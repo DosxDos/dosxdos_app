@@ -1,0 +1,31 @@
+Formato de fechas: yyyy-mm-dd
+POST (Opcional: asunto)
+
+{
+    "numLlamada": "", 
+    "fechaLlamada": "",
+    "hora": "",
+    "minutos": "",
+    "ampm": "",
+    "asuntoLlamada": ""
+}
+
+PUT (Obligatorio: llamadaId y otro campo a actualizar)
+
+{
+    "llamadaId": "", 
+    "numLlamada": "", 
+    "fechaLlamada": "",
+    "hora": "",
+    "minutos": "",
+    "ampm": "",
+    "asuntoLlamada": "",
+    "estado": "",
+    "notas": ""
+}
+
+DELETE
+
+{
+    "llamadaId": ""
+}
