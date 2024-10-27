@@ -1,3 +1,3 @@
 <?php
-echo "Verificación webhook de github 5";
+echo "Verificación webhook de github 6";
 ?>
