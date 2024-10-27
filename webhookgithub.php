@@ -1,7 +1,8 @@
 <?php
 // Ruta del proyecto en Windows Server
-$projectDir = 'P:\\xampp\\htdocs\\esc-backend';
+$projectDir = 'P:\\xampp\\htdocs\\dosxdosiidos';
 
+/*
 // Lee el payload de GitHub
 $payload = file_get_contents('php://input');
 
@@ -10,6 +11,7 @@ if (!$payload) {
     http_response_code(400);
     die('Bad request: no payload received.');
 }
+*/
 
 // Ejecuta el comando de actualización del repositorio en Windows
 $output = shell_exec("cd /d {$projectDir} && git pull 2>&1");
