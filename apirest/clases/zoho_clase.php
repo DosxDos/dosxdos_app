@@ -18,14 +18,14 @@ class Zoho extends conexion
     function __construct()
     {
         try {
-            $this->cliente = file_get_contents('./clases/cliente_zoho.json');
-            //$this->cliente = file_get_contents('cliente_zoho.json');
+            $cliente = __DIR__.'\cliente_zoho.json';
+            $this->cliente = file_get_contents($cliente);
             $this->cliente = json_decode($this->cliente, true);
-            $this->tokens = file_get_contents('./clases/tokens_zoho.json');
-            //$this->tokens = file_get_contents('tokens_zoho.json');
+            $token = __DIR__.'\tokens_zoho.json';
+            $this->tokens = file_get_contents($token);
             $this->tokens = json_decode($this->tokens, true);
-            $this->codigo = file_get_contents('./clases/code_zoho.json');
-            //$this->codigo = file_get_contents('code_zoho.json');
+            $codigo = __DIR__.'\code_zoho.json';
+            $this->codigo = file_get_contents($codigo);
             $this->codigo = json_decode($this->codigo, true);
             $this->dominioApi = $this->tokens['api_domain'];
             $this->dominioCliente = $this->codigo['accounts-server'];
@@ -65,7 +65,8 @@ class Zoho extends conexion
                     $this->tokens['token_type'] = $this->respuesta['token_type'];
                     $this->tokens['expires_in'] = $this->respuesta['expires_in'];
                     $jsonTokens = json_encode($this->tokens);
-                    if (file_put_contents('./clases/tokens_zoho.json', $jsonTokens) === false) {
+                    $tokensFile = __DIR__.'\tokens_zoho.json';
+                    if (file_put_contents($tokensFile, $jsonTokens) === false) {
                         $this->respuesta = "Error al escribir el token de acceso.";
                         return false;
                     } else {
@@ -272,8 +273,69 @@ class Zoho extends conexion
                 $respuestaFinal = $this->respuestaFinal->okF($this->respuesta);
                 return $respuestaFinal;
             } else {
-                $respuestaFinal = $this->respuestaFinal->ok($this->respuesta);
-                return $respuestaFinal;
+                if (isset($this->respuesta['info']['more_records'])) {
+                    if ($this->respuesta['info']['more_records']) {
+                        $datos = $this->respuesta['data'];
+                        $this->masDatos = true;
+                        $page = 2;
+                        while ($this->masDatos) {
+                            $pagina = '&page=' . $page;
+                            $url = $this->dominioApi . $link . $pagina;
+                            $curl = curl_init();
+                            curl_setopt($curl, CURLOPT_URL, $url);
+                            curl_setopt($curl, CURLOPT_HTTPGET, true);
+                            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+                            curl_setopt($curl, CURLOPT_HTTPHEADER, array($authorizationHeader));
+                            $response = curl_exec($curl);
+                            curl_close($curl);
+                            $this->respuesta = json_decode($response, true);
+                            if (isset($this->respuesta['code']) && $this->respuesta['code'] == 'INVALID_TOKEN') {
+                                $this->respuesta = "Token de acceso inválido en la api de Zoho";
+                                $renovar = $this->renovarToken();
+                                if ($renovar) {
+                                    $curl = curl_init();
+                                    curl_setopt($curl, CURLOPT_URL, $url);
+                                    curl_setopt($curl, CURLOPT_HTTPGET, true);
+                                    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+                                    curl_setopt($curl, CURLOPT_HTTPHEADER, array($authorizationHeader));
+                                    $response = curl_exec($curl);
+                                    curl_close($curl);
+                                    $this->respuesta = json_decode($response, true);
+                                    if (isset($this->respuesta['code']) && $this->respuesta['code'] == 'INVALID_TOKEN') {
+                                        $respuestaFinal = $this->respuestaFinal->error_401($this->respuesta);
+                                    }
+                                } else {
+                                    $respuestaFinal = $this->respuestaFinal->error_401($this->respuesta);
+                                    return $respuestaFinal;
+                                }
+                            } else if ($this->respuesta === false) {
+                                $this->respuesta = "Error en la comunicación con la API de Zoho: " . curl_error($curl);
+                                $respuestaFinal = $this->respuestaFinal->okF($this->respuesta);
+                                return $respuestaFinal;
+                            } else if (isset($this->respuesta['status']) && $this->respuesta['status'] == 'error') {
+                                $this->respuesta = "Error en la API de Zoho: " . $this->respuesta['code'] . " " . $this->respuesta['message'];
+                                $respuestaFinal = $this->respuestaFinal->okF($this->respuesta);
+                                return $respuestaFinal;
+                            } else {
+                                $datos = array_merge($datos, $this->respuesta['data']);
+                                if ($this->respuesta['info']['more_records']) {
+                                    $this->masDatos = true;
+                                    $page++;
+                                } else {
+                                    $this->masDatos = false;
+                                }
+                            }
+                        }
+                        $respuestaFinal = $this->respuestaFinal->ok($datos);
+                        return $respuestaFinal;
+                    } else {
+                        $respuestaFinal = $this->respuestaFinal->ok($this->respuesta);
+                        return $respuestaFinal;
+                    }
+                } else {
+                    $respuestaFinal = $this->respuestaFinal->ok($this->respuesta);
+                    return $respuestaFinal;
+                }
             }
         } catch (\Throwable $th) {
             $this->respuesta = "Error en la función post: " . $th->getMessage();

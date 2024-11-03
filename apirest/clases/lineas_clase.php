@@ -432,10 +432,10 @@ class Lineas extends Conexion
     }
 }
 
-/*
+
 $_lineas = new Lineas;
 $json = file_get_contents('navision.json');
 $_lineas->put($json);
 var_dump($_lineas->respuesta);
 var_dump($_lineas->error);
-*/
+

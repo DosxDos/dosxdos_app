@@ -1,7 +1,8 @@
 <?php
 
-require_once 'clases/respuestas_clase.php';
-require_once 'clases/zoho_clase.php';
+
+require_once __DIR__.'\respuestas_clase.php';
+require_once __DIR__.'\zoho_clase.php';
 
 /*
 require_once 'respuestas_clase.php';

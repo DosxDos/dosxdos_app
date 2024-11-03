@@ -1,15 +1,15 @@
 {
-    "CodigoRuta": "R-0996",
-    "LineaRuta": "10000",
+    "CodigoRuta": "GRAN_CANARIA_(A)",
+    "LineaRuta": "4920",
     "DescripcionIncidencia": "",
-    "DiasActuacion": "0",
+    "DiasActuacion": "",
     "Estado": "Pendiente",
     "FechaActuacion": "",
-    "FirmaCliente": "http://localhost/dosxdos_app/fotos_y_firmas.php?ruta=R-0996&linea=10000&ot=OT-23061&lineaActividad=40000",
+    "FirmaCliente": "http://localhost/dosxdos_app/fotos_y_firmas.php?ruta=GRAN_CANARIA_(A)&linea=4920&ot=30203&lineaActividad=4920",
     "FotosSubidas": 0,
-    "HorasActuacion": "0",
+    "HorasActuacion": "",
     "Incidencia": "",
-    "MinutosActuacion": "0",
-    "ObservacionesTecnico": "1 Display marca + suelo",
-    "LinkWeb": "http://localhost/dosxdos_app/fotos_y_firmas.php?ruta=R-0996&linea=10000&ot=OT-23061&lineaActividad=40000"
+    "MinutosActuacion": "",
+    "ObservacionesTecnico": "PRUEBA DESDE PHP 1",
+    "LinkWeb": "http://localhost/dosxdos_app/fotos_y_firmas.php?ruta=GRAN_CANARIA_(A)&linea=4920&ot=30203&lineaActividad=4920"
 }
