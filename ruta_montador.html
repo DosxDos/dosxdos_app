@@ -1335,7 +1335,7 @@
                         //NAVISION
                         const otNavision = objeto.Navision_OT;
                         if (observaciones) {
-                            texto = `NAVISION: ${otNavision} _ CRM: ${ot} _ ${LineaActividad} _ ${objeto.NombrePuntoVenta} _ ${objeto.Zona} _ ${objeto.NombreCliente} _ ${objeto.TipoTrabajo} _ ${observaciones}`;
+                            texto = `${objeto.Sector} _ ${objeto.Zona} _ ${LineaActividad} _ ${objeto.NombrePuntoVenta} _ ${objeto.NombreCliente} _ ${objeto.TipoTrabajo} _ ${observaciones} _ NAVISION: ${otNavision} _ CRM: ${ot}`;
                         } else {
                             texto = `NAVISION: ${otNavision} _ CRM: ${ot} _ ${LineaActividad} _ ${objeto.NombrePuntoVenta} _ ${objeto.Zona} _ ${objeto.NombreCliente} _ ${objeto.TipoTrabajo}`;
                         }
