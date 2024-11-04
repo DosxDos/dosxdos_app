@@ -1,8 +1,8 @@
 <?php
 
 
-require_once __DIR__.'\respuestas_clase.php';
-require_once __DIR__.'\zoho_clase.php';
+require_once __DIR__ . '\respuestas_clase.php';
+require_once __DIR__ . '\zoho_clase.php';
 
 /*
 require_once 'respuestas_clase.php';
@@ -167,8 +167,8 @@ class Crm extends Zoho
                     $this->urlGet = "/crm/v6/Products";
                     break;
 
-                case 'ots':
-                    $this->urlGet = "/crm/v5/Deals?fields=" . $this->camposOts;
+                case 'actualizarPdvs':
+                    $this->urlGet = "/crm/v5/Puntos_de_venta";
                     break;
             }
             $datos = $zoho->put($this->urlGet, $json);
