@@ -89,6 +89,7 @@
         const TotalLineas = await leerDatos("dosxdos", "lineas");
         if (TotalLineas) {
           lineasRuta = TotalLineas.filter((objeto) => objeto.Proyecto === ruta);
+          console.log("Lineas: ", lineasRuta);
           initMap();
         }
       };
@@ -119,7 +120,7 @@
         lineasRuta.forEach((point) => {
           if (point.lat && point.lng) {
             const nameToDisplay = point.NombrePuntoVenta || point.Firma;
-            const concatenatedName = `Nº ${point.Linea} - OT: ${point.OT} - ${nameToDisplay}`;
+            const concatenatedName = `Linea ${point.Linea} - ${nameToDisplay} - OT CRM: ${point.OT} - OT Navision: ${point.Navision_OT}`;
             const marker = new google.maps.Marker({
               position: {
                 lat: parseFloat(point.lat),
@@ -135,8 +136,8 @@
             marker.addListener("click", () => {
               pointName.innerText = concatenatedName;
               pointAddress.innerText = point.DireccionPuntoVenta;
-              pointLat.innerText = `Latitude: ${parseFloat(point.lat)}`; // Display latitude
-              pointLng.innerText = `Longitude: ${parseFloat(point.lng)}`; // Display longitude
+              pointLat.innerText = `Latitude: ${parseFloat(point.lat)}`;
+              pointLng.innerText = `Longitude: ${parseFloat(point.lng)}`;
               modal.style.display = "flex";
 
               navigateButton.onclick = () => {
