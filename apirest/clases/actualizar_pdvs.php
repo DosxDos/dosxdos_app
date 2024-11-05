@@ -8,7 +8,7 @@ ini_set('default_socket_timeout', 28800);
 date_default_timezone_set('Atlantic/Canary');
 
 try {
-    $file = __DIR__ . '\UPDATED_PDVS6.json';
+    $file = __DIR__ . '\UPDATED_PDVS14.json';
     $pdvs = json_decode(file_get_contents($file), true);
     //print_r($pdvs);
     $crm = new Crm;
@@ -17,7 +17,8 @@ try {
     foreach ($pdvs as $pdv) {
         if ($pdv['lat']) {
             $pdvVector = [];
-            $id_con_prefijo = $pdv['ID de registro'];
+            //$id_con_prefijo = $pdv['ID de registro'];
+            $id_con_prefijo = $pdv['Record Id'];
             $id_numerico = preg_replace('/\D/', '', $id_con_prefijo); // Eliminar todo lo que no sea un dígito
             $nombrePv = $pdv['Punto de venta'];
             $pdvVector['data'][0]['id'] = $id_numerico;
