@@ -110,6 +110,7 @@
         const bounds = new google.maps.LatLngBounds();
         map = new google.maps.Map(document.getElementById("map"), {
           zoom: 8,
+          gestureHandling: "greedy",
         });
 
         renderPins(bounds);
