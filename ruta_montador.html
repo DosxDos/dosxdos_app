@@ -708,7 +708,11 @@
 
     const mapa = document.getElementById('contMapa')
     mapa.addEventListener('click', () => {
-        window.open("http://localhost/dosxdos_app/mapa_ruta.html", "_blank");
+        if (navigator.onLine) {
+            window.open("http://localhost/dosxdos_app/mapa_ruta.html", "_blank");
+        } else {
+            alerta("No es posibler crear el mapa sin conexión a internet");
+        }
     });
 
     /* FUNCIONES DE INDEXDB */
