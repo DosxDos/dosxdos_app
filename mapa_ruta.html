@@ -33,7 +33,29 @@
         margin: 0;
       }
       #map {
-        height: 100vh;
+        height: 95vh;
+      }
+      #navigate-button {
+        background-color: #d31216;
+        border-radius: 30px;
+        color: white;
+        padding: 15px;
+        margin: 10px 0 0 0;
+        font-family: "Lora-Bold", "Lora-Bold";
+        font-size: 22px;
+        border: 1px solid gray;
+      }
+
+      #close-button {
+        background-color: rgba(0, 0, 0, 0.573);
+        border-radius: 30px;
+        padding: 15px;
+        color: white;
+
+        margin: 10px 0 0 0;
+        font-family: "Lora-Bold", "Lora-Bold";
+        font-size: 22px;
+        border: 1px solid gray;
       }
     </style>
   </head>
@@ -44,22 +66,12 @@
     <!-- Modal Structure -->
     <div id="modal" class="modal">
       <div class="modal-content">
-        <h2 id="point-name" class="text-lg font-bold"></h2>
+        <h2 id="point-name" class="text-lg font-bold h-[5vh]"></h2>
         <p id="point-address" class="mt-2"></p>
         <p id="point-lat" class="mt-2"></p>
         <p id="point-lng" class="mt-2"></p>
-        <button
-          id="navigate-button"
-          class="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
-        >
-          Navigate
-        </button>
-        <button
-          id="close-button"
-          class="mt-2 bg-gray-300 text-gray-700 px-4 py-2 rounded"
-        >
-          Close
-        </button>
+        <button id="navigate-button">Navigate</button>
+        <button id="close-button">Close</button>
       </div>
     </div>
 
