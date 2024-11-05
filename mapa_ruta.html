@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mapa Rutas</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDojih1XShuEEmyRVE8FYOGvJn37blq0ng"></script>
+    <style>
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 100;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+      }
+      .modal-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 5px;
+        max-width: 400px;
+        width: 100%;
+      }
+      body {
+        margin: 0;
+      }
+      #map {
+        height: 95vh;
+      }
+      #navigate-button {
+        background-color: #d31216;
+        border-radius: 30px;
+        color: white;
+        padding: 15px;
+        margin: 10px 0 0 0;
+        font-family: "Lora-Bold", "Lora-Bold";
+        font-size: 22px;
+        border: 1px solid gray;
+      }
+
+      #close-button {
+        background-color: rgba(0, 0, 0, 0.573);
+        border-radius: 30px;
+        padding: 15px;
+        color: white;
+
+        margin: 10px 0 0 0;
+        font-family: "Lora-Bold", "Lora-Bold";
+        font-size: 22px;
+        border: 1px solid gray;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100">
+    <h1 id="ruta-title" class="text-center text-2xl font-bold p-4"></h1>
+    <div id="map"></div>
+
+    <!-- Modal Structure -->
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <h2 id="point-name" class="text-lg font-bold h-[5vh]"></h2>
+        <p id="point-address" class="mt-2"></p>
+        <p id="point-lat" class="mt-2"></p>
+        <p id="point-lng" class="mt-2"></p>
+        <button id="navigate-button">Navigate</button>
+        <button id="close-button">Close</button>
+      </div>
+    </div>
+
+    <script src="./js/index_db.js"></script>
+
+    <script>
+      const ruta = localStorage.getItem("ruta");
+      if (ruta) {
+        document.getElementById("ruta-title").innerText = ruta;
+      }
+
+      let lineasRuta;
+
+      const lineas = async () => {
+        const TotalLineas = await leerDatos("dosxdos", "lineas");
+        if (TotalLineas) {
+          lineasRuta = TotalLineas.filter((objeto) => objeto.Proyecto === ruta);
+          console.log("Lineas: ", lineasRuta);
+          initMap();
+        }
+      };
+
+      lineas();
+
+      let map;
+      const modal = document.getElementById("modal");
+      const pointName = document.getElementById("point-name");
+      const pointAddress = document.getElementById("point-address");
+      const pointLat = document.getElementById("point-lat");
+      const pointLng = document.getElementById("point-lng");
+      const navigateButton = document.getElementById("navigate-button");
+      const closeButton = document.getElementById("close-button");
+
+      // Function to initialize the map
+      function initMap() {
+        const bounds = new google.maps.LatLngBounds();
+        map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 8,
+        });
+
+        renderPins(bounds);
+      }
+
+      // Function to render pins on the map
+      function renderPins(bounds) {
+        lineasRuta.forEach((point) => {
+          if (point.lat && point.lng) {
+            const nameToDisplay = point.NombrePuntoVenta || point.Firma;
+            const concatenatedName = `Linea ${point.Linea} - ${nameToDisplay} - OT CRM: ${point.OT} - OT Navision: ${point.Navision_OT}`;
+            const marker = new google.maps.Marker({
+              position: {
+                lat: parseFloat(point.lat),
+                lng: parseFloat(point.lng),
+              },
+              map: map,
+              title: concatenatedName,
+            });
+
+            bounds.extend(marker.position);
+
+            // Add a click event listener to each marker to display the modal
+            marker.addListener("click", () => {
+              pointName.innerText = concatenatedName;
+              pointAddress.innerText = point.DireccionPuntoVenta;
+              pointLat.innerText = `Latitude: ${parseFloat(point.lat)}`;
+              pointLng.innerText = `Longitude: ${parseFloat(point.lng)}`;
+              modal.style.display = "flex";
+
+              navigateButton.onclick = () => {
+                const url = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
+                  point.Direccion
+                )}`;
+                window.open(url, "_blank");
+              };
+            });
+          }
+        });
+        map.fitBounds(bounds);
+      }
+
+      // Close the modal when the close button is clicked
+      closeButton.onclick = () => {
+        modal.style.display = "none";
+      };
+    </script>
+  </body>
+</html>

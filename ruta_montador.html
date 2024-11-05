@@ -509,6 +509,14 @@
             background-color: rgba(0, 0, 0, 0.573);
         }
 
+        #contMapa {
+            display: flex;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            padding: var(--x15);
+        }
+
         /* MOVILES GRANDES */
         @media screen and (min-width: 412px) and (max-width: 767px) {
             :root {
@@ -671,10 +679,13 @@
 
         <h1 id="titulo" class="displayOn"></h1>
 
-        <p id="actualizacion" class="displayOff">PARA PODER USAR SIN CONEXIÓN A INTERNET EL NUEVO CAMPO "APP NOTAS", DEBES CERRAR LA SESIÓN Y VOLVER A INICIAR LA SESIÓN (Cuando cierres la sesión elimina por favor los datos de navegación de Google Chrome).</p>
+        <p id="actualizacion" class="displayOff">PARA PODER USAR SIN CONEXIÓN A INTERNET EL NUEVO CAMPO "APP NOTAS",
+            DEBES CERRAR LA SESIÓN Y VOLVER A INICIAR LA SESIÓN (Cuando cierres la sesión elimina por favor los datos de
+            navegación de Google Chrome).</p>
 
     </section>
 
+    <div id="contMapa"><button id="mapa" class="ruta resaltado">MAPA</button></div>
 
     <section id="contenido"></section>
 
@@ -694,6 +705,15 @@
     console.log(nombreRuta);
     $titulo = document.getElementById('titulo');
     $titulo.innerHTML = nombreRuta;
+
+    const mapa = document.getElementById('contMapa')
+    mapa.addEventListener('click', () => {
+        if (navigator.onLine) {
+            window.open("https://dosxdos.app.iidos.com/mapa_ruta.html", "_blank");
+        } else {
+            alerta("No es posibler crear el mapa sin conexión a internet");
+        }
+    });
 
     /* FUNCIONES DE INDEXDB */
 
