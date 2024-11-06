@@ -45,17 +45,44 @@
         font-size: 22px;
         border: 1px solid gray;
       }
-
       #close-button {
         background-color: rgba(0, 0, 0, 0.573);
         border-radius: 30px;
         padding: 15px;
         color: white;
-
         margin: 10px 0 0 0;
         font-family: "Lora-Bold", "Lora-Bold";
         font-size: 22px;
         border: 1px solid gray;
+      }
+      .alert {
+        background-color: #f8d7da;
+        border: 1px solid #d31216;
+        color: #721c24;
+        padding: 10px;
+        margin: 10px;
+        position: relative;
+        max-width: 300px;
+        z-index: 1000;
+      }
+      .alert-close {
+        position: absolute;
+        top: 0;
+        right: 10px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 20px;
+      }
+      .alert-container {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        width: 100%;
+        max-width: 300px;
       }
     </style>
   </head>
@@ -76,6 +103,8 @@
       </div>
     </div>
 
+    <div id="alert-container" class="alert-container"></div>
+
     <script src="./js/index_db.js"></script>
 
     <script>
@@ -84,7 +113,7 @@
         document.getElementById("ruta-title").innerText = ruta;
       }
 
-      let lineasRuta;
+      let lineasRuta = [];
 
       const lineas = async () => {
         const TotalLineas = await leerDatos("dosxdos", "lineas");
@@ -95,8 +124,6 @@
         }
       };
 
-      lineas();
-
       let map;
       const modal = document.getElementById("modal");
       const pointName = document.getElementById("point-name");
@@ -106,41 +133,48 @@
       const navigateButton = document.getElementById("navigate-button");
       const closeButton = document.getElementById("close-button");
 
-      // Function to initialize the map
       function initMap() {
         const bounds = new google.maps.LatLngBounds();
         map = new google.maps.Map(document.getElementById("map"), {
           zoom: 8,
           gestureHandling: "greedy",
+          fullscreenControl: false,
         });
 
         renderPins(bounds);
       }
 
-      // Function to render pins on the map
       function renderPins(bounds) {
-        lineasRuta.forEach((point) => {
-          if (point.lat && point.lng) {
-            const nameToDisplay = point.NombrePuntoVenta || point.Firma;
+        const offset = 0.000005;
+
+        lineasRuta.forEach((point, index) => {
+          const lat = point.lat ? parseFloat(point.lat) : null;
+          const lng = point.lng ? parseFloat(point.lng) : null;
+
+          if (lat !== null && lng !== null) {
+            const adjustedLat = lat + index * offset;
+            const adjustedLng = lng + index * offset;
+            const nameToDisplay =
+              point.NombrePuntoVenta || point.Firma || "Nombre no disponible";
             const concatenatedName = `Linea ${point.Linea} - ${nameToDisplay} - OT CRM: ${point.OT} - OT Navision: ${point.Navision_OT}`;
             const marker = new google.maps.Marker({
-              position: {
-                lat: parseFloat(point.lat),
-                lng: parseFloat(point.lng),
-              },
+              position: { lat: adjustedLat, lng: adjustedLng },
               map: map,
               title: concatenatedName,
             });
 
             bounds.extend(marker.position);
 
-            // Add a click event listener to each marker to display the modal
             marker.addListener("click", () => {
               pointName.innerText = concatenatedName;
-              pointAddress.innerText = point.DireccionPuntoVenta;
-              pointLat.innerText = `Latitud: ${parseFloat(point.lat)}`;
-              pointLng.innerText = `Longitud: ${parseFloat(point.lng)}`;
+              pointAddress.innerText =
+                point.DireccionPuntoVenta || "Dirección no disponible";
+              pointLat.innerText = `Latitud: ${adjustedLat}`;
+              pointLng.innerText = `Longitud: ${adjustedLng}`;
               modal.style.display = "flex";
+
+              map.setZoom(30);
+              map.setCenter(marker.getPosition());
 
               navigateButton.onclick = () => {
                 const url = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
@@ -149,15 +183,41 @@
                 window.open(url, "_blank");
               };
             });
+          } else {
+            console.log(
+              `Missing coordinates for point: ${JSON.stringify(point)}`
+            );
+            const alertMessage = `Fallo al cargar la ubicación para: ${
+              point.NombrePuntoVenta || "Nombre no disponible"
+            }`;
+            showAlert(alertMessage, concatenatedName);
           }
         });
+
         map.fitBounds(bounds);
       }
 
-      // Close the modal when the close button is clicked
+      function showAlert(message, concatenatedName) {
+        const alertBox = document.createElement("div");
+        alertBox.className = "alert";
+        alertBox.innerText = `${message} - ${concatenatedName}`;
+
+        const closeButton = document.createElement("span");
+        closeButton.innerText = "x";
+        closeButton.className = "alert-close";
+        closeButton.onclick = () => {
+          alertBox.remove();
+        };
+
+        alertBox.appendChild(closeButton);
+        document.getElementById("alert-container").appendChild(alertBox);
+      }
+
       closeButton.onclick = () => {
         modal.style.display = "none";
       };
+
+      lineas();
     </script>
   </body>
 </html>
