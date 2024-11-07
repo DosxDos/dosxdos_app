@@ -29,21 +29,26 @@
       width: 100%;
     }
 
-    body,
-    html {
-      height: 100%;
-      /* Asegura que el cuerpo y el html ocupen el 100% del viewport */
-      margin: 0;
+    body {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    h1 {
+      display: flex;
+      width: 100%;
+      justify-content: center;
+      text-align: center;
+      height: 3vh;
+      font-weight: bold;
     }
 
     #map {
-      height: calc(100vh - 4rem);
-      /* Ajusta la altura del mapa para que reste la altura del título */
-    }
-
-    #ruta-title {
-      height: 4rem;
-      /* Altura del título */
+      width: 100%;
+      height: 97vh;
     }
 
     #navigate-button {
@@ -102,9 +107,9 @@
   </style>
 </head>
 
-<body class="bg-gray-100 h-screen flex flex-col">
-  <h1 id="ruta-title" class="text-center text-2xl font-bold p-4"></h1>
-  <div id="map" class="flex-1"></div>
+<body>
+  <h1 id="ruta-title"></h1>
+  <div id="map"></div>
 
   <!-- Modal Structure -->
   <div id="modal" class="modal z-50">
@@ -188,7 +193,7 @@
             pointLng.innerText = `Longitud: ${adjustedLng}`;
             modal.style.display = "flex";
 
-            map.setZoom(30);
+            map.setZoom(15);
             map.setCenter(marker.getPosition());
 
             navigateButton.onclick = () => {
