@@ -39,14 +39,24 @@
 
     h1 {
       display: flex;
-      width: 100%;
+      position: fixed;
+      bottom: 2.5vh;
+      width: 50%;
       justify-content: center;
       text-align: center;
       font-weight: bold;
       z-index: 200;
+      background-color: white;
+      opacity: 0.7;
+      align-self: center;
+      cursor: pointer;
+      border-radius: 5vw;
     }
 
     #map {
+      display: flex;
+      position: relative;
+      top: 0;
       width: 100%;
       height: 100vh;
     }
@@ -108,7 +118,7 @@
 </head>
 
 <body>
-  <h1 id="ruta-title"></h1>
+  <h1 id="ruta-title" class="p-2"></h1>
   <div id="map"></div>
 
   <!-- Modal Structure -->
@@ -129,9 +139,16 @@
 
   <script>
     const ruta = localStorage.getItem("ruta");
+
     if (ruta) {
       document.getElementById("ruta-title").innerText = ruta;
+    } else {
+      document.getElementById("ruta-title").innerText = 'VOLVER';
     }
+
+    document.getElementById("ruta-title").addEventListener('click', () => {
+      window.location.href = "http://localhost/dosxdos_app/ruta_montador.html";
+    });
 
     let lineasRuta = [];
 
