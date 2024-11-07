@@ -709,7 +709,7 @@
     const mapa = document.getElementById('contMapa')
     mapa.addEventListener('click', () => {
         if (navigator.onLine) {
-            window.open("https://dosxdos.app.iidos.com/mapa_ruta.html", "_blank");
+            window.location.href = "http://localhost/dosxdos_app/mapa_ruta.html";
         } else {
             alerta("No es posibler crear el mapa sin conexión a internet");
         }
