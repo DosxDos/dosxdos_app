@@ -72,6 +72,17 @@
       border: 1px solid gray;
     }
 
+    #report-button {
+      background-color: black;
+      border-radius: 30px;
+      color: white;
+      padding: 15px;
+      margin: 10px 0 0 0;
+      font-family: "Lora-Bold", "Lora-Bold";
+      font-size: 22px;
+      border: 1px solid gray;
+    }
+
     #close-button {
       background-color: rgba(0, 0, 0, 0.573);
       border-radius: 30px;
@@ -129,6 +140,7 @@
       <p id="point-lat" class="mt-2"></p>
       <p id="point-lng" class="mt-2"></p>
       <button id="navigate-button">Navegar</button>
+      <button id="report-button">Reportar</button>
       <button id="close-button">Cerrar</button>
     </div>
   </div>
@@ -138,7 +150,17 @@
   <script src="./js/index_db.js"></script>
 
   <script>
+
+    let montador;
     const ruta = localStorage.getItem("ruta");
+
+    async function datosUsuario() {
+      const Arrayusuario = await leerDatos('dosxdos', 'usuario');
+      usuario = Arrayusuario[0];
+      montador = usuario.cod;
+    }
+
+    datosUsuario();
 
     if (ruta) {
       document.getElementById("ruta-title").innerText = ruta;
@@ -168,6 +190,7 @@
     const pointLat = document.getElementById("point-lat");
     const pointLng = document.getElementById("point-lng");
     const navigateButton = document.getElementById("navigate-button");
+    const reportButton = document.getElementById("report-button");
     const closeButton = document.getElementById("close-button");
 
     function initMap() {
@@ -191,9 +214,11 @@
         if (lat !== null && lng !== null) {
           const adjustedLat = lat + index * offset;
           const adjustedLng = lng + index * offset;
-          const nameToDisplay =
-            point.NombrePuntoVenta || point.Firma || "Nombre no disponible";
-          const concatenatedName = `Linea ${point.Linea} - ${nameToDisplay} - OT CRM: ${point.OT} - OT Navision: ${point.Navision_OT}`;
+          const firma = point.Firma || "Sin firma";
+          const observaciones = point.Observaciones || "Sin observaciones";
+          const nameToDisplay = point.NombrePuntoVenta || "Nombre del punto de venta no disponible";
+          const nombreCliente = point.NombreCliente || "Nombre del cliente no disponible";
+          const concatenatedName = `${point.Linea} - ${nameToDisplay} - ${firma} - ${nombreCliente} - OT CRM: ${point.OT} - OT Navision: ${point.Navision_OT} - ${point.TipoOT} - ${observaciones}`;
           const marker = new google.maps.Marker({
             position: { lat: adjustedLat, lng: adjustedLng },
             map: map,
@@ -214,18 +239,34 @@
             map.setCenter(marker.getPosition());
 
             navigateButton.onclick = () => {
-              const url = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
-                point.DireccionPuntoVenta
-              )}`;
-              window.open(url, "_blank");
+              if (lat !== null && lng !== null) {
+                const url = `https://www.google.com/maps/dir/?api=1&destination=${adjustedLat},${adjustedLng}`;
+                window.open(url, "_blank");
+              } else {
+                alert('Las coordenadas no están disponibles para este punto.');
+              }
             };
+
+            reportButton.addEventListener('click', () => {
+              const lineaStorage = point.Linea;
+              const LineaActividadStorage = point.Linea;
+              const otStorage = point.OT;
+              const clienteStorage = point.Cliente;
+              const nombreClienteStorage = point.NombreCliente;
+              localStorage.setItem('linea', lineaStorage);
+              localStorage.setItem('lineaActividad', LineaActividadStorage);
+              localStorage.setItem('ot', otStorage);
+              localStorage.setItem('cliente', clienteStorage);
+              localStorage.setItem('nombreCliente', nombreClienteStorage);
+              window.location.href = "https://dosxdos.app.iidos.com/linea_montador.html";
+            });
+
           });
         } else {
           console.log(
             `Missing coordinates for point: ${JSON.stringify(point)}`
           );
-          const alertMessage = `Fallo al cargar la ubicación para: ${point.NombrePuntoVenta || "Nombre no disponible"
-            }`;
+          const alertMessage = `Fallo al cargar la ubicación para la línea: `;
           showAlert(alertMessage, concatenatedName);
         }
       });
@@ -249,11 +290,181 @@
       document.getElementById("alert-container").appendChild(alertBox);
     }
 
+    function alerta(message) {
+      const alertBox = document.createElement("div");
+      alertBox.className = "alert";
+      alertBox.innerText = `${message}`;
+
+      const closeButton = document.createElement("span");
+      closeButton.innerText = "x";
+      closeButton.className = "alert-close";
+      closeButton.onclick = () => {
+        alertBox.remove();
+      };
+
+      alertBox.appendChild(closeButton);
+      document.getElementById("alert-container").appendChild(alertBox);
+    }
+
     closeButton.onclick = () => {
       modal.style.display = "none";
     };
 
     lineas();
+
+    function fetchRutas() {
+      return new Promise((resolve, reject) => {
+        url = 'https://dosxdos.app.iidos.com/apirest/rutas.php?montador=' + montador;
+        fetch(url)
+          .then((res) => {
+            if (res.ok) {
+              return res.json()
+            }
+            else {
+              mensaje = 'Error: no se pudo recibir una respuesta de la api intermedia en la función fetchRutas'
+              alerta(mensaje);
+            };
+          })
+          .then((res) => {
+            if (res[0]) {
+              const request = indexedDB.open('dosxdos');
+              request.onsuccess = (event) => {
+                const db = event.target.result;
+                const transaction = db.transaction('rutas', 'readwrite');
+                const datosStore = transaction.objectStore('rutas');
+                const clearRequest = datosStore.clear();
+                clearRequest.onsuccess = (clearEvent) => {
+                  const datos = res[1];
+                  datos.forEach(item => {
+                    datosStore.add(item);
+                  });
+                  resolve(true);
+                };
+                clearRequest.onerror = (event) => {
+                  error = event.target.error;
+                  mensaje = `ERROR: ` + error;
+                  console.error(error);
+                  alerta(mensaje);
+                };
+              };
+              request.onerror = (event) => {
+                error = event.target.error;
+                mensaje = `ERROR: ` + error;
+                console.error(error);
+                alerta(mensaje);
+              }
+            }
+            else {
+              mensaje = res[1];
+              console.error(error);
+              alerta(mensaje);
+            }
+          })
+          .catch((res) => {
+            mensaje = 'Sin conexión: ' + res.message;
+            localStorage.setItem('error', error);
+            console.error(res);
+            alerta(mensaje);
+          })
+      })
+    }
+
+    function fetchLineas(vectorRutas) {
+      return new Promise(async (resolve, reject) => {
+        try {
+          const promises = vectorRutas.map(async (objeto) => {
+            const url = 'https://dosxdos.app.iidos.com/apirest/lineas.php?ruta=' + objeto.cod;
+            const res = await fetch(url);
+
+            if (!res.ok) {
+              throw new Error(`Error en la solicitud de las líneas de la ruta ${objeto.cod}: ${res.status}`);
+            }
+
+            const resJson = await res.json();
+
+            if (resJson[0]) {
+              const db = await new Promise((dbResolve, dbReject) => {
+                const request = indexedDB.open('dosxdos');
+                request.onsuccess = (event) => {
+                  const db = event.target.result;
+                  dbResolve(db);
+                };
+                request.onerror = (event) => {
+                  dbReject(new Error(`Error al abrir la base de datos para ingresar las líneas de la ruta: ${objeto.cod}`));
+                };
+              });
+
+              const transaction = db.transaction('lineas', 'readwrite');
+              const datosStore = transaction.objectStore('lineas');
+              const datos = resJson[1];
+              if (Array.isArray(datos)) {
+                datos.forEach((item) => {
+                  datosStore.add(item);
+                });
+              } else {
+                datosStore.add(datos);
+              }
+            } else {
+              throw new Error(`Error al solicitar las líneas de la ruta ${objeto.cod}: ${resJson[1]}`);
+            }
+          });
+
+          await Promise.all(promises);
+          resolve(true);
+        } catch (err) {
+          console.error(err);
+          localStorage.setItem('error', error);
+          reject(err);
+        }
+      });
+    }
+
+    async function sincronizarDb() {
+      try {
+        if (navigator.onLine) {
+          const fRutas = await fetchRutas();
+          rutas = await leerDatos('dosxdos', 'rutas');
+          rutas = rutas.map(objeto => ({
+            cod: objeto['No.'],
+            nombre: objeto['Descripcion']
+          }));
+          const limpiarLineas = await limpiarDatos('dosxdos', 'lineas');
+          if (limpiarLineas) {
+            lineasCrm = await fetchLineas(rutas);
+            if (lineasCrm) {
+              mensaje = true;
+              localStorage.setItem('sinc', mensaje);
+              window.location.href = "https://dosxdos.app.iidos.com/mapa_ruta.html";
+            }
+            else {
+              alerta('Error al cargar las líneas de las rutas del servidor, se han sincronizado las rutas pero no las líneas')
+            }
+          }
+        }
+      } catch (error) {
+        const mensaje = 'No se ha sincronizado la base de datos: ' + error.message;
+        console.error(error);
+        localStorage.setItem('error', error);
+        localStorage.setItem('mensaje', mensaje);
+        window.location.href = "https://dosxdos.app.iidos.com/mapa_ruta.html";
+      }
+    }
+
+    window.addEventListener('pageshow', (e) => {
+      console.log('Carga completa de los elementos de la página no fetch');
+      let mensaje = localStorage.getItem('mensaje');
+      if (mensaje && mensaje !== null) {
+        alerta(mensaje);
+        localStorage.removeItem('mensaje');
+      }
+      let login = localStorage.getItem('login');
+      if (!login || login === null) {
+        window.location.href = "https://dosxdos.app.iidos.com/index.html";
+      }
+    })
+
+    setInterval(sincronizarDb, 300000);
+
   </script>
 </body>
 
