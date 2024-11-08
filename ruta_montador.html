@@ -1325,6 +1325,8 @@
                 if (usuario.imagen != '0') {
                     $imagenUsuario.src = usuario.imagen;
                 }
+                sinc = await sincronizarDb2();
+                sinc ? console.log("Base de datos sincronizada") : console.error("Error al sincronizar la base de datos");
                 rutas = await leerDatos('dosxdos', 'rutas');
                 rutas = rutas.map(objeto => ({
                     cod: objeto['No.'],
