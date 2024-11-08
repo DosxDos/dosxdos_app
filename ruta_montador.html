@@ -1205,24 +1205,26 @@
 
     async function sincronizarDb() {
         try {
-            loaderOn();
-            const fRutas = await fetchRutas();
-            rutas = await leerDatos('dosxdos', 'rutas');
-            rutas = rutas.map(objeto => ({
-                cod: objeto['No.'],
-                nombre: objeto['Descripcion']
-            }));
-            const limpiarLineas = await limpiarDatos('dosxdos', 'lineas');
-            if (limpiarLineas) {
-                lineas = await fetchLineas(rutas);
-                if (lineas) {
-                    const mensaje = 'Se ha sincronizado la base de datos exitosamente';
-                    localStorage.setItem('mensaje', mensaje);
-                    window.location.href = "https://dosxdos.app.iidos.com/ruta_montador.html";
-                }
-                else {
-                    alerta('Error al cargar las líneas de las rutas del servidor, se han sincronizado las rutas pero no las líneas')
-                    loaderOff();
+            if (navigator.onLine) {
+                loaderOn();
+                const fRutas = await fetchRutas();
+                rutas = await leerDatos('dosxdos', 'rutas');
+                rutas = rutas.map(objeto => ({
+                    cod: objeto['No.'],
+                    nombre: objeto['Descripcion']
+                }));
+                const limpiarLineas = await limpiarDatos('dosxdos', 'lineas');
+                if (limpiarLineas) {
+                    lineas = await fetchLineas(rutas);
+                    if (lineas) {
+                        const mensaje = 'Se ha sincronizado la base de datos exitosamente';
+                        localStorage.setItem('mensaje', mensaje);
+                        window.location.href = "https://dosxdos.app.iidos.com/ruta_montador.html";
+                    }
+                    else {
+                        alerta('Error al cargar las líneas de las rutas del servidor, se han sincronizado las rutas pero no las líneas')
+                        loaderOff();
+                    }
                 }
             }
         } catch (error) {
@@ -1391,6 +1393,7 @@
                         }
                     })
                     const peticionesCierre = await procesarPeticiones2();
+                    setInterval(sincronizarDb, 300000);
                     loaderOff();
                 }
                 else {
