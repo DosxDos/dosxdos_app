@@ -3201,6 +3201,8 @@
                 if (usuario.imagen != '0') {
                     $imagenUsuario.src = usuario.imagen;
                 }
+                sinc = await sincronizarDb2();
+                sinc ? console.log("Base de datos sincronizada") : console.error("Error al sincronizar la base de datos");
                 const TotalLineas = await leerDatos('dosxdos', 'lineas');
                 if (TotalLineas) {
                     //console.log(TotalLineas);
