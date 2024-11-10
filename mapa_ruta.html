@@ -212,6 +212,8 @@
   const ruta = localStorage.getItem("ruta");
   const $loader = document.getElementById('loader');
   const $body = document.getElementById('body');
+  let bounds;
+  let marcadores = [];
 
   function scrollToTop() {
     // Para navegadores modernos
@@ -259,7 +261,10 @@
     if (TotalLineas) {
       lineasRuta = TotalLineas.filter((objeto) => objeto.Proyecto === ruta);
       console.log("Lineas: ", lineasRuta);
-      initMap();
+      storageLineas = JSON.stringify(lineasRuta);
+      localStorage.setItem('lineasRuta', storageLineas);
+      await initMap(lineasRuta);
+      sincronizador();
     }
     loaderOff();
   };
@@ -274,101 +279,104 @@
   const reportButton = document.getElementById("report-button");
   const closeButton = document.getElementById("close-button");
 
-  function initMap() {
-    const bounds = new google.maps.LatLngBounds();
+  function initMap(lineasInicio) {
+    bounds = new google.maps.LatLngBounds();
     map = new google.maps.Map(document.getElementById("map"), {
       zoom: 8,
       gestureHandling: "greedy",
       fullscreenControl: false,
     });
-
-    renderPins(bounds);
+    renderPins(lineasInicio);
   }
 
-  function renderPins(bounds) {
-    const offset = 0.000005;
-
-    lineasRuta.forEach((point, index) => {
-      const lat = point.lat ? parseFloat(point.lat) : null;
-      const lng = point.lng ? parseFloat(point.lng) : null;
-
-      if (lat !== null && lng !== null) {
-        const adjustedLat = lat + index * offset;
-        const adjustedLng = lng + index * offset;
-        const firma = point.Firma || "Sin firma";
-        const observaciones = point.Observaciones || "Sin observaciones";
-        const nameToDisplay = point.NombrePuntoVenta || "Nombre del punto de venta no disponible";
-        const nombreCliente = point.NombreCliente || "Nombre del cliente no disponible";
-        const concatenatedName = `${point.Linea} - ${nameToDisplay} - ${firma} - ${nombreCliente} - OT CRM: ${point.OT} - OT Navision: ${point.Navision_OT} - ${point.TipoOT} - ${observaciones}`;
-        const marker = new google.maps.Marker({
-          position: { lat: adjustedLat, lng: adjustedLng },
-          map: map,
-          title: concatenatedName,
-        });
-
-        bounds.extend(marker.position);
-
-        marker.addListener("click", () => {
-          pointName.innerText = concatenatedName;
-          pointAddress.innerText =
-            point.DireccionPuntoVenta || "Dirección no disponible";
-          pointLat.innerText = `Latitud: ${adjustedLat}`;
-          pointLng.innerText = `Longitud: ${adjustedLng}`;
-          // Muestra el modal al hacer clic en el marcador
-          modal.classList.remove("hidden");
-          modal.style.display = "flex";
-
-          map.setZoom(19);
-          map.setCenter(marker.getPosition());
-
-          navigateButton.onclick = () => {
-            if (lat !== null && lng !== null) {
-              const url = `https://www.google.com/maps/dir/?api=1&destination=${adjustedLat},${adjustedLng}`;
-              window.open(url, "_blank");
-            } else {
-              alert('Las coordenadas no están disponibles para este punto.');
-            }
-          };
-
-          reportButton.addEventListener('click', () => {
-            const lineaStorage = point.Linea;
-            const LineaActividadStorage = point.Linea;
-            const otStorage = point.OT;
-            const clienteStorage = point.Cliente;
-            const nombreClienteStorage = point.NombreCliente;
-            localStorage.setItem('linea', lineaStorage);
-            localStorage.setItem('lineaActividad', LineaActividadStorage);
-            localStorage.setItem('ot', otStorage);
-            localStorage.setItem('cliente', clienteStorage);
-            localStorage.setItem('nombreCliente', nombreClienteStorage);
-            window.location.href = "https://dosxdos.app.iidos.com/linea_montador.html";
-          });
-
-        });
-      } else {
-        console.log(
-          `Missing coordinates for point: ${JSON.stringify(point)}`
-        );
-        const alertMessage = `Fallo al cargar la ubicación para la línea: `;
-        showAlert(alertMessage, concatenatedName);
+  function renderPins(lineasRender) {
+    return new Promise((resolve, reject) => {
+      try {
+        const offset = 0.000070;
+        let i = 0;
+        for (const point of lineasRender) {
+          const lat = point.lat ? parseFloat(point.lat) : null;
+          const lng = point.lng ? parseFloat(point.lng) : null;
+          if (lat !== null && lng !== null) {
+            const adjustedLat = lat + i * offset;
+            const adjustedLng = lng + i * offset;
+            const firma = point.Firma || "Sin firma";
+            const observaciones = point.Observaciones || "Sin observaciones";
+            const nameToDisplay = point.NombrePuntoVenta || "Nombre del punto de venta no disponible";
+            const nombreCliente = point.NombreCliente || "Nombre del cliente no disponible";
+            const concatenatedName = `${point.Linea} - ${nameToDisplay} - ${firma} - ${nombreCliente} - OT CRM: ${point.OT} - OT Navision: ${point.Navision_OT} - ${point.TipoOT} - ${observaciones}`;
+            const marker = new google.maps.Marker({
+              position: { lat: adjustedLat, lng: adjustedLng },
+              map: map,
+              title: concatenatedName,
+            });
+            bounds.extend(marker.position);
+            marker.addListener("click", () => {
+              pointName.innerText = concatenatedName;
+              pointAddress.innerText =
+                point.DireccionPuntoVenta || "Dirección no disponible";
+              pointLat.innerText = `Latitud: ${adjustedLat}`;
+              pointLng.innerText = `Longitud: ${adjustedLng}`;
+              // Muestra el modal al hacer clic en el marcador
+              modal.classList.remove("hidden");
+              modal.style.display = "flex";
+              map.setZoom(19);
+              map.setCenter(marker.getPosition());
+              navigateButton.onclick = () => {
+                if (lat !== null && lng !== null) {
+                  const url = `https://www.google.com/maps/dir/?api=1&destination=${adjustedLat},${adjustedLng}`;
+                  window.open(url, "_blank");
+                } else {
+                  alert('Las coordenadas no están disponibles para este punto.');
+                }
+              };
+              reportButton.addEventListener('click', () => {
+                const lineaStorage = point.Linea;
+                const LineaActividadStorage = point.Linea;
+                const otStorage = point.OT;
+                const clienteStorage = point.Cliente;
+                const nombreClienteStorage = point.NombreCliente;
+                localStorage.setItem('linea', lineaStorage);
+                localStorage.setItem('lineaActividad', LineaActividadStorage);
+                localStorage.setItem('ot', otStorage);
+                localStorage.setItem('cliente', clienteStorage);
+                localStorage.setItem('nombreCliente', nombreClienteStorage);
+                window.location.href = "https://dosxdos.app.iidos.com/linea_montador.html";
+              });
+            });
+            // Agregar una propiedad personalizada al marcador
+            marker.customId = point.Linea; // Usa un identificador único de tu objeto `point`
+            // Guarda el marcador en un array para gestionarlo más tarde si es necesario
+            marcadores.push(marker);
+          } else {
+            console.log(
+              `Missing coordinates for point: ${JSON.stringify(point)}`
+            );
+            const alertMessage = `Fallo al cargar la ubicación para la línea: `;
+            showAlert(alertMessage, concatenatedName);
+          }
+          i++;
+        };
+        map.fitBounds(bounds);
+        resolve(true);
+      } catch (error) {
+        console.error(error);
+        alerta("Error al renderizar los puntos en el mapa, por favor carga de nuevo el mapa para intentarlo nuevamente")
+        resolve(false);
       }
-    });
-
-    map.fitBounds(bounds);
+    })
   }
 
   function showAlert(message, concatenatedName) {
     const alertBox = document.createElement("div");
     alertBox.className = "alert";
     alertBox.innerText = `${message} - ${concatenatedName}`;
-
     const closeButton = document.createElement("span");
     closeButton.innerText = "x";
     closeButton.className = "alert-close";
     closeButton.onclick = () => {
       alertBox.remove();
     };
-
     alertBox.appendChild(closeButton);
     document.getElementById("alert-container").appendChild(alertBox);
   }
@@ -377,14 +385,12 @@
     const alertBox = document.createElement("div");
     alertBox.className = "alert";
     alertBox.innerText = `${message}`;
-
     const closeButton = document.createElement("span");
     closeButton.innerText = "x";
     closeButton.className = "alert-close";
     closeButton.onclick = () => {
       alertBox.remove();
     };
-
     alertBox.appendChild(closeButton);
     document.getElementById("alert-container").appendChild(alertBox);
   }
@@ -455,16 +461,14 @@
   function fetchLineas(vectorRutas) {
     return new Promise(async (resolve, reject) => {
       try {
+        console.log(vectorRutas);
         const promises = vectorRutas.map(async (objeto) => {
           const url = 'https://dosxdos.app.iidos.com/apirest/lineas.php?ruta=' + objeto.cod;
           const res = await fetch(url);
-
           if (!res.ok) {
             throw new Error(`Error en la solicitud de las líneas de la ruta ${objeto.cod}: ${res.status}`);
           }
-
           const resJson = await res.json();
-
           if (resJson[0]) {
             const db = await new Promise((dbResolve, dbReject) => {
               const request = indexedDB.open('dosxdos');
@@ -476,7 +480,6 @@
                 dbReject(new Error(`Error al abrir la base de datos para ingresar las líneas de la ruta: ${objeto.cod}`));
               };
             });
-
             const transaction = db.transaction('lineas', 'readwrite');
             const datosStore = transaction.objectStore('lineas');
             const datos = resJson[1];
@@ -491,13 +494,12 @@
             throw new Error(`Error al solicitar las líneas de la ruta ${objeto.cod}: ${resJson[1]}`);
           }
         });
-
         await Promise.all(promises);
         resolve(true);
       } catch (err) {
         console.error(err);
         localStorage.setItem('error', error);
-        reject(err);
+        resolve(false);
       }
     });
   }
@@ -572,7 +574,165 @@
     })
   }
 
-  setInterval(sincronizarDb, 300000);
+  function fetchLineasRuta(ruta) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const url = 'https://dosxdos.app.iidos.com/apirest/lineas.php?ruta=' + ruta;
+        const res = await fetch(url);
+        if (!res.ok) {
+          console.error(res);
+          throw new Error(`Error en la función fetchLineasRuta al solicitar las líneas de la ruta`);
+        }
+        const resJson = await res.json()
+        if (resJson[0]) {
+          const datos = resJson[1];
+          resolve(datos);
+        } else {
+          console.error(resJson)
+          throw new Error(`Error en la función fetchLineasRuta al solicitar las líneas de la ruta`);
+        }
+      } catch (err) {
+        console.error(err);
+        localStorage.setItem('error', error);
+        resolve(false);
+      }
+    });
+  }
+
+  const compararDatos = () => {
+    return new Promise((resolve, reject) => {
+      try {
+        marcadoresAccion = {};
+        marcadoresAccion.data = [];
+        marcadoresAccion.accion = "none";
+        marcadoresAccion.lineasRuta = lineasRuta.length;
+        marcadoresAccion.marcadores = marcadores.length;
+        //console.log("lineasRuta: " + lineasRuta.length);
+        //console.log("marcadores: " + marcadores.length);
+        if (lineasRuta.length != marcadores.length) {
+          //console.log("Líneas distintas en CRM, se debe sincronizar");
+          if (lineasRuta.length < marcadores.length) {
+            //console.log("lineasRuta es menor que marcadores, se deben eliminar marcadores");
+            for (const marcador of marcadores) {
+              let validarMarcador = true;
+              for (const linea of lineasRuta) {
+                if (linea.Linea == marcador.customId) {
+                  validarMarcador = false;
+                  break;
+                }
+              }
+              //console.log(validarMarcador);
+              if (validarMarcador) {
+                //console.log("Se elimina el marcador: " + marcador.customId);
+                alerta(`La línea ${marcador.customId} ha sido reportada o eliminada de la ruta`);
+                marcadoresAccion.data.push(marcador);
+              }
+            }
+            marcadoresAccion.accion = "delete";
+          } else {
+            //console.log("lineasRuta es mayor que marcadores, se deben agregar marcadores")
+            for (const linea of lineasRuta) {
+              let validarLinea = true;
+              for (const marcador of marcadores) {
+                if (linea.Linea == marcador.customId) {
+                  validarLinea = false;
+                  break;
+                }
+              }
+              //console.log(validarLinea);
+              if (validarLinea) {
+                //console.log("Se agrega la línea: " + linea.Linea);
+                alerta(`La línea ${linea.Linea} ha sido agregada`);
+                marcadoresAccion.data.push(linea);
+              }
+            }
+            marcadoresAccion.accion = "add";
+          }
+        }
+        resolve(marcadoresAccion);
+      } catch (error) {
+        console.error(error);
+        resolve(false);
+      }
+    });
+  };
+
+  const deleteMarcadores = (marcadoresDelete) => {
+    return new Promise((resolve, reject) => {
+      try {
+        let i = 0;
+        for (const marcador of marcadores) {
+          for (const marcadorDelete of marcadoresDelete) {
+            if (marcadorDelete.customId == marcador.customId) {
+              marcadores.splice(i, 1);
+              marcador.setMap(null);
+              resolve(true);
+              break;
+            }
+          }
+          i++;
+        }
+      } catch (error) {
+        console.error(error);
+        alerta("Error en el sincronizador al eliminar líneas ya realizadas, por favor vuelve a cargar de nuevo el mapa para verlo actualizado")
+        resolve(false);
+      }
+    });
+  };
+
+  const deleteAllMarcadores = () => {
+    return new Promise((resolve, reject) => {
+      try {
+        for (const marcador of marcadores) {
+          marcador.setMap(null);
+        }
+        marcadores = [];
+        resolve(true);
+      } catch (error) {
+        console.error(error);
+        alerta("Error en el sincronizador al eliminar líneas para actualizar el mapa completo, error en deleteAllMarcadores. Por favor vuelve a cargar de nuevo el mapa para verlo actualizado")
+        resolve(false);
+      }
+    });
+  };
+
+  const sincronizador = async () => {
+    try {
+      lineasRuta = await fetchLineasRuta(ruta);
+      if (lineasRuta) {
+        const comparacion = await compararDatos();
+        console.log(comparacion);
+        if (comparacion.data.length) {
+          if (comparacion.accion == "delete") {
+            deleteMarcadores(comparacion.data);
+            if (deleteMarcadores) {
+              alerta("El mapa ha sido actualizado");
+            }
+          } else if ((comparacion.accion == "add")) {
+            const deleteMarcadores = await deleteAllMarcadores();
+            if (deleteMarcadores) {
+              const render = await renderPins(lineasRuta);
+              if (render) {
+                alerta("El mapa ha sido actualizado")
+              } else {
+                alerta("Error, el mapa no ha sido actualizado, por favor intenta cargar el mapa nuevamente para ver los actuales cambios");
+              }
+            } else {
+              alerta("Error, el mapa no ha sido actualizado, por favor intenta cargar el mapa nuevamente para ver los actuales cambios")
+            }
+          }
+        }
+      }
+      else {
+        alerta('Error en el sincronizador para actualizar el mapa, error en fetchLineas. Por favor intenta cargar el mapa nuevamente para ver los actuales cambios');
+      }
+      intervaloAleatorio = Math.floor(Math.random() * (6000 - 5000 + 1)) + 5000;
+      setTimeout(sincronizador, intervaloAleatorio);
+    } catch (error) {
+      console.error(error);
+      alerta('Error en el sincronizador del mapa. Por favor intenta cargar el mapa nuevamente para ver los actuales cambios');
+    }
+  }
 
 </script>
 
