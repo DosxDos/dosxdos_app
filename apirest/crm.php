@@ -47,6 +47,19 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
             $jsonRespuesta = json_encode($crm->respuestaError);
             print $jsonRespuesta;
         }
+    } else if (isset($_GET["montadores"])) {
+        $crm->get('montadores');
+        if ($crm->estado) {
+            $cod = $crm->respuesta[2];
+            http_response_code($cod);
+            $jsonRespuesta = json_encode($crm->respuesta);
+            print $jsonRespuesta;
+        } else {
+            $cod = $crm->respuestaError[2];
+            http_response_code($cod);
+            $jsonRespuesta = json_encode($crm->respuestaError);
+            print $jsonRespuesta;
+        }
     } else if (isset($_GET["eliminarLineas"])) {
         $crm->get('ots');
         if ($crm->estado) {
