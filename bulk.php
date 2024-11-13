@@ -17,6 +17,7 @@ try {
     $json = json_encode($vectorJson, JSON_FORCE_OBJECT);
     //echo $json;
     $response = $crm->agregar('bulkRead', $json);
+    print_r ($response);
     if ($crm->estado) {
         if ($crm->respuesta[1]['data'][0]['status'] == "success") {
             echo '<p id="p1" style="font-size: 20px; font-weight: bold; color: green">Solicitud al CRM exitosa, esperando recibir respuesta de los datos solicitados...</p>';
