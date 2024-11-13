@@ -20,6 +20,7 @@ class Crm extends Zoho
     private $camposPreciosLogos = "Rango1,Rango2,Precio";
     private $camposPreciosLogosMontaje = "Rango1,Rango2,Precio";
     private $camposRutas = "Name";
+    private $camposMontadores = "Apellido_del_montador,C_digo_del_montador,idApp,Name,Tel_fono_del_montador";
     public $estado = true;
     public $respuesta;
     public $respuestaError;
@@ -95,6 +96,10 @@ class Crm extends Zoho
 
                 case 'rutas':
                     $this->urlGet = "/crm/v5/Rutas?fields=" . $this->camposRutas;
+                    break;
+
+                case 'montadores':
+                    $this->urlGet = "/crm/v5/Montadores?fields=" . $this->camposMontadores;
                     break;
 
                 default:
