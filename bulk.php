@@ -17,7 +17,7 @@ try {
     $json = json_encode($vectorJson, JSON_FORCE_OBJECT);
     //echo $json;
     $response = $crm->agregar('bulkRead', $json);
-    print_r ($response);
+    print_r($response);
     if ($crm->estado) {
         if ($crm->respuesta[1]['data'][0]['status'] == "success") {
             echo '<p id="p1" style="font-size: 20px; font-weight: bold; color: green">Solicitud al CRM exitosa, esperando recibir respuesta de los datos solicitados...</p>';
@@ -26,6 +26,7 @@ try {
             flush();
             $crmResponse;
             while (true) {
+                sleep(5);
                 if (file_get_contents("callBackBulkCrm.json")) {
                     $crmResponse = file_get_contents("callBackBulkCrm.json");
                     $crmResponse = json_decode($crmResponse, true);
@@ -43,13 +44,50 @@ try {
                     }
                     break;
                 }
-                sleep(1);
             }
             if (isset($crmResponse['state']) && $crmResponse['state'] == "COMPLETED") {
                 echo '<p id="p4" style="font-size: 20px; font-weight: bold; color: green">Los datos comprimidos se han generado en el CRM, obteniendo los datos...</p>';
                 echo '<script>window.location.href = "#p4";</script>';
                 @ob_flush();
                 flush();
+
+                $link = $crmResponse['result']['download_url'];
+                $getArchivo = $crm->bulkFile($link);
+
+                if ($getArchivo) {
+                    $tempZipPath = "./temp_data.zip";
+                    // Extraer el contenido del archivo .zip
+                    $zip = new ZipArchive;
+                    if ($zip->open($tempZipPath) === true) {
+                        // Asumimos que el archivo .csv es el primero en el .zip
+                        $csvFileName = $zip->getNameIndex(0);
+                        $zip->extractTo('./'); // Extrae el .csv en el directorio actual
+                        $zip->close();
+
+                        // Leer el archivo .csv y convertirlo en un array asociativo
+                        $csvData = [];
+                        if (($handle = fopen($csvFileName, "r")) !== false) {
+                            $headers = fgetcsv($handle); // Leer la primera línea como encabezados
+                            while (($row = fgetcsv($handle)) !== false) {
+                                $csvData[] = array_combine($headers, $row);
+                            }
+                            fclose($handle);
+                        } else {
+                            die('<p id="p7" style="font-size: 20px; font-weight: bold; color: red">Error al abrir el archivo csv del CRM...</p><script>window.location.href = "#p7";</script>');
+                        }
+
+                        // Eliminar el archivo temporal .zip y el .csv extraído si no necesitas almacenarlos
+                        unlink($tempZipPath);
+                        unlink($csvFileName);
+
+                        // Mostrar el array asociativo resultante
+                        print_r($csvData);
+                    } else {
+                        die('<p id="p7" style="font-size: 20px; font-weight: bold; color: red">Error al abrir el archivo comprimido de los datos del CRM...</p><script>window.location.href = "#p7";</script>');
+                    }
+                } else {
+                    die('<p id="p7" style="font-size: 20px; font-weight: bold; color: red">Error al descargar el archivo comprimido de los datos del CRM...</p><script>window.location.href = "#p7";</script>');
+                }
             }
         } else {
             print_r($crm->respuesta);

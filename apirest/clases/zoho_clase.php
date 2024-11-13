@@ -18,13 +18,13 @@ class Zoho extends conexion
     function __construct()
     {
         try {
-            $cliente = __DIR__.'\cliente_zoho.json';
+            $cliente = __DIR__ . '\cliente_zoho.json';
             $this->cliente = file_get_contents($cliente);
             $this->cliente = json_decode($this->cliente, true);
-            $token = __DIR__.'\tokens_zoho.json';
+            $token = __DIR__ . '\tokens_zoho.json';
             $this->tokens = file_get_contents($token);
             $this->tokens = json_decode($this->tokens, true);
-            $codigo = __DIR__.'\code_zoho.json';
+            $codigo = __DIR__ . '\code_zoho.json';
             $this->codigo = file_get_contents($codigo);
             $this->codigo = json_decode($this->codigo, true);
             $this->dominioApi = $this->tokens['api_domain'];
@@ -65,7 +65,7 @@ class Zoho extends conexion
                     $this->tokens['token_type'] = $this->respuesta['token_type'];
                     $this->tokens['expires_in'] = $this->respuesta['expires_in'];
                     $jsonTokens = json_encode($this->tokens);
-                    $tokensFile = __DIR__.'\tokens_zoho.json';
+                    $tokensFile = __DIR__ . '\tokens_zoho.json';
                     if (file_put_contents($tokensFile, $jsonTokens) === false) {
                         $this->respuesta = "Error al escribir el token de acceso.";
                         return false;
@@ -188,6 +188,40 @@ class Zoho extends conexion
             $this->respuesta = "Error en la función get: " . $th->getMessage();
             $respuestaFinal = $this->respuestaFinal->error_500($this->respuesta);
             return $respuestaFinal;
+        }
+    }
+
+    public function getBulkFile($link)
+    {
+        try {
+            $url = $this->dominioApi . $link;
+            $accessToken = $this->tokens['access_token'];
+            $authorizationHeader = "Authorization: Zoho-oauthtoken $accessToken";
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_HTTPGET, true);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_HTTPHEADER, array($authorizationHeader));
+            $response = curl_exec($curl);
+            curl_close($curl);
+            if ($response === false) {
+                $renovar = $this->renovarToken();
+                if ($renovar) {
+                    return $this->getBulkFile($link);
+                } else {
+                    return false;
+                }
+            } else {
+                // Guardar el archivo .zip en una ubicación temporal
+                $tempZipPath = 'temp_data.zip';
+                if (file_put_contents($tempZipPath, $response)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        } catch (\Throwable $th) {
+            return false;
         }
     }
 

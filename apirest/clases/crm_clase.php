@@ -214,6 +214,13 @@ class Crm extends Zoho
                 case 'ots':
                     $this->urlGet = "/crm/v5/Deals?fields=" . $this->camposOts;
                     break;
+
+                case 'bulkRead':
+                    $this->urlGet = "/crm/bulk/v3/read";
+                    break;
+
+                default:
+                    $this->urlGet = $variable;
             }
             $datos = $zoho->post($this->urlGet, $json);
             if (isset($datos[1]['data'][0]['status']) && isset($datos[1]['data'][0]['code']) && $datos[1]['data'][0]['status'] == 'error' && $datos[1]['data'][0]['code'] == 'RECORD_IN_BLUEPRINT') {
@@ -240,5 +247,10 @@ class Crm extends Zoho
             $this->respuestaError[1] = "Error en el objeto CRM, en la función modulos: " . $this->mensajeError;
             $this->respuestaError[2] = 500;
         }
+    }
+
+    public function bulkFile($link) {
+        $zoho = new Zoho;
+        return $zoho->getBulkFile($link);
     }
 }
