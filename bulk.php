@@ -9,13 +9,34 @@ require_once './apirest/clases/crm_clase.php';
 try {
     //TODOS LOS DATOS DE UN MÓDULO
     $crm = new Crm;
+    $fecha1 = "2024-10-01";
+    $fecha1 = "2024-10-31";
+    $json = '{
+        "query": {
+            "module": {
+                "api_name": "Products"
+            },
+            "criteria": {
+                "comparator": "between",
+                "field": {
+                    "api_name": "Fecha_actuaci_n"
+                },
+                "value": [' . '"' . $fecha1 . '"' . ',' . 
+                '"' . $fecha2 . '"' . ']
+            }
+        }
+    }';
+    /*
     $vectorJson = [];
     $vectorJson['callback']['url'] = "https://dosxdos.app.iidos.com/callBackBulkCrm.php";
     $vectorJson['callback']['method'] = "post";
     $vectorJson['query']['module']['api_name'] = "Products";
+    $vectorJson['query']['criteria']['field']['api_name']= "Fecha_actuaci_n";
+    $vectorJson['query']['criteria']['comparator']= "between";
     $vectorJson['file_type'] = "csv";
     $json = json_encode($vectorJson, JSON_FORCE_OBJECT);
     //echo $json;
+    */
     $response = $crm->agregar('bulkRead', $json);
     print_r($response);
     if ($crm->estado) {
