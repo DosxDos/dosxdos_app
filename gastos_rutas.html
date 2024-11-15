@@ -497,6 +497,9 @@
               headers: { "Content-Type": "application/json" },
               body: cuerpo,
             };
+
+            console.log(endpoint);
+            console.log(options);
             fetch(endpoint, options)
               .then((response) => {
                 // Verificar si el estado de la respuesta no es exitoso (códigos 4xx o 5xx)
