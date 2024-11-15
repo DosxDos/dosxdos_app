@@ -1,8 +1,10 @@
 <?php
 
+/*
 ini_set("display_errors", 0);
 ini_set("display_startup_errors", 0);
 mysqli_report(MYSQLI_REPORT_OFF);
+*/
 
 header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
 header('Access-Control-Allow-Methods: GET, POST');
@@ -42,6 +44,7 @@ try {
             $response = $_respuestas->ok($crm->respuesta);
             http_response_code(200);
             echo json_encode($response);
+
             /*                
             if ($crm->respuesta[1]['data'][0]['status'] == "success") {
                 $crmResponse;
@@ -110,6 +113,7 @@ try {
                 http_response_code(500);
                 echo json_encode($crm->respuesta);
             }
+
             */
         } else {
             http_response_code(500);
