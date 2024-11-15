@@ -334,8 +334,12 @@
             Promise.all([rutasResponse.json(), montadoresResponse.json()])
           )
           .then(([rutasDataResponse, montadoresDataResponse]) => {
-            rutasData = rutasDataResponse[1];
-            montadoresData = montadoresDataResponse[1].data;
+            rutasData = rutasDataResponse[1].sort((a, b) =>
+              a.Name.localeCompare(b.Name)
+            );
+            montadoresData = montadoresDataResponse[1].data.sort((a, b) =>
+              a.Name.localeCompare(b.Name)
+            );
             populateDropdown("rutas", rutasData);
             populateDropdown("montadores", montadoresData);
           })
@@ -469,7 +473,7 @@
 
           console.log("form data sent: ", formData);
 
-          fetch("https://dosxdos.app.iidos.com/apirest/gastos_rutas.php", {
+          fetch("https://dosxdos.app.iidos.com/gastos_rutas.php", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
