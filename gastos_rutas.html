@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gastos Rutas</title>
+  <style>
+    #loader {
+      width: 100vw;
+      height: 100vh;
+      position: absolute;
+      top: 0;
+      z-index: 6000;
+      background-color: rgba(0, 0, 0, 0.886);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .loader {
+      border: 4px solid #ffffff;
+      /* Blanco */
+      border-top: 4px solid #d31216;
+      /* Rojo */
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .displayOff {
+      display: none;
+    }
+
+    .displayOn {
+      display: flex;
+    }
+
+    .borde {
+      border: var(--x1) solid black;
+    }
+
+    body {
+      overflow-x: hidden;
+    }
+
+    .oyh {
+      overflow-y: hidden;
+    }
+
+    /* Message */
+    .message-container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      height: 100%;
+      z-index: 3000;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .message-title {
+      font-weight: bold;
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+
+    .message-content {
+      font-size: 1rem;
+    }
+
+    /* Other styles for dropdowns and form */
+    .feedback {
+      color: red;
+      font-size: 14px;
+      margin-top: 5px;
+    }
+
+    .checkbox-item label {
+      margin-left: 8px;
+    }
+
+    .selected-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .tag {
+      background-color: #f1f1f1;
+      padding: 5px 10px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .tag .tag-close {
+      cursor: pointer;
+      font-weight: bold;
+      color: red;
+    }
+
+    /* Back Button */
+    #volver {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background-color: red;
+      padding: 12px;
+      border-radius: 20%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 3001;
+    }
+
+    #volver img {
+      width: 24px;
+      height: 24px;
+    }
+  </style>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body id="body" class="bg-gray-100 text-black p-5 flex flex-col justify-center items-center my-auto">
+  <div id="loader" class="displayOn">
+    <span class="loader"></span>
+  </div>
+
+  <!-- Back Button -->
+  <div id="volver" onclick="goBack()"
+    class="absolute top-5 left-5 flex items-center bg-red-600 p-3 rounded-[20%] cursor-pointer hover:bg-red-700">
+    <img src="https://dosxdos.app.iidos.com/img/back.png" alt="Volver Icon" class="w-7 h-7" />
+  </div>
+
+  <h1 id="titulo" class="relative text-4xl mb-8 mt-16 text-black font-bold mx-auto">
+    Gastos Rutas
+  </h1>
+
+  <form id="gastosRutasForm" class="w-full max-w-lg mx-auto">
+    <!-- Date Inputs -->
+    <div class="mb-5 w-full">
+      <label for="fechaInicial" class="block text-lg mb-2 font-semibold">Fecha Inicial</label>
+      <input type="date" id="fechaInicial" name="fechaInicial" required
+        class="w-full p-3 border border-gray-300 rounded-lg" />
+      <div id="fechaInicialFeedback" class="feedback"></div>
+    </div>
+
+    <div class="mb-5 w-full">
+      <label for="fechaFinal" class="block text-lg mb-2 font-semibold">Fecha Final</label>
+      <input type="date" id="fechaFinal" name="fechaFinal" required
+        class="w-full p-3 border border-gray-300 rounded-lg" />
+      <div id="fechaFinalFeedback" class="feedback"></div>
+    </div>
+
+    <!-- Rutas Dropdown -->
+    <div class="mb-5 w-full">
+      <label class="block text-lg font-semibold">Rutas</label>
+      <div class="dropdown">
+        <button type="button" class="dropbtn w-full p-3 bg-red-600 text-white rounded-lg text-left"
+          onclick="toggleDropdown('rutas')">
+          Seleccionar Rutas
+        </button>
+        <div id="rutasContent"
+          class="dropdown-content z-10 w-full bg-white border border-gray-300 rounded-lg mt-1 p-3 hidden">
+          <input type="text" class="search-input w-full p-3 mb-3 border border-gray-300 rounded-lg"
+            id="rutasSearchInput" placeholder="Buscar Rutas..." onkeyup="filterItems('rutas')" />
+          <div id="rutasCheckboxes"></div>
+        </div>
+      </div>
+      <div id="selectedRutas" class="selected-tags"></div>
+      <div id="rutasFeedback" class="feedback"></div>
+    </div>
+
+    <!-- Montadores Dropdown -->
+    <div class="mb-5 w-full">
+      <label class="block text-lg font-semibold">Montadores</label>
+      <div class="dropdown">
+        <button type="button" class="dropbtn w-full p-3 bg-red-600 text-white rounded-lg text-left"
+          onclick="toggleDropdown('montadores')">
+          Seleccionar Montadores
+        </button>
+        <div id="montadoresContent"
+          class="dropdown-content z-10 w-full bg-white border border-gray-300 rounded-lg mt-1 p-3 hidden">
+          <input type="text" class="search-input w-full p-3 mb-3 border border-gray-300 rounded-lg"
+            id="montadoresSearchInput" placeholder="Buscar Montadores..." onkeyup="filterItems('montadores')" />
+          <div id="montadoresCheckboxes"></div>
+        </div>
+      </div>
+      <div id="selectedMontadores" class="selected-tags"></div>
+      <div id="montadoresFeedback" class="feedback"></div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons flex gap-5 justify-center mt-5 flex-wrap">
+      <button type="button" id="calcularBtn" class="bg-red-600 text-white px-5 py-3 rounded-lg hover:bg-red-700"
+        onclick="validateForm()">
+        Calcular
+      </button>
+      <button type="button" id="borrarTodoBtn" class="bg-gray-300 text-black px-5 py-3 rounded-lg hover:bg-gray-400"
+        onclick="clearForm()">
+        Borrar Todo
+      </button>
+    </div>
+  </form>
+
+  <script>
+    let rutasData = [];
+    let montadoresData = [];
+    $loader = document.getElementById("loader");
+    $body = document.getElementById("body");
+
+    /* LOADER */
+    function scrollToTop() {
+      // Para navegadores modernos
+      document.documentElement.scrollTop = 0;
+      // Para navegadores antiguos
+      document.body.scrollTop = 0;
+    }
+
+    /* LOADER */
+    function loaderOn() {
+      scrollToTop();
+      $loader.classList.remove("displayOff");
+      $loader.classList.add("displayOn");
+      $body.classList.add("oyh");
+    }
+
+    function loaderOff() {
+      setTimeout(() => {
+        $loader.classList.remove("displayOn");
+        $loader.classList.add("displayOff");
+        $body.classList.remove("oyh");
+      }, 1000);
+    }
+
+    // Back Button Functionality
+    function goBack() {
+      window.history.back();
+    }
+
+    // Function to toggle dropdown visibility
+    function toggleDropdown(type) {
+      const content = document.getElementById(`${type}Content`);
+      const isVisible = content.style.display === "block";
+
+      // Hide all dropdowns first
+      const dropdowns = document.getElementsByClassName("dropdown-content");
+      Array.from(dropdowns).forEach((dropdown) => {
+        dropdown.style.display = "none";
+      });
+
+      // Show the clicked dropdown if it wasn't visible
+      if (!isVisible) {
+        content.style.display = "block";
+        document.getElementById(`${type}SearchInput`).focus();
+      }
+    }
+
+    // Fetch Rutas and Montadores data on page load
+    document.addEventListener("DOMContentLoaded", () => {
+      loaderOn();
+      Promise.all([
+        fetch("https://dosxdos.app.iidos.com/apirest/rutas.php"),
+        fetch("https://dosxdos.app.iidos.com/apirest/crm.php?montadores"),
+      ])
+        .then(([rutasResponse, montadoresResponse]) =>
+          Promise.all([rutasResponse.json(), montadoresResponse.json()])
+        )
+        .then(([rutasDataResponse, montadoresDataResponse]) => {
+          rutasData = rutasDataResponse[1];
+          montadoresData = montadoresDataResponse[1].data;
+          populateDropdown("rutas", rutasData);
+          populateDropdown("montadores", montadoresData);
+        })
+        .catch((error) => console.error("Error fetching data:", error))
+        .finally(() => loaderOff());
+    });
+
+    // Populate dropdown with checkboxes
+    function populateDropdown(type, items) {
+      const container = document.getElementById(`${type}Checkboxes`);
+      container.innerHTML = "";
+
+      items.forEach((item) => {
+        const div = document.createElement("div");
+        div.className =
+          "checkbox-item flex items-center p-2 cursor-pointer hover:bg-gray-100";
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.id = `${type}-${item.id}`;
+        checkbox.checked = false;
+
+        const label = document.createElement("label");
+        label.htmlFor = `${type}-${item.id}`;
+        label.textContent = item.Name;
+
+        div.appendChild(checkbox);
+        div.appendChild(label);
+        container.appendChild(div);
+
+        checkbox.addEventListener("change", () => {
+          if (checkbox.checked) {
+            addTag(type, item);
+          } else {
+            removeTag(type, item.id);
+          }
+        });
+      });
+    }
+
+    // Add selected item tag
+    function addTag(type, item) {
+      const container = document.getElementById(
+        `selected${capitalizeFirstLetter(type)}`
+      );
+      const tag = document.createElement("div");
+      tag.className = "tag";
+      tag.dataset.id = `${type}-${item.id}`;
+      tag.innerHTML = `${item.Name} <span class="tag-close" onclick="removeTag('${type}', '${item.id}')">&times;</span>`;
+      container.appendChild(tag);
+    }
+
+    // Remove selected item tag
+    function removeTag(type, id) {
+      const container = document.getElementById(
+        `selected${capitalizeFirstLetter(type)}`
+      );
+      const tag = container.querySelector(`div[data-id="${type}-${id}"]`);
+      if (tag) {
+        tag.remove();
+        const checkbox = document.getElementById(`${type}-${id}`);
+        if (checkbox) {
+          checkbox.checked = false;
+        }
+      }
+    }
+
+    // Capitalize first letter
+    function capitalizeFirstLetter(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+    // Validate form and send POST request
+    function validateForm() {
+      const fechaInicial = document.getElementById("fechaInicial");
+      const fechaFinal = document.getElementById("fechaFinal");
+
+      const selectedRutas = Array.from(
+        document.getElementById("selectedRutas").children
+      ).map((tag) => tag.dataset.id.replace("rutas-", ""));
+      const selectedMontadores = Array.from(
+        document.getElementById("selectedMontadores").children
+      ).map((tag) => tag.dataset.id.replace("montadores-", ""));
+
+      let isValid = true;
+      if (!fechaInicial.value) {
+        document.getElementById("fechaInicialFeedback").textContent =
+          "La fecha inicial es requerida.";
+        isValid = false;
+      }
+      if (!fechaFinal.value) {
+        document.getElementById("fechaFinalFeedback").textContent =
+          "La fecha final es requerida.";
+        isValid = false;
+      }
+      if (selectedRutas.length === 0) {
+        document.getElementById("rutasFeedback").textContent =
+          "Debes seleccionar al menos una ruta.";
+        isValid = false;
+      }
+      if (selectedMontadores.length === 0) {
+        document.getElementById("montadoresFeedback").textContent =
+          "Debes seleccionar al menos un montador.";
+        isValid = false;
+      }
+
+      if (isValid) {
+        const formData = {
+          fechas: {
+            fechaInicial: fechaInicial.value,
+            fechaFinal: fechaFinal.value,
+          },
+          rutas: rutasData.filter((ruta) => selectedRutas.includes(ruta.id)),
+          montadores: montadoresData.filter((montador) =>
+            selectedMontadores.includes(montador.id)
+          ),
+        };
+
+        loaderOn();
+
+        console.log("form data sent: ", formData);
+
+        fetch("https://dosxdos.app.iidos.com/gastos_rutas.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            loaderOff();
+            displayMessage(
+              "¡Éxito!",
+              "Los datos se enviaron correctamente",
+              "success"
+            );
+          })
+          .catch((error) => {
+            loaderOff();
+            displayMessage(
+              "Error",
+              "Hubo un error al enviar los datos.",
+              "error"
+            );
+          });
+      }
+    }
+
+    // Function to display success/error message
+    function displayMessage(title, message, type) {
+      const messageContainer = document.createElement("div");
+      messageContainer.className = `message-container ${type}`;
+      messageContainer.innerHTML = `
+          <div class="message-title">${title}</div>
+          <div class="message-content">${message}</div>
+        `;
+      document.body.appendChild(messageContainer);
+
+      // Hide message after 5 seconds
+      setTimeout(() => {
+        messageContainer.remove();
+      }, 5000);
+    }
+  </script>
+</body>
+
+</html>
