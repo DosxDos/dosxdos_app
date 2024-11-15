@@ -424,7 +424,7 @@
         });
       }
 
-      function validateForm() {
+      async function validateForm() {
         const fechaInicial = document.getElementById("fechaInicial");
         const fechaFinal = document.getElementById("fechaFinal");
 
@@ -472,33 +472,144 @@
           loaderOn();
 
           console.log("form data sent: ", formData);
+          const endpoint = "https://dosxdos.app.iidos.com/gastos_rutas.php";
+          const metodo = "POST";
+          const cuerpo = JSON.stringify(formData);
 
-          fetch("https://dosxdos.app.iidos.com/gastos_rutas.php", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              loaderOff();
-              displayMessage(
-                "¡Éxito!",
-                "Los datos se enviaron correctamente",
-                "success"
-              );
-            })
-            .catch((error) => {
-              loaderOff();
-              displayMessage(
-                "Error",
-                "Hubo un error al enviar los datos.",
-                "error"
-              );
-            });
+          const respuesta = await requestBackend(endpoint, metodo, cuerpo);
+
+          if (respuesta) {
+            document.getElementById;
+          } else {
+            console.error(
+              "Error al llamar el backend en la línea 479 para calcular los gastos"
+            );
+          }
         }
       }
+
+      const requestBackend = (endpoint, metodo, cuerpo = false) => {
+        return new Promise((resolve, reject) => {
+          if (cuerpo) {
+            fetch(endpoint, {
+              method: metodo,
+              body: cuerpo,
+            })
+              .then((response) => {
+                // Verificar si el estado de la respuesta no es exitoso (códigos 4xx o 5xx)
+                if (!response.ok) {
+                  // Verificar si fue un error de la API
+                  //Intentar obtener el cuerpo de la respuesta como JSON
+                  return response
+                    .clone()
+                    .json()
+                    .then((errorResponse) => {
+                      console.error(errorResponse);
+                      resolve(errorResponse);
+                    })
+                    .catch(() => {
+                      // Si no es posible parsear el cuerpo como JSON, obtenerlo como texto
+                      return response.text().then((errorText) => {
+                        respuestaErrorPersonalizada = [false, errorText, 500];
+                        console.error(respuestaErrorPersonalizada);
+                        resolve(respuestaErrorPersonalizada);
+                      });
+                    });
+                }
+                return response
+                  .clone()
+                  .json()
+                  .then((response) => {
+                    console.log(response);
+                    resolve(response);
+                  })
+                  .catch(() => {
+                    // Si no es posible parsear el cuerpo como JSON, obtenerlo como texto
+                    return response.text().then((errorText) => {
+                      respuestaErrorPersonalizada = [false, errorText, 500];
+                      console.error(respuestaErrorPersonalizada);
+                      resolve(respuestaErrorPersonalizada);
+                    });
+                  });
+              })
+              .catch((error) => {
+                // Verificar si el error fue de red
+                if (error.message === "Failed to fetch") {
+                  respuestaErrorPersonalizada = [
+                    false,
+                    "Error de red: No se pudo conectar con el servidor.",
+                    500,
+                  ];
+                  console.error(respuestaErrorPersonalizada);
+                  resolve(respuestaErrorPersonalizada);
+                } else {
+                  console.error(error);
+                  respuestaErrorPersonalizada = [false, error.message, 500];
+                  console.error(respuestaErrorPersonalizada);
+                  resolve(respuestaErrorPersonalizada);
+                }
+              });
+          } else {
+            fetch(endpoint, {
+              method: metodo,
+            })
+              .then((response) => {
+                // Verificar si el estado de la respuesta no es exitoso (códigos 4xx o 5xx)
+                if (!response.ok) {
+                  // Verificar si fue un error de la API
+                  //Intentar obtener el cuerpo de la respuesta como JSON
+                  return response
+                    .clone()
+                    .json()
+                    .then((errorResponse) => {
+                      console.error(errorResponse);
+                      resolve(errorResponse);
+                    })
+                    .catch(() => {
+                      // Si no es posible parsear el cuerpo como JSON, obtenerlo como texto
+                      return response.text().then((errorText) => {
+                        respuestaErrorPersonalizada = [false, errorText, 500];
+                        console.error(respuestaErrorPersonalizada);
+                        resolve(respuestaErrorPersonalizada);
+                      });
+                    });
+                }
+                return response
+                  .clone()
+                  .json()
+                  .then((response) => {
+                    console.log(response);
+                    resolve(response);
+                  })
+                  .catch(() => {
+                    // Si no es posible parsear el cuerpo como JSON, obtenerlo como texto
+                    return response.text().then((errorText) => {
+                      respuestaErrorPersonalizada = [false, errorText, 500];
+                      console.error(respuestaErrorPersonalizada);
+                      resolve(respuestaErrorPersonalizada);
+                    });
+                  });
+              })
+              .catch((error) => {
+                // Verificar si el error fue de red
+                if (error.message === "Failed to fetch") {
+                  respuestaErrorPersonalizada = [
+                    false,
+                    "Error de red: No se pudo conectar con el servidor.",
+                    500,
+                  ];
+                  console.error(respuestaErrorPersonalizada);
+                  resolve(respuestaErrorPersonalizada);
+                } else {
+                  console.error(error);
+                  respuestaErrorPersonalizada = [false, error.message, 500];
+                  console.error(respuestaErrorPersonalizada);
+                  resolve(respuestaErrorPersonalizada);
+                }
+              });
+          }
+        });
+      };
 
       function displayMessage(title, message, type) {
         const messageContainer = document.createElement("div");
@@ -508,10 +619,12 @@
           <div class="message-content">${message}</div>
         `;
         document.body.appendChild(messageContainer);
-
-        setTimeout(() => {
+        const botonCerrar = document.createElement("button");
+        botonCerrar.className = "cerrar";
+        botonCerrar.onclick(() => {
           messageContainer.remove();
-        }, 5000);
+        });
+        document.body.appendChild(botonCerrar);
       }
     </script>
   </body>
