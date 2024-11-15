@@ -489,7 +489,7 @@
         }
       }
 
-      const requestBackend = (endpoint, metodo, cuerpo = false) => {
+      const requestBackend = (endpoint, metodo, cuerpo) => {
         return new Promise((resolve, reject) => {
           if (cuerpo) {
             const options = {
