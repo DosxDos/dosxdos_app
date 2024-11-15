@@ -424,10 +424,6 @@
         });
       }
 
-      const endpoint = "https://dosxdos.app.iidos.com/gastos_rutas.php";
-      const metodo = "POST";
-      let cuerpo;
-
       async function validateForm() {
         const fechaInicial = document.getElementById("fechaInicial");
         const fechaFinal = document.getElementById("fechaFinal");
@@ -476,7 +472,10 @@
           loaderOn();
 
           console.log("form data sent: ", formData);
-          cuerpo = JSON.stringify(formData);
+          const cuerpo = JSON.stringify(formData);
+
+          const endpoint = "https://dosxdos.app.iidos.com/gastos_rutas.php";
+          const metodo = "POST";
 
           const respuesta = await requestBackend(endpoint, metodo, cuerpo);
 
@@ -493,10 +492,12 @@
       const requestBackend = (endpoint, metodo, cuerpo = false) => {
         return new Promise((resolve, reject) => {
           if (cuerpo) {
-            fetch(endpoint, {
+            const options = {
               method: metodo,
+              headers: { "Content-Type": "application/json" },
               body: cuerpo,
-            })
+            };
+            fetch(endpoint, options)
               .then((response) => {
                 // Verificar si el estado de la respuesta no es exitoso (códigos 4xx o 5xx)
                 if (!response.ok) {
@@ -552,9 +553,11 @@
                 }
               });
           } else {
-            fetch(endpoint, {
+            const options = {
               method: metodo,
-            })
+              headers: { "Content-Type": "application/json" },
+            };
+            fetch(endpoint, options)
               .then((response) => {
                 // Verificar si el estado de la respuesta no es exitoso (códigos 4xx o 5xx)
                 if (!response.ok) {
