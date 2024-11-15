@@ -480,7 +480,7 @@
           const respuesta = await requestBackend(endpoint, metodo, cuerpo);
 
           if (respuesta) {
-            document.getElementById;
+            console.log(respuesta[1]);
           } else {
             console.error(
               "Error al llamar el backend en la línea 479 para calcular los gastos"
@@ -491,131 +491,87 @@
 
       function requestBackend(endpoint, metodo, cuerpo = false) {
         return new Promise((resolve, reject) => {
+          let options;
           if (cuerpo) {
-            const options = {
+            options = {
               method: metodo,
               headers: { "Content-Type": "application/json" },
               body: cuerpo,
             };
-            console.log(endpoint);
-            console.log(options);
-            fetch(endpoint, options)
-              .then((response) => {
-                // Verificar si el estado de la respuesta no es exitoso (códigos 4xx o 5xx)
-                if (!response.ok) {
-                  // Verificar si fue un error de la API
-                  //Intentar obtener el cuerpo de la respuesta como JSON
-                  return response
-                    .clone()
-                    .json()
-                    .then((errorResponse) => {
-                      console.error(errorResponse);
-                      resolve(errorResponse);
-                    })
-                    .catch(() => {
-                      // Si no es posible parsear el cuerpo como JSON, obtenerlo como texto
-                      return response.text().then((errorText) => {
-                        respuestaErrorPersonalizada = [false, errorText, 500];
-                        console.error(respuestaErrorPersonalizada);
-                        resolve(respuestaErrorPersonalizada);
-                      });
-                    });
-                }
-                return response
-                  .clone()
-                  .json()
-                  .then((response) => {
-                    console.log(response);
-                    resolve(response);
-                  })
-                  .catch(() => {
-                    // Si no es posible parsear el cuerpo como JSON, obtenerlo como texto
-                    return response.text().then((errorText) => {
-                      respuestaErrorPersonalizada = [false, errorText, 500];
-                      console.error(respuestaErrorPersonalizada);
-                      resolve(respuestaErrorPersonalizada);
-                    });
-                  });
-              })
-              .catch((error) => {
-                // Verificar si el error fue de red
-                if (error.message === "Failed to fetch") {
-                  respuestaErrorPersonalizada = [
-                    false,
-                    "Error de red: No se pudo conectar con el servidor.",
-                    500,
-                  ];
-                  console.error(respuestaErrorPersonalizada);
-                  resolve(respuestaErrorPersonalizada);
-                } else {
-                  console.error(error);
-                  respuestaErrorPersonalizada = [false, error.message, 500];
-                  console.error(respuestaErrorPersonalizada);
-                  resolve(respuestaErrorPersonalizada);
-                }
-              });
           } else {
-            const options = {
+            options = {
               method: metodo,
               headers: { "Content-Type": "application/json" },
             };
-            fetch(endpoint, options)
-              .then((response) => {
-                // Verificar si el estado de la respuesta no es exitoso (códigos 4xx o 5xx)
-                if (!response.ok) {
-                  // Verificar si fue un error de la API
-                  //Intentar obtener el cuerpo de la respuesta como JSON
-                  return response
-                    .clone()
-                    .json()
-                    .then((errorResponse) => {
-                      console.error(errorResponse);
-                      resolve(errorResponse);
-                    })
-                    .catch(() => {
-                      // Si no es posible parsear el cuerpo como JSON, obtenerlo como texto
-                      return response.text().then((errorText) => {
-                        respuestaErrorPersonalizada = [false, errorText, 500];
-                        console.error(respuestaErrorPersonalizada);
-                        resolve(respuestaErrorPersonalizada);
-                      });
-                    });
-                }
+          }
+          console.log(endpoint);
+          console.log(options);
+          fetch(endpoint, options)
+            .then((response) => {
+              // Verificar si el estado de la respuesta no es exitoso (códigos 4xx o 5xx)
+              if (!response.ok) {
+                // Verificar si fue un error de la API
+                //Intentar obtener el cuerpo de la respuesta como JSON
                 return response
                   .clone()
                   .json()
-                  .then((response) => {
-                    console.log(response);
-                    resolve(response);
+                  .then((errorResponse) => {
+                    console.error("Error enviado por la API");
+                    console.error(errorResponse);
+                    resolve(errorResponse);
                   })
                   .catch(() => {
                     // Si no es posible parsear el cuerpo como JSON, obtenerlo como texto
                     return response.text().then((errorText) => {
                       respuestaErrorPersonalizada = [false, errorText, 500];
+                      console.error(
+                        "Error en el backend, ha respondido el servidor del backend y no la API"
+                      );
                       console.error(respuestaErrorPersonalizada);
                       resolve(respuestaErrorPersonalizada);
                     });
                   });
-              })
-              .catch((error) => {
-                // Verificar si el error fue de red
-                if (error.message === "Failed to fetch") {
-                  respuestaErrorPersonalizada = [
-                    false,
-                    "Error de red: No se pudo conectar con el servidor.",
-                    500,
-                  ];
-                  console.error(respuestaErrorPersonalizada);
-                  resolve(respuestaErrorPersonalizada);
-                } else {
-                  console.error("Error del js del frontend u otra naturaleza");
-                  console.error(error);
-                  respuestaErrorPersonalizada = [false, error.message, 500];
-                  console.error(respuestaErrorPersonalizada);
-                  resolve(respuestaErrorPersonalizada);
-                }
-              });
-          }
+              }
+              return response
+                .clone()
+                .json()
+                .then((response) => {
+                  console.log(response);
+                  resolve(response);
+                })
+                .catch(() => {
+                  // Si no es posible parsear el cuerpo como JSON, obtenerlo como texto
+                  return response.text().then((errorText) => {
+                    respuestaErrorPersonalizada = [false, errorText, 500];
+                    console.error(
+                      "Error, la API ha respondido pero no lo ha hecho en formato JSON"
+                    );
+                    console.error(respuestaErrorPersonalizada);
+                    resolve(respuestaErrorPersonalizada);
+                  });
+                });
+            })
+            .catch((error) => {
+              // Verificar si el error fue de red
+              if (error.message === "Failed to fetch") {
+                respuestaErrorPersonalizada = [
+                  false,
+                  "Error de red: No se pudo conectar con el servidor.",
+                  500,
+                ];
+                console.error(
+                  "Error en el cliente, no se ha podido conectar a la API"
+                );
+                console.error(respuestaErrorPersonalizada);
+                resolve(respuestaErrorPersonalizada);
+              } else {
+                console.error("Error en el código del frontend");
+                console.error(error);
+                respuestaErrorPersonalizada = [false, error.message, 500];
+                console.error(respuestaErrorPersonalizada);
+                resolve(respuestaErrorPersonalizada);
+              }
+            });
         });
       }
 
