@@ -41,7 +41,7 @@ try {
 
         if ($crm->estado) {
 
-            $response = $_respuestas->ok($crm->respuesta);
+            $response = $respuesta->ok($crm->respuesta);
             http_response_code(200);
             echo json_encode($response);
 
@@ -82,7 +82,7 @@ try {
                                 }
                                 fclose($handle);
                             } else {
-                                $response = $_respuestas->error_500('Error al abrir el archivo csv del CRM');
+                                $response = $respuesta->error_500('Error al abrir el archivo csv del CRM');
                                 http_response_code(500);
                                 echo json_encode($response);
                                 die();
@@ -92,18 +92,18 @@ try {
                             unlink($tempZipPath);
                             unlink($csvFileName);
 
-                            $response = $_respuestas->ok($csvData);
+                            $response = $respuesta->ok($csvData);
                             http_response_code(200);
                             echo json_encode($response);
 
                         } else {
-                            $response = $_respuestas->error_500('Error al abrir el archivo comprimido de los datos del CRM');
+                            $response = $respuesta->error_500('Error al abrir el archivo comprimido de los datos del CRM');
                             http_response_code(500);
                             echo json_encode($response);
                             die();
                         }
                     } else {
-                        $response = $_respuestas->error_500('Error al descargar el archivo comprimido de los datos del CRM');
+                        $response = $respuesta->error_500('Error al descargar el archivo comprimido de los datos del CRM');
                         http_response_code(500);
                         echo json_encode($response);
                         die();
@@ -120,7 +120,7 @@ try {
             echo json_encode($crm->respuestaError);
         }
     } else {
-        $response = $_respuestas->error_405();
+        $response = $respuesta->error_405();
         http_response_code(405);
         echo json_encode($response);
     }
@@ -134,7 +134,7 @@ try {
     $errores['archivoError'] = $archivoError;
     $errores['lineaError'] = $lineaError;
     $errores['trazaError'] = $trazaError;
-    $response = $_respuestas->error_500($errores);
+    $response = $respuesta->error_500($errores);
     http_response_code(500);
     echo json_encode($response);
 }
