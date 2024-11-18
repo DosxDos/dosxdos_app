@@ -1,603 +1,565 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gastos Rutas</title>
-    <style>
-      #loader {
-        width: 100vw;
-        height: 100vh;
-        position: absolute;
-        top: 0;
-        z-index: 6000;
-        background-color: rgba(0, 0, 0, 0.886);
-        justify-content: center;
-        align-items: center;
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gastos Rutas</title>
+  <style>
+    #loader {
+      width: 100vw;
+      height: 100vh;
+      position: absolute;
+      top: 0;
+      z-index: 6000;
+      background-color: rgba(0, 0, 0, 0.886);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .loader {
+      border: 4px solid #ffffff;
+      /* Blanco */
+      border-top: 4px solid #d31216;
+      /* Rojo */
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
       }
 
-      .loader {
-        border: 4px solid #ffffff;
-        /* Blanco */
-        border-top: 4px solid #d31216;
-        /* Rojo */
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        animation: spin 1s linear infinite;
+      100% {
+        transform: rotate(360deg);
       }
+    }
 
-      @keyframes spin {
-        0% {
-          transform: rotate(0deg);
-        }
+    .displayOff {
+      display: none;
+    }
 
-        100% {
-          transform: rotate(360deg);
-        }
-      }
+    .displayOn {
+      display: flex;
+    }
 
-      .displayOff {
-        display: none;
-      }
+    .borde {
+      border: var(--x1) solid black;
+    }
 
-      .displayOn {
-        display: flex;
-      }
+    body {
+      overflow-x: hidden;
+    }
 
-      .borde {
-        border: var(--x1) solid black;
-      }
+    .oyh {
+      overflow-y: hidden;
+    }
 
-      body {
-        overflow-x: hidden;
-      }
+    /* Message */
+    .message-container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      height: 100%;
+      z-index: 3000;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
 
-      .oyh {
-        overflow-y: hidden;
-      }
+    .message-title {
+      font-weight: bold;
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
 
-      /* Message */
-      .message-container {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        padding: 20px;
-        background-color: white;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        width: 100%;
-        height: 100%;
-        z-index: 3000;
-        text-align: center;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-      }
+    .message-content {
+      font-size: 1rem;
+    }
 
-      .message-title {
-        font-weight: bold;
-        font-size: 1.5rem;
-        margin-bottom: 10px;
-      }
+    /* Other styles for dropdowns and form */
+    .feedback {
+      color: red;
+      font-size: 14px;
+      margin-top: 5px;
+    }
 
-      .message-content {
-        font-size: 1rem;
-      }
+    .checkbox-item label {
+      margin-left: 8px;
+    }
 
-      /* Other styles for dropdowns and form */
-      .feedback {
-        color: red;
-        font-size: 14px;
-        margin-top: 5px;
-      }
+    .selected-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
 
-      .checkbox-item label {
-        margin-left: 8px;
-      }
+    .tag {
+      background-color: #f1f1f1;
+      padding: 5px 10px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
 
-      .selected-tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-top: 8px;
-      }
+    .tag .tag-close {
+      cursor: pointer;
+      font-weight: bold;
+      color: red;
+    }
 
-      .tag {
-        background-color: #f1f1f1;
-        padding: 5px 10px;
-        border-radius: 20px;
-        display: flex;
-        align-items: center;
-        gap: 5px;
-      }
+    /* Back Button */
+    #volver {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background-color: red;
+      padding: 12px;
+      border-radius: 20%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 3001;
+    }
 
-      .tag .tag-close {
-        cursor: pointer;
-        font-weight: bold;
-        color: red;
-      }
+    #volver img {
+      width: 24px;
+      height: 24px;
+    }
+  </style>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
 
-      /* Back Button */
-      #volver {
-        position: absolute;
-        top: 20px;
-        left: 20px;
-        background-color: red;
-        padding: 12px;
-        border-radius: 20%;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 3001;
-      }
+<body id="body" class="bg-gray-100 text-black p-5 flex flex-col justify-center items-center my-auto">
+  <div id="loader" class="displayOn">
+    <span class="loader"></span>
+  </div>
 
-      #volver img {
-        width: 24px;
-        height: 24px;
-      }
-    </style>
-    <script src="https://cdn.tailwindcss.com"></script>
-  </head>
-  <body
-    id="body"
-    class="bg-gray-100 text-black p-5 flex flex-col justify-center items-center my-auto"
-  >
-    <div id="loader" class="displayOn">
-      <span class="loader"></span>
+  <!-- Back Button -->
+  <div id="volver" onclick="goBack()"
+    class="absolute top-5 left-5 flex items-center bg-red-600 p-3 rounded-[20%] cursor-pointer hover:bg-red-700">
+    <img src="https://dosxdos.app.iidos.com/img/back.png" alt="Volver Icon" class="w-7 h-7" />
+  </div>
+
+  <h1 id="titulo" class="relative text-4xl mb-8 mt-16 text-black font-bold mx-auto">
+    Gastos Rutas
+  </h1>
+
+  <form id="gastosRutasForm" class="w-full max-w-lg mx-auto">
+    <!-- Date Inputs -->
+    <div class="mb-5 w-full">
+      <label for="fechaInicial" class="block text-lg mb-2 font-semibold">Fecha Inicial</label>
+      <input type="date" id="fechaInicial" name="fechaInicial" required
+        class="w-full p-3 border border-gray-300 rounded-lg" />
+      <div id="fechaInicialFeedback" class="feedback"></div>
     </div>
 
-    <!-- Back Button -->
-    <div
-      id="volver"
-      onclick="goBack()"
-      class="absolute top-5 left-5 flex items-center bg-red-600 p-3 rounded-[20%] cursor-pointer hover:bg-red-700"
-    >
-      <img
-        src="https://dosxdos.app.iidos.com/img/back.png"
-        alt="Volver Icon"
-        class="w-7 h-7"
-      />
+    <div class="mb-5 w-full">
+      <label for="fechaFinal" class="block text-lg mb-2 font-semibold">Fecha Final</label>
+      <input type="date" id="fechaFinal" name="fechaFinal" required
+        class="w-full p-3 border border-gray-300 rounded-lg" />
+      <div id="fechaFinalFeedback" class="feedback"></div>
     </div>
 
-    <h1
-      id="titulo"
-      class="relative text-4xl mb-8 mt-16 text-black font-bold mx-auto"
-    >
-      Gastos Rutas
-    </h1>
-
-    <form id="gastosRutasForm" class="w-full max-w-lg mx-auto">
-      <!-- Date Inputs -->
-      <div class="mb-5 w-full">
-        <label for="fechaInicial" class="block text-lg mb-2 font-semibold"
-          >Fecha Inicial</label
-        >
-        <input
-          type="date"
-          id="fechaInicial"
-          name="fechaInicial"
-          required
-          class="w-full p-3 border border-gray-300 rounded-lg"
-        />
-        <div id="fechaInicialFeedback" class="feedback"></div>
-      </div>
-
-      <div class="mb-5 w-full">
-        <label for="fechaFinal" class="block text-lg mb-2 font-semibold"
-          >Fecha Final</label
-        >
-        <input
-          type="date"
-          id="fechaFinal"
-          name="fechaFinal"
-          required
-          class="w-full p-3 border border-gray-300 rounded-lg"
-        />
-        <div id="fechaFinalFeedback" class="feedback"></div>
-      </div>
-
-      <!-- Rutas Dropdown -->
-      <div class="mb-5 w-full">
-        <label class="block text-lg font-semibold">Rutas</label>
-        <div class="dropdown">
-          <button
-            type="button"
-            class="dropbtn w-full p-3 bg-red-600 text-white rounded-lg text-left"
-            onclick="toggleDropdown('rutas')"
-          >
-            Seleccionar Rutas
-          </button>
-          <div
-            id="rutasContent"
-            class="dropdown-content z-10 w-full bg-white border border-gray-300 rounded-lg mt-1 p-3 hidden"
-          >
-            <input
-              type="text"
-              class="search-input w-full p-3 mb-3 border border-gray-300 rounded-lg"
-              id="rutasSearchInput"
-              placeholder="Buscar Rutas..."
-              onkeyup="filterItems('rutas')"
-            />
-            <div id="rutasCheckboxes"></div>
-          </div>
-        </div>
-        <div id="selectedRutas" class="selected-tags"></div>
-        <div id="rutasFeedback" class="feedback"></div>
-      </div>
-
-      <!-- Montadores Dropdown -->
-      <div class="mb-5 w-full">
-        <label class="block text-lg font-semibold">Montadores</label>
-        <div class="dropdown">
-          <button
-            type="button"
-            class="dropbtn w-full p-3 bg-red-600 text-white rounded-lg text-left"
-            onclick="toggleDropdown('montadores')"
-          >
-            Seleccionar Montadores
-          </button>
-          <div
-            id="montadoresContent"
-            class="dropdown-content z-10 w-full bg-white border border-gray-300 rounded-lg mt-1 p-3 hidden"
-          >
-            <input
-              type="text"
-              class="search-input w-full p-3 mb-3 border border-gray-300 rounded-lg"
-              id="montadoresSearchInput"
-              placeholder="Buscar Montadores..."
-              onkeyup="filterItems('montadores')"
-            />
-            <div id="montadoresCheckboxes"></div>
-          </div>
-        </div>
-        <div id="selectedMontadores" class="selected-tags"></div>
-        <div id="montadoresFeedback" class="feedback"></div>
-      </div>
-
-      <!-- Action Buttons -->
-      <div class="action-buttons flex gap-5 justify-center mt-5 flex-wrap">
-        <button
-          type="button"
-          id="calcularBtn"
-          class="bg-red-600 text-white px-5 py-3 rounded-lg hover:bg-red-700"
-          onclick="validateForm()"
-        >
-          Calcular
+    <!-- Rutas Dropdown -->
+    <div class="mb-5 w-full">
+      <label class="block text-lg font-semibold">Rutas</label>
+      <div class="dropdown">
+        <button type="button" class="dropbtn w-full p-3 bg-red-600 text-white rounded-lg text-left"
+          onclick="toggleDropdown('rutas')">
+          Seleccionar Rutas
         </button>
-        <button
-          type="button"
-          id="borrarTodoBtn"
-          class="bg-gray-300 text-black px-5 py-3 rounded-lg hover:bg-gray-400"
-          onclick="clearForm()"
-        >
-          Borrar Todo
-        </button>
+        <div id="rutasContent"
+          class="dropdown-content z-10 w-full bg-white border border-gray-300 rounded-lg mt-1 p-3 hidden">
+          <input type="text" class="search-input w-full p-3 mb-3 border border-gray-300 rounded-lg"
+            id="rutasSearchInput" placeholder="Buscar Rutas..." onkeyup="filterItems('rutas')" />
+          <div id="rutasCheckboxes"></div>
+        </div>
       </div>
-    </form>
+      <div id="selectedRutas" class="selected-tags"></div>
+      <div id="rutasFeedback" class="feedback"></div>
+    </div>
 
-    <script>
-      let rutasData = [];
-      let montadoresData = [];
-      const $loader = document.getElementById("loader");
-      const $body = document.getElementById("body");
+    <!-- Montadores Dropdown -->
+    <div class="mb-5 w-full">
+      <label class="block text-lg font-semibold">Montadores</label>
+      <div class="dropdown">
+        <button type="button" class="dropbtn w-full p-3 bg-red-600 text-white rounded-lg text-left"
+          onclick="toggleDropdown('montadores')">
+          Seleccionar Montadores
+        </button>
+        <div id="montadoresContent"
+          class="dropdown-content z-10 w-full bg-white border border-gray-300 rounded-lg mt-1 p-3 hidden">
+          <input type="text" class="search-input w-full p-3 mb-3 border border-gray-300 rounded-lg"
+            id="montadoresSearchInput" placeholder="Buscar Montadores..." onkeyup="filterItems('montadores')" />
+          <div id="montadoresCheckboxes"></div>
+        </div>
+      </div>
+      <div id="selectedMontadores" class="selected-tags"></div>
+      <div id="montadoresFeedback" class="feedback"></div>
+    </div>
 
-      function scrollToTop() {
-        document.documentElement.scrollTop = 0;
-        document.body.scrollTop = 0;
-      }
+    <!-- Action Buttons -->
+    <div class="action-buttons flex gap-5 justify-center mt-5 flex-wrap">
+      <button type="button" id="calcularBtn" class="bg-red-600 text-white px-5 py-3 rounded-lg hover:bg-red-700"
+        onclick="validateForm()">
+        Calcular
+      </button>
+      <button type="button" id="borrarTodoBtn" class="bg-gray-300 text-black px-5 py-3 rounded-lg hover:bg-gray-400"
+        onclick="clearForm()">
+        Borrar Todo
+      </button>
+    </div>
+  </form>
 
-      function loaderOn() {
-        scrollToTop();
-        $loader.classList.remove("displayOff");
-        $loader.classList.add("displayOn");
-        $body.classList.add("oyh");
-      }
+  <script>
+    let rutasData = [];
+    let montadoresData = [];
+    const $loader = document.getElementById("loader");
+    const $body = document.getElementById("body");
 
-      function loaderOff() {
-        setTimeout(() => {
-          $loader.classList.remove("displayOn");
-          $loader.classList.add("displayOff");
-          $body.classList.remove("oyh");
-        }, 1000);
-      }
+    function scrollToTop() {
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    }
 
-      function goBack() {
-        window.history.back();
-      }
+    function loaderOn() {
+      scrollToTop();
+      $loader.classList.remove("displayOff");
+      $loader.classList.add("displayOn");
+      $body.classList.add("oyh");
+    }
 
-      function toggleDropdown(type) {
-        const content = document.getElementById(`${type}Content`);
-        const isVisible = content.style.display === "block";
+    function loaderOff() {
+      setTimeout(() => {
+        $loader.classList.remove("displayOn");
+        $loader.classList.add("displayOff");
+        $body.classList.remove("oyh");
+      }, 1000);
+    }
 
-        const dropdowns = document.getElementsByClassName("dropdown-content");
-        Array.from(dropdowns).forEach((dropdown) => {
-          dropdown.style.display = "none";
-        });
+    function goBack() {
+      window.history.back();
+    }
 
-        if (!isVisible) {
-          content.style.display = "block";
-          document.getElementById(`${type}SearchInput`).focus();
-        }
-      }
+    function toggleDropdown(type) {
+      const content = document.getElementById(`${type}Content`);
+      const isVisible = content.style.display === "block";
 
-      document.addEventListener("DOMContentLoaded", () => {
-        loaderOn();
-        Promise.all([
-          fetch("https://dosxdos.app.iidos.com/apirest/rutas.php"),
-          fetch("https://dosxdos.app.iidos.com/apirest/crm.php?montadores"),
-        ])
-          .then(([rutasResponse, montadoresResponse]) =>
-            Promise.all([rutasResponse.json(), montadoresResponse.json()])
-          )
-          .then(([rutasDataResponse, montadoresDataResponse]) => {
-            rutasData = rutasDataResponse[1].sort((a, b) =>
-              a.Name.localeCompare(b.Name)
-            );
-            montadoresData = montadoresDataResponse[1].data.sort((a, b) =>
-              a.Name.localeCompare(b.Name)
-            );
-            populateDropdown("rutas", rutasData);
-            populateDropdown("montadores", montadoresData);
-          })
-          .catch((error) => console.error("Error fetching data:", error))
-          .finally(() => loaderOff());
+      const dropdowns = document.getElementsByClassName("dropdown-content");
+      Array.from(dropdowns).forEach((dropdown) => {
+        dropdown.style.display = "none";
       });
 
-      function populateDropdown(type, items) {
-        const container = document.getElementById(`${type}Checkboxes`);
-        container.innerHTML = "";
-
-        items.forEach((item) => {
-          const div = document.createElement("div");
-          div.className =
-            "checkbox-item flex items-center p-2 cursor-pointer hover:bg-gray-100";
-
-          const checkbox = document.createElement("input");
-          checkbox.type = "checkbox";
-          checkbox.id = `${type}-${item.id}`;
-          checkbox.checked = false;
-
-          const label = document.createElement("label");
-          label.htmlFor = `${type}-${item.id}`;
-
-          const fullName =
-            type === "montadores"
-              ? [item.Name, item.Apellido_del_montador]
-                  .filter(Boolean)
-                  .join(" ")
-              : item.Name;
-
-          label.textContent = fullName;
-
-          div.appendChild(checkbox);
-          div.appendChild(label);
-          container.appendChild(div);
-
-          checkbox.addEventListener("change", () => {
-            if (checkbox.checked) {
-              addTag(type, { ...item, Name: fullName });
-            } else {
-              removeTag(type, item.id);
-            }
-          });
-        });
+      if (!isVisible) {
+        content.style.display = "block";
+        document.getElementById(`${type}SearchInput`).focus();
       }
+    }
 
-      function addTag(type, item) {
-        const container = document.getElementById(
-          `selected${capitalizeFirstLetter(type)}`
-        );
-        const tag = document.createElement("div");
-        tag.className = "tag";
-        tag.dataset.id = `${type}-${item.id}`;
-        tag.innerHTML = `${item.Name} <span class="tag-close" onclick="removeTag('${type}', '${item.id}')">&times;</span>`;
-        container.appendChild(tag);
-      }
+    document.addEventListener("DOMContentLoaded", () => {
+      loaderOn();
+      Promise.all([
+        fetch("https://dosxdos.app.iidos.com/apirest/rutas.php"),
+        fetch("https://dosxdos.app.iidos.com/apirest/crm.php?montadores"),
+      ])
+        .then(([rutasResponse, montadoresResponse]) =>
+          Promise.all([rutasResponse.json(), montadoresResponse.json()])
+        )
+        .then(([rutasDataResponse, montadoresDataResponse]) => {
+          rutasData = rutasDataResponse[1].sort((a, b) =>
+            a.Name.localeCompare(b.Name)
+          );
+          montadoresData = montadoresDataResponse[1].data.sort((a, b) =>
+            a.Name.localeCompare(b.Name)
+          );
+          populateDropdown("rutas", rutasData);
+          populateDropdown("montadores", montadoresData);
+        })
+        .catch((error) => console.error("Error fetching data:", error))
+        .finally(() => loaderOff());
+    });
 
-      function removeTag(type, id) {
-        const container = document.getElementById(
-          `selected${capitalizeFirstLetter(type)}`
-        );
-        const tag = container.querySelector(`div[data-id="${type}-${id}"]`);
-        if (tag) {
-          tag.remove();
-          const checkbox = document.getElementById(`${type}-${id}`);
-          if (checkbox) {
-            checkbox.checked = false;
-          }
-        }
-      }
+    function populateDropdown(type, items) {
+      const container = document.getElementById(`${type}Checkboxes`);
+      container.innerHTML = "";
 
-      function capitalizeFirstLetter(string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
-      }
+      items.forEach((item) => {
+        const div = document.createElement("div");
+        div.className =
+          "checkbox-item flex items-center p-2 cursor-pointer hover:bg-gray-100";
 
-      function filterItems(type) {
-        const searchInput = document.getElementById(`${type}SearchInput`);
-        const searchTerm = searchInput.value.toLowerCase();
-        const checkboxes = document.querySelectorAll(
-          `#${type}Checkboxes .checkbox-item`
-        );
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.id = `${type}-${item.id}`;
+        checkbox.checked = false;
 
-        checkboxes.forEach((checkbox) => {
-          const label = checkbox.querySelector("label");
-          const itemText = label.textContent.toLowerCase();
-          checkbox.style.display = itemText.includes(searchTerm)
-            ? "flex"
-            : "none";
-        });
-      }
+        const label = document.createElement("label");
+        label.htmlFor = `${type}-${item.id}`;
 
-      async function validateForm() {
-        const fechaInicial = document.getElementById("fechaInicial");
-        const fechaFinal = document.getElementById("fechaFinal");
+        const fullName =
+          type === "montadores"
+            ? [item.Name, item.Apellido_del_montador]
+              .filter(Boolean)
+              .join(" ")
+            : item.Name;
 
-        const selectedRutas = Array.from(
-          document.getElementById("selectedRutas").children
-        ).map((tag) => tag.dataset.id.replace("rutas-", ""));
-        const selectedMontadores = Array.from(
-          document.getElementById("selectedMontadores").children
-        ).map((tag) => tag.dataset.id.replace("montadores-", ""));
+        label.textContent = fullName;
 
-        let isValid = true;
-        if (!fechaInicial.value) {
-          document.getElementById("fechaInicialFeedback").textContent =
-            "La fecha inicial es requerida.";
-          isValid = false;
-        }
-        if (!fechaFinal.value) {
-          document.getElementById("fechaFinalFeedback").textContent =
-            "La fecha final es requerida.";
-          isValid = false;
-        }
-        if (selectedRutas.length === 0) {
-          document.getElementById("rutasFeedback").textContent =
-            "Debes seleccionar al menos una ruta.";
-          isValid = false;
-        }
-        if (selectedMontadores.length === 0) {
-          document.getElementById("montadoresFeedback").textContent =
-            "Debes seleccionar al menos un montador.";
-          isValid = false;
-        }
+        div.appendChild(checkbox);
+        div.appendChild(label);
+        container.appendChild(div);
 
-        if (isValid) {
-          const formData = {
-            fechas: {
-              fechaInicial: fechaInicial.value,
-              fechaFinal: fechaFinal.value,
-            },
-            rutas: rutasData.filter((ruta) => selectedRutas.includes(ruta.id)),
-            montadores: montadoresData.filter((montador) =>
-              selectedMontadores.includes(montador.id)
-            ),
-          };
-
-          loaderOn();
-
-          console.log("form data sent: ", formData);
-          const cuerpo = JSON.stringify(formData);
-
-          const endpoint = "https://dosxdos.app.iidos.com/gastos_rutas.php";
-          const metodo = "POST";
-
-          const respuesta = await requestBackend(endpoint, metodo, cuerpo);
-
-          if (respuesta) {
-            console.log(respuesta[1]);
+        checkbox.addEventListener("change", () => {
+          if (checkbox.checked) {
+            addTag(type, { ...item, Name: fullName });
           } else {
-            console.error(
-              "Error al llamar el backend en la línea 479 para calcular los gastos"
-            );
+            removeTag(type, item.id);
           }
+        });
+      });
+    }
+
+    function addTag(type, item) {
+      const container = document.getElementById(
+        `selected${capitalizeFirstLetter(type)}`
+      );
+      const tag = document.createElement("div");
+      tag.className = "tag";
+      tag.dataset.id = `${type}-${item.id}`;
+      tag.innerHTML = `${item.Name} <span class="tag-close" onclick="removeTag('${type}', '${item.id}')">&times;</span>`;
+      container.appendChild(tag);
+    }
+
+    function removeTag(type, id) {
+      const container = document.getElementById(
+        `selected${capitalizeFirstLetter(type)}`
+      );
+      const tag = container.querySelector(`div[data-id="${type}-${id}"]`);
+      if (tag) {
+        tag.remove();
+        const checkbox = document.getElementById(`${type}-${id}`);
+        if (checkbox) {
+          checkbox.checked = false;
         }
       }
+    }
 
-      function requestBackend(endpoint, metodo, cuerpo = false) {
-        return new Promise((resolve, reject) => {
-          let options;
-          if (cuerpo) {
+    function capitalizeFirstLetter(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+    function filterItems(type) {
+      const searchInput = document.getElementById(`${type}SearchInput`);
+      const searchTerm = searchInput.value.toLowerCase();
+      const checkboxes = document.querySelectorAll(
+        `#${type}Checkboxes .checkbox-item`
+      );
+
+      checkboxes.forEach((checkbox) => {
+        const label = checkbox.querySelector("label");
+        const itemText = label.textContent.toLowerCase();
+        checkbox.style.display = itemText.includes(searchTerm)
+          ? "flex"
+          : "none";
+      });
+    }
+
+    async function validateForm() {
+      const fechaInicial = document.getElementById("fechaInicial");
+      const fechaFinal = document.getElementById("fechaFinal");
+
+      const selectedRutas = Array.from(
+        document.getElementById("selectedRutas").children
+      ).map((tag) => tag.dataset.id.replace("rutas-", ""));
+      const selectedMontadores = Array.from(
+        document.getElementById("selectedMontadores").children
+      ).map((tag) => tag.dataset.id.replace("montadores-", ""));
+
+      let isValid = true;
+      if (!fechaInicial.value) {
+        document.getElementById("fechaInicialFeedback").textContent =
+          "La fecha inicial es requerida.";
+        isValid = false;
+      }
+      if (!fechaFinal.value) {
+        document.getElementById("fechaFinalFeedback").textContent =
+          "La fecha final es requerida.";
+        isValid = false;
+      }
+      if (selectedRutas.length === 0) {
+        document.getElementById("rutasFeedback").textContent =
+          "Debes seleccionar al menos una ruta.";
+        isValid = false;
+      }
+      if (selectedMontadores.length === 0) {
+        document.getElementById("montadoresFeedback").textContent =
+          "Debes seleccionar al menos un montador.";
+        isValid = false;
+      }
+
+      if (isValid) {
+        const formData = {
+          fechas: {
+            fechaInicial: fechaInicial.value,
+            fechaFinal: fechaFinal.value,
+          },
+          rutas: rutasData.filter((ruta) => selectedRutas.includes(ruta.id)),
+          montadores: montadoresData.filter((montador) =>
+            selectedMontadores.includes(montador.id)
+          ),
+        };
+
+        loaderOn();
+
+        console.log("form data sent: ", formData);
+        const cuerpo = JSON.stringify(formData);
+
+        const endpoint = "https://dosxdos.app.iidos.com/gastos_rutas.php";
+        const metodo = "POST";
+
+        const respuesta = await requestBackend(endpoint, metodo, cuerpo);
+
+        if (respuesta) {
+          console.log(respuesta[1]);
+        } else {
+          console.error(
+            "Error al llamar el backend en la línea 479 para calcular los gastos"
+          );
+        }
+      }
+    }
+
+    function requestBackend(endpoint, metodo, cuerpo = false, cabeceras = false) {
+      return new Promise((resolve, reject) => {
+        let options;
+        if (cuerpo) {
+          if (cabeceras) {
             options = {
               method: metodo,
-              headers: { "Content-Type": "application/json" },
+              headers: cabeceras,
               body: cuerpo,
             };
           } else {
             options = {
               method: metodo,
               headers: { "Content-Type": "application/json" },
+              body: cuerpo,
             };
           }
-          console.log(endpoint);
-          console.log(options);
-          fetch(endpoint, options)
-            .then((response) => {
-              // Verificar si el estado de la respuesta no es exitoso (códigos 4xx o 5xx)
-              if (!response.ok) {
-                // Verificar si fue un error de la API
-                //Intentar obtener el cuerpo de la respuesta como JSON
-                return response
-                  .clone()
-                  .json()
-                  .then((errorResponse) => {
-                    console.error("Error enviado por la API");
-                    console.error(errorResponse);
-                    resolve(errorResponse);
-                  })
-                  .catch(() => {
-                    // Si no es posible parsear el cuerpo como JSON, obtenerlo como texto
-                    return response.text().then((errorText) => {
-                      respuestaErrorPersonalizada = [false, errorText, 500];
-                      console.error(
-                        "Error en el backend, ha respondido el servidor del backend y no la API"
-                      );
-                      console.error(respuestaErrorPersonalizada);
-                      resolve(respuestaErrorPersonalizada);
-                    });
-                  });
-              }
+        } else {
+          if (cabeceras) {
+            options = {
+              method: metodo,
+              headers: cabeceras,
+            };
+          } else {
+            options = {
+              method: metodo,
+            };
+          }
+        }
+        console.log(endpoint);
+        console.log(options);
+        fetch(endpoint, options)
+          .then((response) => {
+            // Verificar si el estado de la respuesta no es exitoso (códigos 4xx o 5xx)
+            if (!response.ok) {
+              // Verificar si fue un error de la API
+              //Intentar obtener el cuerpo de la respuesta como JSON
               return response
                 .clone()
                 .json()
-                .then((response) => {
-                  console.log(response);
-                  resolve(response);
+                .then((errorResponse) => {
+                  console.error("Error enviado por la API");
+                  console.error(errorResponse);
+                  resolve(errorResponse);
                 })
                 .catch(() => {
                   // Si no es posible parsear el cuerpo como JSON, obtenerlo como texto
                   return response.text().then((errorText) => {
                     respuestaErrorPersonalizada = [false, errorText, 500];
                     console.error(
-                      "Error, la API ha respondido pero no lo ha hecho en formato JSON"
+                      "Error en el backend, ha respondido el servidor del backend y no la API"
                     );
                     console.error(respuestaErrorPersonalizada);
                     resolve(respuestaErrorPersonalizada);
                   });
                 });
-            })
-            .catch((error) => {
-              // Verificar si el error fue de red
-              if (error.message === "Failed to fetch") {
-                respuestaErrorPersonalizada = [
-                  false,
-                  "Error de red: No se pudo conectar con el servidor.",
-                  500,
-                ];
-                console.error(
-                  "Error en el cliente, no se ha podido conectar a la API"
-                );
-                console.error(respuestaErrorPersonalizada);
-                resolve(respuestaErrorPersonalizada);
-              } else {
-                console.error("Error en el código del frontend");
-                console.error(error);
-                respuestaErrorPersonalizada = [false, error.message, 500];
-                console.error(respuestaErrorPersonalizada);
-                resolve(respuestaErrorPersonalizada);
-              }
-            });
-        });
-      }
+            }
+            return response
+              .clone()
+              .json()
+              .then((response) => {
+                console.log(response);
+                resolve(response);
+              })
+              .catch(() => {
+                // Si no es posible parsear el cuerpo como JSON, obtenerlo como texto
+                return response.text().then((errorText) => {
+                  respuestaErrorPersonalizada = [false, errorText, 500];
+                  console.error(
+                    "Error, la API ha respondido pero no lo ha hecho en formato JSON"
+                  );
+                  console.error(respuestaErrorPersonalizada);
+                  resolve(respuestaErrorPersonalizada);
+                });
+              });
+          })
+          .catch((error) => {
+            // Verificar si el error fue de red
+            if (error.message === "Failed to fetch") {
+              respuestaErrorPersonalizada = [
+                false,
+                "Error de red: No se pudo conectar con el servidor.",
+                500,
+              ];
+              console.error(
+                "Error en el cliente, no se ha podido conectar a la API"
+              );
+              console.error(respuestaErrorPersonalizada);
+              resolve(respuestaErrorPersonalizada);
+            } else {
+              console.error("Error en el código del frontend");
+              console.error(error);
+              respuestaErrorPersonalizada = [false, error.message, 500];
+              console.error(respuestaErrorPersonalizada);
+              resolve(respuestaErrorPersonalizada);
+            }
+          });
+      });
+    }
 
-      function displayMessage(title, message, type) {
-        const messageContainer = document.createElement("div");
-        messageContainer.className = `message-container ${type}`;
-        messageContainer.innerHTML = `
+    function displayMessage(title, message, type) {
+      const messageContainer = document.createElement("div");
+      messageContainer.className = `message-container ${type}`;
+      messageContainer.innerHTML = `
           <div class="message-title">${title}</div>
           <div class="message-content">${message}</div>
         `;
-        document.body.appendChild(messageContainer);
-        const botonCerrar = document.createElement("button");
-        botonCerrar.className = "cerrar";
-        botonCerrar.onclick(() => {
-          messageContainer.remove();
-        });
-        document.body.appendChild(botonCerrar);
-      }
-    </script>
-  </body>
+      document.body.appendChild(messageContainer);
+      const botonCerrar = document.createElement("button");
+      botonCerrar.className = "cerrar";
+      botonCerrar.onclick(() => {
+        messageContainer.remove();
+      });
+      document.body.appendChild(botonCerrar);
+    }
+  </script>
+</body>
+
 </html>
