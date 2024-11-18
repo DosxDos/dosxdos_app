@@ -1,11 +1,5 @@
 <?php
 
-/*
-ini_set("display_errors", 0);
-ini_set("display_startup_errors", 0);
-mysqli_report(MYSQLI_REPORT_OFF);
-*/
-
 header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
 header('Access-Control-Allow-Methods: GET, POST');
 header('Content-Type: application/json; charset=utf-8');
@@ -19,14 +13,12 @@ date_default_timezone_set('Atlantic/Canary');
 require_once './apirest/clases/crm_clase.php';
 require_once './apirest/clases/crm_clase.php';
 
-
-
 try {
     $crm = new Crm;
     $respuesta = new Respuestas;
 
-
     if ($_SERVER['REQUEST_METHOD'] == "POST") {
+
         $postBody = file_get_contents("php://input");
         $body = json_decode($postBody, true);
 
@@ -40,12 +32,6 @@ try {
         $response = $crm->agregar('bulkRead', $json);
 
         if ($crm->estado) {
-
-            /*
-            $response = $respuesta->ok($crm->respuesta);
-            http_response_code(200);
-            echo json_encode($response);
-            */
 
             if ($crm->respuesta[1]['data'][0]['status'] == "success") {
                 $crmResponse;
@@ -113,10 +99,54 @@ try {
                                 }
                             }
 
-                            $response = $respuesta->ok($lineasFiltradas2);
+                            $otsCrm = [];
+
+                            foreach ($lineasFiltradas2 as $linea) {
+                                $ot = $linea['C_digo_de_OT_relacionada'];
+                                array_push($otsCrm, $ot);
+                            }
+
+                            $otsCrm = array_values(array_unique($otsCrm));
+
+                            $otsCalculo = [];
+
+                            foreach ($lineasFiltradas2 as $linea) {
+                                foreach ($otsCrm as $ot) {
+                                    if ($linea['C_digo_de_OT_relacionada'] == $ot) {
+                                        $otsCalculo[$ot]['navision'] = $linea['Navision_OT'];
+                                        $otsCalculo[$ot]['dias'] = 0;
+                                        $otsCalculo[$ot]['horas'] = 0;
+                                        $otsCalculo[$ot]['minutos'] = 0;
+                                        $otsCalculo[$ot]['totalMinutos'] = 0;
+                                        $otsCalculo[$ot]['porcentaje'] = 0;
+                                    }
+                                }
+                            }
+
+                            foreach ($lineasFiltradas2 as $linea) {
+                                foreach ($otsCrm as $ot) {
+                                    if ($linea['C_digo_de_OT_relacionada'] == $ot) {
+                                        $otsCalculo[$ot]['dias'] += (floatval($linea['D_as_actuaci_n']) * 24) * 60;
+                                        $otsCalculo[$ot]['horas'] += floatval($linea['Horas_actuaci_n']) * 60;
+                                        $otsCalculo[$ot]['minutos'] += floatval($linea['Minutos_actuaci_n']);
+                                    }
+                                }
+                            }
+
+                            $totalMinutos = 0;
+
+                            foreach ($otsCalculo as $ot => $vector) {
+                                $otsCalculo[$ot]['totalMinutos'] =  $vector['dias'] + $vector['horas'] + $vector['minutos'];
+                                $totalMinutos += $otsCalculo[$ot]['totalMinutos'];
+                            }
+
+                            foreach ($otsCalculo as $ot => $vector) {
+                                $otsCalculo[$ot]['porcentaje'] =  ($vector['totalMinutos'] * 100) / $totalMinutos;
+                            }
+
+                            $response = $respuesta->ok($otsCalculo);
                             http_response_code(200);
                             echo json_encode($response);
-                            
                         } else {
                             $response = $respuesta->error_500('Error al abrir el archivo comprimido de los datos del CRM');
                             http_response_code(500);
@@ -138,6 +168,7 @@ try {
             http_response_code(500);
             echo json_encode($crm->respuestaError);
         }
+        
     } else {
         $response = $respuesta->error_405();
         http_response_code(405);
