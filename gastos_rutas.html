@@ -363,7 +363,15 @@
 
           const label = document.createElement("label");
           label.htmlFor = `${type}-${item.id}`;
-          label.textContent = item.Name;
+
+          const fullName =
+            type === "montadores"
+              ? [item.Name, item.Apellido_del_montador]
+                  .filter(Boolean)
+                  .join(" ")
+              : item.Name;
+
+          label.textContent = fullName;
 
           div.appendChild(checkbox);
           div.appendChild(label);
@@ -371,7 +379,7 @@
 
           checkbox.addEventListener("change", () => {
             if (checkbox.checked) {
-              addTag(type, item);
+              addTag(type, { ...item, Name: fullName });
             } else {
               removeTag(type, item.id);
             }
