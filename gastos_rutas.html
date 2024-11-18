@@ -505,7 +505,7 @@
           "width: 100vw; height: 100vh; margin: 0; padding: 20px; background-color: white;";
 
         const content = document.createElement("div");
-        content.className = "w-full h-full flex flex-col";
+        content.className = "w-full h-full flex flex-col py-16";
 
         // Create table HTML
         let tableHTML = `
@@ -533,7 +533,7 @@
                 <td>${otCRM}</td>
                 <td>${details.navision}</td>
                 <td>${details.totalMinutos || 0}</td>
-                <td>${(details.porcentaje || 0).toFixed(2)}%</td>
+                <td>${(details.porcentaje || 0).toFixed(3)}%</td>
             </tr>
         `;
         });
