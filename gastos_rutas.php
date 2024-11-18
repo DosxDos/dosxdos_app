@@ -33,33 +33,35 @@ try {
         $fecha1 = $body['fechas']['fechaInicial'];
         $fecha2 = $body['fechas']['fechaFinal'];
         $montadores = $body['montadores'];
-        $rutas = $body['montadores'];
+        $rutas = $body['rutas'];
 
-        $json = '{"query": {"module": {"api_name": "Products"},"criteria": {"comparator": "between","field": {"api_name": "Fecha_actuaci_n"}, "value": [' . '"' . $fecha1 . '"' . ',' . '"' . $fecha2 . '"' . ']}}}';
+        $json = '{ "callback": {"url": "https://dosxdos.app.iidos.com/callBackBulkCrm.php", "method": "post"}, "query": {"module": {"api_name": "Products"},"criteria": {"comparator": "between","field": {"api_name": "Fecha_actuaci_n"}, "value": [' . '"' . $fecha1 . '"' . ',' . '"' . $fecha2 . '"' . ']}}}';
 
         $response = $crm->agregar('bulkRead', $json);
 
         if ($crm->estado) {
 
+            /*
             $response = $respuesta->ok($crm->respuesta);
             http_response_code(200);
             echo json_encode($response);
+            */
 
-            /*                
             if ($crm->respuesta[1]['data'][0]['status'] == "success") {
                 $crmResponse;
                 while (true) {
                     sleep(5);
-                    if (file_get_contents("callBackBulkCrm.json")) {
+                    if (file_exists("callBackBulkCrm.json")) { // Comprueba si el archivo existe
                         $crmResponse = file_get_contents("callBackBulkCrm.json");
-                        $crmResponse = json_decode($crmResponse, true);
-                        unlink("callBackBulkCrm.json");
-                        //print_r($crmResponse);
-                        break;
+                        if ($crmResponse !== false) { // Verifica que se haya leído correctamente
+                            $crmResponse = json_decode($crmResponse, true);
+                            unlink("callBackBulkCrm.json"); // Elimina el archivo después de procesarlo
+                            break; // Sale del bucle
+                        }
                     }
                 }
                 if (isset($crmResponse['state']) && $crmResponse['state'] == "COMPLETED") {
-                
+
                     $link = $crmResponse['result']['download_url'];
                     $getArchivo = $crm->bulkFile($link);
 
@@ -92,10 +94,29 @@ try {
                             unlink($tempZipPath);
                             unlink($csvFileName);
 
-                            $response = $respuesta->ok($csvData);
+                            $lineasFiltradas = [];
+                            $lineasFiltradas2 = [];
+
+                            foreach ($csvData as $linea) {
+                                foreach ($rutas as $ruta) {
+                                    if ($linea['RutaSelect'] == $ruta['Name']) {
+                                        array_push($lineasFiltradas, $linea);
+                                    }
+                                }
+                            }
+
+                            foreach ($lineasFiltradas as $linea) {
+                                foreach ($montadores as $montador) {
+                                    if ($linea['montadorUsuarioApp'] == $montador['idApp']) {
+                                        array_push($lineasFiltradas2, $linea);
+                                    }
+                                }
+                            }
+
+                            $response = $respuesta->ok($lineasFiltradas2);
                             http_response_code(200);
                             echo json_encode($response);
-
+                            
                         } else {
                             $response = $respuesta->error_500('Error al abrir el archivo comprimido de los datos del CRM');
                             http_response_code(500);
@@ -113,8 +134,6 @@ try {
                 http_response_code(500);
                 echo json_encode($crm->respuesta);
             }
-
-            */
         } else {
             http_response_code(500);
             echo json_encode($crm->respuestaError);
