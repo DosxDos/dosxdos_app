@@ -44,6 +44,7 @@
       body {
         overflow-x: hidden;
       }
+
       .oyh {
         overflow-y: hidden;
       }
@@ -60,6 +61,19 @@
         background-color: white;
         z-index: 3000;
         overflow-y: auto;
+      }
+
+      .fade {
+        animation: fade 0.5s;
+      }
+
+      @keyframes fade {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
       }
 
       .feedback {
@@ -148,6 +162,10 @@
       .error-message {
         color: #d31216;
         font-weight: bold;
+        margin-bottom: 20px;
+      }
+
+      .action-buttons {
         margin-bottom: 20px;
       }
     </style>
@@ -285,11 +303,37 @@
       </div>
     </form>
 
+    <div id="tableSection" class="hidden fade">
+      <div class="table-container">
+        <input
+          type="number"
+          id="gastosInput"
+          class="w-full p-3 border border-gray-300 rounded-lg mb-3"
+          placeholder="Ingrese monto de gastos en euros"
+        />
+        <button
+          onclick="processGastos()"
+          class="bg-red-600 text-white px-5 py-3 rounded-lg hover:bg-red-700 mb-4"
+        >
+          Calcular Euros
+        </button>
+        <div id="firstTable"></div>
+        <div id="secondTable" class="hidden"></div>
+      </div>
+      <button
+        onclick="reloadForm()"
+        class="bg-gray-600 text-white px-5 py-3 rounded-lg hover:bg-gray-700 mt-4"
+      >
+        Volver al Formulario
+      </button>
+    </div>
+
     <script>
       let rutasData = [];
       let montadoresData = [];
       const $loader = document.getElementById("loader");
       const $body = document.getElementById("body");
+      let originalTableData = null; // To store the original results for processing
 
       function scrollToTop() {
         document.documentElement.scrollTop = 0;
@@ -468,382 +512,123 @@
       }
 
       function displayResults(data) {
-        const existingResults = document.querySelector(".message-container");
-        if (existingResults) {
-          existingResults.remove();
-        }
+        originalTableData = data; // Save original results for further calculations
+        renderFirstTable(data);
+      }
 
-        // Check if data is empty or has no entries
-        if (!data || Object.keys(data).length === 0) {
-          const container = document.createElement("div");
-          container.className = "message-container";
-          container.style.cssText =
-            "width: 100vw; height: 100vh; margin: 0; padding: 20px; background-color: white;";
+      function renderFirstTable(data) {
+        const container = createTableContainer("Resultados del Cálculo");
 
-          container.innerHTML = `
-            <div class="w-full h-full flex flex-col items-center justify-center">
-                <h2 class="text-2xl font-bold text-gray-800 mb-4">No hay datos disponibles</h2>
-                <p class="text-gray-600 mb-6">No se encontraron resultados para los criterios seleccionados.</p>
-                <button onclick="location.reload()" 
-                        class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors">
-                    Volver al Formulario
-                </button>
-            </div>
+        const tableHTML = generateTableHTML(data, [
+          "OT CRM",
+          "OT NAVISION",
+          "TOTAL MINUTOS",
+          "PORCENTAJE",
+        ]);
+        container.innerHTML += tableHTML;
+
+        const gastosInputHTML = `
+          <input
+            type="number"
+            id="gastosInput"
+            class="w-full p-3 border border-gray-300 rounded-lg mb-3"
+            placeholder="Ingrese monto de gastos en euros"
+          />
+          <button
+            onclick="processGastos()"
+            class="bg-red-600 text-white px-5 py-3 rounded-lg hover:bg-red-700"
+          >
+            Calcular Euros
+          </button>
         `;
+        container.innerHTML += gastosInputHTML;
 
-          document.body.appendChild(container);
+        document.body.appendChild(container);
+      }
+
+      function processGastos() {
+        const gastosInput = document.getElementById("gastosInput");
+        const gastos = parseFloat(gastosInput.value);
+
+        if (isNaN(gastos) || gastos <= 0) {
+          alert("Por favor, ingrese un monto válido.");
           return;
         }
 
-        let totalMinutos = 0;
-        let totalPorcentaje = 0;
+        const calculatedData = calculateEuros(originalTableData, gastos);
+        renderSecondTable(calculatedData);
+      }
 
-        const container = document.createElement("div");
-        container.className = "message-container";
-        container.style.cssText =
-          "width: 100vw; height: 100vh; margin: 0; padding: 20px; background-color: white;";
+      function calculateEuros(data, gastos) {
+        const newData = {};
 
-        const content = document.createElement("div");
-        content.className = "w-full h-full flex flex-col py-16";
-
-        // Create table HTML
-        let tableHTML = `
-        <h2 class="text-2xl font-bold mb-4">Resultados del Cálculo</h2>
-        <div class="table-container">
-            <table class="results-table">
-                <thead>
-                    <tr>
-                        <th style="min-width: 100px;">OT CRM</th>
-                        <th style="min-width: 100px;">OT NAVISION</th>
-                        <th style="min-width: 120px;">TOTAL MINUTOS</th>
-                        <th style="min-width: 100px;">PORCENTAJE</th>
-                    </tr>
-                </thead>
-                <tbody>
-    `;
-
-        // Add table rows
         Object.entries(data).forEach(([otCRM, details]) => {
-          totalMinutos += details.totalMinutos || 0;
-          totalPorcentaje += details.porcentaje || 0;
+          const percentage = details.porcentaje || 0;
+          newData[otCRM] = {
+            ...details,
+            euros: (gastos * (percentage / 100)).toFixed(2),
+          };
+        });
 
+        return newData;
+      }
+
+      function renderSecondTable(data) {
+        const container = createTableContainer("Resultados en Euros");
+
+        const tableHTML = generateTableHTML(data, [
+          "OT CRM",
+          "OT NAVISION",
+          "PORCENTAJE",
+          "TOTAL EUROS",
+        ]);
+        container.innerHTML += tableHTML;
+
+        const backButton = `
+          <button
+            onclick="renderFirstTable(originalTableData)"
+            class="bg-gray-600 text-white px-5 py-3 rounded-lg hover:bg-gray-700 mt-4"
+          >
+            Volver a la Tabla Anterior
+          </button>
+        `;
+        container.innerHTML += backButton;
+
+        document.body.appendChild(container);
+      }
+
+      function createTableContainer(title) {
+        const container = document.createElement("div");
+        container.className = "message-container fade";
+        container.innerHTML = `<h2 class="text-2xl font-bold mb-4">${title}</h2>`;
+        return container;
+      }
+
+      function generateTableHTML(data, columns) {
+        let tableHTML = `
+          <div class="table-container">
+            <table class="results-table">
+              <thead>
+                <tr>${columns.map((col) => `<th>${col}</th>`).join("")}</tr>
+              </thead>
+              <tbody>
+        `;
+
+        Object.entries(data).forEach(([otCRM, details]) => {
           tableHTML += `
             <tr>
-                <td>${otCRM}</td>
-                <td>${details.navision}</td>
-                <td>${details.totalMinutos || 0}</td>
-                <td>${(details.porcentaje || 0).toFixed(3)}%</td>
+              <td>${otCRM}</td>
+              <td>${details.navision}</td>
+              <td>${(details.porcentaje || 0).toFixed(3)}%</td>
+              <td>${
+                details.euros ? `${details.euros} €` : details.totalMinutos || 0
+              }</td>
             </tr>
-        `;
+          `;
         });
 
-        // Add totals row
-        tableHTML += `
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="2" class="text-right font-bold">TOTALES:</td>
-                        <td class="font-bold">${totalMinutos}</td>
-                        <td class="font-bold">${totalPorcentaje.toFixed(
-                          2
-                        )}%</td>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-
-        <div class="flex justify-end gap-4 mt-6">
-            <button onclick="copyResults()" 
-                    class="bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700 transition-colors">
-                Copiar Resultados
-            </button>
-            <button onclick="location.reload()" 
-                    class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors">
-                Volver al Formulario
-            </button>
-        </div>
-    `;
-
-        content.innerHTML = tableHTML;
-        container.appendChild(content);
-        document.body.appendChild(container);
-      }
-
-      // Update the error message display to also be fullscreen
-      function displayErrorMessage(message) {
-        const existingMessage = document.querySelector(".message-container");
-        if (existingMessage) {
-          existingMessage.remove();
-        }
-
-        const container = document.createElement("div");
-        container.className = "message-container";
-        container.style.cssText =
-          "width: 100vw; height: 100vh; margin: 0; padding: 20px; background-color: white;";
-
-        container.innerHTML = `
-        <div class="h-full flex flex-col items-center justify-center">
-            <h2 class="text-xl font-bold text-red-600 mb-4">Error</h2>
-            <p class="text-gray-700 mb-6">${message}</p>
-            <button onclick="location.reload()" 
-                    class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors">
-                Reintentar
-            </button>
-        </div>
-    `;
-
-        document.body.appendChild(container);
-      }
-
-      function copyResults() {
-        const table = document.querySelector(".results-table");
-        let text = "";
-
-        // Get headers
-        const headers = Array.from(table.querySelectorAll("thead th")).map(
-          (th) => th.textContent.trim()
-        );
-        text += headers.join("\t") + "\n";
-
-        // Get data rows
-        const rows = table.querySelectorAll("tbody tr");
-        rows.forEach((row) => {
-          const cells = Array.from(row.querySelectorAll("td")).map((td) =>
-            td.textContent.trim()
-          );
-          text += cells.join("\t") + "\n";
-        });
-
-        // Get totals
-        const totals = Array.from(table.querySelectorAll("tfoot td")).map(
-          (td) => td.textContent.trim()
-        );
-        text += totals.join("\t") + "\n";
-
-        // Copy to clipboard
-        navigator.clipboard
-          .writeText(text)
-          .then(() => {
-            alert("Resultados copiados al portapapeles");
-          })
-          .catch((err) => {
-            console.error("Error al copiar: ", err);
-            alert("Error al copiar los resultados");
-          });
-      }
-
-      function displayErrorMessage(message) {
-        const existingMessage = document.querySelector(".message-container");
-        if (existingMessage) {
-          existingMessage.remove();
-        }
-
-        const container = document.createElement("div");
-        container.className = "message-container";
-
-        container.innerHTML = `
-                <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
-                    <h2 class="text-xl font-bold text-red-600 mb-4">Error</h2>
-                    <p class="text-gray-700 mb-6">${message}</p>
-                    <button onclick="location.reload()" 
-                            class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors">
-                        Reintentar
-                    </button>
-                </div>
-            `;
-
-        document.body.appendChild(container);
-      }
-
-      async function validateForm() {
-        const fechaInicial = document.getElementById("fechaInicial");
-        const fechaFinal = document.getElementById("fechaFinal");
-
-        const selectedRutas = Array.from(
-          document.getElementById("selectedRutas").children
-        ).map((tag) => tag.dataset.id.replace("rutas-", ""));
-        const selectedMontadores = Array.from(
-          document.getElementById("selectedMontadores").children
-        ).map((tag) => tag.dataset.id.replace("montadores-", ""));
-
-        let isValid = true;
-        // Clear previous feedback
-        document
-          .querySelectorAll(".feedback")
-          .forEach((el) => (el.textContent = ""));
-
-        if (!fechaInicial.value) {
-          document.getElementById("fechaInicialFeedback").textContent =
-            "La fecha inicial es requerida.";
-          isValid = false;
-        }
-        if (!fechaFinal.value) {
-          document.getElementById("fechaFinalFeedback").textContent =
-            "La fecha final es requerida.";
-          isValid = false;
-        }
-        if (selectedRutas.length === 0) {
-          document.getElementById("rutasFeedback").textContent =
-            "Debes seleccionar al menos una ruta.";
-          isValid = false;
-        }
-        if (selectedMontadores.length === 0) {
-          document.getElementById("montadoresFeedback").textContent =
-            "Debes seleccionar al menos un montador.";
-          isValid = false;
-        }
-
-        if (isValid) {
-          const formData = {
-            fechas: {
-              fechaInicial: fechaInicial.value,
-              fechaFinal: fechaFinal.value,
-            },
-            rutas: rutasData.filter((ruta) => selectedRutas.includes(ruta.id)),
-            montadores: montadoresData.filter((montador) =>
-              selectedMontadores.includes(montador.id)
-            ),
-          };
-
-          loaderOn();
-
-          const response = await requestBackend(
-            "https://dosxdos.app.iidos.com/gastos_rutas.php",
-            "POST",
-            JSON.stringify(formData)
-          );
-
-          loaderOff();
-
-          if (response && response[0]) {
-            displayResults(response[1]);
-          } else {
-            displayErrorMessage(
-              response ? response[1] : "Error al procesar la solicitud"
-            );
-          }
-        }
-      }
-
-      function requestBackend(
-        endpoint,
-        metodo,
-        cuerpo = false,
-        cabeceras = false
-      ) {
-        return new Promise((resolve, reject) => {
-          let options;
-          if (cuerpo) {
-            if (cabeceras) {
-              options = {
-                method: metodo,
-                headers: cabeceras,
-                body: cuerpo,
-              };
-            } else {
-              options = {
-                method: metodo,
-                headers: { "Content-Type": "application/json" },
-                body: cuerpo,
-              };
-            }
-          } else {
-            if (cabeceras) {
-              options = {
-                method: metodo,
-                headers: cabeceras,
-              };
-            } else {
-              options = {
-                method: metodo,
-              };
-            }
-          }
-          console.log(endpoint);
-          console.log(options);
-          fetch(endpoint, options)
-            .then((response) => {
-              // Verificar si el estado de la respuesta no es exitoso (códigos 4xx o 5xx)
-              if (!response.ok) {
-                // Verificar si fue un error de la API
-                //Intentar obtener el cuerpo de la respuesta como JSON
-                return response
-                  .clone()
-                  .json()
-                  .then((errorResponse) => {
-                    console.error("Error enviado por la API");
-                    console.error(errorResponse);
-                    resolve(errorResponse);
-                  })
-                  .catch(() => {
-                    // Si no es posible parsear el cuerpo como JSON, obtenerlo como texto
-                    return response.text().then((errorText) => {
-                      respuestaErrorPersonalizada = [false, errorText, 500];
-                      console.error(
-                        "Error en el backend, ha respondido el servidor del backend y no la API"
-                      );
-                      console.error(respuestaErrorPersonalizada);
-                      resolve(respuestaErrorPersonalizada);
-                    });
-                  });
-              }
-              return response
-                .clone()
-                .json()
-                .then((response) => {
-                  console.log(response);
-                  resolve(response);
-                })
-                .catch(() => {
-                  // Si no es posible parsear el cuerpo como JSON, obtenerlo como texto
-                  return response.text().then((errorText) => {
-                    respuestaErrorPersonalizada = [false, errorText, 500];
-                    console.error(
-                      "Error, la API ha respondido pero no lo ha hecho en formato JSON"
-                    );
-                    console.error(respuestaErrorPersonalizada);
-                    resolve(respuestaErrorPersonalizada);
-                  });
-                });
-            })
-            .catch((error) => {
-              // Verificar si el error fue de red
-              if (error.message === "Failed to fetch") {
-                respuestaErrorPersonalizada = [
-                  false,
-                  "Error de red: No se pudo conectar con el servidor.",
-                  500,
-                ];
-                console.error(
-                  "Error en el cliente, no se ha podido conectar a la API"
-                );
-                console.error(respuestaErrorPersonalizada);
-                resolve(respuestaErrorPersonalizada);
-              } else {
-                console.error("Error en el código del frontend");
-                console.error(error);
-                respuestaErrorPersonalizada = [false, error.message, 500];
-                console.error(respuestaErrorPersonalizada);
-                resolve(respuestaErrorPersonalizada);
-              }
-            });
-        });
-      }
-
-      function displayMessage(title, message, type) {
-        const messageContainer = document.createElement("div");
-        messageContainer.className = `message-container ${type}`;
-        messageContainer.innerHTML = `
-          <div class="message-title">${title}</div>
-          <div class="message-content">${message}</div>
-        `;
-        document.body.appendChild(messageContainer);
-        const botonCerrar = document.createElement("button");
-        botonCerrar.className = "cerrar";
-        botonCerrar.onclick(() => {
-          messageContainer.remove();
-        });
-        document.body.appendChild(botonCerrar);
+        tableHTML += `</tbody></table></div>`;
+        return tableHTML;
       }
     </script>
   </body>
