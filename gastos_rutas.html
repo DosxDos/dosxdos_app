@@ -157,6 +157,7 @@
         overflow-y: auto;
         border: 1px solid #ddd;
         border-radius: 4px;
+        margin-bottom: 20px;
       }
 
       .error-message {
@@ -303,29 +304,9 @@
       </div>
     </form>
 
-    <div id="tableSection" class="hidden fade">
-      <div class="table-container">
-        <input
-          type="number"
-          id="gastosInput"
-          class="w-full p-3 border border-gray-300 rounded-lg mb-3"
-          placeholder="Ingrese monto de gastos en euros"
-        />
-        <button
-          onclick="processGastos()"
-          class="bg-red-600 text-white px-5 py-3 rounded-lg hover:bg-red-700 mb-4"
-        >
-          Calcular Euros
-        </button>
-        <div id="firstTable"></div>
-        <div id="secondTable" class="hidden"></div>
-      </div>
-      <button
-        onclick="reloadForm()"
-        class="bg-gray-600 text-white px-5 py-3 rounded-lg hover:bg-gray-700 mt-4"
-      >
-        Volver al Formulario
-      </button>
+    <div id="tableSection" class="hidden">
+      <div class="table-container" id="firstTableContainer"></div>
+      <div class="table-container hidden" id="secondTableContainer"></div>
     </div>
 
     <script>
@@ -766,34 +747,30 @@
         renderFirstTable(data);
       }
 
-      function renderFirstTable(data) {
-        const container = createTableContainer("Resultados del Cálculo");
-
-        const tableHTML = generateTableHTML(data, [
+      function displayFirstTable(data) {
+        originalTableData = data;
+        const container = document.getElementById("firstTableContainer");
+        container.innerHTML = `
+        <h2 class="text-2xl font-bold mb-4">Resultados del Cálculo</h2>
+        <input
+          type="number"
+          id="gastosInput"
+          placeholder="Ingrese monto de gastos en euros"
+          class="w-full p-3 border mb-3"
+        />
+        <button onclick="processGastos()" class="bg-red-600 text-white px-5 py-3 rounded-lg">Calcular Euros</button>
+        <div class="table-container">${generateTableHTML(data, [
           "OT CRM",
           "OT NAVISION",
           "TOTAL MINUTOS",
           "PORCENTAJE",
-        ]);
-        container.innerHTML += tableHTML;
-
-        const gastosInputHTML = `
-          <input
-            type="number"
-            id="gastosInput"
-            class="w-full p-3 border border-gray-300 rounded-lg mb-3"
-            placeholder="Ingrese monto de gastos en euros"
-          />
-          <button
-            onclick="processGastos()"
-            class="bg-red-600 text-white px-5 py-3 rounded-lg hover:bg-red-700"
-          >
-            Calcular Euros
-          </button>
-        `;
-        container.innerHTML += gastosInputHTML;
-
-        document.body.appendChild(container);
+        ])}</div>
+        <div class="action-buttons">
+          <button onclick="copyResults()">Copiar Resultados</button>
+          <button onclick="location.reload()">Volver al Formulario</button>
+        </div>
+      `;
+        document.getElementById("tableSection").classList.remove("hidden");
       }
 
       function processGastos() {
@@ -805,8 +782,15 @@
           return;
         }
 
-        const calculatedData = calculateEuros(originalTableData, gastos);
-        renderSecondTable(calculatedData);
+        const calculatedData = {};
+        Object.entries(originalTableData).forEach(([key, value]) => {
+          calculatedData[key] = {
+            ...value,
+            euros: ((gastos * (value.porcentaje || 0)) / 100).toFixed(2),
+          };
+        });
+
+        displaySecondTable(calculatedData);
       }
 
       function calculateEuros(data, gastos) {
@@ -823,28 +807,24 @@
         return newData;
       }
 
-      function renderSecondTable(data) {
-        const container = createTableContainer("Resultados en Euros");
-
-        const tableHTML = generateTableHTML(data, [
+      function displaySecondTable(data) {
+        const container = document.getElementById("secondTableContainer");
+        container.innerHTML = `
+        <h2 class="text-2xl font-bold mb-4">Resultados en Euros</h2>
+        <div class="table-container">${generateTableHTML(data, [
           "OT CRM",
           "OT NAVISION",
           "PORCENTAJE",
           "TOTAL EUROS",
-        ]);
-        container.innerHTML += tableHTML;
-
-        const backButton = `
-          <button
-            onclick="renderFirstTable(originalTableData)"
-            class="bg-gray-600 text-white px-5 py-3 rounded-lg hover:bg-gray-700 mt-4"
-          >
-            Volver a la Tabla Anterior
-          </button>
-        `;
-        container.innerHTML += backButton;
-
-        document.body.appendChild(container);
+        ])}</div>
+        <div class="action-buttons">
+          <button onclick="displayFirstTable(originalTableData)">Volver a la Tabla Anterior</button>
+          <button onclick="copyResults()">Copiar Resultados</button>
+          <button onclick="location.reload()">Volver al Formulario</button>
+        </div>
+      `;
+        document.getElementById("firstTableContainer").classList.add("hidden");
+        container.classList.remove("hidden");
       }
 
       function createTableContainer(title) {
@@ -854,31 +834,26 @@
         return container;
       }
 
-      function generateTableHTML(data, columns) {
-        let tableHTML = `
-          <div class="table-container">
-            <table class="results-table">
-              <thead>
-                <tr>${columns.map((col) => `<th>${col}</th>`).join("")}</tr>
-              </thead>
-              <tbody>
-        `;
+      function generateTableHTML(data, headers) {
+        let html = "<table><thead><tr>";
+        headers.forEach((header) => (html += `<th>${header}</th>`));
+        html += "</tr></thead><tbody>";
 
-        Object.entries(data).forEach(([otCRM, details]) => {
-          tableHTML += `
-            <tr>
-              <td>${otCRM}</td>
-              <td>${details.navision}</td>
-              <td>${(details.porcentaje || 0).toFixed(3)}%</td>
-              <td>${
-                details.euros ? `${details.euros} €` : details.totalMinutos || 0
-              }</td>
-            </tr>
-          `;
+        Object.entries(data).forEach(([key, value]) => {
+          html += `
+          <tr>
+            <td>${key}</td>
+            <td>${value.navision || ""}</td>
+            <td>${value.porcentaje || 0}%</td>
+            <td>${
+              value.euros ? `${value.euros} €` : value.totalMinutos || 0
+            }</td>
+          </tr>
+        `;
         });
 
-        tableHTML += `</tbody></table></div>`;
-        return tableHTML;
+        html += "</tbody></table>";
+        return html;
       }
     </script>
   </body>
