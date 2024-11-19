@@ -166,8 +166,109 @@
         margin-bottom: 20px;
       }
 
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+      }
+
+      #loader {
+        width: 100vw;
+        height: 100vh;
+        position: absolute;
+        top: 0;
+        z-index: 6000;
+        background-color: rgba(0, 0, 0, 0.886);
+        justify-content: center;
+        align-items: center;
+      }
+
+      .loader {
+        border: 4px solid #ffffff;
+        border-top: 4px solid #d31216;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      #volver {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background-color: red;
+        padding: 12px;
+        border-radius: 20%;
+        cursor: pointer;
+        z-index: 3001;
+      }
+
+      #volver img {
+        width: 24px;
+        height: 24px;
+      }
+
+      .message-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        margin: 0;
+        padding: 20px;
+        background-color: white;
+        z-index: 3000;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .results-table {
+        width: 90%;
+        margin: 20px auto;
+        border-collapse: collapse;
+      }
+
+      .results-table th,
+      .results-table td {
+        border: 1px solid #ddd;
+        padding: 12px;
+        text-align: left;
+      }
+
+      .results-table thead th {
+        background-color: #d31216;
+        color: white;
+        position: sticky;
+        top: 0;
+      }
+
+      .table-container {
+        max-height: 80vh;
+        overflow-y: auto;
+      }
+
       .action-buttons {
-        margin-bottom: 20px;
+        margin-top: 20px;
+      }
+
+      .action-buttons button {
+        margin-right: 10px;
+      }
+
+      #volverTabla {
+        position: absolute;
+        top: 20px;
+        right: 20px;
       }
     </style>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -690,39 +791,18 @@
 
       function copyResults() {
         const table = document.querySelector(".results-table");
-        let text = "";
+        const rows = Array.from(table.rows);
+        const text = rows
+          .map((row) =>
+            Array.from(row.cells)
+              .map((cell) => cell.textContent)
+              .join("\t")
+          )
+          .join("\n");
 
-        // Get headers
-        const headers = Array.from(table.querySelectorAll("thead th")).map(
-          (th) => th.textContent.trim()
-        );
-        text += headers.join("\t") + "\n";
-
-        // Get data rows
-        const rows = table.querySelectorAll("tbody tr");
-        rows.forEach((row) => {
-          const cells = Array.from(row.querySelectorAll("td")).map((td) =>
-            td.textContent.trim()
-          );
-          text += cells.join("\t") + "\n";
-        });
-
-        // Get totals
-        const totals = Array.from(table.querySelectorAll("tfoot td")).map(
-          (td) => td.textContent.trim()
-        );
-        text += totals.join("\t") + "\n";
-
-        // Copy to clipboard
         navigator.clipboard
           .writeText(text)
-          .then(() => {
-            alert("Resultados copiados al portapapeles");
-          })
-          .catch((err) => {
-            console.error("Error al copiar: ", err);
-            alert("Error al copiar los resultados");
-          });
+          .then(() => alert("Resultados copiados."));
       }
 
       function clearForm() {
@@ -748,35 +828,41 @@
       }
 
       function displayFirstTable(data) {
-        originalTableData = data;
         const container = document.getElementById("firstTableContainer");
         container.innerHTML = `
-        <h2 class="text-2xl font-bold mb-4">Resultados del Cálculo</h2>
-        <input
-          type="number"
-          id="gastosInput"
-          placeholder="Ingrese monto de gastos en euros"
-          class="w-full p-3 border mb-3"
-        />
-        <button onclick="processGastos()" class="bg-red-600 text-white px-5 py-3 rounded-lg">Calcular Euros</button>
-        <div class="table-container">${generateTableHTML(data, [
-          "OT CRM",
-          "OT NAVISION",
-          "TOTAL MINUTOS",
-          "PORCENTAJE",
-        ])}</div>
-        <div class="action-buttons">
-          <button onclick="copyResults()">Copiar Resultados</button>
-          <button onclick="location.reload()">Volver al Formulario</button>
-        </div>
-      `;
+          <h2 class="text-2xl font-bold mb-4">Resultados del Cálculo</h2>
+          <input
+            type="number"
+            id="gastosInput"
+            placeholder="Ingrese monto de gastos en euros"
+            class="w-full p-3 border mb-3"
+          />
+          <button onclick="processGastos()" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+            Calcular Euros
+          </button>
+          <table class="results-table">
+            ${generateTableHTML(data, [
+              "OT CRM",
+              "OT NAVISION",
+              "TOTAL MINUTOS",
+              "PORCENTAJE",
+            ])}
+          </table>
+          <div class="action-buttons">
+            <button onclick="copyResults()" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">
+              Copiar Resultados
+            </button>
+            <button onclick="location.reload()" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+              Volver al Formulario
+            </button>
+          </div>
+        `;
         document.getElementById("tableSection").classList.remove("hidden");
+        document.getElementById("secondTableContainer").classList.add("hidden");
       }
 
       function processGastos() {
-        const gastosInput = document.getElementById("gastosInput");
-        const gastos = parseFloat(gastosInput.value);
-
+        const gastos = parseFloat(document.getElementById("gastosInput").value);
         if (isNaN(gastos) || gastos <= 0) {
           alert("Por favor, ingrese un monto válido.");
           return;
@@ -810,19 +896,24 @@
       function displaySecondTable(data) {
         const container = document.getElementById("secondTableContainer");
         container.innerHTML = `
-        <h2 class="text-2xl font-bold mb-4">Resultados en Euros</h2>
-        <div class="table-container">${generateTableHTML(data, [
-          "OT CRM",
-          "OT NAVISION",
-          "PORCENTAJE",
-          "TOTAL EUROS",
-        ])}</div>
-        <div class="action-buttons">
-          <button onclick="displayFirstTable(originalTableData)">Volver a la Tabla Anterior</button>
-          <button onclick="copyResults()">Copiar Resultados</button>
-          <button onclick="location.reload()">Volver al Formulario</button>
-        </div>
-      `;
+          <h2 class="text-2xl font-bold mb-4">Resultados en Euros</h2>
+          <table class="results-table">
+            ${generateTableHTML(data, [
+              "OT CRM",
+              "OT NAVISION",
+              "PORCENTAJE",
+              "TOTAL EUROS",
+            ])}
+          </table>
+          <div class="action-buttons">
+            <button onclick="copyResults()" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">
+              Copiar Resultados
+            </button>
+            <button onclick="location.reload()" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+              Volver al Formulario
+            </button>
+          </div>
+        `;
         document.getElementById("firstTableContainer").classList.add("hidden");
         container.classList.remove("hidden");
       }
@@ -835,25 +926,44 @@
       }
 
       function generateTableHTML(data, headers) {
-        let html = "<table><thead><tr>";
+        let html = "<thead><tr>";
         headers.forEach((header) => (html += `<th>${header}</th>`));
         html += "</tr></thead><tbody>";
 
         Object.entries(data).forEach(([key, value]) => {
           html += `
-          <tr>
-            <td>${key}</td>
-            <td>${value.navision || ""}</td>
-            <td>${value.porcentaje || 0}%</td>
-            <td>${
-              value.euros ? `${value.euros} €` : value.totalMinutos || 0
-            }</td>
-          </tr>
-        `;
+            <tr>
+              <td>${key}</td>
+              <td>${value.navision || ""}</td>
+              <td>${value.porcentaje || 0}%</td>
+              <td>${
+                value.euros ? `${value.euros} €` : value.totalMinutos || 0
+              }</td>
+            </tr>
+          `;
         });
 
-        html += "</tbody></table>";
+        html += `
+          <tr>
+            <td colspan="2" class="font-bold">Totales</td>
+            <td class="font-bold">${calculateTotalMinutes(data)}</td>
+            <td class="font-bold">${calculateTotalEuros(data)} €</td>
+          </tr>
+        </tbody>`;
         return html;
+      }
+
+      function calculateTotalMinutes(data) {
+        return Object.values(data).reduce(
+          (sum, item) => sum + (item.totalMinutos || 0),
+          0
+        );
+      }
+
+      function calculateTotalEuros(data) {
+        return Object.values(data)
+          .reduce((sum, item) => sum + parseFloat(item.euros || 0), 0)
+          .toFixed(2);
       }
     </script>
   </body>
