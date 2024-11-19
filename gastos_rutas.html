@@ -779,7 +779,7 @@
             type="number"
             id="gastosInput"
             placeholder="Ingrese monto de gastos en euros"
-            class="w-full p-3 border mb-3"
+            class="w-[90vw] lg:w-[50vw] p-3 border mb-3 flex mx-auto"
           />
           <button onclick="processGastos()" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
             Calcular Euros
@@ -893,7 +893,7 @@
                 <td>${key}</td>
                 <td>${value.navision || ""}</td>
                 <td>${value.totalMinutos || 0}</td>
-                <td>${value.porcentaje || 0}%</td>
+                <td>${value.porcentaje.toFixed(2) || 0}%</td>
             </tr>`;
         });
 
