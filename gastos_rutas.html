@@ -135,7 +135,7 @@
         border: 1px solid #ddd;
         border-radius: 4px;
         margin-bottom: 20px;
-        padding: 20px;
+        padding: 40px;
       }
 
       .error-message {
@@ -145,7 +145,8 @@
       }
 
       .results-table {
-        width: 100%;
+        width: 85%;
+        margin-inline: auto;
         margin: 20px auto;
         border-collapse: collapse;
       }
@@ -904,7 +905,7 @@
             <td class="font-bold">${
               headers.includes("TOTAL EUROS")
                 ? totalEuros.toFixed(2) + " €"
-                : totalPorcentaje.toFixed(2) + "%"
+                : totalPorcentaje.toFixed(3) + "%"
             }</td>
         </tr>
     </tbody>`;
