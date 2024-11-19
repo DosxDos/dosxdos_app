@@ -494,6 +494,75 @@
         });
       }
 
+      // Validate form
+      async function validateForm() {
+        const fechaInicial = document.getElementById("fechaInicial");
+        const fechaFinal = document.getElementById("fechaFinal");
+        const selectedRutas = Array.from(
+          document.getElementById("selectedRutas").children
+        ).map((tag) => tag.dataset.id.replace("rutas-", ""));
+        const selectedMontadores = Array.from(
+          document.getElementById("selectedMontadores").children
+        ).map((tag) => tag.dataset.id.replace("montadores-", ""));
+
+        let isValid = true;
+        document
+          .querySelectorAll(".feedback")
+          .forEach((el) => (el.textContent = ""));
+
+        if (!fechaInicial.value) {
+          document.getElementById("fechaInicialFeedback").textContent =
+            "La fecha inicial es requerida.";
+          isValid = false;
+        }
+        if (!fechaFinal.value) {
+          document.getElementById("fechaFinalFeedback").textContent =
+            "La fecha final es requerida.";
+          isValid = false;
+        }
+        if (selectedRutas.length === 0) {
+          document.getElementById("rutasFeedback").textContent =
+            "Debes seleccionar al menos una ruta.";
+          isValid = false;
+        }
+        if (selectedMontadores.length === 0) {
+          document.getElementById("montadoresFeedback").textContent =
+            "Debes seleccionar al menos un montador.";
+          isValid = false;
+        }
+
+        if (isValid) {
+          const formData = {
+            fechas: {
+              fechaInicial: fechaInicial.value,
+              fechaFinal: fechaFinal.value,
+            },
+            rutas: rutasData.filter((ruta) => selectedRutas.includes(ruta.id)),
+            montadores: montadoresData.filter((montador) =>
+              selectedMontadores.includes(montador.id)
+            ),
+          };
+
+          loaderOn();
+
+          const response = await requestBackend(
+            "https://dosxdos.app.iidos.com/gastos_rutas.php",
+            "POST",
+            JSON.stringify(formData)
+          );
+
+          loaderOff();
+
+          if (response && response[0]) {
+            displayResults(response[1]);
+          } else {
+            displayErrorMessage(
+              response ? response[1] : "Error al procesar la solicitud"
+            );
+          }
+        }
+      }
+
       function clearForm() {
         document.getElementById("fechaInicial").value = "";
         document.getElementById("fechaFinal").value = "";
@@ -512,7 +581,7 @@
       }
 
       function displayResults(data) {
-        originalTableData = data; // Save original results for further calculations
+        originalTableData = data;
         renderFirstTable(data);
       }
 
