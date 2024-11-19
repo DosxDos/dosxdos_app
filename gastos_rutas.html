@@ -145,7 +145,7 @@
 
       .results-table {
         width: 100%;
-        margin: 0 auto;
+        margin: 20px auto;
         border-collapse: collapse;
       }
 
@@ -160,6 +160,7 @@
         background-color: #d31216;
         color: white;
         font-weight: bold;
+        text-transform: uppercase;
       }
 
       .results-table tbody tr:nth-child(even) {
@@ -173,20 +174,21 @@
 
       .action-buttons {
         display: flex;
-        gap: 10px;
+        gap: 15px;
         margin-top: 20px;
       }
 
       .action-buttons button {
-        padding: 10px 20px;
+        padding: 12px 25px;
         font-size: 16px;
         border: none;
         cursor: pointer;
         border-radius: 5px;
+        transition: all 0.2s;
       }
 
-      .action-buttons .hover:hover {
-        opacity: 0.9;
+      .action-buttons button:hover {
+        transform: scale(1.05);
       }
     </style>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -713,14 +715,15 @@
         const text = rows
           .map((row) =>
             Array.from(row.cells)
-              .map((cell) => cell.textContent)
+              .map((cell) => cell.textContent.trim())
               .join("\t")
           )
           .join("\n");
 
         navigator.clipboard
           .writeText(text)
-          .then(() => alert("Resultados copiados."));
+          .then(() => alert("Resultados copiados correctamente."))
+          .catch(() => alert("Hubo un error al copiar los resultados."));
       }
 
       function clearForm() {
@@ -741,6 +744,13 @@
       }
 
       function displayResults(data) {
+        if (!data || Object.keys(data).length === 0) {
+          displayErrorMessage(
+            "No se encontraron resultados para los filtros seleccionados."
+          );
+          return;
+        }
+
         originalTableData = data;
         document.getElementById("gastosRutasForm").style.display = "none";
         document.getElementById("tableSection").classList.remove("hidden");
@@ -855,30 +865,38 @@
       }
 
       function generateTableHTML(data, headers) {
+        let totalPorcentaje = 0;
+        let totalMinutos = 0;
+        let totalEuros = 0;
+
         let html = "<thead><tr>";
         headers.forEach((header) => (html += `<th>${header}</th>`));
         html += "</tr></thead><tbody>";
 
         Object.entries(data).forEach(([key, value]) => {
+          totalPorcentaje += value.porcentaje || 0;
+          totalMinutos += value.totalMinutos || 0;
+          totalEuros += parseFloat(value.euros || 0);
           html += `
             <tr>
-              <td>${key}</td>
-              <td>${value.navision || ""}</td>
-              <td>${value.porcentaje || 0}%</td>
-              <td>${
-                value.euros ? `${value.euros} €` : value.totalMinutos || 0
-              }</td>
-            </tr>
-          `;
+                <td>${key}</td>
+                <td>${value.navision || ""}</td>
+                <td>${value.totalMinutos || 0}</td>
+                <td>${value.porcentaje || 0}%</td>
+            </tr>`;
         });
 
         html += `
-          <tr>
+        <tr>
             <td colspan="2" class="font-bold">Totales</td>
-            <td class="font-bold">${calculateTotalMinutes(data)}</td>
-            <td class="font-bold">${calculateTotalEuros(data)} €</td>
-          </tr>
-        </tbody>`;
+            <td class="font-bold">${totalMinutos}</td>
+            <td class="font-bold">${
+              headers.includes("TOTAL EUROS")
+                ? totalEuros.toFixed(2) + " €"
+                : totalPorcentaje.toFixed(2) + "%"
+            }</td>
+        </tr>
+    </tbody>`;
         return html;
       }
 
