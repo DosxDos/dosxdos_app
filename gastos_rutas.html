@@ -851,7 +851,7 @@
         Object.entries(originalTableData).forEach(([key, value]) => {
           calculatedData[key] = {
             ...value,
-            euros: ((gastos * (value.porcentaje || 0)) / 100).toFixed(2),
+            euros: ((gastos * (value.porcentaje || 0)) / 100).toFixed(3),
           };
         });
 
@@ -865,7 +865,7 @@
           const percentage = details.porcentaje || 0;
           newData[otCRM] = {
             ...details,
-            euros: (gastos * (percentage / 100)).toFixed(2),
+            euros: (gastos * (percentage / 100)).toFixed(3),
           };
         });
 
@@ -912,10 +912,10 @@
             html += `<td>${value.totalMinutos || 0}</td>`;
           }
           if (headers.includes("TOTAL EUROS")) {
-            html += `<td>${value.porcentaje?.toFixed(2) || 0}%</td>`;
+            html += `<td>${value.porcentaje?.toFixed(3) || 0}%</td>`;
             html += `<td>${value.euros || "0.00"} €</td>`;
           } else {
-            html += `<td>${value.porcentaje?.toFixed(2) || 0}%</td>`;
+            html += `<td>${value.porcentaje?.toFixed(3) || 0}%</td>`;
           }
           html += "</tr>";
         });
@@ -947,7 +947,7 @@
       function calculateTotalEuros(data) {
         return Object.values(data)
           .reduce((sum, item) => sum + parseFloat(item.euros || 0), 0)
-          .toFixed(2);
+          .toFixed(3);
       }
     </script>
   </body>
