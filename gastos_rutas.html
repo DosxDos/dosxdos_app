@@ -415,7 +415,7 @@
       let montadoresData = [];
       const $loader = document.getElementById("loader");
       const $body = document.getElementById("body");
-      let originalTableData = null; // To store the original results for processing
+      let originalTableData = null;
 
       function scrollToTop() {
         document.documentElement.scrollTop = 0;
@@ -824,6 +824,12 @@
 
       function displayResults(data) {
         originalTableData = data;
+        document.getElementById("gastosRutasForm").style.display = "none";
+        document.getElementById("tableSection").classList.remove("hidden");
+        document
+          .getElementById("firstTableContainer")
+          .classList.remove("hidden");
+        document.getElementById("secondTableContainer").classList.add("hidden");
         displayFirstTable(data);
       }
 
@@ -853,14 +859,12 @@
             <button onclick="copyResults()" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">
               Copiar Resultados
             </button>
-            <button onclick="location.reload()" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+            <button onclick="reloadForm()" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
               Volver al Formulario
             </button>
           </div>
-          </div>
-        `;
-        document.getElementById("tableSection").classList.remove("hidden");
-        document.getElementById("secondTableContainer").classList.add("hidden");
+        </div>
+    `;
       }
 
       function processGastos() {
@@ -896,9 +900,10 @@
       }
 
       function displaySecondTable(data) {
+        document.getElementById("firstTableContainer").classList.add("hidden");
         const container = document.getElementById("secondTableContainer");
         container.innerHTML = `
-                <div class="w-full h-full flex flex-col items-center justify-center">
+        <div class="w-full h-full flex flex-col items-center justify-center">
           <h2 class="text-2xl font-bold mb-4">Resultados en Euros</h2>
           <table class="results-table">
             ${generateTableHTML(data, [
@@ -912,13 +917,18 @@
             <button onclick="copyResults()" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">
               Copiar Resultados
             </button>
-            <button onclick="location.reload()" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
-              Volver al Formulario
+            <button onclick="displayFirstTable(originalTableData)" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+              Volver a la Tabla Anterior
             </button>
-          </div>       </div>
-        `;
-        document.getElementById("firstTableContainer").classList.add("hidden");
+          </div>
+        </div>
+    `;
         container.classList.remove("hidden");
+      }
+
+      function reloadForm() {
+        document.getElementById("gastosRutasForm").style.display = "block";
+        document.getElementById("tableSection").classList.add("hidden");
       }
 
       function createTableContainer(title) {
