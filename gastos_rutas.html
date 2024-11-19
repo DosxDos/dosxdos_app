@@ -865,6 +865,11 @@
       }
 
       function reloadForm() {
+        const existingMessage = document.querySelector(".message-container");
+        if (existingMessage) {
+          existingMessage.remove();
+        }
+        clearForm();
         document.getElementById("gastosRutasForm").style.display = "block";
         document.getElementById("tableSection").classList.add("hidden");
       }
@@ -886,29 +891,41 @@
         html += "</tr></thead><tbody>";
 
         Object.entries(data).forEach(([key, value]) => {
-          totalPorcentaje += value.porcentaje || 0;
+          if (headers.includes("TOTAL EUROS")) {
+            totalEuros += parseFloat(value.euros || 0);
+          }
+          if (headers.includes("PORCENTAJE")) {
+            totalPorcentaje += value.porcentaje || 0;
+          }
           totalMinutos += value.totalMinutos || 0;
-          totalEuros += parseFloat(value.euros || 0);
+
           html += `
-            <tr>
-                <td>${key}</td>
-                <td>${value.navision || ""}</td>
-                <td>${value.totalMinutos || 0}</td>
-                <td>${value.porcentaje.toFixed(2) || 0}%</td>
-            </tr>`;
+      <tr>
+        <td>${key}</td>
+        <td>${value.navision || ""}</td>
+        <td>${
+          headers.includes("TOTAL MINUTOS") ? value.totalMinutos || 0 : ""
+        }</td>
+        <td>${
+          headers.includes("TOTAL EUROS")
+            ? `${value.euros || "0.00"} €`
+            : `${value.porcentaje?.toFixed(2) || 0}%`
+        }</td>
+      </tr>`;
         });
 
         html += `
-        <tr>
-            <td colspan="2" class="font-bold">Totales</td>
-            <td class="font-bold">${totalMinutos}</td>
-            <td class="font-bold">${
-              headers.includes("TOTAL EUROS")
-                ? totalEuros.toFixed(2) + " €"
-                : totalPorcentaje.toFixed(3) + "%"
-            }</td>
-        </tr>
-    </tbody>`;
+    <tr>
+      <td colspan="2" class="font-bold">Totales</td>
+      <td class="font-bold">${totalMinutos}</td>
+      <td class="font-bold">${
+        headers.includes("TOTAL EUROS")
+          ? `${totalEuros.toFixed(2)} €`
+          : `${totalPorcentaje.toFixed(3)}%`
+      }</td>
+    </tr>
+  </tbody>`;
+
         return html;
       }
 
