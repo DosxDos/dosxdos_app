@@ -166,6 +166,13 @@
         text-transform: uppercase;
       }
 
+      .results-table th {
+        position: sticky;
+        top: 0;
+        background-color: #d31216;
+        z-index: 10;
+      }
+
       .results-table tbody tr:nth-child(even) {
         background-color: #f9f9f9;
       }
@@ -882,6 +889,33 @@
         return container;
       }
 
+      function displaySecondTable(data) {
+        const container = document.getElementById("secondTableContainer");
+        container.innerHTML = `
+    <div class="w-screen h-auto flex flex-col items-center justify-center">
+      <h2 class="text-2xl font-bold mb-4">Resultados en Euros</h2>
+      <table id="secondResultsTable" class="results-table">
+        ${generateTableHTML(data, [
+          "OT CRM",
+          "OT NAVISION",
+          "PORCENTAJE",
+          "TOTAL EUROS",
+        ])}
+      </table>
+      <div class="action-buttons">
+        <button onclick="copyResults('secondResultsTable')" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">
+          Copiar Resultados
+        </button>
+        <button onclick="reloadForm()" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+          Volver al Formulario
+        </button>
+      </div>
+    </div>
+  `;
+        container.classList.remove("hidden");
+        document.getElementById("firstTableContainer").classList.add("hidden");
+      }
+
       function generateTableHTML(data, headers) {
         let totalPorcentaje = 0;
         let totalMinutos = 0;
@@ -892,40 +926,31 @@
         html += "</tr></thead><tbody>";
 
         Object.entries(data).forEach(([key, value]) => {
-          if (headers.includes("TOTAL EUROS")) {
-            totalEuros += parseFloat(value.euros || 0);
-          }
-          if (headers.includes("PORCENTAJE")) {
-            totalPorcentaje += value.porcentaje || 0;
-          }
+          totalEuros += parseFloat(value.euros || 0);
+          totalPorcentaje += value.porcentaje || 0;
           totalMinutos += value.totalMinutos || 0;
 
-          html += `
-      <tr>
-        <td>${key}</td>
-        <td>${value.navision || ""}</td>
-        <td>${
-          headers.includes("TOTAL MINUTOS") ? value.totalMinutos || 0 : ""
-        }</td>
-        <td>${
-          headers.includes("TOTAL EUROS")
-            ? `${value.euros || "0.00"} €`
-            : `${value.porcentaje?.toFixed(2) || 0}%`
-        }</td>
-      </tr>`;
+          html += `<tr>
+      <td>${key}</td>
+      <td>${value.navision || ""}</td>
+      <td>${value.porcentaje?.toFixed(2) || 0}%</td>
+      ${
+        headers.includes("TOTAL EUROS")
+          ? `<td>${value.euros || "0.00"} €</td>`
+          : ""
+      }
+    </tr>`;
         });
 
-        html += `
-    <tr>
-      <td colspan="2" class="font-bold">Totales</td>
-      <td class="font-bold">${totalMinutos}</td>
-      <td class="font-bold">${
-        headers.includes("TOTAL EUROS")
-          ? `${totalEuros.toFixed(2)} €`
-          : `${totalPorcentaje.toFixed(3)}%`
-      }</td>
-    </tr>
-  </tbody>`;
+        html += `<tr>
+    <td colspan="2" class="font-bold">Totales</td>
+    <td class="font-bold">${totalPorcentaje.toFixed(3)}%</td>
+    ${
+      headers.includes("TOTAL EUROS")
+        ? `<td class="font-bold">${totalEuros.toFixed(2)} €</td>`
+        : ""
+    }
+  </tr></tbody>`;
 
         return html;
       }
