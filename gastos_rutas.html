@@ -611,7 +611,7 @@
         });
       }
 
-      // Validate form
+      // Update the validateForm function
       async function validateForm() {
         const fechaInicial = document.getElementById("fechaInicial");
         const fechaFinal = document.getElementById("fechaFinal");
@@ -642,11 +642,6 @@
             "Debes seleccionar al menos una ruta.";
           isValid = false;
         }
-        if (selectedMontadores.length === 0) {
-          document.getElementById("montadoresFeedback").textContent =
-            "Debes seleccionar al menos un montador.";
-          isValid = false;
-        }
 
         if (isValid) {
           const formData = {
@@ -655,9 +650,12 @@
               fechaFinal: fechaFinal.value,
             },
             rutas: rutasData.filter((ruta) => selectedRutas.includes(ruta.id)),
-            montadores: montadoresData.filter((montador) =>
-              selectedMontadores.includes(montador.id)
-            ),
+            montadores:
+              selectedMontadores.length > 0
+                ? montadoresData.filter((montador) =>
+                    selectedMontadores.includes(montador.id)
+                  )
+                : null,
           };
 
           loaderOn();
