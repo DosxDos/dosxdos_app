@@ -561,7 +561,6 @@
       });
     }
 
-    // Update the validateForm function
     async function validateForm() {
       const fechaInicial = document.getElementById("fechaInicial");
       const fechaFinal = document.getElementById("fechaFinal");
@@ -587,11 +586,7 @@
           "La fecha final es requerida.";
         isValid = false;
       }
-      if (selectedRutas.length === 0) {
-        document.getElementById("rutasFeedback").textContent =
-          "Debes seleccionar al menos una ruta.";
-        isValid = false;
-      }
+      // Remove rutas validation check since it's now optional
 
       if (isValid) {
         const formData = {
@@ -599,13 +594,14 @@
             fechaInicial: fechaInicial.value,
             fechaFinal: fechaFinal.value,
           },
-          rutas: rutasData.filter((ruta) => selectedRutas.includes(ruta.id)),
-          montadores:
-            selectedMontadores.length > 0
-              ? montadoresData.filter((montador) =>
-                selectedMontadores.includes(montador.id)
-              )
-              : null,
+          // Optional rutas: null if none selected, array if some selected
+          rutas: selectedRutas.length > 0
+            ? rutasData.filter((ruta) => selectedRutas.includes(ruta.id))
+            : null,
+          // Optional montadores: null if none selected, array if some selected
+          montadores: selectedMontadores.length > 0
+            ? montadoresData.filter((montador) => selectedMontadores.includes(montador.id))
+            : null,
         };
 
         loaderOn();
