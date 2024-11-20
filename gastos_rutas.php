@@ -127,7 +127,7 @@ try {
                                 foreach ($lineasFiltradas2 as $linea) {
                                     foreach ($otsCrm as $ot) {
                                         if ($linea['C_digo_de_OT_relacionada'] == $ot) {
-                                            $otsCalculo[$ot]['dias'] += (floatval($linea['D_as_actuaci_n']) * 24) * 60;
+                                            $otsCalculo[$ot]['dias'] += (floatval($linea['D_as_actuaci_n']) * 8) * 60;
                                             $otsCalculo[$ot]['horas'] += floatval($linea['Horas_actuaci_n']) * 60;
                                             $otsCalculo[$ot]['minutos'] += floatval($linea['Minutos_actuaci_n']);
                                         }
