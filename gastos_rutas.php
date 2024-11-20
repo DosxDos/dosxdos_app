@@ -86,13 +86,18 @@ try {
                             $otsCalculo = [];
                             $totalMinutos = 0;
 
-                            foreach ($csvData as $linea) {
-                                foreach ($rutas as $ruta) {
-                                    if ($linea['RutaSelect'] == $ruta['Name']) {
-                                        array_push($lineasFiltradas, $linea);
+                            if ($rutas) {
+                                foreach ($csvData as $linea) {
+                                    foreach ($rutas as $ruta) {
+                                        if ($linea['RutaSelect'] == $ruta['Name']) {
+                                            array_push($lineasFiltradas, $linea);
+                                        }
                                     }
                                 }
+                            } else {
+                                $lineasFiltradas = $csvData;
                             }
+
 
                             if ($montadores) {
                                 foreach ($lineasFiltradas as $linea) {
