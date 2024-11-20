@@ -82,6 +82,9 @@ try {
 
                             $lineasFiltradas = [];
                             $lineasFiltradas2 = [];
+                            $otsCrm = [];
+                            $otsCalculo = [];
+                            $totalMinutos = 0;
 
                             foreach ($csvData as $linea) {
                                 foreach ($rutas as $ruta) {
@@ -91,49 +94,68 @@ try {
                                 }
                             }
 
-                            foreach ($lineasFiltradas as $linea) {
-                                foreach ($montadores as $montador) {
-                                    if ($linea['montadorUsuarioApp'] == $montador['idApp']) {
-                                        array_push($lineasFiltradas2, $linea);
+                            if ($montadores) {
+                                foreach ($lineasFiltradas as $linea) {
+                                    foreach ($montadores as $montador) {
+                                        if ($linea['montadorUsuarioApp'] == $montador['idApp']) {
+                                            array_push($lineasFiltradas2, $linea);
+                                        }
+                                    }
+                                }
+                                foreach ($lineasFiltradas2 as $linea) {
+                                    $ot = $linea['C_digo_de_OT_relacionada'];
+                                    array_push($otsCrm, $ot);
+                                }
+                                $otsCrm = array_values(array_unique($otsCrm));
+                                foreach ($lineasFiltradas2 as $linea) {
+                                    foreach ($otsCrm as $ot) {
+                                        if ($linea['C_digo_de_OT_relacionada'] == $ot) {
+                                            $otsCalculo[$ot]['navision'] = $linea['Navision_OT'];
+                                            $otsCalculo[$ot]['dias'] = 0;
+                                            $otsCalculo[$ot]['horas'] = 0;
+                                            $otsCalculo[$ot]['minutos'] = 0;
+                                            $otsCalculo[$ot]['totalMinutos'] = 0;
+                                            $otsCalculo[$ot]['porcentaje'] = 0;
+                                        }
+                                    }
+                                }
+                                foreach ($lineasFiltradas2 as $linea) {
+                                    foreach ($otsCrm as $ot) {
+                                        if ($linea['C_digo_de_OT_relacionada'] == $ot) {
+                                            $otsCalculo[$ot]['dias'] += (floatval($linea['D_as_actuaci_n']) * 24) * 60;
+                                            $otsCalculo[$ot]['horas'] += floatval($linea['Horas_actuaci_n']) * 60;
+                                            $otsCalculo[$ot]['minutos'] += floatval($linea['Minutos_actuaci_n']);
+                                        }
+                                    }
+                                }
+                            } else {
+                                foreach ($lineasFiltradas as $linea) {
+                                    $ot = $linea['C_digo_de_OT_relacionada'];
+                                    array_push($otsCrm, $ot);
+                                }
+                                $otsCrm = array_values(array_unique($otsCrm));
+                                foreach ($lineasFiltradas as $linea) {
+                                    foreach ($otsCrm as $ot) {
+                                        if ($linea['C_digo_de_OT_relacionada'] == $ot) {
+                                            $otsCalculo[$ot]['navision'] = $linea['Navision_OT'];
+                                            $otsCalculo[$ot]['dias'] = 0;
+                                            $otsCalculo[$ot]['horas'] = 0;
+                                            $otsCalculo[$ot]['minutos'] = 0;
+                                            $otsCalculo[$ot]['totalMinutos'] = 0;
+                                            $otsCalculo[$ot]['porcentaje'] = 0;
+                                        }
+                                    }
+                                }
+                                foreach ($lineasFiltradas as $linea) {
+                                    foreach ($otsCrm as $ot) {
+                                        if ($linea['C_digo_de_OT_relacionada'] == $ot) {
+                                            $otsCalculo[$ot]['dias'] += (floatval($linea['D_as_actuaci_n']) * 24) * 60;
+                                            $otsCalculo[$ot]['horas'] += floatval($linea['Horas_actuaci_n']) * 60;
+                                            $otsCalculo[$ot]['minutos'] += floatval($linea['Minutos_actuaci_n']);
+                                        }
                                     }
                                 }
                             }
-
-                            $otsCrm = [];
-
-                            foreach ($lineasFiltradas2 as $linea) {
-                                $ot = $linea['C_digo_de_OT_relacionada'];
-                                array_push($otsCrm, $ot);
-                            }
-
-                            $otsCrm = array_values(array_unique($otsCrm));
-
-                            $otsCalculo = [];
-
-                            foreach ($lineasFiltradas2 as $linea) {
-                                foreach ($otsCrm as $ot) {
-                                    if ($linea['C_digo_de_OT_relacionada'] == $ot) {
-                                        $otsCalculo[$ot]['navision'] = $linea['Navision_OT'];
-                                        $otsCalculo[$ot]['dias'] = 0;
-                                        $otsCalculo[$ot]['horas'] = 0;
-                                        $otsCalculo[$ot]['minutos'] = 0;
-                                        $otsCalculo[$ot]['totalMinutos'] = 0;
-                                        $otsCalculo[$ot]['porcentaje'] = 0;
-                                    }
-                                }
-                            }
-
-                            foreach ($lineasFiltradas2 as $linea) {
-                                foreach ($otsCrm as $ot) {
-                                    if ($linea['C_digo_de_OT_relacionada'] == $ot) {
-                                        $otsCalculo[$ot]['dias'] += (floatval($linea['D_as_actuaci_n']) * 24) * 60;
-                                        $otsCalculo[$ot]['horas'] += floatval($linea['Horas_actuaci_n']) * 60;
-                                        $otsCalculo[$ot]['minutos'] += floatval($linea['Minutos_actuaci_n']);
-                                    }
-                                }
-                            }
-
-                            $totalMinutos = 0;
 
                             foreach ($otsCalculo as $ot => $vector) {
                                 $otsCalculo[$ot]['totalMinutos'] =  $vector['dias'] + $vector['horas'] + $vector['minutos'];
@@ -168,7 +190,6 @@ try {
             http_response_code(500);
             echo json_encode($crm->respuestaError);
         }
-        
     } else {
         $response = $respuesta->error_405();
         http_response_code(405);
