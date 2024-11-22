@@ -1,0 +1,42 @@
+void automation.actualizarPrevisionEnLineas(Int idOt)
+{
+//OBTENER DATOS DE OT
+ot = zoho.crm.getRecordById("Deals",idOt);
+codigoOt = ot.get("C_digo");
+fechaPrevision = ot.get("Fecha_de_previsi_n");
+prefijo = ot.get("Prefijo");
+navision = ot.get("Navision");
+tipo_ot = ot.get("Tipo_de_OT");
+cliente = ot.get("Empresa");
+info cliente;
+nombre_cliente = cliente.get("name");
+firma = ot.get("Firma");
+nombre_ot = ot.get("Deal_Name");
+//OBTENER DATOS DE LAS LÍNEAS DE OT
+criterio = "(C_digo_de_OT_relacionada:equals:" + codigoOt + ")";
+lineas = zoho.crm.searchRecords("Products",criterio);
+//ACTUALIZAR CADA LÍNEA
+nowFecha = zoho.currentdate;
+dateActual = nowFecha.toDateTime();
+ano = dateActual.getYear();
+mes = dateActual.getMonth();
+if(mes < 10)
+{
+	mes = "0" + mes;
+}
+dia = dateActual.getDay();
+if(dia < 10)
+{
+	dia = "0" + dia;
+}
+fecha = ano + "-" + mes + "-" + dia;
+updateList = List();
+for each  linea in lineas
+{
+	idLinea = linea.get("id");
+	nuevaFase = {"id":idLinea,"Fecha_de_previsi_n_de_OT":fechaPrevision,"Fecha_de_Previsi_n_de_L_nea":fechaPrevision,"Prefijo_OT_relacionada":prefijo,"Navision_OT":navision,"Tipo_de_OT":tipo_ot,"Nombre_de_Empresa":cliente,"Firma_de_la_OT_relacionada":firma,"nombreCliente":nombre_cliente,"nombreOt":nombre_ot};
+	updateList.add(nuevaFase);
+}
+lineasInfo = zoho.crm.bulkUpdate("Products",updateList);
+info lineasInfo;
+}
