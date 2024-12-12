@@ -26,7 +26,7 @@ try {
 
         if (isset($body['fecha1']) && isset($body['fecha2']) && isset($body['montadores'])) {
 
-            if (!$body['montadores']) {
+            if ($body['montadores'] == "" || $body['montadores'] == null || (is_array($body['montadores']) && count($body['montadores']) == 0)) {
                 if (isset($_COOKIE['usuario'])) {
                     if ($_COOKIE['usuario']) {
                         $usuario = $_COOKIE['usuario'];
