@@ -28,7 +28,7 @@ try {
             var_dump($body);
 
             if (!$body['montadores']) {
-                $response = $respuesta->error_400('No se encuentra el identificador del montador');
+                $response = $respuesta->error_400('1 No se encuentra el identificador del montador');
                 http_response_code(400);
                 echo json_encode($response);
                 die();
@@ -37,13 +37,13 @@ try {
                     if ($_COOKIE['usuario']) {
                         $usuario = $_COOKIE['usuario'];
                     } else {
-                        $response = $respuesta->error_400('No se encuentra el identificador del montador');
+                        $response = $respuesta->error_400('2 No se encuentra el identificador del montador');
                         http_response_code(400);
                         echo json_encode($response);
                         die();
                     }
                 } else {
-                    $response = $respuesta->error_400('No se encuentra el identificador del montador');
+                    $response = $respuesta->error_400('3 No se encuentra el identificador del montador');
                     http_response_code(400);
                     echo json_encode($response);
                     die();
