@@ -26,27 +26,34 @@ try {
 
         if (isset($body['fecha1']) && isset($body['fecha2']) && isset($body['montadores'])) {
 
-            if ($body['montadores'] == "" || $body['montadores'] == null || (is_array($body['montadores']) && count($body['montadores']) == 0)) {
-                if (isset($_COOKIE['usuario'])) {
-                    if ($_COOKIE['usuario']) {
-                        $usuario = $_COOKIE['usuario'];
-                    } else {
-                        $response = $respuesta->error_400('2 No se encuentra el identificador del montador');
-                        http_response_code(400);
-                        echo json_encode($response);
-                        die();
-                    }
+            // Validar montadores
+            $montadores = $body['montadores'];
+
+            // Función auxiliar para verificar si montadores está vacío
+            $montadoresVacios = false;
+            if (is_string($montadores)) {
+                $montadoresVacios = trim($montadores) === "";
+            } elseif (is_array($montadores)) {
+                // Eliminamos vacíos tras trim, si después no queda nada, están vacíos
+                $montadoresFiltrados = array_filter(array_map('trim', $montadores));
+                $montadoresVacios = empty($montadoresFiltrados);
+            } elseif (is_null($montadores)) {
+                $montadoresVacios = true;
+            }
+
+            if ($montadoresVacios) {
+                // Si montadores están vacíos, intentamos usar la cookie de usuario
+                if (isset($_COOKIE['usuario']) && !empty($_COOKIE['usuario'])) {
+                    $usuario = $_COOKIE['usuario'];
                 } else {
-                    $response = $respuesta->error_400('3 No se encuentra el identificador del montador');
+                    $response = $respuesta->error_400('No se encuentra el identificador del montador');
                     http_response_code(400);
                     echo json_encode($response);
                     die();
                 }
             } else {
-                $response = $respuesta->error_400('1 No se encuentra el identificador del montador');
-                http_response_code(400);
-                echo json_encode($response);
-                die();
+                // Si montadores no está vacío, trabajaremos con él directamente.
+                $usuario = null;
             }
 
             if (empty(trim($body['fecha1'])) || empty(trim($body['fecha2']))) {
