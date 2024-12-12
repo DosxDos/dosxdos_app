@@ -25,14 +25,8 @@ try {
         //Funcionalidad: Recoger 2 fechas y el montador o array de montadores para los filtros
 
         if (isset($body['fecha1']) && isset($body['fecha2']) && isset($body['montadores'])) {
-            var_dump($body);
 
             if (!$body['montadores']) {
-                $response = $respuesta->error_400('1 No se encuentra el identificador del montador');
-                http_response_code(400);
-                echo json_encode($response);
-                die();
-            } else {
                 if (isset($_COOKIE['usuario'])) {
                     if ($_COOKIE['usuario']) {
                         $usuario = $_COOKIE['usuario'];
@@ -48,6 +42,11 @@ try {
                     echo json_encode($response);
                     die();
                 }
+            } else {
+                $response = $respuesta->error_400('1 No se encuentra el identificador del montador');
+                http_response_code(400);
+                echo json_encode($response);
+                die();
             }
 
             if (empty(trim($body['fecha1'])) || empty(trim($body['fecha2']))) {
