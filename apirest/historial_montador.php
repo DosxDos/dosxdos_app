@@ -86,6 +86,7 @@ try {
                             if ($crmResponse !== false) { // Verifica que se haya leído correctamente
                                 $crmResponse = json_decode($crmResponse, true);
                                 unlink("callBackBulkCrm.json"); // Elimina el archivo después de procesarlo
+                                echo 'bucle';
                                 break; // Sale del bucle
                             }
                         }
