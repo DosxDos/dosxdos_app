@@ -25,6 +25,7 @@ try {
         //Funcionalidad: Recoger 2 fechas y el montador o array de montadores para los filtros
 
         if (isset($body['fecha1']) && isset($body['fecha2']) && isset($body['montadores'])) {
+            var_dump($body);
 
             if (empty($body['montadores'])) {
                 $response = $respuesta->error_400('No se encuentra el identificador del montador');
