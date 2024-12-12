@@ -81,12 +81,11 @@ try {
                     $crmResponse;
                     while (true) {
                         sleep(5);
-                        if (file_exists("callBackBulkCrm.json")) { // Comprueba si el archivo existe
-                            $crmResponse = file_get_contents("callBackBulkCrm.json");
+                        if (file_exists("../callBackBulkCrm.json")) { // Comprueba si el archivo existe
+                            $crmResponse = file_get_contents("../callBackBulkCrm.json");
                             if ($crmResponse !== false) { // Verifica que se haya leído correctamente
                                 $crmResponse = json_decode($crmResponse, true);
-                                unlink("callBackBulkCrm.json"); // Elimina el archivo después de procesarlo
-                                echo 'bucle';
+                                unlink("../callBackBulkCrm.json"); // Elimina el archivo después de procesarlo
                                 break; // Sale del bucle
                             }
                         }
