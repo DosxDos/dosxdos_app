@@ -32,8 +32,15 @@ try {
                 echo json_encode($response);
                 die();
             } else {
-                if ($_COOKIE['usuario']) {
-                    $usuario = $_COOKIE['usuario'];
+                if (isset($_COOKIE['usuario'])) {
+                    if ($_COOKIE['usuario']) {
+                        $usuario = $_COOKIE['usuario'];
+                    } else {
+                        $response = $respuesta->error_400('No se encuentra el identificador del montador');
+                        http_response_code(400);
+                        echo json_encode($response);
+                        die();
+                    }
                 } else {
                     $response = $respuesta->error_400('No se encuentra el identificador del montador');
                     http_response_code(400);
@@ -117,15 +124,15 @@ try {
                                     if (is_array($montado)) {
                                         foreach ($montadores as $montador) {
                                             foreach ($csvData as $linea) {
-                                                if($linea['montadorUsuarioApp'] == $montador){
-                                                    array_push($lineasFiltradas,$linea);
+                                                if ($linea['montadorUsuarioApp'] == $montador) {
+                                                    array_push($lineasFiltradas, $linea);
                                                 }
                                             }
                                         }
                                     } else {
                                         foreach ($csvData as $linea) {
-                                            if($linea['montadorUsuarioApp'] == $montadores){
-                                                array_push($lineasFiltradas,$linea);
+                                            if ($linea['montadorUsuarioApp'] == $montadores) {
+                                                array_push($lineasFiltradas, $linea);
                                             }
                                         }
                                     }
