@@ -10,8 +10,8 @@ set_time_limit(0);
 ini_set('default_socket_timeout', 28800);
 date_default_timezone_set('Atlantic/Canary');
 
-require_once './apirest/clases/crm_clase.php';
-require_once './apirest/clases/crm_clase.php';
+require_once './clases/crm_clase.php';
+require_once './clases/crm_clase.php';
 
 try {
     $crm = new Crm;
