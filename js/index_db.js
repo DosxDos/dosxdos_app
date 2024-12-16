@@ -225,3 +225,27 @@ function agregarDatos(database, store, data) {
         resolve(true);
     })
 }
+//DELETE indexDB
+function deleteDB(database) {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.deleteDatabase(database);
+
+        // Evento que se dispara cuando la base de datos se elimina correctamente
+        request.onsuccess = () => {
+            console.log(`Base de datos "${database}" eliminada exitosamente.`);
+            resolve(true);
+        };
+
+        // Evento que se dispara si ocurre un error al eliminar la base de datos
+        request.onerror = (event) => {
+            console.error(`Error al eliminar la base de datos "${database}":`, event.target.error);
+            reject(event.target.error);
+        };
+
+        // Evento que se dispara si la eliminación de la base de datos está bloqueada
+        request.onblocked = () => {
+            console.warn(`La eliminación de la base de datos "${database}" está bloqueada. Asegúrate de cerrar todas las conexiones a esta base de datos.`);
+            reject(new Error(`La eliminación de la base de datos "${database}" está bloqueada.`));
+        };
+    });
+}
