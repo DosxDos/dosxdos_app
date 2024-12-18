@@ -1387,6 +1387,7 @@
                             const otStorage = ot;
                             const clienteStorage = cliente;
                             const nombreClienteStorage = nombreCliente;
+                            localStorage.setItem('renderizarHistorial', false);
                             localStorage.setItem('linea', lineaStorage);
                             localStorage.setItem('lineaActividad', LineaActividadStorage);
                             localStorage.setItem('ot', otStorage);
@@ -1493,6 +1494,7 @@
                             const lineaStorage = button.id;
                             const LineaActividadStorage = LineaActividad;
                             const otStorage = ot;
+                            localStorage.setItem('renderizarHistorial', false);
                             localStorage.setItem('linea', lineaStorage);
                             localStorage.setItem('lineaActividad', LineaActividadStorage);
                             localStorage.setItem('ot', otStorage);

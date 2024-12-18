@@ -660,10 +660,12 @@
             }
         } else {
             alerta("No es posible realizar esta acción sin conexión a internet");
+            scrollToTop();
         }
     }
     // Agregamos el listener a los inputs de fecha
-    fechaInicio.addEventListener('change', verificarFechas);
+    //fechaInicio.addEventListener('change', verificarFechas);
+    fechaFin.addEventListener('blur', verificarFechas);
     fechaFin.addEventListener('change', verificarFechas);
 
     // Función que realiza la petición al servidor
@@ -748,6 +750,7 @@
                                         const otStorage = ot;
                                         const clienteStorage = cliente;
                                         const nombreClienteStorage = nombreCliente;
+                                        localStorage.setItem('renderizarHistorial', true);
                                         localStorage.setItem('linea', lineaStorage);
                                         localStorage.setItem('lineaActividad', LineaActividadStorage);
                                         localStorage.setItem('ot', otStorage);
@@ -1458,14 +1461,18 @@
                     nombre: objeto['Descripcion']
                 }));
                 var fechaTresMesesAtras, fechaActual;
-                if (localStorage.getItem("fechaInicioHistorial") == null || localStorage.getItem("fechaFinHistorial") == null) {
+                if (localStorage.getItem("fechaInicioHistorial") == null || localStorage.getItem("fechaFinHistorial") == null ||
+                    localStorage.getItem("fechaInicioHistorial") == "" || localStorage.getItem("fechaFinHistorial") == "") {
                     fechaActual = formatearFecha(new Date());
-                    fechaTresMesesAtras = new Date();
-                    // Restar 3 meses a la fecha clonada
-                    fechaTresMesesAtras = formatearFecha(fechaTresMesesAtras.setMonth(fechaTresMesesAtras.getMonth() - 3));
+                    let fechaTresMesesAtrasDate = new Date();
 
-                    localStorage.setItem("fechaInicioHistorial", fechaInicio.value);
-                    localStorage.setItem("fechaFinHistorial", fechaFin.value);
+                    fechaTresMesesAtrasDate.setMonth(fechaTresMesesAtrasDate.getMonth() - 3);
+
+                    // Restar 3 meses a la fecha clonada
+                    fechaTresMesesAtras = formatearFecha(fechaTresMesesAtrasDate);
+
+                    localStorage.setItem("fechaInicioHistorial", fechaTresMesesAtras);
+                    localStorage.setItem("fechaFinHistorial", fechaActual);
 
                 } else {
                     fechaTresMesesAtras = localStorage.getItem("fechaInicioHistorial");
@@ -1513,7 +1520,7 @@
                     nombre: objeto['Descripcion']
                 }));
                 $contenido.replaceChildren();
-                if (localStorage.getItem("fechaInicioHistorial") != null || localStorage.getItem("fechaFinHistorial") != null) {
+                if (localStorage.getItem("fechaInicioHistorial") == null || localStorage.getItem("fechaFinHistorial") == null) {
                     alerta("No tienes historial consultado anteriormente con conexión");
                     loaderOff();
                     return;
@@ -1561,6 +1568,7 @@
                             const otStorage = ot;
                             const clienteStorage = cliente;
                             const nombreClienteStorage = nombreCliente;
+                            localStorage.setItem('renderizarHistorial', true);
                             localStorage.setItem('linea', lineaStorage);
                             localStorage.setItem('lineaActividad', LineaActividadStorage);
                             localStorage.setItem('ot', otStorage);
