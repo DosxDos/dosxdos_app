@@ -1079,12 +1079,6 @@
                 console.error(`Error al eliminar la base de datos "${database}":`, event.target.error);
                 reject(event.target.error);
             };
-
-            // Evento que se dispara si la eliminación de la base de datos está bloqueada
-            request.onblocked = () => {
-                console.warn(`La eliminación de la base de datos "${database}" está bloqueada. Asegúrate de cerrar todas las conexiones a esta base de datos.`);
-                reject(new Error(`La eliminación de la base de datos "${database}" está bloqueada.`));
-            };
         });
     }
 
@@ -1104,7 +1098,7 @@
                 localStorage.removeItem('ot');
                 eliminarCookie('login');
                 eliminarCookie('usuario');
-                deleteDB2('dosxdos') ? console.log("Base de datos eliminada exitosamente") : console.error("error al eliminar la base de datos");
+                await deleteDB2('dosxdos') ? console.log("Base de datos eliminada exitosamente") : console.error("error al eliminar la base de datos");
                 window.location.href = "https://dosxdos.app.iidos.com/index.html";
             } catch (error) {
                 mensaje = 'ERROR: ' + error.message;

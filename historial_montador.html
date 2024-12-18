@@ -106,36 +106,36 @@
         }
 
         #loader {
-      width: 100vw;
-      height: 100vh;
-      position: absolute;
-      top: 0;
-      z-index: 6000;
-      background-color: rgba(0, 0, 0, 0.886);
-      justify-content: center;
-      align-items: center;
-    }
+            width: 100vw;
+            height: 100vh;
+            position: absolute;
+            top: 0;
+            z-index: 6000;
+            background-color: rgba(0, 0, 0, 0.886);
+            justify-content: center;
+            align-items: center;
+        }
 
-    .loader {
-      border: 4px solid #ffffff;
-      /* Blanco */
-      border-top: 4px solid #d31216;
-      /* Rojo */
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      animation: spin 1s linear infinite;
-    }
+        .loader {
+            border: 4px solid #ffffff;
+            /* Blanco */
+            border-top: 4px solid #d31216;
+            /* Rojo */
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
 
-    @keyframes spin {
-      0% {
-        transform: rotate(0deg);
-      }
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
 
-      100% {
-        transform: rotate(360deg);
-      }
-    }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
 
         /* NAVEGACIÓN */
         #encabezado {
@@ -641,6 +641,162 @@
 </body>
 
 <script>
+
+    //ESTA FUNCION REVISA EL HISTORIAL DE MONTADORES//
+
+    const fechaInicio = document.getElementById('fecha-inicio');
+    const fechaFin = document.getElementById('fecha-fin');
+
+    // Función para verificar si ambas fechas tienen valor
+    function verificarFechas() {
+        let inicioVal = fechaInicio.value;
+        let finVal = fechaFin.value;
+        if (inicioVal && finVal) {
+            // Ambas fechas tienen valor, aquí puedes hacer la petición
+            enviarFechasAlServidor(inicioVal, finVal);
+        }
+    }
+
+    // Agregamos el listener a los inputs de fecha
+    fechaInicio.addEventListener('change', verificarFechas);
+    fechaFin.addEventListener('change', verificarFechas);
+
+    // Función que realiza la petición al servidor
+    // Función que realiza la petición al servidor
+    function enviarFechasAlServidor(fechaInicioVal, fechaFinVal) {
+        return new Promise((resolve, reject) => {
+            loaderOn();
+            console.log(fechaInicioVal +" "+fechaFinVal);
+            // Crear el body en formato JSON
+            const bodyData = JSON.stringify({
+                fecha1: fechaInicioVal,
+                fecha2: fechaFinVal
+            });
+
+            // Realizar la petición fetch (POST) al PHP
+            fetch('https://dosxdos.app.iidos.com/apirest/historial_montador.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: bodyData
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error en la respuesta del servidor');
+                    }
+                    return response.json();
+                })
+                .then(async data => {
+                    // Aquí manejas la respuesta que envíe el PHP
+                    console.log('Respuesta del servidor:', data);
+
+                    // data[0] = true o false,
+                    // data[1] = array de rutas/lineas,
+                    // data[2] = código 200, etc.
+
+                    if (data[0] === true && Array.isArray(data[1])) {
+                        let lineas = data[1]; // Este es el array con todas las lineas/rutas
+                        const limpiarHistorial = await limpiarDatos('dosxdos', 'historial');
+                        const actualizarHistorial = await agregarDatos('dosxdos', 'historial', lineas);
+                        if (limpiarHistorial && actualizarHistorial) {
+                            $contenido.replaceChildren();
+
+
+                            const TotalLineas = await leerDatos('dosxdos', 'historial');
+                            if (TotalLineas) {
+                                console.log(TotalLineas);
+                                const fragmento = document.createDocumentFragment();
+                                TotalLineas.forEach((objeto, index) => {
+                                    const button = document.createElement('button');
+                                    if (objeto.Estado_de_Actuaci_n == 'Pendiente') {
+                                        button.className = 'ruta displayOn';
+                                    }
+                                    if (objeto.Estado_de_Actuaci_n == 'Realizado') {
+                                        button.className = 'ruta2 displayOn';
+                                    }
+                                    button.type = 'button';
+                                    button.id = `${objeto.Linea}`;
+                                    const observaciones = objeto.Observaciones;
+                                    const LineaActividad = objeto.Codigo_de_l_nea;
+                                    const ot = objeto.C_digo_de_OT_relacionada;
+                                    const cliente = objeto.N_mero_del_cliente;
+                                    const nombreCliente = objeto.nombreCliente;
+                                    texto = '';
+                                    //NAVISION
+                                    const otNavision = objeto.Navision_OT;
+                                    if (observaciones) {
+                                        texto = `${objeto.Sector} _ ${objeto.Zona} _ ${objeto.Codigo_de_l_nea} _ ${objeto.nombrePv} _ ${objeto.nombreCliente} _ ${objeto.Tipo_de_trabajo} _ ${objeto.Observaciones_internas} _ NAVISION: ${objeto.Navision_OT} _ CRM: ${objeto.C_digo_de_OT_relacionada}`;
+                                    } else {
+                                        texto = `${objeto.Sector} _ ${objeto.Zona} _ ${objeto.Codigo_de_l_nea} _ ${objeto.nombrePv} _ ${objeto.nombreCliente} _ ${objeto.Tipo_de_trabajo} _ NAVISION: ${objeto.Navision_OT} _ CRM: ${objeto.C_digo_de_OT_relacionada}`;
+                                    }
+                                    span = document.createElement('span');
+                                    span.textContent = texto;
+                                    button.appendChild(span);
+                                    button.setAttribute('data-LineaActividad', LineaActividad);
+                                    button.addEventListener('click', () => {
+                                        const lineaStorage = button.id;
+                                        const LineaActividadStorage = LineaActividad;
+                                        const otStorage = ot;
+                                        const clienteStorage = cliente;
+                                        const nombreClienteStorage = nombreCliente;
+                                        localStorage.setItem('linea', lineaStorage);
+                                        localStorage.setItem('lineaActividad', LineaActividadStorage);
+                                        localStorage.setItem('ot', otStorage);
+                                        localStorage.setItem('cliente', clienteStorage);
+                                        localStorage.setItem('nombreCliente', nombreClienteStorage);
+                                        window.location.href = "https://dosxdos.app.iidos.com/linea_montador.html";
+                                    });
+                                    fragmento.appendChild(button);
+                                });
+                                $contenido.appendChild(fragmento);
+                                startBuscador();
+                                const editarUsuario = document.getElementById('editarUsuario');
+                                editarUsuario.addEventListener('click', e => {
+                                    if (navigator.onLine) {
+                                        window.location.href = "https://dosxdos.app.iidos.com/dosxdos.php?modulo=editarUsuario&id=" + usuario.id;
+                                    } else {
+                                        mensaje = 'No es posible acceder a las opciones de edición de usuario sin conexión a internet';
+                                        alerta(mensaje);
+                                        scrollToTop();
+                                    }
+                                })
+                                const peticionesCierre = await procesarPeticiones2();
+                                loaderOff();
+                            }
+                            else {
+                                alerta('Error al leer el almacén de líneas')
+                                const editarUsuario = document.getElementById('editarUsuario');
+                                editarUsuario.addEventListener('click', e => {
+                                    if (navigator.onLine) {
+                                        window.location.href = "https://dosxdos.app.iidos.com/dosxdos.php?modulo=editarUsuario&id=" + usuario.id;
+                                    } else {
+                                        mensaje = 'No es posible acceder a las opciones de edición de usuario sin conexión a internet';
+                                        alerta(mensaje);
+                                        scrollToTop();
+                                    }
+                                })
+                                const peticionesCierre = await procesarPeticiones2();
+                                loaderOff();
+                            }
+                            resolve(true);
+                        } else {
+                            reject('Error al limpiar o actualizar la tabla historial');
+                        }
+                    } else {
+                        console.error('El servidor no devolvió un array de rutas válido');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error en la petición:', error);
+                    reject(event.target.error);
+                });
+        })
+
+    }
+
+
+    //AQUI ACABA LA FUNCION DEL HISTORIAL DE MONTADORES//
 
 
     const ruta = localStorage.getItem('ruta');
@@ -1169,7 +1325,7 @@
                     if (lineas) {
                         const mensaje = 'Se ha sincronizado la base de datos exitosamente';
                         localStorage.setItem('mensaje', mensaje);
-                        //window.location.href = "https://dosxdos.app.iidos.com/ruta_montador.html";
+                        window.location.href = "https://dosxdos.app.iidos.com/historial_montador.html";
                     }
                     else {
                         alerta('Error al cargar las líneas de las rutas del servidor, se han sincronizado las rutas pero no las líneas')
@@ -1282,93 +1438,28 @@
                     cod: objeto['No.'],
                     nombre: objeto['Descripcion']
                 }));
-                const TotalLineas = await leerDatos('dosxdos', 'lineas');
-                if (TotalLineas) {
-                    //console.log(TotalLineas);
-                    const lineas = TotalLineas.filter(objeto => {
-                        return objeto.Proyecto == ruta;
-                    });
-                    console.log(lineas);
-                    const fragmento = document.createDocumentFragment();
-                    lineas.forEach((objeto, index) => {
-                        const button = document.createElement('button');
-                        if (objeto.Estado == 'Pendiente') {
-                            button.className = 'ruta displayOn';
-                        }
-                        if (objeto.Estado == 'Realizado') {
-                            button.className = 'ruta2 displayOn';
-                        }
-                        button.type = 'button';
-                        button.id = `${objeto.Linea}`;
-                        const observaciones = objeto.Observaciones;
-                        const LineaActividad = objeto.LineaActividad;
-                        const ot = objeto.OT;
-                        const cliente = objeto.Cliente;
-                        const nombreCliente = objeto.NombreCliente;
-                        texto = '';
-                        //NAVISION
-                        const otNavision = objeto.Navision_OT;
-                        if (observaciones) {
-                            texto = `${objeto.Sector} _ ${objeto.Zona} _ ${LineaActividad} _ ${objeto.NombrePuntoVenta} _ ${objeto.NombreCliente} _ ${objeto.TipoTrabajo} _ ${observaciones} _ NAVISION: ${otNavision} _ CRM: ${ot}`;
-                        } else {
-                            texto = `${objeto.Sector} _ ${objeto.Zona} _ ${LineaActividad} _ ${objeto.NombrePuntoVenta} _ ${objeto.NombreCliente} _ ${objeto.TipoTrabajo} _ NAVISION: ${otNavision} _ CRM: ${ot}`;
-                        }
-                        span = document.createElement('span');
-                        span.textContent = texto;
-                        button.appendChild(span);
-                        button.setAttribute('data-LineaActividad', LineaActividad);
-                        button.addEventListener('click', () => {
-                            const lineaStorage = button.id;
-                            const LineaActividadStorage = LineaActividad;
-                            const otStorage = ot;
-                            const clienteStorage = cliente;
-                            const nombreClienteStorage = nombreCliente;
-                            localStorage.setItem('linea', lineaStorage);
-                            localStorage.setItem('lineaActividad', LineaActividadStorage);
-                            localStorage.setItem('ot', otStorage);
-                            localStorage.setItem('cliente', clienteStorage);
-                            localStorage.setItem('nombreCliente', nombreClienteStorage);
-                            window.location.href = "https://dosxdos.app.iidos.com/linea_montador.html";
-                        });
-                        fragmento.appendChild(button);
-                    });
-                    $contenido.appendChild(fragmento);
-                    startBuscador();
-                    const editarUsuario = document.getElementById('editarUsuario');
-                    editarUsuario.addEventListener('click', e => {
-                        if (navigator.onLine) {
-                            window.location.href = "https://dosxdos.app.iidos.com/dosxdos.php?modulo=editarUsuario&id=" + usuario.id;
-                        } else {
-                            mensaje = 'No es posible acceder a las opciones de edición de usuario sin conexión a internet';
-                            alerta(mensaje);
-                            scrollToTop();
-                        }
-                    })
-                    const peticionesCierre = await procesarPeticiones2();
-                    setInterval(sincronizarDb, 300000);
-                    loaderOff();
-                }
-                else {
-                    alerta('Error al leer el almacén de líneas')
-                    const editarUsuario = document.getElementById('editarUsuario');
-                    editarUsuario.addEventListener('click', e => {
-                        if (navigator.onLine) {
-                            window.location.href = "https://dosxdos.app.iidos.com/dosxdos.php?modulo=editarUsuario&id=" + usuario.id;
-                        } else {
-                            mensaje = 'No es posible acceder a las opciones de edición de usuario sin conexión a internet';
-                            alerta(mensaje);
-                            scrollToTop();
-                        }
-                    })
-                    const peticionesCierre = await procesarPeticiones2();
-                    loaderOff();
-                }
+                var fechaActual = new Date();
+                var fechaTresMesesAtras = new Date(fechaActual);
+                // Restar 3 meses a la fecha clonada
+                fechaTresMesesAtras.setMonth(fechaTresMesesAtras.getMonth() - 3);
+
+                console.log("Fecha inicio por defecto: " + formatearFecha(fechaTresMesesAtras));
+                console.log("Fecha fin por defecto: " + formatearFecha(fechaActual));
+                await enviarFechasAlServidor(formatearFecha(fechaTresMesesAtras), formatearFecha(fechaActual));
             }
         } catch (error) {
             mensaje = 'ERROR: ' + error.message;
             console.error(error);
             alerta(mensaje);
         }
+    }
+    //ESTO DEJA LAS FECHAS EN FORMATO YYYY-MM-DD
+    // Función para formatear la fecha en "YYYY-MM-DD"
+    function formatearFecha(fecha) {
+        const año = fecha.getFullYear();
+        const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+        const dia = String(fecha.getDate()).padStart(2, '0');
+        return `${año}-${mes}-${dia}`;
     }
 
     /* INICIAR APP OFFLINE */
