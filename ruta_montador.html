@@ -1086,16 +1086,7 @@
         if (navigator.onLine) {
             try {
                 loaderOn();
-                const limpiarUsuario = await limpiarDatos('dosxdos', 'usuario');
-                const limpiarRutas = await limpiarDatos('dosxdos', 'rutas');
-                const limpiarLineas = await limpiarDatos('dosxdos', 'lineas');
-                localStorage.removeItem('login');
-                localStorage.removeItem('loginMontador');
-                localStorage.removeItem('ruta');
-                localStorage.removeItem('mensaje');
-                localStorage.removeItem('linea');
-                localStorage.removeItem('lineaActividad');
-                localStorage.removeItem('ot');
+                localStorage.clear();
                 eliminarCookie('login');
                 eliminarCookie('usuario');
                 await deleteDB2('dosxdos') ? console.log("Base de datos eliminada exitosamente") : console.error("error al eliminar la base de datos");
@@ -1368,6 +1359,9 @@
                         if (objeto.Estado == 'Realizado') {
                             button.className = 'ruta2 displayOn';
                         }
+                        if (objeto.Estado == '' || objeto.Estado == null) {
+                            button.className = 'ruta displayOn';
+                        }
                         button.type = 'button';
                         button.id = `${objeto.Linea}`;
                         const observaciones = objeto.Observaciones;
@@ -1474,6 +1468,9 @@
                         }
                         if (objeto.Estado == 'Realizado') {
                             button.className = 'ruta2 displayOn';
+                        }
+                        if (objeto.Estado == '' || objeto.Estado == null) {
+                            button.className = 'ruta displayOn';
                         }
                         button.type = 'button';
                         button.id = `${objeto.Linea}`;

@@ -1,5 +1,5 @@
 //asignar un nombre y versión al cache
-const CACHE_NAME = 'dosxdos1',
+const CACHE_NAME = 'dosxdos1.3',
   urlsToCache = [
     'https://dosxdos.app.iidos.com/index.html?utm_source=web_app_manifest',
     'https://dosxdos.app.iidos.com/index.html',
@@ -90,6 +90,7 @@ const CACHE_NAME = 'dosxdos1',
     'https://dosxdos.app.iidos.com/img/trabajos.png',
     'https://dosxdos.app.iidos.com/img/clientes2.png',
     'https://dosxdos.app.iidos.com/img/sincronizar.png',
+    'https://dosxdos.app.iidos.com/historial_montador.html'
   ],
 
   urlsToUpdate = [
@@ -128,6 +129,7 @@ const CACHE_NAME = 'dosxdos1',
     'https://dosxdos.app.iidos.com/dm.html',
     'https://dosxdos.app.iidos.com/reciclar.html',
     'https://dosxdos.app.iidos.com/rutas_inactivas.html',
+    'https://dosxdos.app.iidos.com/historial_montador.html'
   ];
 
 //durante la fase de instalación, generalmente se almacena en caché los activos estáticos

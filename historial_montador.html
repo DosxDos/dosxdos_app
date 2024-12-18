@@ -649,14 +649,19 @@
 
     // Función para verificar si ambas fechas tienen valor
     function verificarFechas() {
-        let inicioVal = fechaInicio.value;
-        let finVal = fechaFin.value;
-        if (inicioVal && finVal) {
-            // Ambas fechas tienen valor, aquí puedes hacer la petición
-            enviarFechasAlServidor(inicioVal, finVal);
+        if (navigator.onLine) {
+            let inicioVal = fechaInicio.value;
+            let finVal = fechaFin.value;
+            localStorage.setItem("fechaInicioHistorial", inicioVal);
+            localStorage.setItem("fechaFinHistorial", finVal);
+            if (inicioVal && finVal) {
+                // Ambas fechas tienen valor, aquí puedes hacer la petición
+                enviarFechasAlServidor(inicioVal, finVal);
+            }
+        } else {
+            alerta("No es posible realizar esta acción sin conexión a internet");
         }
     }
-
     // Agregamos el listener a los inputs de fecha
     fechaInicio.addEventListener('change', verificarFechas);
     fechaFin.addEventListener('change', verificarFechas);
@@ -666,7 +671,7 @@
     function enviarFechasAlServidor(fechaInicioVal, fechaFinVal) {
         return new Promise((resolve, reject) => {
             loaderOn();
-            console.log(fechaInicioVal +" "+fechaFinVal);
+            console.log(fechaInicioVal + " " + fechaFinVal);
             // Crear el body en formato JSON
             const bodyData = JSON.stringify({
                 fecha1: fechaInicioVal,
@@ -714,6 +719,9 @@
                                     }
                                     if (objeto.Estado_de_Actuaci_n == 'Realizado') {
                                         button.className = 'ruta2 displayOn';
+                                    }
+                                    if (objeto.Estado == '' || objeto.Estado == null) {
+                                        button.className = 'ruta displayOn';
                                     }
                                     button.type = 'button';
                                     button.id = `${objeto.Linea}`;
@@ -765,7 +773,7 @@
                                 loaderOff();
                             }
                             else {
-                                alerta('Error al leer el almacén de líneas')
+                                alerta('Error al leer el almacén de historial')
                                 const editarUsuario = document.getElementById('editarUsuario');
                                 editarUsuario.addEventListener('click', e => {
                                     if (navigator.onLine) {
@@ -1169,22 +1177,33 @@
         document.cookie = `${nombre}=; expires=${new Date(tiempoExpiracion * 1000).toUTCString()}; path=/;`;
     }
 
+    function deleteDB2(database) {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.deleteDatabase(database);
+
+            // Evento que se dispara cuando la base de datos se elimina correctamente
+            request.onsuccess = () => {
+                console.log(`Base de datos "${database}" eliminada exitosamente.`);
+                resolve(true);
+            };
+
+            // Evento que se dispara si ocurre un error al eliminar la base de datos
+            request.onerror = (event) => {
+                console.error(`Error al eliminar la base de datos "${database}":`, event.target.error);
+                reject(event.target.error);
+            };
+
+        });
+    }
+
     async function cerrarSesion() {
         if (navigator.onLine) {
             try {
                 loaderOn();
-                const limpiarUsuario = await limpiarDatos('dosxdos', 'usuario');
-                const limpiarRutas = await limpiarDatos('dosxdos', 'rutas');
-                const limpiarLineas = await limpiarDatos('dosxdos', 'lineas');
-                localStorage.removeItem('login');
-                localStorage.removeItem('loginMontador');
-                localStorage.removeItem('ruta');
-                localStorage.removeItem('mensaje');
-                localStorage.removeItem('linea');
-                localStorage.removeItem('lineaActividad');
-                localStorage.removeItem('ot');
+                localStorage.clear();
                 eliminarCookie('login');
                 eliminarCookie('usuario');
+                await deleteDB2('dosxdos') ? console.log("Base de datos eliminada exitosamente") : console.error("error al eliminar la base de datos");
                 window.location.href = "https://dosxdos.app.iidos.com/index.html";
             } catch (error) {
                 mensaje = 'ERROR: ' + error.message;
@@ -1336,7 +1355,7 @@
         } catch (error) {
             const mensaje = 'No se ha sincronizado la base de datos: ' + error.message;
             localStorage.setItem('mensaje', mensaje);
-            //window.location.href = "https://dosxdos.app.iidos.com/rutas_montador.html";
+            window.location.href = "https://dosxdos.app.iidos.com/historial_montador.html";
         }
     }
 
@@ -1438,14 +1457,27 @@
                     cod: objeto['No.'],
                     nombre: objeto['Descripcion']
                 }));
-                var fechaActual = new Date();
-                var fechaTresMesesAtras = new Date(fechaActual);
-                // Restar 3 meses a la fecha clonada
-                fechaTresMesesAtras.setMonth(fechaTresMesesAtras.getMonth() - 3);
+                var fechaTresMesesAtras, fechaActual;
+                if (localStorage.getItem("fechaInicioHistorial") == null || localStorage.getItem("fechaFinHistorial") == null) {
+                    fechaActual = formatearFecha(new Date());
+                    fechaTresMesesAtras = new Date();
+                    // Restar 3 meses a la fecha clonada
+                    fechaTresMesesAtras = formatearFecha(fechaTresMesesAtras.setMonth(fechaTresMesesAtras.getMonth() - 3));
 
-                console.log("Fecha inicio por defecto: " + formatearFecha(fechaTresMesesAtras));
-                console.log("Fecha fin por defecto: " + formatearFecha(fechaActual));
-                await enviarFechasAlServidor(formatearFecha(fechaTresMesesAtras), formatearFecha(fechaActual));
+                    localStorage.setItem("fechaInicioHistorial", fechaInicio.value);
+                    localStorage.setItem("fechaFinHistorial", fechaFin.value);
+
+                } else {
+                    fechaTresMesesAtras = localStorage.getItem("fechaInicioHistorial");
+                    fechaActual = localStorage.getItem("fechaFinHistorial");
+                }
+                // Asignar el valor formateado a los inputs de tipo date
+                fechaInicio.value = fechaTresMesesAtras;
+                fechaFin.value = fechaActual;
+
+                console.log("Fecha inicio por defecto: " + fechaTresMesesAtras);
+                console.log("Fecha fin por defecto: " + fechaActual);
+                await enviarFechasAlServidor(fechaTresMesesAtras, fechaActual);
             }
         } catch (error) {
             mensaje = 'ERROR: ' + error.message;
@@ -1480,34 +1512,44 @@
                     cod: objeto['No.'],
                     nombre: objeto['Descripcion']
                 }));
-                const TotalLineas = await leerDatos('dosxdos', 'lineas');
+                $contenido.replaceChildren();
+                if (localStorage.getItem("fechaInicioHistorial") != null || localStorage.getItem("fechaFinHistorial") != null) {
+                    alerta("No tienes historial consultado anteriormente con conexión");
+                    loaderOff();
+                    return;
+                }
+                fechaInicio.value = localStorage.getItem("fechaInicioHistorial");
+                fechaFin.value = localStorage.getItem("fechaFinHistorial");
+
+                const TotalLineas = await leerDatos('dosxdos', 'historial');
                 if (TotalLineas) {
-                    //console.log(TotalLineas);
-                    const lineas = TotalLineas.filter(objeto => {
-                        return objeto.Proyecto == ruta;
-                    });
-                    //console.log(lineas);
+                    console.log(TotalLineas);
                     const fragmento = document.createDocumentFragment();
-                    lineas.forEach((objeto, index) => {
+                    TotalLineas.forEach((objeto, index) => {
                         const button = document.createElement('button');
-                        if (objeto.Estado == 'Pendiente') {
+                        if (objeto.Estado_de_Actuaci_n == 'Pendiente') {
                             button.className = 'ruta displayOn';
                         }
-                        if (objeto.Estado == 'Realizado') {
+                        if (objeto.Estado_de_Actuaci_n == 'Realizado') {
                             button.className = 'ruta2 displayOn';
+                        }
+                        if (objeto.Estado == '' || objeto.Estado == null) {
+                            button.className = 'ruta displayOn';
                         }
                         button.type = 'button';
                         button.id = `${objeto.Linea}`;
                         const observaciones = objeto.Observaciones;
-                        const LineaActividad = objeto.LineaActividad;
-                        const ot = objeto.OT;
+                        const LineaActividad = objeto.Codigo_de_l_nea;
+                        const ot = objeto.C_digo_de_OT_relacionada;
+                        const cliente = objeto.N_mero_del_cliente;
+                        const nombreCliente = objeto.nombreCliente;
                         texto = '';
                         //NAVISION
                         const otNavision = objeto.Navision_OT;
                         if (observaciones) {
-                            texto = `${objeto.Sector} _ ${objeto.Zona} _ ${LineaActividad} _ ${objeto.NombrePuntoVenta} _ ${objeto.NombreCliente} _ ${objeto.TipoTrabajo} _ ${observaciones} _ NAVISION: ${otNavision} _ CRM: ${ot}`;
+                            texto = `${objeto.Sector} _ ${objeto.Zona} _ ${objeto.Codigo_de_l_nea} _ ${objeto.nombrePv} _ ${objeto.nombreCliente} _ ${objeto.Tipo_de_trabajo} _ ${objeto.Observaciones_internas} _ NAVISION: ${objeto.Navision_OT} _ CRM: ${objeto.C_digo_de_OT_relacionada}`;
                         } else {
-                            texto = `${objeto.Sector} _ ${objeto.Zona} _ ${LineaActividad} _ ${objeto.NombrePuntoVenta} _ ${objeto.NombreCliente} _ ${objeto.TipoTrabajo} _ NAVISION: ${otNavision} _ CRM: ${ot}`;
+                            texto = `${objeto.Sector} _ ${objeto.Zona} _ ${objeto.Codigo_de_l_nea} _ ${objeto.nombrePv} _ ${objeto.nombreCliente} _ ${objeto.Tipo_de_trabajo} _ NAVISION: ${objeto.Navision_OT} _ CRM: ${objeto.C_digo_de_OT_relacionada}`;
                         }
                         span = document.createElement('span');
                         span.textContent = texto;
@@ -1517,9 +1559,13 @@
                             const lineaStorage = button.id;
                             const LineaActividadStorage = LineaActividad;
                             const otStorage = ot;
+                            const clienteStorage = cliente;
+                            const nombreClienteStorage = nombreCliente;
                             localStorage.setItem('linea', lineaStorage);
                             localStorage.setItem('lineaActividad', LineaActividadStorage);
                             localStorage.setItem('ot', otStorage);
+                            localStorage.setItem('cliente', clienteStorage);
+                            localStorage.setItem('nombreCliente', nombreClienteStorage);
                             window.location.href = "https://dosxdos.app.iidos.com/linea_montador.html";
                         });
                         fragmento.appendChild(button);
@@ -1539,7 +1585,7 @@
                     loaderOff();
                 }
                 else {
-                    alerta('Error al leer el almacén de líneas')
+                    alerta('Error al leer el almacén de historial')
                     const editarUsuario = document.getElementById('editarUsuario');
                     editarUsuario.addEventListener('click', e => {
                         if (navigator.onLine) {

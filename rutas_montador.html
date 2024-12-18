@@ -1009,16 +1009,7 @@
         if (navigator.onLine) {
             try {
                 loaderOn();
-                const limpiarUsuario = await limpiarDatos('usuario');
-                const limpiarRutas = await limpiarDatos('rutas');
-                const limpiarLineas = await limpiarDatos('lineas');
-                localStorage.removeItem('login');
-                localStorage.removeItem('loginMontador');
-                localStorage.removeItem('ruta');
-                localStorage.removeItem('mensaje');
-                localStorage.removeItem('linea');
-                localStorage.removeItem('lineaActividad');
-                localStorage.removeItem('ot');
+                localStorage.clear();
                 eliminarCookie('login');
                 eliminarCookie('usuario');
                 await deleteDB2('dosxdos') ? console.log("Base de datos eliminada exitosamente") : console.error("error al eliminar la base de datos");

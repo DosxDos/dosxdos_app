@@ -2172,22 +2172,33 @@
         document.cookie = `${nombre}=; expires=${new Date(tiempoExpiracion * 1000).toUTCString()}; path=/;`;
     }
 
+        //ESTA FUNCION ELIMINA POR COMPLETO DEL LADO DEL CLIENTE LA BASE DE DATOS CADA VEZ QUE SE EJEUTA
+        function deleteDB2(database) {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.deleteDatabase(database);
+
+            // Evento que se dispara cuando la base de datos se elimina correctamente
+            request.onsuccess = () => {
+                console.log(`Base de datos "${database}" eliminada exitosamente.`);
+                resolve(true);
+            };
+
+            // Evento que se dispara si ocurre un error al eliminar la base de datos
+            request.onerror = (event) => {
+                console.error(`Error al eliminar la base de datos "${database}":`, event.target.error);
+                reject(event.target.error);
+            };
+        });
+    }
+
     async function cerrarSesions() {
         if (navigator.onLine) {
             try {
                 loaderOn();
-                const limpiarUsuario = await limpiarDatos('dosxdos', 'usuario');
-                const limpiarRutas = await limpiarDatos('dosxdos', 'rutas');
-                const limpiarLineas = await limpiarDatos('dosxdos', 'lineas');
-                localStorage.removeItem('login');
-                localStorage.removeItem('loginMontador');
-                localStorage.removeItem('ruta');
-                localStorage.removeItem('mensaje');
-                localStorage.removeItem('linea');
-                localStorage.removeItem('lineaActividad');
-                localStorage.removeItem('ot');
+                localStorage.clear();
                 eliminarCookie('login');
                 eliminarCookie('usuario');
+                await deleteDB2('dosxdos') ? console.log("Base de datos eliminada exitosamente") : console.error("error al eliminar la base de datos");
                 window.location.href = "https://dosxdos.app.iidos.com/index.html";
             } catch (error) {
                 mensaje = 'ERROR: ' + error.message;
