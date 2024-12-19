@@ -589,6 +589,13 @@
                 <p>Líneas</p>
             </div>
 
+            <div class="opcionMenu" id="historialIcono">
+                <button class="botonIcono" type="button" id="rutasIconoBoton">
+                    <img src="https://dosxdos.app.iidos.com/img/historial.png">
+                </button>
+                <p>Historial</p>
+            </div>
+
         </nav>
 
         <nav id="opcionesUsuario" class="displayOff">
@@ -827,7 +834,15 @@
     const mapa = document.getElementById('mapa')
     mapa.addEventListener('click', () => {
         if (navigator.onLine) {
-            window.location.href = "https://dosxdos.app.iidos.com/mapa_ruta_historial.html";
+            leerDatos('dosxdos', 'historial').then((datos) => {
+                if (datos && datos.length > 0) {
+                    window.location.href = "https://dosxdos.app.iidos.com/mapa_ruta_historial.html";
+                } else {
+                    alerta("Necesitas hacer 1 historial de fechas primero antes de entrar a la navegación con el mapa");
+                }
+            }).catch((error) => {
+                console.error("Error:", error);
+            });
         } else {
             alerta("No es posibler crear el mapa sin conexión a internet");
         }
@@ -1647,6 +1662,11 @@
     const lineasIcono = document.getElementById('lineasIcono');
     lineasIcono.addEventListener('click', () => {
         window.location.href = "https://dosxdos.app.iidos.com/ruta_montador.html";
+    })
+
+    const historialIcono = document.getElementById('historialIcono');
+    historialIcono.addEventListener('click', () => {
+        window.location.href = "https://dosxdos.app.iidos.com/historial_montador.html";
     })
 
 
