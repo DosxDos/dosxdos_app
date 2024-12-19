@@ -756,7 +756,8 @@
                                         localStorage.setItem('ot', otStorage);
                                         localStorage.setItem('cliente', clienteStorage);
                                         localStorage.setItem('nombreCliente', nombreClienteStorage);
-                                        window.location.href = "https://dosxdos.app.iidos.com/linea_montador.html";
+                                        localStorage.setItem('id', objeto.Id);
+                                        window.location.href = "https://dosxdos.app.iidos.com/linea_historial_montador.html";
                                     });
                                     fragmento.appendChild(button);
                                 });
@@ -826,7 +827,7 @@
     const mapa = document.getElementById('mapa')
     mapa.addEventListener('click', () => {
         if (navigator.onLine) {
-            window.location.href = "https://dosxdos.app.iidos.com/mapa_ruta.html";
+            window.location.href = "https://dosxdos.app.iidos.com/mapa_ruta_historial.html";
         } else {
             alerta("No es posibler crear el mapa sin conexión a internet");
         }
@@ -1574,7 +1575,7 @@
                             localStorage.setItem('ot', otStorage);
                             localStorage.setItem('cliente', clienteStorage);
                             localStorage.setItem('nombreCliente', nombreClienteStorage);
-                            window.location.href = "https://dosxdos.app.iidos.com/linea_montador.html";
+                            window.location.href = "https://dosxdos.app.iidos.com/linea_historial_montador.html";
                         });
                         fragmento.appendChild(button);
                     });
