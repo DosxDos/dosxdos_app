@@ -151,7 +151,8 @@ try {
                                 echo json_encode($response);
                                 die();
                             }
-                            $response = $respuesta->ok($lineasFiltradas);
+                            $lineasOrdenadas = bubbleSortByKey($lineasFiltradas,"Fecha_actuaci_n");
+                            $response = $respuesta->ok($lineasOrdenadas);
                             http_response_code(200);
                             echo json_encode($response);
                         } else {
@@ -193,4 +194,30 @@ try {
     $response = $respuesta->error_500($errores);
     http_response_code(500);
     echo json_encode($response);
+}
+function bubbleSortByKey($array, $key) {
+    $n = count($array);
+    if ($n <= 1) return $array; // Si tiene 0 o 1 elemento, ya está ordenado.
+
+    for ($i = 0; $i < $n - 1; $i++) {
+        for ($j = 0; $j < $n - 1 - $i; $j++) {
+            // Obtenemos los valores a comparar
+            $valorActual = $array[$j][$key];
+            $valorSiguiente = $array[$j + 1][$key];
+
+            // Convertimos a timestamp si es una fecha (opcional, depende de tu criterio)
+            // Si sabes que es fecha, descomenta las siguientes líneas:
+            $valorActual = strtotime($valorActual);
+            $valorSiguiente = strtotime($valorSiguiente);
+
+            // Comparamos los valores
+            if ($valorActual < $valorSiguiente) {
+                // Intercambiamos los elementos
+                $temp = $array[$j];
+                $array[$j] = $array[$j + 1];
+                $array[$j + 1] = $temp;
+            }
+        }
+    }
+    return $array;
 }

@@ -1,5 +1,5 @@
 //asignar un nombre y versión al cache
-const CACHE_NAME = 'dosxdos1.3',
+const CACHE_NAME = 'dosxdos5',
   urlsToCache = [
     'https://dosxdos.app.iidos.com/index.html?utm_source=web_app_manifest',
     'https://dosxdos.app.iidos.com/index.html',
@@ -87,10 +87,11 @@ const CACHE_NAME = 'dosxdos1.3',
     'https://dosxdos.app.iidos.com/dm.html',
     'https://dosxdos.app.iidos.com/reciclar.html',
     'https://dosxdos.app.iidos.com/rutas_inactivas.html',
+    'https://dosxdos.app.iidos.com/historial_montador.html',
     'https://dosxdos.app.iidos.com/img/trabajos.png',
     'https://dosxdos.app.iidos.com/img/clientes2.png',
     'https://dosxdos.app.iidos.com/img/sincronizar.png',
-    'https://dosxdos.app.iidos.com/historial_montador.html'
+    'https://dosxdos.app.iidos.com/css/tailwindmain.css'
   ],
 
   urlsToUpdate = [
@@ -139,11 +140,8 @@ self.addEventListener('install', e => {
       .then(cacheNames => {
         return Promise.all(
           cacheNames.map(cacheName => {
-            // Eliminamos lo que ya no se necesita en caché
-            if (CACHE_NAME != cacheName) {
-              return caches.delete(cacheName, { force: true });
-            }
-            return false;
+            // Eliminamos toda la cache antigua
+            caches.delete(cacheName, { force: true });
           })
         );
       })
@@ -156,7 +154,7 @@ self.addEventListener('install', e => {
                 if (!response.ok) {
                   console.error(`Error al intentar agregar un elemento a la caché: Failed to fetch ${url}`);
                 }
-                return cache.put(url, response);
+                cache.put(url, response);
               });
           })
         );
@@ -175,9 +173,8 @@ self.addEventListener('activate', e => {
           cacheNames.map(cacheName => {
             // Eliminamos lo que ya no se necesita en caché
             if (CACHE_NAME != cacheName) {
-              return caches.delete(cacheName, { force: true });
+              caches.delete(cacheName, { force: true });
             }
-            return false;
           })
         );
       })

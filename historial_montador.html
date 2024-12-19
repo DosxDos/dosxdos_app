@@ -736,9 +736,9 @@
                                     //NAVISION
                                     const otNavision = objeto.Navision_OT;
                                     if (observaciones) {
-                                        texto = `${objeto.Sector} _ ${objeto.Zona} _ ${objeto.Codigo_de_l_nea} _ ${objeto.nombrePv} _ ${objeto.nombreCliente} _ ${objeto.Tipo_de_trabajo} _ ${objeto.Observaciones_internas} _ NAVISION: ${objeto.Navision_OT} _ CRM: ${objeto.C_digo_de_OT_relacionada}`;
+                                        texto = `${objeto.RutaSelect} _ ${objeto.Sector} _ ${objeto.Zona} _ ${objeto.Codigo_de_l_nea} _ ${objeto.nombrePv} _ ${objeto.nombreCliente} _ ${objeto.Tipo_de_trabajo} _ ${objeto.Observaciones_internas} _ NAVISION: ${objeto.Navision_OT} _ CRM: ${objeto.C_digo_de_OT_relacionada}`;
                                     } else {
-                                        texto = `${objeto.Sector} _ ${objeto.Zona} _ ${objeto.Codigo_de_l_nea} _ ${objeto.nombrePv} _ ${objeto.nombreCliente} _ ${objeto.Tipo_de_trabajo} _ NAVISION: ${objeto.Navision_OT} _ CRM: ${objeto.C_digo_de_OT_relacionada}`;
+                                        texto = `${objeto.RutaSelect} _ ${objeto.Sector} _ ${objeto.Zona} _ ${objeto.Codigo_de_l_nea} _ ${objeto.nombrePv} _ ${objeto.nombreCliente} _ ${objeto.Tipo_de_trabajo} _ NAVISION: ${objeto.Navision_OT} _ CRM: ${objeto.C_digo_de_OT_relacionada}`;
                                     }
                                     span = document.createElement('span');
                                     span.textContent = texto;
@@ -1466,7 +1466,7 @@
                     fechaActual = formatearFecha(new Date());
                     let fechaTresMesesAtrasDate = new Date();
 
-                    fechaTresMesesAtrasDate.setMonth(fechaTresMesesAtrasDate.getMonth() - 3);
+                    fechaTresMesesAtrasDate.setMonth(fechaTresMesesAtrasDate.getMonth() - 1);
 
                     // Restar 3 meses a la fecha clonada
                     fechaTresMesesAtras = formatearFecha(fechaTresMesesAtrasDate);
@@ -1554,9 +1554,9 @@
                         //NAVISION
                         const otNavision = objeto.Navision_OT;
                         if (observaciones) {
-                            texto = `${objeto.Sector} _ ${objeto.Zona} _ ${objeto.Codigo_de_l_nea} _ ${objeto.nombrePv} _ ${objeto.nombreCliente} _ ${objeto.Tipo_de_trabajo} _ ${objeto.Observaciones_internas} _ NAVISION: ${objeto.Navision_OT} _ CRM: ${objeto.C_digo_de_OT_relacionada}`;
+                            texto = `${objeto.RutaSelect} _ ${objeto.Sector} _ ${objeto.Zona} _ ${objeto.Codigo_de_l_nea} _ ${objeto.nombrePv} _ ${objeto.nombreCliente} _ ${objeto.Tipo_de_trabajo} _ ${objeto.Observaciones_internas} _ NAVISION: ${objeto.Navision_OT} _ CRM: ${objeto.C_digo_de_OT_relacionada}`;
                         } else {
-                            texto = `${objeto.Sector} _ ${objeto.Zona} _ ${objeto.Codigo_de_l_nea} _ ${objeto.nombrePv} _ ${objeto.nombreCliente} _ ${objeto.Tipo_de_trabajo} _ NAVISION: ${objeto.Navision_OT} _ CRM: ${objeto.C_digo_de_OT_relacionada}`;
+                            texto = `${objeto.RutaSelect} _ ${objeto.Sector} _ ${objeto.Zona} _ ${objeto.Codigo_de_l_nea} _ ${objeto.nombrePv} _ ${objeto.nombreCliente} _ ${objeto.Tipo_de_trabajo} _ NAVISION: ${objeto.Navision_OT} _ CRM: ${objeto.C_digo_de_OT_relacionada}`;
                         }
                         span = document.createElement('span');
                         span.textContent = texto;
