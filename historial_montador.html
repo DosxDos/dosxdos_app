@@ -626,7 +626,7 @@
 
     </section>
 
-   
+
     <div class="w-full max-w-md mx-auto flex">
         <div class="bg-white p-8 rounded shadow-md w-full max-w-md">
             <h2 class="text-2xl font-bold mb-6 text-center">Selecciona las Fechas</h2>
@@ -662,7 +662,7 @@
     const fechaInicio = document.getElementById('fecha-inicio');
     const fechaFin = document.getElementById('fecha-fin');
     const consultar = document.getElementById('consultar');
-    
+
 
     // Función para verificar si ambas fechas tienen valor
     function verificarFechas() {
@@ -674,8 +674,8 @@
             if (inicioVal && finVal) {
                 // Ambas fechas tienen valor, aquí puedes hacer la petición
                 enviarFechasAlServidor(inicioVal, finVal);
-            }else{
-                alerta(inicioVal +" " +finVal +" No se han encontrado valores en las fechas");
+            } else {
+                alerta(inicioVal + " " + finVal + " No se han encontrado valores en las fechas");
             }
         } else {
             alerta("No es posible realizar esta acción sin conexión a internet");
@@ -821,7 +821,7 @@
                 })
                 .catch(error => {
                     console.error('Error en la petición:', error);
-                    reject(event.target.error);
+                    alerta("Error, por favor inténtalo nuevamente: " + error);
                     loaderOff();
                 });
         })
@@ -1491,23 +1491,18 @@
                     nombre: objeto['Descripcion']
                 }));
                 var fechaTresMesesAtras, fechaActual;
-                if (localStorage.getItem("fechaInicioHistorial") == null || localStorage.getItem("fechaFinHistorial") == null ||
-                    localStorage.getItem("fechaInicioHistorial") == "" || localStorage.getItem("fechaFinHistorial") == "") {
-                    fechaActual = formatearFecha(new Date());
-                    let fechaTresMesesAtrasDate = new Date();
 
-                    fechaTresMesesAtrasDate.setMonth(fechaTresMesesAtrasDate.getMonth() - 1);
+                fechaActual = formatearFecha(new Date());
+                let fechaTresMesesAtrasDate = new Date();
 
-                    // Restar 3 meses a la fecha clonada
-                    fechaTresMesesAtras = formatearFecha(fechaTresMesesAtrasDate);
+                fechaTresMesesAtrasDate.setMonth(fechaTresMesesAtrasDate.getMonth() - 1);
 
-                    localStorage.setItem("fechaInicioHistorial", fechaTresMesesAtras);
-                    localStorage.setItem("fechaFinHistorial", fechaActual);
+                // Restar 3 meses a la fecha clonada
+                fechaTresMesesAtras = formatearFecha(fechaTresMesesAtrasDate);
 
-                } else {
-                    fechaTresMesesAtras = localStorage.getItem("fechaInicioHistorial");
-                    fechaActual = localStorage.getItem("fechaFinHistorial");
-                }
+                localStorage.setItem("fechaInicioHistorial", fechaTresMesesAtras);
+                localStorage.setItem("fechaFinHistorial", fechaActual);
+
                 // Asignar el valor formateado a los inputs de tipo date
                 fechaInicio.value = fechaTresMesesAtras;
                 fechaFin.value = fechaActual;
