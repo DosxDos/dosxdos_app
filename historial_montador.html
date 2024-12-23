@@ -697,6 +697,7 @@
                 fecha1: fechaInicioVal,
                 fecha2: fechaFinVal
             });
+            console.log(bodyData);
 
             // Realizar la petición fetch (POST) al PHP
             fetch('https://dosxdos.app.iidos.com/apirest/historial_montador.php', {
@@ -716,7 +717,7 @@
                 .then(async data => {
                     // Aquí manejas la respuesta que envíe el PHP
                     console.log('Respuesta del servidor:', data);
-                    
+
                     // data[0] = true o false,
                     // data[1] = array de rutas/lineas,
                     // data[2] = código 200, etc.
