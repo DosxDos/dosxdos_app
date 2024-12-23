@@ -52,7 +52,7 @@ try {
         }
         if ($montadoresVacios) {
             // Si montadores están vacíos, intentamos usar la cookie de usuario
-            if (isset($_COOKIE['usuario'])) {
+            if (isset($_COOKIE['usuario']) && !empty($_COOKIE['usuario'])) {
                 $usuario = $_COOKIE['usuario'];
             } else {
                 $response = $respuesta->error_400('No se encuentra el identificador del montador');
