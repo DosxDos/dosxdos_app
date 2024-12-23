@@ -97,10 +97,15 @@ try {
                             $crmResponse = json_decode($crmResponse, true);
                             unlink($archivoJson); // Elimina el archivo después de procesarlo
                             break; // Sale del bucle
+                        } else {
+                            $response = $respuesta->error_500('Error al leer el archivo de respuesta del CRM');
+                            http_response_code(500);
+                            echo json_encode($response);
+                            die();
                         }
                     }
                     $tiempoLimite = $tiempoLimite + 5;
-                    if ($tiempoLimite >= 60) {
+                    if ($tiempoLimite >= 180) {
                         $response = $respuesta->error_500('La API del CRM ha tardado mucho en responder, por favor inténtalo nuevamente');
                         http_response_code(500);
                         echo json_encode($response);
