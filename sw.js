@@ -1,5 +1,5 @@
 //asignar un nombre y versión al cache
-const CACHE_NAME = 'dosxdos5',
+const CACHE_NAME = 'dosxdos6',
   urlsToCache = [
     'https://dosxdos.app.iidos.com/index.html?utm_source=web_app_manifest',
     'https://dosxdos.app.iidos.com/index.html',
@@ -91,6 +91,7 @@ const CACHE_NAME = 'dosxdos5',
     'https://dosxdos.app.iidos.com/img/trabajos.png',
     'https://dosxdos.app.iidos.com/img/clientes2.png',
     'https://dosxdos.app.iidos.com/img/sincronizar.png',
+    'https://dosxdos.app.iidos.com/img/historial.png',
     'https://dosxdos.app.iidos.com/css/tailwindmain.css'
   ],
 

@@ -655,6 +655,14 @@
                 <p>Líneas</p>
             </div>
 
+            <div class="opcionMenu" id="historialIcono">
+                <button class="botonIcono" type="button" id="rutasIconoBoton">
+                    <img src="https://dosxdos.app.iidos.com/img/historial.png">
+                </button>
+                <p>Historial</p>
+            </div>
+
+
         </nav>
 
         <nav id="opcionesUsuario" class="displayOff">
@@ -1570,6 +1578,11 @@
     const lineasIcono = document.getElementById('lineasIcono');
     lineasIcono.addEventListener('click', () => {
         window.location.href = "https://dosxdos.app.iidos.com/ruta_montador.html";
+    })
+
+    const historialIcono = document.getElementById('historialIcono');
+    historialIcono.addEventListener('click', () => {
+        window.location.href = "https://dosxdos.app.iidos.com/historial_montador.html";
     })
 
 

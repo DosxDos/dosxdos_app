@@ -151,10 +151,16 @@ try {
                                 echo json_encode($response);
                                 die();
                             }
-                            $lineasOrdenadas = bubbleSortByKey($lineasFiltradas,"Fecha_actuaci_n");
-                            $response = $respuesta->ok($lineasOrdenadas);
-                            http_response_code(200);
-                            echo json_encode($response);
+                            if (count($lineasFiltradas)) {
+                                $lineasOrdenadas = bubbleSortByKey($lineasFiltradas, "Fecha_actuaci_n");
+                                $response = $respuesta->ok($lineasOrdenadas);
+                                http_response_code(200);
+                                echo json_encode($response);
+                            } else {
+                                $response = $respuesta->ok([]);
+                                http_response_code(200);
+                                echo json_encode($response);
+                            }
                         } else {
                             $response = $respuesta->error_500('Error al abrir el archivo comprimido de los datos del CRM');
                             http_response_code(500);
@@ -195,7 +201,8 @@ try {
     http_response_code(500);
     echo json_encode($response);
 }
-function bubbleSortByKey($array, $key) {
+function bubbleSortByKey($array, $key)
+{
     $n = count($array);
     if ($n <= 1) return $array; // Si tiene 0 o 1 elemento, ya está ordenado.
 
