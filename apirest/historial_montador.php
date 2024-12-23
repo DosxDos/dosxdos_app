@@ -105,7 +105,7 @@ try {
                         }
                     }
                     $tiempoLimite = $tiempoLimite + 5;
-                    if ($tiempoLimite >= 180) {
+                    if ($tiempoLimite >= 300) {
                         $response = $respuesta->error_500('La API del CRM ha tardado mucho en responder, por favor inténtalo nuevamente');
                         http_response_code(500);
                         echo json_encode($response);
@@ -173,9 +173,16 @@ try {
                             }
                             if (count($lineasFiltradas)) {
                                 $lineasOrdenadas = bubbleSortByKey($lineasFiltradas, "Fecha_actuaci_n");
-                                $response = $respuesta->ok($lineasOrdenadas);
-                                http_response_code(200);
-                                echo json_encode($response);
+                                if ($lineasOrdenadas) {
+                                    $response = $respuesta->ok($lineasOrdenadas);
+                                    http_response_code(200);
+                                    echo json_encode($response);
+                                } else {
+                                    $response = $respuesta->error_500('Error al ordenar las líneas filtradas');
+                                    http_response_code(500);
+                                    echo json_encode($response);
+                                    die();
+                                }
                             } else {
                                 $response = $respuesta->ok([]);
                                 http_response_code(200);
@@ -193,6 +200,11 @@ try {
                         echo json_encode($response);
                         die();
                     }
+                } else {
+                    $response = $respuesta->error_500($crmResponse);
+                    http_response_code(500);
+                    echo json_encode($response);
+                    die();
                 }
             } else {
                 http_response_code(500);
