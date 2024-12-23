@@ -708,6 +708,7 @@
             })
                 .then(response => {
                     if (!response.ok) {
+                        console.error(response.text());
                         throw new Error('Error en la respuesta del servidor');
                     }
                     return response.json();
@@ -715,7 +716,7 @@
                 .then(async data => {
                     // Aquí manejas la respuesta que envíe el PHP
                     console.log('Respuesta del servidor:', data);
-
+                    
                     // data[0] = true o false,
                     // data[1] = array de rutas/lineas,
                     // data[2] = código 200, etc.
@@ -823,6 +824,7 @@
                     console.error('Error en la petición:', error);
                     alerta("Error, por favor inténtalo nuevamente: " + error);
                     loaderOff();
+                    resolve(false);
                 });
         })
 
