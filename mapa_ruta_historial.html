@@ -357,7 +357,7 @@
               };
               // Función para el botón "Reportar"
               reportButton.onclick = () => {
-                const lineaStorage = point.Linea;
+                const lineaStorage = point.Codigo_de_l_nea;
                 const LineaActividadStorage = point.Codigo_de_l_nea;
                 const otStorage = point.C_digo_de_OT_relacionada;
                 const clienteStorage = point.N_mero_del_cliente;
@@ -375,13 +375,13 @@
             });
 
             // Añadir una propiedad personalizada al marcador
-            marker.customId = point.Linea; // Usar un identificador único de tu objeto `point`
+            marker.customId = point.Codigo_de_l_nea; // Usar un identificador único de tu objeto `point`
 
             // Guardar el marcador en un array para gestionarlo más tarde si es necesario
             marcadores.push(marker);
           } else {
             console.log(`Faltan coordenadas para el punto: ${JSON.stringify(point)}`);
-            alerta(`Fallo al cargar la ubicación para la línea: ${point.Linea}`);
+            alerta(`Fallo al cargar la ubicación para la línea: ${point.Codigo_de_l_nea}`);
           }
           i++;
         };
