@@ -3253,7 +3253,7 @@
                             return objeto.Id == id;
                         });
                         if (lineaVector) {
-                            lineaObj = lineaVector[0];
+                            console.log(lineaVector);
                             $titulo = document.getElementById('titulo');
                             $titulo.innerHTML = `${nombreRuta} ${ot} Linea-${lineaActividad} Cliente-${lineaObj.nombreCliente} PV-${lineaObj.nombrePv} ${lineaObj.codPv} Firma-${lineaObj.Firma_de_la_OT_relacionada}`;
                             //console.log(lineaObj);
@@ -3274,7 +3274,7 @@
                             } else {
                                 telefonoBoton.innerHTML = "SIN TELÉFONO";
                             }
-                            cargarDatoTexto('cliente', lineaObj.NombreCliente);
+                            cargarDatoTexto('cliente', lineaObj.nombreCliente);
                             cargarDatoTexto('ot', lineaObj.C_digo_de_OT_relacionada);
                             cargarDatoTexto('tipoOt', lineaObj.Tipo_de_OT);
                             cargarDatoTexto('descripcionOt', lineaObj.nombreOt);
@@ -3283,21 +3283,21 @@
                             cargarDatoTexto('puntoDeVenta2', lineaObj.PDV);
                             cargarDatoTexto('zona', lineaObj.Zona);
                             cargarDatoTexto('sector', lineaObj.Sector);
-                            cargarDatoTexto('direccion', lineaObj.DireccionPuntoVenta);
-                            cargarDatoTexto('tipoDeTrabajo', lineaObj.TipoTrabajo);
-                            cargarDatoTexto('tipoDeTrabajo2', lineaObj.DescripcionTipoTrabajo);
-                            cargarDatoTexto('observaciones', lineaObj.Observaciones);
+                            cargarDatoTexto('direccion', lineaObj.Direcci_n);
+                            cargarDatoTexto('tipoDeTrabajo', lineaObj.Tipo_de_trabajo);
+                            cargarDatoTexto('tipoDeTrabajo2', lineaObj.Descripci_n_Tipo_Trabajo);
+                            cargarDatoTexto('observaciones', lineaObj.Observaciones_internas);
                             cargarDatoTexto('poner', lineaObj.Poner);
                             cargarDatoTexto('quitar', lineaObj.Quitar);
-                            cargarDatoTexto('alto', lineaObj.Alto);
-                            cargarDatoTexto('ancho', lineaObj.Ancho);
-                            cargarDatoTexto('firmaDatos', lineaObj.Firma);
-                            cargarDatoTexto('revisado', lineaObj.Revisado);
-                            cargarDatoSelect('estado', lineaObj.Estado);
+                            cargarDatoTexto('alto', lineaObj.Alto_medida);
+                            cargarDatoTexto('ancho', lineaObj.Ancho_medida);
+                            cargarDatoTexto('firmaDatos', lineaObj.Firma_de_la_OT_relacionada);
+                            cargarDatoTexto('revisado', lineaObj.Revisado_en_la_ruta);
+                            cargarDatoSelect('estado', lineaObj.Estado_de_Actuaci_n);
                             cargarDatoTexto('navisionOt', lineaObj.Navision_OT);
                             /* FORMULARIO */
                             if (lineaObj.Incidencia) {
-                                cargarDatoSelect('incidencia', lineaObj.Incidencia);
+                                cargarDatoSelect('incidencia', lineaObj.Motivo_de_incidencia);
                             }
                             if (lineaObj.Fecha_actuaci_n) {
                                 cargarFecha('fecha', lineaObj.Fecha_actuaci_n);
