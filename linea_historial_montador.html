@@ -3302,7 +3302,7 @@
                             }
                             if (lineaObj.Fecha_actuaci_n) {
                                 console.log(lineaObj.Fecha_actuaci_n);
-                                cargarFecha('fecha', lineaObj.Fecha_actuaci_n);
+                                document.getElementById('fecha').value = lineaObj.Fecha_actuaci_n;
                             }
                             if (lineaObj.D_as_actuaci_n) {
                                 cargarDatoValor('dias', lineaObj.D_as_actuaci_n);
@@ -3464,7 +3464,7 @@
                                 cargarDatoSelect('incidencia', lineaObj.Motivo_de_incidencia);
                             }
                             if (lineaObj.Fecha_actuaci_n) {
-                                cargarFecha('fecha', lineaObj.Fecha_actuaci_n);
+                                document.getElementById('fecha').value = lineaObj.Fecha_actuaci_n;
                             }
                             if (lineaObj.D_as_actuaci_n) {
                                 cargarDatoValor('dias', lineaObj.D_as_actuaci_n);
