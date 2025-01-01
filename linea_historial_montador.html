@@ -1101,7 +1101,7 @@
 
         </div>
 
-        <form action="linea_montador.html" method="post" enctype="multipart/form-data" id="formLinea" novalidate>
+        <form action="linea_historial_montador.html" method="post" enctype="multipart/form-data" id="formLinea" novalidate>
             <div id="cajaEstado">
                 <label for="estado">ESTADO:</label>
                 <select name="estado" id="estado" class="" required>
@@ -2408,7 +2408,7 @@
                 if (lineas) {
                     const mensaje = 'Se ha sincronizado la base de datos exitosamente';
                     localStorage.setItem('mensaje', mensaje);
-                    window.location.href = "https://dosxdos.app.iidos.com/linea_montador.html";
+                    window.location.href = "https://dosxdos.app.iidos.com/linea_historial_montador.html";
                 }
                 else {
                     alerta('Error al cargar las líneas de las rutas del servidor, se han sincronizado las rutas pero no las líneas')
@@ -2592,7 +2592,7 @@
                         eliminar = await eliminarFirma(jsonDelete);
                     }
                     localStorage.setItem('mensaje', eliminar);
-                    window.location.href = "https://dosxdos.app.iidos.com/linea_montador.html";
+                    window.location.href = "https://dosxdos.app.iidos.com/linea_historial_montador.html";
                 }
             } catch (err) {
                 console.error(err);
