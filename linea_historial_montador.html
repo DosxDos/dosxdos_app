@@ -2418,7 +2418,7 @@
         } catch (error) {
             const mensaje = 'No se ha sincronizado la base de datos: ' + error.message;
             localStorage.setItem('mensaje', mensaje);
-            window.location.href = "https://dosxdos.app.iidos.com/rutas_montador.html";
+            window.location.href = "https://dosxdos.app.iidos.com/linea_historial_montador.html";
         }
     }
 
@@ -2918,7 +2918,7 @@
             localStorage.setItem('mensaje', mensaje);
             /*alerta(mensaje);
             scrollToTop;*/
-            window.location.href = "https://dosxdos.app.iidos.com/historial_montador.html";
+            window.location.href = "https://dosxdos.app.iidos.com/linea_historial_montador.html";
 
         } catch (error) {
             console.log(error);
@@ -3088,7 +3088,7 @@
                 mensaje += '-Error: No ha sido posible sincronizar la base de datos-'
             }
             localStorage.setItem('mensaje', mensaje);
-            window.location.href = "https://dosxdos.app.iidos.com/historial_montador.html";
+            window.location.href = "https://dosxdos.app.iidos.com/linea_historial_montador.html";
             /*alerta(mensaje);
             scrollToTop();*/
         } catch (error) {
