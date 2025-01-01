@@ -464,6 +464,7 @@
 
 <script>
 
+    const versionLocal = 'dosxdos100';
     idioma = '';
     usuario = '';
     jsonIdioma = '';
@@ -739,29 +740,45 @@
         document.cookie = `${nombre}=; expires=${new Date(tiempoExpiracion * 1000).toUTCString()}; path=/;`;
     }
 
-    function cerrarSesions() {
+    //ESTA FUNCION ELIMINA POR COMPLETO DEL LADO DEL CLIENTE LA BASE DE DATOS CADA VEZ QUE SE EJEUTA
+    function deleteDB2(database) {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.deleteDatabase(database);
+
+            // Evento que se dispara cuando la base de datos se elimina correctamente
+            request.onsuccess = () => {
+                console.log(`Base de datos "${database}" eliminada exitosamente.`);
+                resolve(true);
+            };
+
+            // Evento que se dispara si ocurre un error al eliminar la base de datos
+            request.onerror = (event) => {
+                console.error(`Error al eliminar la base de datos "${database}":`, event.target.error);
+                reject(event.target.error);
+            };
+
+        });
+    }
+
+    async function cerrarSesions() {
         if (navigator.onLine) {
             try {
-                localStorage.removeItem('login');
-                localStorage.removeItem('usuario');
-                localStorage.removeItem('loginMontador');
-                localStorage.removeItem('ruta');
-                localStorage.removeItem('mensaje');
-                localStorage.removeItem('linea');
-                localStorage.removeItem('lineaActividad');
-                localStorage.removeItem('ot');
+                loaderOn();
+                localStorage.clear();
                 eliminarCookie('login');
                 eliminarCookie('usuario');
+                await deleteDB2('dosxdos') ? console.log("Base de datos eliminada exitosamente") : console.error("error al eliminar la base de datos");
                 window.location.href = "https://dosxdos.app.iidos.com/index.html";
             } catch (error) {
-                mensaj = 'ERROR: ' + error.message;
+                mensaje = 'ERROR: ' + error.message;
                 console.error(error);
-                mensaje(mensaj);
+                alerta(mensaje);
             }
         }
         else {
-            mensaj = 'No es posible cerrar la sesión sin conexión a internet';
-            mensaje(mensaj);
+            mensaje = 'No es posible cerrar la sesión sin conexión a internet';
+            $textoMensaje.innerHTML = mensaje;
+            mensajeOn();
         }
     }
 
@@ -830,6 +847,7 @@
 
     async function appOnline() {
         try {
+            await validarVersion();
             inicio();
             idioma = localStorage.getItem('idioma');
             if (idioma && idioma !== null) {
@@ -984,6 +1002,7 @@
                                                         localStorage.setItem('login', login);
                                                         localStorage.setItem('usuario', usuario);
                                                         localStorage.setItem('loginMontador', loginMontador);
+                                                        localStorage.setItem('version', versionLocal);
                                                         setCookie("login", login, 365);
                                                         setCookie("usuario", usuario, 365);
                                                         window.location.href = "https://dosxdos.app.iidos.com/rutas_montador.html";
@@ -992,6 +1011,7 @@
                                                         const usuario = data.id;
                                                         localStorage.setItem('login', login);
                                                         localStorage.setItem('usuario', usuario);
+                                                        localStorage.setItem('version', versionLocal);
                                                         setCookie("login", login, 365);
                                                         setCookie("usuario", usuario, 365);
                                                         window.location.href = "https://dosxdos.app.iidos.com/clientes.html";
@@ -1000,6 +1020,7 @@
                                                         const usuario = data.id;
                                                         localStorage.setItem('login', login);
                                                         localStorage.setItem('usuario', usuario);
+                                                        localStorage.setItem('version', versionLocal);
                                                         setCookie("login", login, 365);
                                                         setCookie("usuario", usuario, 365);
                                                         window.location.href = "https://dosxdos.app.iidos.com/ot.html";
@@ -1103,6 +1124,21 @@
             }
         }
     })
+
+    /* FUNCIÓN PARA OBLIGAR EL CIERRE DE SESIÓN EN ACTUALIZACIONES QUE INLUYEN INDEXDB */
+
+    function validarVersion() {
+        return new Promise((resolve, reject) => {
+            const version = localStorage.getItem('version');
+            if (version && version !== null) {
+                if (version != versionLocal) {
+                    cerrarSesions();
+                }
+            } else {
+                cerrarSesions();
+            }
+        })
+    }
 
 </script>
 
