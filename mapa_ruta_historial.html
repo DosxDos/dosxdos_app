@@ -314,7 +314,7 @@
             const observaciones = point.Observaciones_internas || "Sin observaciones";
             const nameToDisplay = point.nombrePv || "Nombre del punto de venta no disponible";
             const nombreCliente = point.nombreCliente || "Nombre del cliente no disponible";
-            const concatenatedName = `${point.RutaSelect} - ${point.Fecha_actuaci_n} - ${point.Codigo_de_l_nea} - ${nameToDisplay} - ${firma} - ${nombreCliente} - OT CRM: ${point.C_digo_de_OT_relacionada} - OT Navision: ${point.Navision_OT} - ${point.TipoOT} - ${observaciones} - ${point.Observaciones_montador}`;
+            const concatenatedName = `${point.RutaSelect} - ${point.Fecha_actuaci_n} - ${point.Codigo_de_l_nea} - ${nameToDisplay} - ${firma} - ${nombreCliente} - OT CRM: ${point.C_digo_de_OT_relacionada} - OT Navision: ${point.Navision_OT} - ${point.Tipo_de_OT} - ${observaciones} - ${point.Observaciones_montador}`;
             
             const marker = new google.maps.Marker({
               position: { lat: adjustedLat, lng: adjustedLng },
@@ -334,7 +334,7 @@
             // Listener para el clic en el marcador
             marker.addListener("click", () => {
               pointName.innerText = concatenatedName;
-              pointAddress.innerText = point.DireccionPuntoVenta || "Dirección no disponible";
+              pointAddress.innerText = point.Direcci_n || "Dirección no disponible";
               pointLat.innerText = `Latitud: ${adjustedLat}`;
               pointLng.innerText = `Longitud: ${adjustedLng}`;
 
