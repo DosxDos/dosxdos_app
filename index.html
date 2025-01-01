@@ -818,30 +818,35 @@
 
     /* PAGESHOW */
 
-    window.addEventListener('pageshow', (e) => {
-        vLogin()
-            .then(login => {
-                if (login) {
-                    if (login.length != 0) {
-                        if (login.clase == 'montador') {
-                            window.location.href = "https://dosxdos.app.iidos.com/rutas_montador.html";
-                        } else if (login.clase == 'cliente') {
-                            window.location.href = "https://dosxdos.app.iidos.com/clientes.html";
+    window.addEventListener('pageshow', async (e) => {
+        const validacionDeVersion = await validarVersion();
+        if (validacionDeVersion) {
+            vLogin()
+                .then(login => {
+                    if (login) {
+                        if (login.length != 0) {
+                            if (login.clase == 'montador') {
+                                window.location.href = "https://dosxdos.app.iidos.com/rutas_montador.html";
+                            } else if (login.clase == 'cliente') {
+                                window.location.href = "https://dosxdos.app.iidos.com/clientes.html";
+                            } else {
+                                window.location.href = "https://dosxdos.app.iidos.com/ot.html";
+                            }
                         } else {
-                            window.location.href = "https://dosxdos.app.iidos.com/ot.html";
+                            console.log('Usuario no reconocido');
                         }
-                    } else {
-                        console.log('Usuario no reconocido');
                     }
-                }
-                else {
-                    console.log('Sin login');
-                }
-            })
-        let mensaj = localStorage.getItem('mensaje');
-        if (mensaj && mensaj !== null) {
-            mensaje(mensaj);
-            localStorage.removeItem('mensaje');
+                    else {
+                        console.log('Sin login');
+                    }
+                })
+            let mensaj = localStorage.getItem('mensaje');
+            if (mensaj && mensaj !== null) {
+                mensaje(mensaj);
+                localStorage.removeItem('mensaje');
+            }
+        } else {
+            cerrarSesions();
         }
     })
 
