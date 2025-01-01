@@ -847,27 +847,31 @@
 
     async function appOnline() {
         try {
-            await validarVersion();
-            inicio();
-            idioma = localStorage.getItem('idioma');
-            if (idioma && idioma !== null) {
-                await cargarIdioma(idioma);
-                const htmlElement = document.querySelector('html');
-                if (htmlElement) {
-                    htmlElement.lang = idioma;
+            const validacionDeVersion = await validarVersion();
+            if (validacionDeVersion) {
+                inicio();
+                idioma = localStorage.getItem('idioma');
+                if (idioma && idioma !== null) {
+                    await cargarIdioma(idioma);
+                    const htmlElement = document.querySelector('html');
+                    if (htmlElement) {
+                        htmlElement.lang = idioma;
+                    }
+                } else {
+                    const idiomaNavegador = navigator.language || navigator.userLanguage;
+                    idioma = idiomaNavegador.split('-')[0];
+                    const htmlElement = document.querySelector('html');
+                    if (htmlElement) {
+                        htmlElement.lang = idioma;
+                    }
+                    await cargarIdioma(idioma);
+                }
+                if ('standalone' in window.navigator && window.navigator.standalone) {
+                    const instalarApp = document.getElementById('instalar');
+                    instalarApp.classList.replace('displayOn', 'displayOff');
                 }
             } else {
-                const idiomaNavegador = navigator.language || navigator.userLanguage;
-                idioma = idiomaNavegador.split('-')[0];
-                const htmlElement = document.querySelector('html');
-                if (htmlElement) {
-                    htmlElement.lang = idioma;
-                }
-                await cargarIdioma(idioma);
-            }
-            if ('standalone' in window.navigator && window.navigator.standalone) {
-                const instalarApp = document.getElementById('instalar');
-                instalarApp.classList.replace('displayOn', 'displayOff');
+                cerrarSesions();
             }
         } catch (error) {
             console.error(error);
@@ -1134,12 +1138,13 @@
             if (version && version !== null) {
                 if (version != versionLocal) {
                     console.error('Se procede a cerrar sesión para actualizar la versión de la aplicación');
-                    cerrarSesions();
+                    resolve(false)
                 }
             } else {
                 console.error('Se procede a cerrar sesión para actualizar la versión de la aplicación');
-                cerrarSesions();
+                resolve(false);
             }
+            resolve(true);
         })
     }
 
