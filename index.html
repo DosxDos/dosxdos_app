@@ -763,7 +763,6 @@
     async function cerrarSesions() {
         if (navigator.onLine) {
             try {
-                loaderOn();
                 localStorage.clear();
                 eliminarCookie('login');
                 eliminarCookie('usuario');
