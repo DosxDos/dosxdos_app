@@ -781,6 +781,28 @@
         }
     }
 
+    async function cerrarSesionsVersion() {
+        if (navigator.onLine) {
+            try {
+                localStorage.clear();
+                eliminarCookie('login');
+                eliminarCookie('usuario');
+                await deleteDB2('dosxdos') ? console.log("Base de datos eliminada exitosamente") : console.error("error al eliminar la base de datos");
+                localStorage.setItem('cierrePorVersion', true);
+                window.location.href = "https://dosxdos.app.iidos.com/index.html";
+            } catch (error) {
+                mensaje = 'ERROR: ' + error.message;
+                console.error(error);
+                alerta(mensaje);
+            }
+        }
+        else {
+            mensaje = 'No es posible cerrar la sesión sin conexión a internet';
+            $textoMensaje.innerHTML = mensaje;
+            mensajeOn();
+        }
+    }
+
     if (navigator.onLine) {
         console.log('La aplicación está en línea.');
         let login = localStorage.getItem('login');
@@ -818,8 +840,8 @@
     /* PAGESHOW */
 
     window.addEventListener('pageshow', async (e) => {
-        const validacionDeVersion = await validarVersion();
-        if (validacionDeVersion) {
+        const validacionDeCierrePorVersion = await validarCierrePorVersion();
+        if (validacionDeCierrePorVersion) {
             vLogin()
                 .then(login => {
                     if (login) {
@@ -845,14 +867,42 @@
                 localStorage.removeItem('mensaje');
             }
         } else {
-            cerrarSesions();
+            const validacionDeVersion = await validarVersion();
+            if (validacionDeVersion) {
+                vLogin()
+                    .then(login => {
+                        if (login) {
+                            if (login.length != 0) {
+                                if (login.clase == 'montador') {
+                                    window.location.href = "https://dosxdos.app.iidos.com/rutas_montador.html";
+                                } else if (login.clase == 'cliente') {
+                                    window.location.href = "https://dosxdos.app.iidos.com/clientes.html";
+                                } else {
+                                    window.location.href = "https://dosxdos.app.iidos.com/ot.html";
+                                }
+                            } else {
+                                console.log('Usuario no reconocido');
+                            }
+                        }
+                        else {
+                            console.log('Sin login');
+                        }
+                    })
+                let mensaj = localStorage.getItem('mensaje');
+                if (mensaj && mensaj !== null) {
+                    mensaje(mensaj);
+                    localStorage.removeItem('mensaje');
+                }
+            } else {
+                cerrarSesionsVersion();
+            }
         }
     })
 
     async function appOnline() {
         try {
-            const validacionDeVersion = await validarVersion();
-            if (validacionDeVersion) {
+            const validacionDeCierrePorVersion = await validarCierrePorVersion();
+            if (validacionDeCierrePorVersion) {
                 inicio();
                 idioma = localStorage.getItem('idioma');
                 if (idioma && idioma !== null) {
@@ -875,7 +925,32 @@
                     instalarApp.classList.replace('displayOn', 'displayOff');
                 }
             } else {
-                cerrarSesions();
+                const validacionDeVersion = await validarVersion();
+                if (validacionDeVersion) {
+                    inicio();
+                    idioma = localStorage.getItem('idioma');
+                    if (idioma && idioma !== null) {
+                        await cargarIdioma(idioma);
+                        const htmlElement = document.querySelector('html');
+                        if (htmlElement) {
+                            htmlElement.lang = idioma;
+                        }
+                    } else {
+                        const idiomaNavegador = navigator.language || navigator.userLanguage;
+                        idioma = idiomaNavegador.split('-')[0];
+                        const htmlElement = document.querySelector('html');
+                        if (htmlElement) {
+                            htmlElement.lang = idioma;
+                        }
+                        await cargarIdioma(idioma);
+                    }
+                    if ('standalone' in window.navigator && window.navigator.standalone) {
+                        const instalarApp = document.getElementById('instalar');
+                        instalarApp.classList.replace('displayOn', 'displayOff');
+                    }
+                } else {
+                    cerrarSesionsVersion();
+                }
             }
         } catch (error) {
             console.error(error);
@@ -1011,6 +1086,7 @@
                                                         localStorage.setItem('usuario', usuario);
                                                         localStorage.setItem('loginMontador', loginMontador);
                                                         localStorage.setItem('version', versionLocal);
+                                                        localStorage.setItem('cierrePorVersion', false);
                                                         setCookie("login", login, 365);
                                                         setCookie("usuario", usuario, 365);
                                                         window.location.href = "https://dosxdos.app.iidos.com/rutas_montador.html";
@@ -1020,6 +1096,7 @@
                                                         localStorage.setItem('login', login);
                                                         localStorage.setItem('usuario', usuario);
                                                         localStorage.setItem('version', versionLocal);
+                                                        localStorage.setItem('cierrePorVersion', false);
                                                         setCookie("login", login, 365);
                                                         setCookie("usuario", usuario, 365);
                                                         window.location.href = "https://dosxdos.app.iidos.com/clientes.html";
@@ -1029,6 +1106,7 @@
                                                         localStorage.setItem('login', login);
                                                         localStorage.setItem('usuario', usuario);
                                                         localStorage.setItem('version', versionLocal);
+                                                        localStorage.setItem('cierrePorVersion', false);
                                                         setCookie("login", login, 365);
                                                         setCookie("usuario", usuario, 365);
                                                         window.location.href = "https://dosxdos.app.iidos.com/ot.html";
@@ -1149,6 +1227,20 @@
                 resolve(false);
             }
             resolve(true);
+        })
+    }
+
+    function validarCierrePorVersion() {
+        return new Promise((resolve, reject) => {
+            const cierrePorVersion = localStorage.getItem('cierrePorVersion');
+            console.log('cierrePorVersion: ' + cierrePorVersion);
+            if (cierrePorVersion && cierrePorVersion !== null) {
+                console.error('Hay cierre por versión');
+                resolve(true)
+            } else {
+                console.log('No hay cierre por versión');
+                resolve(false);
+            }
         })
     }
 
