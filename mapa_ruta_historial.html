@@ -310,11 +310,11 @@
           if (lat !== null && lng !== null) {
             const adjustedLat = lat + i * offset;
             const adjustedLng = lng + i * offset;
-            const firma = point.nombrePv || "Sin firma";
-            const observaciones = point.Observaciones_montador || "Sin observaciones";
-            const nameToDisplay = point.Sector || "Nombre del punto de venta no disponible";
+            const firma = point.Firma_de_la_OT_relacionada || "Sin firma";
+            const observaciones = point.Observaciones_internas || "Sin observaciones";
+            const nameToDisplay = point.nombrePv || "Nombre del punto de venta no disponible";
             const nombreCliente = point.nombreCliente || "Nombre del cliente no disponible";
-            const concatenatedName = `${point.RutaSelect} - ${nameToDisplay} - ${firma} - ${nombreCliente} - OT CRM: ${point.C_digo_de_OT_relacionada} - OT Navision: ${point.Navision_OT} - ${point.TipoOT} - ${observaciones} - ${point.Fecha_actuaci_n}`;
+            const concatenatedName = `${point.RutaSelect} - ${point.Fecha_actuaci_n} - ${point.Codigo_de_l_nea} - ${nameToDisplay} - ${firma} - ${nombreCliente} - OT CRM: ${point.C_digo_de_OT_relacionada} - OT Navision: ${point.Navision_OT} - ${point.TipoOT} - ${observaciones} - ${point.Observaciones_montador}`;
             
             const marker = new google.maps.Marker({
               position: { lat: adjustedLat, lng: adjustedLng },
