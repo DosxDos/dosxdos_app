@@ -793,7 +793,8 @@
                 eliminarCookie('usuario');
                 await deleteDB2('dosxdos') ? console.log("Base de datos eliminada exitosamente") : console.error("error al eliminar la base de datos");
                 localStorage.setItem('cierrePorVersion', true);
-                appOnline();
+                localStorage.setItem('version', versionLocal);
+                window.location.href = "https://dosxdos.app.iidos.com/index.html";
             } catch (error) {
                 mensaje = 'ERROR: ' + error.message;
                 console.error(error);
