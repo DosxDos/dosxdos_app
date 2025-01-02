@@ -787,7 +787,10 @@
                 localStorage.clear();
                 eliminarCookie('login');
                 eliminarCookie('usuario');
-                await deleteDB2('dosxdos') ? console.log("Base de datos eliminada exitosamente") : console.error("error al eliminar la base de datos");
+                const existenciaDeDb = existenciaDb('dosxdos');
+                if (existenciaDeDb) {
+                    await deleteDB2('dosxdos') ? console.log("Base de datos eliminada exitosamente") : console.error("error al eliminar la base de datos");
+                }
                 localStorage.setItem('cierrePorVersion', true);
                 window.location.href = "https://dosxdos.app.iidos.com/index.html";
             } catch (error) {
@@ -841,7 +844,9 @@
 
     window.addEventListener('pageshow', async (e) => {
         const validacionDeCierrePorVersion = await validarCierrePorVersion();
-        if (validacionDeCierrePorVersion) {
+        if (validacionDeCierrePorVersion == null) {
+            cerrarSesionsVersion();
+        } else if (validacionDeCierrePorVersion) {
             vLogin()
                 .then(login => {
                     if (login) {
@@ -1234,9 +1239,11 @@
         return new Promise((resolve, reject) => {
             const cierrePorVersion = localStorage.getItem('cierrePorVersion');
             console.log('cierrePorVersion: ' + cierrePorVersion);
-            if (cierrePorVersion && cierrePorVersion !== null) {
+            if (cierrePorVersion) {
                 console.error('Hay cierre por versión');
                 resolve(true)
+            } else if (cierrePorVersion == null) {
+                resolve(null);
             } else {
                 console.log('No hay cierre por versión');
                 resolve(false);
