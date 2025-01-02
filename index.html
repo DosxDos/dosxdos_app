@@ -1240,12 +1240,13 @@
             const cierrePorVersion = localStorage.getItem('cierrePorVersion');
             console.log('cierrePorVersion: ' + cierrePorVersion);
             if (cierrePorVersion) {
-                console.error('Hay cierre por versión');
+                console.error('Hay cierre por versión: ' + cierrePorVersion);
                 resolve(true)
             } else if (cierrePorVersion == null) {
+                console.error('No existe la variable de cierre por versión: ' + cierrePorVersion);
                 resolve(null);
             } else {
-                console.log('No hay cierre por versión');
+                console.log('No hay cierre por versión: ' + cierrePorVersion);
                 resolve(false);
             }
         })
