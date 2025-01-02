@@ -3433,10 +3433,9 @@
                         });
                         if (lineaVector) {
                             lineaObj = lineaVector[0];
-                            //console.log(lineaObj);
+                            console.log(lineaObj);
                             $titulo = document.getElementById('titulo');
                             $titulo.innerHTML = `${nombreRuta} ${ot} Linea-${lineaActividad} Cliente-${lineaObj.nombreCliente} PV-${lineaObj.nombrePv} ${lineaObj.codPv} Firma-${lineaObj.Firma_de_la_OT_relacionada}`;
-                            //console.log(lineaObj);
                             numeroPuntoDeVenta = lineaObj.codPv;
                             cargarDatoTexto('cliente', lineaObj.nombreCliente);
                             cargarDatoTexto('ot', lineaObj.C_digo_de_OT_relacionada);
