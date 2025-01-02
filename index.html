@@ -390,30 +390,6 @@
     <link rel="apple-touch-startup-image" href="https://dosxdos.app.iidos.com/img/dosxdos.png">
     <link rel="manifest" href="https://dosxdos.app.iidos.com/manifest.json">
     <script src="https://dosxdos.app.iidos.com/js/index_db.js"></script>
-    <!-- INICIO BASE DE DATOS DEL CLIENTE - INDEXDB -->
-    <script>
-
-        const stores = [
-            'usuario',
-            'rutas',
-            'lineas',
-            'peticionesLineas',
-            'peticionesFotos',
-            'peticionesFirmas',
-            'notas',
-            'historial'
-        ]
-        db('dosxdos', stores)
-            .then(res => {
-                if (res) {
-                    console.log('Base de datos abierta exitosamente')
-                }
-            })
-            .catch(err => {
-                console.log(err)
-            })
-
-    </script>
     <!-- SERVICEWORKER -->
     <script src="https://dosxdos.app.iidos.com/serviceworker.js"></script>
     <script src="https://dosxdos.app.iidos.com//sw.js"></script>
@@ -470,6 +446,32 @@
     idioma = '';
     usuario = '';
     jsonIdioma = '';
+
+    function crearBaseDeDatos() {
+        return new Promise((resolve, reject) => {
+            const stores = [
+                'usuario',
+                'rutas',
+                'lineas',
+                'peticionesLineas',
+                'peticionesFotos',
+                'peticionesFirmas',
+                'notas',
+                'historial'
+            ];
+            db('dosxdos', stores)
+                .then(res => {
+                    if (res) {
+                        console.log('Base de datos abierta exitosamente')
+                        resolve(true);
+                    }
+                })
+                .catch(err => {
+                    console.log(err)
+                    resolve(false);
+                })
+        });
+    }
 
     /* EVITAR REENVÍO DE FORMULARIOS */
     if (window.history.replaceState) {
@@ -1079,13 +1081,14 @@
                             if (res[0]) {
                                 const data = res[1];
                                 agregarDato('dosxdos', 'usuario', data)
-                                    .then(res => {
+                                    .then(async res => {
                                         if (res) {
                                             const eliminado = parseInt(data.eliminado);
                                             const activo = parseInt(data.activo);
                                             if (!eliminado) {
                                                 if (activo) {
                                                     if (data.clase == 'montador') {
+                                                        await crearBaseDeDatos();
                                                         const login = true;
                                                         const usuario = data.id;
                                                         const loginMontador = true;
@@ -1098,6 +1101,7 @@
                                                         setCookie("usuario", usuario, 365);
                                                         window.location.href = "https://dosxdos.app.iidos.com/rutas_montador.html";
                                                     } else if (data.clase == 'cliente') {
+                                                        await crearBaseDeDatos();
                                                         const login = true;
                                                         const usuario = data.id;
                                                         localStorage.setItem('login', login);
@@ -1108,6 +1112,7 @@
                                                         setCookie("usuario", usuario, 365);
                                                         window.location.href = "https://dosxdos.app.iidos.com/clientes.html";
                                                     } else {
+                                                        await crearBaseDeDatos();
                                                         const login = true;
                                                         const usuario = data.id;
                                                         localStorage.setItem('login', login);
