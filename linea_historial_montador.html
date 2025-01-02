@@ -1386,8 +1386,8 @@
                 vNota = false;
             }
             const notaObj = {};
-            notaObj.ot = ot;
-            notaObj.linea = lineaActividad;
+            notaObj.ot = lineaObj.C_digo_de_OT_relacionada;
+            notaObj.linea = linea;
             notaObj.nota = nota;
             const notaJson = JSON.stringify(notaObj);
 
@@ -1432,26 +1432,26 @@
                 const totalFotos = {};
                 const totalFirmas = {};
 
-                totalFotos.ruta = ruta;
-                totalFotos.linea = linea;
-                totalFotos.ot = ot;
-                totalFotos.lineaActividad = lineaActividad;
+                totalFotos.ruta = lineaObj.RutaSelect;
+                totalFotos.linea = lineaObj.Codigo_de_l_nea;
+                totalFotos.ot = lineaObj.C_digo_de_OT_relacionada;
+                totalFotos.lineaActividad = lineaObj.Codigo_de_l_nea;
                 totalFotos.fecha = fecha;
-                totalFotos.cliente = cliente;
-                totalFotos.nombreCliente = lineaObj.NombreCliente;
-                totalFotos.pv = lineaObj.PuntoVenta;
-                totalFotos.pvNombre = lineaObj.NombrePuntoVenta;
+                totalFotos.cliente = lineaObj.N_mero_del_cliente;
+                totalFotos.nombreCliente = lineaObj.nombreCliente;
+                totalFotos.pv = lineaObj.codPv;
+                totalFotos.pvNombre = lineaObj.nombrePv;
                 totalFotos.usuario = usuarioId;
 
-                totalFirmas.ruta = ruta;
-                totalFirmas.linea = linea;
-                totalFirmas.ot = ot;
-                totalFirmas.lineaActividad = lineaActividad;
+                totalFirmas.ruta = lineaObj.RutaSelect;
+                totalFirmas.linea = lineaObj.Codigo_de_l_nea;
+                totalFirmas.ot = lineaObj.C_digo_de_OT_relacionada;
+                totalFirmas.lineaActividad = lineaObj.Codigo_de_l_nea;
                 totalFirmas.fecha = fecha;
-                totalFirmas.cliente = cliente;
-                totalFirmas.nombreCliente = lineaObj.NombreCliente;
-                totalFirmas.pv = lineaObj.PuntoVenta;
-                totalFirmas.pvNombre = lineaObj.NombrePuntoVenta;
+                totalFirmas.cliente = lineaObj.N_mero_del_cliente;
+                totalFirmas.nombreCliente = lineaObj.nombreCliente;
+                totalFirmas.pv = lineaObj.codPv;
+                totalFirmas.pvNombre = lineaObj.nombrePv;
                 totalFirmas.usuario = usuarioId;
 
                 totalFotos.fotos = [];
@@ -3257,7 +3257,7 @@
                             console.log(lineaVector);
                             $titulo = document.getElementById('titulo');
                             $titulo.innerHTML = `${nombreRuta} ${ot} Linea-${lineaActividad} Cliente-${lineaObj.nombreCliente} PV-${lineaObj.nombrePv} ${lineaObj.codPv} Firma-${lineaObj.Firma_de_la_OT_relacionada}`;
-                            //console.log(lineaObj);
+                            console.log(lineaObj);
                             numeroPuntoDeVenta = lineaObj.codPv;
                             const objPdv = await fetchTelefono(numeroPuntoDeVenta);
                             let telPdv;
