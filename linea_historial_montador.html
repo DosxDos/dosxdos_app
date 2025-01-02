@@ -3249,7 +3249,7 @@
                     //console.log(lineas);
                     if (lineas) {
                         console.log(lineas);
-                        const lineaVector = lineas.filter(objeto => {
+                        const lineaVector = await lineas.filter(objeto => {
                             return objeto.Id == id;
                         });
                         if (lineaVector) {
@@ -3428,7 +3428,7 @@
                     });
                     //console.log(lineas);
                     if (lineas) {
-                        const lineaVector = lineas.filter(objeto => {
+                        const lineaVector = await lineas.filter(objeto => {
                             return objeto.Id == id;
                         });
                         if (lineaVector) {
