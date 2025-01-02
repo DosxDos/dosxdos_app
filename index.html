@@ -789,7 +789,7 @@
                 localStorage.clear();
                 eliminarCookie('login');
                 eliminarCookie('usuario');
-                const existenciaDeDb = existenciaDb('dosxdos');
+                const existenciaDeDb = existDb('dosxdos');
                 if (existenciaDeDb) {
                     await deleteDB2('dosxdos') ? console.log("Base de datos eliminada exitosamente") : console.error("error al eliminar la base de datos");
                 }
