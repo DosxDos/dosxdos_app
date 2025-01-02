@@ -932,6 +932,7 @@
                 }
             } else {
                 const validacionDeVersion = await validarVersion();
+                console.log('validacionDeVersion: ' + validacionDeVersion);
                 if (validacionDeVersion) {
                     inicio();
                     idioma = localStorage.getItem('idioma');
