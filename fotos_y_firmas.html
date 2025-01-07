@@ -3121,7 +3121,11 @@
                         $titulo.innerHTML = `${otArchivos} Línea-${lineaActividadArchivos} Cliente-${lineaData.NombreCliente} PV-${lineaData.PuntoVenta} ${lineaData.NombrePuntoVenta} Firma-${lineaData.Firma} ${rutaArchivos}`;
                         const datosBoton = document.getElementById('datosBoton');
                         datosBoton.classList.replace('displayOff', 'displayOn');
-                        cargarDatoTexto('cliente', lineaData.NombreCliente);
+                        if (lineaData.NombreCliente) {
+                            cargarDatoTexto('cliente', lineaData.NombreCliente);
+                        } else {
+                            cargarDatoTexto('cliente', 'Sin cliente');
+                        }
                         cargarDatoTexto('ot', lineaData.OT);
                         cargarDatoTexto('tipoOt', lineaData.TipoOT);
                         cargarDatoTexto('descripcionOt', lineaData.DescripcionOT);
