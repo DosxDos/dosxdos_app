@@ -9,6 +9,8 @@
     <title></title>
     <link rel="icon" type="image/png" href="https://dosxdos.app.iidos.com/img/logoPwa256.png">
     <meta name="description" content="DOS.DOS GRUPO IMAGEN - Aplicación Web Progresiva (PWA)">
+    <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-messaging-compat.js"></script>
     <style>
         * {
             margin: 0;
@@ -391,6 +393,8 @@
     <link rel="manifest" href="https://dosxdos.app.iidos.com/manifest.json">
     <script src="https://dosxdos.app.iidos.com/js/index_db.js"></script>
     <!-- SERVICEWORKER -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-messaging-compat.js"></script>
     <script src="https://dosxdos.app.iidos.com/serviceworker.js"></script>
     <script src="https://dosxdos.app.iidos.com//sw.js"></script>
 
@@ -446,6 +450,71 @@
     idioma = '';
     usuario = '';
     jsonIdioma = '';
+    // Configuración de Firebase
+    // const firebaseConfig = {
+    //     apiKey: "AIzaSyCPtGrKaRYMUxDx6SXIQvlewLNxyapnxcM",
+    //     authDomain: "dosxdos-app.firebaseapp.com",
+    //     projectId: "dosxdos-app",
+    //     storageBucket: "dosxdos-app.firebasestorage.app",
+    //     messagingSenderId: "52849872855",
+    //     appId: "1:52849872855:web:3d68fa7ed8dd785fe14592",
+    //     measurementId: "G-ZG5EKJDHL5"
+    // };
+
+    // Inicializa la app
+    // firebase.initializeApp(firebaseConfig);
+
+    // Inicializa el servicio de mensajería
+    // const messaging = firebase.messaging();
+
+    // Solicita permiso para recibir notificaciones
+    // function solicitarPermisoNotificaciones() {
+    //     return new Promise((resolve, reject) => {
+    //         const permiso = Notification.requestPermission()
+    //             .then((permiso) => {
+    //                 if (permiso === 'granted') {
+    //                     Aquí ya puedes obtener el token
+    //                     return messaging.getToken();
+    //                 } else {
+    //                     console.log('Permiso denegado');
+    //                 }
+    //             })
+    //             .then((token) => {
+    //                 if (token) {
+    //                     console.log('Token de FCM:', token);
+    //                     guardarTokenEnServidor(token);
+    //                     resolve(token);
+    //                 }
+    //             })
+    //             .catch((error) => {
+    //                 console.error('Error al obtener el permiso o token: ', error);
+    //                 reject(error);
+    //             });
+    //     });
+    // }
+
+
+    // Guarda el token en tu servidor usando PHP
+    // function guardarTokenEnServidor(token) {
+    //     return new Promise((resolve, reject) => {
+    //         fetch('https://dosxdos.app.iidos.com/apirest/guardar_token.php', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json'
+    //             },
+    //             body: JSON.stringify({ token: token })
+    //         })
+    //             .then(response => response.json())
+    //             .then(data => {
+    //                 console.log('Token guardado en servidor:', data);
+    //                 resolve(data);
+    //             })
+    //             .catch(error => {
+    //                 console.error('Error al guardar el token en servidor:', error);
+    //                 reject(error);
+    //             });
+    //     });
+    // }
 
     function crearBaseDeDatos() {
         return new Promise((resolve, reject) => {

@@ -1,5 +1,6 @@
 {
     "require": {
-        "phpmailer/phpmailer": "6.9.1"
+        "phpmailer/phpmailer": "6.9.1",
+        "kreait/firebase-php": "^5.26"
     }
 }
