@@ -469,7 +469,6 @@
         mensajeOn();
     }
 
-    /*
     //Configuración de Firebase
     const firebaseConfig = {
         apiKey: "AIzaSyCPtGrKaRYMUxDx6SXIQvlewLNxyapnxcM",
@@ -480,9 +479,7 @@
         appId: "1:52849872855:web:3d68fa7ed8dd785fe14592",
         measurementId: "G-ZG5EKJDHL5"
     };
-    */
 
-    /*
     //Inicializa la Firebase
     function iniciarFirebase() {
         return new Promise((resolve, reject) => {
@@ -494,9 +491,7 @@
             }
         });
     }
-    */
 
-    /*
     //Inicializa el servicio de mensajería
     function iniciarFirebaseMensajeria() {
         return new Promise((resolve, reject) => {
@@ -508,7 +503,6 @@
             }
         });
     }
-    */
 
     //Solicita permiso para recibir notificaciones
     function solicitarPermisoNotificaciones() {
@@ -528,7 +522,6 @@
                 });
         });
     }
-
 
     //Guarda el token en tu servidor usando PHP
     function guardarTokenEnServidor(token, usuario) {
@@ -557,12 +550,20 @@
 
     async function ejecutarFirebase() {
         try {
-            const permiso = await solicitarPermisoNotificaciones();
-            if (permiso) {
-                console.log('Token Firebase:', permiso);
-                tokenFirebase = permiso;
-            } else {
-                console.error('El permiso para recibir notificaciones fue denegado');
+            const firebase = await iniciarFirebase();
+            if (firebase) {
+                console.log('Firebase inicializado');
+                const mensajeria = await iniciarFirebaseMensajeria();
+                if (mensajeria) {
+                    console.log('Firebase Mensajería inicializado');
+                    const permiso = await solicitarPermisoNotificaciones();
+                    if (permiso) {
+                        console.log('Token Firebase:', permiso);
+                        tokenFirebase = permiso;
+                    } else {
+                        console.error('El permiso para recibir notificaciones fue denegado');
+                    }
+                }
             }
         } catch (error) {
             alerta('Error al ejecutar Firebase: ' + error);
