@@ -222,8 +222,8 @@ self.addEventListener('fetch', event => {
 });
 
 //Notificaciones a traves de firebase
-if(navigator.online){
-const firebaseConfig = {
+if (navigator.online) {
+  const firebaseConfig = {
     apiKey: "AIzaSyCPtGrKaRYMUxDx6SXIQvlewLNxyapnxcM",
     authDomain: "dosxdos-app.firebaseapp.com",
     projectId: "dosxdos-app",
@@ -231,21 +231,24 @@ const firebaseConfig = {
     messagingSenderId: "52849872855",
     appId: "1:52849872855:web:3d68fa7ed8dd785fe14592",
     measurementId: "G-ZG5EKJDHL5"
-};
+  };
 
-firebase.initializeApp(firebaseConfig);
+  firebase.initializeApp(firebaseConfig);
+  console.log('Firebase inicializado en el service worker');
 
-const messaging = firebase.messaging();
+  const messaging = firebase.messaging();
+  console.log('Firebase messaging inicializado en el service worker');
 
-// Escucha mensajes en segundo plano
-messaging.onBackgroundMessage((payload) => {
-    console.log('[firebase-messaging-sw.js] Recibió un mensaje en segundo plano: ', payload);
+  // Escucha mensajes en segundo plano
+  messaging.onBackgroundMessage((payload) => {
+    console.log('Recibió un mensaje en segundo plano: ', payload);
     const notificationTitle = payload.notification.title || 'DosxDos';
     const notificationOptions = {
-        body: payload.notification.body || '',
-        icon: payload.notification.icon || 'https://dosxdos.app.iidos.com/img/logoPwa512.png',
+      body: payload.notification.body || '',
+      icon: payload.notification.icon || 'https://dosxdos.app.iidos.com/img/logoPwa512.png',
     };
     self.registration.showNotification(notificationTitle, notificationOptions);
-});
+  });
+  console.log('onBackgroundMessage definida en el service worker');
 }
 
