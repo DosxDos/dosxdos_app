@@ -1223,6 +1223,7 @@
                                                         localStorage.setItem('cierrePorVersion', false);
                                                         setCookie("login", login, 365);
                                                         setCookie("usuario", usuario, 365);
+                                                        localStorage.setItem('tokenFirebase', tokenFirebase);
                                                         await guardarTokenEnServidor(tokenFirebase, usuario);
                                                         window.location.href = "https://dosxdos.app.iidos.com/rutas_montador.html";
                                                     } else if (data.clase == 'cliente') {
@@ -1234,6 +1235,7 @@
                                                         localStorage.setItem('cierrePorVersion', false);
                                                         setCookie("login", login, 365);
                                                         setCookie("usuario", usuario, 365);
+                                                        localStorage.setItem('tokenFirebase', tokenFirebase);
                                                         await guardarTokenEnServidor(tokenFirebase, usuario);
                                                         window.location.href = "https://dosxdos.app.iidos.com/clientes.html";
                                                     } else {
@@ -1245,6 +1247,7 @@
                                                         localStorage.setItem('cierrePorVersion', false);
                                                         setCookie("login", login, 365);
                                                         setCookie("usuario", usuario, 365);
+                                                        localStorage.setItem('tokenFirebase', tokenFirebase);
                                                         await guardarTokenEnServidor(tokenFirebase, usuario);
                                                         window.location.href = "https://dosxdos.app.iidos.com/ot.html";
                                                     }
