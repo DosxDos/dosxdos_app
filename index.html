@@ -557,18 +557,12 @@
 
     async function ejecutarFirebase() {
         try {
-            const inicio = await iniciarFirebase();
-            if (inicio) {
-                const mensajeria = await iniciarFirebaseMensajeria();
-                if (mensajeria) {
-                    const permiso = await solicitarPermisoNotificaciones();
-                    if (permiso) {
-                        console.log('Token Firebase:', permiso);
-                        tokenFirebase = permiso;
-                    } else {
-                        console.error('El permiso para recibir notificaciones fue denegado');
-                    }
-                }
+            const permiso = await solicitarPermisoNotificaciones();
+            if (permiso) {
+                console.log('Token Firebase:', permiso);
+                tokenFirebase = permiso;
+            } else {
+                console.error('El permiso para recibir notificaciones fue denegado');
             }
         } catch (error) {
             alerta('Error al ejecutar Firebase: ' + error);
