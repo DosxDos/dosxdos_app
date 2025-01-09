@@ -452,6 +452,29 @@
     jsonIdioma = '';
     messaging = null;
     tokenFirebase = null;
+    const $mensaje = document.getElementById('mensaje');
+    const $textoMensaje = document.getElementById('mensajeTexto');
+
+    //Alertas
+    function mensajeOn() {
+        $mensaje.classList.remove('displayOff');
+        $mensaje.classList.add('displayOn');
+    }
+
+    function mensajeOff() {
+        $mensaje.classList.remove('displayOn');
+        $mensaje.classList.add('displayOff');
+    }
+
+    $imgCerrar.addEventListener('click', e => {
+        mensajeOff();
+    })
+
+    function alerta(men) {
+        $textoMensaje.innerHTML = men;
+        mensajeOn();
+    }
+
     //Configuración de Firebase
     const firebaseConfig = {
         apiKey: "AIzaSyCPtGrKaRYMUxDx6SXIQvlewLNxyapnxcM",
