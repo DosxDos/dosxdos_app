@@ -1,6 +1,7 @@
 <?php
-require __DIR__ . '/clases/conexion_clase.php'; // Ajusta según tu conexión
-require __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/clases/conexion_clase.php'; // Ajusta según tu conexión
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Messaging\CloudMessage;
@@ -9,7 +10,7 @@ use Kreait\Firebase\Messaging\Notification;
 // 1. Leer el JSON recibido en el cuerpo de la petición
 $inputData = json_decode(file_get_contents('php://input'), true);
 
-if (!isset($inputData['titulo'], $inputData['cuerpo'], $inputData['user_id'])) {
+if (!isset($inputData['titulo']) || !isset($inputData['cuerpo']) || !isset($inputData['user_id'])) {
     http_response_code(400);
     echo json_encode([
         'status'  => 'error',
@@ -33,7 +34,7 @@ try {
     }
 
     // Preparar la consulta con placeholders (?)
-    $sql = "SELECT token FROM tokens WHERE user_id = ? LIMIT 1";
+    $sql = "SELECT token FROM tokens WHERE user_id = ?";
     $stmt = $db->conexion->prepare($sql);
     
     if (!$stmt) {
@@ -83,7 +84,7 @@ try {
 
 
 // 4. Configurar Firebase con la cuenta de servicio
-$serviceAccountPath = __DIR__ . '/credenciales.json'; // Ajusta la ruta a tu JSON de credenciales
+$serviceAccountPath = __DIR__ . '/clases/credenciales.json'; // Ajusta la ruta a tu JSON de credenciales
 $factory  = (new Factory)->withServiceAccount($serviceAccountPath);
 $messaging = $factory->createMessaging();
 

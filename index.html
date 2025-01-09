@@ -9,8 +9,6 @@
     <title></title>
     <link rel="icon" type="image/png" href="https://dosxdos.app.iidos.com/img/logoPwa256.png">
     <meta name="description" content="DOS.DOS GRUPO IMAGEN - Aplicación Web Progresiva (PWA)">
-    <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-messaging-compat.js"></script>
     <style>
         * {
             margin: 0;
@@ -392,10 +390,9 @@
     <link rel="apple-touch-startup-image" href="https://dosxdos.app.iidos.com/img/dosxdos.png">
     <link rel="manifest" href="https://dosxdos.app.iidos.com/manifest.json">
     <script src="https://dosxdos.app.iidos.com/js/index_db.js"></script>
-    <!-- SERVICEWORKER -->
+    <!-- SERVICEWORKERS -->
     <script src="https://dosxdos.app.iidos.com/serviceworker.js"></script>
     <script src="https://dosxdos.app.iidos.com//sw.js"></script>
-
 </head>
 
 <body>
@@ -441,6 +438,8 @@
 </body>
 
 <script src="https://dosxdos.app.iidos.com/js/index_db.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-messaging-compat.js"></script>
 
 <script>
 
@@ -1224,6 +1223,7 @@
                                                         localStorage.setItem('cierrePorVersion', false);
                                                         setCookie("login", login, 365);
                                                         setCookie("usuario", usuario, 365);
+                                                        await guardarTokenEnServidor(tokenFirebase, usuario);
                                                         window.location.href = "https://dosxdos.app.iidos.com/rutas_montador.html";
                                                     } else if (data.clase == 'cliente') {
                                                         const login = true;
@@ -1234,6 +1234,7 @@
                                                         localStorage.setItem('cierrePorVersion', false);
                                                         setCookie("login", login, 365);
                                                         setCookie("usuario", usuario, 365);
+                                                        await guardarTokenEnServidor(tokenFirebase, usuario);
                                                         window.location.href = "https://dosxdos.app.iidos.com/clientes.html";
                                                     } else {
                                                         const login = true;
@@ -1244,6 +1245,7 @@
                                                         localStorage.setItem('cierrePorVersion', false);
                                                         setCookie("login", login, 365);
                                                         setCookie("usuario", usuario, 365);
+                                                        await guardarTokenEnServidor(tokenFirebase, usuario);
                                                         window.location.href = "https://dosxdos.app.iidos.com/ot.html";
                                                     }
                                                 } else {

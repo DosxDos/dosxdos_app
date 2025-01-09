@@ -1,10 +1,11 @@
 <?php
-require __DIR__ . '/clases/conexion_clase.php'; // Ajusta según tu conexión
+require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/clases/conexion_clase.php'; // Ajusta según tu conexión
 
 // Leer los datos enviados desde JS (JSON)
-$data = json_decode(file_get_contents("php://input"));
+$data = json_decode(file_get_contents("php://input"), true);
 
-if (!isset($data->token) && !isset($data->user_id)) {
+if (!isset($data['token']) || !isset($data['user_id'])) {
     // Si no se recibió el token, retornamos error
     echo json_encode([
         'status'  => 'error',
@@ -13,12 +14,13 @@ if (!isset($data->token) && !isset($data->user_id)) {
     exit;
 }
 
-$token = $data->token;
+$token = $data['token'];
+$user_id = $data['user_id'];
 
 try {
     // Crear instancia de tu clase de conexión
     $db = new Conexion();
-    
+
     // Revisar si hubo algún error al conectar
     if ($db->conexion->connect_errno) {
         throw new Exception('Error de conexión: ' . $db->conexion->connect_error);
@@ -27,8 +29,12 @@ try {
     // Preparamos la consulta con placeholders. 
     // ON DUPLICATE KEY UPDATE, pero usando la sintaxis para MySQL con placeholders.
     // (Si la columna 'token' es UNIQUE, esto actualizará si ya existe.)
-    $sql = "INSERT INTO tokens VALUES (?,?) 
-            ON DUPLICATE KEY UPDATE token = VALUES(token)";
+    $sql = "INSERT INTO tokens (user_id, token)
+    VALUES (?, ?)
+    ON DUPLICATE KEY UPDATE
+    token = VALUES(token),
+    updated_at = CURRENT_TIMESTAMP;
+    ";
 
     $stmt = $db->conexion->prepare($sql);
     if (!$stmt) {
@@ -36,7 +42,7 @@ try {
     }
 
     // Enlazamos el parámetro. 's' -> string
-    $stmt->bind_param('si', $token, $id);
+    $stmt->bind_param('is', $user_id, $token);
 
     // Ejecutamos
     $stmt->execute();
@@ -66,4 +72,3 @@ try {
         'message' => $e->getMessage()
     ]);
 }
-?>

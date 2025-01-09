@@ -93,7 +93,8 @@ const CACHE_NAME = 'dosxdos103',
     'https://dosxdos.app.iidos.com/img/clientes2.png',
     'https://dosxdos.app.iidos.com/img/sincronizar.png',
     'https://dosxdos.app.iidos.com/img/historial.png',
-    'https://dosxdos.app.iidos.com/css/tailwindmain.css'
+    'https://dosxdos.app.iidos.com/css/tailwindmain.css',
+    'https://dosxdos.app.iidos.com/firebase-messaging-sw.js'
   ],
 
   urlsToUpdate = [
