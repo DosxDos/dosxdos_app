@@ -37,7 +37,7 @@ try {
     }
 
     // Preparar la consulta con placeholders (?)
-    $sql = "SELECT token FROM tokens WHERE user_id = ?";
+    $sql = "SELECT * FROM tokens WHERE user_id = ?";
     $stmt = $db->conexion->prepare($sql);
 
     if (!$stmt) {
@@ -55,6 +55,7 @@ try {
 
     // Obtener el resultado
     $result = $stmt->get_result();
+    //var_dump($result);
     if (!$result) {
         throw new Exception("Error al obtener el resultado: " . $db->conexion->error);
     }
@@ -77,6 +78,7 @@ try {
         $tokensDestino[$i]['user_id'] = $row['user_id'];
         $tokensDestino[$i]['created_at'] = $row['created_at'];
         $tokensDestino[$i]['updated_at'] = $row['updated_at'];
+        $i++;
     }
 
     // Cerrar statement
@@ -96,9 +98,12 @@ $serviceAccountPath = __DIR__ . '/clases/credenciales.json'; // Ajusta la ruta a
 $factory  = (new Factory)->withServiceAccount($serviceAccountPath);
 $messaging = $factory->createMessaging();
 
+//Array para guardar los tokens notificados
+$tokensNotificados = [];
+
 //Enviar las notificaciones a todos los tokens del usuario
 try {
-    $i = 1;
+    $i = 0;
     foreach ($tokensDestino as $tokenDestino) {
         // 5. Construir la notificación
         $message = CloudMessage::new()
@@ -110,12 +115,14 @@ try {
             ->withChangedTarget('token', $tokenDestino['token']);
         // 6. Enviar la notificación
         $messaging->send($message);
-        sleep(1);
+        $tokensNotificados[$i] = $tokenDestino['token'];
+        //sleep(1);
         $i++;
     }
     echo json_encode([
         'status'  => 'success',
-        'message' => $i . ' notificaciones enviadas exitosamente'
+        'message' => $i . ' notificaciones enviadas exitosamente',
+        'tokensNotificados' => $tokensNotificados
     ]);
 } catch (\Throwable $th) {
     http_response_code(500);
