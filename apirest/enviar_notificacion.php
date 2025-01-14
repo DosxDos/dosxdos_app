@@ -24,6 +24,9 @@ $titulo  = $inputData['titulo'];
 $cuerpo  = $inputData['cuerpo'];
 $user_id = $inputData['user_id'];
 
+//Array para guardar los tokens de destino
+$tokensDestino = [];
+
 // 2. Conectar a la BD usando tu clase Conexion
 try {
     $db = new Conexion();
@@ -36,7 +39,7 @@ try {
     // Preparar la consulta con placeholders (?)
     $sql = "SELECT token FROM tokens WHERE user_id = ?";
     $stmt = $db->conexion->prepare($sql);
-    
+
     if (!$stmt) {
         // Error al preparar la sentencia
         throw new Exception("Error al preparar el statement: " . $db->conexion->error);
@@ -66,13 +69,18 @@ try {
         exit;
     }
 
-    // Extraer el token
-    $row = $result->fetch_assoc();
-    $tokenDestino = $row['token'];
+    // Extraer los tokens
+    $i = 0;
+    while ($row = $result->fetch_assoc()) {
+        $tokensDestino[$i]['token'] = $row['token'];
+        $tokensDestino[$i]['id'] = $row['id'];
+        $tokensDestino[$i]['user_id'] = $row['user_id'];
+        $tokensDestino[$i]['created_at'] = $row['created_at'];
+        $tokensDestino[$i]['updated_at'] = $row['updated_at'];
+    }
 
     // Cerrar statement
     $stmt->close();
-
 } catch (Exception $e) {
     http_response_code(500);
     echo json_encode([
@@ -88,26 +96,31 @@ $serviceAccountPath = __DIR__ . '/clases/credenciales.json'; // Ajusta la ruta a
 $factory  = (new Factory)->withServiceAccount($serviceAccountPath);
 $messaging = $factory->createMessaging();
 
-// 5. Construir la notificación
-$message = CloudMessage::new()
-    ->withNotification(Notification::create($titulo, $cuerpo))
-    ->withData([
-        // Campos de datos adicionales si quieres
-        'info_extra' => 'valor'
-    ])
-    ->withChangedTarget('token', $tokenDestino);
-
-// 6. Enviar la notificación
+//Enviar las notificaciones a todos los tokens del usuario
 try {
-    $messaging->send($message);
+    $i = 1;
+    foreach ($tokensDestino as $tokenDestino) {
+        // 5. Construir la notificación
+        $message = CloudMessage::new()
+            ->withNotification(Notification::create($titulo, $cuerpo))
+            ->withData([
+                // Campos de datos adicionales si quieres
+                'info_extra' => 'valor'
+            ])
+            ->withChangedTarget('token', $tokenDestino['token']);
+        // 6. Enviar la notificación
+        $messaging->send($message);
+        sleep(1);
+        $i++;
+    }
     echo json_encode([
         'status'  => 'success',
-        'message' => 'Notificación enviada exitosamente'
+        'message' => $i . ' notificaciones enviadas exitosamente'
     ]);
-} catch (Exception $e) {
+} catch (\Throwable $th) {
     http_response_code(500);
     echo json_encode([
         'status'  => 'error',
-        'message' => 'Error al enviar la notificación: '.$e->getMessage()
+        'message' => 'Error al enviar las notificaciones: ' . $e->getMessage()
     ]);
 }

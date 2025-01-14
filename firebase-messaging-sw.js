@@ -18,7 +18,17 @@ if (navigator.onLine) {
 
     // Escucha mensajes en segundo plano
     messaging.onBackgroundMessage((payload) => {
-        alert("ha llegado una notificación");
+        console.log('[firebase-messaging-sw.js] Recibió un mensaje en segundo plano: ', payload);
+        const notificationTitle = payload.notification.title || 'Notificación';
+        const notificationOptions = {
+            body: payload.notification.body || '',
+            icon: payload.notification.icon || '/icon.png',
+        };
+        self.registration.showNotification(notificationTitle, notificationOptions);
+    });
+
+    // Escucha mensajes en segundo plano
+    messaging.onMessage((payload) => {
         console.log('[firebase-messaging-sw.js] Recibió un mensaje en segundo plano: ', payload);
         const notificationTitle = payload.notification.title || 'Notificación';
         const notificationOptions = {
