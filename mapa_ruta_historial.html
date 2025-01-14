@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mapa Rutas</title>
-  <link rel="icon" type="image/png" href="https://dosxdos.app.iidos.com/img/logoPwa256.png">
+  <link rel="icon" type="image/png" href="http://localhost/dosxdos_app/img/logoPwa256.png">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDojih1XShuEEmyRVE8FYOGvJn37blq0ng"></script>
   <style>
@@ -239,7 +239,7 @@
 
   // Evento para el botón de título
   document.getElementById("ruta-title").addEventListener('click', () => {
-    window.location.href = "https://dosxdos.app.iidos.com/historial_montador.html";
+    window.location.href = "http://localhost/dosxdos_app/historial_montador.html";
   });
 
   let lineasRuta = [];
@@ -321,7 +321,7 @@
               map: map,
               title: concatenatedName,
               icon: {
-                url: "https://dosxdos.app.iidos.com/img/marcador_de_historial.png",
+                url: "http://localhost/dosxdos_app/img/marcador_de_historial.png",
                 scaledSize: new google.maps.Size(30, 30), // Tamaño ajustado
                 origin: new google.maps.Point(0, 0),
                 anchor: new google.maps.Point(15, 30)
@@ -370,7 +370,7 @@
                 localStorage.setItem('cliente', clienteStorage);
                 localStorage.setItem('nombreCliente', nombreCliente);
                 
-                window.location.href = "https://dosxdos.app.iidos.com/linea_historial_montador.html";
+                window.location.href = "http://localhost/dosxdos_app/linea_historial_montador.html";
               };
             });
 
@@ -415,7 +415,7 @@
     }
     let login = localStorage.getItem('login');
     if (!login || login === null) {
-      window.location.href = "https://dosxdos.app.iidos.com/index.html";
+      window.location.href = "http://localhost/dosxdos_app/index.html";
     }
   });
 </script>

@@ -215,7 +215,7 @@
 
   <div id="volver" onclick="goBack()"
     class="absolute top-5 left-5 flex items-center bg-red-600 p-3 rounded-[20%] cursor-pointer hover:bg-red-700">
-    <img src="https://dosxdos.app.iidos.com/img/back.png" alt="Volver Icon" class="w-7 h-7" />
+    <img src="http://localhost/dosxdos_app/img/back.png" alt="Volver Icon" class="w-7 h-7" />
   </div>
 
   <h1 id="titulo" class="relative text-4xl mb-8 mt-16 text-black font-bold mx-auto">
@@ -348,8 +348,8 @@
     document.addEventListener("DOMContentLoaded", () => {
       loaderOn();
       Promise.all([
-        fetch("https://dosxdos.app.iidos.com/apirest/rutas.php"),
-        fetch("https://dosxdos.app.iidos.com/apirest/crm.php?montadores"),
+        fetch("http://localhost/dosxdos_app/apirest/rutas.php"),
+        fetch("http://localhost/dosxdos_app/apirest/crm.php?montadores"),
       ])
         .then(([rutasResponse, montadoresResponse]) =>
           Promise.all([rutasResponse.json(), montadoresResponse.json()])
@@ -607,7 +607,7 @@
         loaderOn();
 
         const response = await requestBackend(
-          "https://dosxdos.app.iidos.com/gastos_rutas.php",
+          "http://localhost/dosxdos_app/gastos_rutas.php",
           "POST",
           JSON.stringify(formData)
         );

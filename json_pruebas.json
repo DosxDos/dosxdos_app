@@ -5,11 +5,11 @@
     "DiasActuacion": "",
     "Estado": "Realizado",
     "FechaActuacion": "2029-06-15",
-    "FirmaCliente": "https://dosxdos.app.iidos.com/fotos_y_firmas.php?ruta=GRAN_CANARIA_(D)&linea=undefined&ot=31088&lineaActividad=10715",
+    "FirmaCliente": "http://localhost/dosxdos_app/fotos_y_firmas.php?ruta=GRAN_CANARIA_(D)&linea=undefined&ot=31088&lineaActividad=10715",
     "FotosSubidas": 3,
     "HorasActuacion": "",
     "Incidencia": "",
     "MinutosActuacion": "15",
     "ObservacionesTecnico": "Ensayo del historial",
-    "LinkWeb": "https://dosxdos.app.iidos.com/fotos_y_firmas.php?ruta=GRAN_CANARIA_(D)&linea=undefined&ot=31088&lineaActividad=10715"
+    "LinkWeb": "http://localhost/dosxdos_app/fotos_y_firmas.php?ruta=GRAN_CANARIA_(D)&linea=undefined&ot=31088&lineaActividad=10715"
 }
