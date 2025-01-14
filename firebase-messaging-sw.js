@@ -18,6 +18,7 @@ if (navigator.onLine) {
 
     // Escucha mensajes en segundo plano
     messaging.onBackgroundMessage((payload) => {
+        alert("ha llegado una notificación");
         console.log('[firebase-messaging-sw.js] Recibió un mensaje en segundo plano: ', payload);
         const notificationTitle = payload.notification.title || 'Notificación';
         const notificationOptions = {
