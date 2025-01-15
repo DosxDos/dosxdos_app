@@ -7,6 +7,7 @@ $data = json_decode(file_get_contents("php://input"), true);
 
 if (!isset($data['token']) || !isset($data['user_id'])) {
     // Si no se recibió el token, retornamos error
+    //echo $data['token']
     echo json_encode([
         'status'  => 'error',
         'message' => 'No se ha recibido el token del montador o el id del usuario'

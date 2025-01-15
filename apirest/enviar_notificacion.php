@@ -7,7 +7,7 @@ use Kreait\Firebase\Factory;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Notification;
 
-// 1. Leer el JSON recibido en el cuerpo de la petición
+/** ==================== 1. Leer datos de la petición ==================== **/
 $inputData = json_decode(file_get_contents('php://input'), true);
 
 if (!isset($inputData['titulo']) || !isset($inputData['cuerpo']) || !isset($inputData['user_id'])) {
@@ -27,7 +27,7 @@ $user_id = $inputData['user_id'];
 //Array para guardar los tokens de destino
 $tokensDestino = [];
 
-// 2. Conectar a la BD usando tu clase Conexion
+/** ==================== 2. Conectar a la BD y obtener tokens ==================== **/
 try {
     $db = new Conexion();
 
@@ -84,6 +84,21 @@ try {
     // Cerrar statement
     $stmt->close();
 } catch (Exception $e) {
+    var_dump($e);
+    http_response_code(500);
+    echo json_encode([
+        'status'  => 'error',
+        'message' => $e->getMessage()
+    ]);
+    exit;
+}
+/** ==================== 3. Registrar la notificación en BD (opcional antes de enviar) ==================== **/
+try {
+    // Aquí llamas a la función que creaste
+    $idInsertado = registrarNotificacion($db, $user_id, $titulo, $cuerpo, 'montador');
+    // OJO: Si quisieras un tipo distinto, lo cambias en el último parámetro
+} catch (Exception $e) {
+    var_dump($e);
     http_response_code(500);
     echo json_encode([
         'status'  => 'error',
@@ -92,12 +107,12 @@ try {
     exit;
 }
 
-
-// 4. Configurar Firebase con la cuenta de servicio
+/** ==================== 4. Configurar Firebase ==================== **/
 $serviceAccountPath = __DIR__ . '/clases/credenciales.json'; // Ajusta la ruta a tu JSON de credenciales
 $factory  = (new Factory)->withServiceAccount($serviceAccountPath);
 $messaging = $factory->createMessaging();
 
+/** ==================== 5. Enviar las notificaciones ==================== **/
 //Array para guardar los tokens notificados
 $tokensNotificados = [];
 
@@ -113,9 +128,23 @@ try {
                 'info_extra' => 'valor'
             ])
             ->withChangedTarget('token', $tokenDestino['token']);
-        // 6. Enviar la notificación
-        $messaging->send($message);
-        $tokensNotificados[$i] = $tokenDestino['token'];
+        //Enviar la notificación recogida en un try catch y si falla se borra
+        try {
+            $messaging->send($message);
+            $tokensNotificados[$i] = $tokenDestino['token'];
+        } catch (\Kreait\Firebase\Exception\Messaging\NotFound $e) {
+            // Si llegó aquí, significa que Firebase dice que el token está "desconocido" (404).
+            // 1. Borramos el token de la base de datos.
+            if ($db && $db->conexion) {
+                $sqlDel = "DELETE FROM tokens WHERE token = ?";
+                $stmtDel = $db->conexion->prepare($sqlDel);
+                if ($stmtDel) {
+                    $stmtDel->bind_param("s", $tokenDestino['token']);
+                    $stmtDel->execute();
+                    $stmtDel->close();
+                }
+            }
+        }
         //sleep(1);
         $i++;
     }
@@ -126,8 +155,60 @@ try {
     ]);
 } catch (\Throwable $th) {
     http_response_code(500);
+    var_dump($th);
     echo json_encode([
         'status'  => 'error',
         'message' => 'Error al enviar las notificaciones: ' . $e->getMessage()
     ]);
 }
+/** ==================== FUNCIONES ENVIAR NOTIFICACIONES ==================== **/
+/**
+ * Inserta una notificación en la tabla `notificaciones_push`.
+ *
+ * @param Conexion $db       Instancia de la clase Conexion (o tu manejador de BD).
+ * @param int      $user_id  ID del usuario.
+ * @param string   $titulo   Título de la notificación.
+ * @param string   $mensaje  Cuerpo de la notificación.
+ * @param string   $tipoUsuario (opcional) Tipo de usuario al que se envía.
+ *
+ * @return int  Devuelve el ID autoincremental de la notificación insertada (o 0 si algo falla).
+ * @throws Exception
+ */
+function registrarNotificacion($db, $user_id, $titulo, $mensaje, $tipoUsuario = 'montador')
+{
+    try {
+        // Prepara el SQL
+        $sql = "INSERT INTO notificaciones_push 
+                (usuario_id, titulo, mensaje, tipo_usuario, visto, fecha_visto) 
+                VALUES 
+                (?, ?, ?, ?, ?, ?)";
+
+        // Prepara la sentencia
+        $stmt = $db->conexion->prepare($sql);
+        if (!$stmt) {
+            throw new Exception("Error al preparar la sentencia: " . $db->conexion->error);
+        }
+
+        // Campos fijos o por defecto
+        $visto      = 0;    // inicia como no visto
+        $fechaVisto = null; // será NULL hasta que se marque como visto
+
+        // Vincula los parámetros
+        // "isssis" -> i=int, s=string, s=string, s=string, i=int, s=string (o null)
+        $stmt->bind_param("isssis", $user_id, $titulo, $mensaje, $tipoUsuario, $visto, $fechaVisto);
+
+        // Ejecuta
+        $stmt->execute();
+
+        // Obtén el ID insertado
+        $insertId = $stmt->insert_id;
+
+        // Cierra la sentencia
+        $stmt->close();
+
+        return $insertId;
+    } catch (Exception $e) {
+        throw new Exception("Error al insertar notificación: " . $e->getMessage());
+    }
+}
+

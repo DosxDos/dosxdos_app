@@ -389,10 +389,12 @@
     <link rel="apple-touch-icon" href="https://dosxdos.app.iidos.com/img/logoPwa256.png">
     <link rel="apple-touch-startup-image" href="https://dosxdos.app.iidos.com/img/dosxdos.png">
     <link rel="manifest" href="https://dosxdos.app.iidos.com/manifest.json">
+    <!-- Importacion de IndexDB -->
     <script src="https://dosxdos.app.iidos.com/js/index_db.js"></script>
-    <!-- SERVICEWORKERS -->
+    <!-- SERVICEWORKER CACHE-->
     <script src="https://dosxdos.app.iidos.com/serviceworker.js"></script>
-    <script src="https://dosxdos.app.iidos.com//sw.js"></script>
+    <!-- SERVICEWORKER FIREBASE-->
+    <script src="https://dosxdos.app.iidos.com/serviceWorkerFirebase.js"></script>
 </head>
 
 <body>
@@ -437,7 +439,6 @@
 
 </body>
 
-<script src="https://dosxdos.app.iidos.com/js/index_db.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-messaging-compat.js"></script>
 
@@ -561,12 +562,18 @@
                         tokenFirebase = permiso;
                     } else {
                         console.error('El permiso para recibir notificaciones fue denegado');
+                        alerta("Este dispositivo no recibirá notificaciones de la App");
                     }
                 }
             }
         } catch (error) {
-            alerta('Error al ejecutar Firebase: ' + error);
-            console.error('Error al ejecutar Firebase: ' + error);
+            reinicioFirebase = localStorage.getItem("reinicioFirebase");
+            if (!reinicioFirebase || reinicioFirebase == null) {
+                localStorage.setItem("reinicioFirebase", true);
+                window.location.reload();
+            } else {
+                alerta("Este dispositivo no recibirá notificaciones de la App");
+            }
         }
     }
 
@@ -1223,8 +1230,12 @@
                                                         localStorage.setItem('cierrePorVersion', false);
                                                         setCookie("login", login, 365);
                                                         setCookie("usuario", usuario, 365);
-                                                        localStorage.setItem('tokenFirebase', tokenFirebase);
-                                                        await guardarTokenEnServidor(tokenFirebase, usuario);
+                                                        if (tokenFirebase != null) {
+                                                            localStorage.setItem('tokenFirebase', tokenFirebase);
+                                                            await guardarTokenEnServidor(tokenFirebase, usuario);
+                                                        } else {
+                                                            localStorage.setItem('mensaje', "Este dispositivo no recibirá notificaciones de la App");
+                                                        }
                                                         window.location.href = "https://dosxdos.app.iidos.com/rutas_montador.html";
                                                     } else if (data.clase == 'cliente') {
                                                         const login = true;
@@ -1235,8 +1246,12 @@
                                                         localStorage.setItem('cierrePorVersion', false);
                                                         setCookie("login", login, 365);
                                                         setCookie("usuario", usuario, 365);
-                                                        localStorage.setItem('tokenFirebase', tokenFirebase);
-                                                        await guardarTokenEnServidor(tokenFirebase, usuario);
+                                                        if (tokenFirebase != null) {
+                                                            localStorage.setItem('tokenFirebase', tokenFirebase);
+                                                            await guardarTokenEnServidor(tokenFirebase, usuario);
+                                                        } else {
+                                                            localStorage.setItem('mensaje', "Este dispositivo no recibirá notificaciones de la App");
+                                                        }
                                                         window.location.href = "https://dosxdos.app.iidos.com/clientes.html";
                                                     } else {
                                                         const login = true;
@@ -1247,8 +1262,12 @@
                                                         localStorage.setItem('cierrePorVersion', false);
                                                         setCookie("login", login, 365);
                                                         setCookie("usuario", usuario, 365);
-                                                        localStorage.setItem('tokenFirebase', tokenFirebase);
-                                                        await guardarTokenEnServidor(tokenFirebase, usuario);
+                                                        if (tokenFirebase != null) {
+                                                            localStorage.setItem('tokenFirebase', tokenFirebase);
+                                                            await guardarTokenEnServidor(tokenFirebase, usuario);
+                                                        } else {
+                                                            localStorage.setItem('mensaje', "Este dispositivo no recibirá notificaciones de la App");
+                                                        }
                                                         window.location.href = "https://dosxdos.app.iidos.com/ot.html";
                                                     }
                                                 } else {
