@@ -1,0 +1,14 @@
+ruta_montador.html (hacerlo en todos los html) 16-1-2025
+    - Logo html y css (notificaciones)
+    - Variable --x150
+    - Evento Click de notificaciones
+    - sw: bell.png, 
+
+notificaciones.html
+    -sw: notificaciones.html
+
+
+
+
+
+

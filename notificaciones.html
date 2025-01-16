@@ -5,13 +5,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RUTAS</title>
+    <title>RUTA</title>
     <!-- Favicons -->
     <link rel="icon" type="image/png" href="http://localhost/dosxdos_app/img/logoPwa256.png">
     <style>
         @charset "UTF-8";
 
-        /* $variables - 40% --- 24.27% del valor de la variable */
+        /* $variables - 40% */
         :root {
             --x1_7: 0.41vw;
             --x60: 14.56vw;
@@ -32,7 +32,6 @@
             --x2: 0.49vw;
             --x18: 4.37vw;
             --x2_5: 0.61vw;
-            --x150: 36.40vw;
         }
 
         /* INICIO */
@@ -201,8 +200,6 @@
             background-color: #f4f4f4;
         }
 
-        /* LOGO Y NOTIFICACIONES */
-
         #logo {
             display: flex;
             width: 100%;
@@ -212,54 +209,8 @@
         }
 
         #logo>img {
-            width: var(--x150);
+            width: var(--x300);
         }
-
-        #notificaciones {
-            display: flex;
-            position: absolute;
-            width: var(--x60);
-            height: var(--x60);
-            justify-content: center;
-            align-items: center;
-            right: var(--x10);
-            cursor: pointer;
-        }
-
-        #bell {
-            width: var(--x60);
-            height: var(--x60);
-        }
-
-        #numNotificaciones {
-            position: absolute;
-            width: var(--x30);
-            height: var(--x30);
-            border-radius: 50%;
-            background-color: #d31216;
-            justify-content: center;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            top: var(--x2);
-            right: var(--x2);
-        }
-
-        #numNtf {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            /* border: 1px solid black; */
-            border-radius: 50%;
-            width: var(--x25);
-            height: var(--x25);
-            color: white;
-            font-size: var(--x25);
-            padding-left: var(--x3);
-        }
-
-        /* FIN DE LOGO Y NOTIFICACIONES */
 
         #menu {
             display: flex;
@@ -438,6 +389,15 @@
             margin-bottom: var(--x20);
         }
 
+        #actualizacion {
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            padding: var(--x15);
+            text-align: center;
+            color: gray;
+        }
+
         #imgCerrar {
             position: absolute;
             width: var(--x28);
@@ -487,7 +447,7 @@
             outline-color: #b20b15;
         }
 
-        #rutas {
+        #contenido {
             display: flex;
             width: 100%;
             flex-direction: column;
@@ -498,6 +458,7 @@
         }
 
         .ruta {
+            max-width: 100%;
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
@@ -520,17 +481,40 @@
             background-color: #b20b15;
         }
 
+        .ruta2 {
+            max-width: 100%;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            border-radius: var(--x30);
+            font-family: 'Lora-Bold', 'Lora-Bold';
+            font-size: var(--x22);
+            border: var(--x1) solid gray;
+            color: white;
+            background-color: #d312158a;
+            margin-top: var(--x10);
+            margin-bottom: var(--x10);
+            padding: var(--x15);
+        }
+
+        .ruta2:hover {
+            cursor: pointer;
+        }
+
+        .ruta2:active {
+            background-color: #b20b15;
+        }
+
         .resaltado {
             background-color: rgba(0, 0, 0, 0.573);
         }
 
-        #actualizacion {
+        #contMapa {
+            display: flex;
+            width: 100%;
             justify-content: center;
             align-items: center;
-            flex-wrap: wrap;
             padding: var(--x15);
-            text-align: center;
-            color: gray;
         }
 
         /* MOVILES GRANDES */
@@ -555,11 +539,10 @@
                 --x2: 2px;
                 --x18: 18px;
                 --x2_5: 2.5px;
-                --x150: 150px;
             }
         }
 
-        /* TABLETS -- 5% del valor de la variable */
+        /* TABLETS */
         @media screen and (min-width: 768px) and (max-width: 1199px) {
             :root {
                 --x1_7: 0.09vw;
@@ -581,7 +564,6 @@
                 --x2: 0.1vw;
                 --x18: 0.9vw;
                 --x2_5: 0.13vw;
-                --x150: 7.5vw;
             }
 
             #menu {
@@ -589,7 +571,7 @@
             }
         }
 
-        /* ESCRITORIOS --- 60% del valor de la variable */
+        /* ESCRITORIOS */
         @media screen and (min-width: 1200px) {
             :root {
                 --x1_7: 1.02px;
@@ -611,7 +593,6 @@
                 --x2: 1.2px;
                 --x18: 10.8px;
                 --x2_5: 1.5px;
-                --x150: 90px;
             }
 
             #menu {
@@ -630,13 +611,7 @@
     <section id="encabezado">
 
         <div id="logo">
-            <img src="http://localhost/dosxdos_app/img/logo300.png" alt="Logo">
-            <div id="notificaciones">
-                <img src="http://localhost/dosxdos_app/img/bell.gif" alt="bell" id="bell">
-                <div id="numNotificaciones" class="displayOff">
-                    <p id="numNtf">3</p>
-                </div>
-            </div>
+            <img src="http://localhost/dosxdos_app/img/logo300.png">
         </div>
 
         <nav id="menu">
@@ -687,6 +662,7 @@
                 <p>Historial</p>
             </div>
 
+
         </nav>
 
         <nav id="opcionesUsuario" class="displayOff">
@@ -709,7 +685,7 @@
 
         </div>
 
-        <h1 id="titulo" class="displayOn">RUTAS</h1>
+        <h1 id="titulo" class="displayOn"></h1>
 
         <p id="actualizacion" class="displayOff">PARA PODER USAR SIN CONEXIÓN A INTERNET EL NUEVO CAMPO "APP NOTAS",
             DEBES CERRAR LA SESIÓN Y VOLVER A INICIAR LA SESIÓN (Cuando cierres la sesión elimina por favor los datos de
@@ -717,70 +693,299 @@
 
     </section>
 
+    <div id="contMapa"><button id="mapa" class="ruta resaltado">MAPA</button></div>
 
-    <section id="rutas"></section>
+    <section id="contenido"></section>
 
 </body>
 
 <script>
 
-    function cache() {
 
-        const urlsToCache = [
-            'http://localhost/dosxdos_app/index.html?utm_source=web_app_manifest',
-            'http://localhost/dosxdos_app/index.html',
-            'http://localhost/dosxdos_app/manifest.json',
-            'http://localhost/dosxdos_app/serviceworker.js',
-            'http://localhost/dosxdos_app/sw.js',
-            'http://localhost/dosxdos_app/css/index.css',
-            'http://localhost/dosxdos_app/rutas_montador.html',
-            'http://localhost/dosxdos_app/css/rutas_montador.css',
-            'http://localhost/dosxdos_app/ruta_montador.html',
-            'http://localhost/dosxdos_app/css/ruta_montador.css',
-            'http://localhost/dosxdos_app/linea_montador.html',
-            'http://localhost/dosxdos_app/css/linea_montador.css',
-            'http://localhost/dosxdos_app/fotos_y_firmas.html',
-            'http://localhost/dosxdos_app/css/fotos_y_firmas.css',
-            'http://localhost/dosxdos_app/css/fuentes/Roboto/Roboto-Light.ttf',
-            'http://localhost/dosxdos_app/css/fuentes/Merriweather/Merriweather-Light.ttf',
-            'http://localhost/dosxdos_app/css/fuentes/Merriweather/Merriweather-Bold.ttf',
-            'http://localhost/dosxdos_app/css/fuentes/Lora/Lora-Regular.ttf',
-            'http://localhost/dosxdos_app/css/fuentes/Lora/Lora-Medium.ttf',
-            'http://localhost/dosxdos_app/css/fuentes/Lora/Lora-Bold.ttf',
-            'http://localhost/dosxdos_app/img/candado.png',
-            'http://localhost/dosxdos_app/img/casa.png',
-            'http://localhost/dosxdos_app/img/casaWhite.png',
-            'http://localhost/dosxdos_app/img/dosxdos.png',
-            'http://localhost/dosxdos_app/img/email.png',
-            'http://localhost/dosxdos_app/img/flechaAbajo.png',
-            'http://localhost/dosxdos_app/img/fondo.jpg',
-            'http://localhost/dosxdos_app/img/logoPwa1024.png',
-            'http://localhost/dosxdos_app/img/logoPwa512.png',
-            'http://localhost/dosxdos_app/img/logoPwa384.png',
-            'http://localhost/dosxdos_app/img/logoPwa256.png',
-            'http://localhost/dosxdos_app/img/logoPwa192.png',
-            'http://localhost/dosxdos_app/img/logoPwa128.png',
-            'http://localhost/dosxdos_app/img/logoPwa96.png',
-            'http://localhost/dosxdos_app/img/logoPwa64.png',
-            'http://localhost/dosxdos_app/img/logoPwa32.png',
-            'http://localhost/dosxdos_app/img/logoPwa16.png',
-            'http://localhost/dosxdos_app/img/logo300.png',
-            'http://localhost/dosxdos_app/img/lupa.png',
-            'http://localhost/dosxdos_app/img/reloj.png',
-            'http://localhost/dosxdos_app/img/relojWhite.png',
-            'http://localhost/dosxdos_app/img/usuario.png',
-            'http://localhost/dosxdos_app/img/rutasWhite.png',
-            'http://localhost/dosxdos_app/img/cerrar.png',
-            'http://localhost/dosxdos_app/img/usuarios.png',
-            'http://localhost/dosxdos_app/img/trash.png',
-            'http://localhost/dosxdos_app/img/folder.png',
-            'http://localhost/dosxdos_app/img/comprimido.png',
-            'http://localhost/dosxdos_app/img/task.png',
-            'http://localhost/dosxdos_app/css/dosxdos.css',
-        ]
+    const ruta = localStorage.getItem('ruta');
+    if (ruta && ruta !== null) {
+        console.log(ruta);
+    }
+    else {
+        window.location.href = 'http://localhost/dosxdos_app/rutas_montador.html';
+    }
+    const nombreRuta = localStorage.getItem('nombreRuta');
+    console.log(nombreRuta);
+    $titulo = document.getElementById('titulo');
+    $titulo.innerHTML = nombreRuta;
+
+    const mapa = document.getElementById('mapa')
+    mapa.addEventListener('click', () => {
+        if (navigator.onLine) {
+            window.location.href = "http://localhost/dosxdos_app/mapa_ruta.html";
+        } else {
+            alerta("No es posibler crear el mapa sin conexión a internet");
+        }
+    });
+
+    /* FUNCIONES DE INDEXDB */
+
+    function db(database, stores) {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open(database, 1);
+            request.onupgradeneeded = (event) => {
+                const db = event.target.result;
+                stores.forEach(element => {
+                    db.createObjectStore(element, { keyPath: 'id', autoIncrement: true });
+                });
+            };
+            request.onsuccess = (event) => {
+                resolve(true);
+            }
+            request.onerror = (event) => {
+                console.error(`Error en la función db al tratar de abrir o crear la base de datos ${database}: ${event.target.error}`);
+                reject(event.target.error);
+            }
+        })
+    }
+
+    function existDb(dataBase) {
+        return new Promise((resolve, reject) => {
+            const dbNameToCheck = dataBase;
+            indexedDB.databases().then((databases) => {
+                const databaseExists = databases.some((db) => db.name === dbNameToCheck);
+                if (databaseExists) {
+                    resolve(true);
+                } else {
+                    resolve(false);
+                }
+            }).catch((error) => {
+                console.error(`Error en la función existDb al verificar la existencia de la base de datos ${dataBase}: ${error.message}`);
+                reject(error);
+            });
+        })
+    }
+
+    function existStore(db, almacen) {
+        return new Promise((resolve, reject) => {
+            const dbName = db;
+            const storeName = almacen;
+            const request = indexedDB.open(dbName);
+            request.onsuccess = (event) => {
+                const db = event.target.result;
+                if (db.objectStoreNames.contains(storeName)) {
+                    resolve(true);
+                } else {
+                    resolve(false);
+                }
+            };
+            request.onerror = (event) => {
+                console.error(`Error en la función existStore al abrir la base de datos ${db} para verificar si el almacen ${almacen} existe: ${event.target.error}`);
+                reject(event.target.error);
+            };
+
+        })
+    }
+
+    function almacenVacio(db, almacen) {
+        return new Promise((resolve, reject) => {
+            const dbName = db;
+            const storeName = almacen;
+            const request = indexedDB.open(dbName);
+            request.onsuccess = (event) => {
+                const db = event.target.result;
+                const transaction = db.transaction([storeName], 'readonly');
+                const store = transaction.objectStore(storeName);
+                const getAllRequest = store.getAll();
+                getAllRequest.onsuccess = (event) => {
+                    const data = event.target.result;
+                    if (data.length > 0) {
+                        resolve(false);
+                    }
+                    else {
+                        resolve(true);
+                    }
+                };
+                getAllRequest.onerror = (event) => {
+                    console.error(`Error en la función almacenVacio al verificar si el almacen ${almacen} tiene contenido: ${event.target.error}`);
+                    reject(event.target.error);
+                };
+            };
+            request.onerror = (event) => {
+                console.error(`Error en la función almacenVacio al abrir la base de datos ${db} para verificar si el almacen ${almacen} tiene contenido: ${event.target.error}`);
+                reject(event.target.error);
+            }
+        })
+    }
+
+    function leerDatos(database, store) {
+        return new Promise((resolve, reject) => {
+            datos = [];
+            const request = indexedDB.open(database);
+            request.onsuccess = (event) => {
+                const db = event.target.result;
+                const transaction = db.transaction(store, 'readonly');
+                const almacen = transaction.objectStore(store);
+                const cursorRequest = almacen.openCursor();
+                cursorRequest.onsuccess = (event) => {
+                    const cursor = event.target.result;
+                    if (cursor) {
+                        datos.push(cursor.value);
+                        cursor.continue();
+                    } else {
+                        resolve(datos);
+                    }
+                };
+                cursorRequest.onerror = function (event) {
+                    console.error(`Error en la función leerDatos al solcitar el cursor para leer el almacen ${store}: ${event.target.error}`);
+                    reject(event.target.error);
+                };
+            };
+            request.onerror = (event) => {
+                console.error(`Error en la función leerDatos al solcitar abrir la base de datos para leer el almacen ${store}: ${event.target.error}`);
+                reject(event.target.error);
+            }
+        })
+    }
+
+    function limpiarDatos(database, store) {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open(database);
+            request.onsuccess = (event) => {
+                const db = event.target.result;
+                const transaction = db.transaction(store, 'readwrite');
+                const datosStore = transaction.objectStore(store);
+                const clearRequest = datosStore.clear();
+                clearRequest.onsuccess = (clearEvent) => {
+                    resolve(true);
+                };
+                clearRequest.onerror = (event) => {
+                    console.error(`Error en la función limpiarDatos al solcitar limpiar el almacen ${store}: ${event.target.error}`);
+                    reject(event.target.error);
+                };
+            }
+            request.onerror = (event) => {
+                console.error(`Error en la función limpiarDatos al solcitar abrir la base de datos para limpiar el almacen ${store}: ${event.target.error}`);
+                reject(event.target.error);
+            }
+        })
+    }
+
+    function agregarDato(database, store, data) {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open(database);
+            request.onsuccess = (event) => {
+                const db = event.target.result;
+                const transaction = db.transaction(store, 'readwrite');
+                const datosStore = transaction.objectStore(store);
+                const clearRequest = datosStore.clear();
+                clearRequest.onsuccess = (clearEvent) => {
+                    const requestAgregar = datosStore.add(data);
+                    requestAgregar.onsuccess = (event) => {
+                        resolve(true);
+                    };
+                    requestAgregar.onerror = (event) => {
+                        console.error(`Error en la función agregarDato al agregar los datos al almacén ${store}: ${event.target.error}`);
+                        reject(event.target.error);
+                    };
+                };
+                clearRequest.onerror = (event) => {
+                    console.error(`Error en la función agregarDato al limpiar el almacén ${store} para ingresar los nuevos datos: ${event.target.error}`);
+                    reject(event.target.error);
+                };
+            };
+            request.onerror = (event) => {
+                console.error(`Error en la función agregarDato al abrir la base de datos ${database} para ingresar los nuevos datos: ${event.target.error}`);
+                reject(event.target.error);
+            }
+        })
+    }
+
+    function agregarDatos(database, store, data) {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open(database);
+            request.onsuccess = (event) => {
+                const db = event.target.result;
+                const transaction = db.transaction(store, 'readwrite');
+                const datosStore = transaction.objectStore(store);
+                const clearRequest = datosStore.clear();
+                clearRequest.onsuccess = (clearEvent) => {
+                    data.forEach(dato => {
+                        const requestAgregar = datosStore.add(dato);
+                        requestAgregar.onerror = (event) => {
+                            console.error(`Error en la función agregarDato al agregar los datos al almacén ${store}: ${event.target.error}`);
+                            reject(event.target.error);
+                        };
+                    })
+                };
+                clearRequest.onerror = (event) => {
+                    console.error(`Error en la función agregarDato al limpiar el almacén ${store} para ingresar los nuevos datos: ${event.target.error}`);
+                    reject(event.target.error);
+                };
+            };
+            request.onerror = (event) => {
+                console.error(`Error en la función agregarDato al abrir la base de datos ${database} para ingresar los nuevos datos: ${event.target.error}`);
+                reject(event.target.error);
+            }
+            resolve(true);
+        })
+    }
+
+    /* MANEJO DE RECURSOS ESTÁTICOS */
+
+    const urls = [
+        'http://localhost/dosxdos_app/index.html?utm_source=web_app_manifest',
+        'http://localhost/dosxdos_app/index.html',
+        'http://localhost/dosxdos_app/manifest.json',
+        'http://localhost/dosxdos_app/serviceworker.js',
+        'http://localhost/dosxdos_app/sw.js',
+        'http://localhost/dosxdos_app/css/index.css',
+        'http://localhost/dosxdos_app/rutas_montador.html',
+        'http://localhost/dosxdos_app/css/rutas_montador.css',
+        'http://localhost/dosxdos_app/ruta_montador.html',
+        'http://localhost/dosxdos_app/css/ruta_montador.css',
+        'http://localhost/dosxdos_app/linea_montador.html',
+        'http://localhost/dosxdos_app/css/linea_montador.css',
+        'http://localhost/dosxdos_app/fotos_y_firmas.html',
+        'http://localhost/dosxdos_app/css/fotos_y_firmas.css',
+        'http://localhost/dosxdos_app/css/fuentes/Roboto/Roboto-Light.ttf',
+        'http://localhost/dosxdos_app/css/fuentes/Merriweather/Merriweather-Light.ttf',
+        'http://localhost/dosxdos_app/css/fuentes/Merriweather/Merriweather-Bold.ttf',
+        'http://localhost/dosxdos_app/css/fuentes/Lora/Lora-Regular.ttf',
+        'http://localhost/dosxdos_app/css/fuentes/Lora/Lora-Medium.ttf',
+        'http://localhost/dosxdos_app/css/fuentes/Lora/Lora-Bold.ttf',
+        'http://localhost/dosxdos_app/img/candado.png',
+        'http://localhost/dosxdos_app/img/casa.png',
+        'http://localhost/dosxdos_app/img/casaWhite.png',
+        'http://localhost/dosxdos_app/img/dosxdos.png',
+        'http://localhost/dosxdos_app/img/email.png',
+        'http://localhost/dosxdos_app/img/flechaAbajo.png',
+        'http://localhost/dosxdos_app/img/fondo.jpg',
+        'http://localhost/dosxdos_app/img/logoPwa1024.png',
+        'http://localhost/dosxdos_app/img/logoPwa512.png',
+        'http://localhost/dosxdos_app/img/logoPwa384.png',
+        'http://localhost/dosxdos_app/img/logoPwa256.png',
+        'http://localhost/dosxdos_app/img/logoPwa192.png',
+        'http://localhost/dosxdos_app/img/logoPwa128.png',
+        'http://localhost/dosxdos_app/img/logoPwa96.png',
+        'http://localhost/dosxdos_app/img/logoPwa64.png',
+        'http://localhost/dosxdos_app/img/logoPwa32.png',
+        'http://localhost/dosxdos_app/img/logoPwa16.png',
+        'http://localhost/dosxdos_app/img/logo300.png',
+        'http://localhost/dosxdos_app/img/lupa.png',
+        'http://localhost/dosxdos_app/img/reloj.png',
+        'http://localhost/dosxdos_app/img/relojWhite.png',
+        'http://localhost/dosxdos_app/img/usuario.png',
+        'http://localhost/dosxdos_app/img/rutasWhite.png',
+        'http://localhost/dosxdos_app/img/cerrar.png',
+        'http://localhost/dosxdos_app/img/usuarios.png',
+        'http://localhost/dosxdos_app/img/trash.png',
+        'http://localhost/dosxdos_app/img/folder.png',
+        'http://localhost/dosxdos_app/img/comprimido.png',
+        'http://localhost/dosxdos_app/img/task.png',
+        'http://localhost/dosxdos_app/css/dosxdos.css',
+
+    ]
+
+    function cache() {
         caches.open('dosxdos').
             then((cache) => {
-                urlsToCache.forEach((resource) => {
+                urls.forEach((resource) => {
                     cache.match(resource)
                         .then((response) => {
                             if (!response) {
@@ -799,7 +1004,7 @@
         $opcionesUsuario = document.getElementById('opcionesUsuario'),
         $casa = document.getElementById('casa'),
         $usuario = document.getElementById('usuario'),
-        $rutas = document.getElementById('rutas'),
+        $contenido = document.getElementById('contenido'),
         $loader = document.getElementById('loader'),
         $body = document.getElementById('body'),
         $mensaje = document.getElementById('mensaje'),
@@ -811,8 +1016,7 @@
         $botonRutas = document.getElementById('rutasIconoBoton');
     let usuario,
         montador,
-        rutas,
-        lineas;
+        rutas;
 
     /* LOADER */
 
@@ -861,190 +1065,7 @@
         loaderOff();
     }
 
-    /* LEER DATOS DE INDEXDB */
-
-    function leerDatos(store) {
-
-        return new Promise((resolve, reject) => {
-            datos = [];
-            const request = indexedDB.open('dosxdos');
-            request.onsuccess = (event) => {
-                const db = event.target.result;
-                const transaction = db.transaction(store, 'readonly');
-                const almacen = transaction.objectStore(store);
-                const cursorRequest = almacen.openCursor();
-                cursorRequest.onsuccess = (event) => {
-                    const cursor = event.target.result;
-                    if (cursor) {
-                        datos.push(cursor.value);
-                        cursor.continue();
-                    } else {
-                        resolve(datos);
-                    }
-                };
-                cursorRequest.onerror = function (event) {
-                    error = event.target.error;
-                    mensaje = 'ERROR: ' + error;
-                    $textoMensaje.innerHTML = mensaje;
-                    console.error(error);
-                    mensajeOn();
-                    loaderOff();
-                };
-            };
-            request.onerror = (event) => {
-                error = event.target.error;
-                mensaje = 'ERROR: ' + error;
-                $textoMensaje.innerHTML = mensaje;
-                console.error(error);
-                mensajeOn();
-                loaderOff();
-            }
-        })
-    }
-
-    function leerDatos2(database, store) {
-        return new Promise((resolve, reject) => {
-            datos = [];
-            const request = indexedDB.open(database);
-            request.onsuccess = (event) => {
-                const db = event.target.result;
-                const transaction = db.transaction(store, 'readonly');
-                const almacen = transaction.objectStore(store);
-                const cursorRequest = almacen.openCursor();
-                cursorRequest.onsuccess = (event) => {
-                    const cursor = event.target.result;
-                    if (cursor) {
-                        datos.push(cursor.value);
-                        cursor.continue();
-                    } else {
-                        resolve(datos);
-                    }
-                };
-                cursorRequest.onerror = function (event) {
-                    console.error(`Error en la función leerDatos al solcitar el cursor para leer el almacen ${store}: ${event.target.error}`);
-                    reject(event.target.error);
-                };
-            };
-            request.onerror = (event) => {
-                console.error(`Error en la función leerDatos al solcitar abrir la base de datos para leer el almacen ${store}: ${event.target.error}`);
-                reject(event.target.error);
-            }
-        })
-    }
-
-    /* LIMPIAR ALMACÉN DE INDEXDB */
-
-    function limpiarDatos(store) {
-        return new Promise((resolve, reject) => {
-            const request = indexedDB.open('dosxdos');
-            request.onsuccess = (event) => {
-                const db = event.target.result;
-                const transaction = db.transaction(store, 'readwrite');
-                const datosStore = transaction.objectStore(store);
-                const clearRequest = datosStore.clear();
-                clearRequest.onsuccess = (clearEvent) => {
-                    resolve(true);
-                };
-                clearRequest.onerror = (event) => {
-                    error = event.target.error;
-                    mensaje = `Error al limpiar el almacén ${store}: ` + error;
-                    $textoMensaje.innerHTML = mensaje;
-                    console.error(error);
-                    mensajeOn();
-                    loaderOff();
-                };
-            }
-            request.onerror = (event) => {
-                error = event.target.error;
-                mensaje = `Error al abrir la base de datos para limpiar el almacén ${store}` + error;
-                $textoMensaje.innerHTML = mensaje;
-                console.error(error);
-                mensajeOn();
-                loaderOff();
-            }
-        })
-    }
-
-    function limpiarDatos2(database, store) {
-        return new Promise((resolve, reject) => {
-            const request = indexedDB.open(database);
-            request.onsuccess = (event) => {
-                const db = event.target.result;
-                const transaction = db.transaction(store, 'readwrite');
-                const datosStore = transaction.objectStore(store);
-                const clearRequest = datosStore.clear();
-                clearRequest.onsuccess = (clearEvent) => {
-                    resolve(true);
-                };
-                clearRequest.onerror = (event) => {
-                    console.error(`Error en la función limpiarDatos al solcitar limpiar el almacen ${store}: ${event.target.error}`);
-                    reject(event.target.error);
-                };
-            }
-            request.onerror = (event) => {
-                console.error(`Error en la función limpiarDatos al solcitar abrir la base de datos para limpiar el almacen ${store}: ${event.target.error}`);
-                reject(event.target.error);
-            }
-        })
-    }
-
-    function limpiarAlmacen(database, store) {
-        return new Promise((resolve, reject) => {
-            const request = indexedDB.open(database);
-            request.onsuccess = (event) => {
-                const db = event.target.result;
-                const transaction = db.transaction(store, 'readwrite');
-                const datosStore = transaction.objectStore(store);
-                const clearRequest = datosStore.clear();
-                clearRequest.onsuccess = (clearEvent) => {
-                    resolve(true);
-                };
-                clearRequest.onerror = (event) => {
-                    console.error(`Error en la función limpiarDatos al solcitar limpiar el almacen ${store}: ${event.target.error}`);
-                    reject(event.target.error);
-                };
-            }
-            request.onerror = (event) => {
-                console.error(`Error en la función limpiarDatos al solcitar abrir la base de datos para limpiar el almacen ${store}: ${event.target.error}`);
-                reject(event.target.error);
-            }
-        })
-    }
-
-    function almacenVacio(db, almacen) {
-        return new Promise((resolve, reject) => {
-            const dbName = db;
-            const storeName = almacen;
-            const request = indexedDB.open(dbName);
-            request.onsuccess = (event) => {
-                const db = event.target.result;
-                const transaction = db.transaction([storeName], 'readonly');
-                const store = transaction.objectStore(storeName);
-                const getAllRequest = store.getAll();
-                getAllRequest.onsuccess = (event) => {
-                    const data = event.target.result;
-                    if (data.length > 0) {
-                        resolve(false);
-                    }
-                    else {
-                        resolve(true);
-                    }
-                };
-                getAllRequest.onerror = (event) => {
-                    console.error(`Error en la función almacenVacio al verificar si el almacen ${almacen} tiene contenido: ${event.target.error}`);
-                    reject(event.target.error);
-                };
-            };
-            request.onerror = (event) => {
-                console.error(`Error en la función almacenVacio al abrir la base de datos ${db} para verificar si el almacen ${almacen} tiene contenido: ${event.target.error}`);
-                reject(event.target.error);
-            }
-        })
-    }
-
-
     /* CERRAR SESIÓN */
-
     function eliminarCookie(nombre) {
         const tiempoExpiracion = 1; // Segundo 1 de la Época Unix
         document.cookie = `${nombre}=; expires=${new Date(tiempoExpiracion * 1000).toUTCString()}; path=/;`;
@@ -1066,7 +1087,6 @@
                 console.error(`Error al eliminar la base de datos "${database}":`, event.target.error);
                 reject(event.target.error);
             };
-
         });
     }
 
@@ -1104,9 +1124,7 @@
                     }
                     else {
                         mensaje = 'Error: no se pudo recibir una respuesta de la api intermedia en la función fetchRutas'
-                        $textoMensaje.innerHTML = mensaje;
-                        mensajeOn();
-                        loaderOff();
+                        alerta(mensaje);
                     };
                 })
                 .then((res) => {
@@ -1127,35 +1145,27 @@
                             clearRequest.onerror = (event) => {
                                 error = event.target.error;
                                 mensaje = `ERROR: ` + error;
-                                $textoMensaje.innerHTML = mensaje;
                                 console.error(error);
-                                mensajeOn();
-                                loaderOff();
+                                alerta(mensaje);
                             };
                         };
                         request.onerror = (event) => {
                             error = event.target.error;
                             mensaje = `ERROR: ` + error;
-                            $textoMensaje.innerHTML = mensaje;
                             console.error(error);
-                            mensajeOn();
-                            loaderOff();
+                            alerta(mensaje);
                         }
                     }
                     else {
                         mensaje = res[1];
-                        $textoMensaje.innerHTML = mensaje;
                         console.error(error);
-                        mensajeOn();
-                        loaderOff();
+                        alerta(mensaje);
                     }
                 })
                 .catch((res) => {
-                    mensaje = 'Error al consultar las rutas: ' + res.message;
-                    $textoMensaje.innerHTML = mensaje;
-                    console.error(res);
-                    mensajeOn();
-                    loaderOff();
+                    mensaje = 'Sin conexión: ' + res.message;
+                    console.error(error);
+                    alerta(mensaje);
                 })
         })
     }
@@ -1209,28 +1219,31 @@
         });
     }
 
+
     /* SINCRONIZAR BASE DE DATOS */
 
     async function sincronizarDb() {
         try {
-            loaderOn();
-            const fRutas = await fetchRutas();
-            rutas = await leerDatos('rutas');
-            rutas = rutas.map(objeto => ({
-                cod: objeto['No.'],
-                nombre: objeto['Descripcion']
-            }));
-            const limpiarLineas = await limpiarAlmacen('dosxdos', 'lineas');
-            if (limpiarLineas) {
-                lineas = await fetchLineas(rutas);
-                if (lineas) {
-                    const mensaje = 'Se ha sincronizado la base de datos exitosamente';
-                    localStorage.setItem('mensaje', mensaje);
-                    window.location.href = "http://localhost/dosxdos_app/rutas_montador.html";
-                }
-                else {
-                    alerta('Error al cargar las líneas de las rutas del servidor, se han sincronizado las rutas pero no las líneas')
-                    loaderOff();
+            if (navigator.onLine) {
+                loaderOn();
+                const fRutas = await fetchRutas();
+                rutas = await leerDatos('dosxdos', 'rutas');
+                rutas = rutas.map(objeto => ({
+                    cod: objeto['No.'],
+                    nombre: objeto['Descripcion']
+                }));
+                const limpiarLineas = await limpiarDatos('dosxdos', 'lineas');
+                if (limpiarLineas) {
+                    lineas = await fetchLineas(rutas);
+                    if (lineas) {
+                        const mensaje = 'Se ha sincronizado la base de datos exitosamente';
+                        localStorage.setItem('mensaje', mensaje);
+                        window.location.href = "http://localhost/dosxdos_app/ruta_montador.html";
+                    }
+                    else {
+                        alerta('Error al cargar las líneas de las rutas del servidor, se han sincronizado las rutas pero no las líneas')
+                        loaderOff();
+                    }
                 }
             }
         } catch (error) {
@@ -1246,12 +1259,12 @@
 
                 loaderOn();
                 const fRutas = await fetchRutas();
-                rutas = await leerDatos2('dosxdos', 'rutas');
+                rutas = await leerDatos('dosxdos', 'rutas');
                 rutas = rutas.map(objeto => ({
                     cod: objeto['No.'],
                     nombre: objeto['Descripcion']
                 }));
-                const limpiarLineas = await limpiarDatos2('dosxdos', 'lineas');
+                const limpiarLineas = await limpiarDatos('dosxdos', 'lineas');
                 if (limpiarLineas) {
                     lineas = await fetchLineas(rutas);
                     if (lineas) {
@@ -1274,7 +1287,7 @@
         return new Promise((resolve, reject) => {
             const login = localStorage.getItem('login');
             if (login && login !== null) {
-                leerDatos('usuario')
+                leerDatos('dosxdos', 'usuario')
                     .then(res => {
                         usuario = res[0];
                         resolve(usuario.clase);
@@ -1291,7 +1304,7 @@
 
     function startBuscador() {
         if (buscador.value) {
-            botones = document.querySelectorAll('#rutas button');
+            botones = document.querySelectorAll('#contenido button');
             const valorBusqueda = buscador.value.toLowerCase();
             botones.forEach((boton) => {
                 const textoBoton = boton.textContent.toLowerCase();
@@ -1307,7 +1320,7 @@
                     // Restablecer el texto original sin resaltado
                     span.textContent = span.textContent;
                 }
-            });
+            })
         }
     }
 
@@ -1320,7 +1333,7 @@
                 window.location.href = "http://localhost/dosxdos_app/index.html";
             }
             else {
-                const Arrayusuario = await leerDatos('usuario');
+                const Arrayusuario = await leerDatos('dosxdos', 'usuario');
                 usuario = Arrayusuario[0];
                 let loginMontador = localStorage.getItem('loginMontador');
                 if (!loginMontador || loginMontador === null) {
@@ -1331,75 +1344,103 @@
                 if (usuario.imagen != '0') {
                     $imagenUsuario.src = usuario.imagen;
                 }
-                const rutasResult = await fetchRutas();
-                rutas = await leerDatos('rutas');
+                sinc = await sincronizarDb2();
+                sinc ? console.log("Base de datos sincronizada") : console.error("Error al sincronizar la base de datos");
+                rutas = await leerDatos('dosxdos', 'rutas');
                 rutas = rutas.map(objeto => ({
                     cod: objeto['No.'],
                     nombre: objeto['Descripcion']
                 }));
-                const fragmento = document.createDocumentFragment();
-                rutas.forEach((objeto, index) => {
-                    const button = document.createElement('button');
-                    button.className = 'ruta displayOn';
-                    button.type = 'button';
-                    button.id = `${objeto.cod}`;
-                    const texto = `${objeto.nombre}`;
-                    span = document.createElement('span');
-                    span.textContent = texto;
-                    button.appendChild(span);
-                    button.addEventListener('click', () => {
-                        const rutaStorage = button.id;
-                        localStorage.setItem('ruta', rutaStorage);
-                        const nombreRutaStorage = button.textContent;
-                        localStorage.setItem('nombreRuta', nombreRutaStorage);
-                        window.location.href = "http://localhost/dosxdos_app/ruta_montador.html";
+                const TotalLineas = await leerDatos('dosxdos', 'lineas');
+                if (TotalLineas) {
+                    //console.log(TotalLineas);
+                    const lineas = TotalLineas.filter(objeto => {
+                        return objeto.Proyecto == ruta;
                     });
-                    fragmento.appendChild(button);
-                });
-                $rutas.appendChild(fragmento);
-                const limpiarLineas = await limpiarAlmacen('dosxdos', 'lineas');
-                if (limpiarLineas) {
-                    lineas = await fetchLineas(rutas);
-                    if (lineas) {
-                        startBuscador();
-                        const editarUsuario = document.getElementById('editarUsuario');
-                        editarUsuario.addEventListener('click', e => {
-                            if (navigator.onLine) {
-                                window.location.href = "http://localhost/dosxdos_app/dosxdos.php?modulo=editarUsuario&id=" + usuario.id;
-                            } else {
-                                mensaje = 'No es posible acceder a las opciones de edición de usuario sin conexión a internet';
-                                alerta(mensaje);
-                                scrollToTop();
-                            }
-                        })
-                        const peticionesCierre = await procesarPeticiones2();
-                        loaderOff();
-                    }
-                    else {
-                        alerta('Error al cargar las líneas de las rutas del servidor');
-                        startBuscador();
-                        const editarUsuario = document.getElementById('editarUsuario');
-                        editarUsuario.addEventListener('click', e => {
-                            if (navigator.onLine) {
-                                window.location.href = "http://localhost/dosxdos_app/dosxdos.php?modulo=editarUsuario&id=" + usuario.id;
-                            } else {
-                                mensaje = 'No es posible acceder a las opciones de edición de usuario sin conexión a internet';
-                                alerta(mensaje);
-                                scrollToTop();
-                            }
-                        })
-                        const peticionesCierre = await procesarPeticiones2();
-                        loaderOff();
-                    }
+                    console.log(lineas);
+                    const fragmento = document.createDocumentFragment();
+                    lineas.forEach((objeto, index) => {
+                        const button = document.createElement('button');
+                        if (objeto.Estado == 'Pendiente') {
+                            button.className = 'ruta displayOn';
+                        }
+                        if (objeto.Estado == 'Realizado') {
+                            button.className = 'ruta2 displayOn';
+                        }
+                        if (objeto.Estado == '' || objeto.Estado == null) {
+                            button.className = 'ruta displayOn';
+                        }
+                        button.type = 'button';
+                        button.id = `${objeto.Linea}`;
+                        const observaciones = objeto.Observaciones;
+                        const LineaActividad = objeto.LineaActividad;
+                        const ot = objeto.OT;
+                        const cliente = objeto.Cliente;
+                        const nombreCliente = objeto.NombreCliente;
+                        texto = '';
+                        //NAVISION
+                        const otNavision = objeto.Navision_OT;
+                        if (observaciones) {
+                            texto = `${objeto.Sector} _ ${objeto.Zona} _ ${LineaActividad} _ ${objeto.NombrePuntoVenta} _ ${objeto.NombreCliente} _ ${objeto.TipoTrabajo} _ ${observaciones} _ NAVISION: ${otNavision} _ CRM: ${ot}`;
+                        } else {
+                            texto = `${objeto.Sector} _ ${objeto.Zona} _ ${LineaActividad} _ ${objeto.NombrePuntoVenta} _ ${objeto.NombreCliente} _ ${objeto.TipoTrabajo} _ NAVISION: ${otNavision} _ CRM: ${ot}`;
+                        }
+                        span = document.createElement('span');
+                        span.textContent = texto;
+                        button.appendChild(span);
+                        button.setAttribute('data-LineaActividad', LineaActividad);
+                        button.addEventListener('click', () => {
+                            const lineaStorage = button.id;
+                            const LineaActividadStorage = LineaActividad;
+                            const otStorage = ot;
+                            const clienteStorage = cliente;
+                            const nombreClienteStorage = nombreCliente;
+                            localStorage.setItem('renderizarHistorial', false);
+                            localStorage.setItem('linea', lineaStorage);
+                            localStorage.setItem('lineaActividad', LineaActividadStorage);
+                            localStorage.setItem('ot', otStorage);
+                            localStorage.setItem('cliente', clienteStorage);
+                            localStorage.setItem('nombreCliente', nombreClienteStorage);
+                            window.location.href = "http://localhost/dosxdos_app/linea_montador.html";
+                        });
+                        fragmento.appendChild(button);
+                    });
+                    $contenido.appendChild(fragmento);
+                    startBuscador();
+                    const editarUsuario = document.getElementById('editarUsuario');
+                    editarUsuario.addEventListener('click', e => {
+                        if (navigator.onLine) {
+                            window.location.href = "http://localhost/dosxdos_app/dosxdos.php?modulo=editarUsuario&id=" + usuario.id;
+                        } else {
+                            mensaje = 'No es posible acceder a las opciones de edición de usuario sin conexión a internet';
+                            alerta(mensaje);
+                            scrollToTop();
+                        }
+                    })
+                    const peticionesCierre = await procesarPeticiones2();
+                    setInterval(sincronizarDb, 300000);
+                    loaderOff();
                 }
-
+                else {
+                    alerta('Error al leer el almacén de líneas')
+                    const editarUsuario = document.getElementById('editarUsuario');
+                    editarUsuario.addEventListener('click', e => {
+                        if (navigator.onLine) {
+                            window.location.href = "http://localhost/dosxdos_app/dosxdos.php?modulo=editarUsuario&id=" + usuario.id;
+                        } else {
+                            mensaje = 'No es posible acceder a las opciones de edición de usuario sin conexión a internet';
+                            alerta(mensaje);
+                            scrollToTop();
+                        }
+                    })
+                    const peticionesCierre = await procesarPeticiones2();
+                    loaderOff();
+                }
             }
         } catch (error) {
             mensaje = 'ERROR: ' + error.message;
-            $textoMensaje.innerHTML = mensaje;
             console.error(error);
-            mensajeOn();
-            loaderOff();
+            alerta(mensaje);
         }
     }
 
@@ -1412,56 +1453,99 @@
                 window.location.href = "http://localhost/dosxdos_app/index.html";
             }
             else {
-                const Arrayusuario = await leerDatos('usuario');
+                const Arrayusuario = await leerDatos('dosxdos', 'usuario');
                 usuario = Arrayusuario[0];
                 montador = usuario.cod;
                 $nombreUsuario.innerHTML = usuario.nombre;
-                rutas = await leerDatos('rutas');
+                rutas = await leerDatos('dosxdos', 'rutas');
                 rutas = rutas.map(objeto => ({
                     cod: objeto['No.'],
                     nombre: objeto['Descripcion']
                 }));
-                const fragmento = document.createDocumentFragment();
-                rutas.forEach((objeto, index) => {
-                    const button = document.createElement('button');
-                    button.className = 'ruta displayOn';
-                    button.type = 'button';
-                    button.id = `${objeto.cod}`;
-                    const texto = `${objeto.nombre}`;
-                    span = document.createElement('span');
-                    span.textContent = texto;
-                    button.appendChild(span);
-                    button.addEventListener('click', () => {
-                        const rutaStorage = button.id;
-                        localStorage.setItem('ruta', rutaStorage);
-                        const nombreRutaStorage = button.textContent;
-                        localStorage.setItem('nombreRuta', nombreRutaStorage);
-                        window.location.href = "http://localhost/dosxdos_app/ruta_montador.html";
+                const TotalLineas = await leerDatos('dosxdos', 'lineas');
+                if (TotalLineas) {
+                    //console.log(TotalLineas);
+                    const lineas = TotalLineas.filter(objeto => {
+                        return objeto.Proyecto == ruta;
                     });
-                    fragmento.appendChild(button);
-                });
-                $rutas.appendChild(fragmento);
-                startBuscador();
-                const editarUsuario = document.getElementById('editarUsuario');
-                editarUsuario.addEventListener('click', e => {
-                    if (navigator.onLine) {
-                        window.location.href = "http://localhost/dosxdos_app/dosxdos.php?modulo=editarUsuario&id=" + usuario.id;
-                    } else {
-                        mensaje = 'No es posible acceder a las opciones de edición de usuario sin conexión a internet';
-                        alerta(mensaje);
-                        scrollToTop();
-                    }
-                })
-                loaderOff();
+                    //console.log(lineas);
+                    const fragmento = document.createDocumentFragment();
+                    lineas.forEach((objeto, index) => {
+                        const button = document.createElement('button');
+                        if (objeto.Estado == 'Pendiente') {
+                            button.className = 'ruta displayOn';
+                        }
+                        if (objeto.Estado == 'Realizado') {
+                            button.className = 'ruta2 displayOn';
+                        }
+                        if (objeto.Estado == '' || objeto.Estado == null) {
+                            button.className = 'ruta displayOn';
+                        }
+                        button.type = 'button';
+                        button.id = `${objeto.Linea}`;
+                        const observaciones = objeto.Observaciones;
+                        const LineaActividad = objeto.LineaActividad;
+                        const ot = objeto.OT;
+                        texto = '';
+                        //NAVISION
+                        const otNavision = objeto.Navision_OT;
+                        if (observaciones) {
+                            texto = `${objeto.Sector} _ ${objeto.Zona} _ ${LineaActividad} _ ${objeto.NombrePuntoVenta} _ ${objeto.NombreCliente} _ ${objeto.TipoTrabajo} _ ${observaciones} _ NAVISION: ${otNavision} _ CRM: ${ot}`;
+                        } else {
+                            texto = `${objeto.Sector} _ ${objeto.Zona} _ ${LineaActividad} _ ${objeto.NombrePuntoVenta} _ ${objeto.NombreCliente} _ ${objeto.TipoTrabajo} _ NAVISION: ${otNavision} _ CRM: ${ot}`;
+                        }
+                        span = document.createElement('span');
+                        span.textContent = texto;
+                        button.appendChild(span);
+                        button.setAttribute('data-LineaActividad', LineaActividad);
+                        button.addEventListener('click', () => {
+                            const lineaStorage = button.id;
+                            const LineaActividadStorage = LineaActividad;
+                            const otStorage = ot;
+                            localStorage.setItem('renderizarHistorial', false);
+                            localStorage.setItem('linea', lineaStorage);
+                            localStorage.setItem('lineaActividad', LineaActividadStorage);
+                            localStorage.setItem('ot', otStorage);
+                            window.location.href = "http://localhost/dosxdos_app/linea_montador.html";
+                        });
+                        fragmento.appendChild(button);
+                    });
+                    $contenido.appendChild(fragmento);
+                    startBuscador();
+                    const editarUsuario = document.getElementById('editarUsuario');
+                    editarUsuario.addEventListener('click', e => {
+                        if (navigator.onLine) {
+                            window.location.href = "http://localhost/dosxdos_app/dosxdos.php?modulo=editarUsuario&id=" + usuario.id;
+                        } else {
+                            mensaje = 'No es posible acceder a las opciones de edición de usuario sin conexión a internet';
+                            alerta(mensaje);
+                            scrollToTop();
+                        }
+                    })
+                    loaderOff();
+                }
+                else {
+                    alerta('Error al leer el almacén de líneas')
+                    const editarUsuario = document.getElementById('editarUsuario');
+                    editarUsuario.addEventListener('click', e => {
+                        if (navigator.onLine) {
+                            window.location.href = "http://localhost/dosxdos_app/dosxdos.php?modulo=editarUsuario&id=" + usuario.id;
+                        } else {
+                            mensaje = 'No es posible acceder a las opciones de edición de usuario sin conexión a internet';
+                            alerta(mensaje);
+                            scrollToTop();
+                        }
+                    })
+                    loaderOff();
+                }
             }
         } catch (error) {
             mensaje = 'ERROR: ' + error.message;
-            $textoMensaje.innerHTML = mensaje;
             console.error(error);
-            mensajeOn();
-            loaderOff();
+            alerta(mensaje);
         }
     }
+
 
     /* ERROR EN EVENTOS CLIC */
 
@@ -1501,24 +1585,21 @@
         window.location.href = "http://localhost/dosxdos_app/historial_montador.html";
     })
 
-    /* NOTIFICACIONES */
-    const notificaciones = document.getElementById('notificaciones');
-    notificaciones.addEventListener('click', () => {
-        window.location.href = "http://localhost/dosxdos_app/notificaciones.html";
-    })
 
     /* EVENTOS CLIC */
 
     document.addEventListener("click", (e) => {
+
         if (e.target.matches('#cerrarSesion')) {
             cerrarSesion();
         }
+
     })
 
     /* BUSCADOR */
 
     buscador.addEventListener('input', () => {
-        botones = document.querySelectorAll('#rutas button');
+        botones = document.querySelectorAll('#contenido button');
         const valorBusqueda = buscador.value.toLowerCase();
         botones.forEach((boton) => {
             const textoBoton = boton.textContent.toLowerCase();
@@ -1540,8 +1621,8 @@
     /* PETICIONES PENDIENTES */
 
     function actualizarLinea(json) {
-        console.log(json);
         return new Promise((resolve, reject) => {
+            console.log(json);
             fetch("http://localhost/dosxdos_app/apirest/lineas.php",
                 {
                     method: "PUT",
@@ -1692,16 +1773,16 @@
                     }
                 };
                 if (tipoVector == 'lineas') {
-                    vaciarStore = await limpiarDatos2('dosxdos', 'peticionesLineas');
+                    vaciarStore = await limpiarDatos('dosxdos', 'peticionesLineas');
                     mensaje += '-Datos pendientes enviados al servidor-';
                 } else if (tipoVector == 'fotos') {
-                    vaciarStore = await limpiarDatos2('dosxdos', 'peticionesFotos');
+                    vaciarStore = await limpiarDatos('dosxdos', 'peticionesFotos');
                     mensaje += '-Fotos pendientes subidas al servidor-';
                 } else if (tipoVector == 'firmas') {
-                    vaciarStore = await limpiarDatos2('dosxdos', 'peticionesFirmas');
+                    vaciarStore = await limpiarDatos('dosxdos', 'peticionesFirmas');
                     mensaje += '-Firmas pendientes subidas al servidor-';
                 } else if (tipoVector == 'notas') {
-                    vaciarStore = await limpiarDatos2('dosxdos', 'notas');
+                    vaciarStore = await limpiarDatos('dosxdos', 'notas');
                     mensaje += '-Notas pendientes subidas al servidor-';
                 }
                 resolve(mensaje);
@@ -1720,7 +1801,7 @@
             mensaje = '';
             const exPeticionesLineas = await almacenVacio('dosxdos', 'peticionesLineas');
             if (!exPeticionesLineas) {
-                const peticionesLineas = await leerDatos2('dosxdos', 'peticionesLineas');
+                const peticionesLineas = await leerDatos('dosxdos', 'peticionesLineas');
                 if (peticionesLineas) {
                     //console.log(peticionesLineas);
                     const enviarPeticionesLineas = await enviarPeticiones(peticionesLineas, 'lineas')
@@ -1733,7 +1814,7 @@
             }
             const exPeticionesFotos = await almacenVacio('dosxdos', 'peticionesFotos');
             if (!exPeticionesFotos) {
-                const peticionesFotos = await leerDatos2('dosxdos', 'peticionesFotos');
+                const peticionesFotos = await leerDatos('dosxdos', 'peticionesFotos');
                 if (peticionesFotos) {
                     //console.log(peticionesFotos);
                     const enviarPeticionesFotos = await enviarPeticiones(peticionesFotos, 'fotos')
@@ -1746,7 +1827,7 @@
             }
             const exPeticionesFirmas = await almacenVacio('dosxdos', 'peticionesFirmas');
             if (!exPeticionesFirmas) {
-                const peticionesFirmas = await leerDatos2('dosxdos', 'peticionesFirmas');
+                const peticionesFirmas = await leerDatos('dosxdos', 'peticionesFirmas');
                 if (peticionesFirmas) {
                     //console.log(peticionesFirmas);
                     const enviarPeticionesFirmas = await enviarPeticiones(peticionesFirmas, 'firmas')
@@ -1759,7 +1840,7 @@
             }
             const exPeticionesNotas = await almacenVacio('dosxdos', 'notas');
             if (!exPeticionesNotas) {
-                const peticionesNotas = await leerDatos2('dosxdos', 'notas');
+                const peticionesNotas = await leerDatos('dosxdos', 'notas');
                 if (peticionesNotas) {
                     //console.log(peticionesFirmas);
                     const enviarPeticionesNotas = await enviarPeticiones(peticionesNotas, 'notas')
@@ -1797,7 +1878,7 @@
             }
             const exPeticionesLineas = await almacenVacio('dosxdos', 'peticionesLineas');
             if (!exPeticionesLineas) {
-                const peticionesLineas = await leerDatos2('dosxdos', 'peticionesLineas');
+                const peticionesLineas = await leerDatos('dosxdos', 'peticionesLineas');
                 if (peticionesLineas) {
                     //console.log(peticionesLineas);
                     const enviarPeticionesLineas = await enviarPeticiones(peticionesLineas, 'lineas')
@@ -1810,7 +1891,7 @@
             }
             const exPeticionesFotos = await almacenVacio('dosxdos', 'peticionesFotos');
             if (!exPeticionesFotos) {
-                const peticionesFotos = await leerDatos2('dosxdos', 'peticionesFotos');
+                const peticionesFotos = await leerDatos('dosxdos', 'peticionesFotos');
                 if (peticionesFotos) {
                     //console.log(peticionesFotos);
                     const enviarPeticionesFotos = await enviarPeticiones(peticionesFotos, 'fotos')
@@ -1823,7 +1904,7 @@
             }
             const exPeticionesFirmas = await almacenVacio('dosxdos', 'peticionesFirmas');
             if (!exPeticionesFirmas) {
-                const peticionesFirmas = await leerDatos2('dosxdos', 'peticionesFirmas');
+                const peticionesFirmas = await leerDatos('dosxdos', 'peticionesFirmas');
                 if (peticionesFirmas) {
                     //console.log(peticionesFirmas);
                     const enviarPeticionesFirmas = await enviarPeticiones(peticionesFirmas, 'firmas')
@@ -1836,7 +1917,7 @@
             }
             const exPeticionesNotas = await almacenVacio('dosxdos', 'notas');
             if (!exPeticionesNotas) {
-                const peticionesNotas = await leerDatos2('dosxdos', 'notas');
+                const peticionesNotas = await leerDatos('dosxdos', 'notas');
                 if (peticionesNotas) {
                     //console.log(peticionesFirmas);
                     const enviarPeticionesNotas = await enviarPeticiones(peticionesNotas, 'notas')
@@ -1886,6 +1967,7 @@
     })
 
     /* TAREAS AL INICIAR LA PANTALLA CON EL ESTADO DE LA CONEXIÓN */
+
     if (navigator.onLine) {
         console.log('La aplicación está en línea.');
         //cache();
