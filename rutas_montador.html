@@ -33,6 +33,7 @@
             --x18: 4.37vw;
             --x2_5: 0.61vw;
             --x150: 36.40vw;
+            --x35: 8.49vw;
         }
 
         /* INICIO */
@@ -216,7 +217,6 @@
         }
 
         #notificaciones {
-            display: flex;
             position: absolute;
             width: var(--x60);
             height: var(--x60);
@@ -229,6 +229,21 @@
         #bell {
             width: var(--x60);
             height: var(--x60);
+        }
+
+        #sinNotificaciones {
+            position: absolute;
+            width: var(--x60);
+            height: var(--x60);
+            justify-content: center;
+            align-items: center;
+            right: var(--x10);
+            cursor: pointer;
+        }
+
+        #bell2 {
+            width: var(--x35);
+            height: var(--x35);
         }
 
         #numNotificaciones {
@@ -556,6 +571,7 @@
                 --x18: 18px;
                 --x2_5: 2.5px;
                 --x150: 150px;
+                --x35: 35px;
             }
         }
 
@@ -582,6 +598,7 @@
                 --x18: 0.9vw;
                 --x2_5: 0.13vw;
                 --x150: 7.5vw;
+                --x35: 1.75vw;
             }
 
             #menu {
@@ -612,6 +629,7 @@
                 --x18: 10.8px;
                 --x2_5: 1.5px;
                 --x150: 90px;
+                --x35: 21px;
             }
 
             #menu {
@@ -631,11 +649,14 @@
 
         <div id="logo">
             <img src="http://localhost/dosxdos_app/img/logo300.png" alt="Logo">
-            <div id="notificaciones">
+            <div id="notificaciones" class="displayOff">
                 <img src="http://localhost/dosxdos_app/img/bell.gif" alt="bell" id="bell">
-                <div id="numNotificaciones" class="displayOff">
+                <div id="numNotificaciones" class="displayOn">
                     <p id="numNtf">3</p>
                 </div>
+            </div>
+            <div id="sinNotificaciones" class="displayOn">
+                <img src="http://localhost/dosxdos_app/img/bell2.png" alt="bell2" id="bell2">
             </div>
         </div>
 
@@ -659,12 +680,12 @@
 
         <nav id="opcionesMenu" class="displayOff">
 
-            <div class="opcionMenu" id="horarios">
+            <!-- <div class="opcionMenu" id="horarios">
                 <button class="botonIcono" type="button" id="horarios">
                     <img src="http://localhost/dosxdos_app/img/relojWhite.png">
                 </button>
                 <p>Horarios</p>
-            </div>
+            </div> -->
 
             <div class="opcionMenu" id="rutasIcono">
                 <button class="botonIcono" type="button" id="rutasIconoBoton">
@@ -1504,6 +1525,10 @@
     /* NOTIFICACIONES */
     const notificaciones = document.getElementById('notificaciones');
     notificaciones.addEventListener('click', () => {
+        window.location.href = "http://localhost/dosxdos_app/notificaciones.html";
+    })
+    const sinNotificaciones = document.getElementById('sinNotificaciones');
+    sinNotificaciones.addEventListener('click', () => {
         window.location.href = "http://localhost/dosxdos_app/notificaciones.html";
     })
 

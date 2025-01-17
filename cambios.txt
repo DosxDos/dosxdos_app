@@ -1,9 +1,19 @@
 ruta_montador.html (hacerlo en todos los html) 16-1-2025
     - Logo html y css (notificaciones)
-    - Variable --x150
-    - Evento Click de notificaciones
-    - sw: bell.png, 
+    - Variables css:
+        --x150: 36.40vw;
+        --x150: 150px;
+        --x150: 7.5vw;
+        --x150: 90px;
+        --x35: 8.49vw;
+        --x35: 35px;
+        --x35: 1.75vw;
+        --x35: 21px;
+    - Evento Click de notificaciones y sinNotificaciones
+    - sw: bell.png, bell2.png
+    - Comentar la opción de horarios y las opciones que ya no están funcionales: 
 
 notificaciones.html
     -sw: notificaciones.html
+
 
