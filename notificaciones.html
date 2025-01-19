@@ -725,6 +725,14 @@
 
 <script>
 
+    const ruta = localStorage.getItem('ruta');
+    if (ruta && ruta !== null) {
+        console.log(ruta);
+    }
+    else {
+        console.log('ruta no definida');
+    }
+
     const $opcionesMenu = document.getElementById('opcionesMenu'),
         $opcionesUsuario = document.getElementById('opcionesUsuario'),
         $casa = document.getElementById('casa'),
@@ -1117,18 +1125,7 @@
                         button.appendChild(span);
                         button.setAttribute('data-LineaActividad', LineaActividad);
                         button.addEventListener('click', () => {
-                            const lineaStorage = button.id;
-                            const LineaActividadStorage = LineaActividad;
-                            const otStorage = ot;
-                            const clienteStorage = cliente;
-                            const nombreClienteStorage = nombreCliente;
-                            localStorage.setItem('renderizarHistorial', false);
-                            localStorage.setItem('linea', lineaStorage);
-                            localStorage.setItem('lineaActividad', LineaActividadStorage);
-                            localStorage.setItem('ot', otStorage);
-                            localStorage.setItem('cliente', clienteStorage);
-                            localStorage.setItem('nombreCliente', nombreClienteStorage);
-                            window.location.href = "http://localhost/dosxdos_app/linea_montador.html";
+                            aceptarNotificación(LineaActividad);
                         });
                         fragmento.appendChild(button);
                     });
@@ -1225,14 +1222,7 @@
                         button.appendChild(span);
                         button.setAttribute('data-LineaActividad', LineaActividad);
                         button.addEventListener('click', () => {
-                            const lineaStorage = button.id;
-                            const LineaActividadStorage = LineaActividad;
-                            const otStorage = ot;
-                            localStorage.setItem('renderizarHistorial', false);
-                            localStorage.setItem('linea', lineaStorage);
-                            localStorage.setItem('lineaActividad', LineaActividadStorage);
-                            localStorage.setItem('ot', otStorage);
-                            window.location.href = "http://localhost/dosxdos_app/linea_montador.html";
+                            aceptarNotificación(LineaActividad);
                         });
                         fragmento.appendChild(button);
                     });
@@ -1713,6 +1703,24 @@
     } else {
         console.log('La aplicación está fuera de línea.');
         appOffline();
+    }
+
+    async function aceptarNotificación(id) {
+        return new Promise((resolve) => {
+            try {
+                const userResponse = window.confirm("Confirma por favor la aceptación de la notificación");
+                if (userResponse) {
+                    console.log("El usuario aceptó la notificación: " + id);
+                    resolve(true); // El cliente acepta
+                } else {
+                    console.error("El usuario no aceptó la notificación: " + id);
+                    resolve(false); // El cliente no acepta
+                }
+            } catch (error) {
+                console.error("Ocurrió un error al aceptar la notificación:", error);
+                resolve(false); // En caso de error, devolvemos false
+            }
+        });
     }
 
 </script>
