@@ -518,22 +518,6 @@
             background-color: rgba(0, 0, 0, 0.573);
         }
 
-        #cabeceraContenido {
-            display: flex;
-            width: 100%;
-            justify-content: space-evenly;
-            align-items: center;
-            padding: var(--x15);
-            background-color: #f4f4f4;
-        }
-
-        #titulo2 {
-            font-family: 'Lora-Bold', 'Lora-Bold';
-            font-size: var(--x25);
-            padding: var(--x15);
-            text-align: center;
-        }
-
         /* MOVILES GRANDES */
         @media screen and (min-width: 412px) and (max-width: 767px) {
             :root {
@@ -698,24 +682,9 @@
 
         </div>
 
-        <h1 id="titulo" class="displayOn">Notificaciones</h1>
+        <h1 id="titulo" class="displayOn">Título</h1>
 
     </section>
-
-    <div id="cabeceraContenido">
-        <div class="opcionMenu" id="pendientesIcono">
-            <button class="botonIcono" type="button" id="pendientesIconoBoton">
-                <img src="http://localhost/dosxdos_app/img/x.png">
-            </button>
-        </div>
-        <div class="opcionMenu" id="aceptadasIcono">
-            <button class="botonIcono" type="button" id="aceptadasIconoBoton">
-                <img src="http://localhost/dosxdos_app/img/check.png">
-            </button>
-        </div>
-    </div>
-
-    <h2 id="titulo2">Sin aceptar</h2>
 
     <section id="contenido"></section>
 
@@ -738,10 +707,7 @@
         buscador = document.getElementById('buscador'),
         $nombreUsuario = document.getElementById('nombreUsuario'),
         $imagenUsuario = document.getElementById('imagenUsuario'),
-        $botonRutas = document.getElementById('rutasIconoBoton'),
-        $titulo2 = document.getElementById('titulo2'),
-        $pendientesIcono = document.getElementById('pendientesIcono'),
-        $aceptadasIcono = document.getElementById('aceptadasIcono');
+        $botonRutas = document.getElementById('rutasIconoBoton');
     let usuario,
         montador,
         rutas;
@@ -1308,20 +1274,6 @@
     const historialIcono = document.getElementById('historialIcono');
     historialIcono.addEventListener('click', () => {
         window.location.href = "http://localhost/dosxdos_app/historial_montador.html";
-    })
-
-    $pendientesIcono.addEventListener('click', () => {
-        loaderOn();
-        $titulo2.innerHTML = 'Sin aceptar';
-        console.log('Renderizar notificaciones sin aceptar');
-        loaderOff();
-    })
-
-    $aceptadasIcono.addEventListener('click', () => {
-        loaderOn();
-        $titulo2.innerHTML = 'Aceptadas';
-        console.log('Renderizar notificaciones aceptadas');
-        loaderOff();
     })
 
     /* EVENTOS CLIC */

@@ -10,10 +10,12 @@ ruta_montador.html (hacerlo en todos los html) 16-1-2025
         --x35: 1.75vw;
         --x35: 21px;
     - Evento Click de notificaciones y sinNotificaciones
-    - sw: bell.png, bell2.png
-    - Comentar la opción de horarios y las opciones que ya no están funcionales: 
+    - sw: bell.png, bell2.png, x.png, check.png
+    - Comentar la opción de horarios y las opciones que ya no están funcionales dentro del menú
 
 notificaciones.html
     -sw: notificaciones.html
+
+plantilla.html
 
 
