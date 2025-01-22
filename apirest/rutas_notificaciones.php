@@ -112,6 +112,28 @@ switch ($metodo) {
         break;
     case 'PUT':
         switch ($ruta) {
+            case (preg_match('/^notificaciones\/aceptar\/\d+$/', $ruta) ? true : false):
+                try {
+                    if (isset($datos['visto']) && isset($rutas[2]) && is_numeric($rutas[2])) {
+                        $id = $rutas[2];
+                        $datos['visto'] = $datos['visto'] == 'true' ? 1 : 0;
+                        $resultado = $notificacionesControlador->actualizarVisto($id,$datos['visto']);
+                        //Aquí instanciamos el objeto de la clase Respuestas
+                        if($resultado['status'] == "error"){
+                            $respuesta = $respuestas->error_400($resultado['message']);
+                        }elseif($resultado['status'] == "success"){
+                            $respuesta = $respuestas->ok($resultado['message']);
+                        }
+                        echo json_encode($respuesta);
+                    } else {
+                        $respuesta = $respuestas->error_400('Datos incompletos o incorrectos en la solicitud a la api de notificaciones/aceptar');
+                        echo json_encode($respuesta);
+                    }
+                } catch (Throwable $e) {
+                    $respuesta = $respuestas->error_500($e->getMessage());
+                    echo json_encode($respuesta);
+                }
+                break;
             case 'notificaciones':
                 $id = $ruta[1];
                 $notificacionesControlador->actualizarNotificacion($id, $datos);

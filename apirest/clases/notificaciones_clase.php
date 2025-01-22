@@ -234,11 +234,11 @@ class Notificaciones {
     }
 
     //Este método marca una notificación como vista
-    public function markAsSeen($id) {
+    public function actualizarVisto($id, $visto) {
         try {
-            $query = "UPDATE " . $this->table_name . " SET fecha_visto = true WHERE id = ?";
+            $query = "UPDATE " . $this->table_name . " SET fecha_visto = NOW(), visto = ? WHERE id = ?";
             $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('i', $id);
+            $stmt->bind_param('ii', $visto , $id);
 
             if ($stmt->execute()) {
                 return true;

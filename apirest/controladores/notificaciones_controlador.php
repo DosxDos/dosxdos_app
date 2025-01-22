@@ -51,6 +51,18 @@ class NotificacionesControlador {
         return $enviarNotificacion;
     }
 
+    // Método que sirve para saber si un cliente a visualizado una notificación
+    public function actualizarVisto($id, $visto) {
+        // Lógica para actualizar una visualización de una notificación
+        $resultado = $this->notificaciones->actualizarVisto($id, $visto);
+        // Retornar el resultado en formato JSON
+        if($resultado){
+            return ['status' => 'success', 'message' => 'Se actualizó el estado de la notificación ' . $id];
+        }else{
+            return ['status' => 'error', 'message' => 'No se pudo actualizar el estado de la notificación'];
+        }
+    }
+
     // Método para actualizar una notificación existente
     public function actualizarNotificacion($id, $datos) {
         // Lógica para actualizar una notificación existente
