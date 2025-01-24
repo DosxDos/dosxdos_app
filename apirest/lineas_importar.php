@@ -62,34 +62,36 @@ if (isset($_POST['codOt']) && (isset($_FILES['archivo_csv']) && $_FILES['archivo
         //CONSULTA PDV
         $i = 0;
         foreach ($datos as $dato) {
-            $pdv = $dato['No. Punto de Venta'];
-            $query = "SELECT Name, Direcci_n, Zona FROM Puntos_de_venta WHERE N = '$pdv'";
-            $response = $crm->query($query);
-            if ($crm->estado) {
-                /*
+            if (isset($dato['No. Punto de Venta'])) {
+                $pdv = $dato['No. Punto de Venta'];
+                $query = "SELECT Name, Direcci_n, Zona FROM Puntos_de_venta WHERE N = '$pdv'";
+                $response = $crm->query($query);
+                if ($crm->estado) {
+                    /*
                 echo 'BIEN!';
                 echo '<pre>';
                 print_r($crm->respuesta);
                 echo '</pre>';
                 */
-                if ($crm->respuesta[1]) {
-                    $datos[$i]['PuntoDeVentaId'] = $crm->respuesta[1]['data'][0]['id'];
-                    $datos[$i]['PuntoDeVentaNombre'] = $crm->respuesta[1]['data'][0]['Name'];
-                    $datos[$i]['PuntoDeVentaDireccion'] = $crm->respuesta[1]['data'][0]['Direcci_n'];
-                    $datos[$i]['PuntoDeVentaZona'] = $crm->respuesta[1]['data'][0]['Zona'];
-                    $i++;
+                    if ($crm->respuesta[1]) {
+                        $datos[$i]['PuntoDeVentaId'] = $crm->respuesta[1]['data'][0]['id'];
+                        $datos[$i]['PuntoDeVentaNombre'] = $crm->respuesta[1]['data'][0]['Name'];
+                        $datos[$i]['PuntoDeVentaDireccion'] = $crm->respuesta[1]['data'][0]['Direcci_n'];
+                        $datos[$i]['PuntoDeVentaZona'] = $crm->respuesta[1]['data'][0]['Zona'];
+                        $i++;
+                    } else {
+                        $datos[$i]['PuntoDeVentaId'] = null;
+                        $datos[$i]['PuntoDeVentaNombre'] = null;
+                        $datos[$i]['PuntoDeVentaDireccion'] = null;
+                        $datos[$i]['PuntoDeVentaZona'] = null;
+                        $i++;
+                    }
                 } else {
-                    $datos[$i]['PuntoDeVentaId'] = null;
-                    $datos[$i]['PuntoDeVentaNombre'] = null;
-                    $datos[$i]['PuntoDeVentaDireccion'] = null;
-                    $datos[$i]['PuntoDeVentaZona'] = null;
-                    $i++;
+                    echo 'ERROR';
+                    echo '<pre>';
+                    print_r($crm->respuestaError);
+                    echo '</pre>';
                 }
-            } else {
-                echo 'ERROR';
-                echo '<pre>';
-                print_r($crm->respuestaError);
-                echo '</pre>';
             }
         }
 
