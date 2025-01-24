@@ -151,7 +151,7 @@ if (isset($_POST['codOt']) && (isset($_FILES['archivo_csv']) && $_FILES['archivo
                 $lineas_crm[$i]['Punto de venta'] = $dato['PuntoDeVentaId'];
                 $aleatorio = generarCadenaAleatoriaSegura(10);
                 $lineas_crm[$i]['Nombre de Línea de OT'] = $dato['PuntoDeVentaNombre'] . ', ' . $ot['prefijoOt'] . ', ' . $codOt . ', ' . $dato['PuntoDeVentaZona'] . ', ' .  $dato['PuntoDeVentaDireccion']  . ', ' . $aleatorio;
-                $lineas_crm[$i]['Nombre de Empresa'] = $ot['idEmpresa'];
+                $lineas_crm[$i]['Nombre del cliente'] = $ot['idEmpresa'];
                 $lineas_crm[$i]['OT relacionada'] = $ot['idOt'];
                 $lineas_crm[$i]['Fase'] = 'Nuevas';
                 $lineas_crm[$i]['Notion ID'] = $ot['notionId'];
