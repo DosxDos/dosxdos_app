@@ -232,6 +232,10 @@ if (isset($_POST['codOt']) && (isset($_FILES['archivo_csv']) && $_FILES['archivo
             foreach ($lineas_crm as $fila) {
                 fputcsv($csvFile, $fila);
             }
+        } else {
+            $mensaje .= "NO SE HAN ENCONTRADO LÍNEAS PARA IMPORTAR";
+            echo $mensaje;
+            die();
         }
 
         // Cierra el archivo CSV
@@ -252,11 +256,13 @@ if (isset($_POST['codOt']) && (isset($_FILES['archivo_csv']) && $_FILES['archivo
     }
 } else {
     ?>
-    <form action="lineas_importar.php" method="post" style="display: flex; flex-direction: column; width: 250px;" enctype="multipart/form-data">
-        <input type="text" placeholder="CÓDIGO DE OT DEL CRM" name="codOt">
-        <input type="file" name="archivo_csv" style="margin-top: 10px;">
-        <button type="submit" style="margin-top: 10px;">ENVIAR</button>
-    </form>
+    <CENTER>
+        <form action="lineas_importar.php" method="post" style="display: flex; flex-direction: column; width: 250px;" enctype="multipart/form-data">
+            <input type="text" placeholder="CÓDIGO DE OT DEL CRM" name="codOt">
+            <input type="file" name="archivo_csv" style="margin-top: 10px;">
+            <button type="submit" style="margin-top: 10px;">ENVIAR</button>
+        </form>
+    </CENTER>
 <?php
 }
 
