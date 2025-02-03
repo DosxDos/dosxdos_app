@@ -142,7 +142,7 @@ class NotificacionesControlador
         $idRuta = json_encode($crmDatos['respuesta'][1]['data'][0]['id']);
 
         $confirmada = true;
-        //===================Paso opcional por si se quiere verificar la linea confirmada===================
+        //===================Se requiere verificar la linea confirmada y se recogen los campos de la línea para mandarlos al montador===================
 
         list($confirmada, $camposLinea) = $this->obtenerConfirmada($idLinea, $camposLinea);
 
@@ -177,7 +177,7 @@ class NotificacionesControlador
  
         $datos = [
             'usuario_id' => $idAppMontadores,
-            'titulo' => '(Esto es una prueba no hacer caso) Nueva línea en la ruta ' . $faseRuta . ' con línea ' . $camposLinea['Codigo_de_l_nea'],
+            'titulo' => 'Nueva línea en la ruta ' . $faseRuta . ' con línea ' . $camposLinea['Codigo_de_l_nea'],
             'mensaje' => 'Datos de línea: '.$camposLinea['Product_Name'],
             'tipo_usuario' => 'montador'
         ];
