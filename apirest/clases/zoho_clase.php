@@ -35,6 +35,11 @@ class Zoho extends conexion
         }
     }
 
+    public function getTokens()
+    {
+        return $this->tokens;
+    }
+
     private function renovarToken()
     {
         try {

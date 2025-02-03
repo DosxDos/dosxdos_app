@@ -40,6 +40,16 @@ class Crm extends Zoho
         }
     }
 
+    public function getUrlQuery()
+    {
+        return $this->urlQuery;
+    }
+
+    public function setUrlQuery($urlQuery)
+    {
+        $this->urlQuery = $urlQuery;
+    }
+
     public function query($query)
     {
         try {

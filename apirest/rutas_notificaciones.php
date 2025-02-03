@@ -89,12 +89,39 @@ switch ($metodo) {
                     if (isset($datos['usuario_id']) && isset($datos['titulo']) && isset($datos['mensaje']) && isset($datos['tipo_usuario'])) {
                         $resultado = $notificacionesControlador->enviarNotificacion($datos);
                         //Aquí instanciamos el objeto de la clase Respuestas
-                        if($resultado['status'] == "error"){
+                        if ($resultado['status'] == "error") {
                             $respuesta = $respuestas->error_400($resultado['message']);
-                        }elseif($resultado['status'] == "success"){
+                        } elseif ($resultado['status'] == "success") {
                             $respuesta = $respuestas->ok($resultado['tokensNotificados']);
                         }
                         echo json_encode($respuesta);
+                    } else {
+                        $respuesta = $respuestas->error_400('Datos incompletos o incorrectos en la solicitud a la api de notificaciones');
+                        echo json_encode($respuesta);
+                    }
+                } catch (Throwable $e) {
+                    $respuesta = $respuestas->error_500($e->getMessage());
+                    echo json_encode($respuesta);
+                }
+                break;
+            case 'notificaciones/linea_nueva':
+                try {
+                    if (isset($datos['id_linea']) && isset($datos['fase_ruta'])) {
+                        //Comprueba la logica del CRM
+                        $resultado = $notificacionesControlador->enviarNotificacionLineaNueva($datos['id_linea'], $datos['fase_ruta']);
+                        
+                        // Verifica si el resultado tiene errores
+                        if (isset($resultado['status']) && $resultado['status'] == "error") {
+                            // Obtener el error del método error_400
+                            $respuesta = $respuestas->error_400($resultado['message']);
+                            echo json_encode($respuesta);
+                            // Convertir el resultado a JSON antes de enviarlo
+                            exit;
+                        } elseif (isset($resultado['status']) && $resultado['status'] == "success") {
+                            // Convertir el resultado a JSON antes de enviarlo
+                            //$respuesta = $respuestas->ok($resultado['message']);
+                            echo json_encode($resultado);
+                        }                        
                     } else {
                         $respuesta = $respuestas->error_400('Datos incompletos o incorrectos en la solicitud a la api de notificaciones');
                         echo json_encode($respuesta);
@@ -117,11 +144,11 @@ switch ($metodo) {
                     if (isset($datos['visto']) && isset($rutas[2]) && is_numeric($rutas[2])) {
                         $id = $rutas[2];
                         $datos['visto'] = $datos['visto'] == 'true' ? 1 : 0;
-                        $resultado = $notificacionesControlador->actualizarVisto($id,$datos['visto']);
+                        $resultado = $notificacionesControlador->actualizarVisto($id, $datos['visto']);
                         //Aquí instanciamos el objeto de la clase Respuestas
-                        if($resultado['status'] == "error"){
+                        if ($resultado['status'] == "error") {
                             $respuesta = $respuestas->error_400($resultado['message']);
-                        }elseif($resultado['status'] == "success"){
+                        } elseif ($resultado['status'] == "success") {
                             $respuesta = $respuestas->ok($resultado['message']);
                         }
                         echo json_encode($respuesta);
@@ -134,23 +161,38 @@ switch ($metodo) {
                     echo json_encode($respuesta);
                 }
                 break;
-            case 'notificaciones':
-                $id = $ruta[1];
-                $notificacionesControlador->actualizarNotificacion($id, $datos);
-                break;
             default:
-                echo json_encode(['error' => 'Ruta no encontrada']);
+                $respuesta = $respuestas->error_400("No existe la ruta en el método PUT");
+                echo json_encode($respuesta);
                 break;
         }
         break;
     case 'DELETE':
         switch ($ruta) {
-            case 'notificaciones':
-                $id = $ruta[1];
-                $notificacionesControlador->eliminarNotificacion($id);
+            case (preg_match('/^notificaciones\/token\/[a-zA-Z0-9]+:[a-zA-Z0-9_-]+$/', $ruta) ? true : false):
+                try {
+                    if (isset($rutas[2])) {
+                        $token = $rutas[2];
+                        $resultado = $notificacionesControlador->eliminarNotificacionToken($token);
+                        //Aquí instanciamos el objeto de la clase Respuestas
+                        if ($resultado['status'] == "error") {
+                            $respuesta = $respuestas->error_400($resultado['message']);
+                        } elseif ($resultado['status'] == "success") {
+                            $respuesta = $respuestas->ok($resultado['message']);
+                        }
+                        echo json_encode($respuesta);
+                    } else {
+                        $respuesta = $respuestas->error_400('Datos incompletos o incorrectos en la solicitud a la api de notificaciones/aceptar');
+                        echo json_encode($respuesta);
+                    }
+                } catch (Throwable $e) {
+                    $respuesta = $respuestas->error_500($e->getMessage());
+                    echo json_encode($respuesta);
+                }
                 break;
             default:
-                echo json_encode(['error' => 'Ruta no encontrada']);
+                $respuesta = $respuestas->error_400("Ruta no encontrada por el método DELETE");
+                echo json_encode($respuesta);
                 break;
         }
         break;

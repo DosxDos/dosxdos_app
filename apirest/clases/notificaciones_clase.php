@@ -346,5 +346,20 @@ class Notificaciones {
             'tokensNotificados' => $tokensNotificados
         ];
     }
+    //Este método elimina un token de notificación
+    public function eliminarNotificacionToken($token) {
+        try {
+            $query = "DELETE FROM tokens WHERE BINARY token = ?";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('s', $token);
+
+            if ($stmt->execute()) {
+                return true;
+            }
+            return false;
+        } catch (\Throwable $th) {
+            return false;
+        }
+    }
 }
 ?>
