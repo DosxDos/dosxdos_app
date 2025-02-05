@@ -136,7 +136,7 @@ class Lineas extends Conexion
                 if ($json['Incidencia']) {
                     $LineaVector['data'][0]['Motivo_de_incidencia'] = $json['Incidencia'];
                     $LineaVector['data'][0]['Montador_de_la_incidencia'] = $usuario;
-                    $LineaVector['data'][0]['Fase'] = "Incidencias";
+                    $LineaVector['data'][0]['Fase'] = "Incidencias_montador";
                 }
                 $LineaVector['data'][0]['D_as_actuaci_n'] = $json['DiasActuacion'];
                 $LineaVector['data'][0]['Fecha_actuaci_n'] = $json['FechaActuacion'];

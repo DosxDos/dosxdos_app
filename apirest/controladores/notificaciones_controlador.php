@@ -203,6 +203,80 @@ class NotificacionesControlador
         return $datosEncapsulados;
     }
 
+    // Método para eliminar una notificación 
+    public function enviarNotificacionLineaUrgencia($idLinea, $faseRuta)
+    {
+        //===================Primera consulta Zoho para obtener datos de la ruta===================
+
+        $crmDatos = $this->obtenerDatosRuta($faseRuta);
+        if (isset($crmDatos['respuestaError'])) {
+            return ['status' => 'error', 'message' => 'No se pudo obtener los datos de la ruta'];
+        }
+        $idRuta = json_encode($crmDatos['respuesta'][1]['data'][0]['id']);
+
+        $confirmada = true;
+        //===================Se requiere verificar la linea confirmada y se recogen los campos de la línea para mandarlos al montador===================
+
+        list($confirmada, $camposLinea) = $this->obtenerConfirmadaUrgente($idLinea, $camposLinea);
+
+        if ($confirmada === false) {
+            return ['status' => 'error', 'message' => 'No se pudo obtener el estado de la línea'];
+        }
+        //===================Segunda consulta Zoho cambiar datos de la línea para eso primero recoger los datos===================
+
+        /*
+        $actualizarLinea = $this->actualizarLineaUrgente($idLinea, $confirmada);
+
+        // Si no se actualizan los datos correctamente, retornar un mensaje de error
+        if (!$actualizarLinea) {
+            return ["status" => "error", "message" => "Error al actualizar el registro."];
+        }
+        */
+
+        //===================Obtener los montadores de una ruta=======================================
+        $datosAsociadosRuta = $this->obtenerDatosMontadoreAsociadosRuta($idRuta);
+
+        if(isset($datosAsociadosRuta['status']) && $datosAsociadosRuta['status'] === 'error'){
+            return $datosAsociadosRuta;
+        }
+
+        //===================Recoger el idApp de los montadores a través de la linea==================
+
+        $idAppMontadores = $this->obtenerIdAppMontadoresDeIdLinea($datosAsociadosRuta);
+
+        if(isset($idAppMontadores['status']) && $idAppMontadores['status'] === 'error'){
+            return $idAppMontadores;
+        }
+
+        //===================Enviar notificación a los montadores==================
+ 
+        $datos = [
+            'usuario_id' => $idAppMontadores,
+            'titulo' => '"LÍNEA URGENTE" en la ruta ' . $faseRuta . ' con línea ' . $camposLinea['Codigo_de_l_nea'],
+            'mensaje' => 'Datos de línea: '.$camposLinea['Product_Name'],
+            'tipo_usuario' => 'montador'
+        ];
+
+        $enviarNotificaciones = $this->enviarNotificacion($datos);
+
+        if ($enviarNotificaciones['status'] === 'error') {
+            return ["status" => "error", "message" => "Error al enviar las notificaciones a los montadores."];
+        }
+
+        $datosEncapsulados = [
+            'idLinea' => $idLinea,
+            'idRuta' =>  json_decode($idRuta),
+            'confirmada' => $confirmada,
+            'datosAsociadosRuta' => $datosAsociadosRuta,
+            'idAppMontadores' => $idAppMontadores,
+            'enviarNotificaciones' => $enviarNotificaciones,
+            'datos_enviados_montador' => $datos,
+            'status' => 'success'
+        ];
+        
+        return $datosEncapsulados;
+    }
+
     public function obtenerIdAppMontadoresDeIdLinea($datosAsociadosRuta)
     {
         $idAppMontadores = [];
@@ -264,6 +338,29 @@ class NotificacionesControlador
         return false;
     }
 
+    public function actualizarLineaUrgente($idLinea, $confirmada)
+    {
+        $zohoDatos = new Zoho;
+        //Crear la estructura básica de JSON con un array en "data"
+        $data = [
+            "data" => [
+                [
+                    "Urgente" => $confirmada,  // ID del Lead o Contacto
+                ],
+            ]
+        ];
+
+        $dataJson = json_encode($data);
+
+        $zohoDatos = $zohoDatos->put("/crm/v6/Products/$idLinea", $dataJson);
+        // Verificar que la respuesta es válida (no es un error)
+        if (isset($zohoDatos[1]['data'][0]['code']) && $zohoDatos[1]['data'][0]['code'] === 'SUCCESS') {
+            // Si 'data' es 'SUCCESS' entonces se actualizó correctamente
+            return true;
+        }
+        return false;
+    }
+
     // Función para obtener y modificar el campo "Confirmada" de un producto dado el ID
     public function obtenerConfirmada($idLinea, &$camposLinea)
     {
@@ -290,6 +387,38 @@ class NotificacionesControlador
         // Verificar si el campo 'Confirmada' existe en la respuesta y modificarlo
         if (isset($datosArray['respuesta'][1]['data'])) {
             $confirmada = $datosArray['respuesta'][1]['data'][0]['Linea_nueva_en_Ruta'] = true; // Establecer confirmada a true
+        }
+
+        // Retornar el valor modificado de 'Confirmada' y los campos de la línea
+        return [$confirmada ?? false, $camposLinea]; // Retorna el valor de Confirmada o false si no se encontró, y los campos de la línea
+    }
+
+    // Función para obtener y modificar el campo "Confirmada" de un producto dado el ID
+    public function obtenerConfirmadaUrgente($idLinea, &$camposLinea)
+    {
+        $crmDatos = new Crm;
+        // Inicializar la clase CRM
+        //codigo de linea en el titulo
+        //Nombre de la linea en el mensaje
+        $camposLineas = "Urgente,Codigo_de_l_nea,Product_Name";
+
+        // Consulta SQL-like para obtener datos
+        $query = "SELECT $camposLineas FROM Products WHERE id = $idLinea";
+
+        // Enviar la solicitud POST
+        $crmDatos->query($query);
+
+        // Obtener los datos en formato JSON
+        $datosArray = json_encode($crmDatos);
+
+        // Convertir los datos JSON a array PHP
+        $datosArray = json_decode($datosArray, true);
+
+        $camposLinea = $datosArray['respuesta'][1]['data'][0];
+
+        // Verificar si el campo 'Confirmada' existe en la respuesta y modificarlo
+        if (isset($datosArray['respuesta'][1]['data'])) {
+            $confirmada = $datosArray['respuesta'][1]['data'][0]['Urgente'] = true; // Establecer confirmada a true
         }
 
         // Retornar el valor modificado de 'Confirmada' y los campos de la línea
