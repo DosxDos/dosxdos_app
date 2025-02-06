@@ -277,6 +277,115 @@ class NotificacionesControlador
         return $datosEncapsulados;
     }
 
+    // Método para enviar una notificación cada vez que una ruta se a abierto
+    public function enviarNotificacionRutaAbierta($faseRuta)
+    {
+        //===================Primera consulta Zoho para obtener datos de la ruta===================
+
+        $crmDatos = $this->obtenerDatosRutaAbierta($faseRuta);
+        if (isset($crmDatos['respuestaError'])) {
+            return ['status' => 'error', 'message' => 'No se pudo obtener los datos de la ruta'];
+        }
+        $idRuta = json_encode($crmDatos['respuesta'][1]['data'][0]['id']);
+
+        $confirmada = true;
+        //===================Obtener los montadores de una ruta=======================================
+        $datosAsociadosRuta = $this->obtenerDatosMontadoreAsociadosRuta($idRuta);
+
+        if(isset($datosAsociadosRuta['status']) && $datosAsociadosRuta['status'] === 'error'){
+            return $datosAsociadosRuta;
+        }
+
+        //===================Recoger el idApp de los montadores a través de la linea==================
+
+        $idAppMontadores = $this->obtenerIdAppMontadoresDeIdLinea($datosAsociadosRuta);
+
+        if(isset($idAppMontadores['status']) && $idAppMontadores['status'] === 'error'){
+            return $idAppMontadores;
+        }
+
+        //===================Enviar notificación a los montadores==================
+ 
+        $datos = [
+            'usuario_id' => $idAppMontadores,
+            'titulo' => 'Se ha abierto la ruta ' . $faseRuta,
+            'mensaje' => 'la ruta esta abierta y se van a ir añadiendo rutas en la ruta: ' . $faseRuta,
+            'tipo_usuario' => 'montador'
+        ];
+
+        $enviarNotificaciones = $this->enviarNotificacion($datos);
+
+        if ($enviarNotificaciones['status'] === 'error') {
+            return ["status" => "error", "message" => "Error al enviar las notificaciones a los montadores."];
+        }
+
+        $datosEncapsulados = [
+            'idRuta' =>  json_decode($idRuta),
+            'datosAsociadosRuta' => $datosAsociadosRuta,
+            'idAppMontadores' => $idAppMontadores,
+            'enviarNotificaciones' => $enviarNotificaciones,
+            'datos_enviados_montador' => $datos,
+            'status' => 'success'
+        ];
+        
+        return $datosEncapsulados;
+    }
+
+    // Método para eliminar una notificación 
+    public function enviarNotificacionRutaCerrada($faseRuta)
+    {
+        //===================Primera consulta Zoho para obtener datos de la ruta===================
+
+        $crmDatos = $this->obtenerDatosRuta($faseRuta);
+        if (isset($crmDatos['respuestaError'])) {
+            return ['status' => 'error', 'message' => 'No se pudo obtener los datos de la ruta'];
+        }
+        $idRuta = json_encode($crmDatos['respuesta'][1]['data'][0]['id']);
+
+        $confirmada = true;
+        //===================Obtener los montadores de una ruta=======================================
+        $datosAsociadosRuta = $this->obtenerDatosMontadoreAsociadosRuta($idRuta);
+
+        if(isset($datosAsociadosRuta['status']) && $datosAsociadosRuta['status'] === 'error'){
+            return $datosAsociadosRuta;
+        }
+
+        //===================Recoger el idApp de los montadores a través de la linea==================
+
+        $idAppMontadores = $this->obtenerIdAppMontadoresDeIdLinea($datosAsociadosRuta);
+
+        if(isset($idAppMontadores['status']) && $idAppMontadores['status'] === 'error'){
+            return $idAppMontadores;
+        }
+
+        //===================Enviar notificación a los montadores==================
+ 
+        $datos = [
+            'usuario_id' => $idAppMontadores,
+            'titulo' => 'Se ha cerrado la ruta ' . $faseRuta,
+            'mensaje' => 'la ruta esta cerrada y se van a ir añadiendo solo lar rutas urgentes en la ruta: ' . $faseRuta,
+            'tipo_usuario' => 'montador'
+        ];
+
+        $enviarNotificaciones = $this->enviarNotificacion($datos);
+
+        if ($enviarNotificaciones['status'] === 'error') {
+            return ["status" => "error", "message" => "Error al enviar las notificaciones a los montadores."];
+        }
+
+        $datosEncapsulados = [
+            'idRuta' =>  json_decode($idRuta),
+            'confirmada' => $confirmada,
+            'datosAsociadosRuta' => $datosAsociadosRuta,
+            'idAppMontadores' => $idAppMontadores,
+            'enviarNotificaciones' => $enviarNotificaciones,
+            'datos_enviados_montador' => $datos,
+            'status' => 'success'
+        ];
+        
+        return $datosEncapsulados;
+    }
+
     public function obtenerIdAppMontadoresDeIdLinea($datosAsociadosRuta)
     {
         $idAppMontadores = [];
@@ -430,6 +539,21 @@ class NotificacionesControlador
         $camposRutas = "Cerrada, Email, Secondary_Email, Created_By, Tag, Fecha_cerrada, Record_Image, Modified_By, Email_Opt_Out, Name, Owner";
         $crmDatos = new Crm;
         $query = "SELECT $camposRutas FROM Rutas where Name = $faseRuta AND Cerrada = true"; //esto esta cerrada tiene que ser true
+        // Enviar la solicitud POST
+        $crmDatos->query($query);
+        //solucionar el error Cannot use object of type Crm as array
+        $crmDatos = json_encode($crmDatos);
+        $crmDatos = json_decode($crmDatos, true); // Decode JSON string into an array
+
+        return $crmDatos;
+    }
+
+    //hacer consulta a Zoho para obtener datos de la ruta
+    public function obtenerDatosRutaAbierta($faseRuta)
+    {
+        $camposRutas = "Cerrada, Email, Secondary_Email, Created_By, Tag, Fecha_cerrada, Record_Image, Modified_By, Email_Opt_Out, Name, Owner";
+        $crmDatos = new Crm;
+        $query = "SELECT $camposRutas FROM Rutas where Name = $faseRuta AND Cerrada = false"; //esto esta cerrada tiene que ser true
         // Enviar la solicitud POST
         $crmDatos->query($query);
         //solucionar el error Cannot use object of type Crm as array

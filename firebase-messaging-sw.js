@@ -18,54 +18,49 @@ if (navigator.onLine) {
 
     // Escucha mensajes en segundo plano
     messaging.onBackgroundMessage((payload) => {
-        console.log('[firebase-messaging-sw.js] Recibió un mensaje en segundo plano: ', payload);
-        const notificationTitle = payload.notification.title || 'Notificación';
+        console.log('[firebase-messaging-sw.js] Recibió un mensaje en segundo plano:', payload);
+
+        const notificationTitle = payload.data.title || 'Notificación';
         const notificationOptions = {
-            body: payload.notification.body || '',
-            icon: payload.notification.icon || '/icon.png',
+            body: payload.data.body || '',
+            icon: payload.data.icon || 'https://dosxdos.app.iidos.com/img/dosxdoslogoNuevoRojo.png',
             data: {
-                url: payload.notification.click_action || 'https://dosxdos.app.iidos.com/notificaciones.html',
-            },
+                url: payload.data.click_action || 'https://dosxdos.app.iidos.com/notificaciones.html'
+            }
         };
+
         self.registration.showNotification(notificationTitle, notificationOptions);
     });
+
 
     // Escucha mensajes en segundo plano
     messaging.onMessage((payload) => {
-        console.log('[firebase-messaging-sw.js] Recibió un mensaje en segundo plano: ', payload);
-        const notificationTitle = payload.notification.title || 'Notificación';
-        const notificationOptions = {
-            body: payload.notification.body || '',
-            icon: payload.notification.icon || '/icon.png',
-            data: {
-                url: payload.notification.click_action || 'https://dosxdos.app.iidos.com/notificaciones.html',
-            },
-        };
-        self.registration.showNotification(notificationTitle, notificationOptions);
+        console.log('Mensaje en primer plano recibido:', payload);
+
+        if (!document.hidden) { // Solo muestra la alerta si la app está en primer plano
+            alert(`Nueva notificación: ${payload.data.title}`);
+        }
     });
+
 
     // Maneja clics en las notificaciones
     self.addEventListener('notificationclick', (event) => {
-        console.log('[firebase-messaging-sw.js] Notificación clickeada: ', event);
+        console.log('[firebase-messaging-sw.js] Notificación clickeada:', event);
 
-        event.notification.close(); // Cierra la notificación al hacer clic
+        event.notification.close();
 
-        // Abre o redirige al usuario a la URL especificada en los datos de la notificación
-        if (event.notification.data && event.notification.data.url) {
-            event.waitUntil(
-                clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
-                    for (const client of clientList) {
-                        // Si ya está abierta una pestaña con la URL, enfócala
-                        if (client.url === event.notification.data.url && 'focus' in client) {
-                            return client.focus();
-                        }
+        let url = event.notification.data?.url || 'https://dosxdos.app.iidos.com/notificaciones.html';
+
+        event.waitUntil(
+            clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+                for (const client of clientList) {
+                    if (client.url === url && 'focus' in client) {
+                        return client.focus();
                     }
-                    // Si no hay ninguna pestaña abierta, abre una nueva
-                    if (clients.openWindow) {
-                        return clients.openWindow(event.notification.data.url);
-                    }
-                })
-            );
-        }
+                }
+                return clients.openWindow(url);
+            })
+        );
     });
+
 }

@@ -109,7 +109,7 @@ switch ($metodo) {
                     if (isset($datos['id_linea']) && isset($datos['fase_ruta'])) {
                         //Comprueba la logica del CRM
                         $resultado = $notificacionesControlador->enviarNotificacionLineaNueva($datos['id_linea'], $datos['fase_ruta']);
-                        
+
                         // Verifica si el resultado tiene errores
                         if (isset($resultado['status']) && $resultado['status'] == "error") {
                             // Obtener el error del método error_400
@@ -121,7 +121,7 @@ switch ($metodo) {
                             // Convertir el resultado a JSON antes de enviarlo
                             //$respuesta = $respuestas->ok($resultado['message']);
                             echo json_encode($resultado);
-                        }                        
+                        }
                     } else {
                         $respuesta = $respuestas->error_400('Datos incompletos o incorrectos en la solicitud a la api de notificaciones');
                         echo json_encode($respuesta);
@@ -136,7 +136,7 @@ switch ($metodo) {
                     if (isset($datos['id_linea']) && isset($datos['fase_ruta'])) {
                         //Comprueba la logica del CRM
                         $resultado = $notificacionesControlador->enviarNotificacionLineaUrgencia($datos['id_linea'], $datos['fase_ruta']);
-                        
+
                         // Verifica si el resultado tiene errores
                         if (isset($resultado['status']) && $resultado['status'] == "error") {
                             // Obtener el error del método error_400
@@ -148,7 +148,61 @@ switch ($metodo) {
                             // Convertir el resultado a JSON antes de enviarlo
                             //$respuesta = $respuestas->ok($resultado['message']);
                             echo json_encode($resultado);
-                        }                        
+                        }
+                    } else {
+                        $respuesta = $respuestas->error_400('Datos incompletos o incorrectos en la solicitud a la api de notificaciones');
+                        echo json_encode($respuesta);
+                    }
+                } catch (Throwable $e) {
+                    $respuesta = $respuestas->error_500($e->getMessage());
+                    echo json_encode($respuesta);
+                }
+                break;
+            case 'notificaciones/ruta_abierta':
+                try {
+                    if (isset($datos['fase_ruta'])) {
+                        //Comprueba la logica del CRM
+                        $resultado = $notificacionesControlador->enviarNotificacionRutaAbierta($datos['fase_ruta']);
+
+                        // Verifica si el resultado tiene errores
+                        if (isset($resultado['status']) && $resultado['status'] == "error") {
+                            // Obtener el error del método error_400
+                            $respuesta = $respuestas->error_400($resultado['message']);
+                            echo json_encode($respuesta);
+                            // Convertir el resultado a JSON antes de enviarlo
+                            exit;
+                        } elseif (isset($resultado['status']) && $resultado['status'] == "success") {
+                            // Convertir el resultado a JSON antes de enviarlo
+                            //$respuesta = $respuestas->ok($resultado['message']);
+                            echo json_encode($resultado);
+                        }
+                    } else {
+                        $respuesta = $respuestas->error_400('Datos incompletos o incorrectos en la solicitud a la api de notificaciones');
+                        echo json_encode($respuesta);
+                    }
+                } catch (Throwable $e) {
+                    $respuesta = $respuestas->error_500($e->getMessage());
+                    echo json_encode($respuesta);
+                }
+                break;
+            case 'notificaciones/ruta_cerrada':
+                try {
+                    if (isset($datos['fase_ruta'])) {
+                        //Comprueba la logica del CRM
+                        $resultado = $notificacionesControlador->enviarNotificacionRutaCerrada($datos['fase_ruta']);
+
+                        // Verifica si el resultado tiene errores
+                        if (isset($resultado['status']) && $resultado['status'] == "error") {
+                            // Obtener el error del método error_400
+                            $respuesta = $respuestas->error_400($resultado['message']);
+                            echo json_encode($respuesta);
+                            // Convertir el resultado a JSON antes de enviarlo
+                            exit;
+                        } elseif (isset($resultado['status']) && $resultado['status'] == "success") {
+                            // Convertir el resultado a JSON antes de enviarlo
+                            //$respuesta = $respuestas->ok($resultado['message']);
+                            echo json_encode($resultado);
+                        }
                     } else {
                         $respuesta = $respuestas->error_400('Datos incompletos o incorrectos en la solicitud a la api de notificaciones');
                         echo json_encode($respuesta);

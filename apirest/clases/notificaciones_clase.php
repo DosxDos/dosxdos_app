@@ -1,12 +1,15 @@
 <?php
+
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Notification;
+
 require_once __DIR__ . '/conexion_clase.php';
 require_once __DIR__ . '/../config.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-class Notificaciones {
+class Notificaciones
+{
     private $conn;
     private $table_name = "notificaciones_push";
 
@@ -18,98 +21,114 @@ class Notificaciones {
     private $tipo_usuario;
     private $fecha_visto;
 
-    public function __construct($id = null, $usuario_id = null, $titulo = null, $mensaje = null, $fecha_envio = null, $tipo_usuario = null, $fecha_visto = false) {
+    public function __construct($id = null, $usuario_id = null, $titulo = null, $mensaje = null, $fecha_envio = null, $tipo_usuario = null, $fecha_visto = false)
+    {
         $db = new Conexion();
         $this->conn = $db->conexion;
     }
 
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function setId($id) {
+    public function setId($id)
+    {
         $this->id = $id;
     }
 
-    public function getUsuarioId() {
+    public function getUsuarioId()
+    {
         return $this->usuario_id;
     }
 
-    public function setUsuarioId($usuario_id) {
+    public function setUsuarioId($usuario_id)
+    {
         $this->usuario_id = $usuario_id;
     }
 
-    public function getTitulo() {
+    public function getTitulo()
+    {
         return $this->titulo;
     }
 
-    public function setTitulo($titulo) {
+    public function setTitulo($titulo)
+    {
         $this->titulo = $titulo;
     }
 
-    public function getMensaje() {
+    public function getMensaje()
+    {
         return $this->mensaje;
     }
 
-    public function setMensaje($mensaje) {
+    public function setMensaje($mensaje)
+    {
         $this->mensaje = $mensaje;
     }
 
-    public function getFechaEnvio() {
+    public function getFechaEnvio()
+    {
         return $this->fecha_envio;
     }
 
-    public function setFechaEnvio($fecha_envio) {
+    public function setFechaEnvio($fecha_envio)
+    {
         $this->fecha_envio = $fecha_envio;
     }
 
-    public function getTipoUsuario() {
+    public function getTipoUsuario()
+    {
         return $this->tipo_usuario;
     }
 
-    public function setTipoUsuario($tipo_usuario) {
+    public function setTipoUsuario($tipo_usuario)
+    {
         $this->tipo_usuario = $tipo_usuario;
     }
 
-    public function getFechaVisto() {
+    public function getFechaVisto()
+    {
         return $this->fecha_visto;
     }
 
-    public function setFechaVisto($fecha_visto) {
+    public function setFechaVisto($fecha_visto)
+    {
         $this->fecha_visto = $fecha_visto;
     }
 
-    public function obtenerNotificaciones($pageIndex = 1, $pageSize = 200) {
+    public function obtenerNotificaciones($pageIndex = 1, $pageSize = 200)
+    {
         try {
             // Calcular el offset según la página solicitada
             $offset = ($pageIndex - 1) * $pageSize;
-    
+
             // Consulta SQL para obtener las notificaciones
             $query = "SELECT * FROM " . $this->table_name . " LIMIT ?, ?";
             $stmt = $this->conn->prepare($query);
-    
+
             // Vincular parámetros para la consulta
             $stmt->bind_param('ii', $offset, $pageSize);
             $stmt->execute();
-    
+
             // Obtener el resultado
             $result = $stmt->get_result();
-            
+
             // Verificar si hay resultados
             if ($result->num_rows > 0) {
                 $notificaciones = [];
-    
+
                 // Recoger los resultados en un arreglo
                 while ($row = $result->fetch_assoc()) {
                     $notificaciones[] = $row;
                 }
-    
+
                 // Devolver las notificaciones
                 return $notificaciones;
             } else {
                 return []; // Si no hay resultados, devolver un arreglo vacío
             }
-    
+
             // Cerrar la declaración
             $stmt->close();
         } catch (Exception $e) {
@@ -119,37 +138,38 @@ class Notificaciones {
         }
     }
 
-    public function obtenerNotificacionesPorId($pageIndex = 1, $pageSize = 200, $usuario_id) {
+    public function obtenerNotificacionesPorId($pageIndex = 1, $pageSize = 200, $usuario_id)
+    {
         try {
             // Calcular el offset según la página solicitada
             $offset = ($pageIndex - 1) * $pageSize;
-    
+
             // Consulta SQL para obtener las notificaciones
             $query = "SELECT * FROM " . $this->table_name . " where usuario_id = ? LIMIT ?, ?";
             $stmt = $this->conn->prepare($query);
-    
+
             // Vincular parámetros para la consulta
-            $stmt->bind_param('iii', $usuario_id , $offset, $pageSize);
+            $stmt->bind_param('iii', $usuario_id, $offset, $pageSize);
             $stmt->execute();
-    
+
             // Obtener el resultado
             $result = $stmt->get_result();
-            
+
             // Verificar si hay resultados
             if ($result->num_rows > 0) {
                 $notificaciones = [];
-    
+
                 // Recoger los resultados en un arreglo
                 while ($row = $result->fetch_assoc()) {
                     $notificaciones[] = $row;
                 }
-    
+
                 // Devolver las notificaciones
                 return $notificaciones;
             } else {
                 return []; // Si no hay resultados, devolver un arreglo vacío
             }
-    
+
             // Cerrar la declaración
             $stmt->close();
         } catch (Exception $e) {
@@ -159,37 +179,38 @@ class Notificaciones {
         }
     }
 
-    public function obtenerNotificacionesActivasPorId($pageIndex = 1, $pageSize = 200, $usuario_id, $activa) {
+    public function obtenerNotificacionesActivasPorId($pageIndex = 1, $pageSize = 200, $usuario_id, $activa)
+    {
         try {
             // Calcular el offset según la página solicitada
             $offset = ($pageIndex - 1) * $pageSize;
-    
+
             // Consulta SQL para obtener las notificaciones
             $query = "SELECT * FROM " . $this->table_name . " where usuario_id = ? AND visto = ? LIMIT ?, ?";
             $stmt = $this->conn->prepare($query);
-    
+
             // Vincular parámetros para la consulta
-            $stmt->bind_param('iiii', $usuario_id , $activa, $offset, $pageSize);
+            $stmt->bind_param('iiii', $usuario_id, $activa, $offset, $pageSize);
             $stmt->execute();
-    
+
             // Obtener el resultado
             $result = $stmt->get_result();
-            
+
             // Verificar si hay resultados
             if ($result->num_rows > 0) {
                 $notificaciones = [];
-    
+
                 // Recoger los resultados en un arreglo
                 while ($row = $result->fetch_assoc()) {
                     $notificaciones[] = $row;
                 }
-    
+
                 // Devolver las notificaciones
                 return $notificaciones;
             } else {
                 return []; // Si no hay resultados, devolver un arreglo vacío
             }
-    
+
             // Cerrar la declaración
             $stmt->close();
         } catch (Exception $e) {
@@ -198,9 +219,10 @@ class Notificaciones {
             return false;
         }
     }
-    
 
-    public function update() {
+
+    public function update()
+    {
         try {
             $query = "UPDATE " . $this->table_name . " SET usuario_id = ?, titulo = ?, mensaje = ?, tipo_usuario = ? WHERE id = ?";
             $stmt = $this->conn->prepare($query);
@@ -217,7 +239,8 @@ class Notificaciones {
     }
 
     //Este método elimina una notificación
-    public function delete() {
+    public function delete()
+    {
         try {
             $query = "DELETE FROM " . $this->table_name . " WHERE id = ?";
             $stmt = $this->conn->prepare($query);
@@ -234,11 +257,12 @@ class Notificaciones {
     }
 
     //Este método marca una notificación como vista
-    public function actualizarVisto($id, $visto) {
+    public function actualizarVisto($id, $visto)
+    {
         try {
             $query = "UPDATE " . $this->table_name . " SET fecha_visto = NOW(), visto = ? WHERE id = ?";
             $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('ii', $visto , $id);
+            $stmt->bind_param('ii', $visto, $id);
 
             if ($stmt->execute()) {
                 return true;
@@ -251,7 +275,8 @@ class Notificaciones {
     }
 
     //Este método crea una notificación
-    public function crearNotificacion($usuario_id, $titulo, $mensaje, $tipo_usuario) {
+    public function crearNotificacion($usuario_id, $titulo, $mensaje, $tipo_usuario)
+    {
         try {
             $query = "INSERT INTO " . $this->table_name . " (usuario_id, titulo, mensaje, fecha_envio, tipo_usuario, fecha_visto) VALUES (?, ?, ?, NOW(), ?, false)";
             $stmt = $this->conn->prepare($query);
@@ -276,7 +301,8 @@ class Notificaciones {
         }
     }
 
-    public function enviarNotification($usuario_id, $titulo, $mensaje, $tipo_usuario) {
+    public function enviarNotification($usuario_id, $titulo, $mensaje, $tipo_usuario)
+    {
 
         $tokensDestino = [];
         try {
@@ -309,7 +335,7 @@ class Notificaciones {
             $this->setTitulo($titulo);
             $this->setMensaje($mensaje);
             $this->setTipoUsuario($tipo_usuario);
-            $this->crearNotificacion($usuario_id,$titulo,$mensaje,$tipo_usuario);
+            $this->crearNotificacion($usuario_id, $titulo, $mensaje, $tipo_usuario);
         } catch (Exception $e) {
             return [
                 'status'  => 'error',
@@ -324,9 +350,15 @@ class Notificaciones {
         $tokensNotificados = [];
         foreach ($tokensDestino as $token) {
             $message = CloudMessage::new()
-                ->withNotification(Notification::create($titulo, $mensaje))
-                ->withData(['info_extra' => 'valor'])
+                ->withData([
+                    'title' => $titulo,
+                    'body' => $mensaje,
+                    'icon' => 'https://dosxdos.app.iidos.com/img/dosxdoslogoNuevoRojo.png',
+                    'click_action' => 'https://dosxdos.app.iidos.com/notificaciones.html',
+                    'url' => 'https://dosxdos.app.iidos.com/notificaciones.html'
+                ])
                 ->withChangedTarget('token', $token);
+
 
             try {
                 $messaging->send($message);
@@ -347,7 +379,8 @@ class Notificaciones {
         ];
     }
     //Este método elimina un token de notificación
-    public function eliminarNotificacionToken($token) {
+    public function eliminarNotificacionToken($token)
+    {
         try {
             $query = "DELETE FROM tokens WHERE BINARY token = ?";
             $stmt = $this->conn->prepare($query);
@@ -362,4 +395,3 @@ class Notificaciones {
         }
     }
 }
-?>
