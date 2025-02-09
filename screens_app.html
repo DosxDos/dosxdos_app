@@ -132,6 +132,7 @@
             const data = await response.text();
             const parser = new DOMParser();
             const doc = parser.parseFromString(data, 'text/html');
+            console.log(`doc: ${doc}`);
             const images = Array.from(doc.querySelectorAll('a'))
                 .map(link => link.href)
                 .filter(href => href.endsWith('.png'));
