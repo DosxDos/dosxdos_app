@@ -122,54 +122,36 @@
 </body>
 
 <script>
-    let currentIndex = 0;
 
+    const totalImages = 0; // Cambia este número según la cantidad real de imágenes
     const carouselInner = document.querySelector('.carousel-inner');
 
-    async function loadImages() {
-        try {
-            const response = await fetch('https://dosxdos.app.iidos.com/dosxdos_erp_img/');
-            const data = await response.text();
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(data, 'text/html');
-            const images = Array.from(doc.querySelectorAll('a'))
-                .map(link => link.href)
-                .filter(href => href.endsWith('.png'));
-
-            images.forEach((image, index) => {
-                currentIndex++;
-            });
-        } catch (error) {
-            console.error('Error fetching images:', error);
-        }
-    }
-
-    loadImages().then(() => {
-        for (let i = 1; i <= currentIndex; i++) {
+    function generateImages() {
+        for (let i = 1; i <= totalImages; i++) {
             const div = document.createElement('div');
             div.className = 'carousel-item';
             div.style.backgroundImage = `url('https://dosxdos.app.iidos.com/dosxdos_erp_img/${i}.png')`;
+
+            if (i === 1) div.classList.add('active'); // Activa la primera imagen
+
             carouselInner.appendChild(div);
-            console.log('Imagen cargada:', i);
+            console.log('Imagen añadida:', `https://dosxdos.app.iidos.com/dosxdos_erp_img/${i}.png`);
         }
-    });
+    }
 
+    generateImages();
 
+    // Funciones para cambiar de imagen en el carrusel
+    let currentIndex = 0;
 
     function showSlide(index) {
         const slides = document.querySelectorAll('.carousel-item');
         const totalSlides = slides.length;
 
-        // Asegurarse de que el índice sea cíclico
-        if (index < 0) {
-            currentIndex = totalSlides - 1;
-        } else if (index >= totalSlides) {
-            currentIndex = 0;
-        } else {
-            currentIndex = index;
-        }
+        // Asegurar que el índice sea cíclico
+        currentIndex = (index + totalSlides) % totalSlides;
 
-        // Actualizar la posición del carrusel
+        // Mover el carrusel
         const carouselInner = document.querySelector('.carousel-inner');
         carouselInner.style.transform = `translateX(-${currentIndex * 100}%)`;
     }
@@ -181,13 +163,6 @@
     function prevSlide() {
         showSlide(currentIndex - 1);
     }
-
-    // Navegación automática (opcional)
-    /*
-    setInterval(() => {
-        nextSlide();
-    }, 5000); // Cambiar cada 5 segundos
-    */
 
 </script>
 
