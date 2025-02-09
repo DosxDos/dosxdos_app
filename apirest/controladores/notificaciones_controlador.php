@@ -363,7 +363,7 @@ class NotificacionesControlador
         $datos = [
             'usuario_id' => $idAppMontadores,
             'titulo' => 'Se ha cerrado la ruta ' . $faseRuta,
-            'mensaje' => 'la ruta esta cerrada y se van a ir añadiendo solo lar rutas urgentes en la ruta: ' . $faseRuta,
+            'mensaje' => 'la ruta esta cerrada y se van a ir añadiendo solo la líneas urgentes en la ruta: ' . $faseRuta,
             'tipo_usuario' => 'montador'
         ];
 
