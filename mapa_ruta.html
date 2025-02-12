@@ -296,16 +296,16 @@
         const offset = 0.000070;
         let i = 0;
         for (const point of lineasRender) {
+          const nameToDisplay = point.NombrePuntoVenta || "Nombre del punto de venta no disponible";
+          const firma = point.Firma || "Sin firma";
+          const observaciones = point.Observaciones || "Sin observaciones";
+          const nombreCliente = point.NombreCliente || "Nombre del cliente no disponible";
+          const concatenatedName = `${point.Linea} - ${nameToDisplay} - ${firma} - ${nombreCliente} - OT CRM: ${point.OT} - OT Navision: ${point.Navision_OT} - ${point.TipoOT} - ${observaciones}`;
           const lat = point.lat ? parseFloat(point.lat) : null;
           const lng = point.lng ? parseFloat(point.lng) : null;
           if (lat !== null && lng !== null) {
             const adjustedLat = lat + i * offset;
             const adjustedLng = lng + i * offset;
-            const firma = point.Firma || "Sin firma";
-            const observaciones = point.Observaciones || "Sin observaciones";
-            const nameToDisplay = point.NombrePuntoVenta || "Nombre del punto de venta no disponible";
-            const nombreCliente = point.NombreCliente || "Nombre del cliente no disponible";
-            const concatenatedName = `${point.Linea} - ${nameToDisplay} - ${firma} - ${nombreCliente} - OT CRM: ${point.OT} - OT Navision: ${point.Navision_OT} - ${point.TipoOT} - ${observaciones}`;
             const marker = new google.maps.Marker({
               position: { lat: adjustedLat, lng: adjustedLng },
               map: map,
@@ -355,6 +355,8 @@
             );
             const alertMessage = `Fallo al cargar la ubicación para la línea: `;
             showAlert(alertMessage, concatenatedName);
+            i++;
+            continue;
           }
           i++;
         };
@@ -643,7 +645,7 @@
               //console.log(validarLinea);
               if (validarLinea) {
                 //console.log("Se agrega la línea: " + linea.Linea);
-                alerta(`La línea ${linea.Linea} ha sido agregada`);
+                alerta(`La línea ${linea.Linea} ha sido agregada __ ${linea.NombrePuntoVenta} __ ${linea.DireccionPuntoVenta}`);
                 marcadoresAccion.data.push(linea);
               }
             }

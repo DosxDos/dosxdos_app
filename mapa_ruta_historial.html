@@ -195,9 +195,12 @@
       <p id="point-address" class="mt-2"></p>
       <p id="point-lat" class="mt-2"></p>
       <p id="point-lng" class="mt-2"></p>
-      <button id="navigate-button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Navegar</button>
-      <button id="report-button" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Reportar</button>
-      <button id="close-button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Cerrar</button>
+      <button id="navigate-button"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Navegar</button>
+      <button id="report-button"
+        class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Reportar</button>
+      <button id="close-button"
+        class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Cerrar</button>
     </div>
   </div>
 
@@ -307,15 +310,14 @@
         for (const point of lineasRender) {
           const lat = point.lat ? parseFloat(point.lat) : null;
           const lng = point.lng ? parseFloat(point.lng) : null;
+          const firma = point.Firma_de_la_OT_relacionada || "Sin firma";
+          const observaciones = point.Observaciones_internas || "Sin observaciones";
+          const nameToDisplay = point.nombrePv || "Nombre del punto de venta no disponible";
+          const nombreCliente = point.nombreCliente || "Nombre del cliente no disponible";
+          const concatenatedName = `${point.RutaSelect} - ${point.Fecha_actuaci_n} - ${point.Codigo_de_l_nea} - ${nameToDisplay} - ${firma} - ${nombreCliente} - OT CRM: ${point.C_digo_de_OT_relacionada} - OT Navision: ${point.Navision_OT} - ${point.Tipo_de_OT} - ${observaciones} - ${point.Observaciones_montador}`;
           if (lat !== null && lng !== null) {
             const adjustedLat = lat + i * offset;
             const adjustedLng = lng + i * offset;
-            const firma = point.Firma_de_la_OT_relacionada || "Sin firma";
-            const observaciones = point.Observaciones_internas || "Sin observaciones";
-            const nameToDisplay = point.nombrePv || "Nombre del punto de venta no disponible";
-            const nombreCliente = point.nombreCliente || "Nombre del cliente no disponible";
-            const concatenatedName = `${point.RutaSelect} - ${point.Fecha_actuaci_n} - ${point.Codigo_de_l_nea} - ${nameToDisplay} - ${firma} - ${nombreCliente} - OT CRM: ${point.C_digo_de_OT_relacionada} - OT Navision: ${point.Navision_OT} - ${point.Tipo_de_OT} - ${observaciones} - ${point.Observaciones_montador}`;
-            
             const marker = new google.maps.Marker({
               position: { lat: adjustedLat, lng: adjustedLng },
               map: map,
@@ -361,15 +363,15 @@
                 const LineaActividadStorage = point.Codigo_de_l_nea;
                 const otStorage = point.C_digo_de_OT_relacionada;
                 const clienteStorage = point.N_mero_del_cliente;
-                const nombreCliente= point.nombreCliente;
-                
+                const nombreCliente = point.nombreCliente;
+
                 localStorage.setItem('id', point.Id);
                 localStorage.setItem('linea', lineaStorage);
                 localStorage.setItem('lineaActividad', LineaActividadStorage);
                 localStorage.setItem('ot', otStorage);
                 localStorage.setItem('cliente', clienteStorage);
                 localStorage.setItem('nombreCliente', nombreCliente);
-                
+
                 window.location.href = "https://dosxdos.app.iidos.com/linea_historial_montador.html";
               };
             });
@@ -382,6 +384,8 @@
           } else {
             console.log(`Faltan coordenadas para el punto: ${JSON.stringify(point)}`);
             alerta(`Fallo al cargar la ubicación para la línea: ${point.Codigo_de_l_nea}`);
+            i++;
+            continue;
           }
           i++;
         };

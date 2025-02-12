@@ -27,7 +27,7 @@ try {
         {"url": "https://dosxdos.app.iidos.com/callBackBulkCrm.php", "method": "post"}, 
         "query": {"module": {"api_name": "Products"},
         "criteria": 
-        {"field": {"api_name": "nombrePv"}, 
+        {"field": {"api_name": "lat"}, 
         "comparator": "equal",
         "value": "${EMPTY}"}}}';
 
@@ -174,8 +174,8 @@ try {
                                     flush();
                                     $LineaVector = [];
                                     $LineaVector['data'][0]['id'] = $linea['Id'];
-                                    $LineaVector['data'][0]['nombrePv'] = $nombrePv;
-                                    $LineaVector['data'][0]['codPv'] = $codPv;
+                                    // $LineaVector['data'][0]['nombrePv'] = $nombrePv;
+                                    // $LineaVector['data'][0]['codPv'] = $codPv;
                                     $LineaVector['data'][0]['lat'] = $lat;
                                     $LineaVector['data'][0]['lng'] = $lng;
                                     $LineaJson = json_encode($LineaVector);
