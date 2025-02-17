@@ -1169,7 +1169,7 @@
                 : "Aceptar";
               botonAceptar.onclick = (e) => {
                 e.stopPropagation();
-                aceptarNotificación(objeto.LineaActividad);
+                aceptarNotificación(objeto.id);
               };
 
               button.appendChild(contentDiv);
@@ -1291,7 +1291,7 @@
               botonAceptar.textContent = estaAceptada ? "Aceptada" : "Aceptar";
               botonAceptar.onclick = (e) => {
                 e.stopPropagation();
-                aceptarNotificación(LineaActividad);
+                aceptarNotificación(objeto.id);
               };
 
               divContenedor.appendChild(divInfo);
@@ -1923,7 +1923,7 @@
       appOffline();
     }
 
-    async function aceptarNotificación(id) {
+    async function aceptarNotificación() {
       const modal = document.getElementById("modalNotificacion");
       const confirmarBtn = document.getElementById("confirmarAceptar");
       const cancelarBtn = document.getElementById("cancelarAceptar");
