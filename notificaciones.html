@@ -1136,7 +1136,7 @@
           }));
           const limpiarLineas = await limpiarDatos("dosxdos", "lineas");
           if (limpiarLineas) {
-            lineas = await fetchLineas();
+            lineas = await fetchLineas(rutas);
             if (lineas) {
               resolve(true);
             } else {
