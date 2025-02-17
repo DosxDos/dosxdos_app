@@ -1041,35 +1041,27 @@
       try {
         if (navigator.onLine) {
           loaderOn();
-          const fRutas = await fetchRutas();
-          rutas = await leerDatos("dosxdos", "rutas");
-          rutas = rutas.map((objeto) => ({
-            cod: objeto["No."],
-            nombre: objeto["Descripcion"],
-          }));
-          const limpiarLineas = await limpiarDatos("dosxdos", "lineas");
-          if (limpiarLineas) {
-            lineas = await fetchLineas(rutas);
-            if (lineas) {
+          const limpiarNotificaciones = await limpiarDatos(
+            "dosxdos",
+            "notificaciones"
+          );
+          if (limpiarNotificaciones) {
+            notificaciones = await fetchNotificaciones();
+            if (notificaciones) {
               const mensaje =
-                "Se ha sincronizado la base de datos exitosamente";
+                "Se han sincronizado las notificaciones exitosamente";
               localStorage.setItem("mensaje", mensaje);
-              window.location.href =
-                "https://dosxdos.app.iidos.com/ruta_montador.html";
             } else {
-              alerta(
-                "Error al cargar las líneas de las rutas del servidor, se han sincronizado las rutas pero no las líneas"
-              );
+              alerta("Error al cargar las notificaciones del servidor");
               loaderOff();
             }
           }
         }
       } catch (error) {
         const mensaje =
-          "No se ha sincronizado la base de datos: " + error.message;
+          "No se han sincronizado las notificaciones: " + error.message;
+        alerta(mensaje);
         localStorage.setItem("mensaje", mensaje);
-        window.location.href =
-          "https://dosxdos.app.iidos.com/rutas_montador.html";
       }
     }
 
@@ -1085,7 +1077,7 @@
           }));
           const limpiarLineas = await limpiarDatos("dosxdos", "lineas");
           if (limpiarLineas) {
-            lineas = await fetchLineas(rutas);
+            lineas = await fetchNotificaciones();
             if (lineas) {
               resolve(true);
             } else {
