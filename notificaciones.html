@@ -979,52 +979,50 @@
     function fetchNotificaciones() {
       return new Promise(async (resolve, reject) => {
         try {
-          const promises = vectorRutas.map(async (objeto) => {
-            const url =
-              "https://dosxdos.app.iidos.com/apirest/rutas_notificaciones.php/notificaciones/" +
-              usuario.id;
-            const res = await fetch(url);
+          const url =
+            "https://dosxdos.app.iidos.com/apirest/rutas_notificaciones.php/notificaciones/" +
+            usuario.id;
+          const res = await fetch(url);
 
-            if (!res.ok) {
-              throw new Error(
-                `Error en la solicitud de las notificaciones de ${usuario.nombre}`
-              );
-            }
+          if (!res.ok) {
+            throw new Error(
+              `Error en la solicitud de las notificaciones de ${usuario.nombre}`
+            );
+          }
 
-            const resJson = await res.json();
+          const resJson = await res.json();
 
-            if (resJson[0]) {
-              const db = await new Promise((dbResolve, dbReject) => {
-                const request = indexedDB.open("dosxdos");
-                request.onsuccess = (event) => {
-                  const db = event.target.result;
-                  dbResolve(db);
-                };
-                request.onerror = (event) => {
-                  dbReject(
-                    new Error(
-                      `Error al abrir la base de datos para ingresar las notificaciones de ${usuario.nombre}`
-                    )
-                  );
-                };
+          if (resJson[0]) {
+            const db = await new Promise((dbResolve, dbReject) => {
+              const request = indexedDB.open("dosxdos");
+              request.onsuccess = (event) => {
+                const db = event.target.result;
+                dbResolve(db);
+              };
+              request.onerror = (event) => {
+                dbReject(
+                  new Error(
+                    `Error al abrir la base de datos para ingresar las notificaciones de ${usuario.nombre}`
+                  )
+                );
+              };
+            });
+
+            const transaction = db.transaction("notificaciones", "readwrite");
+            const datosStore = transaction.objectStore("notificaciones");
+            const datos = resJson[1];
+            if (Array.isArray(datos)) {
+              datos.forEach((item) => {
+                datosStore.add(item);
               });
-
-              const transaction = db.transaction("notificaciones", "readwrite");
-              const datosStore = transaction.objectStore("notificaciones");
-              const datos = resJson[1];
-              if (Array.isArray(datos)) {
-                datos.forEach((item) => {
-                  datosStore.add(item);
-                });
-              } else {
-                datosStore.add(datos);
-              }
             } else {
-              throw new Error(
-                `Error al solicitar las notificaciones de ${usuario.nombre}`
-              );
+              datosStore.add(datos);
             }
-          });
+          } else {
+            throw new Error(
+              `Error al solicitar las notificaciones de ${usuario.nombre}`
+            );
+          }
 
           await Promise.all(promises);
           resolve(true);
