@@ -694,7 +694,10 @@
 
       <div id="mensaje" class="displayOff">
         <p id="textoMensaje"></p>
-        <img id="imgCerrar" src="https://dosxdos.app.iidos.com/img/cerrar.png" />
+        <img
+          id="imgCerrar"
+          src="https://dosxdos.app.iidos.com/img/cerrar.png"
+        />
       </div>
 
       <div id="cajaBuscador">
@@ -919,7 +922,8 @@
     function fetchRutas() {
       return new Promise((resolve, reject) => {
         url =
-          "https://dosxdos.app.iidos.com/apirest/rutas.php?montador=" + montador;
+          "https://dosxdos.app.iidos.com/apirest/rutas.php?montador=" +
+          montador;
         fetch(url)
           .then((res) => {
             if (res.ok) {
@@ -972,18 +976,18 @@
       });
     }
 
-    function fetchLineas(vectorRutas) {
+    function fetchNotificaciones() {
       return new Promise(async (resolve, reject) => {
         try {
           const promises = vectorRutas.map(async (objeto) => {
             const url =
-              "https://dosxdos.app.iidos.com/apirest/lineas.php?ruta=" +
-              objeto.cod;
+              "https://dosxdos.app.iidos.com/apirest/rutas_notificaciones.php/notificaciones/" +
+              usuario.id;
             const res = await fetch(url);
 
             if (!res.ok) {
               throw new Error(
-                `Error en la solicitud de las líneas de la ruta ${objeto.cod}: ${res.status}`
+                `Error en la solicitud de las notificaciones de ${usuario.nombre}`
               );
             }
 
@@ -999,14 +1003,14 @@
                 request.onerror = (event) => {
                   dbReject(
                     new Error(
-                      `Error al abrir la base de datos para ingresar las líneas de la ruta: ${objeto.cod}`
+                      `Error al abrir la base de datos para ingresar las notificaciones de ${usuario.nombre}`
                     )
                   );
                 };
               });
 
-              const transaction = db.transaction("lineas", "readwrite");
-              const datosStore = transaction.objectStore("lineas");
+              const transaction = db.transaction("notificaciones", "readwrite");
+              const datosStore = transaction.objectStore("notificaciones");
               const datos = resJson[1];
               if (Array.isArray(datos)) {
                 datos.forEach((item) => {
@@ -1017,7 +1021,7 @@
               }
             } else {
               throw new Error(
-                `Error al solicitar las líneas de la ruta ${objeto.cod}: ${resJson[1]}`
+                `Error al solicitar las notificaciones de ${usuario.nombre}`
               );
             }
           });
@@ -1415,7 +1419,8 @@
     });
 
     $botonRutas.addEventListener("click", () => {
-      window.location.href = "https://dosxdos.app.iidos.com/rutas_montador.html";
+      window.location.href =
+        "https://dosxdos.app.iidos.com/rutas_montador.html";
     });
 
     const lineasIcono = document.getElementById("lineasIcono");
