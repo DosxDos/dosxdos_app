@@ -992,7 +992,7 @@
 
           const resJson = await res.json();
 
-          if (res.message) {
+          if (resJson.message) {
             const db = await new Promise((dbResolve, dbReject) => {
               const request = indexedDB.open("dosxdos");
               request.onsuccess = (event) => {
@@ -1010,7 +1010,7 @@
 
             const transaction = db.transaction("notificaciones", "readwrite");
             const datosStore = transaction.objectStore("notificaciones");
-            const datos = res.message;
+            const datos = resJson.message;
             if (Array.isArray(datos)) {
               datos.forEach((item) => {
                 datosStore.add(item);
