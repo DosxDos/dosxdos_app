@@ -1,15 +1,15 @@
 {
-    "CodigoRuta": "GRAN_CANARIA_(A)",
-    "LineaRuta": "4920",
-    "DescripcionIncidencia": "",
-    "DiasActuacion": "",
-    "Estado": "Pendiente",
-    "FechaActuacion": "",
-    "FirmaCliente": "https://dosxdos.app.iidos.com/fotos_y_firmas.php?ruta=GRAN_CANARIA_(A)&linea=4920&ot=30203&lineaActividad=4920",
-    "FotosSubidas": 0,
-    "HorasActuacion": "",
-    "Incidencia": "",
-    "MinutosActuacion": "",
-    "ObservacionesTecnico": "Prueba PHP 2",
-    "LinkWeb": "https://dosxdos.app.iidos.com/fotos_y_firmas.php?ruta=GRAN_CANARIA_(A)&linea=4920&ot=30203&lineaActividad=4920"
+  "CodigoRuta": "GRAN_CANARIA_(A)",
+  "LineaRuta": "4920",
+  "DescripcionIncidencia": "",
+  "DiasActuacion": "",
+  "Estado": "Pendiente",
+  "FechaActuacion": "",
+  "FirmaCliente": "http://localhost/dosxdos_app/fotos_y_firmas.php?ruta=GRAN_CANARIA_(A)&linea=4920&ot=30203&lineaActividad=4920",
+  "FotosSubidas": 0,
+  "HorasActuacion": "",
+  "Incidencia": "",
+  "MinutosActuacion": "",
+  "ObservacionesTecnico": "Prueba PHP 2",
+  "LinkWeb": "http://localhost/dosxdos_app/fotos_y_firmas.php?ruta=GRAN_CANARIA_(A)&linea=4920&ot=30203&lineaActividad=4920"
 }

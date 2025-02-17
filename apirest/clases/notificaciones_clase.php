@@ -353,9 +353,9 @@ class Notificaciones
                 ->withData([
                     'title' => $titulo,
                     'body' => $mensaje,
-                    'icon' => 'https://dosxdos.app.iidos.com/img/dosxdoslogoNuevoRojo.png',
-                    'click_action' => 'https://dosxdos.app.iidos.com/notificaciones.html',
-                    'url' => 'https://dosxdos.app.iidos.com/notificaciones.html'
+                    'icon' => 'http://localhost/dosxdos_app/img/dosxdoslogoNuevoRojo.png',
+                    'click_action' => 'http://localhost/dosxdos_app/notificaciones.html',
+                    'url' => 'http://localhost/dosxdos_app/notificaciones.html'
                 ])
                 ->withChangedTarget('token', $token);
 

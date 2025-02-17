@@ -9,7 +9,7 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
 header('Access-Control-Allow-Methods: GET');
-header('Access-Control-Allow-Origin: https://dosxdos.app.iidos.com');
+header('Access-Control-Allow-Origin: http://localhost/dosxdos_app');
 
 ini_set('curl.cainfo', '/dev/null');
 set_time_limit(0);
@@ -24,7 +24,7 @@ try {
     $csvData = [];
 
     $json = '{ "callback": 
-        {"url": "https://dosxdos.app.iidos.com/callBackBulkCrm.php", "method": "post"}, 
+        {"url": "http://localhost/dosxdos_app/callBackBulkCrm.php", "method": "post"}, 
         "query": {"module": {"api_name": "Products"},
         "criteria": 
         {"field": {"api_name": "nombrePv"}, 

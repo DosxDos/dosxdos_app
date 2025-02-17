@@ -2,7 +2,7 @@ function fetchNotificaciones() {
   return new Promise(async (resolve, reject) => {
     try {
       const url =
-        "https://dosxdos.app.iidos.com/apirest/rutas_notificaciones.php/notificaciones/" +
+        "http://localhost/dosxdos_app/apirest/rutas_notificaciones.php/notificaciones/" +
         usuario.id;
       const res = await fetch(url);
 

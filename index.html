@@ -8,7 +8,7 @@
     <link
       rel="icon"
       type="image/png"
-      href="https://dosxdos.app.iidos.com/img/logoPwa256.png"
+      href="http://localhost/dosxdos_app/img/logoPwa256.png"
     />
     <meta
       name="description"
@@ -48,19 +48,19 @@
       /* FUENTES */
       @font-face {
         font-family: "FuturaBold";
-        src: url("https://dosxdos.app.iidos.com/css/fuentes/Futura/Futura_Bold.otf")
+        src: url("http://localhost/dosxdos_app/css/fuentes/Futura/Futura_Bold.otf")
           format("truetype");
       }
 
       @font-face {
         font-family: "FuturaLight";
-        src: url("https://dosxdos.app.iidos.com/css/fuentes/Futura/Futura_Light.otf")
+        src: url("http://localhost/dosxdos_app/css/fuentes/Futura/Futura_Light.otf")
           format("truetype");
       }
 
       @font-face {
         font-family: "FuturaMedium";
-        src: url("https://dosxdos.app.iidos.com/css/fuentes/Futura/Futura_Medium.otf")
+        src: url("http://localhost/dosxdos_app/css/fuentes/Futura/Futura_Medium.otf")
           format("truetype");
       }
 
@@ -399,30 +399,30 @@
     />
     <link
       rel="apple-touch-icon"
-      href="https://dosxdos.app.iidos.com/img/logoPwa256.png"
+      href="http://localhost/dosxdos_app/img/logoPwa256.png"
     />
     <link
       rel="apple-touch-startup-image"
-      href="https://dosxdos.app.iidos.com/img/dosxdos.png"
+      href="http://localhost/dosxdos_app/img/dosxdos.png"
     />
-    <link rel="manifest" href="https://dosxdos.app.iidos.com/manifest.json" />
+    <link rel="manifest" href="http://localhost/dosxdos_app/manifest.json" />
     <!-- Importacion de IndexDB -->
-    <script src="https://dosxdos.app.iidos.com/js/index_db.js"></script>
+    <script src="http://localhost/dosxdos_app/js/index_db.js"></script>
     <!-- SERVICEWORKER CACHE-->
-    <script src="https://dosxdos.app.iidos.com/serviceworker.js"></script>
+    <script src="http://localhost/dosxdos_app/serviceworker.js"></script>
     <!-- SERVICEWORKER FIREBASE-->
-    <script src="https://dosxdos.app.iidos.com/serviceWorkerFirebase.js"></script>
+    <script src="http://localhost/dosxdos_app/serviceWorkerFirebase.js"></script>
   </head>
 
   <body>
     <div id="mensaje" class="displayOff">
-      <img id="alerta" src="https://dosxdos.app.iidos.com/img/alerta.png" />
+      <img id="alerta" src="http://localhost/dosxdos_app/img/alerta.png" />
       <p id="mensajeTexto"></p>
     </div>
 
     <div class="puntoFondo displayOn" id="punto">
       <img
-        src="https://dosxdos.app.iidos.com/img/saludo.png"
+        src="http://localhost/dosxdos_app/img/saludo.png"
         class="saludo displayOn"
         id="saludo"
       />
@@ -458,13 +458,13 @@
     </div>
 
     <img
-      src="https://dosxdos.app.iidos.com/img/logo2930.png"
+      src="http://localhost/dosxdos_app/img/logo2930.png"
       class="logo displayOn"
       id="logo"
     />
 
     <img
-      src="https://dosxdos.app.iidos.com/img/logo_clientes.png"
+      src="http://localhost/dosxdos_app/img/logo_clientes.png"
       id="logo2"
       class="logo2"
     />
@@ -477,7 +477,7 @@
 
     <div id="instalar" class="instalar displayOn">
       <img
-        src="https://dosxdos.app.iidos.com/img/instalar.png"
+        src="http://localhost/dosxdos_app/img/instalar.png"
         id="instalarImg"
       />
       <p id="tipInstalar" class="displayOff"></p>
@@ -570,7 +570,7 @@
     //Guarda el token en tu servidor usando PHP
     function guardarTokenEnServidor(token, usuario) {
       return new Promise((resolve, reject) => {
-        fetch("https://dosxdos.app.iidos.com/apirest/guardar_token.php", {
+        fetch("http://localhost/dosxdos_app/apirest/guardar_token.php", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -667,7 +667,7 @@
 
     function espanol() {
       return new Promise((resolve, reject) => {
-        fetch("https://dosxdos.app.iidos.com/espanol.json")
+        fetch("http://localhost/dosxdos_app/espanol.json")
           .then((res) => {
             if (!res.ok) {
               throw new Error(
@@ -689,7 +689,7 @@
 
     function english() {
       return new Promise((resolve, reject) => {
-        fetch("https://dosxdos.app.iidos.com/english.json")
+        fetch("http://localhost/dosxdos_app/english.json")
           .then((res) => {
             if (!res.ok) {
               throw new Error(
@@ -958,7 +958,7 @@
           (await deleteDB2("dosxdos"))
             ? console.log("Base de datos eliminada exitosamente")
             : console.error("error al eliminar la base de datos");
-          window.location.href = "https://dosxdos.app.iidos.com/index.html";
+          window.location.href = "http://localhost/dosxdos_app/index.html";
         } catch (error) {
           mensaje = "ERROR: " + error.message;
           console.error(error);
@@ -982,7 +982,7 @@
             : console.error("error al eliminar la base de datos");
           localStorage.setItem("cierrePorVersion", true);
           localStorage.setItem("version", versionLocal);
-          window.location.href = "https://dosxdos.app.iidos.com/index.html";
+          window.location.href = "http://localhost/dosxdos_app/index.html";
         } catch (error) {
           mensaje = "ERROR: " + error.message;
           console.error(error);
@@ -1000,8 +1000,7 @@
       let login = localStorage.getItem("login");
       if (login && login !== null) {
         let usuario = localStorage.getItem("usuario");
-        url =
-          "https://dosxdos.app.iidos.com/apirest/usuarios.php?id=" + usuario;
+        url = "http://localhost/dosxdos_app/apirest/usuarios.php?id=" + usuario;
         fetch(url)
           .then((res) => {
             if (!res.ok) {
@@ -1042,12 +1041,12 @@
             if (login.length != 0) {
               if (login.clase == "montador") {
                 window.location.href =
-                  "https://dosxdos.app.iidos.com/rutas_montador.html";
+                  "http://localhost/dosxdos_app/rutas_montador.html";
               } else if (login.clase == "cliente") {
                 window.location.href =
-                  "https://dosxdos.app.iidos.com/clientes.html";
+                  "http://localhost/dosxdos_app/clientes.html";
               } else {
-                window.location.href = "https://dosxdos.app.iidos.com/ot.html";
+                window.location.href = "http://localhost/dosxdos_app/ot.html";
               }
             } else {
               console.log("Usuario no reconocido");
@@ -1069,13 +1068,12 @@
               if (login.length != 0) {
                 if (login.clase == "montador") {
                   window.location.href =
-                    "https://dosxdos.app.iidos.com/rutas_montador.html";
+                    "http://localhost/dosxdos_app/rutas_montador.html";
                 } else if (login.clase == "cliente") {
                   window.location.href =
-                    "https://dosxdos.app.iidos.com/clientes.html";
+                    "http://localhost/dosxdos_app/clientes.html";
                 } else {
-                  window.location.href =
-                    "https://dosxdos.app.iidos.com/ot.html";
+                  window.location.href = "http://localhost/dosxdos_app/ot.html";
                 }
               } else {
                 console.log("Usuario no reconocido");
@@ -1249,7 +1247,7 @@
               usuario,
               contrasena,
             };
-            fetch("https://dosxdos.app.iidos.com/apirest/usuarios.php", {
+            fetch("http://localhost/dosxdos_app/apirest/usuarios.php", {
               method: "POST",
               headers: {
                 "Content-type": "application/json; charset=utf-8",
@@ -1318,7 +1316,7 @@
                                 );
                               }
                               window.location.href =
-                                "https://dosxdos.app.iidos.com/rutas_montador.html";
+                                "http://localhost/dosxdos_app/rutas_montador.html";
                             } else if (data.clase == "cliente") {
                               const login = true;
                               const usuario = data.id;
@@ -1344,7 +1342,7 @@
                                 );
                               }
                               window.location.href =
-                                "https://dosxdos.app.iidos.com/clientes.html";
+                                "http://localhost/dosxdos_app/clientes.html";
                             } else {
                               const login = true;
                               const usuario = data.id;
@@ -1370,7 +1368,7 @@
                                 );
                               }
                               window.location.href =
-                                "https://dosxdos.app.iidos.com/ot.html";
+                                "http://localhost/dosxdos_app/ot.html";
                             }
                           } else {
                             mensaj =
@@ -1446,7 +1444,7 @@
             idioma: idioma,
           };
           console.log(body);
-          fetch("https://dosxdos.app.iidos.com/apirest/correos.php", {
+          fetch("http://localhost/dosxdos_app/apirest/correos.php", {
             method: "POST",
             headers: {
               "Content-type": "application/json; charset=utf-8",
