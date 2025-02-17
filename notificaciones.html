@@ -993,6 +993,7 @@
           const resJson = await res.json();
 
           if (resJson.message) {
+            console.log("-----", resJson);
             const db = await new Promise((dbResolve, dbReject) => {
               const request = indexedDB.open("dosxdos");
               request.onsuccess = (event) => {
