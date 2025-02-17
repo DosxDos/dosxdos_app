@@ -1,16 +1,2045 @@
 <!DOCTYPE html>
+
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mantenimiento</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
-<body class="bg-gray-100 flex items-center justify-center h-screen">
-    <div class="text-center">
-        <h1 class="text-4xl font-bold text-gray-800">Esta página esta en Mantenimiento</h1>
-        <p class="mt-4 text-lg text-gray-600">De momento la función esta en desarrollo</p>
-        <button class="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full" onclick="window.location.href = 'index.html'">Ir al sitio principal</button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RUTA</title>
+    <!-- Favicons -->
+    <link
+      rel="icon"
+      type="image/png"
+      href="http://localhost/dosxdos_app/img/logoPwa256.png"
+    />
+    <link rel="stylesheet" href="./css/tailwindmain.css" />
+    <style>
+      @charset "UTF-8";
+
+      /* $variables - 40% */
+      :root {
+        --x1_7: 0.41vw;
+        --x60: 14.56vw;
+        --x10: 2.43vw;
+        --x300: 72.82vw;
+        --x15: 3.64vw;
+        --x5: 1.21vw;
+        --x70: 16.99vw;
+        --x25: 6.07vw;
+        --x3: 0.73vw;
+        --x1: 0.24vw;
+        --x20: 4.85vw;
+        --x250: 60.68vw;
+        --x30: 7.28vw;
+        --x22: 5.34vw;
+        --x28: 6.8vw;
+        --x1_5: 0.36vw;
+        --x2: 0.49vw;
+        --x18: 4.37vw;
+        --x2_5: 0.61vw;
+        --x150: 36.4vw;
+      }
+
+      /* INICIO */
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        letter-spacing: var(--x1_7);
+      }
+
+      .displayOff {
+        display: none;
+      }
+
+      .displayOn {
+        display: flex;
+      }
+
+      .borde {
+        border: var(--x1) solid black;
+      }
+
+      body {
+        overflow-x: hidden;
+      }
+
+      .oyh {
+        overflow-y: hidden;
+      }
+
+      /* FUENTES */
+      @font-face {
+        font-family: "Roboto";
+        src: url("http://localhost/dosxdos_app/css/fuentes/Roboto/Roboto-Light.ttf")
+          format("truetype");
+      }
+
+      @font-face {
+        font-family: "Merriweather";
+        src: url("http://localhost/dosxdos_app/css/fuentes/Merriweather/Merriweather-Light.ttf")
+          format("truetype");
+      }
+
+      @font-face {
+        font-family: "Merriweather-Bold";
+        src: url("http://localhost/dosxdos_app/css/fuentes/Merriweather/Merriweather-Bold.ttf")
+          format("truetype");
+      }
+
+      @font-face {
+        font-family: "Lora";
+        src: url("http://localhost/dosxdos_app/css/fuentes/Lora/Lora-Regular.ttf")
+          format("truetype");
+      }
+
+      @font-face {
+        font-family: "Lora-Medium";
+        src: url("http://localhost/dosxdos_app/css/fuentes/Lora/Lora-Medium.ttf")
+          format("truetype");
+      }
+
+      @font-face {
+        font-family: "Lora-Bold";
+        src: url("http://localhost/dosxdos_app/css/fuentes/Lora/Lora-Bold.ttf")
+          format("truetype");
+      }
+
+      /* LOADER */
+      #loader {
+        width: 100vw;
+        height: 100vh;
+        position: absolute;
+        top: 0;
+        z-index: 2000;
+        background-color: rgba(0, 0, 0, 0.886);
+        justify-content: center;
+        align-items: center;
+      }
+
+      .loader {
+        transform: rotateZ(45deg);
+        perspective: 1000px;
+        border-radius: 50%;
+        width: var(--x60);
+        height: var(--x60);
+        color: #fff;
+      }
+
+      .loader:before,
+      .loader:after {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: inherit;
+        height: inherit;
+        border-radius: 50%;
+        transform: rotateX(70deg);
+        animation: 1s spin linear infinite;
+      }
+
+      .loader:after {
+        color: #b20b15;
+        transform: rotateY(70deg);
+        animation-delay: 0.4s;
+      }
+
+      @keyframes rotate {
+        0% {
+          transform: translate(-50%, -50%) rotateZ(0deg);
+        }
+
+        100% {
+          transform: translate(-50%, -50%) rotateZ(360deg);
+        }
+      }
+
+      @keyframes rotateccw {
+        0% {
+          transform: translate(-50%, -50%) rotate(0deg);
+        }
+
+        100% {
+          transform: translate(-50%, -50%) rotate(-360deg);
+        }
+      }
+
+      @keyframes spin {
+        0%,
+        100% {
+          box-shadow: 0.2em 0px 0 0px currentcolor;
+        }
+
+        12% {
+          box-shadow: 0.2em 0.2em 0 0 currentcolor;
+        }
+
+        25% {
+          box-shadow: 0 0.2em 0 0px currentcolor;
+        }
+
+        37% {
+          box-shadow: -0.2em 0.2em 0 0 currentcolor;
+        }
+
+        50% {
+          box-shadow: -0.2em 0 0 0 currentcolor;
+        }
+
+        62% {
+          box-shadow: -0.2em -0.2em 0 0 currentcolor;
+        }
+
+        75% {
+          box-shadow: 0px -0.2em 0 0 currentcolor;
+        }
+
+        87% {
+          box-shadow: 0.2em -0.2em 0 0 currentcolor;
+        }
+      }
+
+      /* NAVEGACIÓN */
+      #encabezado {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        background-color: #f4f4f4;
+      }
+
+      #logo {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        padding: var(--x10);
+      }
+
+      #logo {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        padding: var(--x10);
+      }
+
+      #logo > img {
+        width: var(--x150);
+      }
+
+      #menu {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        padding: var(--x10);
+        justify-content: space-between;
+        margin-top: var(--x10);
+      }
+
+      #usuario {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #usuario:hover {
+        cursor: pointer;
+      }
+
+      #iconoUsuario {
+        display: flex;
+        width: var(--x70);
+        height: var(--x70);
+        border-radius: 50%;
+      }
+
+      #iconoUsuario > img {
+        width: var(--x70);
+        height: var(--x70);
+        border-radius: 50%;
+      }
+
+      #nombreUsuario {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: var(--x25);
+        margin-left: var(--x5);
+        font-family: "Merriweather-Bold", "Merriweather-Bold";
+      }
+
+      #flechaUsuario {
+        display: flex;
+        width: var(--x25);
+        height: var(--x25);
+        margin-left: var(--x3);
+      }
+
+      #flechaUsuario > img {
+        width: var(--x25);
+        height: var(--x25);
+      }
+
+      .botonIcono {
+        border: var(--x1) solid gray;
+        display: flex;
+        width: var(--x70);
+        height: var(--x70);
+        border-radius: 20%;
+        background-color: #d31216;
+      }
+
+      .botonIcono:hover {
+        cursor: pointer;
+      }
+
+      .botonIcono:active {
+        background-color: #b20b15;
+      }
+
+      .botonIcono > img {
+        width: var(--x70);
+        height: var(--x70);
+        border-radius: 20%;
+        padding: var(--x10);
+      }
+
+      #opcionesMenu {
+        width: 100%;
+        padding: var(--x15);
+        justify-content: space-evenly;
+        align-items: center;
+      }
+
+      .opcionMenu {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .opcionMenu > p {
+        margin-top: var(--x3);
+        font-size: var(--x20);
+        font-family: "Merriweather-Bold", "Merriweather-Bold";
+      }
+
+      #opcionesUsuario {
+        width: 100%;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: var(--x15);
+      }
+
+      .boton {
+        width: var(--x250);
+        border-radius: var(--x30);
+        font-family: "Merriweather-Bold", "Merriweather-Bold";
+        font-size: var(--x22);
+        height: var(--x60);
+        padding: var(--x10);
+        border: var(--x1) solid gray;
+        color: white;
+        background-color: #d31216;
+      }
+
+      .boton2 {
+        width: var(--x250);
+        border-radius: var(--x30);
+        font-family: "Merriweather-Bold", "Merriweather-Bold";
+        font-size: var(--x22);
+        height: var(--x60);
+        padding: var(--x10);
+        border: var(--x1) solid gray;
+        color: white;
+        background-color: #d31216;
+        margin-top: var(--x15);
+      }
+
+      .boton:hover {
+        cursor: pointer;
+      }
+
+      .boton:active {
+        background-color: #b20b15;
+      }
+
+      .boton2:hover {
+        cursor: pointer;
+      }
+
+      .boton2:active {
+        background-color: #b20b15;
+      }
+
+      #titulo {
+        justify-content: center;
+        align-items: center;
+        font-family: "Lora-Bold", "Lora-Bold";
+        width: 100%;
+        font-size: var(--x28);
+        padding: var(--x5);
+        text-align: center;
+      }
+
+      #mensaje {
+        position: relative;
+        flex-wrap: wrap;
+        text-align: center;
+        font-size: var(--x18);
+        letter-spacing: var(--x2_5);
+        background-color: rgba(0, 0, 0, 0.573);
+        color: white;
+        padding: var(--x10);
+        font-family: "Roboto", "Roboto-Light";
+        width: 100%;
+        justify-content: center;
+      }
+
+      #mensaje > p {
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: var(--x20);
+        margin-bottom: var(--x20);
+      }
+
+      #actualizacion {
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        padding: var(--x15);
+        text-align: center;
+        color: gray;
+      }
+
+      #imgCerrar {
+        position: absolute;
+        width: var(--x28);
+        top: var(--x2);
+        right: var(--x2);
+      }
+
+      #imgCerrar:hover {
+        cursor: pointer;
+      }
+
+      #cajaBuscador {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        padding: var(--x15);
+      }
+
+      #iconoBuscador {
+        display: flex;
+        width: var(--x60);
+        height: var(--x60);
+        justify-content: center;
+        align-items: center;
+        padding: var(--x15);
+      }
+
+      #iconoBuscador > img {
+        width: var(--x60);
+        height: var(--x60);
+      }
+
+      #buscador {
+        height: var(--x60);
+        width: var(--x300);
+        margin-left: var(--x5);
+        border: var(--x2) solid gray;
+        font-family: "Lora", "Lora-Regular";
+        font-size: var(--x28);
+        text-align: center;
+        border-radius: var(--x15);
+        padding: var(--x15);
+      }
+
+      #buscador:focus {
+        outline-color: #b20b15;
+      }
+
+      #contenido {
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        padding: var(--x15);
+        justify-content: center;
+        align-items: center;
+        background-color: #e1e1e1;
+      }
+
+      .ruta {
+        max-width: 100%;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        border-radius: var(--x30);
+        font-family: "Lora-Bold", "Lora-Bold";
+        font-size: var(--x22);
+        border: var(--x1) solid gray;
+        color: white;
+        background-color: #d31216;
+        margin-top: var(--x10);
+        margin-bottom: var(--x10);
+        padding: var(--x15);
+      }
+
+      .ruta:hover {
+        cursor: pointer;
+      }
+
+      .ruta:active {
+        background-color: #b20b15;
+      }
+
+      .ruta2 {
+        max-width: 100%;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        border-radius: var(--x30);
+        font-family: "Lora-Bold", "Lora-Bold";
+        font-size: var(--x22);
+        border: var(--x1) solid gray;
+        color: white;
+        background-color: #d312158a;
+        margin-top: var(--x10);
+        margin-bottom: var(--x10);
+        padding: var(--x15);
+      }
+
+      .ruta2:hover {
+        cursor: pointer;
+      }
+
+      .ruta2:active {
+        background-color: #b20b15;
+      }
+
+      .resaltado {
+        background-color: rgba(0, 0, 0, 0.573);
+      }
+
+      #cabeceraContenido {
+        display: flex;
+        width: 100%;
+        justify-content: space-evenly;
+        align-items: center;
+        padding: var(--x15);
+        background-color: #f4f4f4;
+      }
+
+      #titulo2 {
+        font-family: "Lora-Bold", "Lora-Bold";
+        font-size: var(--x25);
+        padding: var(--x15);
+        text-align: center;
+      }
+
+      /* MOVILES GRANDES */
+      @media screen and (min-width: 412px) and (max-width: 767px) {
+        :root {
+          --x1_7: 1.7px;
+          --x60: 60px;
+          --x10: 10px;
+          --x300: 300px;
+          --x15: 15px;
+          --x5: 5px;
+          --x70: 70px;
+          --x25: 25px;
+          --x3: 3px;
+          --x1: 1px;
+          --x20: 20px;
+          --x250: 250px;
+          --x30: 30px;
+          --x22: 22px;
+          --x28: 28px;
+          --x1_5: 1.5px;
+          --x2: 2px;
+          --x18: 18px;
+          --x2_5: 2.5px;
+          --x150: 150px;
+        }
+      }
+
+      /* TABLETS */
+      @media screen and (min-width: 768px) and (max-width: 1199px) {
+        :root {
+          --x1_7: 0.09vw;
+          --x60: 3vw;
+          --x10: 0.5vw;
+          --x300: 15vw;
+          --x15: 0.75vw;
+          --x5: 0.25vw;
+          --x70: 3.5vw;
+          --x25: 1.25vw;
+          --x3: 0.15vw;
+          --x1: 0.05vw;
+          --x20: 1vw;
+          --x250: 12.5vw;
+          --x30: 1.5vw;
+          --x22: 1.1vw;
+          --x28: 1.4vw;
+          --x1_5: 0.08vw;
+          --x2: 0.1vw;
+          --x18: 0.9vw;
+          --x2_5: 0.13vw;
+          --x150: 7.5vw;
+        }
+
+        #menu {
+          justify-content: space-evenly;
+        }
+      }
+
+      /* ESCRITORIOS */
+      @media screen and (min-width: 1200px) {
+        :root {
+          --x1_7: 1.02px;
+          --x60: 36px;
+          --x10: 6px;
+          --x300: 180px;
+          --x15: 9px;
+          --x5: 3px;
+          --x70: 42px;
+          --x25: 15px;
+          --x3: 1.8px;
+          --x1: 0.6px;
+          --x20: 12px;
+          --x250: 150px;
+          --x30: 18px;
+          --x22: 13.2px;
+          --x28: 16.8px;
+          --x1_5: 0.9px;
+          --x2: 1.2px;
+          --x18: 10.8px;
+          --x2_5: 1.5px;
+          --x150: 90px;
+        }
+
+        #menu {
+          justify-content: space-evenly;
+        }
+      }
+    </style>
+  </head>
+
+  <body id="body" class="oyh">
+    <div id="loader" class="displayOn">
+      <span class="loader"></span>
     </div>
-</body>
+
+    <section id="encabezado">
+      <div id="logo">
+        <img src="http://localhost/dosxdos_app/img/logo300.png" />
+      </div>
+
+      <nav id="menu">
+        <div id="usuario">
+          <div id="iconoUsuario">
+            <img
+              src="http://localhost/dosxdos_app/img/usuario.png"
+              id="imagenUsuario"
+            />
+          </div>
+          <p id="nombreUsuario"></p>
+          <div id="flechaUsuario">
+            <img src="http://localhost/dosxdos_app/img/flechaAbajo.png" />
+          </div>
+        </div>
+
+        <button id="casa" class="botonIcono">
+          <img src="http://localhost/dosxdos_app/img/casaWhite.png" />
+        </button>
+      </nav>
+
+      <nav id="opcionesMenu" class="displayOff">
+        <div class="opcionMenu" id="rutasIcono">
+          <button class="botonIcono" type="button" id="rutasIconoBoton">
+            <img src="http://localhost/dosxdos_app/img/rutasWhite.png" />
+          </button>
+          <p>Rutas</p>
+        </div>
+
+        <div class="opcionMenu" id="lineasIcono">
+          <button class="botonIcono" type="button" id="rutasIconoBoton">
+            <img src="http://localhost/dosxdos_app/img/task.png" />
+          </button>
+          <p>Líneas</p>
+        </div>
+
+        <div class="opcionMenu" id="historialIcono">
+          <button class="botonIcono" type="button" id="rutasIconoBoton">
+            <img src="http://localhost/dosxdos_app/img/historial.png" />
+          </button>
+          <p>Historial</p>
+        </div>
+      </nav>
+
+      <nav id="opcionesUsuario" class="displayOff">
+        <button type="button" id="editarUsuario" class="boton">
+          Editar usuario
+        </button>
+        <button type="button" id="cerrarSesion" class="boton2">
+          Cerrar sesión
+        </button>
+      </nav>
+
+      <div id="mensaje" class="displayOff">
+        <p id="textoMensaje"></p>
+        <img id="imgCerrar" src="http://localhost/dosxdos_app/img/cerrar.png" />
+      </div>
+
+      <div id="cajaBuscador">
+        <div id="iconoBuscador">
+          <img src="http://localhost/dosxdos_app/img/lupa.png" />
+        </div>
+        <input type="text" id="buscador" />
+      </div>
+
+      <h1 id="titulo" class="displayOn">Notificaciones</h1>
+    </section>
+
+    <div id="cabeceraContenido" class="w-full bg-white shadow">
+      <div class="mx-auto max-w-7xl">
+        <div class="border-b border-gray-200">
+          <nav class="flex -mb-px" aria-label="Pestañas">
+            <button
+              id="pestañaPendientes"
+              class="w-1/2 py-4 px-1 text-center border-b-2 border-red-500 text-red-600 font-medium text-sm"
+            >
+              <span class="flex items-center justify-center">
+                <span class="ml-2">Notificaciones Pendientes</span>
+                <span
+                  id="contadorPendientes"
+                  class="bg-red-100 text-red-600 ml-3 py-0.5 px-2.5 rounded-full text-xs"
+                  >0</span
+                >
+              </span>
+            </button>
+            <button
+              id="pestañaAceptadas"
+              class="w-1/2 py-4 px-1 text-center border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 font-medium text-sm"
+            >
+              <span class="flex items-center justify-center">
+                <span class="ml-2">Notificaciones Aceptadas</span>
+                <span
+                  id="contadorAceptadas"
+                  class="bg-gray-100 text-gray-600 ml-3 py-0.5 px-2.5 rounded-full text-xs"
+                  >0</span
+                >
+              </span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </div>
+
+    <section id="contenido"></section>
+
+    <div id="modalNotificacion" class="fixed inset-0 z-50 hidden">
+      <div class="fixed inset-0 bg-black bg-opacity-50"></div>
+      <div class="fixed inset-0 overflow-y-auto">
+        <div class="flex min-h-full items-center justify-center p-4">
+          <div
+            class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl sm:my-8 sm:w-full sm:max-w-lg sm:p-6"
+          >
+            <div class="sm:flex sm:items-start">
+              <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                <h3 class="text-base font-semibold leading-6 text-gray-900">
+                  Confirmar Acción
+                </h3>
+                <div class="mt-2">
+                  <p class="text-sm text-gray-500">
+                    ¿Estás seguro que deseas aceptar esta notificación?
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="flex gap-3 mt-5">
+              <button
+                type="button"
+                id="confirmarAceptar"
+                class="flex-1 justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500"
+              >
+                Confirmar
+              </button>
+              <button
+                type="button"
+                id="cancelarAceptar"
+                class="flex-1 justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <script src="http://localhost/dosxdos_app/js/index_db.js"></script>
+
+  <script>
+    const ruta = localStorage.getItem("ruta");
+    if (ruta && ruta !== null) {
+      console.log(ruta);
+    } else {
+      console.log("ruta no definida");
+    }
+
+    const $opcionesMenu = document.getElementById("opcionesMenu"),
+      $opcionesUsuario = document.getElementById("opcionesUsuario"),
+      $casa = document.getElementById("casa"),
+      $usuario = document.getElementById("usuario"),
+      $contenido = document.getElementById("contenido"),
+      $loader = document.getElementById("loader"),
+      $body = document.getElementById("body"),
+      $mensaje = document.getElementById("mensaje"),
+      $imgCerrar = document.getElementById("imgCerrar"),
+      $textoMensaje = document.getElementById("textoMensaje"),
+      buscador = document.getElementById("buscador"),
+      $nombreUsuario = document.getElementById("nombreUsuario"),
+      $imagenUsuario = document.getElementById("imagenUsuario"),
+      $botonRutas = document.getElementById("rutasIconoBoton"),
+      $titulo2 = document.getElementById("titulo2"),
+      $pendientesIcono = document.getElementById("pendientesIcono"),
+      $aceptadasIcono = document.getElementById("aceptadasIcono");
+    let usuario, montador, rutas;
+
+    /* LOADER */
+
+    function scrollToTop() {
+      // Para navegadores modernos
+      document.documentElement.scrollTop = 0;
+      // Para navegadores antiguos
+      document.body.scrollTop = 0;
+    }
+
+    /* LOADER */
+    function loaderOn() {
+      scrollToTop();
+      $loader.classList.remove("displayOff");
+      $loader.classList.add("displayOn");
+      $body.classList.add("oyh");
+    }
+
+    function loaderOff() {
+      setTimeout(() => {
+        $loader.classList.remove("displayOn");
+        $loader.classList.add("displayOff");
+        $body.classList.remove("oyh");
+      }, 1000);
+    }
+
+    /* MENSAJE */
+
+    function mensajeOn() {
+      $mensaje.classList.remove("displayOff");
+      $mensaje.classList.add("displayOn");
+    }
+
+    function mensajeOff() {
+      $mensaje.classList.remove("displayOn");
+      $mensaje.classList.add("displayOff");
+    }
+
+    $imgCerrar.addEventListener("click", (e) => {
+      mensajeOff();
+    });
+
+    function alerta(men) {
+      $textoMensaje.innerHTML = men;
+      mensajeOn();
+      loaderOff();
+    }
+
+    /* CERRAR SESIÓN */
+    function eliminarCookie(nombre) {
+      const tiempoExpiracion = 1; // Segundo 1 de la Época Unix
+      document.cookie = `${nombre}=; expires=${new Date(
+        tiempoExpiracion * 1000
+      ).toUTCString()}; path=/;`;
+    }
+
+    //ESTA FUNCION ELIMINA POR COMPLETO DEL LADO DEL CLIENTE LA BASE DE DATOS CADA VEZ QUE SE EJEUTA
+    function deleteDB2(database) {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.deleteDatabase(database);
+
+        // Evento que se dispara cuando la base de datos se elimina correctamente
+        request.onsuccess = () => {
+          console.log(`Base de datos "${database}" eliminada exitosamente.`);
+          resolve(true);
+        };
+
+        // Evento que se dispara si ocurre un error al eliminar la base de datos
+        request.onerror = (event) => {
+          console.error(
+            `Error al eliminar la base de datos "${database}":`,
+            event.target.error
+          );
+          reject(event.target.error);
+        };
+      });
+    }
+
+    async function cerrarSesion() {
+      if (navigator.onLine) {
+        try {
+          loaderOn();
+          localStorage.clear();
+          eliminarCookie("login");
+          eliminarCookie("usuario");
+          (await deleteDB2("dosxdos"))
+            ? console.log("Base de datos eliminada exitosamente")
+            : console.error("error al eliminar la base de datos");
+          window.location.href = "http://localhost/dosxdos_app/index.html";
+        } catch (error) {
+          mensaje = "ERROR: " + error.message;
+          console.error(error);
+          alerta(mensaje);
+        }
+      } else {
+        mensaje = "No es posible cerrar la sesión sin conexión a internet";
+        $textoMensaje.innerHTML = mensaje;
+        mensajeOn();
+      }
+    }
+
+    /* TRAER DATOS DE LOS SERVIDORES */
+
+    function fetchRutas() {
+      return new Promise((resolve, reject) => {
+        url =
+          "http://localhost/dosxdos_app/apirest/rutas.php?montador=" + montador;
+        fetch(url)
+          .then((res) => {
+            if (res.ok) {
+              return res.json();
+            } else {
+              mensaje =
+                "Error: no se pudo recibir una respuesta de la api intermedia en la función fetchRutas";
+              alerta(mensaje);
+            }
+          })
+          .then((res) => {
+            if (res[0]) {
+              const request = indexedDB.open("dosxdos");
+              request.onsuccess = (event) => {
+                const db = event.target.result;
+                const transaction = db.transaction("rutas", "readwrite");
+                const datosStore = transaction.objectStore("rutas");
+                const clearRequest = datosStore.clear();
+                clearRequest.onsuccess = (clearEvent) => {
+                  const datos = res[1];
+                  datos.forEach((item) => {
+                    datosStore.add(item);
+                  });
+                  resolve(true);
+                };
+                clearRequest.onerror = (event) => {
+                  error = event.target.error;
+                  mensaje = `ERROR: ` + error;
+                  console.error(error);
+                  alerta(mensaje);
+                };
+              };
+              request.onerror = (event) => {
+                error = event.target.error;
+                mensaje = `ERROR: ` + error;
+                console.error(error);
+                alerta(mensaje);
+              };
+            } else {
+              mensaje = res[1];
+              console.error(error);
+              alerta(mensaje);
+            }
+          })
+          .catch((res) => {
+            mensaje = "Sin conexión: " + res.message;
+            console.error(error);
+            alerta(mensaje);
+          });
+      });
+    }
+
+    function fetchLineas(vectorRutas) {
+      return new Promise(async (resolve, reject) => {
+        try {
+          const promises = vectorRutas.map(async (objeto) => {
+            const url =
+              "http://localhost/dosxdos_app/apirest/lineas.php?ruta=" +
+              objeto.cod;
+            const res = await fetch(url);
+
+            if (!res.ok) {
+              throw new Error(
+                `Error en la solicitud de las líneas de la ruta ${objeto.cod}: ${res.status}`
+              );
+            }
+
+            const resJson = await res.json();
+
+            if (resJson[0]) {
+              const db = await new Promise((dbResolve, dbReject) => {
+                const request = indexedDB.open("dosxdos");
+                request.onsuccess = (event) => {
+                  const db = event.target.result;
+                  dbResolve(db);
+                };
+                request.onerror = (event) => {
+                  dbReject(
+                    new Error(
+                      `Error al abrir la base de datos para ingresar las líneas de la ruta: ${objeto.cod}`
+                    )
+                  );
+                };
+              });
+
+              const transaction = db.transaction("lineas", "readwrite");
+              const datosStore = transaction.objectStore("lineas");
+              const datos = resJson[1];
+              if (Array.isArray(datos)) {
+                datos.forEach((item) => {
+                  datosStore.add(item);
+                });
+              } else {
+                datosStore.add(datos);
+              }
+            } else {
+              throw new Error(
+                `Error al solicitar las líneas de la ruta ${objeto.cod}: ${resJson[1]}`
+              );
+            }
+          });
+
+          await Promise.all(promises);
+          resolve(true);
+        } catch (err) {
+          console.error(err);
+          reject(err);
+        }
+      });
+    }
+
+    /* SINCRONIZAR BASE DE DATOS */
+
+    async function sincronizarDb() {
+      try {
+        if (navigator.onLine) {
+          loaderOn();
+          const fRutas = await fetchRutas();
+          rutas = await leerDatos("dosxdos", "rutas");
+          rutas = rutas.map((objeto) => ({
+            cod: objeto["No."],
+            nombre: objeto["Descripcion"],
+          }));
+          const limpiarLineas = await limpiarDatos("dosxdos", "lineas");
+          if (limpiarLineas) {
+            lineas = await fetchLineas(rutas);
+            if (lineas) {
+              const mensaje =
+                "Se ha sincronizado la base de datos exitosamente";
+              localStorage.setItem("mensaje", mensaje);
+              window.location.href =
+                "http://localhost/dosxdos_app/ruta_montador.html";
+            } else {
+              alerta(
+                "Error al cargar las líneas de las rutas del servidor, se han sincronizado las rutas pero no las líneas"
+              );
+              loaderOff();
+            }
+          }
+        }
+      } catch (error) {
+        const mensaje =
+          "No se ha sincronizado la base de datos: " + error.message;
+        localStorage.setItem("mensaje", mensaje);
+        window.location.href =
+          "http://localhost/dosxdos_app/rutas_montador.html";
+      }
+    }
+
+    async function sincronizarDb2() {
+      return new Promise(async (resolve, reject) => {
+        try {
+          loaderOn();
+          const fRutas = await fetchRutas();
+          rutas = await leerDatos("dosxdos", "rutas");
+          rutas = rutas.map((objeto) => ({
+            cod: objeto["No."],
+            nombre: objeto["Descripcion"],
+          }));
+          const limpiarLineas = await limpiarDatos("dosxdos", "lineas");
+          if (limpiarLineas) {
+            lineas = await fetchLineas(rutas);
+            if (lineas) {
+              resolve(true);
+            } else {
+              resolve(false);
+            }
+          }
+        } catch (error) {
+          console.error(error);
+          reject(false);
+        }
+      });
+    }
+
+    /* LOGIN */
+
+    function vLogin() {
+      return new Promise((resolve, reject) => {
+        const login = localStorage.getItem("login");
+        if (login && login !== null) {
+          leerDatos("dosxdos", "usuario")
+            .then((res) => {
+              usuario = res[0];
+              resolve(usuario.clase);
+            })
+            .catch((err) => {
+              resolve(false);
+            });
+        } else {
+          resolve(false);
+        }
+      });
+    }
+
+    function startBuscador() {
+      if (buscador.value) {
+        botones = document.querySelectorAll("#contenido button");
+        const valorBusqueda = buscador.value.toLowerCase();
+        botones.forEach((boton) => {
+          const textoBoton = boton.textContent.toLowerCase();
+          const span = boton.querySelector("span"); // Obtener el elemento <span> dentro del botón
+          if (textoBoton.includes(valorBusqueda)) {
+            boton.classList.replace("displayOff", "displayOn");
+            // Crear una expresión regular para buscar la coincidencia exacta
+            const regex = new RegExp(valorBusqueda, "gi");
+            const textoResaltado = boton.textContent.replace(
+              regex,
+              '<span class="resaltado">$&</span>'
+            );
+            span.innerHTML = textoResaltado;
+          } else {
+            boton.classList.replace("displayOn", "displayOff");
+            // Restablecer el texto original sin resaltado
+            span.textContent = span.textContent;
+          }
+        });
+      }
+    }
+
+    /* INICIAR APP ONLINE */
+
+    async function appOnline() {
+      try {
+        const login = await vLogin();
+        if (!login) {
+          window.location.href = "http://localhost/dosxdos_app/index.html";
+        } else {
+          const Arrayusuario = await leerDatos("dosxdos", "usuario");
+          usuario = Arrayusuario[0];
+          let loginMontador = localStorage.getItem("loginMontador");
+          if (!loginMontador || loginMontador === null) {
+            window.location.href =
+              "http://localhost/dosxdos_app/dosxdos.php?id=" +
+              usuario.id +
+              "&rol=" +
+              usuario.clase;
+          }
+          montador = usuario.cod;
+          $nombreUsuario.innerHTML = usuario.nombre;
+          if (usuario.imagen != "0") {
+            $imagenUsuario.src = usuario.imagen;
+          }
+          sinc = await sincronizarDb2();
+          sinc
+            ? console.log("Base de datos sincronizada")
+            : console.error("Error al sincronizar la base de datos");
+          rutas = await leerDatos("dosxdos", "rutas");
+          rutas = rutas.map((objeto) => ({
+            cod: objeto["No."],
+            nombre: objeto["Descripcion"],
+          }));
+          const TotalLineas = await leerDatos("dosxdos", "lineas");
+          if (TotalLineas) {
+            //console.log(TotalLineas);
+            const lineas = TotalLineas.filter((objeto) => {
+              return objeto.Proyecto == ruta;
+            });
+            console.log(lineas);
+
+            const fragmento = document.createDocumentFragment();
+            lineas.forEach((objeto, index) => {
+              const containerDiv = document.createElement("div");
+              containerDiv.className = "w-full mb-4";
+
+              // Main notification button
+              const button = document.createElement("button");
+              const estaAceptada = objeto.Estado === "Realizado";
+
+              button.className = `${
+                estaAceptada ? "ruta2" : "ruta"
+              } displayOn text-white w-full flex flex-col sm:flex-row sm:items-center p-4`;
+
+              // Content wrapper
+              const contentDiv = document.createElement("div");
+              contentDiv.className = "flex-1 mb-3 sm:mb-0";
+
+              const texto = objeto.Observaciones
+                ? `${objeto.Sector} _ ${objeto.Zona} _ ${objeto.LineaActividad} _ ${objeto.NombrePuntoVenta} _ ${objeto.NombreCliente} _ ${objeto.TipoTrabajo} _ ${objeto.Observaciones} _ NAVISION: ${objeto.Navision_OT} _ CRM: ${objeto.OT}`
+                : `${objeto.Sector} _ ${objeto.Zona} _ ${objeto.LineaActividad} _ ${objeto.NombrePuntoVenta} _ ${objeto.NombreCliente} _ ${objeto.TipoTrabajo} _ NAVISION: ${objeto.Navision_OT} _ CRM: ${objeto.OT}`;
+
+              contentDiv.textContent = texto;
+
+              // Accept button
+              const botonAceptar = document.createElement("button");
+              botonAceptar.className =
+                "bg-white text-red-600 px-4 py-2 rounded-md hover:bg-red-50 self-end sm:self-center transition-colors min-w-[100px] text-center";
+              botonAceptar.textContent = estaAceptada
+                ? "✓ Aceptada"
+                : "Aceptar";
+              botonAceptar.onclick = (e) => {
+                e.stopPropagation();
+                aceptarNotificación(objeto.LineaActividad);
+              };
+
+              button.appendChild(contentDiv);
+              button.appendChild(botonAceptar);
+              containerDiv.appendChild(button);
+
+              containerDiv.setAttribute(
+                "data-LineaActividad",
+                objeto.LineaActividad
+              );
+              containerDiv.setAttribute(
+                "data-estado",
+                estaAceptada ? "aceptada" : "pendiente"
+              );
+
+              fragmento.appendChild(containerDiv);
+            });
+            $contenido.appendChild(fragmento);
+            startBuscador();
+            const editarUsuario = document.getElementById("editarUsuario");
+            editarUsuario.addEventListener("click", (e) => {
+              if (navigator.onLine) {
+                window.location.href =
+                  "http://localhost/dosxdos_app/dosxdos.php?modulo=editarUsuario&id=" +
+                  usuario.id;
+              } else {
+                mensaje =
+                  "No es posible acceder a las opciones de edición de usuario sin conexión a internet";
+                alerta(mensaje);
+                scrollToTop();
+              }
+            });
+            const peticionesCierre = await procesarPeticiones2();
+            loaderOff();
+          } else {
+            alerta("Error al leer el almacén de líneas");
+            const editarUsuario = document.getElementById("editarUsuario");
+            editarUsuario.addEventListener("click", (e) => {
+              if (navigator.onLine) {
+                window.location.href =
+                  "http://localhost/dosxdos_app/dosxdos.php?modulo=editarUsuario&id=" +
+                  usuario.id;
+              } else {
+                mensaje =
+                  "No es posible acceder a las opciones de edición de usuario sin conexión a internet";
+                alerta(mensaje);
+                scrollToTop();
+              }
+            });
+            const peticionesCierre = await procesarPeticiones2();
+            loaderOff();
+          }
+        }
+      } catch (error) {
+        mensaje = "ERROR: " + error.message;
+        console.error(error);
+        alerta(mensaje);
+      }
+    }
+
+    /* INICIAR APP OFFLINE */
+
+    async function appOffline() {
+      try {
+        const login = await vLogin();
+        if (!login) {
+          window.location.href = "http://localhost/dosxdos_app/index.html";
+        } else {
+          const Arrayusuario = await leerDatos("dosxdos", "usuario");
+          usuario = Arrayusuario[0];
+          montador = usuario.cod;
+          $nombreUsuario.innerHTML = usuario.nombre;
+          rutas = await leerDatos("dosxdos", "rutas");
+          rutas = rutas.map((objeto) => ({
+            cod: objeto["No."],
+            nombre: objeto["Descripcion"],
+          }));
+          const TotalLineas = await leerDatos("dosxdos", "lineas");
+          if (TotalLineas) {
+            //console.log(TotalLineas);
+            const lineas = TotalLineas.filter((objeto) => {
+              return objeto.Proyecto == ruta;
+            });
+            //console.log(lineas);
+            const fragmento = document.createDocumentFragment();
+            lineas.forEach((objeto, index) => {
+              const button = document.createElement("button");
+              const estaAceptada = objeto.Estado === "Realizado";
+
+              button.className = `${
+                estaAceptada ? "ruta2" : "ruta"
+              } displayOn flex justify-between items-center`;
+              button.type = "button";
+              button.id = `${objeto.Linea}`;
+
+              const observaciones = objeto.Observaciones;
+              const LineaActividad = objeto.LineaActividad;
+              const ot = objeto.OT;
+              const otNavision = objeto.Navision_OT;
+
+              const divContenedor = document.createElement("div");
+              divContenedor.className = "flex justify-between items-start";
+
+              const divInfo = document.createElement("div");
+              divInfo.className = "flex-1";
+
+              const texto = observaciones
+                ? `${objeto.Sector} _ ${objeto.Zona} _ ${LineaActividad} _ ${objeto.NombrePuntoVenta} _ ${objeto.NombreCliente} _ ${objeto.TipoTrabajo} _ ${observaciones} _ NAVISION: ${otNavision} _ CRM: ${ot}`
+                : `${objeto.Sector} _ ${objeto.Zona} _ ${LineaActividad} _ ${objeto.NombrePuntoVenta} _ ${objeto.NombreCliente} _ ${objeto.TipoTrabajo} _ NAVISION: ${otNavision} _ CRM: ${ot}`;
+
+              divInfo.textContent = texto;
+
+              const botonAceptar = document.createElement("button");
+              botonAceptar.className = `ml-4 inline-flex items-center rounded-md ${
+                estaAceptada
+                  ? "bg-gray-100 px-2 py-1 text-xs font-medium text-gray-600"
+                  : "bg-red-100 px-2 py-1 text-xs font-medium text-red-700 hover:bg-red-200"
+              }`;
+              botonAceptar.textContent = estaAceptada ? "Aceptada" : "Aceptar";
+              botonAceptar.onclick = (e) => {
+                e.stopPropagation();
+                aceptarNotificación(LineaActividad);
+              };
+
+              divContenedor.appendChild(divInfo);
+              divContenedor.appendChild(botonAceptar);
+              button.appendChild(divContenedor);
+
+              button.setAttribute("data-LineaActividad", LineaActividad);
+              button.setAttribute(
+                "data-estado",
+                estaAceptada ? "aceptada" : "pendiente"
+              );
+
+              fragmento.appendChild(button);
+            });
+            $contenido.appendChild(fragmento);
+            startBuscador();
+            const editarUsuario = document.getElementById("editarUsuario");
+            editarUsuario.addEventListener("click", (e) => {
+              if (navigator.onLine) {
+                window.location.href =
+                  "http://localhost/dosxdos_app/dosxdos.php?modulo=editarUsuario&id=" +
+                  usuario.id;
+              } else {
+                mensaje =
+                  "No es posible acceder a las opciones de edición de usuario sin conexión a internet";
+                alerta(mensaje);
+                scrollToTop();
+              }
+            });
+            loaderOff();
+          } else {
+            alerta("Error al leer el almacén de líneas");
+            const editarUsuario = document.getElementById("editarUsuario");
+            editarUsuario.addEventListener("click", (e) => {
+              if (navigator.onLine) {
+                window.location.href =
+                  "http://localhost/dosxdos_app/dosxdos.php?modulo=editarUsuario&id=" +
+                  usuario.id;
+              } else {
+                mensaje =
+                  "No es posible acceder a las opciones de edición de usuario sin conexión a internet";
+                alerta(mensaje);
+                scrollToTop();
+              }
+            });
+            loaderOff();
+          }
+        }
+      } catch (error) {
+        mensaje = "ERROR: " + error.message;
+        console.error(error);
+        alerta(mensaje);
+      }
+    }
+
+    /* ERROR EN EVENTOS CLIC */
+
+    $casa.addEventListener("click", () => {
+      if ($opcionesMenu.classList.contains("displayOff")) {
+        $opcionesMenu.classList.replace("displayOff", "displayOn");
+        if ($opcionesUsuario.classList.contains("displayOn")) {
+          $opcionesUsuario.classList.replace("displayOn", "displayOff");
+        }
+      } else {
+        $opcionesMenu.classList.replace("displayOn", "displayOff");
+      }
+    });
+
+    $usuario.addEventListener("click", () => {
+      if ($opcionesUsuario.classList.contains("displayOff")) {
+        $opcionesUsuario.classList.replace("displayOff", "displayOn");
+        if ($opcionesMenu.classList.contains("displayOn")) {
+          $opcionesMenu.classList.replace("displayOn", "displayOff");
+        }
+      } else {
+        $opcionesUsuario.classList.replace("displayOn", "displayOff");
+      }
+    });
+
+    $botonRutas.addEventListener("click", () => {
+      window.location.href = "http://localhost/dosxdos_app/rutas_montador.html";
+    });
+
+    const lineasIcono = document.getElementById("lineasIcono");
+    lineasIcono.addEventListener("click", () => {
+      window.location.href = "http://localhost/dosxdos_app/ruta_montador.html";
+    });
+
+    const historialIcono = document.getElementById("historialIcono");
+    historialIcono.addEventListener("click", () => {
+      window.location.href =
+        "http://localhost/dosxdos_app/historial_montador.html";
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const pestañaPendientes = document.getElementById("pestañaPendientes");
+      const pestañaAceptadas = document.getElementById("pestañaAceptadas");
+
+      pestañaPendientes.addEventListener("click", () => {
+        loaderOn();
+        pestañaPendientes.classList.add("border-red-500", "text-red-600");
+        pestañaPendientes.classList.remove(
+          "border-transparent",
+          "text-gray-500"
+        );
+        pestañaAceptadas.classList.remove("border-red-500", "text-red-600");
+        pestañaAceptadas.classList.add("border-transparent", "text-gray-500");
+        actualizarVistaNotificaciones();
+        loaderOff();
+      });
+
+      pestañaAceptadas.addEventListener("click", () => {
+        loaderOn();
+        pestañaAceptadas.classList.add("border-red-500", "text-red-600");
+        pestañaAceptadas.classList.remove(
+          "border-transparent",
+          "text-gray-500"
+        );
+        pestañaPendientes.classList.remove("border-red-500", "text-red-600");
+        pestañaPendientes.classList.add("border-transparent", "text-gray-500");
+        actualizarVistaNotificaciones();
+        loaderOff();
+      });
+
+      // Actualización inicial
+      actualizarVistaNotificaciones();
+    });
+
+    const actualizarVistaNotificaciones = () => {
+      const pestañaPendientes = document.getElementById("pestañaPendientes");
+      const pestañaAceptadas = document.getElementById("pestañaAceptadas");
+      const pestañaActual = pestañaPendientes.classList.contains(
+        "border-red-500"
+      )
+        ? "pendiente"
+        : "aceptada";
+
+      // Get all notification containers
+      const todasLasNotificaciones = Array.from(
+        document.querySelectorAll("#contenido [data-LineaActividad]")
+      );
+
+      let contadorPendientes = 0;
+      let contadorAceptadas = 0;
+
+      // First count all items
+      todasLasNotificaciones.forEach((notificacion) => {
+        if (notificacion.getAttribute("data-estado") === "aceptada") {
+          contadorAceptadas++;
+        } else {
+          contadorPendientes++;
+        }
+      });
+
+      // Then update visibility based on current tab
+      todasLasNotificaciones.forEach((notificacion) => {
+        const estaAceptada =
+          notificacion.getAttribute("data-estado") === "aceptada";
+        notificacion.style.display =
+          (pestañaActual === "pendiente" && !estaAceptada) ||
+          (pestañaActual === "aceptada" && estaAceptada)
+            ? "block"
+            : "none";
+      });
+
+      // Update counters in UI
+      document.getElementById("contadorPendientes").textContent =
+        contadorPendientes;
+      document.getElementById("contadorAceptadas").textContent =
+        contadorAceptadas;
+    };
+
+    /* EVENTOS CLIC */
+
+    document.addEventListener("click", (e) => {
+      if (e.target.matches("#cerrarSesion")) {
+        cerrarSesion();
+      }
+    });
+
+    /* BUSCADOR */
+
+    buscador.addEventListener("input", () => {
+      botones = document.querySelectorAll("#contenido button");
+      const valorBusqueda = buscador.value.toLowerCase();
+      botones.forEach((boton) => {
+        const textoBoton = boton.textContent.toLowerCase();
+        const span = boton.querySelector("span"); // Obtener el elemento <span> dentro del botón
+        if (textoBoton.includes(valorBusqueda)) {
+          boton.classList.replace("displayOff", "displayOn");
+          // Crear una expresión regular para buscar la coincidencia exacta
+          const regex = new RegExp(valorBusqueda, "gi");
+          const textoResaltado = boton.textContent.replace(
+            regex,
+            '<span class="resaltado">$&</span>'
+          );
+          span.innerHTML = textoResaltado;
+        } else {
+          boton.classList.replace("displayOn", "displayOff");
+          // Restablecer el texto original sin resaltado
+          span.textContent = span.textContent;
+        }
+      });
+    });
+
+    /* PETICIONES PENDIENTES */
+
+    function actualizarLinea(json) {
+      return new Promise((resolve, reject) => {
+        console.log(json);
+        fetch("http://localhost/dosxdos_app/apirest/lineas.php", {
+          method: "PUT",
+          headers: {
+            "Content-type": "application/json; charset=utf-8",
+          },
+          body: json,
+        })
+          .then((res) =>
+            res.ok
+              ? res.json()
+              : reject(
+                  new Error(
+                    `Error en los servidores al actualizar los datos de la línea`
+                  )
+                )
+          )
+          .then((res) => {
+            if (res[0]) {
+              resolve(true);
+            } else {
+              resolve(false);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            reject(err);
+          });
+      });
+    }
+
+    function subirFotos(json) {
+      return new Promise((resolve, reject) => {
+        fetch("http://localhost/dosxdos_app/apirest/fotos.php", {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json; charset=utf-8",
+          },
+          body: json,
+        })
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error(
+                `Error en el servidor de la API intermedia al guardar las fotos. Status: ${res.status}`
+              );
+            }
+            return res.json();
+          })
+          .then((res) => {
+            if (res[0]) {
+              resolve(true);
+            } else {
+              resolve(false);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            reject(err);
+          });
+      });
+    }
+
+    function subirFirmas(json) {
+      return new Promise((resolve, reject) => {
+        fetch("http://localhost/dosxdos_app/apirest/firmas.php", {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json; charset=utf-8",
+          },
+          body: json,
+        })
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error(
+                `Error en el servidor de la API intermedia al guardar las firmas. Status: ${res.status}`
+              );
+            }
+            return res.json();
+          })
+          .then((res) => {
+            if (res[0]) {
+              resolve(true);
+            } else {
+              resolve(false);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            reject(err);
+          });
+      });
+    }
+
+    function subirNota(json) {
+      return new Promise((resolve, reject) => {
+        fetch("http://localhost/dosxdos_app/apirest/notas.php", {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json; charset=utf-8",
+          },
+          body: json,
+        })
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error(
+                `Error en el servidor de la API intermedia al guardar la nota. Status: ${res.status}`
+              );
+            }
+            return res.json();
+          })
+          .then((res) => {
+            if (res[0]) {
+              resolve(true);
+            } else {
+              resolve(false);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            reject(err);
+          });
+      });
+    }
+
+    async function enviarPeticiones(vectorObjDb, tipoVector) {
+      return new Promise(async (resolve, reject) => {
+        try {
+          let solicitud,
+            mensaje = "",
+            vaciarStore;
+          for (const objeto of vectorObjDb) {
+            jsonObjeto = JSON.stringify(objeto);
+            if (tipoVector == "lineas") {
+              solicitud = await actualizarLinea(jsonObjeto);
+              if (!solicitud) {
+                mensaje += `-Error en el envío de la petición pendiente de la actualización de datos en la api de Navision en la ruta: ${objeto.CodigoRuta} y la línea de ruta: ${objeto.LineaRuta}-`;
+              }
+            } else if (tipoVector == "fotos") {
+              solicitud = await subirFotos(jsonObjeto);
+              if (!solicitud) {
+                mensaje += `-Error al subir las fotos pendientes de la ot: ${objeto.ot} y la línea: ${objeto.lineaActividad}-`;
+              }
+            } else if (tipoVector == "firmas") {
+              solicitud = await subirFirmas(jsonObjeto);
+              if (!solicitud) {
+                mensaje += `-Error al subir las firmas pendientes de la ot: ${objeto.ot} y la línea: ${objeto.lineaActividad}-`;
+              }
+            } else if (tipoVector == "notas") {
+              solicitud = await subirNota(jsonObjeto);
+              if (!solicitud) {
+                mensaje += `-Error al subir las notas pendientes de la ot: ${objeto.ot} y la línea: ${objeto.linea}-`;
+              }
+            }
+          }
+          if (tipoVector == "lineas") {
+            vaciarStore = await limpiarDatos("dosxdos", "peticionesLineas");
+            mensaje += "-Datos pendientes enviados al servidor-";
+          } else if (tipoVector == "fotos") {
+            vaciarStore = await limpiarDatos("dosxdos", "peticionesFotos");
+            mensaje += "-Fotos pendientes subidas al servidor-";
+          } else if (tipoVector == "firmas") {
+            vaciarStore = await limpiarDatos("dosxdos", "peticionesFirmas");
+            mensaje += "-Firmas pendientes subidas al servidor-";
+          } else if (tipoVector == "notas") {
+            vaciarStore = await limpiarDatos("dosxdos", "notas");
+            mensaje += "-Notas pendientes subidas al servidor-";
+          }
+          resolve(mensaje);
+        } catch (err) {
+          console.error(err);
+          alerta(err.message);
+          scrollToTop();
+          reject(err);
+        }
+      });
+    }
+
+    async function procesarPeticiones() {
+      try {
+        loaderOn();
+        mensaje = "";
+        const exPeticionesLineas = await almacenVacio(
+          "dosxdos",
+          "peticionesLineas"
+        );
+        if (!exPeticionesLineas) {
+          const peticionesLineas = await leerDatos(
+            "dosxdos",
+            "peticionesLineas"
+          );
+          if (peticionesLineas) {
+            //console.log(peticionesLineas);
+            const enviarPeticionesLineas = await enviarPeticiones(
+              peticionesLineas,
+              "lineas"
+            );
+            if (enviarPeticionesLineas) {
+              mensaje += enviarPeticionesLineas;
+            }
+          } else {
+            mensaje +=
+              "-Error al leer las peticiones de las líneas. Las peticiones pendientes de las líneas no han sido procesadas-";
+          }
+        }
+        const exPeticionesFotos = await almacenVacio(
+          "dosxdos",
+          "peticionesFotos"
+        );
+        if (!exPeticionesFotos) {
+          const peticionesFotos = await leerDatos("dosxdos", "peticionesFotos");
+          if (peticionesFotos) {
+            //console.log(peticionesFotos);
+            const enviarPeticionesFotos = await enviarPeticiones(
+              peticionesFotos,
+              "fotos"
+            );
+            if (enviarPeticionesFotos) {
+              mensaje += enviarPeticionesFotos;
+            }
+          } else {
+            mensaje +=
+              "-Error al leer las peticiones de las fotos. Las peticiones pendientes de las fotos no han sido procesadas-";
+          }
+        }
+        const exPeticionesFirmas = await almacenVacio(
+          "dosxdos",
+          "peticionesFirmas"
+        );
+        if (!exPeticionesFirmas) {
+          const peticionesFirmas = await leerDatos(
+            "dosxdos",
+            "peticionesFirmas"
+          );
+          if (peticionesFirmas) {
+            //console.log(peticionesFirmas);
+            const enviarPeticionesFirmas = await enviarPeticiones(
+              peticionesFirmas,
+              "firmas"
+            );
+            if (enviarPeticionesFirmas) {
+              mensaje += enviarPeticionesFirmas;
+            }
+          } else {
+            mensaje +=
+              "-Error al leer las peticiones de las firmas. Las peticiones pendientes de las firmas no han sido procesadas-";
+          }
+        }
+        const exPeticionesNotas = await almacenVacio("dosxdos", "notas");
+        if (!exPeticionesNotas) {
+          const peticionesNotas = await leerDatos("dosxdos", "notas");
+          if (peticionesNotas) {
+            //console.log(peticionesFirmas);
+            const enviarPeticionesNotas = await enviarPeticiones(
+              peticionesNotas,
+              "notas"
+            );
+            if (enviarPeticionesNotas) {
+              mensaje += enviarPeticionesNotas;
+            }
+          } else {
+            mensaje +=
+              "-Error al leer las peticiones de las notas. Las peticiones pendientes de las notas no han sido procesadas-";
+          }
+        }
+        if (!mensaje) {
+          mensaje = "No hay datos pendientes para ser enviados al servidor";
+        }
+        const sincronizarBaseDatos = await sincronizarDb2();
+        if (sincronizarBaseDatos) {
+          mensaje += "-Se ha sincronizado la base de datos exitosamente-";
+        } else {
+          mensaje += "-Error: No ha sido posible sincronizar la base de datos-";
+        }
+        localStorage.setItem("mensaje", mensaje);
+        location.reload();
+        /*alerta(mensaje);
+                scrollToTop();*/
+      } catch (error) {
+        console.error(error);
+        alerta(error.message);
+        scrollToTop();
+      }
+    }
+
+    async function procesarPeticiones2(mensaje) {
+      try {
+        if (mensaje == null) {
+          mensaje = "";
+        }
+        const exPeticionesLineas = await almacenVacio(
+          "dosxdos",
+          "peticionesLineas"
+        );
+        if (!exPeticionesLineas) {
+          const peticionesLineas = await leerDatos(
+            "dosxdos",
+            "peticionesLineas"
+          );
+          if (peticionesLineas) {
+            //console.log(peticionesLineas);
+            const enviarPeticionesLineas = await enviarPeticiones(
+              peticionesLineas,
+              "lineas"
+            );
+            if (enviarPeticionesLineas) {
+              mensaje += enviarPeticionesLineas;
+            }
+          } else {
+            mensaje +=
+              "-Error al leer las peticiones de las líneas. Las peticiones pendientes de las líneas no han sido procesadas-";
+          }
+        }
+        const exPeticionesFotos = await almacenVacio(
+          "dosxdos",
+          "peticionesFotos"
+        );
+        if (!exPeticionesFotos) {
+          const peticionesFotos = await leerDatos("dosxdos", "peticionesFotos");
+          if (peticionesFotos) {
+            //console.log(peticionesFotos);
+            const enviarPeticionesFotos = await enviarPeticiones(
+              peticionesFotos,
+              "fotos"
+            );
+            if (enviarPeticionesFotos) {
+              mensaje += enviarPeticionesFotos;
+            }
+          } else {
+            mensaje +=
+              "-Error al leer las peticiones de las fotos. Las peticiones pendientes de las fotos no han sido procesadas-";
+          }
+        }
+        const exPeticionesFirmas = await almacenVacio(
+          "dosxdos",
+          "peticionesFirmas"
+        );
+        if (!exPeticionesFirmas) {
+          const peticionesFirmas = await leerDatos(
+            "dosxdos",
+            "peticionesFirmas"
+          );
+          if (peticionesFirmas) {
+            //console.log(peticionesFirmas);
+            const enviarPeticionesFirmas = await enviarPeticiones(
+              peticionesFirmas,
+              "firmas"
+            );
+            if (enviarPeticionesFirmas) {
+              mensaje += enviarPeticionesFirmas;
+            }
+          } else {
+            mensaje +=
+              "-Error al leer las peticiones de las firmas. Las peticiones pendientes de las firmas no han sido procesadas-";
+          }
+        }
+        const exPeticionesNotas = await almacenVacio("dosxdos", "notas");
+        if (!exPeticionesNotas) {
+          const peticionesNotas = await leerDatos("dosxdos", "notas");
+          if (peticionesNotas) {
+            //console.log(peticionesFirmas);
+            const enviarPeticionesNotas = await enviarPeticiones(
+              peticionesNotas,
+              "notas"
+            );
+            if (enviarPeticionesNotas) {
+              mensaje += enviarPeticionesNotas;
+            }
+          } else {
+            mensaje +=
+              "-Error al leer las peticiones de las notas. Las peticiones pendientes de las notas no han sido procesadas-";
+          }
+        }
+        if (mensaje) {
+          alerta(mensaje);
+          scrollToTop();
+        }
+      } catch (error) {
+        console.error(error);
+        alerta(error.message);
+        scrollToTop();
+      }
+    }
+
+    /* TAREAS EN LA INTERMITENCIA DE LA CONEXIÓN */
+
+    window.addEventListener("online", () => {
+      console.log("La conexión a Internet se ha recuperado.");
+      //cache();
+      procesarPeticiones();
+    });
+
+    window.addEventListener("offline", () => {
+      console.log("La conexión a Internet se ha perdido.");
+    });
+
+    /* PAGESHOW */
+    window.addEventListener("pageshow", (e) => {
+      console.log("Carga completa de los elementos de la página no fetch");
+      let mensaje = localStorage.getItem("mensaje");
+      if (mensaje && mensaje !== null) {
+        $textoMensaje.innerHTML = mensaje;
+        mensajeOn();
+        localStorage.removeItem("mensaje");
+      }
+      let login = localStorage.getItem("login");
+      if (!login || login === null) {
+        window.location.href = "http://localhost/dosxdos_app/index.html";
+      }
+    });
+
+    /* TAREAS AL INICIAR LA PANTALLA CON EL ESTADO DE LA CONEXIÓN */
+
+    if (navigator.onLine) {
+      console.log("La aplicación está en línea.");
+      //cache();
+      appOnline();
+    } else {
+      console.log("La aplicación está fuera de línea.");
+      appOffline();
+    }
+
+    async function aceptarNotificación(id) {
+      const modal = document.getElementById("modalNotificacion");
+      const confirmarBtn = document.getElementById("confirmarAceptar");
+      const cancelarBtn = document.getElementById("cancelarAceptar");
+
+      return new Promise((resolve) => {
+        modal.classList.remove("hidden");
+
+        function handleConfirm() {
+          loaderOn();
+          fetch(
+            `https://dosxdos.app.iidos.com/apirest/rutas_notificaciones.php/notificaciones/aceptar/${id}`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ visto: true }),
+            }
+          )
+            .then((response) => response.json())
+            .then((data) => {
+              const notificationDiv = document.querySelector(
+                `[data-LineaActividad="${id}"]`
+              );
+              if (notificationDiv) {
+                // Update data attribute
+                notificationDiv.setAttribute("data-estado", "aceptada");
+
+                // Update visual state of the button
+                const mainButton = notificationDiv.querySelector("button");
+                mainButton.className = mainButton.className.replace(
+                  "ruta",
+                  "ruta2"
+                );
+
+                // Update accept button text
+                const acceptButton = mainButton.querySelector("button");
+                acceptButton.textContent = "✓ Aceptada";
+
+                // Switch to accepted tab
+                const pestañaAceptadas =
+                  document.getElementById("pestañaAceptadas");
+                pestañaAceptadas.click();
+
+                // Update the counts and visibility
+                actualizarVistaNotificaciones();
+              }
+              resolve(true);
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              resolve(false);
+            })
+            .finally(() => {
+              modal.classList.add("hidden");
+              loaderOff();
+              cleanup();
+            });
+        }
+
+        function handleCancel() {
+          modal.classList.add("hidden");
+          cleanup();
+          resolve(false);
+        }
+
+        function cleanup() {
+          confirmarBtn.removeEventListener("click", handleConfirm);
+          cancelarBtn.removeEventListener("click", handleCancel);
+        }
+
+        confirmarBtn.addEventListener("click", handleConfirm);
+        cancelarBtn.addEventListener("click", handleCancel);
+      });
+    }
+  </script>
 </html>
