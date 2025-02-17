@@ -993,7 +993,6 @@
           const resJson = await res.json();
 
           if (resJson.message) {
-            console.log("-----", resJson);
             const db = await new Promise((dbResolve, dbReject) => {
               const request = indexedDB.open("dosxdos");
               request.onsuccess = (event) => {
@@ -1033,9 +1032,9 @@
       });
     }
 
-    /* SINCRONIZAR BASE DE DATOS */
+    /* SINCRONIZAR NOTIFICACIONES */
 
-    async function sincronizarDb() {
+    async function sincronizarNotificaciones() {
       try {
         if (navigator.onLine) {
           loaderOn();
@@ -1049,9 +1048,11 @@
               const mensaje =
                 "Se han sincronizado las notificaciones exitosamente";
               localStorage.setItem("mensaje", mensaje);
+              return true;
             } else {
               alerta("Error al cargar las notificaciones del servidor");
               loaderOff();
+              return false;
             }
           }
         }
@@ -1060,7 +1061,67 @@
           "No se han sincronizado las notificaciones: " + error.message;
         alerta(mensaje);
         localStorage.setItem("mensaje", mensaje);
+        return false;
       }
+    }
+
+    function fetchLineas(vectorRutas) {
+      return new Promise(async (resolve, reject) => {
+        try {
+          const promises = vectorRutas.map(async (objeto) => {
+            const url =
+              "https://dosxdos.app.iidos.com/apirest/lineas.php?ruta=" +
+              objeto.cod;
+            const res = await fetch(url);
+
+            if (!res.ok) {
+              throw new Error(
+                `Error en la solicitud de las líneas de la ruta ${objeto.cod}: ${res.status}`
+              );
+            }
+
+            const resJson = await res.json();
+
+            if (resJson[0]) {
+              const db = await new Promise((dbResolve, dbReject) => {
+                const request = indexedDB.open("dosxdos");
+                request.onsuccess = (event) => {
+                  const db = event.target.result;
+                  dbResolve(db);
+                };
+                request.onerror = (event) => {
+                  dbReject(
+                    new Error(
+                      `Error al abrir la base de datos para ingresar las líneas de la ruta: ${objeto.cod}`
+                    )
+                  );
+                };
+              });
+
+              const transaction = db.transaction("lineas", "readwrite");
+              const datosStore = transaction.objectStore("lineas");
+              const datos = resJson[1];
+              if (Array.isArray(datos)) {
+                datos.forEach((item) => {
+                  datosStore.add(item);
+                });
+              } else {
+                datosStore.add(datos);
+              }
+            } else {
+              throw new Error(
+                `Error al solicitar las líneas de la ruta ${objeto.cod}: ${resJson[1]}`
+              );
+            }
+          });
+
+          await Promise.all(promises);
+          resolve(true);
+        } catch (err) {
+          console.error(err);
+          reject(err);
+        }
+      });
     }
 
     async function sincronizarDb2() {
@@ -1075,7 +1136,7 @@
           }));
           const limpiarLineas = await limpiarDatos("dosxdos", "lineas");
           if (limpiarLineas) {
-            lineas = await fetchNotificaciones();
+            lineas = await fetchLineas();
             if (lineas) {
               resolve(true);
             } else {
@@ -1161,27 +1222,22 @@
           sinc
             ? console.log("Base de datos sincronizada")
             : console.error("Error al sincronizar la base de datos");
-          rutas = await leerDatos("dosxdos", "rutas");
-          rutas = rutas.map((objeto) => ({
-            cod: objeto["No."],
-            nombre: objeto["Descripcion"],
-          }));
-          const TotalLineas = await leerDatos("dosxdos", "lineas");
-          if (TotalLineas) {
-            //console.log(TotalLineas);
-            const lineas = TotalLineas.filter((objeto) => {
-              return objeto.Proyecto == ruta;
-            });
-            console.log(lineas);
+
+          const TotalNotificaciones = await leerDatos(
+            "dosxdos",
+            "notificaciones"
+          );
+          if (TotalNotificaciones) {
+            console.log("TotalNotificaciones", TotalNotificaciones);
 
             const fragmento = document.createDocumentFragment();
-            lineas.forEach((objeto, index) => {
+            TotalNotificaciones.forEach((objeto, index) => {
               const containerDiv = document.createElement("div");
               containerDiv.className = "w-full mb-4";
 
               // Main notification button
               const button = document.createElement("button");
-              const estaAceptada = objeto.Estado === "Realizado";
+              const estaAceptada = objeto.visto === 1;
 
               button.className = `${
                 estaAceptada ? "ruta2" : "ruta"
@@ -1191,11 +1247,7 @@
               const contentDiv = document.createElement("div");
               contentDiv.className = "flex-1 mb-3 sm:mb-0";
 
-              const texto = objeto.Observaciones
-                ? `${objeto.Sector} _ ${objeto.Zona} _ ${objeto.LineaActividad} _ ${objeto.NombrePuntoVenta} _ ${objeto.NombreCliente} _ ${objeto.TipoTrabajo} _ ${objeto.Observaciones} _ NAVISION: ${objeto.Navision_OT} _ CRM: ${objeto.OT}`
-                : `${objeto.Sector} _ ${objeto.Zona} _ ${objeto.LineaActividad} _ ${objeto.NombrePuntoVenta} _ ${objeto.NombreCliente} _ ${objeto.TipoTrabajo} _ NAVISION: ${objeto.Navision_OT} _ CRM: ${objeto.OT}`;
-
-              contentDiv.textContent = texto;
+              contentDiv.textContent = `${objeto.titulo} _ ${objeto.mensaje} _ ${objeto.LineaActividad} _ ${objeto.fecha_envio} _ ${objeto.fecha_visto}`;
 
               // Accept button
               const botonAceptar = document.createElement("button");
