@@ -488,6 +488,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-messaging-compat.js"></script>
 
   <script>
+    let tokenNativo = "";
     const versionLocal = "dosxdos104";
     idioma = "";
     usuario = "";
@@ -1506,6 +1507,11 @@
           resolve(false);
         }
       });
+    }
+
+    function asignarTokenNativo(){
+      tokenNativo = window.localStorage.getItem('tokenNativo');
+      alerta("token Android:" + tokenNativo)
     }
   </script>
 </html>
