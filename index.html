@@ -1476,7 +1476,7 @@
     }
   });
 
-  /* FUNCIÓN PARA OBLIGAR EL CIERRE DE SESIÓN EN ACTUALIZACIONES QUE INLUYEN INDEXDB */
+  /* FUNCIÓN PARA OBLIGAR EL CIERRE DE SESIÓN */
 
   function validarVersion() {
     return new Promise((resolve, reject) => {
@@ -1515,12 +1515,15 @@
   function asignarTokenNativo() {
     tokenNativo = window.localStorage.getItem('tokenNativo');
   }
-  if(isAndroid){
-    alerta("Por favor instala la aplicación nativa para Android en la PlayStore. Puedes hacer click en el botón de descarga. Así podrás tener todas las funcionalidades.");
+
+  if (isAndroid) {
+    alerta("Por favor instala la aplicación nativa para Android, puedes hacer click en el botón de descarga. De esta forma podrás disfrutar de todas las funcionalidades para móviles.");
   }
-  if(isiOS){
-    alerta("Por favor instala la aplicación nativa para Android en la AppStore. Puedes hacer click en el botón de descarga. Así podrás tener todas las funcionalidades.");
-  }
+
+  // if (isiOS) {
+  //   alerta("Por favor instala la aplicación nativa para Apple en la AppStore, puedes hacer click en el botón de descarga. De esta forma podrás disfrutar de todas las funcionalidades para móviles.");
+  // }
+
 </script>
 
 </html>
