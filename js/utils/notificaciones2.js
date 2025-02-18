@@ -58,10 +58,7 @@ async function sincronizarNotificaciones() {
   try {
     if (navigator.onLine) {
       loaderOn();
-      const limpiarNotificaciones = await limpiarDatos(
-        "dosxdos",
-        "notificaciones"
-      );
+      const limpiarNotificaciones = await limpiarDatos("notificaciones");
       if (limpiarNotificaciones) {
         notificacionesActuales = await fetchNotificaciones();
         if (notificacionesActuales) {
@@ -75,10 +72,50 @@ async function sincronizarNotificaciones() {
       }
     }
   } catch (error) {
+    console.error(error);
     const mensaje =
       "No se han sincronizado las notificaciones: " + error.message;
     alerta(mensaje);
     localStorage.setItem("mensaje", mensaje);
     return false;
   }
+}
+
+function notificar() {
+  return new Promise(async (resolve) => {
+    try {
+      notificationsStore = await leerDatos("notificaciones");
+      notificacionesSinAcpetar = false;
+      console.log(notificationsStore);
+      notificationsStore.map(not => {
+        if (!not.visto) {
+          notificacionesSinAcpetar = true;
+          notificacionesSinAcpetarNumero++;
+        }
+      })
+      console.log('notificacionesSinAcpetar: ' + notificacionesSinAcpetar)
+      console.log('notificacionesSinAcpetarNumero: ' + notificacionesSinAcpetarNumero)
+      const notificaciones = document.getElementById("notificaciones");
+      notificaciones.addEventListener("click", () => {
+        window.location.href = "http://localhost/dosxdos_app/notificaciones.html";
+      });
+      const sinNotificaciones = document.getElementById("sinNotificaciones");
+      sinNotificaciones.addEventListener("click", () => {
+        window.location.href = "http://localhost/dosxdos_app/notificaciones.html";
+      });
+      if (notificacionesSinAcpetarNumero) {
+        notificaciones.classList.remove('displayOff');
+        notificaciones.classList.add('displayOn');
+        document.getElementById('numNtf').innerHTML = notificacionesSinAcpetarNumero;
+      } else {
+        sinNotificaciones.classList.remove('displayOff');
+        sinNotificaciones.classList.add('displayOn');
+      }
+    } catch (err) {
+      console.error(err);
+      const mensaje =
+        "Error en el sistema de notificaciones: " + error.message;
+      alerta(mensaje);
+    }
+  });
 }

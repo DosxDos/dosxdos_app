@@ -653,7 +653,7 @@
           <p id="numNtf">3</p>
         </div>
       </div>
-      <div id="sinNotificaciones" class="displayOn">
+      <div id="sinNotificaciones" class="displayOff">
         <img src="http://localhost/dosxdos_app/img/bell2.png" alt="bell2" id="bell2" />
       </div>
     </div>
@@ -819,7 +819,7 @@
     $nombreUsuario = document.getElementById("nombreUsuario"),
     $imagenUsuario = document.getElementById("imagenUsuario"),
     $botonRutas = document.getElementById("rutasIconoBoton");
-  let usuario, montador, rutas, lineas;
+  let usuario, montador, rutas, lineas, notificacionesSinAcpetarNumero = 0;
 
   /* LOADER */
 
@@ -1441,6 +1441,10 @@
             const peticionesCierre = await procesarPeticiones2();
             loaderOff();
           }
+          const sincronizacionDeNotificaciones = await sincronizarNotificaciones();
+          if (sincronizacionDeNotificaciones) {
+            await notificar();
+          }
         }
       }
     } catch (error) {
@@ -1552,16 +1556,6 @@
   historialIcono.addEventListener("click", () => {
     window.location.href =
       "http://localhost/dosxdos_app/historial_montador.html";
-  });
-
-  /* NOTIFICACIONES */
-  const notificaciones = document.getElementById("notificaciones");
-  notificaciones.addEventListener("click", () => {
-    window.location.href = "http://localhost/dosxdos_app/notificaciones.html";
-  });
-  const sinNotificaciones = document.getElementById("sinNotificaciones");
-  sinNotificaciones.addEventListener("click", () => {
-    window.location.href = "http://localhost/dosxdos_app/notificaciones.html";
   });
 
   /* EVENTOS CLIC */
@@ -2027,5 +2021,7 @@
     appOffline();
   }
 </script>
+
+<script src="http://localhost/dosxdos_app/js/utils/notificaciones2.js"></script>
 
 </html>
