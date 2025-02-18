@@ -450,7 +450,6 @@
   jsonIdioma = "";
   messaging = null;
 
-  const sistema = document.getElementById('sistema');
   const userAgent = navigator.userAgent;
 
   const isWindows = /windows/i.test(userAgent);
@@ -458,6 +457,7 @@
   const isLinux = /linux/i.test(userAgent);
   const isAndroid = /android/i.test(userAgent);
   const isiOS = /(iphone|ipad|ipod)/i.test(userAgent);
+
 
   const $mensaje = document.getElementById("mensaje");
   const $textoMensaje = document.getElementById("mensajeTexto");
@@ -573,7 +573,6 @@
             console.error(
               "El permiso para recibir notificaciones fue denegado"
             );
-            alerta("Este dispositivo no recibirá notificaciones de la App");
           }
         }
       }
@@ -1089,7 +1088,7 @@
         await ejecutarFirebase();
         if (!isAndroid || !isiOS) {
           if (!tokenFirebase) {
-            alerta("Este dispositivo no recibirá notificaciones de la App")
+            //alerta("Este dispositivo no recibirá notificaciones de la App")
           }
         }
       } else {
@@ -1124,7 +1123,7 @@
           await ejecutarFirebase();
           if (!isAndroid || !isiOS) {
             if (!tokenFirebase) {
-              alerta("Este dispositivo no recibirá notificaciones de la App")
+              //alerta("Este dispositivo no recibirá notificaciones de la App")
             }
           }
         } else {
@@ -1278,26 +1277,19 @@
                             setCookie("login", login, 365);
                             setCookie("usuario", usuario, 365);
                             if (isAndroid || isiOS) {
-                              if (tokenNativo) {
+                              if (tokenNativo != null) {
                                 await guardarTokenEnServidor(
                                   tokenNativo,
                                   usuario
                                 );
                               } else {
-                                if (tokenFirebase) {
-                                  await guardarTokenEnServidor(
-                                    tokenFirebase,
-                                    usuario
-                                  );
-                                } else {
-                                  localStorage.setItem(
-                                    "mensaje",
-                                    "Este dispositivo no recibirá notificaciones de la App"
-                                  );
-                                }
+                                localStorage.setItem(
+                                  "mensaje",
+                                  "Debes instalar la aplicación nativa. Este dispositivo no recibirá notificaciones Web"
+                                );
                               }
                             } else {
-                              if (tokenFirebase) {
+                              if (tokenFirebase != null) {
                                 await guardarTokenEnServidor(
                                   tokenFirebase,
                                   usuario
@@ -1305,7 +1297,7 @@
                               } else {
                                 localStorage.setItem(
                                   "mensaje",
-                                  "Este dispositivo no recibirá notificaciones de la App"
+                                  "Este dispositivo no recibirá notificaciones de la App, ya que no permite las notificaciones Web"
                                 );
                               }
                             }
@@ -1321,26 +1313,19 @@
                             setCookie("login", login, 365);
                             setCookie("usuario", usuario, 365);
                             if (isAndroid || isiOS) {
-                              if (tokenNativo) {
+                              if (tokenNativo != null) {
                                 await guardarTokenEnServidor(
                                   tokenNativo,
                                   usuario
                                 );
                               } else {
-                                if (tokenFirebase) {
-                                  await guardarTokenEnServidor(
-                                    tokenFirebase,
-                                    usuario
-                                  );
-                                } else {
-                                  localStorage.setItem(
-                                    "mensaje",
-                                    "Este dispositivo no recibirá notificaciones de la App"
-                                  );
-                                }
+                                localStorage.setItem(
+                                  "mensaje",
+                                  "Debes instalar la aplicación nativa. Este dispositivo no recibirá notificaciones Web"
+                                );
                               }
                             } else {
-                              if (tokenFirebase) {
+                              if (tokenFirebase != null) {
                                 await guardarTokenEnServidor(
                                   tokenFirebase,
                                   usuario
@@ -1348,7 +1333,7 @@
                               } else {
                                 localStorage.setItem(
                                   "mensaje",
-                                  "Este dispositivo no recibirá notificaciones de la App"
+                                  "Este dispositivo no recibirá notificaciones de la App, ya que no permite las notificaciones Web"
                                 );
                               }
                             }
@@ -1364,26 +1349,19 @@
                             setCookie("login", login, 365);
                             setCookie("usuario", usuario, 365);
                             if (isAndroid || isiOS) {
-                              if (tokenNativo) {
+                              if (tokenNativo != null) {
                                 await guardarTokenEnServidor(
                                   tokenNativo,
                                   usuario
                                 );
                               } else {
-                                if (tokenFirebase) {
-                                  await guardarTokenEnServidor(
-                                    tokenFirebase,
-                                    usuario
-                                  );
-                                } else {
-                                  localStorage.setItem(
-                                    "mensaje",
-                                    "Este dispositivo no recibirá notificaciones de la App"
-                                  );
-                                }
+                                localStorage.setItem(
+                                  "mensaje",
+                                  "Debes instalar la aplicación nativa. Este dispositivo no recibirá notificaciones Web"
+                                );
                               }
                             } else {
-                              if (tokenFirebase) {
+                              if (tokenFirebase != null) {
                                 await guardarTokenEnServidor(
                                   tokenFirebase,
                                   usuario
@@ -1391,7 +1369,7 @@
                               } else {
                                 localStorage.setItem(
                                   "mensaje",
-                                  "Este dispositivo no recibirá notificaciones de la App"
+                                  "Este dispositivo no recibirá notificaciones de la App, ya que no permite las notificaciones Web"
                                 );
                               }
                             }
@@ -1536,9 +1514,7 @@
 
   function asignarTokenNativo() {
     tokenNativo = window.localStorage.getItem('tokenNativo');
-    alerta("token Android:" + tokenNativo)
   }
-
 </script>
 
 </html>
