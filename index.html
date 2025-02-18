@@ -1515,6 +1515,12 @@
   function asignarTokenNativo() {
     tokenNativo = window.localStorage.getItem('tokenNativo');
   }
+  if(isAndroid){
+    alerta("Por favor instala la aplicación nativa para Android en la PlayStore. Puedes hacer click en el botón de descarga. Así podrás tener todas las funcionalidades.");
+  }
+  if(isiOS){
+    alerta("Por favor instala la aplicación nativa para Android en la AppStore. Puedes hacer click en el botón de descarga. Así podrás tener todas las funcionalidades.");
+  }
 </script>
 
 </html>
