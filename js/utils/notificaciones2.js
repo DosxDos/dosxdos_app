@@ -86,7 +86,6 @@ function notificar() {
     try {
       notificationsStore = await leerDatos("notificaciones");
       notificacionesSinAcpetar = false;
-      console.log(notificationsStore);
       notificationsStore.map(not => {
         if (!not.visto) {
           notificacionesSinAcpetar = true;
