@@ -118,3 +118,33 @@ function notificar() {
     }
   });
 }
+
+function eliminarTokenNotificaciones() {
+  return new Promise(resolve => {
+    tokenEliminar = localStorage.getItem('tokenNotificaciones');
+    if (tokenEliminar != null) {
+      urlTokenEliminar = 'http://localhost/dosxdos_app/apirest/rutas_notificaciones.php/notificaciones/token/' + tokenEliminar;
+      fetch(urlTokenEliminar, {
+        method: "DELETE",
+      })
+        .then((res) =>
+          res.ok
+            ? res.json()
+            : reject(
+              new Error(
+                `Error al eliminar el token de las notificaciones.`
+              )
+            )
+        )
+        .then((res) => {
+          resolve(true);
+        })
+        .catch((err) => {
+          mensaje = err.message;
+          console.error(err);
+          alerta(mensaje);
+          reject(new Error(mensaje));
+        });
+    }
+  });
+}
