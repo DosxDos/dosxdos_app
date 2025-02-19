@@ -250,7 +250,7 @@ switch ($metodo) {
         break;
     case 'DELETE':
         switch ($ruta) {
-            case (preg_match('/^notificaciones\/token\/[a-zA-Z0-9]+:[a-zA-Z0-9_-]+$/', $ruta) ? true : false):
+            case (preg_match('/^notificaciones\/token\/[a-zA-Z0-9:_-]+$/', $ruta) ? true : false):
                 try {
                     if (isset($rutas[2])) {
                         $token = $rutas[2];
