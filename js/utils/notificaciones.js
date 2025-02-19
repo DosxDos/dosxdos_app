@@ -63,10 +63,9 @@ async function sincronizarNotificaciones() {
         "notificaciones"
       );
       if (limpiarNotificaciones) {
-        notificaciones = await fetchNotificaciones();
-        if (notificaciones) {
+        notificacionesActuales = await fetchNotificaciones();
+        if (notificacionesActuales) {
           const mensaje = "Se han sincronizado las notificaciones exitosamente";
-          localStorage.setItem("mensaje", mensaje);
           return true;
         } else {
           alerta("Error al cargar las notificaciones del servidor");
@@ -82,4 +81,72 @@ async function sincronizarNotificaciones() {
     localStorage.setItem("mensaje", mensaje);
     return false;
   }
+}
+
+function notificar() {
+  return new Promise(async (resolve) => {
+    try {
+      notificationsStore = await leerDatos("notificaciones");
+      notificacionesSinAcpetar = false;
+      notificationsStore.map(not => {
+        if (!not.visto) {
+          notificacionesSinAcpetar = true;
+          notificacionesSinAcpetarNumero++;
+        }
+      })
+      console.log('notificacionesSinAcpetar: ' + notificacionesSinAcpetar)
+      console.log('notificacionesSinAcpetarNumero: ' + notificacionesSinAcpetarNumero)
+      const notificaciones = document.getElementById("notificaciones");
+      notificaciones.addEventListener("click", () => {
+        window.location.href = "https://dosxdos.app.iidos.com/notificaciones.html";
+      });
+      const sinNotificaciones = document.getElementById("sinNotificaciones");
+      sinNotificaciones.addEventListener("click", () => {
+        window.location.href = "https://dosxdos.app.iidos.com/notificaciones.html";
+      });
+      if (notificacionesSinAcpetarNumero) {
+        notificaciones.classList.remove('displayOff');
+        notificaciones.classList.add('displayOn');
+        document.getElementById('numNtf').innerHTML = notificacionesSinAcpetarNumero;
+      } else {
+        sinNotificaciones.classList.remove('displayOff');
+        sinNotificaciones.classList.add('displayOn');
+      }
+    } catch (err) {
+      console.error(err);
+      const mensaje =
+        "Error en el sistema de notificaciones: " + error.message;
+      alerta(mensaje);
+    }
+  });
+}
+
+function eliminarTokenNotificaciones() {
+  return new Promise(resolve => {
+    tokenEliminar = localStorage.getItem('tokenNotificaciones');
+    if (tokenEliminar != null) {
+      urlTokenEliminar = 'https://dosxdos.app.iidos.com/apirest/rutas_notificaciones.php/notificaciones/token/' + tokenEliminar;
+      fetch(urlTokenEliminar, {
+        method: "DELETE",
+      })
+        .then((res) =>
+          res.ok
+            ? res.json()
+            : reject(
+              new Error(
+                `Error al eliminar el token de las notificaciones.`
+              )
+            )
+        )
+        .then((res) => {
+          resolve(true);
+        })
+        .catch((err) => {
+          mensaje = err.message;
+          console.error(err);
+          alerta(mensaje);
+          reject(new Error(mensaje));
+        });
+    }
+  });
 }
