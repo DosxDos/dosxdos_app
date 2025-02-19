@@ -99,6 +99,9 @@ const CACHE_NAME = 'dosxdos105',
     'https://dosxdos.app.iidos.com/js/utils/notificaciones.js',
     'https://dosxdos.app.iidos.com/js/utils/notificaciones2.js',
     'https://dosxdos.app.iidos.com/js/utils/loadFirebase.js',
+    'https://dosxdos.app.iidos.com/img/bell.gif',
+    'https://dosxdos.app.iidos.com/img/bell2.png',
+    'https://dosxdos.app.iidos.com/img/Isotipo-38.png',
   ],
 
   urlsToUpdate = [

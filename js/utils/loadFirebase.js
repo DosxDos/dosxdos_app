@@ -6,16 +6,16 @@ async function loadFirebase() {
         const isiOS = /(iphone|ipad|ipod)/i.test(userAgent);
 
         if (isAndroid || isiOS) {
-            console.warn("Dispositivo Android o Ios, Firebase no será cargado.");
+            console.warn("Dispositivo Android o Ios, Firebase web push notifications no será cargado.");
             return;
         }
 
         if (!navigator.onLine) {
-            console.warn("Sin conexión, Firebase no será cargado.");
+            console.warn("Sin conexión, Firebase web push notifications no será cargado.");
             return;
         }
 
-        console.log("Conexión activa. Cargando Firebase...");
+        console.warn("Conexión activa. Cargando Firebase web push notifications...");
 
         // Importa Firebase dinámicamente solo si hay conexión
         const { initializeApp } = await import("https://www.gstatic.com/firebasejs/9.6.11/firebase-app.js");
@@ -36,44 +36,53 @@ async function loadFirebase() {
 
         // Manejar mensajes en primer plano
         onMessage(messaging, (payload) => {
-            console.log('[Firebase] Mensaje en primer plano:', payload);
+            console.log('[Firebase web push notifications] Mensaje en primer plano:', payload);
 
             // Extraer datos con valores por defecto si vienen nulos o indefinidos
-            const title = payload?.notification?.title || "Nueva Notificación";
-            const body = payload?.notification?.body || "Tienes una nueva notificación, por favor revísala en cuanto puedas.";
-            const icon = payload?.notification?.icon || "https://dosxdos.app.iidos.com/img/dosxdoslogoNuevoRojo.png";
-            const click_action = payload?.notification?.click_action || "https://dosxdos.app.iidos.com/notificaciones.html";
+            const title = payload.data.title || "Nueva Notificación";
+            const body = payload.data.body || "Tienes una nueva notificación, por favor revísala en cuanto puedas.";
+            const icon = payload.data.icon || "https://dosxdos.app.iidos.com/img/dosxdoslogoNuevoRojo.png";
+            const click_action = payload.data.click_action || "https://dosxdos.app.iidos.com/notificaciones.html";
 
             // Crear un string bien formado
-            const mensaje = title + ": " + body;
+            const mensaje = "Tienes una nueva notificación: " + title + ": " + body;
 
             // Guardar en localStorage
-            localStorage.setItem('mensaje', mensaje);
-            console.log("Notificación guardada en localStorage:", mensaje);
+            alerta(mensaje);
+
+            const $numeroDeNotificacionesActuales = document.getElementById('numNtf');
+            const numeroDeNotificacionesActuales = $numeroDeNotificacionesActuales.innerHTML;
+            const numeroDeNotificacionesActualesInt = parseInt(numeroDeNotificacionesActuales);
+            $numeroDeNotificacionesActuales.innerHTML = numeroDeNotificacionesActualesInt + 1;
+
+            scrollToTop();
 
             // Mostrar notificación en la UI si el usuario tiene permisos activados
-            if (Notification.permission === "granted") {
-                new Notification(title, {
-                    body,
-                    icon
+            if (Notification.permission === "default") {
+                Notification.requestPermission().then((permission) => {
+                    if (permission === "granted") {
+                        const notificacionSistemaOperativo = new Notification(title, { body, icon });
+                        notificacionSistemaOperativo.onclick = () => {
+                            window.location.href = click_action;
+                        };
+                    }
                 });
+            } else if (Notification.permission === "granted") {
+                const notificacionSistemaOperativo = new Notification(title, { body, icon });
+                notificacionSistemaOperativo.onclick = () => {
+                    window.location.href = click_action;
+                };
             }
-
-            location.reload();
 
         });
 
-        console.log('Firebase cargado exitosamente')
+        console.warn('Firebase Web push notifications cargado exitosamente')
     } catch (error) {
-        console.error('No es posible cargar Firebase en este dispositivo')
+        console.error('No es posible cargar Firebase web push notifications en este dispositivo')
         console.error(error);
     }
 
 }
 
-// Escuchar cambios de conexión
-window.addEventListener("online", loadFirebase);
-
 // Cargar Firebase al inicio si hay conexión
 loadFirebase();
-
