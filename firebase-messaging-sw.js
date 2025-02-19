@@ -28,20 +28,8 @@ if (navigator.onLine) {
                 url: payload.data.click_action || 'https://dosxdos.app.iidos.com/notificaciones.html'
             }
         };
-
         self.registration.showNotification(notificationTitle, notificationOptions);
     });
-
-
-    // Escucha mensajes en segundo plano
-    messaging.onMessage((payload) => {
-        console.log('Mensaje en primer plano recibido:', payload);
-
-        if (!document.hidden) { // Solo muestra la alerta si la app está en primer plano
-            alert(`Nueva notificación: ${payload.data.title}`);
-        }
-    });
-
 
     // Maneja clics en las notificaciones
     self.addEventListener('notificationclick', (event) => {

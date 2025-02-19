@@ -96,7 +96,9 @@ const CACHE_NAME = 'dosxdos105',
     'https://dosxdos.app.iidos.com/css/tailwindmain.css',
     'https://dosxdos.app.iidos.com/firebase-messaging-sw.js',
     'https://dosxdos.app.iidos.com/img/dosxdoslogoNuevoRojo.png',
-    'https://dosxdos.app.iidos.com/js/utils/notificaciones.js'
+    'https://dosxdos.app.iidos.com/js/utils/notificaciones.js',
+    'https://dosxdos.app.iidos.com/js/utils/notificaciones2.js',
+    'https://dosxdos.app.iidos.com/js/utils/loadFirebase.js',
   ],
 
   urlsToUpdate = [
@@ -137,7 +139,9 @@ const CACHE_NAME = 'dosxdos105',
     'https://dosxdos.app.iidos.com/rutas_inactivas.html',
     'https://dosxdos.app.iidos.com/historial_montador.html',
     'https://dosxdos.app.iidos.com/linea_historial_montador.html',
-    'https://dosxdos.app.iidos.com/js/utils/notificaciones.js'
+    'https://dosxdos.app.iidos.com/js/utils/notificaciones.js',
+    'https://dosxdos.app.iidos.com/js/utils/notificaciones2.js',
+    'https://dosxdos.app.iidos.com/js/utils/loadFirebase.js',
   ];
 
 //durante la fase de instalación, generalmente se almacena en caché los activos estáticos
