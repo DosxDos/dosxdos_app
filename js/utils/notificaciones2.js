@@ -137,7 +137,15 @@ function eliminarTokenNotificaciones() {
             )
         )
         .then((res) => {
-          resolve(true);
+          if (res.success) {
+            localStorage.setItem('tokenNotificaciones', null);
+            resolve(true);
+          } else {
+            console.error(res);
+            alerta("Error al eliminar el token de las notificaciones: " + res.message)
+            resolve(false);
+          }
+
         })
         .catch((err) => {
           mensaje = err.message;
