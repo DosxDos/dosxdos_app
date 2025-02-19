@@ -262,15 +262,6 @@
         border-radius: 50%;
       }
 
-      #nombreUsuario {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: var(--x25);
-        margin-left: var(--x5);
-        font-family: "Merriweather-Bold", "Merriweather-Bold";
-      }
-
       #flechaUsuario {
         display: flex;
         width: var(--x25);
@@ -427,44 +418,6 @@
         cursor: pointer;
       }
 
-      #cajaBuscador {
-        display: flex;
-        width: 100%;
-        justify-content: center;
-        align-items: center;
-        padding: var(--x15);
-      }
-
-      #iconoBuscador {
-        display: flex;
-        width: var(--x60);
-        height: var(--x60);
-        justify-content: center;
-        align-items: center;
-        padding: var(--x15);
-      }
-
-      #iconoBuscador > img {
-        width: var(--x60);
-        height: var(--x60);
-      }
-
-      #buscador {
-        height: var(--x60);
-        width: var(--x300);
-        margin-left: var(--x5);
-        border: var(--x2) solid gray;
-        font-family: "Lora", "Lora-Regular";
-        font-size: var(--x28);
-        text-align: center;
-        border-radius: var(--x15);
-        padding: var(--x15);
-      }
-
-      #buscador:focus {
-        outline-color: #b20b15;
-      }
-
       #contenido {
         display: flex;
         width: 100%;
@@ -541,6 +494,14 @@
         font-size: var(--x25);
         padding: var(--x15);
         text-align: center;
+      }
+
+      #mobileMenu.translate-x-full {
+        pointer-events: none;
+      }
+
+      #mobileMenu:not(.translate-x-full) {
+        pointer-events: auto;
       }
 
       /* MOVILES GRANDES */
@@ -636,149 +597,463 @@
       <span class="loader"></span>
     </div>
 
-    <section id="encabezado">
-      <div id="logo">
-        <img src="http://localhost/dosxdos_app/img/logo300.png" />
-      </div>
+    <section id="encabezado" class="w-full bg-white shadow-md fixed top-0 z-30">
+      <!-- Main header -->
+      <div class="flex items-center justify-between w-full px-6 py-4">
+        <!-- Logo -->
+        <div class="flex items-center">
+          <img
+            src="http://localhost/dosxdos_app/img/logo300.png"
+            class="h-16 hidden md:block"
+            alt="Logo completo"
+          />
+          <img
+            src="http://localhost/dosxdos_app/img/Isotipo-38.png"
+            class="h-16 md:hidden"
+            alt="Isotipo"
+          />
+        </div>
 
-      <nav id="menu">
-        <div id="usuario">
-          <div id="iconoUsuario">
-            <img
-              src="http://localhost/dosxdos_app/img/usuario.png"
-              id="imagenUsuario"
-            />
+        <!-- Desktop Navigation -->
+        <nav class="hidden md:flex items-center space-x-8">
+          <a
+            href="http://localhost/dosxdos_app/rutas_montador.html"
+            class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-6 h-6 mr-2"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M4 5c8 0 8 14 16 14" />
+              <circle cx="4" cy="5" r="2" />
+              <circle cx="12" cy="12" r="2" />
+              <circle cx="20" cy="19" r="2" />
+            </svg>
+            <span>Rutas</span>
+          </a>
+
+          <a
+            href="http://localhost/dosxdos_app/ruta_montador.html"
+            class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-6 h-6 mr-2"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"
+              />
+              <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+              <path d="M9 12h6" />
+              <path d="M9 16h6" />
+            </svg>
+            <span>Líneas</span>
+          </a>
+
+          <a
+            href="http://localhost/dosxdos_app/historial_montador.html"
+            class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-6 h-6 mr-2"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+            <span>Historial</span>
+          </a>
+
+          <!-- Desktop User Menu -->
+          <div class="relative group drop-shadow">
+            <button
+              id="userMenuButton"
+              class="group flex items-center gap-3 py-1 pl-1.5 pr-4 rounded-full bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-gray-300 transition-all duration-200"
+              aria-expanded="false"
+            >
+              <div
+                class="w-10 h-10 rounded-full overflow-hidden border-2 border-white shadow-sm bg-gray-100 flex items-center justify-center"
+              >
+                <img
+                  id="imagenUsuarioDesktop"
+                  src="http://localhost/dosxdos_app/img/usuario.png"
+                  class="w-full h-full object-cover"
+                  alt="Profile"
+                  onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                />
+                <svg
+                  class="w-5 h-5 text-gray-400 hidden"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </div>
+
+              <span
+                id="nombreUsuarioDesktop"
+                class="text-gray-700 font-medium text-lg"
+              ></span>
+
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-6 h-6 text-gray-400 group-hover:text-gray-600 transition-transform duration-200 group-hover:rotate-180"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+
+            <!-- Desktop Dropdown Menu -->
+            <div
+              id="userDropdownMenu"
+              class="hidden absolute right-0 mt-2 w-max bg-white rounded-lg shadow-lg p-4 z-50"
+            >
+              <button
+                id="editarUsuarioDesktop"
+                class="flex items-center gap-2 w-full mb-4 text-left text-xl text-black hover:bg-red-600/20 rounded-lg transition-colors duration-200"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-5 h-5 mr-2"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+                  />
+                  <path
+                    d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
+                  />
+                </svg>
+                Editar Usuario
+              </button>
+              <button
+                id="cerrarSesionDesktop"
+                class="flex items-center gap-2 w-full text-left text-xl text-red-500 hover:bg-red-600/20 rounded-lg transition-colors duration-200"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-5 h-5 mr-2"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                  <polyline points="16 17 21 12 16 7" />
+                  <line x1="21" y1="12" x2="9" y2="12" />
+                </svg>
+                Cerrar Sesión
+              </button>
+            </div>
           </div>
-          <p id="nombreUsuario"></p>
-          <div id="flechaUsuario">
-            <img src="http://localhost/dosxdos_app/img/flechaAbajo.png" />
+        </nav>
+
+        <!-- Mobile Hamburger Button -->
+        <button
+          id="menuButton"
+          class="md:hidden relative z-50 p-2 focus:outline-none mr-4"
+        >
+          <div class="relative w-8 h-8">
+            <span
+              class="absolute h-1 w-8 bg-gray-900 transition-all duration-300 ease-in-out top-1"
+              id="hamburgerTop"
+            ></span>
+            <span
+              class="absolute h-1 w-8 bg-gray-900 transition-all duration-300 ease-in-out top-4"
+              id="hamburgerMiddle"
+            ></span>
+            <span
+              class="absolute h-1 w-8 bg-gray-900 transition-all duration-300 ease-in-out top-7"
+              id="hamburgerBottom"
+            ></span>
+          </div>
+        </button>
+      </div>
+
+      <div
+        id="mobileMenu"
+        class="md:hidden fixed inset-0 bg-gradient-to-r from-red-500 to-red-600 bg-opacity-95 transform translate-x-full transition-all duration-500 ease-in-out z-40 overflow-hidden backdrop-blur-sm"
+      >
+        <!-- User Profile Section -->
+        <div class="px-8 py-4 mt-20">
+          <div
+            class="relative flex items-center gap-3 py-1 pl-1.5 pr-4 bg-white shadow-lg rounded-full"
+          >
+            <!-- Profile image -->
+            <div
+              class="absolute left-0 w-24 h-24 rounded-full overflow-hidden border-2 border-white bg-gray-100 flex items-center justify-center shadow-lg"
+            >
+              <img
+                id="imagenUsuarioMobile"
+                src="http://localhost/dosxdos_app/img/usuario.png"
+                class="w-full h-full object-cover"
+                alt="Profile"
+                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+              />
+              <!-- Fallback initials/icon (hidden by default) -->
+              <svg
+                class="w-12 h-12 text-gray-400 hidden"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+            </div>
+            <div class="ml-24 flex items-center py-4">
+              <!-- User name -->
+              <span class="text-black font-medium text-xl">¡Hola,&nbsp;</span>
+              <span
+                id="nombreUsuarioMobile"
+                class="text-black font-medium text-xl"
+              ></span>
+              <span class="text-black font-medium text-xl">!</span>
+            </div>
           </div>
         </div>
 
-        <button id="casa" class="botonIcono">
-          <img src="http://localhost/dosxdos_app/img/casaWhite.png" />
-        </button>
-      </nav>
+        <!-- Navigation Links -->
+        <nav class="px-8 py-6 space-y-2">
+          <a
+            href="http://localhost/dosxdos_app/rutas_montador.html"
+            class="z-10 flex items-center px-6 py-4 text-white bg-white/10 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-md group backdrop-blur-md"
+          >
+            <div
+              class="z-0 flex items-center justify-center w-14 h-14 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all"
+            >
+              <svg
+                class="w-7 h-7 text-white group-hover:text-gray-900 transition-all"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M4 5c8 0 8 14 16 14" />
+                <circle cx="4" cy="5" r="2" />
+                <circle cx="12" cy="12" r="2" />
+                <circle cx="20" cy="19" r="2" />
+              </svg>
+            </div>
+            <span class="text-lg font-semibold tracking-wide">Rutas</span>
+          </a>
 
-      <nav id="opcionesMenu" class="displayOff">
-        <div class="opcionMenu" id="rutasIcono">
-          <button class="botonIcono" type="button" id="rutasIconoBoton">
-            <img src="http://localhost/dosxdos_app/img/rutasWhite.png" />
+          <a
+            href="http://localhost/dosxdos_app/ruta_montador.html"
+            class="z-10 flex items-center px-6 py-4 text-white bg-white/10 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-md group backdrop-blur-md"
+          >
+            <div
+              class="flex items-center justify-center w-14 h-14 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all"
+            >
+              <svg
+                class="w-7 h-7 text-white group-hover:text-gray-900 transition-all"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"
+                />
+                <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+                <path d="M9 12h6" />
+                <path d="M9 16h6" />
+              </svg>
+            </div>
+            <span class="text-lg font-semibold tracking-wide">Líneas</span>
+          </a>
+
+          <a
+            href="http://localhost/dosxdos_app/historial_montador.html"
+            class="z-10 flex items-center px-6 py-4 text-white bg-white/10 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-md group backdrop-blur-md"
+          >
+            <div
+              class="flex items-center justify-center w-14 h-14 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all"
+            >
+              <svg
+                class="w-7 h-7 text-white group-hover:text-gray-900 transition-all"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+            </div>
+            <span class="text-lg font-semibold tracking-wide">Historial</span>
+          </a>
+        </nav>
+
+        <!-- User Actions -->
+        <div
+          class="absolute bottom-0 left-0 right-0 px-8 py-2 bg-white bg-opacity-05 rounded-t-2xl shadow"
+        >
+          <button
+            id="editarUsuarioMobile"
+            class="flex items-center w-full px-4 text-white rounded-xl transition-all duration-300 group my-3 backdrop-blur-sm shadow-lg bg-red-600"
+          >
+            <div
+              class="flex items-center justify-center w-12 h-10 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all"
+            >
+              <svg
+                class="w-6 h-6 shadow-lg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+                />
+                <path
+                  d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
+                />
+              </svg>
+            </div>
+            <span class="text-lg font-medium">Editar usuario</span>
           </button>
-          <p>Rutas</p>
-        </div>
 
-        <div class="opcionMenu" id="lineasIcono">
-          <button class="botonIcono" type="button" id="rutasIconoBoton">
-            <img src="http://localhost/dosxdos_app/img/task.png" />
+          <button
+            id="cerrarSesionMobile"
+            class="flex items-center w-full px-4 text-white rounded-xl transition-all duration-300 group mb-3 backdrop-blur-sm shadow-lg bg-red-600"
+          >
+            <div
+              class="flex items-center justify-center w-12 h-10 bg-white/20 rounded-lg mr-4 group-hover:bg-white/30 transition-all"
+            >
+              <svg
+                class="w-6 h-6"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+              </svg>
+            </div>
+            <span class="text-lg font-medium">Cerrar sesión</span>
           </button>
-          <p>Líneas</p>
         </div>
-
-        <div class="opcionMenu" id="historialIcono">
-          <button class="botonIcono" type="button" id="rutasIconoBoton">
-            <img src="http://localhost/dosxdos_app/img/historial.png" />
-          </button>
-          <p>Historial</p>
-        </div>
-      </nav>
-
-      <nav id="opcionesUsuario" class="displayOff">
-        <button type="button" id="editarUsuario" class="boton">
-          Editar usuario
-        </button>
-        <button type="button" id="cerrarSesion" class="boton2">
-          Cerrar sesión
-        </button>
-      </nav>
-
-      <div id="mensaje" class="displayOff">
-        <p id="textoMensaje"></p>
-        <img id="imgCerrar" src="http://localhost/dosxdos_app/img/cerrar.png" />
       </div>
-
-      <div id="cajaBuscador">
-        <div id="iconoBuscador">
-          <img src="http://localhost/dosxdos_app/img/lupa.png" />
-        </div>
-        <input type="text" id="buscador" />
-      </div>
-
-      <h1 id="titulo" class="displayOn">Notificaciones</h1>
     </section>
 
-    <div id="cabeceraContenido" class="w-full bg-white shadow">
-      <div class="mx-auto max-w-7xl">
-        <div class="border-b border-gray-200">
-          <nav class="flex -mb-px" aria-label="Pestañas">
-            <button
-              id="pestañaPendientes"
-              class="w-1/2 py-4 px-1 text-center border-b-2 border-red-500 text-red-600 font-medium text-sm"
-            >
-              <span class="flex items-center justify-center">
-                <span class="ml-2">Notificaciones Pendientes</span>
-                <span
-                  id="contadorPendientes"
-                  class="bg-red-100 text-red-600 ml-3 py-0.5 px-2.5 rounded-full text-xs"
-                  >0</span
-                >
-              </span>
-            </button>
-            <button
-              id="pestañaAceptadas"
-              class="w-1/2 py-4 px-1 text-center border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 font-medium text-sm"
-            >
-              <span class="flex items-center justify-center">
-                <span class="ml-2">Notificaciones Aceptadas</span>
-                <span
-                  id="contadorAceptadas"
-                  class="bg-gray-100 text-gray-600 ml-3 py-0.5 px-2.5 rounded-full text-xs"
-                  >0</span
-                >
-              </span>
-            </button>
-          </nav>
+    <div class="pt-16 w-full">
+      <div id="cabeceraContenido" class="flex flex-col w-full bg-white shadow">
+        <!-- Search Section -->
+        <div class="relative flex items-center w-full px-12 mt-12 mb-6">
+          <img
+            src="http://localhost/dosxdos_app/img/lupa.png"
+            class="w-5 h-5 opacity-90 absolute left-16 top-1/2 transform -translate-y-1/2"
+          />
+          <input
+            type="text"
+            id="buscador"
+            class="shadow w-full h-12 pl-12 pr-4 bg-white/10 border border-white/20 rounded-lg text-lg focus:outline-none focus:ring-2 focus:ring-white/50 transition-all duration-300 ease-in-out text-black placeholder-white/70"
+            placeholder="Buscar notificaciones..."
+          />
+        </div>
+        <div class="w-full">
+          <div class="border-b border-gray-200">
+            <nav class="flex -mb-px w-full" aria-label="Pestañas">
+              <button
+                id="pestañaPendientes"
+                class="flex-1 w-[50vw] py-4 px-1 text-center border-b-2 border-red-500 text-red-600 font-medium text-sm"
+              >
+                <span class="flex items-center justify-center">
+                  <span class="ml-2">Notificaciones Pendientes</span>
+                  <span
+                    id="contadorPendientes"
+                    class="bg-red-100 text-red-600 ml-3 py-0.5 px-2.5 rounded-full text-xs"
+                    >0</span
+                  >
+                </span>
+              </button>
+              <button
+                id="pestañaAceptadas"
+                class="flex-1 w-[50vw] py-4 px-1 text-center border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 font-medium text-sm"
+              >
+                <span class="flex items-center justify-center">
+                  <span class="ml-2">Notificaciones Aceptadas</span>
+                  <span
+                    id="contadorAceptadas"
+                    class="bg-gray-100 text-gray-600 ml-3 py-0.5 px-2.5 rounded-full text-xs"
+                    >0</span
+                  >
+                </span>
+              </button>
+            </nav>
+          </div>
         </div>
       </div>
     </div>
 
     <section id="contenido"></section>
 
-    <div id="modalNotificacion" class="fixed inset-0 z-50 hidden">
-      <div class="fixed inset-0 bg-black bg-opacity-50"></div>
-      <div class="fixed inset-0 overflow-y-auto">
-        <div class="flex min-h-full items-center justify-center p-4">
-          <div
-            class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl sm:my-8 sm:w-full sm:max-w-lg sm:p-6"
-          >
-            <div class="sm:flex sm:items-start">
-              <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                <h3 class="text-base font-semibold leading-6 text-gray-900">
-                  Confirmar Acción
-                </h3>
-                <div class="mt-2">
-                  <p class="text-sm text-gray-500">
-                    ¿Estás seguro que deseas aceptar esta notificación?
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="flex gap-3 mt-5">
-              <button
-                type="button"
-                id="confirmarAceptar"
-                class="flex-1 justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500"
-              >
-                Confirmar
-              </button>
-              <button
-                type="button"
-                id="cancelarAceptar"
-                class="flex-1 justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-              >
-                Cancelar
-              </button>
-            </div>
+    <div
+      id="modalNotificacion"
+      class="fixed inset-0 z-50 hidden opacity-0 pointer-events-none transition-all duration-300 ease-in-out"
+    >
+      <div
+        class="fixed inset-0 bg-black bg-opacity-50"
+        onclick="closeModal()"
+      ></div>
+      <div
+        class="fixed inset-0 overflow-y-auto flex items-center justify-center p-4"
+      >
+        <div
+          class="modal-content bg-white rounded-xl shadow-xl max-w-md w-full p-6 mx-4 transform scale-95 transition-all duration-300 ease-in-out"
+        >
+          <h2 class="modal-title text-xl font-bold mb-4"></h2>
+          <p class="modal-description text-gray-600 mb-4"></p>
+          <div class="modal-details text-sm text-gray-500 mb-6"></div>
+          <div class="flex space-x-3">
+            <button
+              id="confirmarAceptar"
+              class="flex-1 bg-red-600 text-white py-2 rounded-lg hover:bg-red-600 transition"
+            >
+              Marcar como Leída
+            </button>
+            <button
+              id="cancelarAceptar"
+              class="flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg hover:bg-gray-300 transition"
+            >
+              Cancelar
+            </button>
           </div>
         </div>
       </div>
@@ -794,6 +1069,39 @@
     } else {
       console.log("ruta no definida");
     }
+
+    // At the top, get all elements we need and check their existence
+    document.addEventListener("DOMContentLoaded", () => {
+      const elements = {
+        buscador: document.getElementById("buscador"),
+        mensaje: document.getElementById("mensaje"),
+        textoMensaje: document.getElementById("textoMensaje"),
+        loader: document.getElementById("loader"),
+        body: document.getElementById("body"),
+        nombreUsuario: document.getElementById("nombreUsuario"),
+        imagenUsuario: document.getElementById("imagenUsuario"),
+        contenido: document.getElementById("contenido"),
+      };
+
+      // Check if all required elements exist
+      const missingElements = Object.entries(elements)
+        .filter(([key, value]) => !value)
+        .map(([key]) => key);
+
+      if (missingElements.length > 0) {
+        console.error("Missing required elements:", missingElements);
+        return;
+      }
+
+      // Now we can safely use these elements
+      if (navigator.onLine) {
+        console.log("La aplicación está en línea.");
+        appOnline();
+      } else {
+        console.log("La aplicación está fuera de línea.");
+        appOffline();
+      }
+    });
 
     const $opcionesMenu = document.getElementById("opcionesMenu"),
       $opcionesUsuario = document.getElementById("opcionesUsuario"),
@@ -814,7 +1122,170 @@
       $aceptadasIcono = document.getElementById("aceptadasIcono");
     let usuario, montador, rutas;
 
-    /* LOADER */
+    document.addEventListener("DOMContentLoaded", () => {
+      // Handle normal user menu toggle
+      const userMenuButton = document.getElementById("userMenuButton");
+      const userDropdownMenu = document.getElementById("userDropdownMenu");
+
+      // Toggle menu on button click
+      userMenuButton?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        userDropdownMenu.classList.toggle("hidden");
+        const isExpanded = !userDropdownMenu.classList.contains("hidden");
+        userMenuButton.setAttribute("aria-expanded", isExpanded);
+      });
+
+      // ADD THIS NEW CODE HERE
+      const mobileMenuLinks = document.querySelectorAll("#mobileMenu nav a");
+      mobileMenuLinks.forEach((link) => {
+        link.addEventListener("click", (e) => {
+          e.stopPropagation();
+          window.location.href = link.href;
+          menuButton.click(); // Close menu after clicking
+        });
+      });
+
+      // Mobile menu toggle
+      const menuButton = document.getElementById("menuButton");
+      const mobileMenu = document.getElementById("mobileMenu");
+      const hamburgerTop = document.getElementById("hamburgerTop");
+      const hamburgerMiddle = document.getElementById("hamburgerMiddle");
+      const hamburgerBottom = document.getElementById("hamburgerBottom");
+
+      menuButton.addEventListener("click", () => {
+        const isOpen = !mobileMenu.classList.contains("translate-x-full");
+        mobileMenu.classList.toggle("translate-x-full");
+        document.body.classList.toggle("overflow-hidden");
+
+        if (!isOpen) {
+          // Menu is opening
+          hamburgerTop.classList.remove("bg-gray-900");
+          hamburgerMiddle.classList.remove("bg-gray-900");
+          hamburgerBottom.classList.remove("bg-gray-900");
+          hamburgerTop.classList.add("bg-white");
+          hamburgerMiddle.classList.add("bg-white");
+          hamburgerBottom.classList.add("bg-white");
+
+          hamburgerTop.style.transform = "rotate(45deg) translate(10px, 7px)";
+          hamburgerMiddle.style.opacity = "0";
+          hamburgerBottom.style.transform =
+            "rotate(-45deg) translate(10px, -7px)";
+        } else {
+          // Menu is closing
+          hamburgerTop.classList.remove("bg-white");
+          hamburgerMiddle.classList.remove("bg-white");
+          hamburgerBottom.classList.remove("bg-white");
+          hamburgerTop.classList.add("bg-gray-900");
+          hamburgerMiddle.classList.add("bg-gray-900");
+          hamburgerBottom.classList.add("bg-gray-900");
+
+          hamburgerTop.style.transform = "";
+          hamburgerMiddle.style.opacity = "1";
+          hamburgerBottom.style.transform = "";
+        }
+      });
+
+      // Handle user info display
+      if (usuario && usuario.nombre) {
+        const nombreUsuarioDesktop = document.getElementById(
+          "nombreUsuarioDesktop"
+        );
+        const nombreUsuarioMobile = document.getElementById(
+          "nombreUsuarioMobile"
+        );
+        const imagenUsuarioDesktop = document.getElementById(
+          "imagenUsuarioDesktop"
+        );
+        const imagenUsuarioMobile = document.getElementById(
+          "imagenUsuarioMobile"
+        );
+
+        // Update usernames
+        if (nombreUsuarioDesktop)
+          nombreUsuarioDesktop.textContent = usuario.nombre;
+        if (nombreUsuarioMobile)
+          nombreUsuarioMobile.textContent = usuario.nombre;
+
+        // Update profile images
+        if (usuario.imagen !== "0") {
+          if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
+          if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
+        }
+      }
+
+      // Handle edit user buttons
+      const editarUsuarioDesktop = document.getElementById(
+        "editarUsuarioDesktop"
+      );
+      const editarUsuarioMobile = document.getElementById(
+        "editarUsuarioMobile"
+      );
+
+      [editarUsuarioDesktop, editarUsuarioMobile].forEach((button) => {
+        if (button) {
+          button.addEventListener("click", (e) => {
+            if (navigator.onLine) {
+              window.location.href =
+                "http://localhost/dosxdos_app/dosxdos.php?modulo=editarUsuario&id=" +
+                usuario.id;
+            } else {
+              mensaje =
+                "No es posible acceder a las opciones de edición de usuario sin conexión a internet";
+              alerta(mensaje);
+              scrollToTop();
+            }
+          });
+        }
+      });
+
+      // Handle logout buttons
+      const cerrarSesionDesktop = document.getElementById(
+        "cerrarSesionDesktop"
+      );
+      const cerrarSesionMobile = document.getElementById("cerrarSesionMobile");
+
+      [cerrarSesionDesktop, cerrarSesionMobile].forEach((button) => {
+        if (button) {
+          button.addEventListener("click", () => {
+            cerrarSesion();
+          });
+        }
+      });
+
+      // Close menus when clicking outside
+      document.addEventListener("click", (e) => {
+        // Close desktop dropdown if clicking outside
+        if (
+          !userMenuButton?.contains(e.target) &&
+          !userDropdownMenu?.contains(e.target)
+        ) {
+          userDropdownMenu?.classList.add("hidden");
+          userMenuButton?.setAttribute("aria-expanded", "false");
+        }
+
+        // Close mobile menu if clicking outside
+        if (
+          !mobileMenu.contains(e.target) &&
+          !menuButton.contains(e.target) &&
+          !mobileMenu.classList.contains("translate-x-full")
+        ) {
+          menuButton.click();
+        }
+      });
+
+      // Handle escape key
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          if (!userDropdownMenu?.classList.contains("hidden")) {
+            userDropdownMenu.classList.add("hidden");
+            userMenuButton?.setAttribute("aria-expanded", "false");
+          }
+          if (!mobileMenu.classList.contains("translate-x-full")) {
+            menuButton.click();
+          }
+        }
+      });
+    });
 
     function scrollToTop() {
       // Para navegadores modernos
@@ -842,8 +1313,11 @@
     /* MENSAJE */
 
     function mensajeOn() {
-      $mensaje.classList.remove("displayOff");
-      $mensaje.classList.add("displayOn");
+      const mensaje = document.getElementById("mensaje");
+      if (!mensaje) return;
+
+      mensaje.classList.remove("displayOff");
+      mensaje.classList.add("displayOn");
     }
 
     function mensajeOff() {
@@ -851,12 +1325,18 @@
       $mensaje.classList.add("displayOff");
     }
 
-    $imgCerrar.addEventListener("click", (e) => {
+    $imgCerrar?.addEventListener("click", (e) => {
       mensajeOff();
     });
 
     function alerta(men) {
-      $textoMensaje.innerHTML = men;
+      const textoMensaje = document.getElementById("textoMensaje");
+      if (!textoMensaje) {
+        console.error("Elemento textoMensaje no encontrado");
+        return;
+      }
+
+      textoMensaje.innerHTML = men;
       mensajeOn();
       loaderOff();
     }
@@ -1078,15 +1558,19 @@
     }
 
     function startBuscador() {
+      const buscador = document.getElementById("buscador");
+      if (!buscador) return; // Exit if element doesn't exist
+
       if (buscador.value) {
-        botones = document.querySelectorAll("#contenido button");
+        const botones = document.querySelectorAll("#contenido button");
         const valorBusqueda = buscador.value.toLowerCase();
         botones.forEach((boton) => {
+          const span = boton.querySelector("span");
+          if (!span) return; // Skip if no span element
+
           const textoBoton = boton.textContent.toLowerCase();
-          const span = boton.querySelector("span"); // Obtener el elemento <span> dentro del botón
           if (textoBoton.includes(valorBusqueda)) {
             boton.classList.replace("displayOff", "displayOn");
-            // Crear una expresión regular para buscar la coincidencia exacta
             const regex = new RegExp(valorBusqueda, "gi");
             const textoResaltado = boton.textContent.replace(
               regex,
@@ -1095,7 +1579,6 @@
             span.innerHTML = textoResaltado;
           } else {
             boton.classList.replace("displayOn", "displayOff");
-            // Restablecer el texto original sin resaltado
             span.textContent = span.textContent;
           }
         });
@@ -1109,120 +1592,235 @@
         const login = await vLogin();
         if (!login) {
           window.location.href = "http://localhost/dosxdos_app/index.html";
+          return;
+        }
+
+        const Arrayusuario = await leerDatos("dosxdos", "usuario");
+        if (!Arrayusuario || !Arrayusuario.length) {
+          throw new Error("No se encontraron datos de usuario");
+        }
+
+        usuario = Arrayusuario[0];
+        let loginMontador = localStorage.getItem("loginMontador");
+
+        if (!loginMontador) {
+          window.location.href = `http://localhost/dosxdos_app/dosxdos.php?id=${usuario.id}&rol=${usuario.clase}`;
+          return;
+        }
+
+        montador = usuario.cod;
+
+        // Update UI with user details
+        document.getElementById("nombreUsuarioDesktop").textContent =
+          usuario.nombre;
+        document.getElementById("nombreUsuarioMobile").textContent =
+          usuario.nombre;
+
+        if (usuario.imagen !== "0") {
+          document.getElementById("imagenUsuarioDesktop").src = usuario.imagen;
+          document.getElementById("imagenUsuarioMobile").src = usuario.imagen;
+        }
+
+        const sinc = await sincronizarDb2();
+        if (!sinc) console.error("Error al sincronizar la base de datos");
+
+        await sincronizarNotificaciones();
+        const TotalNotificaciones = await leerDatos(
+          "dosxdos",
+          "notificaciones"
+        );
+
+        if (TotalNotificaciones) {
+          console.log("TotalNotificaciones", TotalNotificaciones);
+
+          const fragmento = document.createDocumentFragment();
+          let contadorPendientes = 0;
+          let contadorAceptadas = 0;
+
+          TotalNotificaciones.forEach((objeto) => {
+            const containerDiv = document.createElement("div");
+            containerDiv.className = "w-full mb-4";
+            containerDiv.setAttribute("data-notification-id", objeto.id);
+            containerDiv.setAttribute(
+              "data-estado",
+              objeto.visto === 1 ? "aceptada" : "pendiente"
+            );
+
+            const notificationContent = document.createElement("div");
+            notificationContent.className =
+              objeto.visto === 1
+                ? "bg-gray-100"
+                : "bg-gradient-to-r from-red-500 to-red-600 text-white";
+            notificationContent.classList.add(
+              "rounded-xl",
+              "p-4",
+              "cursor-pointer"
+            );
+
+            notificationContent.innerHTML = `
+                    <div class="flex justify-between">
+                        <h3 class="font-bold text-lg">${objeto.titulo}</h3>
+                        <span class="${
+                          objeto.visto === 1
+                            ? "bg-green-100 text-green-800"
+                            : "bg-red-100 text-red-800"
+                        } px-2 py-1 rounded-full text-xs font-medium">
+                            ${objeto.visto === 1 ? "Leída" : "Pendiente"}
+                        </span>
+                    </div>
+                    <p class="text-sm opacity-75">${objeto.mensaje}</p>
+                `;
+
+            notificationContent.addEventListener("click", () =>
+              openNotificationModal(objeto)
+            );
+
+            containerDiv.appendChild(notificationContent);
+            fragmento.appendChild(containerDiv);
+
+            // Update counts
+            if (objeto.visto === 1) {
+              contadorAceptadas++;
+            } else {
+              contadorPendientes++;
+            }
+          });
+
+          // Append notifications to the container
+          const contenido = document.getElementById("contenido");
+          if (contenido) {
+            contenido.innerHTML = "";
+            contenido.appendChild(fragmento);
+          }
+
+          // Update the notification counters
+          document.getElementById("contadorPendientes").textContent =
+            contadorPendientes;
+          document.getElementById("contadorAceptadas").textContent =
+            contadorAceptadas;
+
+          // Modal Functionality
+          function openNotificationModal(objeto) {
+            const modal = document.getElementById("modalNotificacion");
+            const modalTitle = modal.querySelector(".modal-title");
+            const modalDescription = modal.querySelector(".modal-description");
+            const modalDetails = modal.querySelector(".modal-details");
+            const confirmButton = document.getElementById("confirmarAceptar");
+            const cancelButton = document.getElementById("cancelarAceptar");
+
+            // Populate modal content
+            modalTitle.textContent = objeto.titulo;
+            modalDescription.textContent = objeto.mensaje;
+            modalDetails.innerHTML = `
+        <p class="mb-2"><strong>Línea de Actividad:</strong> ${objeto.LineaActividad}</p>
+        <p><strong>Fecha:</strong> ${objeto.fecha_envio}</p>
+    `;
+
+            // Remove any old event listeners to avoid duplication
+            confirmButton.replaceWith(confirmButton.cloneNode(true));
+            cancelButton.replaceWith(cancelButton.cloneNode(true));
+
+            // Re-bind new event listeners
+            document
+              .getElementById("confirmarAceptar")
+              .addEventListener("click", () => markNotificationAsRead(objeto));
+            document
+              .getElementById("cancelarAceptar")
+              .addEventListener("click", closeModal);
+
+            // ✅ Make sure the modal is fully visible and clickable
+            modal.classList.remove(
+              "hidden",
+              "opacity-0",
+              "pointer-events-none"
+            );
+            modal.classList.add("opacity-100", "pointer-events-auto");
+          }
+
+          function closeModal() {
+            const modal = document.getElementById("modalNotificacion");
+
+            // Hide the modal properly
+            modal.classList.remove("opacity-100", "pointer-events-auto");
+            modal.classList.add("opacity-0", "pointer-events-none");
+
+            // Fully hide after transition
+            setTimeout(() => {
+              modal.classList.add("hidden");
+            }, 300);
+          }
+
+          function markNotificationAsRead(objeto) {
+            fetch(
+              `http://localhost/dosxdos_app/apirest/rutas_notificaciones.php/notificaciones/aceptar/${objeto.id}`,
+              {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ visto: 1 }),
+              }
+            )
+              .then((response) => response.json())
+              .then(() => {
+                // Move notification to "Aceptadas" tab
+                const notificationElement = document.querySelector(
+                  `[data-notification-id="${objeto.id}"]`
+                );
+                if (notificationElement) {
+                  notificationElement.setAttribute("data-estado", "aceptada");
+                  notificationElement.classList.remove(
+                    "bg-gradient-to-r",
+                    "from-red-600",
+                    "to-red-500",
+                    "text-white"
+                  );
+                  notificationElement.classList.add("bg-gray-100");
+
+                  // Update badge
+                  const statusBadge = notificationElement.querySelector("span");
+                  statusBadge.textContent = "Leída";
+                  statusBadge.classList.replace("bg-red-100", "bg-green-100");
+                  statusBadge.classList.replace(
+                    "text-red-800",
+                    "text-green-800"
+                  );
+                }
+
+                closeModal();
+                actualizarVistaNotificaciones();
+              })
+              .catch((error) => {
+                console.error("Error marking notification as read:", error);
+                closeModal();
+              });
+          }
+
+          // Ensure the "Editar Usuario" button works
+          const editarUsuario = document.getElementById("editarUsuario");
+          if (editarUsuario) {
+            editarUsuario.addEventListener("click", () => {
+              if (navigator.onLine) {
+                window.location.href = `http://localhost/dosxdos_app/dosxdos.php?modulo=editarUsuario&id=${usuario.id}`;
+              } else {
+                alerta(
+                  "No es posible acceder a las opciones de edición de usuario sin conexión a internet"
+                );
+                scrollToTop();
+              }
+            });
+          }
+
+          await procesarPeticiones2();
+          loaderOff();
         } else {
-          const Arrayusuario = await leerDatos("dosxdos", "usuario");
-          usuario = Arrayusuario[0];
-          let loginMontador = localStorage.getItem("loginMontador");
-          if (!loginMontador || loginMontador === null) {
-            window.location.href =
-              "http://localhost/dosxdos_app/dosxdos.php?id=" +
-              usuario.id +
-              "&rol=" +
-              usuario.clase;
-          }
-          montador = usuario.cod;
-          $nombreUsuario.innerHTML = usuario.nombre;
-          if (usuario.imagen != "0") {
-            $imagenUsuario.src = usuario.imagen;
-          }
-          sinc = await sincronizarDb2();
-          sinc
-            ? console.log("Base de datos sincronizada")
-            : console.error("Error al sincronizar la base de datos");
-          await sincronizarNotificaciones();
-          const TotalNotificaciones = await leerDatos(
-            "dosxdos",
-            "notificaciones"
-          );
-          if (TotalNotificaciones) {
-            console.log("TotalNotificaciones", TotalNotificaciones);
-
-            const fragmento = document.createDocumentFragment();
-            TotalNotificaciones.forEach((objeto, index) => {
-              const containerDiv = document.createElement("div");
-              containerDiv.className = "w-full mb-4";
-
-              // Main notification button
-              const button = document.createElement("button");
-              const estaAceptada = objeto.visto === 1;
-
-              button.className = `${
-                estaAceptada ? "ruta2" : "ruta"
-              } displayOn text-white w-full flex flex-col sm:flex-row sm:items-center p-4`;
-
-              // Content wrapper
-              const contentDiv = document.createElement("div");
-              contentDiv.className = "flex-1 mb-3 sm:mb-0";
-
-              contentDiv.textContent = `${objeto.titulo} _ ${objeto.mensaje} _ ${objeto.LineaActividad} _ ${objeto.fecha_envio} _ ${objeto.fecha_visto}`;
-
-              // Accept button
-              const botonAceptar = document.createElement("button");
-              botonAceptar.className =
-                "bg-white text-red-600 px-4 py-2 rounded-md hover:bg-red-50 self-end sm:self-center transition-colors min-w-[100px] text-center";
-              botonAceptar.textContent = estaAceptada
-                ? "✓ Aceptada"
-                : "Aceptar";
-              botonAceptar.onclick = (e) => {
-                e.stopPropagation();
-                aceptarNotificación(objeto.id);
-              };
-
-              button.appendChild(contentDiv);
-              button.appendChild(botonAceptar);
-              containerDiv.appendChild(button);
-
-              containerDiv.setAttribute(
-                "data-LineaActividad",
-                objeto.LineaActividad
-              );
-              containerDiv.setAttribute(
-                "data-estado",
-                estaAceptada ? "aceptada" : "pendiente"
-              );
-
-              fragmento.appendChild(containerDiv);
-            });
-            $contenido.appendChild(fragmento);
-            startBuscador();
-            const editarUsuario = document.getElementById("editarUsuario");
-            editarUsuario.addEventListener("click", (e) => {
-              if (navigator.onLine) {
-                window.location.href =
-                  "http://localhost/dosxdos_app/dosxdos.php?modulo=editarUsuario&id=" +
-                  usuario.id;
-              } else {
-                mensaje =
-                  "No es posible acceder a las opciones de edición de usuario sin conexión a internet";
-                alerta(mensaje);
-                scrollToTop();
-              }
-            });
-            const peticionesCierre = await procesarPeticiones2();
-            loaderOff();
-          } else {
-            alerta("Error al leer el almacén de líneas");
-            const editarUsuario = document.getElementById("editarUsuario");
-            editarUsuario.addEventListener("click", (e) => {
-              if (navigator.onLine) {
-                window.location.href =
-                  "http://localhost/dosxdos_app/dosxdos.php?modulo=editarUsuario&id=" +
-                  usuario.id;
-              } else {
-                mensaje =
-                  "No es posible acceder a las opciones de edición de usuario sin conexión a internet";
-                alerta(mensaje);
-                scrollToTop();
-              }
-            });
-            const peticionesCierre = await procesarPeticiones2();
-            loaderOff();
-          }
+          alerta("Error al leer el almacén de líneas");
+          await procesarPeticiones2();
+          loaderOff();
         }
       } catch (error) {
-        mensaje = "ERROR: " + error.message;
-        console.error(error);
-        alerta(mensaje);
+        console.error("ERROR:", error.message);
+        alerta(error.message);
       }
     }
 
@@ -1251,6 +1849,7 @@
             });
             //console.log(lineas);
             const fragmento = document.createDocumentFragment();
+
             lineas.forEach((objeto, index) => {
               const button = document.createElement("button");
               const estaAceptada = objeto.Estado === "Realizado";
@@ -1345,42 +1944,42 @@
 
     /* ERROR EN EVENTOS CLIC */
 
-    $casa.addEventListener("click", () => {
-      if ($opcionesMenu.classList.contains("displayOff")) {
-        $opcionesMenu.classList.replace("displayOff", "displayOn");
-        if ($opcionesUsuario.classList.contains("displayOn")) {
-          $opcionesUsuario.classList.replace("displayOn", "displayOff");
-        }
-      } else {
-        $opcionesMenu.classList.replace("displayOn", "displayOff");
-      }
-    });
+    // $casa.addEventListener("click", () => {
+    //   if ($opcionesMenu.classList.contains("displayOff")) {
+    //     $opcionesMenu.classList.replace("displayOff", "displayOn");
+    //     if ($opcionesUsuario.classList.contains("displayOn")) {
+    //       $opcionesUsuario.classList.replace("displayOn", "displayOff");
+    //     }
+    //   } else {
+    //     $opcionesMenu.classList.replace("displayOn", "displayOff");
+    //   }
+    // });
 
-    $usuario.addEventListener("click", () => {
-      if ($opcionesUsuario.classList.contains("displayOff")) {
-        $opcionesUsuario.classList.replace("displayOff", "displayOn");
-        if ($opcionesMenu.classList.contains("displayOn")) {
-          $opcionesMenu.classList.replace("displayOn", "displayOff");
-        }
-      } else {
-        $opcionesUsuario.classList.replace("displayOn", "displayOff");
-      }
-    });
+    // $usuario.addEventListener("click", () => {
+    //   if ($opcionesUsuario.classList.contains("displayOff")) {
+    //     $opcionesUsuario.classList.replace("displayOff", "displayOn");
+    //     if ($opcionesMenu.classList.contains("displayOn")) {
+    //       $opcionesMenu.classList.replace("displayOn", "displayOff");
+    //     }
+    //   } else {
+    //     $opcionesUsuario.classList.replace("displayOn", "displayOff");
+    //   }
+    // });
 
-    $botonRutas.addEventListener("click", () => {
-      window.location.href = "http://localhost/dosxdos_app/rutas_montador.html";
-    });
+    // $botonRutas.addEventListener("click", () => {
+    //   window.location.href = "http://localhost/dosxdos_app/rutas_montador.html";
+    // });
 
-    const lineasIcono = document.getElementById("lineasIcono");
-    lineasIcono.addEventListener("click", () => {
-      window.location.href = "http://localhost/dosxdos_app/ruta_montador.html";
-    });
+    // const lineasIcono = document.getElementById("lineasIcono");
+    // lineasIcono.addEventListener("click", () => {
+    //   window.location.href = "http://localhost/dosxdos_app/ruta_montador.html";
+    // });
 
-    const historialIcono = document.getElementById("historialIcono");
-    historialIcono.addEventListener("click", () => {
-      window.location.href =
-        "http://localhost/dosxdos_app/historial_montador.html";
-    });
+    // const historialIcono = document.getElementById("historialIcono");
+    // historialIcono.addEventListener("click", () => {
+    //   window.location.href =
+    //     "http://localhost/dosxdos_app/historial_montador.html";
+    // });
 
     document.addEventListener("DOMContentLoaded", () => {
       const pestañaPendientes = document.getElementById("pestañaPendientes");
@@ -1427,25 +2026,23 @@
 
       // Get all notification containers
       const todasLasNotificaciones = Array.from(
-        document.querySelectorAll("#contenido [data-LineaActividad]")
+        document.querySelectorAll("#contenido [data-notification-id]")
       );
 
       let contadorPendientes = 0;
       let contadorAceptadas = 0;
 
-      // First count all items
       todasLasNotificaciones.forEach((notificacion) => {
-        if (notificacion.getAttribute("data-estado") === "aceptada") {
+        const estaAceptada =
+          notificacion.getAttribute("data-estado") === "aceptada";
+
+        if (estaAceptada) {
           contadorAceptadas++;
         } else {
           contadorPendientes++;
         }
-      });
 
-      // Then update visibility based on current tab
-      todasLasNotificaciones.forEach((notificacion) => {
-        const estaAceptada =
-          notificacion.getAttribute("data-estado") === "aceptada";
+        // Display only relevant notifications for the selected tab
         notificacion.style.display =
           (pestañaActual === "pendiente" && !estaAceptada) ||
           (pestañaActual === "aceptada" && estaAceptada)
@@ -1470,27 +2067,48 @@
 
     /* BUSCADOR */
 
+    // Replace the existing buscador event listener with this improved version
     buscador.addEventListener("input", () => {
-      botones = document.querySelectorAll("#contenido button");
-      const valorBusqueda = buscador.value.toLowerCase();
-      botones.forEach((boton) => {
-        const textoBoton = boton.textContent.toLowerCase();
-        const span = boton.querySelector("span"); // Obtener el elemento <span> dentro del botón
-        if (textoBoton.includes(valorBusqueda)) {
-          boton.classList.replace("displayOff", "displayOn");
-          // Crear una expresión regular para buscar la coincidencia exacta
-          const regex = new RegExp(valorBusqueda, "gi");
-          const textoResaltado = boton.textContent.replace(
-            regex,
-            '<span class="resaltado">$&</span>'
-          );
-          span.innerHTML = textoResaltado;
+      const valorBusqueda = buscador.value.toLowerCase().trim();
+      const notifications = document.querySelectorAll(
+        "#contenido .w-full.mb-4"
+      );
+
+      let contadorPendientes = 0;
+      let contadorAceptadas = 0;
+
+      notifications.forEach((notification) => {
+        const contentDiv = notification.querySelector(".flex-1");
+        if (!contentDiv) return;
+
+        const text = contentDiv.textContent.toLowerCase();
+        const estaAceptada =
+          notification.getAttribute("data-estado") === "aceptada";
+
+        // Determine visibility based on search and current tab
+        const pestañaPendientes = document.getElementById("pestañaPendientes");
+        const mostrarNotificacion =
+          text.includes(valorBusqueda) &&
+          ((pestañaPendientes.classList.contains("border-red-500") &&
+            !estaAceptada) ||
+            (!pestañaPendientes.classList.contains("border-red-500") &&
+              estaAceptada));
+
+        notification.style.display = mostrarNotificacion ? "block" : "none";
+
+        // Update counters
+        if (estaAceptada) {
+          contadorAceptadas++;
         } else {
-          boton.classList.replace("displayOn", "displayOff");
-          // Restablecer el texto original sin resaltado
-          span.textContent = span.textContent;
+          contadorPendientes++;
         }
       });
+
+      // Update counters in UI
+      document.getElementById("contadorPendientes").textContent =
+        contadorPendientes;
+      document.getElementById("contadorAceptadas").textContent =
+        contadorAceptadas;
     });
 
     /* PETICIONES PENDIENTES */
@@ -1773,7 +2391,7 @@
         localStorage.setItem("mensaje", mensaje);
         location.reload();
         /*alerta(mensaje);
-                scrollToTop();*/
+                    scrollToTop();*/
       } catch (error) {
         console.error(error);
         alerta(error.message);
@@ -1918,10 +2536,18 @@
       appOffline();
     }
 
-    async function aceptarNotificación(id) {
+    async function aceptarNotificación(objeto) {
       const modal = document.getElementById("modalNotificacion");
+      const modalTitle = modal.querySelector(".modal-title");
+      const modalDescription = modal.querySelector(".modal-description");
+      const modalLineaActividad = modal.querySelector(".modal-linea-actividad");
       const confirmarBtn = document.getElementById("confirmarAceptar");
       const cancelarBtn = document.getElementById("cancelarAceptar");
+
+      // Populate modal with full notification details
+      modalTitle.textContent = objeto.titulo;
+      modalDescription.textContent = objeto.mensaje;
+      modalLineaActividad.textContent = `Línea de Actividad: ${objeto.LineaActividad}`;
 
       return new Promise((resolve) => {
         modal.classList.remove("hidden");
@@ -1929,7 +2555,7 @@
         function handleConfirm() {
           loaderOn();
           fetch(
-            `http://localhost/dosxdos_app/apirest/rutas_notificaciones.php/notificaciones/aceptar/${id}`,
+            `http://localhost/dosxdos_app/apirest/rutas_notificaciones.php/notificaciones/aceptar/${objeto.id}`,
             {
               method: "PUT",
               headers: {
@@ -1941,22 +2567,46 @@
             .then((response) => response.json())
             .then((data) => {
               const notificationDiv = document.querySelector(
-                `[data-LineaActividad="${id}"]`
+                `[data-notification-id="${objeto.id}"]`
               );
               if (notificationDiv) {
-                // Update data attribute
                 notificationDiv.setAttribute("data-estado", "aceptada");
-
-                // Update visual state of the button
-                const mainButton = notificationDiv.querySelector("button");
-                mainButton.className = mainButton.className.replace(
-                  "ruta",
-                  "ruta2"
+                notificationDiv.classList.add("bg-gray-100");
+                notificationDiv.classList.remove(
+                  "bg-gradient-to-r",
+                  "from-red-600",
+                  "to-red-500",
+                  "text-white"
                 );
 
-                // Update accept button text
-                const acceptButton = mainButton.querySelector("button");
-                acceptButton.textContent = "✓ Aceptada";
+                // Update title and description styles
+                const titleSpan = notificationDiv.querySelector(
+                  ".notification-title"
+                );
+                const descriptionSpan = notificationDiv.querySelector(
+                  ".notification-description"
+                );
+
+                if (titleSpan)
+                  titleSpan.classList.replace("text-white", "text-gray-800");
+                if (descriptionSpan)
+                  descriptionSpan.classList.replace(
+                    "text-white/80",
+                    "text-gray-600"
+                  );
+
+                // Update accept button
+                const actionButton = notificationDiv.querySelector(
+                  ".notification-action"
+                );
+                if (actionButton) {
+                  actionButton.textContent = "✓ Aceptada";
+                  actionButton.classList.replace("bg-white", "bg-gray-200");
+                  actionButton.classList.replace(
+                    "text-red-600",
+                    "text-gray-700"
+                  );
+                }
 
                 // Switch to accepted tab
                 const pestañaAceptadas =
