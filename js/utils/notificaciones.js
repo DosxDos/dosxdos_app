@@ -17,33 +17,29 @@ function fetchNotificaciones() {
       if (resJson.message) {
         const db = await new Promise((dbResolve, dbReject) => {
           const request = indexedDB.open("dosxdos");
-          request.onsuccess = (event) => {
-            const db = event.target.result;
-            dbResolve(db);
-          };
-          request.onerror = (event) => {
-            dbReject(
-              new Error(
-                `Error al abrir la base de datos para ingresar las notificaciones de ${usuario.nombre}`
-              )
-            );
-          };
+          request.onsuccess = (event) => dbResolve(event.target.result);
+          request.onerror = (event) =>
+            dbReject(new Error(`Error al abrir la base de datos`));
         });
 
         const transaction = db.transaction("notificaciones", "readwrite");
-        const datosStore = transaction.objectStore("notificaciones");
+        const store = transaction.objectStore("notificaciones");
+
+        // Clear existing data first
+        await store.clear();
+
         const datos = resJson.message;
         if (Array.isArray(datos)) {
-          datos.forEach((item) => {
-            datosStore.add(item);
-          });
+          for (const item of datos) {
+            try {
+              await store.add(item);
+            } catch (e) {
+              console.log("Skipping duplicate notification:", item.id);
+            }
+          }
         } else {
-          datosStore.add(datos);
+          await store.add(datos);
         }
-      } else {
-        throw new Error(
-          `Error al solicitar las notificaciones de ${usuario.nombre}`
-        );
       }
 
       resolve(true);
@@ -55,24 +51,18 @@ function fetchNotificaciones() {
 }
 
 async function sincronizarNotificaciones() {
+  if (!navigator.onLine) return false;
+
   try {
-    if (navigator.onLine) {
-      loaderOn();
-      const limpiarNotificaciones = await limpiarDatos(
-        "dosxdos",
-        "notificaciones"
-      );
-      if (limpiarNotificaciones) {
-        notificacionesActuales = await fetchNotificaciones();
-        if (notificacionesActuales) {
-          const mensaje = "Se han sincronizado las notificaciones exitosamente";
-          return true;
-        } else {
-          alerta("Error al cargar las notificaciones del servidor");
-          loaderOff();
-          return false;
-        }
-      }
+    loaderOn();
+    await limpiarDatos("dosxdos", "notificaciones");
+    const notificacionesActuales = await fetchNotificaciones();
+
+    if (notificacionesActuales) {
+      return true;
+    } else {
+      alerta("Error al cargar las notificaciones del servidor");
+      return false;
     }
   } catch (error) {
     const mensaje =
@@ -80,5 +70,7 @@ async function sincronizarNotificaciones() {
     alerta(mensaje);
     localStorage.setItem("mensaje", mensaje);
     return false;
+  } finally {
+    loaderOff();
   }
 }
