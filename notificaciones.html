@@ -391,7 +391,7 @@
                 <circle cx="12" cy="7" r="4"></circle>
               </svg>
             </div>
-            <div class="ml-24 flex items-center py-4">
+            <div class="ml-28 flex items-center py-4">
               <!-- User name -->
               <span class="text-black font-medium text-xl">¡Hola,&nbsp;</span>
               <span
@@ -582,10 +582,6 @@
     <section id="contenidoPendientes" class="p-6 bg-gray-100"></section>
     <section id="contenidoAceptadas" class="hidden p-6 bg-gray-100"></section>
 
-    <div id="mensaje" class="displayOff">
-      <p id="textoMensaje"></p>
-    </div>
-
     <div
       id="modalNotificacion"
       class="fixed inset-0 z-50 hidden opacity-0 pointer-events-none transition-all duration-300 ease-in-out"
@@ -663,8 +659,6 @@
     // Core Element References
     const elements = {
       buscador: document.getElementById("buscador"),
-      mensaje: document.getElementById("mensaje"),
-      textoMensaje: document.getElementById("textoMensaje"),
       loader: document.getElementById("loader"),
       body: document.getElementById("body"),
       nombreUsuarioDesktop: document.getElementById("nombreUsuarioDesktop"),
@@ -709,49 +703,93 @@
       }, 1000);
     }
 
-    /* MENSAJE */
-    function mensajeOn() {
-      if (!elements.mensaje) return;
-      elements.mensaje.classList.remove("displayOff");
-      elements.mensaje.classList.add("displayOn");
-    }
-
-    function mensajeOff() {
-      elements.mensaje.classList.remove("displayOn");
-      elements.mensaje.classList.add("displayOff");
-    }
-
-    function alerta(men) {
-      let textoMensaje = document.getElementById("textoMensaje");
-
-      if (!textoMensaje) {
-        console.error(
-          "ERROR: Elemento textoMensaje no encontrado en el DOM. Creándolo..."
-        );
-        textoMensaje = document.createElement("p");
-        textoMensaje.id = "textoMensaje";
-        textoMensaje.style.position = "fixed";
-        textoMensaje.style.top = "10px";
-        textoMensaje.style.left = "50%";
-        textoMensaje.style.transform = "translateX(-50%)";
-        textoMensaje.style.background = "red";
-        textoMensaje.style.color = "white";
-        textoMensaje.style.padding = "10px";
-        textoMensaje.style.borderRadius = "5px";
-        textoMensaje.style.zIndex = "10000";
-        textoMensaje.style.display = "none";
-        document.body.appendChild(textoMensaje);
+    function alerta(mensaje) {
+      // Remove existing alert if present
+      const existingAlert = document.querySelector("#customAlert");
+      if (existingAlert) {
+        existingAlert.remove();
       }
 
-      textoMensaje.textContent = men;
-      textoMensaje.style.display = "block";
+      // Create alert container
+      const alertContainer = document.createElement("div");
+      alertContainer.id = "customAlert";
+      alertContainer.className =
+        "fixed left-1/2 transform -translate-x-1/2 z-50 transition-all duration-300 ease-in-out w-[95%] md:w-[75%] lg:w-[65%]";
+      alertContainer.style.top = "-100px";
+
+      // Create alert content
+      const alertContent = document.createElement("div");
+      alertContent.className = `
+        relative
+        bg-white
+        border-2 border-red-600
+        rounded-lg
+        shadow-lg
+        p-4 md:p-5
+        flex flex-col md:flex-row md:items-center gap-3 md:gap-4
+      `;
+
+      // Create close button
+      const closeButton = document.createElement("button");
+      closeButton.className =
+        "absolute -right-3 -top-3 hover:bg-red-400 p-1 bg-red-600  rounded-full p-1.5 transition-colors duration-200";
+      closeButton.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      `;
+
+      // Create main content container for mobile layout
+      const contentContainer = document.createElement("div");
+      contentContainer.className =
+        "flex flex-col md:flex-row items-center gap-3 md:gap-4 flex-1";
+
+      // Create icon with exclamation mark
+      const iconContainer = document.createElement("div");
+      iconContainer.className = "flex-shrink-0 text-red-600";
+      iconContainer.innerHTML = `
+  <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10" />
+    <path d="M12 7v6" />
+    <path d="M12 16h0.01" />
+  </svg>
+`;
+
+      // Create message text
+      const messageText = document.createElement("p");
+      messageText.className = "text-gray-900 text-base md:text-lg flex-1";
+      messageText.textContent = mensaje;
+
+      // Assemble the content container
+      contentContainer.appendChild(iconContainer);
+      contentContainer.appendChild(messageText);
+
+      // Assemble the alert
+      alertContent.appendChild(closeButton);
+      alertContent.appendChild(contentContainer);
+      alertContainer.appendChild(alertContent);
+      document.body.appendChild(alertContainer);
+
+      // Slide down animation
+      requestAnimationFrame(() => {
+        alertContainer.style.top = "56px";
+      });
+
+      // Add event listeners
+      closeButton.addEventListener("click", () => {
+        hideAlert(alertContainer);
+      });
+
+      // Hide loader if it exists
+      loaderOff();
+    }
+
+    function hideAlert(alertContainer) {
+      alertContainer.style.top = "-100px";
 
       setTimeout(() => {
-        textoMensaje.style.display = "none";
-      }, 3000);
-
-      mensajeOn();
-      loaderOff();
+        alertContainer.remove();
+      }, 300);
     }
 
     /* CERRAR SESIÓN */
@@ -796,14 +834,9 @@
           alerta(mensaje);
         }
       } else {
-        mensaje = "No es posible cerrar la sesión sin conexión a internet";
-        elements.textoMensaje.innerHTML = mensaje;
-        mensajeOn();
+        alerta("No es posible cerrar la sesión sin conexión a internet");
       }
     }
-
-    /* Initial event handlers that don't need DOM loaded */
-    elements.mensaje.addEventListener("click", mensajeOff);
 
     /* API AND DATA FUNCTIONS */
     function fetchRutas() {
@@ -944,7 +977,7 @@
     }
 
     /* LOGIN */
-    function vLogin() {
+    async function vLogin() {
       return new Promise((resolve, reject) => {
         const login = localStorage.getItem("login");
         if (login && login !== null) {
@@ -970,7 +1003,6 @@
       isUpdating = true;
 
       try {
-        console.log("actualizarVistaNotificaciones called");
         const pendientesContainer = elements.contenidoPendientes;
         const aceptadasContainer = elements.contenidoAceptadas;
         const pestañaPendientes = elements.pestañaPendientes;
@@ -1005,12 +1037,14 @@
 
         // Add notifications to containers
         pendientes.forEach((notif) => {
-          const element = createNotificationElement(notif);
+          const searchTerm = elements.buscador.value.toLowerCase().trim();
+          const element = createNotificationElement(notif, searchTerm);
           pendientesContainer.appendChild(element);
         });
 
         aceptadas.forEach((notif) => {
-          const element = createNotificationElement(notif);
+          const searchTerm = elements.buscador.value.toLowerCase().trim();
+          const element = createNotificationElement(notif, searchTerm);
           aceptadasContainer.appendChild(element);
         });
       } finally {
@@ -1021,22 +1055,12 @@
     async function updateCounters() {
       const TotalNotificaciones = await leerDatos("dosxdos", "notificaciones");
 
-      console.log("All Notifications from DB:", TotalNotificaciones); // Debugging
-      console.log("Total count:", TotalNotificaciones.length);
-
       const contadorPendientes = TotalNotificaciones.filter(
         (notif) => notif.visto === 0
       ).length;
       const contadorAceptadas = TotalNotificaciones.filter(
         (notif) => notif.visto === 1
       ).length;
-
-      console.log(
-        "Pending:",
-        contadorPendientes,
-        "Accepted:",
-        contadorAceptadas
-      ); // Debugging
 
       document.getElementById("contadorPendientes").textContent =
         contadorPendientes;
@@ -1092,13 +1116,25 @@
       return match ? match[1] : "-";
     }
 
+    function highlightText(text, searchTerm) {
+      if (!searchTerm) return text; // Return original text if no search term
+
+      const escapedTerm = searchTerm.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&"); // Escape special characters
+      const regex = new RegExp(`(${escapedTerm})`, "gi");
+
+      return text.replace(
+        regex,
+        `<mark class="bg-white bg-opacity-70">$1</mark>`
+      );
+    }
+
     // NOTIFICATION PROCESSING FUNCTIONS
-    function createNotificationElement(objeto) {
+    function createNotificationElement(objeto, searchTerm = "") {
       let existingElement = document.querySelector(
         `[data-notification-id="${objeto.id}"]`
       );
 
-      if (existingElement) return existingElement;
+      if (existingElement) existingElement.remove(); // Ensure we remove outdated elements
 
       const containerDiv = document.createElement("div");
       containerDiv.className = "w-full mb-4";
@@ -1121,20 +1157,24 @@
       );
 
       notificationContent.innerHTML = `
-          <div class="flex justify-between items-center">
-            <h3 class="font-bold text-lg flex-grow pr-2 pt-4 lg:pt-0 pb-2">${
-              objeto.titulo
-            }</h3>
-            <span class="${
-              objeto.visto === 1
-                ? "bg-gray-200 text-gray-600"
-                : "bg-white text-red-600"
-            } absolute top-2 right-2 px-2 py-0.5 rounded-full text-xs font-semibold tracking-tight">
-              ${objeto.visto === 1 ? "Leída" : "Pendiente"}
-            </span>
-          </div>
-          <p class="text-sm opacity-75 mt-2">${objeto.mensaje}</p>
-        `;
+    <div class="flex justify-between items-center">
+      <h3 class="font-bold text-lg flex-grow pr-2 pt-4 lg:pt-0 pb-2">${highlightText(
+        objeto.titulo,
+        searchTerm
+      )}</h3>
+      <span class="${
+        objeto.visto === 1
+          ? "bg-gray-200 text-gray-600"
+          : "bg-white text-red-600"
+      } absolute top-2 right-2 px-2 py-0.5 rounded-full text-xs font-semibold tracking-tight">
+        ${objeto.visto === 1 ? "Aceptada" : "Pendiente"}
+      </span>
+    </div>
+    <p class="text-sm opacity-75 mt-2">${highlightText(
+      objeto.mensaje,
+      searchTerm
+    )}</p>
+  `;
 
       notificationContent.addEventListener("click", () =>
         openNotificationModal(objeto)
@@ -1163,42 +1203,42 @@
 
       // Modal content
       const formattedDetails = `
-    <div class="space-y-4 bg-gray-50 p-4 rounded-lg">
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <p class="text-xs font-semibold text-gray-500 uppercase">Número de Línea</p>
-          <p class="text-lg font-bold text-red-600">${lineNumber}</p>
-        </div>
-        <div>
-          <p class="text-xs font-semibold text-gray-500 uppercase">Fecha</p>
-          <p class="text-base text-gray-800">${formatDate(
-            objeto.fecha_envio
-          )}</p>
-        </div>
-      </div>
+        <div class="space-y-4 bg-gray-50 p-4 rounded-lg">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <p class="text-xs font-semibold text-gray-500 uppercase">Número de Línea</p>
+              <p class="text-lg font-bold text-red-600">${lineNumber}</p>
+            </div>
+            <div>
+              <p class="text-xs font-semibold text-gray-500 uppercase">Fecha</p>
+              <p class="text-base text-gray-800">${formatDate(
+                objeto.fecha_envio
+              )}</p>
+            </div>
+          </div>
 
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <p class="text-xs font-semibold text-gray-500 uppercase mb-1">Cliente</p>
-          <p class="text-base text-gray-800">${parsedDetails.client}</p>
-        </div>
-        <div>
-          <p class="text-xs font-semibold text-gray-500 uppercase mb-1">OT</p>
-          <p class="text-base text-gray-800">${parsedDetails.ot}</p>
-        </div>
-      </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <p class="text-xs font-semibold text-gray-500 uppercase mb-1">Cliente</p>
+              <p class="text-base text-gray-800">${parsedDetails.client}</p>
+            </div>
+            <div>
+              <p class="text-xs font-semibold text-gray-500 uppercase mb-1">OT</p>
+              <p class="text-base text-gray-800">${parsedDetails.ot}</p>
+            </div>
+          </div>
 
-      <div>
-        <p class="text-xs font-semibold text-gray-500 uppercase mb-1">Ruta</p>
-        <p class="text-base text-gray-800">${parsedDetails.route}</p>
-      </div>
+          <div>
+            <p class="text-xs font-semibold text-gray-500 uppercase mb-1">Ruta</p>
+            <p class="text-base text-gray-800">${parsedDetails.route}</p>
+          </div>
 
-      <div>
-        <p class="text-xs font-semibold text-gray-500 uppercase mb-1">Dirección</p>
-        <p class="text-base text-gray-800">${parsedDetails.address}</p>
-      </div>
-    </div>
-  `;
+          <div>
+            <p class="text-xs font-semibold text-gray-500 uppercase mb-1">Dirección</p>
+            <p class="text-base text-gray-800">${parsedDetails.address}</p>
+          </div>
+        </div>
+      `;
 
       const cleanedTitle = objeto.titulo
         .replace(/\s*con\s*línea\s*\d+/i, "")
@@ -1231,21 +1271,30 @@
 
       updatedCancelButton.addEventListener("click", closeModal);
 
-      // Add close (X) button to the modal
       let closeButton = modal.querySelector(".modal-close-button");
       if (!closeButton) {
         closeButton = document.createElement("button");
         closeButton.classList.add(
           "absolute",
-          "top-4",
-          "right-4",
+          "-top-3",
+          "-right-3",
+          "w-8",
+          "h-8",
+          "flex",
+          "items-center",
+          "justify-center",
+          "bg-gray-100",
+          "hover:bg-gray-200",
+          "rounded-full",
           "text-gray-500",
           "hover:text-gray-700",
-          "text-xl"
+          "transition-colors",
+          "duration-200",
+          "shadow-md",
+          "modal-close-button"
         );
-        closeButton.innerHTML = "&times;";
-        closeButton.style.fontSize = "1.5rem";
-        closeButton.classList.add("modal-close-button");
+        closeButton.innerHTML =
+          '<span class="text-2xl font-semibold mb-1">&times;</span>';
         closeButton.addEventListener("click", closeModal);
         modal.querySelector(".modal-content").prepend(closeButton);
       }
@@ -1274,29 +1323,30 @@
         const modalContent = modalNotificacion.querySelector(".modal-content");
         if (modalContent) {
           modalContent.innerHTML = `
-              <div class="p-4 space-y-4">
-                <h2 class="modal-title text-xl font-bold text-gray-800 mb-2"></h2>
-                <p class="modal-description text-gray-600 mb-4"></p>
-                <div class="modal-details text-sm text-gray-500 mb-6"></div>
-                <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
-                  <button
-                    id="confirmarAceptar"
-                    class="flex-1 bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition font-semibold px-2"
-                  >
-                    Marcar como Leída
-                  </button>
-                  <button
-                    id="cancelarAceptar"
-                    class="flex-1 bg-gray-200 text-gray-700 py-3 rounded-lg hover:bg-gray-300 transition font-semibold"
-                  >
-                    Cancelar
-                  </button>
-                </div>
-              </div>
-            `;
+                  <div class="p-4 space-y-4">
+                    <h2 class="modal-title text-xl font-bold text-gray-800 mb-2"></h2>
+                    <p class="modal-description text-gray-600 mb-4"></p>
+                    <div class="modal-details text-sm text-gray-500 mb-6"></div>
+                    <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
+                      <button
+                        id="confirmarAceptar"
+                        class="flex-1 bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition font-semibold px-2"
+                      >
+                        Marcar como Leída
+                      </button>
+                      <button
+                        id="cancelarAceptar"
+                        class="flex-1 bg-gray-200 text-gray-700 py-3 rounded-lg hover:bg-gray-300 transition font-semibold"
+                      >
+                        Cancelar
+                      </button>
+                    </div>
+                  </div>
+                `;
         }
       }
     });
+
     function closeModal() {
       const modal = document.getElementById("modalNotificacion");
       modal.classList.remove("opacity-100", "pointer-events-auto");
@@ -1306,37 +1356,81 @@
       }, 300);
     }
 
+    function closeSidebar() {
+      const mobileMenu = document.getElementById("mobileMenu");
+      const hamburgerTop = document.getElementById("hamburgerTop");
+      const hamburgerMiddle = document.getElementById("hamburgerMiddle");
+      const hamburgerBottom = document.getElementById("hamburgerBottom");
+
+      if (mobileMenu) {
+        mobileMenu.classList.add("translate-x-full");
+
+        // Reset hamburger icon colors and position
+        if (hamburgerTop && hamburgerMiddle && hamburgerBottom) {
+          // Remove white background
+          hamburgerTop.classList.remove("bg-white");
+          hamburgerMiddle.classList.remove("bg-white");
+          hamburgerBottom.classList.remove("bg-white");
+
+          // Add dark background
+          hamburgerTop.classList.add("bg-gray-900");
+          hamburgerMiddle.classList.add("bg-gray-900");
+          hamburgerBottom.classList.add("bg-gray-900");
+
+          // Reset transforms
+          hamburgerTop.style.transform = "";
+          hamburgerMiddle.style.opacity = "1";
+          hamburgerBottom.style.transform = "";
+        }
+      }
+    }
+
     // SEARCH FUNCTIONALITY
     function initializeSearch() {
       const buscador = document.getElementById("buscador");
       if (buscador) {
         buscador.addEventListener("input", () => {
-          const valorBusqueda = buscador.value.toLowerCase().trim();
+          const searchTerm = buscador.value.toLowerCase().trim();
           const notifications = document.querySelectorAll(
             "[data-notification-id]"
           );
 
           notifications.forEach((notification) => {
-            const title =
-              notification.querySelector("h3")?.textContent?.toLowerCase() ||
-              "";
-            const message =
-              notification.querySelector("p")?.textContent?.toLowerCase() || "";
-            const matchesSearch =
-              title.includes(valorBusqueda) || message.includes(valorBusqueda);
+            const titleEl = notification.querySelector("h3");
+            const messageEl = notification.querySelector("p");
 
-            const isPendiente =
+            const titleText = titleEl?.textContent.toLowerCase() || "";
+            const messageText = messageEl?.textContent.toLowerCase() || "";
+
+            const matchesSearch =
+              titleText.includes(searchTerm) ||
+              messageText.includes(searchTerm);
+            const isPending =
               notification.getAttribute("data-estado") !== "aceptada";
-            const mostrandoPendientes =
+            const showingPending =
               document.getElementById("contenidoPendientes").style.display !==
               "none";
 
-            const shouldShow =
+            // Show or hide based on the search
+            notification.style.display =
               matchesSearch &&
-              ((mostrandoPendientes && isPendiente) ||
-                (!mostrandoPendientes && !isPendiente));
+              ((showingPending && isPending) || (!showingPending && !isPending))
+                ? "block"
+                : "none";
 
-            notification.style.display = shouldShow ? "block" : "none";
+            // Apply the highlight effect
+            if (matchesSearch) {
+              if (titleEl)
+                titleEl.innerHTML = highlightText(
+                  titleEl.textContent,
+                  searchTerm
+                );
+              if (messageEl)
+                messageEl.innerHTML = highlightText(
+                  messageEl.textContent,
+                  searchTerm
+                );
+            }
           });
         });
       }
@@ -1345,63 +1439,64 @@
     async function aceptarNotificacion(objeto) {
       try {
         loaderOn();
-
-        // Make API request - send true as required by API
-        const response = await fetch(
-          `http://localhost/dosxdos_app/apirest/rutas_notificaciones.php/notificaciones/aceptar/${objeto.id}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ visto: true }), // Changed to true for API
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-
-        const data = await response.json();
-        console.log("Response data:", data);
-
-        // Update IndexedDB - store as 1 for consistency with existing data
-        const db = await new Promise((resolve, reject) => {
-          const request = indexedDB.open("dosxdos");
-          request.onsuccess = (event) => resolve(event.target.result);
-          request.onerror = (event) => reject(event.target.error);
-        });
-
-        const transaction = db.transaction("notificaciones", "readwrite");
-        const store = transaction.objectStore("notificaciones");
-
-        // Update notification status - store as 1 in local DB
-        objeto.visto = 1; // Keep as 1 for local storage
-        await store.put(objeto);
-
-        // Rest of the UI update code remains the same...
-        const notificationElement = document.querySelector(
-          `[data-notification-id="${objeto.id}"]`
-        );
-
-        if (notificationElement) {
-          notificationElement.setAttribute("data-estado", "aceptada");
-          notificationElement.classList.add("opacity-50", "grayscale");
-
-          const statusBadge = notificationElement.querySelector("span");
-          if (statusBadge) {
-            statusBadge.textContent = "Leída";
-            statusBadge.classList.replace("bg-white", "bg-gray-200");
-            statusBadge.classList.replace("text-red-600", "text-gray-600");
+        if (navigator.onLine) {
+          const response = await fetch(
+            `http://localhost/dosxdos_app/apirest/rutas_notificaciones.php/notificaciones/aceptar/${objeto.id}`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ visto: true }), // Changed to true for API
+            }
+          );
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
           }
 
-          const aceptadasContainer =
-            document.getElementById("contenidoAceptadas");
-          if (aceptadasContainer) {
-            aceptadasContainer.appendChild(notificationElement);
-          }
+          const data = await response.json();
+          console.log("Response data:", data);
 
-          await actualizarVistaNotificaciones();
+          // Update IndexedDB - store as 1 for consistency with existing data
+          const db = await new Promise((resolve, reject) => {
+            const request = indexedDB.open("dosxdos");
+            request.onsuccess = (event) => resolve(event.target.result);
+            request.onerror = (event) => reject(event.target.error);
+          });
+
+          const transaction = db.transaction("notificaciones", "readwrite");
+          const store = transaction.objectStore("notificaciones");
+
+          // Update notification status - store as 1 in local DB
+          objeto.visto = 1; // Keep as 1 for local storage
+          await store.put(objeto);
+
+          // Rest of the UI update code remains the same...
+          const notificationElement = document.querySelector(
+            `[data-notification-id="${objeto.id}"]`
+          );
+
+          if (notificationElement) {
+            notificationElement.setAttribute("data-estado", "aceptada");
+            notificationElement.classList.add("opacity-50", "grayscale");
+
+            const statusBadge = notificationElement.querySelector("span");
+            if (statusBadge) {
+              statusBadge.textContent = "Leída";
+              statusBadge.classList.replace("bg-white", "bg-gray-200");
+              statusBadge.classList.replace("text-red-600", "text-gray-600");
+            }
+
+            const aceptadasContainer =
+              document.getElementById("contenidoAceptadas");
+            if (aceptadasContainer) {
+              aceptadasContainer.appendChild(notificationElement);
+            }
+
+            await actualizarVistaNotificaciones();
+          }
+        } else {
+          alerta("Sin conexión a internet no puedes aceptar notificaciones");
         }
 
         closeModal();
@@ -1557,7 +1652,8 @@
       [cerrarSesionDesktop, cerrarSesionMobile].forEach((button) => {
         if (button) {
           button.addEventListener("click", () => {
-            cerrarSesion();
+            closeSidebar(); // Close the sidebar first
+            cerrarSesion(); // Then proceed with logout
           });
         }
       });
@@ -1745,6 +1841,8 @@
           "notificaciones"
         );
 
+        console.warn("TotalNotificaciones", TotalNotificaciones);
+
         if (TotalNotificaciones) {
           // Split notifications
           const pendientes = TotalNotificaciones.filter(
@@ -1790,13 +1888,24 @@
 
           loaderOff();
         } else {
-          alerta("Error al leer el almacén de líneas");
+          alerta("Error al leer el almacén de notificaciones");
           loaderOff();
         }
       } catch (error) {
         console.error("ERROR:", error.message);
         alerta(error.message);
       }
+    }
+
+    function removeDuplicates(array) {
+      const seen = new Set();
+      return array.filter((item) => {
+        if (!seen.has(item.id)) {
+          seen.add(item.id);
+          return true;
+        }
+        return false;
+      });
     }
 
     // APPLICATION OFFLINE STATE HANDLER
@@ -1809,10 +1918,34 @@
         }
 
         const Arrayusuario = await leerDatos("dosxdos", "usuario");
-        usuario = Arrayusuario[0];
+        if (!Arrayusuario || !Arrayusuario.length) {
+          throw new Error("No se encontraron datos de usuario");
+        }
+
+        // Find the actual user object (the one with 'usuario' property)
+        usuario = Arrayusuario.find((item) => item.hasOwnProperty("usuario"));
+
+        if (!usuario) {
+          throw new Error("No se encontró el objeto de usuario correcto");
+        }
+
+        let loginMontador = localStorage.getItem("loginMontador");
+
+        if (!loginMontador) {
+          window.location.href = `http://localhost/dosxdos_app/dosxdos.php?id=${usuario.id}&rol=${usuario.clase}`;
+          return;
+        }
+
         montador = usuario.cod;
 
-        // Update user name
+        // Update UI with user details
+        const imagenUsuarioDesktop = document.getElementById(
+          "imagenUsuarioDesktop"
+        );
+        const imagenUsuarioMobile = document.getElementById(
+          "imagenUsuarioMobile"
+        );
+
         const nombreUsuarioDesktop = document.getElementById(
           "nombreUsuarioDesktop"
         );
@@ -1821,115 +1954,514 @@
         );
 
         if (usuario && usuario.nombre) {
-          if (nombreUsuarioDesktop)
+          if (nombreUsuarioDesktop) {
             nombreUsuarioDesktop.textContent = usuario.nombre;
-          if (nombreUsuarioMobile)
+          } else {
+            console.error("Desktop element not found");
+          }
+
+          if (nombreUsuarioMobile) {
             nombreUsuarioMobile.textContent = usuario.nombre;
+          } else {
+            console.error("Mobile element not found");
+          }
+        } else {
+          console.error("⚠️ No se pudo cargar el nombre del usuario.");
         }
 
-        // Fetch routes and lines
-        rutas = await leerDatos("dosxdos", "rutas");
-        rutas = rutas.map((objeto) => ({
-          cod: objeto["No."],
-          nombre: objeto["Descripcion"],
-        }));
+        if (usuario.imagen !== "0") {
+          if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
+          if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
+        }
 
-        const TotalLineas = await leerDatos("dosxdos", "lineas");
-        if (TotalLineas) {
-          const lineas = TotalLineas.filter(
-            (objeto) => objeto.Proyecto == ruta
+        // Process pending requests
+        let TotalNotificaciones = await leerDatos("dosxdos", "notificaciones");
+
+        console.warn(
+          "TotalNotificaciones before deduplication:",
+          TotalNotificaciones
+        );
+
+        // Filter out duplicate items by `id`
+        TotalNotificaciones = removeDuplicates(TotalNotificaciones);
+
+        console.warn(
+          "TotalNotificaciones after deduplication:",
+          TotalNotificaciones
+        );
+
+        if (TotalNotificaciones) {
+          // Split notifications
+          const pendientes = TotalNotificaciones.filter(
+            (objeto) => objeto.visto == 0
           );
-          const fragmento = document.createDocumentFragment();
+          const aceptadas = TotalNotificaciones.filter(
+            (objeto) => objeto.visto == 1
+          );
 
-          lineas.forEach((objeto) => {
-            const button = document.createElement("button");
-            const estaAceptada = objeto.Estado === "Realizado";
+          console.log("Pendientes:", pendientes);
+          console.log("Aceptadas:", aceptadas);
 
-            button.className = `${
-              estaAceptada ? "ruta2" : "ruta"
-            } displayOn flex justify-between items-center`;
-            button.type = "button";
-            button.id = `${objeto.Linea}`;
+          // Populate notification containers
+          const pendientesContainer = document.getElementById(
+            "contenidoPendientes"
+          );
+          const aceptadasContainer =
+            document.getElementById("contenidoAceptadas");
 
-            const observaciones = objeto.Observaciones;
-            const LineaActividad = objeto.LineaActividad;
-            const ot = objeto.OT;
-            const otNavision = objeto.Navision_OT;
+          pendientesContainer.innerHTML = "";
+          aceptadasContainer.innerHTML = "";
 
-            const divContenedor = document.createElement("div");
-            divContenedor.className = "flex justify-between items-start";
-
-            const divInfo = document.createElement("div");
-            divInfo.className = "flex-1";
-
-            const texto = observaciones
-              ? `${objeto.Sector} _ ${objeto.Zona} _ ${LineaActividad} _ ${objeto.NombrePuntoVenta} _ ${objeto.NombreCliente} _ ${objeto.TipoTrabajo} _ ${observaciones} _ NAVISION: ${otNavision} _ CRM: ${ot}`
-              : `${objeto.Sector} _ ${objeto.Zona} _ ${LineaActividad} _ ${objeto.NombrePuntoVenta} _ ${objeto.NombreCliente} _ ${objeto.TipoTrabajo} _ NAVISION: ${otNavision} _ CRM: ${ot}`;
-
-            divInfo.textContent = texto;
-
-            const botonAceptar = document.createElement("button");
-            botonAceptar.className = `ml-4 inline-flex items-center rounded-md ${
-              estaAceptada
-                ? "bg-gray-100 px-2 py-1 text-xs font-medium text-gray-600"
-                : "bg-red-100 px-2 py-1 text-xs font-medium text-red-700 hover:bg-red-200"
-            }`;
-            botonAceptar.textContent = estaAceptada ? "Aceptada" : "Aceptar";
-            botonAceptar.onclick = (e) => {
-              e.stopPropagation();
-              aceptarNotificación(objeto.id);
-            };
-
-            divContenedor.appendChild(divInfo);
-            divContenedor.appendChild(botonAceptar);
-            button.appendChild(divContenedor);
-
-            button.setAttribute("data-LineaActividad", LineaActividad);
-            button.setAttribute(
-              "data-estado",
-              estaAceptada ? "aceptada" : "pendiente"
-            );
-
-            fragmento.appendChild(button);
+          pendientes.forEach((objeto) => {
+            const element = createNotificationElement(objeto);
+            pendientesContainer.appendChild(element);
           });
 
-          $contenido.appendChild(fragmento);
-          startBuscador();
-
-          const editarUsuario = document.getElementById("editarUsuario");
-          editarUsuario.addEventListener("click", (e) => {
-            if (navigator.onLine) {
-              window.location.href = `http://localhost/dosxdos_app/dosxdos.php?modulo=editarUsuario&id=${usuario.id}`;
-            } else {
-              mensaje =
-                "No es posible acceder a las opciones de edición de usuario sin conexión a internet";
-              alerta(mensaje);
-              scrollToTop();
-            }
+          aceptadas.forEach((objeto) => {
+            const element = createNotificationElement(objeto);
+            aceptadasContainer.appendChild(element);
           });
+
+          // Update notification counters
+          const contadorPendientes =
+            document.getElementById("contadorPendientes");
+          const contadorAceptadas =
+            document.getElementById("contadorAceptadas");
+
+          if (contadorPendientes)
+            contadorPendientes.textContent = pendientes.length;
+          if (contadorAceptadas)
+            contadorAceptadas.textContent = aceptadas.length;
 
           loaderOff();
         } else {
-          alerta("Error al leer el almacén de líneas");
-          const editarUsuario = document.getElementById("editarUsuario");
-          editarUsuario.addEventListener("click", (e) => {
-            if (navigator.onLine) {
-              window.location.href = `http://localhost/dosxdos_app/dosxdos.php?modulo=editarUsuario&id=${usuario.id}`;
-            } else {
-              mensaje =
-                "No es posible acceder a las opciones de edición de usuario sin conexión a internet";
-              alerta(mensaje);
-              scrollToTop();
-            }
-          });
+          alerta("Error al leer el almacén de notificaciones");
           loaderOff();
         }
       } catch (error) {
-        mensaje = "ERROR: " + error.message;
-        console.error(error);
-        alerta(mensaje);
+        console.error("ERROR:", error.message);
+        alerta(error.message);
       }
     }
+
+    /* PETICIONES PENDIENTES */
+
+    function actualizarLinea(json) {
+      console.log(json);
+      return new Promise((resolve, reject) => {
+        fetch("http://localhost/dosxdos_app/apirest/lineas.php", {
+          method: "PUT",
+          headers: {
+            "Content-type": "application/json; charset=utf-8",
+          },
+          body: json,
+        })
+          .then((res) =>
+            res.ok
+              ? res.json()
+              : reject(
+                  new Error(
+                    `Error en los servidores al actualizar los datos de la línea`
+                  )
+                )
+          )
+          .then((res) => {
+            if (res[0]) {
+              resolve(true);
+            } else {
+              resolve(false);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            reject(err);
+          });
+      });
+    }
+
+    function subirFotos(json) {
+      return new Promise((resolve, reject) => {
+        fetch("http://localhost/dosxdos_app/apirest/fotos.php", {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json; charset=utf-8",
+          },
+          body: json,
+        })
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error(
+                `Error en el servidor de la API intermedia al guardar las fotos. Status: ${res.status}`
+              );
+            }
+            return res.json();
+          })
+          .then((res) => {
+            if (res[0]) {
+              resolve(true);
+            } else {
+              resolve(false);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            reject(err);
+          });
+      });
+    }
+
+    function subirFirmas(json) {
+      return new Promise((resolve, reject) => {
+        fetch("http://localhost/dosxdos_app/apirest/firmas.php", {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json; charset=utf-8",
+          },
+          body: json,
+        })
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error(
+                `Error en el servidor de la API intermedia al guardar las firmas. Status: ${res.status}`
+              );
+            }
+            return res.json();
+          })
+          .then((res) => {
+            if (res[0]) {
+              resolve(true);
+            } else {
+              resolve(false);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            reject(err);
+          });
+      });
+    }
+
+    function subirNota(json) {
+      return new Promise((resolve, reject) => {
+        fetch("http://localhost/dosxdos_app/apirest/notas.php", {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json; charset=utf-8",
+          },
+          body: json,
+        })
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error(
+                `Error en el servidor de la API intermedia al guardar la nota. Status: ${res.status}`
+              );
+            }
+            return res.json();
+          })
+          .then((res) => {
+            if (res[0]) {
+              resolve(true);
+            } else {
+              resolve(false);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            reject(err);
+          });
+      });
+    }
+
+    async function enviarPeticiones(vectorObjDb, tipoVector) {
+      return new Promise(async (resolve, reject) => {
+        try {
+          let solicitud,
+            mensaje = "",
+            vaciarStore;
+          for (const objeto of vectorObjDb) {
+            jsonObjeto = JSON.stringify(objeto);
+            if (tipoVector == "lineas") {
+              solicitud = await actualizarLinea(jsonObjeto);
+              if (!solicitud) {
+                mensaje += `-Error en el envío de la petición pendiente de la actualización de datos en la api de Navision en la ruta: ${objeto.CodigoRuta} y la línea de ruta: ${objeto.LineaRuta}-`;
+              }
+            } else if (tipoVector == "fotos") {
+              solicitud = await subirFotos(jsonObjeto);
+              if (!solicitud) {
+                mensaje += `-Error al subir las fotos pendientes de la ot: ${objeto.ot} y la línea: ${objeto.lineaActividad}-`;
+              }
+            } else if (tipoVector == "firmas") {
+              solicitud = await subirFirmas(jsonObjeto);
+              if (!solicitud) {
+                mensaje += `-Error al subir las firmas pendientes de la ot: ${objeto.ot} y la línea: ${objeto.lineaActividad}-`;
+              }
+            } else if (tipoVector == "notas") {
+              solicitud = await subirNota(jsonObjeto);
+              if (!solicitud) {
+                mensaje += `-Error al subir las notas pendientes de la ot: ${objeto.ot} y la línea: ${objeto.linea}-`;
+              }
+            }
+          }
+          if (tipoVector == "lineas") {
+            vaciarStore = await limpiarDatos2("dosxdos", "peticionesLineas");
+            mensaje += "-Datos pendientes enviados al servidor-";
+          } else if (tipoVector == "fotos") {
+            vaciarStore = await limpiarDatos2("dosxdos", "peticionesFotos");
+            mensaje += "-Fotos pendientes subidas al servidor-";
+          } else if (tipoVector == "firmas") {
+            vaciarStore = await limpiarDatos2("dosxdos", "peticionesFirmas");
+            mensaje += "-Firmas pendientes subidas al servidor-";
+          } else if (tipoVector == "notas") {
+            vaciarStore = await limpiarDatos2("dosxdos", "notas");
+            mensaje += "-Notas pendientes subidas al servidor-";
+          }
+          resolve(mensaje);
+        } catch (err) {
+          console.error(err);
+          alerta(err.message);
+          scrollToTop();
+          reject(err);
+        }
+      });
+    }
+
+    async function procesarPeticiones() {
+      try {
+        loaderOn();
+        mensaje = "";
+        const exPeticionesLineas = await almacenVacio(
+          "dosxdos",
+          "peticionesLineas"
+        );
+        if (!exPeticionesLineas) {
+          const peticionesLineas = await leerDatos2(
+            "dosxdos",
+            "peticionesLineas"
+          );
+          if (peticionesLineas) {
+            //console.log(peticionesLineas);
+            const enviarPeticionesLineas = await enviarPeticiones(
+              peticionesLineas,
+              "lineas"
+            );
+            if (enviarPeticionesLineas) {
+              mensaje += enviarPeticionesLineas;
+            }
+          } else {
+            mensaje +=
+              "-Error al leer las peticiones de las líneas. Las peticiones pendientes de las líneas no han sido procesadas-";
+          }
+        }
+        const exPeticionesFotos = await almacenVacio(
+          "dosxdos",
+          "peticionesFotos"
+        );
+        if (!exPeticionesFotos) {
+          const peticionesFotos = await leerDatos2(
+            "dosxdos",
+            "peticionesFotos"
+          );
+          if (peticionesFotos) {
+            //console.log(peticionesFotos);
+            const enviarPeticionesFotos = await enviarPeticiones(
+              peticionesFotos,
+              "fotos"
+            );
+            if (enviarPeticionesFotos) {
+              mensaje += enviarPeticionesFotos;
+            }
+          } else {
+            mensaje +=
+              "-Error al leer las peticiones de las fotos. Las peticiones pendientes de las fotos no han sido procesadas-";
+          }
+        }
+        const exPeticionesFirmas = await almacenVacio(
+          "dosxdos",
+          "peticionesFirmas"
+        );
+        if (!exPeticionesFirmas) {
+          const peticionesFirmas = await leerDatos2(
+            "dosxdos",
+            "peticionesFirmas"
+          );
+          if (peticionesFirmas) {
+            //console.log(peticionesFirmas);
+            const enviarPeticionesFirmas = await enviarPeticiones(
+              peticionesFirmas,
+              "firmas"
+            );
+            if (enviarPeticionesFirmas) {
+              mensaje += enviarPeticionesFirmas;
+            }
+          } else {
+            mensaje +=
+              "-Error al leer las peticiones de las firmas. Las peticiones pendientes de las firmas no han sido procesadas-";
+          }
+        }
+        const exPeticionesNotas = await almacenVacio("dosxdos", "notas");
+        if (!exPeticionesNotas) {
+          const peticionesNotas = await leerDatos2("dosxdos", "notas");
+          if (peticionesNotas) {
+            //console.log(peticionesFirmas);
+            const enviarPeticionesNotas = await enviarPeticiones(
+              peticionesNotas,
+              "notas"
+            );
+            if (enviarPeticionesNotas) {
+              mensaje += enviarPeticionesNotas;
+            }
+          } else {
+            mensaje +=
+              "-Error al leer las peticiones de las notas. Las peticiones pendientes de las notas no han sido procesadas-";
+          }
+        }
+        if (!mensaje) {
+          mensaje = "No hay datos pendientes para ser enviados al servidor";
+        }
+        const sincronizarBaseDatos = await sincronizarDb2();
+        if (sincronizarBaseDatos) {
+          mensaje += "- Se ha sincronizado la base de datos exitosamente";
+        } else {
+          mensaje += "-Error: No ha sido posible sincronizar la base de datos-";
+        }
+        localStorage.setItem("mensaje", mensaje);
+        location.reload();
+        /*alerta(mensaje);
+              scrollToTop();*/
+      } catch (error) {
+        console.error(error);
+        alerta(error.message);
+        scrollToTop();
+      }
+    }
+
+    async function procesarPeticiones2(mensaje) {
+      try {
+        if (mensaje == null) {
+          mensaje = "";
+        }
+        const exPeticionesLineas = await almacenVacio(
+          "dosxdos",
+          "peticionesLineas"
+        );
+        if (!exPeticionesLineas) {
+          const peticionesLineas = await leerDatos2(
+            "dosxdos",
+            "peticionesLineas"
+          );
+          if (peticionesLineas) {
+            //console.log(peticionesLineas);
+            const enviarPeticionesLineas = await enviarPeticiones(
+              peticionesLineas,
+              "lineas"
+            );
+            if (enviarPeticionesLineas) {
+              mensaje += enviarPeticionesLineas;
+            }
+          } else {
+            mensaje +=
+              "-Error al leer las peticiones de las líneas. Las peticiones pendientes de las líneas no han sido procesadas-";
+          }
+        }
+        const exPeticionesFotos = await almacenVacio(
+          "dosxdos",
+          "peticionesFotos"
+        );
+        if (!exPeticionesFotos) {
+          const peticionesFotos = await leerDatos2(
+            "dosxdos",
+            "peticionesFotos"
+          );
+          if (peticionesFotos) {
+            //console.log(peticionesFotos);
+            const enviarPeticionesFotos = await enviarPeticiones(
+              peticionesFotos,
+              "fotos"
+            );
+            if (enviarPeticionesFotos) {
+              mensaje += enviarPeticionesFotos;
+            }
+          } else {
+            mensaje +=
+              "-Error al leer las peticiones de las fotos. Las peticiones pendientes de las fotos no han sido procesadas-";
+          }
+        }
+        const exPeticionesFirmas = await almacenVacio(
+          "dosxdos",
+          "peticionesFirmas"
+        );
+        if (!exPeticionesFirmas) {
+          const peticionesFirmas = await leerDatos2(
+            "dosxdos",
+            "peticionesFirmas"
+          );
+          if (peticionesFirmas) {
+            //console.log(peticionesFirmas);
+            const enviarPeticionesFirmas = await enviarPeticiones(
+              peticionesFirmas,
+              "firmas"
+            );
+            if (enviarPeticionesFirmas) {
+              mensaje += enviarPeticionesFirmas;
+            }
+          } else {
+            mensaje +=
+              "-Error al leer las peticiones de las firmas. Las peticiones pendientes de las firmas no han sido procesadas-";
+          }
+        }
+        const exPeticionesNotas = await almacenVacio("dosxdos", "notas");
+        if (!exPeticionesNotas) {
+          const peticionesNotas = await leerDatos2("dosxdos", "notas");
+          if (peticionesNotas) {
+            //console.log(peticionesFirmas);
+            const enviarPeticionesNotas = await enviarPeticiones(
+              peticionesNotas,
+              "notas"
+            );
+            if (enviarPeticionesNotas) {
+              mensaje += enviarPeticionesNotas;
+            }
+          } else {
+            mensaje +=
+              "-Error al leer las peticiones de las notas. Las peticiones pendientes de las notas no han sido procesadas-";
+          }
+        }
+        if (mensaje) {
+          alerta(mensaje);
+          scrollToTop();
+        }
+      } catch (error) {
+        console.error(error);
+        alerta(error.message);
+        scrollToTop();
+      }
+    }
+
+    /* TAREAS EN LA INTERMITENCIA DE LA CONEXIÓN */
+
+    window.addEventListener("online", () => {
+      console.log("La conexión a Internet se ha recuperado.");
+      //cache();
+      procesarPeticiones();
+    });
+
+    window.addEventListener("offline", () => {
+      alerta("La conexión a Internet se ha perdido.");
+    });
+
+    /* PAGESHOW */
+    window.addEventListener("pageshow", (e) => {
+      console.log("Carga completa de los elementos de la página no fetch");
+      let mensaje = localStorage.getItem("mensaje");
+      if (mensaje && mensaje !== null) {
+        alerta(mensaje); // Use the new alert instead
+        localStorage.removeItem("mensaje");
+      }
+      let login = localStorage.getItem("login");
+      if (!login || login === null) {
+        window.location.href = "http://localhost/dosxdos_app/index.html";
+      }
+    });
 
     // INITIALIZATION FUNCTION
     function initializeAppState() {
