@@ -819,7 +819,7 @@
     $nombreUsuario = document.getElementById("nombreUsuario"),
     $imagenUsuario = document.getElementById("imagenUsuario"),
     $botonRutas = document.getElementById("rutasIconoBoton");
-  let usuario, montador, rutas, lineas, notificacionesSinAcpetarNumero = 0;
+  let usuario, montador, rutas, lineas;
 
   /* LOADER */
 
@@ -1508,6 +1508,7 @@
             scrollToTop();
           }
         });
+        await notificarOffline();
         loaderOff();
       }
     } catch (error) {

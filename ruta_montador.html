@@ -200,6 +200,8 @@
             background-color: #f4f4f4;
         }
 
+        /* LOGO Y NOTIFICACIONES */
+
         #logo {
             display: flex;
             width: 100%;
@@ -209,8 +211,68 @@
         }
 
         #logo>img {
-            width: var(--x300);
+            width: var(--x150);
         }
+
+        #notificaciones {
+            position: absolute;
+            width: var(--x60);
+            height: var(--x60);
+            justify-content: center;
+            align-items: center;
+            right: var(--x10);
+            cursor: pointer;
+        }
+
+        #bell {
+            width: var(--x60);
+            height: var(--x60);
+        }
+
+        #sinNotificaciones {
+            position: absolute;
+            width: var(--x60);
+            height: var(--x60);
+            justify-content: center;
+            align-items: center;
+            right: var(--x10);
+            cursor: pointer;
+        }
+
+        #bell2 {
+            width: var(--x35);
+            height: var(--x35);
+        }
+
+        #numNotificaciones {
+            position: absolute;
+            width: var(--x30);
+            height: var(--x30);
+            border-radius: 50%;
+            background-color: #d31216;
+            justify-content: center;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            top: var(--x2);
+            right: var(--x2);
+        }
+
+        #numNtf {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            /* border: 1px solid black; */
+            border-radius: 50%;
+            width: var(--x25);
+            height: var(--x25);
+            color: white;
+            font-size: var(--x25);
+            padding-left: var(--x3);
+        }
+
+        /* FIN DE LOGO Y NOTIFICACIONES */
 
         #menu {
             display: flex;
@@ -611,7 +673,16 @@
     <section id="encabezado">
 
         <div id="logo">
-            <img src="https://dosxdos.app.iidos.com/img/logo300.png">
+            <img src="https://dosxdos.app.iidos.com/img/logo300.png" alt="Logo" />
+            <div id="notificaciones" class="displayOff">
+                <img src="https://dosxdos.app.iidos.com/img/bell.gif" alt="bell" id="bell" />
+                <div id="numNotificaciones" class="displayOn">
+                    <p id="numNtf">0</p>
+                </div>
+            </div>
+            <div id="sinNotificaciones" class="displayOff">
+                <img src="https://dosxdos.app.iidos.com/img/bell2.png" alt="bell2" id="bell2" />
+            </div>
         </div>
 
         <nav id="menu">
@@ -1094,23 +1165,28 @@
         if (navigator.onLine) {
             try {
                 loaderOn();
-                localStorage.clear();
-                eliminarCookie('login');
-                eliminarCookie('usuario');
-                await deleteDB2('dosxdos') ? console.log("Base de datos eliminada exitosamente") : console.error("error al eliminar la base de datos");
-                window.location.href = "https://dosxdos.app.iidos.com/index.html";
+                const eliminarBaseDeDatosCliente = await deleteDB2("dosxdos");
+                if (eliminarBaseDeDatosCliente) {
+                    const eliminarTokenDeLasNotificaciones = eliminarTokenNotificaciones()
+                    if (eliminarTokenDeLasNotificaciones) {
+                        localStorage.clear();
+                        eliminarCookie("login");
+                        eliminarCookie("usuario");
+                        window.location.href = "https://dosxdos.app.iidos.com/index.html";
+                    }
+                }
             } catch (error) {
-                mensaje = 'ERROR: ' + error.message;
+                mensaje = "ERROR: " + error.message;
                 console.error(error);
                 alerta(mensaje);
             }
-        }
-        else {
-            mensaje = 'No es posible cerrar la sesión sin conexión a internet';
+        } else {
+            mensaje = "No es posible cerrar la sesión sin conexión a internet";
             $textoMensaje.innerHTML = mensaje;
             mensajeOn();
         }
     }
+
 
     /* TRAER DATOS DE LOS SERVIDORES */
 
@@ -1978,5 +2054,8 @@
     }
 
 </script>
+
+<script src="https://dosxdos.app.iidos.com/js/utils/notificaciones2.js"></script>
+<script src="https://dosxdos.app.iidos.com/js/utils/loadFirebase.js"></script>
 
 </html>

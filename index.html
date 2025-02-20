@@ -1287,10 +1287,17 @@
                                   tokenNativo
                                 );
                               } else {
-                                localStorage.setItem(
-                                  "mensaje",
-                                  "Debes instalar la aplicación nativa. Este dispositivo no recibirá notificaciones si no instalas la aplicación nativa."
-                                );
+                                if (isAndroid) {
+                                  localStorage.setItem(
+                                    "mensaje",
+                                    "Debes instalar la aplicación nativa para Android en la Playstore o en el botón de descarga del inicio de sesión. Este dispositivo no recibirá notificaciones y la aplicación no podrá ejecutar todas sus funcionalidades."
+                                  );
+                                } else if (isiOS) {
+                                  localStorage.setItem(
+                                    "mensaje",
+                                    "Debes instalar la aplicación nativa para Ios en la Appstore o en el botón de descarga del inicio de sesión. Este dispositivo no recibirá notificaciones y la aplicación no podrá ejecutar todas sus funcionalidades."
+                                  );
+                                }
                                 localStorage.setItem(
                                   "tokenNotificaciones",
                                   null
@@ -1339,10 +1346,17 @@
                                   tokenNativo
                                 );
                               } else {
-                                localStorage.setItem(
-                                  "mensaje",
-                                  "Debes instalar la aplicación nativa. Este dispositivo no recibirá notificaciones si no instalas la aplicación nativa."
-                                );
+                                if (isAndroid) {
+                                  localStorage.setItem(
+                                    "mensaje",
+                                    "Debes instalar la aplicación nativa para Android en la Playstore o en el botón de descarga del inicio de sesión. Este dispositivo no recibirá notificaciones y la aplicación no podrá ejecutar todas sus funcionalidades."
+                                  );
+                                } else if (isiOS) {
+                                  localStorage.setItem(
+                                    "mensaje",
+                                    "Debes instalar la aplicación nativa para Ios en la Appstore o en el botón de descarga del inicio de sesión. Este dispositivo no recibirá notificaciones y la aplicación no podrá ejecutar todas sus funcionalidades."
+                                  );
+                                }
                                 localStorage.setItem(
                                   "tokenNotificaciones",
                                   null
@@ -1391,10 +1405,17 @@
                                   tokenNativo
                                 );
                               } else {
-                                localStorage.setItem(
-                                  "mensaje",
-                                  "Debes instalar la aplicación nativa. Este dispositivo no recibirá notificaciones si no instalas la aplicación nativa."
-                                );
+                                if (isAndroid) {
+                                  localStorage.setItem(
+                                    "mensaje",
+                                    "Debes instalar la aplicación nativa para Android en la Playstore o en el botón de descarga del inicio de sesión. Este dispositivo no recibirá notificaciones y la aplicación no podrá ejecutar todas sus funcionalidades."
+                                  );
+                                } else if (isiOS) {
+                                  localStorage.setItem(
+                                    "mensaje",
+                                    "Debes instalar la aplicación nativa para Ios en la Appstore o en el botón de descarga del inicio de sesión. Este dispositivo no recibirá notificaciones y la aplicación no podrá ejecutar todas sus funcionalidades."
+                                  );
+                                }
                                 localStorage.setItem(
                                   "tokenNotificaciones",
                                   null
@@ -1563,14 +1584,6 @@
   function asignarTokenNativo() {
     tokenNativo = window.localStorage.getItem('tokenNativo');
   }
-
-  if (isAndroid) {
-    alerta("Por favor instala la aplicación nativa para Android, puedes hacer click en el botón de descarga. De esta forma podrás disfrutar de todas las funcionalidades para móviles.");
-  }
-
-  // if (isiOS) {
-  //   alerta("Por favor instala la aplicación nativa para Apple en la AppStore, puedes hacer click en el botón de descarga. De esta forma podrás disfrutar de todas las funcionalidades para móviles.");
-  // }
 
 </script>
 

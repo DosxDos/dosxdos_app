@@ -164,70 +164,93 @@ function notificarOffline() {
 
 function eliminarTokenNotificaciones() {
   return new Promise(resolve => {
-    tokenEliminar = localStorage.getItem('tokenNotificaciones');
-    if (tokenEliminar != null) {
-      urlTokenEliminar = 'https://dosxdos.app.iidos.com/apirest/rutas_notificaciones.php/notificaciones/token/' + tokenEliminar;
-      fetch(urlTokenEliminar, {
-        method: "DELETE",
-      })
-        .then((res) =>
-          res.ok
-            ? res.json()
-            : reject(
-              new Error(
-                `Error al eliminar el token de las notificaciones.`
-              )
-            )
-        )
-        .then((res) => {
-          if (res.success) {
-            localStorage.setItem('tokenNotificaciones', null);
-            resolve(true);
-          } else {
-            console.error(res);
-            alerta("Error al eliminar el token de las notificaciones: " + res.message)
-            resolve(false);
-          }
-
+    try {
+      tokenEliminar = localStorage.getItem('tokenNotificaciones');
+      if (tokenEliminar != null) {
+        urlTokenEliminar = 'https://dosxdos.app.iidos.com/apirest/rutas_notificaciones.php/notificaciones/token/' + tokenEliminar;
+        fetch(urlTokenEliminar, {
+          method: "DELETE",
         })
-        .catch((err) => {
-          mensaje = err.message;
-          console.error(err);
-          alerta(mensaje);
-          reject(new Error(mensaje));
-        });
+          .then((res) =>
+            res.ok
+              ? res.json()
+              : reject(
+                new Error(
+                  `Error al eliminar el token de las notificaciones.`
+                )
+              )
+          )
+          .then((res) => {
+            if (res.success) {
+              localStorage.setItem('tokenNotificaciones', null);
+              resolve(true);
+            } else {
+              console.error(res);
+              alerta("Error al eliminar el token de las notificaciones: " + res.message)
+              resolve(false);
+            }
+
+          })
+          .catch((err) => {
+            mensaje = err.message;
+            console.error(err);
+            alerta(mensaje);
+            reject(new Error(mensaje));
+          });
+      }
+    } catch (err) {
+      mensaje = err.message;
+      console.error(err);
+      alerta(mensaje);
+      reject(new Error(mensaje));
     }
+
   });
 }
 
-function notificarWebApp(data) {
-  console.log('[Firebase] Mensaje en primer plano:', data);
+function notificarWebApp() {
 
-  // Extraer datos con valores por defecto si vienen nulos o indefinidos
-  const title = data.title || "Nueva Notificación";
-  const body = data.body || "Tienes una nueva notificación, por favor revísala en cuanto puedas.";
-  const icon = data.icon || "https://dosxdos.app.iidos.com/img/dosxdoslogoNuevoRojo.png";
-  const click_action = data.click_action || "https://dosxdos.app.iidos.com/notificaciones.html";
+  try {
 
-  // Crear un string bien formado
-  const mensaje = "Tienes una nueva notificación: " + title + ": " + body;
+    dataNativa = localStorage.getItem('dataNotificacionNativa');
+    console.log('[Firebase] Mensaje en primer plano:', dataNativa);
 
-  alerta(mensaje);
+    if (dataNativa != null) {
+      const data = JSON.parse(dataNativa);
 
-  const $notificaciones = document.getElementById('notificaciones');
-  const $sinNotificaciones = document.getElementById('sinNotificaciones');
+      // Extraer datos con valores por defecto si vienen nulos o indefinidos
+      const title = data.title || "Nueva Notificación";
+      const body = data.body || "Tienes una nueva notificación, por favor revísala en cuanto puedas.";
+      const icon = data.icon || "https://dosxdos.app.iidos.com/img/dosxdoslogoNuevoRojo.png";
+      const click_action = data.click_action || "https://dosxdos.app.iidos.com/notificaciones.html";
 
-  if ($sinNotificaciones.classList.contains('displayOn')) {
-    $sinNotificaciones.classList.remove('displayOn');
-    $sinNotificaciones.classList.add('displayOff');
-    $notificaciones.classList.remove('displayOff')
-    $notificaciones.classList.add('displayOn')
+      // Crear un string bien formado
+      const mensaje = "Tienes una nueva notificación: " + title + ": " + body;
+
+      alerta(mensaje);
+
+      const $notificaciones = document.getElementById('notificaciones');
+      const $sinNotificaciones = document.getElementById('sinNotificaciones');
+
+      if ($sinNotificaciones.classList.contains('displayOn')) {
+        $sinNotificaciones.classList.remove('displayOn');
+        $sinNotificaciones.classList.add('displayOff');
+        $notificaciones.classList.remove('displayOff');
+        $notificaciones.classList.add('displayOn');
+      }
+
+      const $numeroDeNotificacionesActuales = document.getElementById('numNtf');
+      const numeroDeNotificacionesActuales = $numeroDeNotificacionesActuales.innerHTML;
+      const numeroDeNotificacionesActualesInt = parseInt(numeroDeNotificacionesActuales);
+      $numeroDeNotificacionesActuales.innerHTML = numeroDeNotificacionesActualesInt + 1;
+
+      scrollToTop();
+    } else {
+      alerta("No se ha recibido un valor en la variable dataNotificacionNativa del localStorage");
+    }
+  } catch (err) {
+    mensaje = err.message;
+    console.error(err);
+    alerta(mensaje);
   }
-
-  const $numeroDeNotificacionesActuales = document.getElementById('numNtf');
-  const numeroDeNotificacionesActuales = $numeroDeNotificacionesActuales.innerHTML;
-  const numeroDeNotificacionesActualesInt = parseInt(numeroDeNotificacionesActuales);
-  $numeroDeNotificacionesActuales.innerHTML = numeroDeNotificacionesActualesInt + 1;
-
-  scrollToTop();
 }
