@@ -1508,8 +1508,8 @@
             scrollToTop();
           }
         });
-        await notificarOffline();
         loaderOff();
+        await notificarOffline();
       }
     } catch (error) {
       mensaje = "ERROR: " + error.message;

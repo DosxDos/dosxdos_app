@@ -114,6 +114,7 @@ function notificar() {
           sinNotificaciones.classList.add('displayOn');
         }
       }
+      resolve(true);
     } catch (err) {
       console.error(err);
       const mensaje =
@@ -155,7 +156,7 @@ function notificarOffline() {
         sinNotificaciones.classList.remove('displayOff');
         sinNotificaciones.classList.add('displayOn');
       }
-      console.warn('Ejecuta hasta ese puto punto');
+      resolve(true);
     } catch (err) {
       console.error(err);
       const mensaje =
