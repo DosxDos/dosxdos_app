@@ -25,7 +25,7 @@ switch ($metodo) {
             case 'notificaciones':
                 try {
                     $pageIndex = $_GET['pageIndex'] ?? 1;
-                    $pageSize = $_GET['pageSize'] ?? 200;
+                    $pageSize = $_GET['pageSize'] ?? 200000;
                     $resultado = $notificacionesControlador->obtenerNotificaciones($pageIndex, $pageSize);
                     //Aquí instanciamos el objeto de la clase Respuestas
                     $respuesta = $respuestas->ok($resultado);
@@ -38,7 +38,7 @@ switch ($metodo) {
             case (preg_match('/^notificaciones\/\d+$/', $ruta) ? true : false):
                 try {
                     $pageIndex = $_GET['pageIndex'] ?? 1;
-                    $pageSize = $_GET['pageSize'] ?? 200;
+                    $pageSize = $_GET['pageSize'] ?? 200000;
                     $id = $rutas[1];
                     if (isset($_GET['activa'])) {
                         $activa = $_GET['activa'];

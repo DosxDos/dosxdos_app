@@ -32,6 +32,7 @@ function fetchNotificaciones() {
 
         const transaction = db.transaction("notificaciones", "readwrite");
         const datosStore = transaction.objectStore("notificaciones");
+        await datosStore.clear();
         const datos = resJson.message;
         if (Array.isArray(datos)) {
           datos.forEach((item) => {
@@ -62,7 +63,6 @@ async function sincronizarNotificaciones() {
       if (limpiarNotificaciones) {
         notificacionesActuales = await fetchNotificaciones();
         if (notificacionesActuales) {
-          const mensaje = "Se han sincronizado las notificaciones exitosamente";
           return true;
         } else {
           alerta("Error al cargar las notificaciones del servidor");
@@ -84,8 +84,51 @@ async function sincronizarNotificaciones() {
 function notificar() {
   return new Promise(async (resolve) => {
     try {
+      const sincronizacionInicial = await sincronizarNotificaciones();
+      if (sincronizacionInicial) {
+        notificationsStore = await leerDatos("notificaciones");
+        notificacionesSinAcpetar = false;
+        notificacionesSinAcpetarNumero = 0;
+        notificationsStore.map(not => {
+          if (!not.visto) {
+            notificacionesSinAcpetar = true;
+            notificacionesSinAcpetarNumero++;
+          }
+        })
+        console.log('notificacionesSinAcpetar: ' + notificacionesSinAcpetar)
+        console.log('notificacionesSinAcpetarNumero: ' + notificacionesSinAcpetarNumero)
+        const notificaciones = document.getElementById("notificaciones");
+        notificaciones.addEventListener("click", () => {
+          window.location.href = "https://dosxdos.app.iidos.com/notificaciones.html";
+        });
+        const sinNotificaciones = document.getElementById("sinNotificaciones");
+        sinNotificaciones.addEventListener("click", () => {
+          window.location.href = "https://dosxdos.app.iidos.com/notificaciones.html";
+        });
+        if (notificacionesSinAcpetarNumero) {
+          notificaciones.classList.remove('displayOff');
+          notificaciones.classList.add('displayOn');
+          document.getElementById('numNtf').innerHTML = notificacionesSinAcpetarNumero;
+        } else {
+          sinNotificaciones.classList.remove('displayOff');
+          sinNotificaciones.classList.add('displayOn');
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      const mensaje =
+        "Error en el sistema de notificaciones: " + error.message;
+      alerta(mensaje);
+    }
+  });
+}
+
+function notificarOffline() {
+  return new Promise(async (resolve) => {
+    try {
       notificationsStore = await leerDatos("notificaciones");
       notificacionesSinAcpetar = false;
+      notificacionesSinAcpetarNumero = 0;
       notificationsStore.map(not => {
         if (!not.visto) {
           notificacionesSinAcpetar = true;
@@ -155,4 +198,36 @@ function eliminarTokenNotificaciones() {
         });
     }
   });
+}
+
+function notificarWebApp(data) {
+  console.log('[Firebase] Mensaje en primer plano:', data);
+
+  // Extraer datos con valores por defecto si vienen nulos o indefinidos
+  const title = data.title || "Nueva Notificación";
+  const body = data.body || "Tienes una nueva notificación, por favor revísala en cuanto puedas.";
+  const icon = data.icon || "https://dosxdos.app.iidos.com/img/dosxdoslogoNuevoRojo.png";
+  const click_action = data.click_action || "https://dosxdos.app.iidos.com/notificaciones.html";
+
+  // Crear un string bien formado
+  const mensaje = "Tienes una nueva notificación: " + title + ": " + body;
+
+  alerta(mensaje);
+
+  const $notificaciones = document.getElementById('notificaciones');
+  const $sinNotificaciones = document.getElementById('sinNotificaciones');
+
+  if ($sinNotificaciones.classList.contains('displayOn')) {
+    $sinNotificaciones.classList.remove('displayOn');
+    $sinNotificaciones.classList.add('displayOff');
+    $notificaciones.classList.remove('displayOff')
+    $notificaciones.classList.add('displayOn')
+  }
+
+  const $numeroDeNotificacionesActuales = document.getElementById('numNtf');
+  const numeroDeNotificacionesActuales = $numeroDeNotificacionesActuales.innerHTML;
+  const numeroDeNotificacionesActualesInt = parseInt(numeroDeNotificacionesActuales);
+  $numeroDeNotificacionesActuales.innerHTML = numeroDeNotificacionesActualesInt + 1;
+
+  scrollToTop();
 }

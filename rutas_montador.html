@@ -1444,10 +1444,7 @@
             const peticionesCierre = await procesarPeticiones2();
             loaderOff();
           }
-          const sincronizacionDeNotificaciones = await sincronizarNotificaciones();
-          if (sincronizacionDeNotificaciones) {
-            await notificar();
-          }
+          await notificar();
         }
       }
     } catch (error) {

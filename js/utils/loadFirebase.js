@@ -47,7 +47,6 @@ async function loadFirebase() {
             // Crear un string bien formado
             const mensaje = "Tienes una nueva notificación: " + title + ": " + body;
 
-            // Guardar en localStorage
             alerta(mensaje);
 
             const $notificaciones = document.getElementById('notificaciones');
