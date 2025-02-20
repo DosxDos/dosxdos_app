@@ -1,9 +1,4 @@
 <?php
-// ini_set('display_errors', 1);
-// ini_set('display_startup_errors', 1);
-
-// error_reporting(E_ALL);
-
 require_once __DIR__ . '/controladores/notificaciones_controlador.php';
 require_once __DIR__ . '/clases/respuestas_clase.php';
 
@@ -255,7 +250,7 @@ switch ($metodo) {
         break;
     case 'DELETE':
         switch ($ruta) {
-            case (preg_match('/^notificaciones\/token\/[a-zA-Z0-9]+:[a-zA-Z0-9_-]+$/', $ruta) ? true : false):
+            case (preg_match('/^notificaciones\/token\/[a-zA-Z0-9:_-]+$/', $ruta) ? true : false):
                 try {
                     if (isset($rutas[2])) {
                         $token = $rutas[2];
