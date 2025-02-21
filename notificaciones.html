@@ -895,7 +895,8 @@
     function fetchRutas() {
       return new Promise((resolve, reject) => {
         url =
-          "https://dosxdos.app.iidos.com/apirest/rutas.php?montador=" + montador;
+          "https://dosxdos.app.iidos.com/apirest/rutas.php?montador=" +
+          montador;
         fetch(url)
           .then((res) => {
             if (res.ok) {
@@ -2230,6 +2231,80 @@
             console.log(err);
             reject(err);
           });
+      });
+    }
+
+    /* LEER DATOS DE INDEXDB */
+
+    function leerDatos(store) {
+      return new Promise((resolve, reject) => {
+        datos = [];
+        const request = indexedDB.open("dosxdos");
+        request.onsuccess = (event) => {
+          const db = event.target.result;
+          const transaction = db.transaction(store, "readonly");
+          const almacen = transaction.objectStore(store);
+          const cursorRequest = almacen.openCursor();
+          cursorRequest.onsuccess = (event) => {
+            const cursor = event.target.result;
+            if (cursor) {
+              datos.push(cursor.value);
+              cursor.continue();
+            } else {
+              resolve(datos);
+            }
+          };
+          cursorRequest.onerror = function (event) {
+            error = event.target.error;
+            mensaje = "ERROR: " + error;
+            $textoMensaje.innerHTML = mensaje;
+            console.error(error);
+            mensajeOn();
+            loaderOff();
+          };
+        };
+        request.onerror = (event) => {
+          error = event.target.error;
+          mensaje = "ERROR: " + error;
+          $textoMensaje.innerHTML = mensaje;
+          console.error(error);
+          mensajeOn();
+          loaderOff();
+        };
+      });
+    }
+
+    function leerDatos2(database, store) {
+      return new Promise((resolve, reject) => {
+        datos = [];
+        const request = indexedDB.open(database);
+        request.onsuccess = (event) => {
+          const db = event.target.result;
+          const transaction = db.transaction(store, "readonly");
+          const almacen = transaction.objectStore(store);
+          const cursorRequest = almacen.openCursor();
+          cursorRequest.onsuccess = (event) => {
+            const cursor = event.target.result;
+            if (cursor) {
+              datos.push(cursor.value);
+              cursor.continue();
+            } else {
+              resolve(datos);
+            }
+          };
+          cursorRequest.onerror = function (event) {
+            console.error(
+              `Error en la función leerDatos al solcitar el cursor para leer el almacen ${store}: ${event.target.error}`
+            );
+            reject(event.target.error);
+          };
+        };
+        request.onerror = (event) => {
+          console.error(
+            `Error en la función leerDatos al solcitar abrir la base de datos para leer el almacen ${store}: ${event.target.error}`
+          );
+          reject(event.target.error);
+        };
       });
     }
 
