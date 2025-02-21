@@ -467,28 +467,24 @@
 
   // Initialize ruta if not exists
   if (!ruta) {
-    console.warn("⚠️ Ruta is not defined, checking user data...");
     leerDatos("dosxdos", "usuario").then((userData) => {
       if (userData.length > 0 && userData[0].ruta) {
         ruta = userData[0].ruta;
         localStorage.setItem("ruta", ruta);
-        console.log("✅ Ruta set:", ruta);
       } else {
-        console.error("Ruta still undefined.");
+        console.log("Ruta undefined.");
       }
     });
   }
 
   // Initialize montador if not exists
   if (!montador) {
-    console.error("⚠️ montador is not defined. Attempting to set it...");
     leerDatos("dosxdos", "usuario").then((data) => {
       if (data.length > 0 && data[0].cod) {
         montador = data[0].cod;
         localStorage.setItem("montador", montador);
-        console.log("✅ montador set:", montador);
       } else {
-        console.error("No valid montador found.");
+        console.log("No valid montador found.");
       }
     });
   }
@@ -2014,44 +2010,6 @@
 
     /* LEER DATOS DE INDEXDB */
 
-    function leerDatos(store) {
-      return new Promise((resolve, reject) => {
-        datos = [];
-        const request = indexedDB.open("dosxdos");
-        request.onsuccess = (event) => {
-          const db = event.target.result;
-          const transaction = db.transaction(store, "readonly");
-          const almacen = transaction.objectStore(store);
-          const cursorRequest = almacen.openCursor();
-          cursorRequest.onsuccess = (event) => {
-            const cursor = event.target.result;
-            if (cursor) {
-              datos.push(cursor.value);
-              cursor.continue();
-            } else {
-              resolve(datos);
-            }
-          };
-          cursorRequest.onerror = function (event) {
-            error = event.target.error;
-            mensaje = "ERROR: " + error;
-            $textoMensaje.innerHTML = mensaje;
-            console.error(error);
-            mensajeOn();
-            loaderOff();
-          };
-        };
-        request.onerror = (event) => {
-          error = event.target.error;
-          mensaje = "ERROR: " + error;
-          $textoMensaje.innerHTML = mensaje;
-          console.error(error);
-          mensajeOn();
-          loaderOff();
-        };
-      });
-    }
-
     function leerDatos2(database, store) {
       return new Promise((resolve, reject) => {
         datos = [];
@@ -2085,6 +2043,33 @@
         };
       });
     }
+
+    function limpiarDatos2(database, store) {
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.open(database);
+      request.onsuccess = (event) => {
+        const db = event.target.result;
+        const transaction = db.transaction(store, "readwrite");
+        const datosStore = transaction.objectStore(store);
+        const clearRequest = datosStore.clear();
+        clearRequest.onsuccess = (clearEvent) => {
+          resolve(true);
+        };
+        clearRequest.onerror = (event) => {
+          console.error(
+            `Error en la función limpiarDatos al solcitar limpiar el almacen ${store}: ${event.target.error}`
+          );
+          reject(event.target.error);
+        };
+      };
+      request.onerror = (event) => {
+        console.error(
+          `Error en la función limpiarDatos al solcitar abrir la base de datos para limpiar el almacen ${store}: ${event.target.error}`
+        );
+        reject(event.target.error);
+      };
+    });
+  }
 
   async function enviarPeticiones(vectorObjDb, tipoVector) {
     return new Promise(async (resolve, reject) => {
