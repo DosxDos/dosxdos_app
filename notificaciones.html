@@ -361,10 +361,17 @@
 
       <div
         id="mobileMenu"
-        class="md:hidden fixed inset-0 bg-gradient-to-r from-red-500 to-red-600 bg-opacity-95 transform translate-x-full transition-all duration-500 ease-in-out z-40 overflow-hidden backdrop-blur-sm"
+        class="md:hidden fixed inset-0 bg-gradient-to-r from-red-500 to-red-600 bg-opacity-95 transform translate-x-full transition-all duration-500 ease-in-out z-40 overflow-hidden backdrop-blur-sm flex flex-col"
       >
+        <div
+          class="absolute inset-0 z-0"
+          style="
+            background-image: url('https://dosxdos.app.iidos.com/img/texture-red.svg');
+            background-size: contain;
+          "
+        ></div>
         <!-- User Profile Section -->
-        <div class="px-8 py-4 mt-20">
+        <div class="px-8 py-4 mt-20 relative z-10">
           <div
             class="relative flex items-center gap-3 py-1 pl-1.5 pr-4 bg-white shadow-lg rounded-full"
           >
@@ -379,7 +386,6 @@
                 alt="Profile"
                 onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
               />
-              <!-- Fallback initials/icon (hidden by default) -->
               <svg
                 class="w-12 h-12 text-gray-400 hidden"
                 viewBox="0 0 24 24"
@@ -404,10 +410,10 @@
         </div>
 
         <!-- Navigation Links -->
-        <nav class="px-8 py-6 space-y-2">
+        <nav class="px-8 py-6 space-y-2 relative z-10 flex-1">
           <a
             href="https://dosxdos.app.iidos.com/rutas_montador.html"
-            class="z-10 flex items-center px-6 py-4 text-white bg-white/10 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-md group backdrop-blur-md"
+            class="z-10 flex items-center px-6 py-4 bg-red-600 text-white bg-white/10 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-md group backdrop-blur-md"
           >
             <div
               class="z-0 flex items-center justify-center w-14 h-14 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all"
@@ -430,7 +436,7 @@
 
           <a
             href="https://dosxdos.app.iidos.com/ruta_montador.html"
-            class="z-10 flex items-center px-6 py-4 text-white bg-white/10 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-md group backdrop-blur-md"
+            class="z-10 flex items-center px-6 py-4 bg-red-600 text-white bg-white/10 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-md group backdrop-blur-md"
           >
             <div
               class="flex items-center justify-center w-14 h-14 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all"
@@ -455,7 +461,7 @@
 
           <a
             href="https://dosxdos.app.iidos.com/historial_montador.html"
-            class="z-10 flex items-center px-6 py-4 text-white bg-white/10 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-md group backdrop-blur-md"
+            class="z-10 flex items-center px-6 py-4 text-white bg-red-600 bg-white/10 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-md group backdrop-blur-md"
           >
             <div
               class="flex items-center justify-center w-14 h-14 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all"
@@ -477,7 +483,7 @@
 
         <!-- User Actions -->
         <div
-          class="absolute bottom-0 left-0 right-0 px-8 py-2 bg-white bg-opacity-05 rounded-t-2xl shadow"
+          class="relative z-10 mt-auto px-8 py-6 bg-white bg-opacity-05 rounded-t-2xl shadow"
         >
           <button
             id="editarUsuarioMobile"
@@ -540,9 +546,8 @@
           <input
             type="text"
             id="buscador"
-            class="shadow w-full h-12 pl-12 pr-4 bg-white/10 border border-white/20 rounded-lg text-lg 
-            focus:outline-none focus:ring-1 focus:ring-red-600 focus:border-red-200
-            transition-all duration-300 ease-in-out text-black placeholder-white/70"            placeholder="Buscar notificaciones..."
+            class="shadow w-full h-12 pl-12 pr-4 bg-white/10 border border-white/20 rounded-lg text-lg focus:outline-none focus:ring-2 focus:ring-white/50 transition-all duration-300 ease-in-out text-black placeholder-white/70"
+            placeholder="Buscar notificaciones..."
           />
         </div>
         <div class="w-full">
@@ -1160,7 +1165,15 @@
 
       notificationContent.innerHTML = `
     <div class="flex justify-between items-center">
-      <h3 class="font-bold text-lg flex-grow pr-2 pt-4 lg:pt-0 pb-2">${highlightText(
+        <div
+          class="absolute inset-0 -z-10 rounded-xl"
+          style="
+            background-image: url('https://dosxdos.app.iidos.com/img/texture-red.svg');
+            background-size: contain, 70%;
+            opacity: 0.5;
+          "
+        ></div>
+      <h3 class="font-bold text-lg flex-grow pr-2 pt-4 lg:pt-0 pb-2 z-10">${highlightText(
         objeto.titulo,
         searchTerm
       )}</h3>
