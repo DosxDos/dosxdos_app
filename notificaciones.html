@@ -146,6 +146,22 @@
           box-shadow: 0.2em -0.2em 0 0 currentcolor;
         }
       }
+
+      .website-divider-container-734167 {
+        overflow: hidden;
+        position: relative;
+        height: 100%;
+      }
+
+      .divider-img-734167 {
+        position: absolute;
+        width: 500%;
+        height: 105px;
+        transform: scale(1, 1);
+        bottom: 0px;
+        left: 0px;
+        fill: rgb(255, 255, 255);
+      }
     </style>
   </head>
 
@@ -368,6 +384,7 @@
           style="
             background-image: url('https://dosxdos.app.iidos.com/img/texture-red.svg');
             background-size: contain;
+            opacity: 0.7;
           "
         ></div>
         <!-- User Profile Section -->
@@ -410,10 +427,10 @@
         </div>
 
         <!-- Navigation Links -->
-        <nav class="px-8 py-6 space-y-2 relative z-10 flex-1">
+        <nav class="px-8 py-6 space-y-2 relative z-10 flex-1 overflow-y-auto">
           <a
             href="https://dosxdos.app.iidos.com/rutas_montador.html"
-            class="z-10 flex items-center px-6 py-4 bg-red-600 text-white bg-white/10 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-md group backdrop-blur-md"
+            class="z-10 flex items-center px-6 py-2 text-white bg-red-600 bg-opacity-60 shadow-xl backdrop-blur-lg hover:bg-white/20 rounded-xl transition-all duration-300 group"
           >
             <div
               class="z-0 flex items-center justify-center w-14 h-14 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all"
@@ -436,7 +453,7 @@
 
           <a
             href="https://dosxdos.app.iidos.com/ruta_montador.html"
-            class="z-10 flex items-center px-6 py-4 bg-red-600 text-white bg-white/10 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-md group backdrop-blur-md"
+            class="z-10 flex items-center px-6 py-2 text-white bg-red-600 bg-opacity-60 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-xl group backdrop-blur-lg"
           >
             <div
               class="flex items-center justify-center w-14 h-14 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all"
@@ -461,7 +478,7 @@
 
           <a
             href="https://dosxdos.app.iidos.com/historial_montador.html"
-            class="z-10 flex items-center px-6 py-4 text-white bg-red-600 bg-white/10 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-md group backdrop-blur-md"
+            class="z-10 flex items-center px-6 py-2 text-white bg-red-600 bg-opacity-60 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-xl group backdrop-blur-lg"
           >
             <div
               class="flex items-center justify-center w-14 h-14 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all"
@@ -481,13 +498,42 @@
           </a>
         </nav>
 
+        <div class="relative z-10">
+          <div
+            id="divider_id"
+            class="website-divider-container-734167"
+            style="height: 100px; overflow: visible"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="divider-img-734167"
+              viewBox="0 0 1080 137"
+              preserveAspectRatio="none"
+              style="bottom: -20px"
+            >
+              <path
+                d="M 0,137 V 59.03716 c 158.97703,52.21241 257.17659,0.48065 375.35967,2.17167 118.18308,1.69101 168.54911,29.1665 243.12679,30.10771 C 693.06415,92.25775 855.93515,29.278599 1080,73.61449 V 137 Z"
+                style="fill: #ffffff"
+              ></path>
+              <path
+                d="M 0,10.174557 C 83.419822,8.405668 117.65911,41.78116 204.11379,44.65308 290.56846,47.52499 396.02558,-7.4328 620.04248,94.40134 782.19141,29.627636 825.67279,15.823104 1080,98.55518 V 137 H 0 Z"
+                style="fill: #ffffff; opacity: 0.5"
+              ></path>
+              <path
+                d="M 0,45.10182 C 216.27861,-66.146913 327.90348,63.09813 416.42665,63.52904 504.94982,63.95995 530.42054,22.125806 615.37532,25.210412 700.33012,28.295019 790.77619,132.60682 1080,31.125744 V 137 H 0 Z"
+                style="fill: #ffffff; opacity: 0.25"
+              ></path>
+            </svg>
+          </div>
+        </div>
+
         <!-- User Actions -->
         <div
-          class="relative z-10 mt-auto px-8 py-6 bg-white bg-opacity-05 rounded-t-2xl shadow"
+          class="relative z-10 mt-auto px-8 pb-6 bg-white bg-opacity-05 shadow flex flex-col space-y-2"
         >
           <button
             id="editarUsuarioMobile"
-            class="flex items-center w-full px-4 text-white rounded-xl transition-all duration-300 group my-3 backdrop-blur-sm shadow-lg bg-red-600"
+            class="z-30 flex items-center w-full px-6 py-2 text-white bg-red-600 shadow-xl backdrop-blur-lg rounded-xl transition-all duration-300 group"
           >
             <div
               class="flex items-center justify-center w-12 h-10 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all"
@@ -512,7 +558,7 @@
 
           <button
             id="cerrarSesionMobile"
-            class="flex items-center w-full px-4 text-white rounded-xl transition-all duration-300 group mb-3 backdrop-blur-sm shadow-lg bg-red-600"
+            class="z-30 flex items-center w-full px-6 py-2 bg-red-600 shadow-xl backdrop-blur-lg text-white rounded-xl transition-all duration-300 group mb-3"
           >
             <div
               class="flex items-center justify-center w-12 h-10 bg-white/20 rounded-lg mr-4 group-hover:bg-white/30 transition-all"
@@ -848,8 +894,7 @@
     function fetchRutas() {
       return new Promise((resolve, reject) => {
         url =
-          "https://dosxdos.app.iidos.com/apirest/rutas.php?montador=" +
-          montador;
+          "https://dosxdos.app.iidos.com/apirest/rutas.php?montador=" + montador;
         fetch(url)
           .then((res) => {
             if (res.ok) {
