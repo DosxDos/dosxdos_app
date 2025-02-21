@@ -136,11 +136,12 @@
       }
     }
 
-    .website-divider-container-734167 {
-      overflow: hidden;
-      position: relative;
-      height: 100%;
-    }
+      /* olas divider en el menu movíl */
+      .website-divider-container-734167 {
+        overflow: hidden;
+        position: relative;
+        height: 100%;
+      }
 
     .divider-img-734167 {
       position: absolute;
@@ -674,58 +675,59 @@
     }
   }
 
-  /* API AND DATA FUNCTIONS */
-  function fetchRutas() {
-    return new Promise((resolve, reject) => {
-      url =
-        "https://dosxdos.app.iidos.com/apirest/rutas.php?montador=" + montador;
-      fetch(url)
-        .then((res) => {
-          if (res.ok) {
-            return res.json();
-          } else {
-            mensaje =
-              "Error: no se pudo recibir una respuesta de la api intermedia en la función fetchRutas";
-            alerta(mensaje);
-          }
-        })
-        .then((res) => {
-          if (res[0]) {
-            const request = indexedDB.open("dosxdos");
-            request.onsuccess = (event) => {
-              const db = event.target.result;
-              const transaction = db.transaction("rutas", "readwrite");
-              const datosStore = transaction.objectStore("rutas");
-              const clearRequest = datosStore.clear();
-              clearRequest.onsuccess = (clearEvent) => {
-                const datos = res[1];
-                datos.forEach((item) => {
-                  datosStore.add(item);
-                });
-                resolve(true);
+    /* API AND DATA FUNCTIONS */
+    function fetchRutas() {
+      return new Promise((resolve, reject) => {
+        url =
+          "https://dosxdos.app.iidos.com/apirest/rutas.php?montador=" +
+          montador;
+        fetch(url)
+          .then((res) => {
+            if (res.ok) {
+              return res.json();
+            } else {
+              mensaje =
+                "Error: no se pudo recibir una respuesta de la api intermedia en la función fetchRutas";
+              alerta(mensaje);
+            }
+          })
+          .then((res) => {
+            if (res[0]) {
+              const request = indexedDB.open("dosxdos");
+              request.onsuccess = (event) => {
+                const db = event.target.result;
+                const transaction = db.transaction("rutas", "readwrite");
+                const datosStore = transaction.objectStore("rutas");
+                const clearRequest = datosStore.clear();
+                clearRequest.onsuccess = (clearEvent) => {
+                  const datos = res[1];
+                  datos.forEach((item) => {
+                    datosStore.add(item);
+                  });
+                  resolve(true);
+                };
+                clearRequest.onerror = (event) => {
+                  error = event.target.error;
+                  mensaje = `ERROR: ` + error;
+                  alerta(mensaje);
+                };
               };
-              clearRequest.onerror = (event) => {
+              request.onerror = (event) => {
                 error = event.target.error;
                 mensaje = `ERROR: ` + error;
                 alerta(mensaje);
               };
-            };
-            request.onerror = (event) => {
-              error = event.target.error;
-              mensaje = `ERROR: ` + error;
+            } else {
+              mensaje = res[1];
               alerta(mensaje);
-            };
-          } else {
-            mensaje = res[1];
+            }
+          })
+          .catch((res) => {
+            mensaje = "Sin conexión: " + res.message;
             alerta(mensaje);
-          }
-        })
-        .catch((res) => {
-          mensaje = "Sin conexión: " + res.message;
-          alerta(mensaje);
-        });
-    });
-  }
+          });
+      });
+    }
 
   function fetchLineas(vectorRutas) {
     return new Promise(async (resolve, reject) => {
@@ -1721,21 +1723,22 @@
         const contadorAceptadas =
           document.getElementById("contadorAceptadas");
 
-        if (contadorPendientes)
-          contadorPendientes.textContent = pendientes.length;
-        if (contadorAceptadas)
-          contadorAceptadas.textContent = aceptadas.length;
-
-        loaderOff();
-      } else {
-        alerta("Error al leer el almacén de notificaciones");
-        loaderOff();
+          if (contadorPendientes)
+            contadorPendientes.textContent = pendientes.length;
+          if (contadorAceptadas)
+            contadorAceptadas.textContent = aceptadas.length;
+          await procesarPeticiones2();
+          loaderOff();
+        } else {
+          await procesarPeticiones2();
+          alerta("Error al leer el almacén de notificaciones");
+          loaderOff();
+        }
+      } catch (error) {
+        console.error("ERROR:", error.message);
+        alerta(error.message);
       }
-    } catch (error) {
-      console.error("ERROR:", error.message);
-      alerta(error.message);
     }
-  }
 
   function removeDuplicates(array) {
     const seen = new Set();
@@ -1978,36 +1981,110 @@
     });
   }
 
-  function subirNota(json) {
-    return new Promise((resolve, reject) => {
-      fetch("https://dosxdos.app.iidos.com/apirest/notas.php", {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json; charset=utf-8",
-        },
-        body: json,
-      })
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error(
-              `Error en el servidor de la API intermedia al guardar la nota. Status: ${res.status}`
+    function subirNota(json) {
+      return new Promise((resolve, reject) => {
+        fetch("https://dosxdos.app.iidos.com/apirest/notas.php", {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json; charset=utf-8",
+          },
+          body: json,
+        })
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error(
+                `Error en el servidor de la API intermedia al guardar la nota. Status: ${res.status}`
+              );
+            }
+            return res.json();
+          })
+          .then((res) => {
+            if (res[0]) {
+              resolve(true);
+            } else {
+              resolve(false);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            reject(err);
+          });
+      });
+    }
+
+    /* LEER DATOS DE INDEXDB */
+
+    function leerDatos(store) {
+      return new Promise((resolve, reject) => {
+        datos = [];
+        const request = indexedDB.open("dosxdos");
+        request.onsuccess = (event) => {
+          const db = event.target.result;
+          const transaction = db.transaction(store, "readonly");
+          const almacen = transaction.objectStore(store);
+          const cursorRequest = almacen.openCursor();
+          cursorRequest.onsuccess = (event) => {
+            const cursor = event.target.result;
+            if (cursor) {
+              datos.push(cursor.value);
+              cursor.continue();
+            } else {
+              resolve(datos);
+            }
+          };
+          cursorRequest.onerror = function (event) {
+            error = event.target.error;
+            mensaje = "ERROR: " + error;
+            $textoMensaje.innerHTML = mensaje;
+            console.error(error);
+            mensajeOn();
+            loaderOff();
+          };
+        };
+        request.onerror = (event) => {
+          error = event.target.error;
+          mensaje = "ERROR: " + error;
+          $textoMensaje.innerHTML = mensaje;
+          console.error(error);
+          mensajeOn();
+          loaderOff();
+        };
+      });
+    }
+
+    function leerDatos2(database, store) {
+      return new Promise((resolve, reject) => {
+        datos = [];
+        const request = indexedDB.open(database);
+        request.onsuccess = (event) => {
+          const db = event.target.result;
+          const transaction = db.transaction(store, "readonly");
+          const almacen = transaction.objectStore(store);
+          const cursorRequest = almacen.openCursor();
+          cursorRequest.onsuccess = (event) => {
+            const cursor = event.target.result;
+            if (cursor) {
+              datos.push(cursor.value);
+              cursor.continue();
+            } else {
+              resolve(datos);
+            }
+          };
+          cursorRequest.onerror = function (event) {
+            console.error(
+              `Error en la función leerDatos al solcitar el cursor para leer el almacen ${store}: ${event.target.error}`
             );
-          }
-          return res.json();
-        })
-        .then((res) => {
-          if (res[0]) {
-            resolve(true);
-          } else {
-            resolve(false);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          reject(err);
-        });
-    });
-  }
+            reject(event.target.error);
+          };
+        };
+        request.onerror = (event) => {
+          console.error(
+            `Error en la función leerDatos al solcitar abrir la base de datos para leer el almacen ${store}: ${event.target.error}`
+          );
+          reject(event.target.error);
+        };
+      });
+    }
 
   async function enviarPeticiones(vectorObjDb, tipoVector) {
     return new Promise(async (resolve, reject) => {
