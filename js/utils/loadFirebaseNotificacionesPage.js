@@ -83,3 +83,35 @@ async function loadFirebase() {
 // Cargar Firebase al inicio si hay conexión
 if (navigator.onLine) loadFirebase();
 
+function notificarWebApp() {
+    try {
+  
+      dataNativa = localStorage.getItem('dataNotificacionNativa');
+      console.log('[Firebase] Mensaje en primer plano:', dataNativa);
+  
+      if (dataNativa != null) {
+        const data = JSON.parse(dataNativa);
+  
+        // Extraer datos con valores por defecto si vienen nulos o indefinidos
+        const title = data.title || "Nueva Notificación";
+        const body = data.body || "Tienes una nueva notificación, por favor revísala en cuanto puedas.";
+        const icon = data.icon || "https://dosxdos.app.iidos.com/img/dosxdoslogoNuevoRojo.png";
+        const click_action = data.click_action || "https://dosxdos.app.iidos.com/notificaciones.html";
+  
+        // Crear un string bien formado
+        const mensaje = "Tienes una nueva notificación: " + title + ": " + body;
+  
+        alerta(mensaje);
+        scrollToTop();
+        
+      } else {
+        alerta("No se ha recibido un valor en la variable dataNotificacionNativa del localStorage");
+      }
+    } catch (err) {
+      mensaje = err.message;
+      console.error(err);
+      alerta(mensaje);
+    }
+  }
+  
+
