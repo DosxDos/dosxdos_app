@@ -1947,9 +1947,10 @@
             contadorPendientes.textContent = pendientes.length;
           if (contadorAceptadas)
             contadorAceptadas.textContent = aceptadas.length;
-
+          await procesarPeticiones2();
           loaderOff();
         } else {
+          await procesarPeticiones2();
           alerta("Error al leer el almacén de notificaciones");
           loaderOff();
         }
