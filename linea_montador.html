@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LÍNEA</title>
+    <title>Línea</title>
     <!-- Favicons -->
     <link rel="icon" type="image/png" href="https://dosxdos.app.iidos.com/img/logoPwa256.png">
     <style>
@@ -203,6 +203,8 @@
             background-color: #f4f4f4;
         }
 
+        /* LOGO Y NOTIFICACIONES */
+
         #logo {
             display: flex;
             width: 100%;
@@ -212,8 +214,68 @@
         }
 
         #logo>img {
-            width: var(--x300);
+            width: var(--x150);
         }
+
+        #notificaciones {
+            position: absolute;
+            width: var(--x60);
+            height: var(--x60);
+            justify-content: center;
+            align-items: center;
+            right: var(--x10);
+            cursor: pointer;
+        }
+
+        #bell {
+            width: var(--x60);
+            height: var(--x60);
+        }
+
+        #sinNotificaciones {
+            position: absolute;
+            width: var(--x60);
+            height: var(--x60);
+            justify-content: center;
+            align-items: center;
+            right: var(--x10);
+            cursor: pointer;
+        }
+
+        #bell2 {
+            width: var(--x35);
+            height: var(--x35);
+        }
+
+        #numNotificaciones {
+            position: absolute;
+            width: var(--x30);
+            height: var(--x30);
+            border-radius: 50%;
+            background-color: #d31216;
+            justify-content: center;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            top: var(--x2);
+            right: var(--x2);
+        }
+
+        #numNtf {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            /* border: 1px solid black; */
+            border-radius: 50%;
+            width: var(--x25);
+            height: var(--x25);
+            color: white;
+            font-size: var(--x25);
+            padding-left: var(--x3);
+        }
+
+        /* FIN DE LOGO Y NOTIFICACIONES */
 
         #menu {
             display: flex;
@@ -878,6 +940,8 @@
                 --x50: 50px;
                 --x380: 380px;
                 --x150: 150px;
+                --x35: 8.49vw;
+                --x35: 35px;
             }
         }
 
@@ -907,6 +971,7 @@
                 --x50: 2.5vw;
                 --x380: 19vw;
                 --x150: 7.5vw;
+                --x35: 1.75vw;
             }
 
             #menu {
@@ -948,6 +1013,7 @@
                 --x50: 30px;
                 --x380: 228px;
                 --x150: 90px;
+                --x35: 21px;
             }
 
             #menu {
@@ -986,8 +1052,18 @@
 
     <section id="encabezado" class="displayOn">
 
+
         <div id="logo">
-            <img src="https://dosxdos.app.iidos.com/img/logo300.png">
+            <img src="https://dosxdos.app.iidos.com/img/logo300.png" alt="Logo" />
+            <div id="notificaciones" class="displayOff">
+                <img src="https://dosxdos.app.iidos.com/img/bell.gif" alt="bell" id="bell" />
+                <div id="numNotificaciones" class="displayOn">
+                    <p id="numNtf">0</p>
+                </div>
+            </div>
+            <div id="sinNotificaciones" class="displayOff">
+                <img src="https://dosxdos.app.iidos.com/img/bell2.png" alt="bell2" id="bell2" />
+            </div>
         </div>
 
         <nav id="menu">
@@ -1320,7 +1396,7 @@
         lineasIcono.addEventListener('click', () => {
             window.location.href = "https://dosxdos.app.iidos.com/ruta_montador.html";
         })
-        
+
         const historialIcono = document.getElementById('historialIcono');
         historialIcono.addEventListener('click', () => {
             window.location.href = "https://dosxdos.app.iidos.com/historial_montador.html";
@@ -2211,23 +2287,28 @@
         });
     }
 
-    async function cerrarSesions() {
+
+    async function cerrarSesion() {
         if (navigator.onLine) {
             try {
                 loaderOn();
-                localStorage.clear();
-                eliminarCookie('login');
-                eliminarCookie('usuario');
-                await deleteDB2('dosxdos') ? console.log("Base de datos eliminada exitosamente") : console.error("error al eliminar la base de datos");
-                window.location.href = "https://dosxdos.app.iidos.com/index.html";
+                const eliminarBaseDeDatosCliente = await deleteDB2("dosxdos");
+                if (eliminarBaseDeDatosCliente) {
+                    const eliminarTokenDeLasNotificaciones = eliminarTokenNotificaciones()
+                    if (eliminarTokenDeLasNotificaciones) {
+                        localStorage.clear();
+                        eliminarCookie("login");
+                        eliminarCookie("usuario");
+                        window.location.href = "https://dosxdos.app.iidos.com/index.html";
+                    }
+                }
             } catch (error) {
-                mensaje = 'ERROR: ' + error.message;
+                mensaje = "ERROR: " + error.message;
                 console.error(error);
                 alerta(mensaje);
             }
-        }
-        else {
-            mensaje = 'No es posible cerrar la sesión sin conexión a internet';
+        } else {
+            mensaje = "No es posible cerrar la sesión sin conexión a internet";
             $textoMensaje.innerHTML = mensaje;
             mensajeOn();
         }
@@ -3389,6 +3470,7 @@
                     const peticionesCierre = await procesarPeticiones2();
                     loaderOff();
                 }
+                await notificar();
             }
         } catch (error) {
             mensaje = 'ERROR: ' + error.message;
@@ -3537,6 +3619,7 @@
                     })
                     loaderOff();
                 }
+                await notificarOffline();
             }
         } catch (error) {
             mensaje = 'ERROR: ' + error.message;
@@ -3559,9 +3642,7 @@
 
 </script>
 
-<!-- {"CodigoRuta": "R-0323", "LineaRuta": "10000", "DescripcionIncidencia": "prueba1", "DiasActuacion": "07",
-"Estado": "Pendiente", "FechaActuacion": "01/02/2023", "FirmaCliente": "prueba1", "FotosSubidas": "20",
-"HorasActuacion": "3,5", "Incidencia": "03", "MinutosActuacion": "45", "ObservacionesTecnico": "prueba1",
-"LinkWeb": "https://google.es"} -->
+<script src="https://dosxdos.app.iidos.com/js/utils/notificaciones.js"></script>
+<script src="https://dosxdos.app.iidos.com/js/utils/loadFirebase.js"></script>
 
 </html>
