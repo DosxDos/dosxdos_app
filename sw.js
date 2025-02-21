@@ -103,8 +103,8 @@ const CACHE_NAME = 'dosxdos105',
     'https://dosxdos.app.iidos.com/img/bell2.png',
     'https://dosxdos.app.iidos.com/img/Isotipo-38.png',
     'https://dosxdos.app.iidos.com/notificaciones.html',
-    'https://dosxdos.app.iidos.com/texture-red.svg',
-    'https://dosxdos.app.iidos.com/texture-white.svg'
+    'https://dosxdos.app.iidos.com/img/texture-red.svg',
+    'https://dosxdos.app.iidos.com/img/texture-white.svg'
   ],
 
   urlsToUpdate = [
