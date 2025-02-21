@@ -94,4 +94,5 @@ async function loadFirebase() {
 }
 
 // Cargar Firebase al inicio si hay conexión
-loadFirebase();
+if (navigator.onLine) loadFirebase();
+

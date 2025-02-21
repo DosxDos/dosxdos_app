@@ -32,6 +32,7 @@
             --x2: 0.49vw;
             --x18: 4.37vw;
             --x2_5: 0.61vw;
+            --x150: 36.4vw;
         }
 
         /* INICIO */
@@ -601,6 +602,7 @@
                 --x2: 2px;
                 --x18: 18px;
                 --x2_5: 2.5px;
+                --x150: 150px;
             }
         }
 
@@ -626,6 +628,7 @@
                 --x2: 0.1vw;
                 --x18: 0.9vw;
                 --x2_5: 0.13vw;
+                --x150: 7.5vw;
             }
 
             #menu {
@@ -655,6 +658,7 @@
                 --x2: 1.2px;
                 --x18: 10.8px;
                 --x2_5: 1.5px;
+                --x150: 90px;
             }
 
             #menu {
@@ -1512,6 +1516,7 @@
                     const peticionesCierre = await procesarPeticiones2();
                     loaderOff();
                 }
+                await notificar();
             }
         } catch (error) {
             mensaje = 'ERROR: ' + error.message;
@@ -1614,6 +1619,7 @@
                     })
                     loaderOff();
                 }
+                await notificarOffline();
             }
         } catch (error) {
             mensaje = 'ERROR: ' + error.message;
@@ -2055,7 +2061,7 @@
 
 </script>
 
-<script src="https://dosxdos.app.iidos.com/js/utils/notificaciones2.js"></script>
+<script src="https://dosxdos.app.iidos.com/js/utils/notificaciones.js"></script>
 <script src="https://dosxdos.app.iidos.com/js/utils/loadFirebase.js"></script>
 
 </html>

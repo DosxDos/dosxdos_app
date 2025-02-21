@@ -114,6 +114,7 @@ function notificar() {
           sinNotificaciones.classList.add('displayOn');
         }
       }
+      resolve(true);
     } catch (err) {
       console.error(err);
       const mensaje =
@@ -126,6 +127,7 @@ function notificar() {
 function notificarOffline() {
   return new Promise(async (resolve) => {
     try {
+      console.warn('Entra a la megaputa función')
       notificationsStore = await leerDatos("notificaciones");
       notificacionesSinAcpetar = false;
       notificacionesSinAcpetarNumero = 0;
@@ -145,6 +147,7 @@ function notificarOffline() {
       sinNotificaciones.addEventListener("click", () => {
         window.location.href = "https://dosxdos.app.iidos.com/notificaciones.html";
       });
+      
       if (notificacionesSinAcpetarNumero) {
         notificaciones.classList.remove('displayOff');
         notificaciones.classList.add('displayOn');
@@ -153,6 +156,7 @@ function notificarOffline() {
         sinNotificaciones.classList.remove('displayOff');
         sinNotificaciones.classList.add('displayOn');
       }
+      resolve(true);
     } catch (err) {
       console.error(err);
       const mensaje =
@@ -209,7 +213,6 @@ function eliminarTokenNotificaciones() {
 }
 
 function notificarWebApp() {
-
   try {
 
     dataNativa = localStorage.getItem('dataNotificacionNativa');
