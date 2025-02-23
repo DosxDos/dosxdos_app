@@ -1,0 +1,54 @@
+@use "sass:string";
+
+@function format-num($num) {
+  $str: #{$num};
+  $dot-index: string.index($str, ".");
+  @if $dot-index {
+    $before: string.slice($str, 1, $dot-index - 1);
+    $after: string.slice($str, $dot-index + 1);
+    @return $before + "_" + $after;
+  }
+  @return $str;
+}
+
+:root {
+  // Base: 25% del valor en vw
+  @for $i from 1 through 12000 {
+    $value: $i * 0.1;
+    $name: format-num($value);
+    --x#{$name}: #{$value * 0.25}vw;
+  }
+}
+
+@media screen and (min-width: 412px) and (max-width: 767px) {
+  :root {
+    // Móviles grandes: valor en px
+    @for $i from 1 through 12000 {
+      $value: $i * 0.1;
+      $name: format-num($value);
+      --x#{$name}: #{$value}px;
+    }
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1199px) {
+  :root {
+    // Tablets: 10% del valor en vw
+    @for $i from 1 through 12000 {
+      $value: $i * 0.1;
+      $name: format-num($value);
+      --x#{$name}: #{$value * 0.10}vw;
+    }
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  :root {
+    // Escritorios: valor en px
+    @for $i from 1 through 12000 {
+      $value: $i * 0.1;
+      $name: format-num($value);
+      --x#{$name}: #{$value}px;
+    }
+  }
+}
