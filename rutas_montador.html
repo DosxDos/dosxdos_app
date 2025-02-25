@@ -314,19 +314,19 @@
         <!-- Navigation Links -->
         <nav class="px-8 py-6 space-y-2 relative z-10 flex-1 overflow-y-auto">
           <a href="https://dosxdos.app.iidos.com/notificaciones.html"
-          class="z-10 flex items-center px-6 py-2 text-white bg-red-600 bg-opacity-60 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-xl group backdrop-blur-lg">
-          <div
-            class="flex items-center justify-center w-14 h-14 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all">
-            <svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M18 8a6 6 0 0 0-12 0v5a6 6 0 0 1-2 4h16a6 6 0 0 1-2-4V8"></path>
-              <line x1="12" y1="22" x2="12" y2="22"></line> <!-- Small bell clapper -->
-            </svg>
-          </div>
-          <span class="text-lg font-semibold tracking-wide">Notificaciones</span>
-        </a>
-        
-         
+            class="z-10 flex items-center px-6 py-2 text-white bg-red-600 bg-opacity-60 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-xl group backdrop-blur-lg">
+            <div
+              class="flex items-center justify-center w-14 h-14 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all">
+              <svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 8a6 6 0 0 0-12 0v5a6 6 0 0 1-2 4h16a6 6 0 0 1-2-4V8"></path>
+                <line x1="12" y1="22" x2="12" y2="22"></line> <!-- Small bell clapper -->
+              </svg>
+            </div>
+            <span class="text-lg font-semibold tracking-wide">Notificaciones</span>
+          </a>
+
+
           <a href="https://dosxdos.app.iidos.com/ruta_montador.html"
             class="z-10 flex items-center px-6 py-2 text-white bg-red-600 bg-opacity-60 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-xl group backdrop-blur-lg">
             <div
@@ -422,7 +422,7 @@
       <div id="rutas" class="h-full w-full mx-auto grid grid-cols-1 md:grid-cols-3 gap-4"></div>
     </div>
   </section>
-  
+
 
 </body>
 
@@ -844,8 +844,7 @@
         loaderOn();
         const eliminarBaseDeDatosCliente = await deleteDB2("dosxdos");
         if (eliminarBaseDeDatosCliente) {
-          const eliminarTokenDeLasNotificaciones =
-            eliminarTokenNotificaciones();
+          const eliminarTokenDeLasNotificaciones = eliminarTokenNotificaciones()
           if (eliminarTokenDeLasNotificaciones) {
             localStorage.clear();
             eliminarCookie("login");
@@ -860,7 +859,7 @@
       }
     } else {
       mensaje = "No es posible cerrar la sesión sin conexión a internet";
-      alerta(mensaje);
+      $textoMensaje.innerHTML = mensaje;
       mensajeOn();
     }
   }
@@ -2137,5 +2136,6 @@
 </script>
 
 <script src="https://dosxdos.app.iidos.com/js/utils/notificaciones2.js"></script>
+<script src="https://dosxdos.app.iidos.com/js/utils/loadFirebase.js"></script>
 
 </html>
