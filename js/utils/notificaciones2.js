@@ -86,44 +86,107 @@ function notificar() {
     try {
       notificationsStore = await leerDatos("notificaciones");
       notificacionesSinAcpetar = false;
-      notificationsStore.map(not => {
+      notificacionesSinAcpetarNumero = 0;
+      notificationsStore.map((not) => {
         if (!not.visto) {
           notificacionesSinAcpetar = true;
           notificacionesSinAcpetarNumero++;
         }
-      })
-      console.log('notificacionesSinAcpetar: ' + notificacionesSinAcpetar)
-      console.log('notificacionesSinAcpetarNumero: ' + notificacionesSinAcpetarNumero)
+      });
+      console.log("notificacionesSinAcpetar: " + notificacionesSinAcpetar);
+      console.log(
+        "notificacionesSinAcpetarNumero: " + notificacionesSinAcpetarNumero
+      );
+
+      // Desktop Notification Elements
       const notificaciones = document.getElementById("notificaciones");
-      notificaciones.addEventListener("click", () => {
-        window.location.href = "http://localhost/dosxdos_app/notificaciones.html";
-      });
+      const numNtf = document.getElementById("numNtf");
       const sinNotificaciones = document.getElementById("sinNotificaciones");
-      sinNotificaciones.addEventListener("click", () => {
-        window.location.href = "http://localhost/dosxdos_app/notificaciones.html";
-      });
-      if (notificacionesSinAcpetarNumero) {
-        notificaciones.classList.remove('displayOff');
-        notificaciones.classList.add('displayOn');
-        document.getElementById('numNtf').innerHTML = notificacionesSinAcpetarNumero;
-      } else {
-        sinNotificaciones.classList.remove('displayOff');
-        sinNotificaciones.classList.add('displayOn');
+
+      // Mobile Notification Elements
+      const mobileNotificationCount = document.getElementById(
+        "mobileNotificationCount"
+      );
+      const mobileBellImg = document.getElementById("bellMobile");
+
+      // Add click events for desktop notifications
+      if (notificaciones) {
+        notificaciones.addEventListener("click", () => {
+          window.location.href =
+            "http://localhost/dosxdos_app/notificaciones.html";
+        });
       }
+
+      if (sinNotificaciones) {
+        sinNotificaciones.addEventListener("click", () => {
+          window.location.href =
+            "http://localhost/dosxdos_app/notificaciones.html";
+        });
+      }
+
+      // Handle notification display
+      if (notificacionesSinAcpetarNumero) {
+        // Desktop Notifications
+        if (notificaciones) {
+          notificaciones.classList.remove("displayOff");
+          notificaciones.classList.add("displayOn");
+        }
+        if (numNtf) {
+          numNtf.innerHTML = notificacionesSinAcpetarNumero;
+        }
+        if (sinNotificaciones) {
+          sinNotificaciones.classList.remove("displayOn");
+          sinNotificaciones.classList.add("displayOff");
+        }
+
+        // Mobile Notifications
+        if (mobileNotificationCount) {
+          mobileNotificationCount.textContent = notificacionesSinAcpetarNumero;
+          mobileNotificationCount.classList.remove("hidden");
+        }
+        if (mobileBellImg) {
+          mobileBellImg.src = "http://localhost/dosxdos_app/img/bell.gif";
+          mobileBellImg.classList.add("bell-animate");
+        }
+      } else {
+        // Desktop Notifications
+        if (notificaciones) {
+          notificaciones.classList.remove("displayOn");
+          notificaciones.classList.add("displayOff");
+        }
+        if (sinNotificaciones) {
+          sinNotificaciones.classList.remove("displayOff");
+          sinNotificaciones.classList.add("displayOn");
+        }
+
+        // Mobile Notifications
+        if (mobileNotificationCount) {
+          mobileNotificationCount.textContent = "0";
+          mobileNotificationCount.classList.add("hidden");
+        }
+        if (mobileBellImg) {
+          mobileBellImg.src = "http://localhost/dosxdos_app/img/bell2.png";
+          mobileBellImg.classList.remove("bell-animate");
+        }
+      }
+
+      resolve(true);
     } catch (err) {
       console.error(err);
-      const mensaje =
-        "Error en el sistema de notificaciones: " + error.message;
+      const mensaje = "Error en el sistema de notificaciones: " + err.message;
       alerta(mensaje);
+      resolve(false);
     }
   });
 }
 
 function eliminarTokenNotificaciones() {
-  return new Promise(resolve => {
-    tokenEliminar = localStorage.getItem('tokenNotificaciones');
+  return new Promise((resolve) => {
+    tokenEliminar = localStorage.getItem("tokenNotificaciones");
     if (tokenEliminar != null) {
-      urlTokenEliminar = 'http://localhost/dosxdos_app/apirest/rutas_notificaciones.php/notificaciones/token/' + tokenEliminar;
+      urlTokenEliminar =
+        "http://localhost/dosxdos_app/apirest/rutas_notificaciones.php/notificaciones/token/" +
+        tokenEliminar;
       fetch(urlTokenEliminar, {
         method: "DELETE",
       })
@@ -131,21 +194,20 @@ function eliminarTokenNotificaciones() {
           res.ok
             ? res.json()
             : reject(
-              new Error(
-                `Error al eliminar el token de las notificaciones.`
+                new Error(`Error al eliminar el token de las notificaciones.`)
               )
-            )
         )
         .then((res) => {
           if (res.success) {
-            localStorage.setItem('tokenNotificaciones', null);
+            localStorage.setItem("tokenNotificaciones", null);
             resolve(true);
           } else {
             console.error(res);
-            alerta("Error al eliminar el token de las notificaciones: " + res.message)
+            alerta(
+              "Error al eliminar el token de las notificaciones: " + res.message
+            );
             resolve(false);
           }
-
         })
         .catch((err) => {
           mensaje = err.message;
