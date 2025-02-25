@@ -442,7 +442,7 @@
 
 <script>
 
-  const versionLocal = "dosxdos105";
+  const versionLocal = "dosxdos106";
 
   tokenNativo = null;
   tokenFirebase = null;
@@ -917,13 +917,16 @@
   async function cerrarSesions() {
     if (navigator.onLine) {
       try {
-        localStorage.clear();
-        eliminarCookie("login");
-        eliminarCookie("usuario");
-        (await deleteDB2("dosxdos"))
-          ? console.log("Base de datos eliminada exitosamente")
-          : console.error("error al eliminar la base de datos");
-        window.location.href = "https://dosxdos.app.iidos.com/index.html";
+        const eliminarBaseDeDatosCliente = await deleteDB2("dosxdos");
+        if (eliminarBaseDeDatosCliente) {
+          const eliminarTokenDeLasNotificaciones = eliminarTokenNotificaciones()
+          if (eliminarTokenDeLasNotificaciones) {
+            localStorage.clear();
+            eliminarCookie("login");
+            eliminarCookie("usuario");
+            window.location.href = "https://dosxdos.app.iidos.com/index.html";
+          }
+        }
       } catch (error) {
         mensaje = "ERROR: " + error.message;
         console.error(error);
@@ -939,15 +942,18 @@
   async function cerrarSesionsVersion() {
     if (navigator.onLine) {
       try {
-        localStorage.clear();
-        eliminarCookie("login");
-        eliminarCookie("usuario");
-        (await deleteDB2("dosxdos"))
-          ? console.log("Base de datos eliminada exitosamente")
-          : console.error("error al eliminar la base de datos");
-        localStorage.setItem("cierrePorVersion", true);
-        localStorage.setItem("version", versionLocal);
-        window.location.href = "https://dosxdos.app.iidos.com/index.html";
+        const eliminarBaseDeDatosCliente = await deleteDB2("dosxdos");
+        if (eliminarBaseDeDatosCliente) {
+          const eliminarTokenDeLasNotificaciones = eliminarTokenNotificaciones()
+          if (eliminarTokenDeLasNotificaciones) {
+            localStorage.clear();
+            eliminarCookie("login");
+            eliminarCookie("usuario");
+            localStorage.setItem("cierrePorVersion", true);
+            localStorage.setItem("version", versionLocal);
+            window.location.href = "https://dosxdos.app.iidos.com/index.html";
+          }
+        }
       } catch (error) {
         mensaje = "ERROR: " + error.message;
         console.error(error);
@@ -1584,6 +1590,45 @@
 
   function asignarTokenNativo() {
     tokenNativo = window.localStorage.getItem('tokenNativo');
+  }
+
+  function eliminarTokenNotificaciones() {
+    return new Promise((resolve) => {
+      tokenEliminar = localStorage.getItem("tokenNotificaciones");
+      if (tokenEliminar != null) {
+        urlTokenEliminar =
+          "https://dosxdos.app.iidos.com/apirest/rutas_notificaciones.php/notificaciones/token/" +
+          tokenEliminar;
+        fetch(urlTokenEliminar, {
+          method: "DELETE",
+        })
+          .then((res) =>
+            res.ok
+              ? res.json()
+              : reject(
+                new Error(`Error al eliminar el token de las notificaciones.`)
+              )
+          )
+          .then((res) => {
+            if (res.success) {
+              localStorage.setItem("tokenNotificaciones", null);
+              resolve(true);
+            } else {
+              console.error(res);
+              alerta(
+                "Error al eliminar el token de las notificaciones: " + res.message
+              );
+              resolve(false);
+            }
+          })
+          .catch((err) => {
+            mensaje = err.message;
+            console.error(err);
+            alerta(mensaje);
+            reject(new Error(mensaje));
+          });
+      }
+    });
   }
 
 </script>
