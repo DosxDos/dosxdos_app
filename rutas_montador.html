@@ -1249,29 +1249,38 @@
         }));
 
         const fragmento = document.createDocumentFragment();
-        rutas.forEach((objeto, index) => {
+        const rutasContainer = document.getElementById("rutas");
+
+        rutas.forEach((objeto) => {
           const button = document.createElement("button");
-          button.className = "ruta displayOn";
+          button.className =
+            "relative w-full h-16 sm:h-20 md:h-24 lg:h-28 flex items-center justify-center rounded-2xl text-white font-semibold text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg active:scale-100";
           button.type = "button";
-          button.id = `${objeto.cod}`;
-          const texto = `${objeto.nombre}`;
-          const span = document.createElement("span");
-          span.textContent = texto;
-          button.appendChild(span);
+          button.id = objeto.cod;
+
+          // Background SVG (Full Cover)
+          button.style.backgroundImage = "url('http://localhost/dosxdos_app/img/texture-red.svg')";
+          button.style.backgroundSize = "contain";
+          button.style.backgroundPosition = "center";
+
+          // Text Overlay
+          const textSpan = document.createElement("span");
+          textSpan.className = "relative z-10";
+          textSpan.textContent = objeto.nombre;
+
+          button.appendChild(textSpan);
+
           button.addEventListener("click", () => {
-            const rutaStorage = button.id;
-            localStorage.setItem("ruta", rutaStorage);
-            const nombreRutaStorage = button.textContent;
-            localStorage.setItem("nombreRuta", nombreRutaStorage);
-            window.location.href =
-              "http://localhost/dosxdos_app/ruta_montador.html";
+            localStorage.setItem("ruta", button.id);
+            localStorage.setItem("nombreRuta", objeto.nombre);
+            window.location.href = "http://localhost/dosxdos_app/ruta_montador.html";
           });
+
           fragmento.appendChild(button);
         });
 
-        // Clear the rutas container before adding new elements
-        $rutas.innerHTML = "";
-        $rutas.appendChild(fragmento);
+        rutasContainer.innerHTML = "";
+        rutasContainer.appendChild(fragmento);
 
         initializeSearch();
         initializeApplication();
