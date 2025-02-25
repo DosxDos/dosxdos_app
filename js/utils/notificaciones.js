@@ -2,7 +2,7 @@ function fetchNotificaciones() {
   return new Promise(async (resolve, reject) => {
     try {
       const url =
-        "https://dosxdos.app.iidos.com/apirest/rutas_notificaciones.php/notificaciones/" +
+        "http://localhost/dosxdos_app/apirest/rutas_notificaciones.php/notificaciones/" +
         usuario.id;
       const res = await fetch(url);
 
@@ -107,14 +107,14 @@ function notificar() {
       if (notificaciones) {
         notificaciones.addEventListener("click", () => {
           window.location.href =
-            "https://dosxdos.app.iidos.com/notificaciones.html";
+            "http://localhost/dosxdos_app/notificaciones.html";
         });
       }
 
       if (sinNotificaciones) {
         sinNotificaciones.addEventListener("click", () => {
           window.location.href =
-            "https://dosxdos.app.iidos.com/notificaciones.html";
+            "http://localhost/dosxdos_app/notificaciones.html";
         });
       }
 
@@ -139,7 +139,7 @@ function notificar() {
           mobileNotificationCount.classList.remove("hidden");
         }
         if (mobileBellImg) {
-          mobileBellImg.src = "https://dosxdos.app.iidos.com/img/bell.gif";
+          mobileBellImg.src = "http://localhost/dosxdos_app/img/bell.gif";
           mobileBellImg.classList.add("bell-animate");
         }
       } else {
@@ -159,7 +159,7 @@ function notificar() {
           mobileNotificationCount.classList.add("hidden");
         }
         if (mobileBellImg) {
-          mobileBellImg.src = "https://dosxdos.app.iidos.com/img/bell2.png";
+          mobileBellImg.src = "http://localhost/dosxdos_app/img/bell2.png";
           mobileBellImg.classList.remove("bell-animate");
         }
       }
@@ -179,7 +179,7 @@ function eliminarTokenNotificaciones() {
     tokenEliminar = localStorage.getItem("tokenNotificaciones");
     if (tokenEliminar != null) {
       urlTokenEliminar =
-        "https://dosxdos.app.iidos.com/apirest/rutas_notificaciones.php/notificaciones/token/" +
+        "http://localhost/dosxdos_app/apirest/rutas_notificaciones.php/notificaciones/token/" +
         tokenEliminar;
       fetch(urlTokenEliminar, {
         method: "DELETE",
