@@ -10,10 +10,6 @@
   <link rel="icon" type="image/png" href="https://dosxdos.app.iidos.com/img/logoPwa256.png" />
   <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/tailwindmain.css" />
   <style>
-     * {
-      -webkit-tap-highlight-color: transparent;
-    }
-
     /* Add the divider styles from notificaciones */
     .website-divider-container-734167 {
       overflow: hidden;
@@ -318,19 +314,19 @@
         <!-- Navigation Links -->
         <nav class="px-8 py-6 space-y-2 relative z-10 flex-1 overflow-y-auto">
           <a href="https://dosxdos.app.iidos.com/notificaciones.html"
-          class="z-10 flex items-center px-6 py-2 text-white bg-red-600 bg-opacity-60 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-xl group backdrop-blur-lg">
-          <div
-            class="flex items-center justify-center w-14 h-14 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all">
-            <svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M18 8a6 6 0 0 0-12 0v5a6 6 0 0 1-2 4h16a6 6 0 0 1-2-4V8"></path>
-              <line x1="12" y1="22" x2="12" y2="22"></line> <!-- Small bell clapper -->
-            </svg>
-          </div>
-          <span class="text-lg font-semibold tracking-wide">Notificaciones</span>
-        </a>
-        
-         
+            class="z-10 flex items-center px-6 py-2 text-white bg-red-600 bg-opacity-60 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-xl group backdrop-blur-lg">
+            <div
+              class="flex items-center justify-center w-14 h-14 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all">
+              <svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 8a6 6 0 0 0-12 0v5a6 6 0 0 1-2 4h16a6 6 0 0 1-2-4V8"></path>
+                <line x1="12" y1="22" x2="12" y2="22"></line> <!-- Small bell clapper -->
+              </svg>
+            </div>
+            <span class="text-lg font-semibold tracking-wide">Notificaciones</span>
+          </a>
+
+
           <a href="https://dosxdos.app.iidos.com/ruta_montador.html"
             class="z-10 flex items-center px-6 py-2 text-white bg-red-600 bg-opacity-60 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-xl group backdrop-blur-lg">
             <div
@@ -426,7 +422,7 @@
       <div id="rutas" class="h-full w-full mx-auto grid grid-cols-1 md:grid-cols-3 gap-4"></div>
     </div>
   </section>
-  
+
 
 </body>
 
@@ -848,8 +844,7 @@
         loaderOn();
         const eliminarBaseDeDatosCliente = await deleteDB2("dosxdos");
         if (eliminarBaseDeDatosCliente) {
-          const eliminarTokenDeLasNotificaciones =
-            eliminarTokenNotificaciones();
+          const eliminarTokenDeLasNotificaciones = eliminarTokenNotificaciones()
           if (eliminarTokenDeLasNotificaciones) {
             localStorage.clear();
             eliminarCookie("login");
@@ -864,7 +859,7 @@
       }
     } else {
       mensaje = "No es posible cerrar la sesión sin conexión a internet";
-      alerta(mensaje);
+      $textoMensaje.innerHTML = mensaje;
       mensajeOn();
     }
   }
@@ -1144,6 +1139,9 @@
           nombre: objeto["Descripcion"],
         }));
 
+        rutas.sort((a, b) => a.nombre.localeCompare(b.nombre));
+
+
         const fragmento = document.createDocumentFragment();
         const rutasContainer = document.getElementById("rutas");
 
@@ -1252,30 +1250,41 @@
           nombre: objeto["Descripcion"],
         }));
 
+        rutas.sort((a, b) => a.nombre.localeCompare(b.nombre));
+
         const fragmento = document.createDocumentFragment();
-        rutas.forEach((objeto, index) => {
+        const rutasContainer = document.getElementById("rutas");
+
+        rutas.forEach((objeto) => {
           const button = document.createElement("button");
-          button.className = "ruta displayOn";
+          button.className =
+            "relative w-full h-16 sm:h-20 md:h-24 lg:h-28 flex items-center justify-center rounded-2xl text-white font-semibold text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg active:scale-100";
           button.type = "button";
-          button.id = `${objeto.cod}`;
-          const texto = `${objeto.nombre}`;
-          const span = document.createElement("span");
-          span.textContent = texto;
-          button.appendChild(span);
+          button.id = objeto.cod;
+
+          // Background SVG (Full Cover)
+          button.style.backgroundImage = "url('https://dosxdos.app.iidos.com/img/texture-red.svg')";
+          button.style.backgroundSize = "contain";
+          button.style.backgroundPosition = "center";
+
+          // Text Overlay
+          const textSpan = document.createElement("span");
+          textSpan.className = "relative z-10";
+          textSpan.textContent = objeto.nombre;
+
+          button.appendChild(textSpan);
+
           button.addEventListener("click", () => {
-            const rutaStorage = button.id;
-            localStorage.setItem("ruta", rutaStorage);
-            const nombreRutaStorage = button.textContent;
-            localStorage.setItem("nombreRuta", nombreRutaStorage);
-            window.location.href =
-              "https://dosxdos.app.iidos.com/ruta_montador.html";
+            localStorage.setItem("ruta", button.id);
+            localStorage.setItem("nombreRuta", objeto.nombre);
+            window.location.href = "https://dosxdos.app.iidos.com/ruta_montador.html";
           });
+
           fragmento.appendChild(button);
         });
 
-        // Clear the rutas container before adding new elements
-        $rutas.innerHTML = "";
-        $rutas.appendChild(fragmento);
+        rutasContainer.innerHTML = "";
+        rutasContainer.appendChild(fragmento);
 
         initializeSearch();
         initializeApplication();
@@ -2127,5 +2136,6 @@
 </script>
 
 <script src="https://dosxdos.app.iidos.com/js/utils/notificaciones2.js"></script>
+<script src="https://dosxdos.app.iidos.com/js/utils/loadFirebase.js"></script>
 
 </html>
