@@ -48,6 +48,23 @@ async function loadFirebase() {
             // Crear un string bien formado
             const mensaje = "Tienes una nueva notificación: " + title + ": " + body;
 
+            alerta(mensaje);
+
+            const $notificaciones = document.getElementById('notificaciones');
+            const $sinNotificaciones = document.getElementById('sinNotificaciones');
+
+            if ($sinNotificaciones.classList.contains('displayOn')) {
+                $sinNotificaciones.classList.remove('displayOn');
+                $sinNotificaciones.classList.add('displayOff');
+                $notificaciones.classList.remove('displayOff')
+                $notificaciones.classList.add('displayOn')
+            }
+
+            const $numeroDeNotificacionesActuales = document.getElementById('numNtf');
+            const numeroDeNotificacionesActuales = $numeroDeNotificacionesActuales.innerHTML;
+            const numeroDeNotificacionesActualesInt = parseInt(numeroDeNotificacionesActuales);
+            $numeroDeNotificacionesActuales.innerHTML = numeroDeNotificacionesActualesInt + 1;
+
             scrollToTop();
 
             // Mostrar notificación en la UI si el usuario tiene permisos activados
@@ -67,11 +84,7 @@ async function loadFirebase() {
                 };
             }
 
-            localStorage.setItem('mensaje', 'Tienes una nueva notificación que debes revisar: ' + title + ': ' + body);
-            location.reload();
-
         });
-
         console.warn('Firebase Web push notifications cargado exitosamente')
     } catch (error) {
         console.error('No es posible cargar Firebase web push notifications en este dispositivo')
@@ -83,35 +96,50 @@ async function loadFirebase() {
 // Cargar Firebase al inicio si hay conexión
 if (navigator.onLine) loadFirebase();
 
+// Manejar mensajes en primer plano en notificaciones nativas
 function notificarWebApp() {
     try {
-  
-      dataNativa = localStorage.getItem('dataNotificacionNativa');
-      console.log('[Firebase] Mensaje en primer plano:', dataNativa);
-  
-      if (dataNativa != null) {
-        const data = JSON.parse(dataNativa);
-  
-        // Extraer datos con valores por defecto si vienen nulos o indefinidos
-        const title = data.title || "Nueva Notificación";
-        const body = data.body || "Tienes una nueva notificación, por favor revísala en cuanto puedas.";
-        const icon = data.icon || "https://dosxdos.app.iidos.com/img/dosxdoslogoNuevoRojo.png";
-        const click_action = data.click_action || "https://dosxdos.app.iidos.com/notificaciones.html";
-  
-        // Crear un string bien formado
-        const mensaje = "Tienes una nueva notificación: " + title + ": " + body;
-  
-        alerta(mensaje);
-        scrollToTop();
-        
-      } else {
-        alerta("No se ha recibido un valor en la variable dataNotificacionNativa del localStorage");
-      }
+
+        dataNativa = localStorage.getItem('dataNotificacionNativa');
+        console.log('[Firebase] Mensaje en primer plano:', dataNativa);
+
+        if (dataNativa != null) {
+            const data = JSON.parse(dataNativa);
+
+            // Extraer datos con valores por defecto si vienen nulos o indefinidos
+            const title = data.title || "Nueva Notificación";
+            const body = data.body || "Tienes una nueva notificación, por favor revísala en cuanto puedas.";
+            const icon = data.icon || "https://dosxdos.app.iidos.com/img/dosxdoslogoNuevoRojo.png";
+            const click_action = data.click_action || "https://dosxdos.app.iidos.com/notificaciones.html";
+
+            // Crear un string bien formado
+            const mensaje = "Tienes una nueva notificación: " + title + ": " + body;
+
+            alerta(mensaje);
+            const $notificaciones = document.getElementById('notificaciones');
+            const $sinNotificaciones = document.getElementById('sinNotificaciones');
+
+            if ($sinNotificaciones.classList.contains('displayOn')) {
+                $sinNotificaciones.classList.remove('displayOn');
+                $sinNotificaciones.classList.add('displayOff');
+                $notificaciones.classList.remove('displayOff')
+                $notificaciones.classList.add('displayOn')
+            }
+
+            const $numeroDeNotificacionesActuales = document.getElementById('numNtf');
+            const numeroDeNotificacionesActuales = $numeroDeNotificacionesActuales.innerHTML;
+            const numeroDeNotificacionesActualesInt = parseInt(numeroDeNotificacionesActuales);
+            $numeroDeNotificacionesActuales.innerHTML = numeroDeNotificacionesActualesInt + 1;
+            scrollToTop();
+
+        } else {
+            alerta("No se ha recibido un valor en la variable dataNotificacionNativa del localStorage");
+        }
     } catch (err) {
-      mensaje = err.message;
-      console.error(err);
-      alerta(mensaje);
+        mensaje = err.message;
+        console.error(err);
+        alerta(mensaje);
     }
-  }
-  
+}
+
 
