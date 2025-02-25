@@ -1140,6 +1140,9 @@
           nombre: objeto["Descripcion"],
         }));
 
+        rutas.sort((a, b) => a.nombre.localeCompare(b.nombre));
+
+
         const fragmento = document.createDocumentFragment();
         const rutasContainer = document.getElementById("rutas");
 
@@ -1247,6 +1250,8 @@
           cod: objeto["No."],
           nombre: objeto["Descripcion"],
         }));
+
+        rutas.sort((a, b) => a.nombre.localeCompare(b.nombre));
 
         const fragmento = document.createDocumentFragment();
         const rutasContainer = document.getElementById("rutas");
