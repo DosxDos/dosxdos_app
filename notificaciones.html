@@ -4,7 +4,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>RUTA</title>
+    <title>Notificaciones</title>
     <!-- Favicons -->
     <link
       rel="icon"
@@ -24,6 +24,7 @@
         margin: 0;
         box-sizing: border-box;
         letter-spacing: 0.5px;
+        -webkit-tap-highlight-color: transparent;
       }
 
       .displayOff {
@@ -147,6 +148,7 @@
         }
       }
 
+      /* olas divider en el menu movíl */
       .website-divider-container-734167 {
         overflow: hidden;
         position: relative;
@@ -529,17 +531,17 @@
 
         <!-- User Actions -->
         <div
-          class="relative z-10 mt-auto px-8 pb-6 bg-white bg-opacity-05 shadow flex flex-col space-y-2"
+          class="relative z-10 mt-auto px-8 pb-6 bg-white bg-opacity-05 shadow-lg flex flex-col space-y-4"
         >
           <button
             id="editarUsuarioMobile"
-            class="z-30 flex items-center w-full px-6 py-2 text-white bg-red-600 shadow-xl backdrop-blur-lg rounded-xl transition-all duration-300 group"
+            class="z-30 flex justify-center items-center w-full px-6 py-2 text-white bg-gradient-to-r from-red-500 to-red-600 bg-opacity-70 shadow-lg backdrop-blur-xl rounded-2xl transition-all duration-300 transform group hover:scale-105 hover:shadow-red-500/50 active:scale-95"
           >
             <div
-              class="flex items-center justify-center w-12 h-10 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all"
+              class="flex items-center justify-center h-10 bg-white/20 rounded-2xl transition-all group-hover:bg-white/30 -ml-4"
             >
               <svg
-                class="w-6 h-6 shadow-lg"
+                class="w-7 h-7 text-white opacity-90"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -553,18 +555,21 @@
                 />
               </svg>
             </div>
-            <span class="text-lg font-medium">Editar usuario</span>
+            <span
+              class="text-lg font-semibold tracking-wide text-white text-center ml-4"
+              >Editar usuario</span
+            >
           </button>
 
           <button
             id="cerrarSesionMobile"
-            class="z-30 flex items-center w-full px-6 py-2 bg-red-600 shadow-xl backdrop-blur-lg text-white rounded-xl transition-all duration-300 group mb-3"
+            class="z-30 flex justify-center items-center w-full px-6 py-2 text-white bg-gradient-to-r from-red-500 to-red-600 bg-opacity-70 shadow-lg backdrop-blur-xl rounded-2xl transition-all duration-300 transform group hover:scale-105 hover:shadow-red-500/50 active:scale-95"
           >
             <div
-              class="flex items-center justify-center w-12 h-10 bg-white/20 rounded-lg mr-4 group-hover:bg-white/30 transition-all"
+              class="flex items-center justify-center h-10 bg-white/20 rounded-2xl transition-all group-hover:bg-white/30 -ml-4"
             >
               <svg
-                class="w-6 h-6"
+                class="w-7 h-7 text-white opacity-90"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -575,7 +580,10 @@
                 <line x1="21" y1="12" x2="9" y2="12" />
               </svg>
             </div>
-            <span class="text-lg font-medium">Cerrar sesión</span>
+            <span
+              class="text-lg font-semibold tracking-wide text-white text-center ml-4"
+              >Cerrar sesión</span
+            >
           </button>
         </div>
       </div>
@@ -639,10 +647,6 @@
       class="fixed inset-0 z-50 hidden opacity-0 pointer-events-none transition-all duration-300 ease-in-out"
     >
       <div
-        class="fixed inset-0 bg-black bg-opacity-50"
-        onclick="closeModal()"
-      ></div>
-      <div
         class="fixed inset-0 overflow-y-auto flex items-center justify-center p-4"
       >
         <div
@@ -682,28 +686,24 @@
 
     // Initialize ruta if not exists
     if (!ruta) {
-      console.warn("⚠️ Ruta is not defined, checking user data...");
       leerDatos("dosxdos", "usuario").then((userData) => {
         if (userData.length > 0 && userData[0].ruta) {
           ruta = userData[0].ruta;
           localStorage.setItem("ruta", ruta);
-          console.log("✅ Ruta set:", ruta);
         } else {
-          console.error("Ruta still undefined.");
+          console.log("Ruta undefined.");
         }
       });
     }
 
     // Initialize montador if not exists
     if (!montador) {
-      console.error("⚠️ montador is not defined. Attempting to set it...");
       leerDatos("dosxdos", "usuario").then((data) => {
         if (data.length > 0 && data[0].cod) {
           montador = data[0].cod;
           localStorage.setItem("montador", montador);
-          console.log("✅ montador set:", montador);
         } else {
-          console.error("No valid montador found.");
+          console.log("No valid montador found.");
         }
       });
     }
@@ -894,7 +894,8 @@
     function fetchRutas() {
       return new Promise((resolve, reject) => {
         url =
-          "http://localhost/dosxdos_app/apirest/rutas.php?montador=" + montador;
+          "http://localhost/dosxdos_app/apirest/rutas.php?montador=" +
+          montador;
         fetch(url)
           .then((res) => {
             if (res.ok) {
@@ -1330,34 +1331,6 @@
       }
 
       updatedCancelButton.addEventListener("click", closeModal);
-
-      let closeButton = modal.querySelector(".modal-close-button");
-      if (!closeButton) {
-        closeButton = document.createElement("button");
-        closeButton.classList.add(
-          "absolute",
-          "-top-3",
-          "-right-3",
-          "w-8",
-          "h-8",
-          "flex",
-          "items-center",
-          "justify-center",
-          "bg-gray-100",
-          "hover:bg-gray-200",
-          "rounded-full",
-          "text-gray-500",
-          "hover:text-gray-700",
-          "transition-colors",
-          "duration-200",
-          "shadow-md",
-          "modal-close-button"
-        );
-        closeButton.innerHTML =
-          '<span class="text-2xl font-semibold mb-1">&times;</span>';
-        closeButton.addEventListener("click", closeModal);
-        modal.querySelector(".modal-content").prepend(closeButton);
-      }
 
       // Show modal
       modal.classList.remove("hidden", "opacity-0", "pointer-events-none");
@@ -1826,14 +1799,11 @@
     async function appOnline() {
       try {
         const login = await vLogin();
-        if (!login) {
-          window.location.href = "http://localhost/dosxdos_app/index.html";
-          return;
-        }
 
         const Arrayusuario = await leerDatos("dosxdos", "usuario");
         if (!Arrayusuario || !Arrayusuario.length) {
           throw new Error("No se encontraron datos de usuario");
+          window.location.href = "http://localhost/dosxdos_app/index.html";
         }
 
         // Find the actual user object (the one with 'usuario' property)
@@ -1945,9 +1915,10 @@
             contadorPendientes.textContent = pendientes.length;
           if (contadorAceptadas)
             contadorAceptadas.textContent = aceptadas.length;
-
+          await procesarPeticiones2();
           loaderOff();
         } else {
+          await procesarPeticiones2();
           alerta("Error al leer el almacén de notificaciones");
           loaderOff();
         }
@@ -1972,13 +1943,10 @@
     async function appOffline() {
       try {
         const login = await vLogin();
-        if (!login) {
-          window.location.href = "http://localhost/dosxdos_app/index.html";
-          return;
-        }
 
         const Arrayusuario = await leerDatos("dosxdos", "usuario");
         if (!Arrayusuario || !Arrayusuario.length) {
+          window.location.href = "http://localhost/dosxdos_app/index.html";
           throw new Error("No se encontraron datos de usuario");
         }
 
@@ -2232,6 +2200,69 @@
       });
     }
 
+    /* LEER DATOS DE INDEXDB */
+
+    function leerDatos2(database, store) {
+      return new Promise((resolve, reject) => {
+        datos = [];
+        const request = indexedDB.open(database);
+        request.onsuccess = (event) => {
+          const db = event.target.result;
+          const transaction = db.transaction(store, "readonly");
+          const almacen = transaction.objectStore(store);
+          const cursorRequest = almacen.openCursor();
+          cursorRequest.onsuccess = (event) => {
+            const cursor = event.target.result;
+            if (cursor) {
+              datos.push(cursor.value);
+              cursor.continue();
+            } else {
+              resolve(datos);
+            }
+          };
+          cursorRequest.onerror = function (event) {
+            console.error(
+              `Error en la función leerDatos al solcitar el cursor para leer el almacen ${store}: ${event.target.error}`
+            );
+            reject(event.target.error);
+          };
+        };
+        request.onerror = (event) => {
+          console.error(
+            `Error en la función leerDatos al solcitar abrir la base de datos para leer el almacen ${store}: ${event.target.error}`
+          );
+          reject(event.target.error);
+        };
+      });
+    }
+
+    function limpiarDatos2(database, store) {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open(database);
+        request.onsuccess = (event) => {
+          const db = event.target.result;
+          const transaction = db.transaction(store, "readwrite");
+          const datosStore = transaction.objectStore(store);
+          const clearRequest = datosStore.clear();
+          clearRequest.onsuccess = (clearEvent) => {
+            resolve(true);
+          };
+          clearRequest.onerror = (event) => {
+            console.error(
+              `Error en la función limpiarDatos al solcitar limpiar el almacen ${store}: ${event.target.error}`
+            );
+            reject(event.target.error);
+          };
+        };
+        request.onerror = (event) => {
+          console.error(
+            `Error en la función limpiarDatos al solcitar abrir la base de datos para limpiar el almacen ${store}: ${event.target.error}`
+          );
+          reject(event.target.error);
+        };
+      });
+    }
+
     async function enviarPeticiones(vectorObjDb, tipoVector) {
       return new Promise(async (resolve, reject) => {
         try {
@@ -2387,7 +2418,7 @@
         localStorage.setItem("mensaje", mensaje);
         location.reload();
         /*alerta(mensaje);
-              scrollToTop();*/
+            scrollToTop();*/
       } catch (error) {
         console.error(error);
         alerta(error.message);
@@ -2538,4 +2569,5 @@
     document.addEventListener("DOMContentLoaded", initializeAppState);
   </script>
   <script src="http://localhost/dosxdos_app/js/utils/notificaciones.js"></script>
+  <script src="http://localhost/dosxdos_app/js/utils/loadFirebaseNotificacionesPage.js"></script>
 </html>
