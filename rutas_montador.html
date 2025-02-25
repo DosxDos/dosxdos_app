@@ -10,6 +10,10 @@
   <link rel="icon" type="image/png" href="https://dosxdos.app.iidos.com/img/logoPwa256.png" />
   <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/tailwindmain.css" />
   <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+    }
+
     /* Add the divider styles from notificaciones */
     .website-divider-container-734167 {
       overflow: hidden;
@@ -2093,7 +2097,10 @@
         if (mobileBellImg) {
           mobileBellImg.src = "https://dosxdos.app.iidos.com/img/bell.gif";
           mobileBellImg.classList.add("bell-animate");
-          mobileBellImg.classList.add("w-14", "h-14");
+          // Remove the default size classes first
+          mobileBellImg.classList.remove("w-8", "h-8");
+          // Add the animated size classes
+          mobileBellImg.classList.add("w-10", "h-10");
         }
       } else {
         // Desktop Notifications
@@ -2118,6 +2125,9 @@
         if (mobileBellImg) {
           mobileBellImg.src = "https://dosxdos.app.iidos.com/img/bell2.png";
           mobileBellImg.classList.remove("bell-animate");
+          // Reset the size classes back to original
+          mobileBellImg.classList.remove("w-10", "h-10");
+          mobileBellImg.classList.add("w-8", "h-8");
         }
       }
 

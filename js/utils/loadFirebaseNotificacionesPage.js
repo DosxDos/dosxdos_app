@@ -119,14 +119,14 @@ function notificarWebApp() {
             const $notificaciones = document.getElementById('notificaciones');
             const $sinNotificaciones = document.getElementById('sinNotificaciones');
 
-            if ($sinNotificaciones.classList.contains('displayOn')) {
+            if ($sinNotificaciones.classList.contains('hidden')) {
                 $sinNotificaciones.classList.remove('displayOn');
                 $sinNotificaciones.classList.add('displayOff');
                 $notificaciones.classList.remove('displayOff')
                 $notificaciones.classList.add('displayOn')
             }
 
-            const $numeroDeNotificacionesActuales = document.getElementById('numNtf');
+            const $numeroDeNotificacionesActuales = document.getElementById('mobileNotificationCount');
             const numeroDeNotificacionesActuales = $numeroDeNotificacionesActuales.innerHTML;
             const numeroDeNotificacionesActualesInt = parseInt(numeroDeNotificacionesActuales);
             $numeroDeNotificacionesActuales.innerHTML = numeroDeNotificacionesActualesInt + 1;
