@@ -657,20 +657,25 @@
     if (navigator.onLine) {
       try {
         loaderOn();
-        localStorage.clear();
-        eliminarCookie("login");
-        eliminarCookie("usuario");
-        (await deleteDB2("dosxdos"))
-          ? console.log("Base de datos eliminada exitosamente")
-          : console.error("error al eliminar la base de datos");
-        window.location.href = "https://dosxdos.app.iidos.com/index.html";
+        const eliminarBaseDeDatosCliente = await deleteDB2("dosxdos");
+        if (eliminarBaseDeDatosCliente) {
+          const eliminarTokenDeLasNotificaciones = eliminarTokenNotificaciones()
+          if (eliminarTokenDeLasNotificaciones) {
+            localStorage.clear();
+            eliminarCookie("login");
+            eliminarCookie("usuario");
+            window.location.href = "https://dosxdos.app.iidos.com/index.html";
+          }
+        }
       } catch (error) {
         mensaje = "ERROR: " + error.message;
         console.error(error);
         alerta(mensaje);
       }
     } else {
-      alerta("No es posible cerrar la sesión sin conexión a internet");
+      mensaje = "No es posible cerrar la sesión sin conexión a internet";
+      $textoMensaje.innerHTML = mensaje;
+      mensajeOn();
     }
   }
 

@@ -1598,7 +1598,7 @@
             const peticionesCierre = await procesarPeticiones2();
             loaderOff();
           }
-          await notificar();
+          //await notificar();
         }
       } catch (error) {
         mensaje = "ERROR: " + error.message;
@@ -2214,6 +2214,4 @@
     }
   </script>
 
-  <script src="https://dosxdos.app.iidos.com/js/utils/notificaciones.js"></script>
-  <script src="https://dosxdos.app.iidos.com/js/utils/loadFirebase.js"></script>
 </html>
