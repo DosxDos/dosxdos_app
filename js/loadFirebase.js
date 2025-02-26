@@ -51,16 +51,9 @@ async function loadFirebase() {
 
             //Verificar si la página tiene campana o no, y actuar en consecuencia
             if (document.getElementById('desktopBellContainer') && document.getElementById('mobileBellContainer')) {
-                console.warn('Ha verificado que existe campana y ha ingresado a renderizarla');
-                if (!notificacionesSinAcpetar || sinNotificaciones) {
-                    console.warn('No hay notificaciones sin aceptar o no se han recibido notificaciones de la base de datos del usuario, se procede a renderizar sin notificaciones');
-                    renderizarSinNotificaciones();
-                } else {
-                    console.warn('Se procede a renderizar con notificaciones');
-                    notificacionesSinAcpetarNumero = notificacionesSinAcpetarNumero + 1;
-                    console.warn('notificacionesSinAcpetarNumero: ' + notificacionesSinAcpetarNumero);
-                    renderizarConNotificaciones(notificacionesSinAcpetarNumero);
-                }
+                notificacionesSinAcpetarNumero = notificacionesSinAcpetarNumero + 1;
+                console.warn('notificacionesSinAcpetarNumero: ' + notificacionesSinAcpetarNumero);
+                renderizarConNotificaciones(notificacionesSinAcpetarNumero);
                 scrollToTop();
                 // Mostrar notificación en la UI
                 // Crear la notificación nativa del navegador
@@ -129,16 +122,9 @@ function notificarWebApp() {
 
             //Verificar si la página tiene campana o no, y actuar en consecuencia
             if (document.getElementById('desktopBellContainer') && document.getElementById('mobileBellContainer')) {
-                console.warn('Ha verificado que existe campana y ha ingresado a renderizarla');
-                if (!notificacionesSinAcpetar || sinNotificaciones) {
-                    console.warn('No hay notificaciones sin aceptar o no se han recibido notificaciones de la base de datos del usuario, se procede a renderizar sin notificaciones');
-                    renderizarSinNotificaciones();
-                } else {
-                    console.warn('Se procede a renderizar con notificaciones');
-                    notificacionesSinAcpetarNumero = notificacionesSinAcpetarNumero + 1;
-                    console.warn('notificacionesSinAcpetarNumero: ' + notificacionesSinAcpetarNumero);
-                    renderizarConNotificaciones(notificacionesSinAcpetarNumero);
-                }
+                notificacionesSinAcpetarNumero = notificacionesSinAcpetarNumero + 1;
+                console.warn('notificacionesSinAcpetarNumero: ' + notificacionesSinAcpetarNumero);
+                renderizarConNotificaciones(notificacionesSinAcpetarNumero);
                 scrollToTop();
             } else {
                 scrollToTop();
