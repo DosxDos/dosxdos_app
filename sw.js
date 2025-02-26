@@ -96,9 +96,8 @@ const CACHE_NAME = 'dosxdos106',
     'https://dosxdos.app.iidos.com/css/tailwindmain.css',
     'https://dosxdos.app.iidos.com/firebase-messaging-sw.js',
     'https://dosxdos.app.iidos.com/img/dosxdoslogoNuevoRojo.png',
-    'https://dosxdos.app.iidos.com/js/utils/notificaciones.js',
-    'https://dosxdos.app.iidos.com/js/utils/notificaciones2.js',
-    'https://dosxdos.app.iidos.com/js/utils/loadFirebase.js',
+    'https://dosxdos.app.iidos.com/js/notificaciones.js',
+    'https://dosxdos.app.iidos.com/js/loadFirebase.js',
     'https://dosxdos.app.iidos.com/img/bell.gif',
     'https://dosxdos.app.iidos.com/img/bell2.png',
     'https://dosxdos.app.iidos.com/img/Isotipo-38.png',
@@ -145,10 +144,9 @@ const CACHE_NAME = 'dosxdos106',
     'https://dosxdos.app.iidos.com/rutas_inactivas.html',
     'https://dosxdos.app.iidos.com/historial_montador.html',
     'https://dosxdos.app.iidos.com/linea_historial_montador.html',
-    'https://dosxdos.app.iidos.com/js/utils/notificaciones.js',
-    'https://dosxdos.app.iidos.com/js/utils/notificaciones2.js',
-    'https://dosxdos.app.iidos.com/js/utils/loadFirebase.js',
-    'https://dosxdos.app.iidos.com/notificaciones.html'
+    'https://dosxdos.app.iidos.com/notificaciones.html',
+    'https://dosxdos.app.iidos.com/js/notificaciones.js',
+    'https://dosxdos.app.iidos.com/js/loadFirebase.js'
   ];
 
 //durante la fase de instalación, generalmente se almacena en caché los activos estáticos

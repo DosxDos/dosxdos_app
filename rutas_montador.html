@@ -194,19 +194,13 @@
         </a>
 
         <!-- Desktop Menu Notifications Bell -->
-        <div class="relative">
-          <div id="notificaciones"
-            class="displayOff absolute -top-2 -right-2 min-w-[24px] h-5 bg-red-600 rounded-full flex items-center justify-center z-10">
-            <span id="numNtf" class="text-white text-xs px-1">0</span>
-          </div>
-          <div id="sinNotificaciones" class="displayOff"></div>
 
-          <a href="https://dosxdos.app.iidos.com/notificaciones.html"
-            class="relative flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200"
-            id="desktopBellContainer">
-            <img id="bell" src="https://dosxdos.app.iidos.com/img/bell2.png" class="w-8 h-8 object-contain" />
-          </a>
-        </div>
+        <a href="https://dosxdos.app.iidos.com/notificaciones.html" class="relative z-10" id="desktopBellContainer">
+          <img id="bellDesktop" src="" class="text-gray-900 object-contain" />
+          <span id="desktopNotificationCount"
+            class="absolute top-0 -right-2 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] text-center border hidden"></span>
+        </a>
+
 
         <!-- Desktop User Menu -->
         <div class="relative group drop-shadow">
@@ -263,12 +257,10 @@
       <div class="md:hidden flex items-center space-x-2 mx-2">
         <!-- Mobile Bell -->
 
-        <a href="https://dosxdos.app.iidos.com/notificaciones.html" class="relative z-10 p-2 mt-2"
-          id="mobileBellContainer">
-          <img id="bellMobile" src="https://dosxdos.app.iidos.com/img/bell2.png"
-            class="w-8 h-8 text-gray-900 object-contain" />
+        <a href="https://dosxdos.app.iidos.com/notificaciones.html" class="relative z-10" id="mobileBellContainer">
+          <img id="bellMobile" src="" class="text-gray-900 object-contain mt-2" />
           <span id="mobileNotificationCount"
-            class="absolute top-2 right-0 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] text-center">0</span>
+            class="absolute top-2 right-0 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] text-center border hidden"></span>
         </a>
 
         <!-- Hamburger Button -->
@@ -429,6 +421,8 @@
 
 
 </body>
+
+<script src="https://dosxdos.app.iidos.com/js/index_db.js"></script>
 
 <script>
   function cache() {
@@ -693,35 +687,6 @@
   }
 
   /* LIMPIAR ALMACÉN DE INDEXDB */
-
-  function limpiarDatos(store) {
-    return new Promise((resolve, reject) => {
-      const request = indexedDB.open("dosxdos");
-      request.onsuccess = (event) => {
-        const db = event.target.result;
-        const transaction = db.transaction(store, "readwrite");
-        const datosStore = transaction.objectStore(store);
-        const clearRequest = datosStore.clear();
-        clearRequest.onsuccess = (clearEvent) => {
-          resolve(true);
-        };
-        clearRequest.onerror = (event) => {
-          error = event.target.error;
-          mensaje = `Error al limpiar el almacén ${store}: ` + error;
-          alerta(mensaje);
-          loaderOff();
-        };
-      };
-      request.onerror = (event) => {
-        error = event.target.error;
-        mensaje =
-          `Error al abrir la base de datos para limpiar el almacén ${store}` +
-          error;
-        alerta(mensaje);
-        loaderOff();
-      };
-    });
-  }
 
   function limpiarDatos2(database, store) {
     return new Promise((resolve, reject) => {
@@ -1193,7 +1158,6 @@
             alerta("Error al cargar las líneas de las rutas del servidor");
             initializeSearch();
             initializeApplication();
-            await updateNotificationCount();
             const peticionesCierre = await procesarPeticiones2();
             loaderOff();
           }
@@ -1201,7 +1165,6 @@
             await sincronizarNotificaciones();
           if (sincronizacionDeNotificaciones) {
             await notificar();
-            await updateNotificationCount();
           }
         }
       }
@@ -1292,7 +1255,7 @@
 
         initializeSearch();
         initializeApplication();
-        await updateNotificationCount();
+        notificar();
         loaderOff();
       }
     } catch (error) {
@@ -2052,92 +2015,6 @@
     }
   }
 
-  async function updateNotificationCount() {
-    try {
-      const notificaciones = await leerDatos2("dosxdos", "notificaciones");
-      const unreadCount = notificaciones
-        ? notificaciones.filter((notif) => notif.visto === 0).length
-        : 0;
-
-      const desktopNotificacionesDiv =
-        document.getElementById("notificaciones");
-      const desktopNotificationCount = document.getElementById("numNtf");
-      const desktopSinNotificacionesDiv =
-        document.getElementById("sinNotificaciones");
-      const desktopBellImg = document.getElementById("bell");
-
-      const mobileNotificationCount = document.getElementById(
-        "mobileNotificationCount"
-      );
-      const mobileBellImg = document.getElementById("bellMobile");
-
-      // Show/hide notification elements
-      if (unreadCount > 0) {
-        // Desktop Notifications
-        if (desktopNotificacionesDiv) {
-          desktopNotificacionesDiv.classList.remove("displayOff");
-          desktopNotificacionesDiv.classList.add("displayOn");
-          desktopNotificationCount.textContent = unreadCount;
-        }
-        if (desktopSinNotificacionesDiv) {
-          desktopSinNotificacionesDiv.classList.remove("displayOn");
-          desktopSinNotificacionesDiv.classList.add("displayOff");
-        }
-        if (desktopBellImg) {
-          desktopBellImg.src = "https://dosxdos.app.iidos.com/img/bell.gif";
-          desktopBellImg.classList.add("bell-animate");
-          desktopBellImg.classList.add("w-10", "h-10");
-        }
-
-        // Mobile Notifications
-        if (mobileNotificationCount) {
-          mobileNotificationCount.textContent = unreadCount;
-          mobileNotificationCount.classList.remove("hidden");
-        }
-        if (mobileBellImg) {
-          mobileBellImg.src = "https://dosxdos.app.iidos.com/img/bell.gif";
-          mobileBellImg.classList.add("bell-animate");
-          // Remove the default size classes first
-          mobileBellImg.classList.remove("w-8", "h-8");
-          // Add the animated size classes
-          mobileBellImg.classList.add("w-10", "h-10");
-        }
-      } else {
-        // Desktop Notifications
-        if (desktopNotificacionesDiv) {
-          desktopNotificacionesDiv.classList.remove("displayOn");
-          desktopNotificacionesDiv.classList.add("displayOff");
-        }
-        if (desktopSinNotificacionesDiv) {
-          desktopSinNotificacionesDiv.classList.remove("displayOff");
-          desktopSinNotificacionesDiv.classList.add("displayOn");
-        }
-        if (desktopBellImg) {
-          desktopBellImg.src = "https://dosxdos.app.iidos.com/img/bell2.png";
-          desktopBellImg.classList.remove("bell-animate");
-        }
-
-        // Mobile Notifications
-        if (mobileNotificationCount) {
-          mobileNotificationCount.textContent = "0";
-          mobileNotificationCount.classList.add("hidden");
-        }
-        if (mobileBellImg) {
-          mobileBellImg.src = "https://dosxdos.app.iidos.com/img/bell2.png";
-          mobileBellImg.classList.remove("bell-animate");
-          // Reset the size classes back to original
-          mobileBellImg.classList.remove("w-10", "h-10");
-          mobileBellImg.classList.add("w-8", "h-8");
-        }
-      }
-
-      return unreadCount;
-    } catch (error) {
-      console.error("Error updating notification count:", error);
-      return 0;
-    }
-  }
-
   // Call initialization when DOM is loaded
   document.addEventListener("DOMContentLoaded", () => {
     console.log("DOM fully loaded");
@@ -2145,7 +2022,7 @@
   });
 </script>
 
-<script src="https://dosxdos.app.iidos.com/js/utils/notificaciones2.js"></script>
-<script src="https://dosxdos.app.iidos.com/js/utils/loadFirebaseNotificacionesPage.js"></script>
+<script src="https://dosxdos.app.iidos.com/js/notificaciones.js"></script>
+<script src="https://dosxdos.app.iidos.com/js/loadFirebase.js"></script>
 
 </html>

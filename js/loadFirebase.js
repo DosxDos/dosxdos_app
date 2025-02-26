@@ -1,4 +1,3 @@
-//Este módulo es otra versión del módulo loadFirebase, pero específico sólo para las páginas que no tienen la campana de notificaciones.
 async function loadFirebase() {
     try {
 
@@ -50,20 +49,14 @@ async function loadFirebase() {
 
             alerta(mensaje);
 
-            const $notificaciones = document.getElementById('notificaciones');
-            const $sinNotificaciones = document.getElementById('sinNotificaciones');
-
-            if ($sinNotificaciones.classList.contains('displayOn')) {
-                $sinNotificaciones.classList.remove('displayOn');
-                $sinNotificaciones.classList.add('displayOff');
-                $notificaciones.classList.remove('displayOff')
-                $notificaciones.classList.add('displayOn')
+            if (document.getElementById('desktopBellContainer') && document.getElementById('mobileBellContainer')) {
+                if (!notificacionesSinAcpetar || sinNotificaciones) {
+                    renderizarSinNotificaciones();
+                } else {
+                    notificacionesSinAcpetarNumero++;
+                    renderizarConNotificaciones(notificacionesSinAcpetarNumero);
+                }
             }
-
-            const $numeroDeNotificacionesActuales = document.getElementById('numNtf');
-            const numeroDeNotificacionesActuales = $numeroDeNotificacionesActuales.innerHTML;
-            const numeroDeNotificacionesActualesInt = parseInt(numeroDeNotificacionesActuales);
-            $numeroDeNotificacionesActuales.innerHTML = numeroDeNotificacionesActualesInt + 1;
 
             scrollToTop();
 
@@ -72,20 +65,39 @@ async function loadFirebase() {
                 Notification.requestPermission().then((permission) => {
                     if (permission === "granted") {
                         const notificacionSistemaOperativo = new Notification(title, { body, icon });
-                        notificacionSistemaOperativo.onclick = () => {
-                            window.location.href = click_action;
+                        // Alternativa para manejar el click
+                        notificacionSistemaOperativo.onclick = (event) => {
+                            event.preventDefault();
+                            console.log("Notificación clickeada, intentando abrir: ", click_action);
+                            // Usa el Service Worker para asegurar la navegación
+                            navigator.serviceWorker.ready.then((registration) => {
+                                registration.active.postMessage({ action: 'navigate', url: click_action });
+                            }).catch((error) => {
+                                console.error("Error al acceder al Service Worker:", error);
+                                window.open(click_action, '_self'); // Si falla, intenta abrir la URL
+                            });
                         };
                     }
                 });
             } else if (Notification.permission === "granted") {
                 const notificacionSistemaOperativo = new Notification(title, { body, icon });
-                notificacionSistemaOperativo.onclick = () => {
-                    window.location.href = click_action;
+                // Alternativa para manejar el click
+                notificacionSistemaOperativo.onclick = (event) => {
+                    event.preventDefault();
+                    console.log("Notificación clickeada, intentando abrir: ", click_action);
+                    // Usa el Service Worker para asegurar la navegación
+                    navigator.serviceWorker.ready.then((registration) => {
+                        registration.active.postMessage({ action: 'navigate', url: click_action });
+                    }).catch((error) => {
+                        console.error("Error al acceder al Service Worker:", error);
+                        window.open(click_action, '_self'); // Si falla, intenta abrir la URL
+                    });
                 };
             }
+        })
 
-        });
         console.warn('Firebase Web push notifications cargado exitosamente')
+
     } catch (error) {
         console.error('No es posible cargar Firebase web push notifications en este dispositivo')
         console.error(error);
@@ -96,7 +108,7 @@ async function loadFirebase() {
 // Cargar Firebase al inicio si hay conexión
 if (navigator.onLine) loadFirebase();
 
-// Manejar mensajes en primer plano en notificaciones nativas
+// Manejar mensajes en primer plano en notificaciones nativas de Android e Ios
 function notificarWebApp() {
     try {
 
@@ -116,20 +128,16 @@ function notificarWebApp() {
             const mensaje = "Tienes una nueva notificación: " + title + ": " + body;
 
             alerta(mensaje);
-            const $notificaciones = document.getElementById('notificaciones');
-            const $sinNotificaciones = document.getElementById('sinNotificaciones');
 
-            if ($sinNotificaciones.classList.contains('hidden')) {
-                $sinNotificaciones.classList.remove('displayOn');
-                $sinNotificaciones.classList.add('displayOff');
-                $notificaciones.classList.remove('displayOff')
-                $notificaciones.classList.add('displayOn')
+            if (document.getElementById('desktopBellContainer') && document.getElementById('mobileBellContainer')) {
+                if (!notificacionesSinAcpetar || sinNotificaciones) {
+                    renderizarSinNotificaciones();
+                } else {
+                    notificacionesSinAcpetarNumero++;
+                    renderizarConNotificaciones(notificacionesSinAcpetarNumero);
+                }
             }
 
-            const $numeroDeNotificacionesActuales = document.getElementById('mobileNotificationCount');
-            const numeroDeNotificacionesActuales = $numeroDeNotificacionesActuales.innerHTML;
-            const numeroDeNotificacionesActualesInt = parseInt(numeroDeNotificacionesActuales);
-            $numeroDeNotificacionesActuales.innerHTML = numeroDeNotificacionesActualesInt + 1;
             scrollToTop();
 
         } else {
@@ -141,5 +149,4 @@ function notificarWebApp() {
         alerta(mensaje);
     }
 }
-
 

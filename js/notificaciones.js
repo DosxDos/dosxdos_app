@@ -1,3 +1,11 @@
+const $bellMobile = document.getElementById("bellMobile"),
+  $mobileNotificationCount = document.getElementById("mobileNotificationCount"),
+  $bellDesktop = document.getElementById("bellDesktop"),
+  $desktopNotificationCount = document.getElementById("desktopNotificationCount");
+sinNotificaciones = false;
+notificacionesSinAcpetar = false;
+notificacionesSinAcpetarNumero = 0;
+
 function fetchNotificaciones() {
   return new Promise(async (resolve, reject) => {
     try {
@@ -58,7 +66,7 @@ async function sincronizarNotificaciones() {
   try {
     if (navigator.onLine) {
       loaderOn();
-      const limpiarNotificaciones = await limpiarDatos("notificaciones");
+      const limpiarNotificaciones = await limpiarDatos("dosxdos", "notificaciones");
       if (limpiarNotificaciones) {
         notificacionesActuales = await fetchNotificaciones();
         if (notificacionesActuales) {
@@ -85,91 +93,26 @@ function notificar() {
   return new Promise(async (resolve) => {
     try {
       notificationsStore = await leerDatos("notificaciones");
-      notificacionesSinAcpetar = false;
-      notificacionesSinAcpetarNumero = 0;
-      notificationsStore.map((not) => {
-        if (!not.visto) {
-          notificacionesSinAcpetar = true;
-          notificacionesSinAcpetarNumero++;
+      notificationsStore.length == 0 ? sinNotificaciones = true : sinNotificaciones = false;
+      if (sinNotificaciones) {
+        renderizarSinNotificaciones();
+      } else {
+        notificationsStore.map((not) => {
+          if (!not.visto) {
+            notificacionesSinAcpetar = true;
+            notificacionesSinAcpetarNumero++;
+          }
+        });
+        if (notificacionesSinAcpetar) {
+          renderizarConNotificaciones(notificacionesSinAcpetarNumero);
+        } else {
+          renderizarSinNotificaciones();
         }
-      });
-      console.log("notificacionesSinAcpetar: " + notificacionesSinAcpetar);
-      console.log(
+      }
+      console.warn("notificacionesSinAcpetar: " + notificacionesSinAcpetar);
+      console.warn(
         "notificacionesSinAcpetarNumero: " + notificacionesSinAcpetarNumero
       );
-
-      // Desktop Notification Elements
-      const notificaciones = document.getElementById("notificaciones");
-      const numNtf = document.getElementById("numNtf");
-      const sinNotificaciones = document.getElementById("sinNotificaciones");
-
-      // Mobile Notification Elements
-      const mobileNotificationCount = document.getElementById(
-        "mobileNotificationCount"
-      );
-      const mobileBellImg = document.getElementById("bellMobile");
-
-      // Add click events for desktop notifications
-      if (notificaciones) {
-        notificaciones.addEventListener("click", () => {
-          window.location.href =
-            "https://dosxdos.app.iidos.com/notificaciones.html";
-        });
-      }
-
-      if (sinNotificaciones) {
-        sinNotificaciones.addEventListener("click", () => {
-          window.location.href =
-            "https://dosxdos.app.iidos.com/notificaciones.html";
-        });
-      }
-
-      // Handle notification display
-      if (notificacionesSinAcpetarNumero) {
-        // Desktop Notifications
-        if (notificaciones) {
-          notificaciones.classList.remove("displayOff");
-          notificaciones.classList.add("displayOn");
-        }
-        if (numNtf) {
-          numNtf.innerHTML = notificacionesSinAcpetarNumero;
-        }
-        if (sinNotificaciones) {
-          sinNotificaciones.classList.remove("displayOn");
-          sinNotificaciones.classList.add("displayOff");
-        }
-
-        // Mobile Notifications
-        if (mobileNotificationCount) {
-          mobileNotificationCount.textContent = notificacionesSinAcpetarNumero;
-          mobileNotificationCount.classList.remove("hidden");
-        }
-        if (mobileBellImg) {
-          mobileBellImg.src = "https://dosxdos.app.iidos.com/img/bell.gif";
-          mobileBellImg.classList.add("bell-animate");
-        }
-      } else {
-        // Desktop Notifications
-        if (notificaciones) {
-          notificaciones.classList.remove("displayOn");
-          notificaciones.classList.add("displayOff");
-        }
-        if (sinNotificaciones) {
-          sinNotificaciones.classList.remove("displayOff");
-          sinNotificaciones.classList.add("displayOn");
-        }
-
-        // Mobile Notifications
-        if (mobileNotificationCount) {
-          mobileNotificationCount.textContent = "0";
-          mobileNotificationCount.classList.add("hidden");
-        }
-        if (mobileBellImg) {
-          mobileBellImg.src = "https://dosxdos.app.iidos.com/img/bell2.png";
-          mobileBellImg.classList.remove("bell-animate");
-        }
-      }
-
       resolve(true);
     } catch (err) {
       console.error(err);
@@ -178,6 +121,54 @@ function notificar() {
       resolve(false);
     }
   });
+}
+
+function renderizarSinNotificaciones() {
+  //Mobiles
+  $bellMobile.src = "https://dosxdos.app.iidos.com/img/bell2.png";
+  if ($bellMobile.classList.contains("w-14")) {
+    $bellMobile.classList.replace("w-14", "w-8");
+  } else {
+    $bellMobile.classList.add("w-8");
+  }
+  if (!$mobileNotificationCount.classList.contains("hidden")) {
+    $mobileNotificationCount.classList.add("hidden");
+  }
+  //Desktops
+  $bellDesktop.src = "https://dosxdos.app.iidos.com/img/bell2.png";
+  if ($bellDesktop.classList.contains("w-12")) {
+    $bellDesktop.classList.replace("w-12", "w-7");
+  } else {
+    $bellDesktop.classList.add("w-7");
+  }
+  if (!$desktopNotificationCount.classList.contains("hidden")) {
+    $desktopNotificationCount.classList.add("hidden");
+  }
+}
+
+function renderizarConNotificaciones(numeroDeNotificacionesActuales) {
+  //Mobiles
+  $bellMobile.src = "https://dosxdos.app.iidos.com/img/bell.gif";
+  if ($bellMobile.classList.contains("w-8")) {
+    $bellMobile.classList.replace("w-8", "w-14");
+  } else {
+    $bellMobile.classList.add("w-14");
+  }
+  if ($mobileNotificationCount.classList.contains("hidden")) {
+    $mobileNotificationCount.classList.remove("hidden");
+    $mobileNotificationCount.textContent = numeroDeNotificacionesActuales;
+  }
+  //Desktops
+  $bellDesktop.src = "https://dosxdos.app.iidos.com/img/bell.gif";
+  if ($bellDesktop.classList.contains("w-7")) {
+    $bellDesktop.classList.replace("w-7", "w-12");
+  } else {
+    $bellDesktop.classList.add("w-12");
+  }
+  if ($desktopNotificationCount.classList.contains("hidden")) {
+    $desktopNotificationCount.classList.remove("hidden");
+    $desktopNotificationCount.textContent = numeroDeNotificacionesActuales;
+  }
 }
 
 function eliminarTokenNotificaciones() {
@@ -194,8 +185,8 @@ function eliminarTokenNotificaciones() {
           res.ok
             ? res.json()
             : reject(
-                new Error(`Error al eliminar el token de las notificaciones.`)
-              )
+              new Error(`Error al eliminar el token de las notificaciones.`)
+            )
         )
         .then((res) => {
           if (res.success) {
