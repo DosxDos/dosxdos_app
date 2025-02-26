@@ -856,8 +856,7 @@
           loaderOn();
           const eliminarBaseDeDatosCliente = await deleteDB2("dosxdos");
           if (eliminarBaseDeDatosCliente) {
-            const eliminarTokenDeLasNotificaciones =
-              eliminarTokenNotificaciones();
+            const eliminarTokenDeLasNotificaciones = eliminarTokenNotificaciones()
             if (eliminarTokenDeLasNotificaciones) {
               localStorage.clear();
               eliminarCookie("login");
@@ -871,7 +870,9 @@
           alerta(mensaje);
         }
       } else {
-        alerta("No es posible cerrar la sesión sin conexión a internet");
+        mensaje = "No es posible cerrar la sesión sin conexión a internet";
+        $textoMensaje.innerHTML = mensaje;
+        mensajeOn();
       }
     }
 
