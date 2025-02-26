@@ -39,60 +39,59 @@ async function loadFirebase() {
             console.log('[Firebase web push notifications] Mensaje en primer plano:', payload);
 
             // Extraer datos con valores por defecto si vienen nulos o indefinidos
-            const title = payload.data.title || "Nueva Notificación";
-            const body = payload.data.body || "Tienes una nueva notificación, por favor revísala en cuanto puedas.";
-            const icon = payload.data.icon || "https://dosxdos.app.iidos.com/img/dosxdoslogoNuevoRojo.png";
-            const click_action = payload.data.click_action || "https://dosxdos.app.iidos.com/notificaciones.html";
+            const titleOriginal = payload.data.title || "Nueva Notificación";
+            const bodyOriginal = payload.data.body || "Tienes una nueva notificación, por favor revísala en cuanto puedas.";
+            const iconOriginal = payload.data.icon || "https://dosxdos.app.iidos.com/img/dosxdoslogoNuevoRojo.png";
+            const clickActionOriginal = payload.data.click_action || "https://dosxdos.app.iidos.com/notificaciones.html";
 
             // Crear un string bien formado
-            const mensaje = "Tienes una nueva notificación: " + title + ": " + body;
+            const mensaje = "Tienes una nueva notificación: " + titleOriginal + ": " + bodyOriginal;
 
             alerta(mensaje);
 
+            //Verificar si la página tiene campana o no, y actuar en consecuencia
             if (document.getElementById('desktopBellContainer') && document.getElementById('mobileBellContainer')) {
+                console.warn('Ha verificado que existe campana y ha ingresado a renderizarla');
                 if (!notificacionesSinAcpetar || sinNotificaciones) {
+                    console.warn('No hay notificaciones sin aceptar o no se han recibido notificaciones de la base de datos del usuario, se procede a renderizar sin notificaciones');
                     renderizarSinNotificaciones();
                 } else {
-                    notificacionesSinAcpetarNumero++;
+                    console.warn('Se procede a renderizar con notificaciones');
+                    notificacionesSinAcpetarNumero = notificacionesSinAcpetarNumero + 1;
                     renderizarConNotificaciones(notificacionesSinAcpetarNumero);
                 }
-            }
-
-            scrollToTop();
-
-            // Mostrar notificación en la UI si el usuario tiene permisos activados
-            if (Notification.permission === "default") {
-                Notification.requestPermission().then((permission) => {
-                    if (permission === "granted") {
-                        const notificacionSistemaOperativo = new Notification(title, { body, icon });
-                        // Alternativa para manejar el click
-                        notificacionSistemaOperativo.onclick = (event) => {
-                            event.preventDefault();
-                            console.log("Notificación clickeada, intentando abrir: ", click_action);
-                            // Usa el Service Worker para asegurar la navegación
-                            navigator.serviceWorker.ready.then((registration) => {
-                                registration.active.postMessage({ action: 'navigate', url: click_action });
-                            }).catch((error) => {
-                                console.error("Error al acceder al Service Worker:", error);
-                                window.open(click_action, '_self'); // Si falla, intenta abrir la URL
-                            });
-                        };
-                    }
+                scrollToTop();
+                // Mostrar notificación en la UI
+                // Crear la notificación nativa del navegador
+                const notification = new Notification(titleOriginal, {
+                    body: bodyOriginal,
+                    icon: iconOriginal
                 });
-            } else if (Notification.permission === "granted") {
-                const notificacionSistemaOperativo = new Notification(title, { body, icon });
-                // Alternativa para manejar el click
-                notificacionSistemaOperativo.onclick = (event) => {
-                    event.preventDefault();
-                    console.log("Notificación clickeada, intentando abrir: ", click_action);
-                    // Usa el Service Worker para asegurar la navegación
-                    navigator.serviceWorker.ready.then((registration) => {
-                        registration.active.postMessage({ action: 'navigate', url: click_action });
-                    }).catch((error) => {
-                        console.error("Error al acceder al Service Worker:", error);
-                        window.open(click_action, '_self'); // Si falla, intenta abrir la URL
-                    });
+                // Manejar el clic en la notificación
+                notification.onclick = () => {
+                    console.log("Notificación clickeada, abriendo URL:", click_action);
+                    window.open(clickActionOriginal, '_blank');
                 };
+            } else {
+                scrollToTop();
+                // Mostrar notificación en la UI
+                // Crear la notificación nativa del navegador
+                const notification = new Notification(titleOriginal, {
+                    body: bodyOriginal,
+                    icon: iconOriginal
+                });
+                // Manejar el clic en la notificación
+                notification.onclick = () => {
+                    console.log("Notificación clickeada, abriendo URL:", click_action);
+                    window.open(clickActionOriginal, '_blank');
+                };
+
+                setTimeout(() => {
+                    //Recargar de nuevo la página
+                    localStorage.setItem('mensaje', mensaje);
+                    window.location.reload()
+                }, 3000);
+
             }
         })
 
