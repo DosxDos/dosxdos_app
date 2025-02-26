@@ -144,6 +144,7 @@ function renderizarSinNotificaciones() {
   if (!$desktopNotificationCount.classList.contains("hidden")) {
     $desktopNotificationCount.classList.add("hidden");
   }
+  console.log('Se ha renderizado la campana sin notificaciones');
 }
 
 function renderizarConNotificaciones(numeroDeNotificacionesActuales) {
@@ -157,6 +158,8 @@ function renderizarConNotificaciones(numeroDeNotificacionesActuales) {
   if ($mobileNotificationCount.classList.contains("hidden")) {
     $mobileNotificationCount.classList.remove("hidden");
     $mobileNotificationCount.textContent = numeroDeNotificacionesActuales;
+  } else {
+    $mobileNotificationCount.textContent = numeroDeNotificacionesActuales;
   }
   //Desktops
   $bellDesktop.src = "https://dosxdos.app.iidos.com/img/bell.gif";
@@ -168,7 +171,10 @@ function renderizarConNotificaciones(numeroDeNotificacionesActuales) {
   if ($desktopNotificationCount.classList.contains("hidden")) {
     $desktopNotificationCount.classList.remove("hidden");
     $desktopNotificationCount.textContent = numeroDeNotificacionesActuales;
+  } else {
+    $desktopNotificationCount.textContent = numeroDeNotificacionesActuales;
   }
+  console.log('Se ha renderizado la campana con notificaciones');
 }
 
 function eliminarTokenNotificaciones() {

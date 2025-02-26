@@ -39,13 +39,13 @@ async function loadFirebase() {
             console.log('[Firebase web push notifications] Mensaje en primer plano:', payload);
 
             // Extraer datos con valores por defecto si vienen nulos o indefinidos
-            const titleOriginal = payload.data.title || "Nueva Notificación";
-            const bodyOriginal = payload.data.body || "Tienes una nueva notificación, por favor revísala en cuanto puedas.";
-            const iconOriginal = payload.data.icon || "https://dosxdos.app.iidos.com/img/dosxdoslogoNuevoRojo.png";
-            const clickActionOriginal = payload.data.click_action || "https://dosxdos.app.iidos.com/notificaciones.html";
+            const title = payload.data.title || "Nueva Notificación";
+            const body = payload.data.body || "Tienes una nueva notificación, por favor revísala en cuanto puedas.";
+            const icon = payload.data.icon || "https://dosxdos.app.iidos.com/img/dosxdoslogoNuevoRojo.png";
+            const click_action = "https://dosxdos.app.iidos.com/notificaciones.html";
 
             // Crear un string bien formado
-            const mensaje = "Tienes una nueva notificación: " + titleOriginal + ": " + bodyOriginal;
+            const mensaje = "Tienes una nueva notificación: " + title + ": " + body;
 
             alerta(mensaje);
 
@@ -58,40 +58,39 @@ async function loadFirebase() {
                 } else {
                     console.warn('Se procede a renderizar con notificaciones');
                     notificacionesSinAcpetarNumero = notificacionesSinAcpetarNumero + 1;
+                    console.warn('notificacionesSinAcpetarNumero: ' + notificacionesSinAcpetarNumero);
                     renderizarConNotificaciones(notificacionesSinAcpetarNumero);
                 }
                 scrollToTop();
                 // Mostrar notificación en la UI
                 // Crear la notificación nativa del navegador
-                const notification = new Notification(titleOriginal, {
-                    body: bodyOriginal,
-                    icon: iconOriginal
+                const notification = new Notification(title, {
+                    body: body,
+                    icon: icon
                 });
                 // Manejar el clic en la notificación
                 notification.onclick = () => {
                     console.log("Notificación clickeada, abriendo URL:", click_action);
-                    window.open(clickActionOriginal, '_blank');
+                    window.open(click_action, '_blank');
                 };
             } else {
                 scrollToTop();
                 // Mostrar notificación en la UI
                 // Crear la notificación nativa del navegador
-                const notification = new Notification(titleOriginal, {
-                    body: bodyOriginal,
-                    icon: iconOriginal
+                const notification = new Notification(title, {
+                    body: body,
+                    icon: icon
                 });
                 // Manejar el clic en la notificación
                 notification.onclick = () => {
                     console.log("Notificación clickeada, abriendo URL:", click_action);
-                    window.open(clickActionOriginal, '_blank');
+                    window.open(click_action, '_blank');
                 };
-
                 setTimeout(() => {
                     //Recargar de nuevo la página
                     localStorage.setItem('mensaje', mensaje);
                     window.location.reload()
                 }, 3000);
-
             }
         })
 
@@ -128,17 +127,27 @@ function notificarWebApp() {
 
             alerta(mensaje);
 
+            //Verificar si la página tiene campana o no, y actuar en consecuencia
             if (document.getElementById('desktopBellContainer') && document.getElementById('mobileBellContainer')) {
+                console.warn('Ha verificado que existe campana y ha ingresado a renderizarla');
                 if (!notificacionesSinAcpetar || sinNotificaciones) {
+                    console.warn('No hay notificaciones sin aceptar o no se han recibido notificaciones de la base de datos del usuario, se procede a renderizar sin notificaciones');
                     renderizarSinNotificaciones();
                 } else {
-                    notificacionesSinAcpetarNumero++;
+                    console.warn('Se procede a renderizar con notificaciones');
+                    notificacionesSinAcpetarNumero = notificacionesSinAcpetarNumero + 1;
+                    console.warn('notificacionesSinAcpetarNumero: ' + notificacionesSinAcpetarNumero);
                     renderizarConNotificaciones(notificacionesSinAcpetarNumero);
                 }
+                scrollToTop();
+            } else {
+                scrollToTop();
+                setTimeout(() => {
+                    //Recargar de nuevo la página
+                    localStorage.setItem('mensaje', mensaje);
+                    window.location.reload()
+                }, 3000);
             }
-
-            scrollToTop();
-
         } else {
             alerta("No se ha recibido un valor en la variable dataNotificacionNativa del localStorage");
         }
