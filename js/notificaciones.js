@@ -92,7 +92,7 @@ async function sincronizarNotificaciones() {
 function notificar() {
   return new Promise(async (resolve) => {
     try {
-      notificationsStore = await leerDatos("notificaciones");
+      notificationsStore = await leerDatos("dosxdos", "notificaciones");
       notificationsStore.length == 0 ? sinNotificaciones = true : sinNotificaciones = false;
       if (sinNotificaciones) {
         renderizarSinNotificaciones();

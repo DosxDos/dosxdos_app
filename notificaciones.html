@@ -6,154 +6,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Notificaciones</title>
-  <!-- Favicons -->
   <link rel="icon" type="image/png" href="https://dosxdos.app.iidos.com/img/logoPwa256.png" />
   <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/tailwindmain.css" />
-  <style>
-    @charset "UTF-8";
-
-    /* INICIO */
-    * {
-      padding: 0;
-      margin: 0;
-      box-sizing: border-box;
-      letter-spacing: 0.5px;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .displayOff {
-      display: none;
-    }
-
-    .displayOn {
-      display: flex;
-    }
-
-    /* FUENTES */
-    @font-face {
-      font-family: "Roboto";
-      src: url("https://dosxdos.app.iidos.com/css/fuentes/Roboto/Roboto-Light.ttf") format("truetype");
-    }
-
-    @font-face {
-      font-family: "Merriweather";
-      src: url("https://dosxdos.app.iidos.com/css/fuentes/Merriweather/Merriweather-Light.ttf") format("truetype");
-    }
-
-    @font-face {
-      font-family: "Merriweather-Bold";
-      src: url("https://dosxdos.app.iidos.com/css/fuentes/Merriweather/Merriweather-Bold.ttf") format("truetype");
-    }
-
-    @font-face {
-      font-family: "Lora";
-      src: url("https://dosxdos.app.iidos.com/css/fuentes/Lora/Lora-Regular.ttf") format("truetype");
-    }
-
-    @font-face {
-      font-family: "Lora-Medium";
-      src: url("https://dosxdos.app.iidos.com/css/fuentes/Lora/Lora-Medium.ttf") format("truetype");
-    }
-
-    @font-face {
-      font-family: "Lora-Bold";
-      src: url("https://dosxdos.app.iidos.com/css/fuentes/Lora/Lora-Bold.ttf") format("truetype");
-    }
-
-    /* LOADER */
-    #loader {
-      width: 100vw;
-      height: 100vh;
-      position: absolute;
-      top: 0;
-      z-index: 2000;
-      background-color: rgba(0, 0, 0, 0.886);
-      justify-content: center;
-      align-items: center;
-    }
-
-    .loader {
-      transform: rotateZ(45deg);
-      perspective: 1000px;
-      border-radius: 50%;
-      width: 14vw;
-      height: 14vw;
-      color: #fff;
-    }
-
-    .loader:before,
-    .loader:after {
-      content: "";
-      display: block;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: inherit;
-      height: inherit;
-      border-radius: 50%;
-      transform: rotateX(70deg);
-      animation: 1s spin linear infinite;
-    }
-
-    .loader:after {
-      color: #b20b15;
-      transform: rotateY(70deg);
-      animation-delay: 0.4s;
-    }
-
-    @keyframes spin {
-
-      0%,
-      100% {
-        box-shadow: 0.2em 0px 0 0px currentcolor;
-      }
-
-      12% {
-        box-shadow: 0.2em 0.2em 0 0 currentcolor;
-      }
-
-      25% {
-        box-shadow: 0 0.2em 0 0px currentcolor;
-      }
-
-      37% {
-        box-shadow: -0.2em 0.2em 0 0 currentcolor;
-      }
-
-      50% {
-        box-shadow: -0.2em 0 0 0 currentcolor;
-      }
-
-      62% {
-        box-shadow: -0.2em -0.2em 0 0 currentcolor;
-      }
-
-      75% {
-        box-shadow: 0px -0.2em 0 0 currentcolor;
-      }
-
-      87% {
-        box-shadow: 0.2em -0.2em 0 0 currentcolor;
-      }
-    }
-
-    /* olas divider en el menu movíl */
-    .website-divider-container-734167 {
-      overflow: hidden;
-      position: relative;
-      height: 100%;
-    }
-
-    .divider-img-734167 {
-      position: absolute;
-      width: 500%;
-      height: 105px;
-      transform: scale(1, 1);
-      bottom: 0px;
-      left: 0px;
-      fill: rgb(255, 255, 255);
-    }
-  </style>
+  <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/index.css" />
 </head>
 
 <body id="body" class="bg-gray-100">
@@ -404,7 +259,7 @@
         <img src="https://dosxdos.app.iidos.com/img/lupa.png"
           class="w-5 h-5 opacity-90 absolute left-16 top-1/2 transform -translate-y-1/2" />
         <input type="text" id="buscador"
-          class="shadow w-full h-12 pl-12 pr-4 bg-white/10 border border-white/20 rounded-lg text-lg focus:outline-none focus:ring-2 focus:ring-white/50 transition-all duration-300 ease-in-out text-black placeholder-white/70"
+          class="shadow w-full h-12 pl-12 pr-4 bg-white/10 border border-white/20 rounded-lg text-lg focus:outline-none focus:ring-2 focus:ring-red-600 transition-all duration-300 ease-in-out text-black placeholder-white/70"
           placeholder="Buscar notificaciones..." />
       </div>
       <div class="w-full">

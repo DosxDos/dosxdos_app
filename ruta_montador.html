@@ -1,809 +1,365 @@
 <!DOCTYPE html>
 
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Líneas de ruta</title>
-    <!-- Favicons -->
-    <link
-      rel="icon"
-      type="image/png"
-      href="https://dosxdos.app.iidos.com/img/logoPwa256.png"
-    />
-    <style>
-      @charset "UTF-8";
 
-      /* $variables - 40% */
-      :root {
-        --x1_7: 0.41vw;
-        --x60: 14.56vw;
-        --x10: 2.43vw;
-        --x300: 72.82vw;
-        --x15: 3.64vw;
-        --x5: 1.21vw;
-        --x70: 16.99vw;
-        --x25: 6.07vw;
-        --x3: 0.73vw;
-        --x1: 0.24vw;
-        --x20: 4.85vw;
-        --x250: 60.68vw;
-        --x30: 7.28vw;
-        --x22: 5.34vw;
-        --x28: 6.8vw;
-        --x1_5: 0.36vw;
-        --x2: 0.49vw;
-        --x18: 4.37vw;
-        --x2_5: 0.61vw;
-        --x150: 36.4vw;
-        --x35: 8.49vw;
-      }
-
-      /* INICIO */
-      * {
-        padding: 0;
-        margin: 0;
-        box-sizing: border-box;
-        letter-spacing: var(--x1_7);
-        -webkit-tap-highlight-color: transparent;
-      }
-
-      .displayOff {
-        display: none;
-      }
-
-      .displayOn {
-        display: flex;
-      }
-
-      .borde {
-        border: var(--x1) solid black;
-      }
-
-      body {
-        overflow-x: hidden;
-      }
-
-      .oyh {
-        overflow-y: hidden;
-      }
-
-      /* FUENTES */
-      @font-face {
-        font-family: "Roboto";
-        src: url("https://dosxdos.app.iidos.com/css/fuentes/Roboto/Roboto-Light.ttf")
-          format("truetype");
-      }
-
-      @font-face {
-        font-family: "Merriweather";
-        src: url("https://dosxdos.app.iidos.com/css/fuentes/Merriweather/Merriweather-Light.ttf")
-          format("truetype");
-      }
-
-      @font-face {
-        font-family: "Merriweather-Bold";
-        src: url("https://dosxdos.app.iidos.com/css/fuentes/Merriweather/Merriweather-Bold.ttf")
-          format("truetype");
-      }
-
-      @font-face {
-        font-family: "Lora";
-        src: url("https://dosxdos.app.iidos.com/css/fuentes/Lora/Lora-Regular.ttf")
-          format("truetype");
-      }
-
-      @font-face {
-        font-family: "Lora-Medium";
-        src: url("https://dosxdos.app.iidos.com/css/fuentes/Lora/Lora-Medium.ttf")
-          format("truetype");
-      }
-
-      @font-face {
-        font-family: "Lora-Bold";
-        src: url("https://dosxdos.app.iidos.com/css/fuentes/Lora/Lora-Bold.ttf")
-          format("truetype");
-      }
-
-      /* LOADER */
-      #loader {
-        width: 100vw;
-        height: 100vh;
-        position: absolute;
-        top: 0;
-        z-index: 2000;
-        background-color: rgba(0, 0, 0, 0.886);
-        justify-content: center;
-        align-items: center;
-      }
-
-      .loader {
-        transform: rotateZ(45deg);
-        perspective: 1000px;
-        border-radius: 50%;
-        width: var(--x60);
-        height: var(--x60);
-        color: #fff;
-      }
-
-      .loader:before,
-      .loader:after {
-        content: "";
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: inherit;
-        height: inherit;
-        border-radius: 50%;
-        transform: rotateX(70deg);
-        animation: 1s spin linear infinite;
-      }
-
-      .loader:after {
-        color: #b20b15;
-        transform: rotateY(70deg);
-        animation-delay: 0.4s;
-      }
-
-      @keyframes rotate {
-        0% {
-          transform: translate(-50%, -50%) rotateZ(0deg);
-        }
-
-        100% {
-          transform: translate(-50%, -50%) rotateZ(360deg);
-        }
-      }
-
-      @keyframes rotateccw {
-        0% {
-          transform: translate(-50%, -50%) rotate(0deg);
-        }
-
-        100% {
-          transform: translate(-50%, -50%) rotate(-360deg);
-        }
-      }
-
-      @keyframes spin {
-        0%,
-        100% {
-          box-shadow: 0.2em 0px 0 0px currentcolor;
-        }
-
-        12% {
-          box-shadow: 0.2em 0.2em 0 0 currentcolor;
-        }
-
-        25% {
-          box-shadow: 0 0.2em 0 0px currentcolor;
-        }
-
-        37% {
-          box-shadow: -0.2em 0.2em 0 0 currentcolor;
-        }
-
-        50% {
-          box-shadow: -0.2em 0 0 0 currentcolor;
-        }
-
-        62% {
-          box-shadow: -0.2em -0.2em 0 0 currentcolor;
-        }
-
-        75% {
-          box-shadow: 0px -0.2em 0 0 currentcolor;
-        }
-
-        87% {
-          box-shadow: 0.2em -0.2em 0 0 currentcolor;
-        }
-      }
-
-      /* NAVEGACIÓN */
-      #encabezado {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        justify-content: center;
-        align-items: center;
-        background-color: #f4f4f4;
-      }
-
-      /* LOGO Y NOTIFICACIONES */
-
-      #logo {
-        display: flex;
-        width: 100%;
-        justify-content: center;
-        align-items: center;
-        padding: var(--x10);
-      }
-
-      #logo > img {
-        width: var(--x150);
-      }
-
-      #notificaciones {
-        position: absolute;
-        width: var(--x60);
-        height: var(--x60);
-        justify-content: center;
-        align-items: center;
-        right: var(--x10);
-        cursor: pointer;
-      }
-
-      #bell {
-        width: var(--x60);
-        height: var(--x60);
-      }
-
-      #sinNotificaciones {
-        position: absolute;
-        width: var(--x60);
-        height: var(--x60);
-        justify-content: center;
-        align-items: center;
-        right: var(--x10);
-        cursor: pointer;
-      }
-
-      #bell2 {
-        width: var(--x35);
-        height: var(--x35);
-      }
-
-      #numNotificaciones {
-        position: absolute;
-        width: var(--x30);
-        height: var(--x30);
-        border-radius: 50%;
-        background-color: #d31216;
-        justify-content: center;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        top: var(--x2);
-        right: var(--x2);
-      }
-
-      #numNtf {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        /* border: 1px solid black; */
-        border-radius: 50%;
-        width: var(--x25);
-        height: var(--x25);
-        color: white;
-        font-size: var(--x25);
-        padding-left: var(--x3);
-      }
-
-      /* FIN DE LOGO Y NOTIFICACIONES */
-
-      #menu {
-        display: flex;
-        width: 100%;
-        align-items: center;
-        padding: var(--x10);
-        justify-content: space-between;
-        margin-top: var(--x10);
-      }
-
-      #usuario {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      #usuario:hover {
-        cursor: pointer;
-      }
-
-      #iconoUsuario {
-        display: flex;
-        width: var(--x70);
-        height: var(--x70);
-        border-radius: 50%;
-      }
-
-      #iconoUsuario > img {
-        width: var(--x70);
-        height: var(--x70);
-        border-radius: 50%;
-      }
-
-      #nombreUsuario {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: var(--x25);
-        margin-left: var(--x5);
-        font-family: "Merriweather-Bold", "Merriweather-Bold";
-      }
-
-      #flechaUsuario {
-        display: flex;
-        width: var(--x25);
-        height: var(--x25);
-        margin-left: var(--x3);
-      }
-
-      #flechaUsuario > img {
-        width: var(--x25);
-        height: var(--x25);
-      }
-
-      .botonIcono {
-        border: var(--x1) solid gray;
-        display: flex;
-        width: var(--x70);
-        height: var(--x70);
-        border-radius: 20%;
-        background-color: #d31216;
-      }
-
-      .botonIcono:hover {
-        cursor: pointer;
-      }
-
-      .botonIcono:active {
-        background-color: #b20b15;
-      }
-
-      .botonIcono > img {
-        width: var(--x70);
-        height: var(--x70);
-        border-radius: 20%;
-        padding: var(--x10);
-      }
-
-      #opcionesMenu {
-        width: 100%;
-        padding: var(--x15);
-        justify-content: space-evenly;
-        align-items: center;
-      }
-
-      .opcionMenu {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-      }
-
-      .opcionMenu > p {
-        margin-top: var(--x3);
-        font-size: var(--x20);
-        font-family: "Merriweather-Bold", "Merriweather-Bold";
-      }
-
-      #opcionesUsuario {
-        width: 100%;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding: var(--x15);
-      }
-
-      .boton {
-        width: var(--x250);
-        border-radius: var(--x30);
-        font-family: "Merriweather-Bold", "Merriweather-Bold";
-        font-size: var(--x22);
-        height: var(--x60);
-        padding: var(--x10);
-        border: var(--x1) solid gray;
-        color: white;
-        background-color: #d31216;
-      }
-
-      .boton2 {
-        width: var(--x250);
-        border-radius: var(--x30);
-        font-family: "Merriweather-Bold", "Merriweather-Bold";
-        font-size: var(--x22);
-        height: var(--x60);
-        padding: var(--x10);
-        border: var(--x1) solid gray;
-        color: white;
-        background-color: #d31216;
-        margin-top: var(--x15);
-      }
-
-      .boton:hover {
-        cursor: pointer;
-      }
-
-      .boton:active {
-        background-color: #b20b15;
-      }
-
-      .boton2:hover {
-        cursor: pointer;
-      }
-
-      .boton2:active {
-        background-color: #b20b15;
-      }
-
-      #titulo {
-        justify-content: center;
-        align-items: center;
-        font-family: "Lora-Bold", "Lora-Bold";
-        width: 100%;
-        font-size: var(--x28);
-        padding: var(--x5);
-        text-align: center;
-      }
-
-      #mensaje {
-        position: relative;
-        flex-wrap: wrap;
-        text-align: center;
-        font-size: var(--x18);
-        letter-spacing: var(--x2_5);
-        background-color: rgba(0, 0, 0, 0.573);
-        color: white;
-        padding: var(--x10);
-        font-family: "Roboto", "Roboto-Light";
-        width: 100%;
-        justify-content: center;
-      }
-
-      #mensaje > p {
-        display: flex;
-        flex-wrap: wrap;
-        margin-top: var(--x20);
-        margin-bottom: var(--x20);
-      }
-
-      #actualizacion {
-        justify-content: center;
-        align-items: center;
-        flex-wrap: wrap;
-        padding: var(--x15);
-        text-align: center;
-        color: gray;
-      }
-
-      #imgCerrar {
-        position: absolute;
-        width: var(--x28);
-        top: var(--x2);
-        right: var(--x2);
-      }
-
-      #imgCerrar:hover {
-        cursor: pointer;
-      }
-
-      #cajaBuscador {
-        display: flex;
-        width: 100%;
-        justify-content: center;
-        align-items: center;
-        padding: var(--x15);
-      }
-
-      #iconoBuscador {
-        display: flex;
-        width: var(--x60);
-        height: var(--x60);
-        justify-content: center;
-        align-items: center;
-        padding: var(--x15);
-      }
-
-      #iconoBuscador > img {
-        width: var(--x60);
-        height: var(--x60);
-      }
-
-      #buscador {
-        height: var(--x60);
-        width: var(--x300);
-        margin-left: var(--x5);
-        border: var(--x2) solid gray;
-        font-family: "Lora", "Lora-Regular";
-        font-size: var(--x28);
-        text-align: center;
-        border-radius: var(--x15);
-        padding: var(--x15);
-      }
-
-      #buscador:focus {
-        outline-color: #b20b15;
-      }
-
-      #contenido {
-        display: flex;
-        width: 100%;
-        flex-direction: column;
-        padding: var(--x15);
-        justify-content: center;
-        align-items: center;
-        background-color: #e1e1e1;
-      }
-
-      .ruta {
-        max-width: 100%;
-        flex-wrap: wrap;
-        justify-content: center;
-        align-items: center;
-        border-radius: var(--x30);
-        font-family: "Lora-Bold", "Lora-Bold";
-        font-size: var(--x22);
-        border: var(--x1) solid gray;
-        color: white;
-        background-color: #d31216;
-        margin-top: var(--x10);
-        margin-bottom: var(--x10);
-        padding: var(--x15);
-      }
-
-      .ruta:hover {
-        cursor: pointer;
-      }
-
-      .ruta:active {
-        background-color: #b20b15;
-      }
-
-      .ruta2 {
-        max-width: 100%;
-        flex-wrap: wrap;
-        justify-content: center;
-        align-items: center;
-        border-radius: var(--x30);
-        font-family: "Lora-Bold", "Lora-Bold";
-        font-size: var(--x22);
-        border: var(--x1) solid gray;
-        color: white;
-        background-color: #d312158a;
-        margin-top: var(--x10);
-        margin-bottom: var(--x10);
-        padding: var(--x15);
-      }
-
-      .ruta2:hover {
-        cursor: pointer;
-      }
-
-      .ruta2:active {
-        background-color: #b20b15;
-      }
-
-      .resaltado {
-        background-color: rgba(0, 0, 0, 0.573);
-      }
-
-      #contMapa {
-        display: flex;
-        width: 100%;
-        justify-content: center;
-        align-items: center;
-        padding: var(--x15);
-      }
-
-      /* MOVILES GRANDES */
-      @media screen and (min-width: 412px) and (max-width: 767px) {
-        :root {
-          --x1_7: 1.7px;
-          --x60: 60px;
-          --x10: 10px;
-          --x300: 300px;
-          --x15: 15px;
-          --x5: 5px;
-          --x70: 70px;
-          --x25: 25px;
-          --x3: 3px;
-          --x1: 1px;
-          --x20: 20px;
-          --x250: 250px;
-          --x30: 30px;
-          --x22: 22px;
-          --x28: 28px;
-          --x1_5: 1.5px;
-          --x2: 2px;
-          --x18: 18px;
-          --x2_5: 2.5px;
-          --x150: 150px;
-          --x35: 35px;
-        }
-      }
-
-      /* TABLETS */
-      @media screen and (min-width: 768px) and (max-width: 1199px) {
-        :root {
-          --x1_7: 0.09vw;
-          --x60: 3vw;
-          --x10: 0.5vw;
-          --x300: 15vw;
-          --x15: 0.75vw;
-          --x5: 0.25vw;
-          --x70: 3.5vw;
-          --x25: 1.25vw;
-          --x3: 0.15vw;
-          --x1: 0.05vw;
-          --x20: 1vw;
-          --x250: 12.5vw;
-          --x30: 1.5vw;
-          --x22: 1.1vw;
-          --x28: 1.4vw;
-          --x1_5: 0.08vw;
-          --x2: 0.1vw;
-          --x18: 0.9vw;
-          --x2_5: 0.13vw;
-          --x150: 7.5vw;
-          --x35: 1.75vw;
-        }
-
-        #menu {
-          justify-content: space-evenly;
-        }
-      }
-
-      /* ESCRITORIOS */
-      @media screen and (min-width: 1200px) {
-        :root {
-          --x1_7: 1.02px;
-          --x60: 36px;
-          --x10: 6px;
-          --x300: 180px;
-          --x15: 9px;
-          --x5: 3px;
-          --x70: 42px;
-          --x25: 15px;
-          --x3: 1.8px;
-          --x1: 0.6px;
-          --x20: 12px;
-          --x250: 150px;
-          --x30: 18px;
-          --x22: 13.2px;
-          --x28: 16.8px;
-          --x1_5: 0.9px;
-          --x2: 1.2px;
-          --x18: 10.8px;
-          --x2_5: 1.5px;
-          --x150: 90px;
-          --x35: 21px;
-        }
-
-        #menu {
-          justify-content: space-evenly;
-        }
-      }
-    </style>
-  </head>
-
-  <body id="body" class="oyh">
-    <div id="loader" class="displayOn">
-      <span class="loader"></span>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Líneas de ruta</title>
+  <link rel="icon" type="image/png" href="https://dosxdos.app.iidos.com/img/logoPwa256.png" />
+  <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/tailwindmain.css" />
+  <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/index.css" />
+</head>
+
+<body id="body" class="oyh">
+  <div id="loader" class="displayOn">
+    <span class="loader"></span>
+  </div>
+
+  <section id="encabezado" class="w-full bg-white shadow-md fixed top-0 z-30">
+    <!-- Main header -->
+    <div class="flex items-center justify-between w-full px-6 py-4">
+      <!-- Logo -->
+      <div class="flex items-center">
+        <img src="https://dosxdos.app.iidos.com/img/logo300.png" class="h-16 hidden xl:block" alt="Logo completo" />
+        <img src="https://dosxdos.app.iidos.com/img/Isotipo-38.png" class="h-16 xl:hidden" alt="Isotipo" />
+      </div>
+
+      <!-- Desktop Navigation -->
+      <nav class="hidden xl:flex items-center space-x-8">
+        <a href="https://dosxdos.app.iidos.com/rutas_montador.html"
+          class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 5c8 0 8 14 16 14" />
+            <circle cx="4" cy="5" r="2" />
+            <circle cx="12" cy="12" r="2" />
+            <circle cx="20" cy="19" r="2" />
+          </svg>
+          <span>Rutas</span>
+        </a>
+
+        <a href="https://dosxdos.app.iidos.com/ruta_montador.html"
+          class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+            <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+            <path d="M9 12h6" />
+            <path d="M9 16h6" />
+          </svg>
+          <span>Líneas</span>
+        </a>
+
+        <!-- History Link -->
+        <a href="https://dosxdos.app.iidos.com/historial_montador.html"
+          class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
+          <svg class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
+          </svg>
+          <span>Historial</span>
+        </a>
+
+        <!-- Desktop Menu Notifications Bell -->
+        <a href="https://dosxdos.app.iidos.com/notificaciones.html" class="relative z-10" id="desktopBellContainer">
+          <img id="bellDesktop" src="" class="text-gray-900 object-contain" />
+          <span id="desktopNotificationCount"
+            class="absolute top-0 -right-2 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] text-center border hidden"></span>
+        </a>
+
+        <!-- Desktop User Menu -->
+        <div class="relative group drop-shadow">
+          <button id="userMenuButton"
+            class="group flex items-center gap-3 py-1 pl-1.5 pr-4 rounded-full bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-gray-300 transition-all duration-200"
+            aria-expanded="false">
+            <div
+              class="w-10 h-10 rounded-full overflow-hidden border-2 border-white shadow-sm bg-gray-100 flex items-center justify-center">
+              <img id="imagenUsuarioDesktop" src="https://dosxdos.app.iidos.com/img/usuario.png"
+                class="w-full h-full object-cover" alt="Profile"
+                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+              <svg class="w-5 h-5 text-gray-400 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+            </div>
+
+            <span id="nombreUsuarioDesktop" class="text-gray-700 font-medium text-lg"></span>
+
+            <svg xmlns="http://www.w3.org/2000/svg"
+              class="w-6 h-6 text-gray-400 group-hover:text-gray-600 transition-transform duration-200 group-hover:rotate-180"
+              viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+
+          <!-- Desktop Dropdown Menu -->
+          <div id="userDropdownMenu" class="hidden absolute right-0 mt-2 w-max bg-white rounded-lg shadow-lg p-4 z-50">
+            <button id="editarUsuarioDesktop"
+              class="flex items-center gap-2 w-full mb-4 text-left text-xl text-black hover:bg-red-600/20 rounded-lg transition-colors duration-200">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+              </svg>
+              Editar Usuario
+            </button>
+            <button id="cerrarSesionDesktop"
+              class="flex items-center gap-2 w-full text-left text-xl text-red-500 hover:bg-red-600/20 rounded-lg transition-colors duration-200">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+              </svg>
+              Cerrar Sesión
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Mobile Navigation -->
+      <div class="xl:hidden flex items-center space-x-2 mx-2">
+        <!-- Mobile Bell -->
+        <a href="https://dosxdos.app.iidos.com/notificaciones.html" class="relative z-10" id="mobileBellContainer">
+          <img id="bellMobile" src="" class="text-gray-900 object-contain mt-2" />
+          <span id="mobileNotificationCount"
+            class="absolute top-2 right-0 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] text-center border hidden"></span>
+        </a>
+
+        <!-- Hamburger Button -->
+        <button id="menuButton" class="xl:hidden relative z-50 p-2 focus:outline-none">
+          <div class="relative w-8 h-8">
+            <span class="absolute h-1 w-8 bg-gray-900 transition-all duration-300 ease-in-out top-1"
+              id="hamburgerTop"></span>
+            <span class="absolute h-1 w-8 bg-gray-900 transition-all duration-300 ease-in-out top-4"
+              id="hamburgerMiddle"></span>
+            <span class="absolute h-1 w-8 bg-gray-900 transition-all duration-300 ease-in-out top-7"
+              id="hamburgerBottom"></span>
+          </div>
+        </button>
+      </div>
+
+      <div id="mobileMenu"
+        class="xl:hidden fixed inset-0 bg-gradient-to-r from-red-500 to-red-600 bg-opacity-95 transform translate-x-full transition-all duration-500 ease-in-out z-40 overflow-hidden backdrop-blur-sm flex flex-col">
+        <div class="absolute inset-0 z-0" style="
+              background-image: url('https://dosxdos.app.iidos.com/img/texture-red.svg');
+              background-size: contain;
+              opacity: 0.7;
+            "></div>
+        <!-- User Profile Section -->
+        <div class="px-8 py-4 mt-20 relative z-10">
+          <div class="relative flex items-center gap-3 py-1 pl-1.5 pr-4 bg-white shadow-lg rounded-full">
+            <!-- Profile image -->
+            <div
+              class="absolute left-0 w-24 h-24 rounded-full overflow-hidden border-2 border-white bg-gray-100 flex items-center justify-center shadow-lg">
+              <img id="imagenUsuarioMobile" src="https://dosxdos.app.iidos.com/img/usuario.png"
+                class="w-full h-full object-cover" alt="Profile"
+                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+              <svg class="w-12 h-12 text-gray-400 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+            </div>
+            <div class="ml-28 flex items-center py-4">
+              <!-- User name -->
+              <span class="text-black font-medium text-xl">¡Hola,&nbsp;</span>
+              <span id="nombreUsuarioMobile" class="text-black font-medium text-xl"></span>
+              <span class="text-black font-medium text-xl">!</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Navigation Links -->
+        <nav class="px-8 py-6 space-y-2 relative z-10 flex-1 overflow-y-auto">
+          <a href="https://dosxdos.app.iidos.com/notificaciones.html"
+            class="z-10 flex items-center px-6 py-2 text-white bg-red-600 bg-opacity-60 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-xl group backdrop-blur-lg">
+            <div
+              class="flex items-center justify-center w-14 h-14 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all">
+              <svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 8a6 6 0 0 0-12 0v5a6 6 0 0 1-2 4h16a6 6 0 0 1-2-4V8"></path>
+                <line x1="12" y1="22" x2="12" y2="22"></line>
+                <!-- Small bell clapper -->
+              </svg>
+            </div>
+            <span class="text-lg font-semibold tracking-wide">Notificaciones</span>
+          </a>
+
+          <!-- <a href="https://dosxdos.app.iidos.com/ruta_montador.html"
+            class="z-10 flex items-center px-6 py-2 text-white bg-red-600 bg-opacity-60 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-xl group backdrop-blur-lg">
+            <div
+              class="flex items-center justify-center w-14 h-14 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all">
+              <svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+                <path d="M9 12h6" />
+                <path d="M9 16h6" />
+              </svg>
+            </div>
+            <span class="text-lg font-semibold tracking-wide">Horarios</span>
+          </a> -->
+
+          <a href="https://dosxdos.app.iidos.com/rutas_montador.html"
+            class="z-10 flex items-center px-6 py-2 text-white bg-red-600 bg-opacity-60 shadow-xl backdrop-blur-lg hover:bg-white/20 rounded-xl transition-all duration-300 group">
+            <div
+              class="z-0 flex items-center justify-center w-14 h-14 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all">
+              <svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <path d="M4 5c8 0 8 14 16 14" />
+                <circle cx="4" cy="5" r="2" />
+                <circle cx="12" cy="12" r="2" />
+                <circle cx="20" cy="19" r="2" />
+              </svg>
+            </div>
+            <span class="text-lg font-semibold tracking-wide">Rutas</span>
+          </a>
+
+          <a href="https://dosxdos.app.iidos.com/ruta_montador.html"
+            class="z-10 flex items-center px-6 py-2 text-white bg-red-600 bg-opacity-60 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-xl group backdrop-blur-lg">
+            <div
+              class="flex items-center justify-center w-14 h-14 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all">
+              <svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+                <path d="M9 12h6" />
+                <path d="M9 16h6" />
+              </svg>
+            </div>
+            <span class="text-lg font-semibold tracking-wide">Líneas</span>
+          </a>
+
+          <a href="https://dosxdos.app.iidos.com/historial_montador.html"
+            class="z-10 flex items-center px-6 py-2 text-white bg-red-600 bg-opacity-60 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-xl group backdrop-blur-lg">
+            <div
+              class="flex items-center justify-center w-14 h-14 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all">
+              <svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+            </div>
+            <span class="text-lg font-semibold tracking-wide">Historial</span>
+          </a>
+        </nav>
+
+        <div class="relative z-10">
+          <div id="divider_id" class="website-divider-container-734167" style="height: 100px; overflow: visible">
+            <svg xmlns="http://www.w3.org/2000/svg" class="divider-img-734167" viewBox="0 0 1080 137"
+              preserveAspectRatio="none" style="bottom: -20px">
+              <path
+                d="M 0,137 V 59.03716 c 158.97703,52.21241 257.17659,0.48065 375.35967,2.17167 118.18308,1.69101 168.54911,29.1665 243.12679,30.10771 C 693.06415,92.25775 855.93515,29.278599 1080,73.61449 V 137 Z"
+                style="fill: #ffffff"></path>
+              <path
+                d="M 0,10.174557 C 83.419822,8.405668 117.65911,41.78116 204.11379,44.65308 290.56846,47.52499 396.02558,-7.4328 620.04248,94.40134 782.19141,29.627636 825.67279,15.823104 1080,98.55518 V 137 H 0 Z"
+                style="fill: #ffffff; opacity: 0.5"></path>
+              <path
+                d="M 0,45.10182 C 216.27861,-66.146913 327.90348,63.09813 416.42665,63.52904 504.94982,63.95995 530.42054,22.125806 615.37532,25.210412 700.33012,28.295019 790.77619,132.60682 1080,31.125744 V 137 H 0 Z"
+                style="fill: #ffffff; opacity: 0.25"></path>
+            </svg>
+          </div>
+        </div>
+
+        <!-- User Actions -->
+        <div class="relative z-10 mt-auto px-8 pb-6 bg-white bg-opacity-05 shadow flex flex-col space-y-2">
+          <button id="editarUsuarioMobile"
+            class="z-30 flex items-center w-full px-6 py-2 text-white bg-red-600 shadow-xl backdrop-blur-lg rounded-xl transition-all duration-300 group">
+            <div
+              class="flex items-center justify-center w-12 h-10 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all">
+              <svg class="w-6 h-6 shadow-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+              </svg>
+            </div>
+            <span class="text-lg font-medium">Editar usuario</span>
+          </button>
+
+          <button id="cerrarSesionMobile"
+            class="z-30 flex items-center w-full px-6 py-2 bg-red-600 shadow-xl backdrop-blur-lg text-white rounded-xl transition-all duration-300 group mb-3">
+            <div
+              class="flex items-center justify-center w-12 h-10 bg-white/20 rounded-lg mr-4 group-hover:bg-white/30 transition-all">
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+              </svg>
+            </div>
+            <span class="text-lg font-medium">Cerrar sesión</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <div class="p-6 pt-32 w-full bg-gray-100 ">
+    <!-- Header with search functionality -->
+    <div id="cabeceraContenido" class="flex items-center gap-4 z-10">
+      <button id="volverBtn" class="text-red-600">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd"
+            d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+            clip-rule="evenodd" />
+        </svg>
+      </button>
+
+      <div class="relative flex items-center w-full">
+        <svg xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none"
+          viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+
+        <input type="text" id="buscador"
+          class="shadow w-full h-12 pl-12 pr-4 bg-white/10 border border-white/20 rounded-lg text-lg focus:outline-none focus:ring-2 focus:ring-red-600 transition-all duration-300 ease-in-out text-black placeholder-white/70"
+          placeholder="Buscar líneas..." />
+      </div>
     </div>
 
-    <section id="encabezado">
-      <div id="logo">
-        <img src="https://dosxdos.app.iidos.com/img/logo300.png" alt="Logo" />
-        <div id="notificaciones" class="displayOff">
-          <img
-            src="https://dosxdos.app.iidos.com/img/bell.gif"
-            alt="bell"
-            id="bell"
-          />
-          <div id="numNotificaciones" class="displayOn">
-            <p id="numNtf">0</p>
-          </div>
-        </div>
-        <div id="sinNotificaciones" class="displayOff">
-          <img
-            src="https://dosxdos.app.iidos.com/img/bell2.png"
-            alt="bell2"
-            id="bell2"
-          />
-        </div>
+    <h1 id="titulo" class="text-2xl font-bold text-center my-8 text-gray-800">LANZAROTE_(A)</h1>
+
+    <!-- map button -->
+    <div id="contMapa" class="flex items-center justify-center mb-6">
+      <button id="mapa"
+        class="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition-colors duration-200 shadow-sm px-4 py-2">
+        <span class="whitespace-nowrap">Ver en mapa</span>
+        <svg width="32" height="32" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+          <!-- Map outline -->
+          <path d="M3 7l6 3l6-3l6 3v10l-6-3l-6 3l-6-3V7z" stroke="white" stroke-width="1.5" stroke-linecap="round"
+            stroke-linejoin="round" />
+
+          <!-- Map fold lines -->
+          <path d="M9 10v10" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M15 7v10" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+
+          <!-- Larger Location pin - prominent teardrop shape -->
+          <path d="M12 4c-2.2 0-4 1.8-4 4c0 4 4 8 4 8s4-4 4-8c0-2.2-1.8-4-4-4z" fill="white" stroke="white"
+            stroke-width="0.5" />
+          <circle cx="12" cy="8" r="1.5" fill="#e11d48" stroke="none" />
+        </svg>
+      </button>
+    </div>
+
+    <section class="flex flex-col min-h-screen">
+      <div class="flex-grow bg-gray-100">
+        <div id="contenido" class="w-full"></div>
       </div>
-
-      <nav id="menu">
-        <div id="usuario">
-          <div id="iconoUsuario">
-            <img
-              src="https://dosxdos.app.iidos.com/img/usuario.png"
-              id="imagenUsuario"
-            />
-          </div>
-          <p id="nombreUsuario"></p>
-          <div id="flechaUsuario">
-            <img src="https://dosxdos.app.iidos.com/img/flechaAbajo.png" />
-          </div>
-        </div>
-
-        <button id="casa" class="botonIcono">
-          <img src="https://dosxdos.app.iidos.com/img/casaWhite.png" />
-        </button>
-      </nav>
-
-      <nav id="opcionesMenu" class="displayOff">
-        <div class="opcionMenu" id="horarios">
-          <button class="botonIcono" type="button" id="horarios">
-            <img src="https://dosxdos.app.iidos.com/img/relojWhite.png" />
-          </button>
-          <p>Horarios</p>
-        </div>
-
-        <div class="opcionMenu" id="rutasIcono">
-          <button class="botonIcono" type="button" id="rutasIconoBoton">
-            <img src="https://dosxdos.app.iidos.com/img/rutasWhite.png" />
-          </button>
-          <p>Rutas</p>
-        </div>
-
-        <div class="opcionMenu" id="lineasIcono">
-          <button class="botonIcono" type="button" id="rutasIconoBoton">
-            <img src="https://dosxdos.app.iidos.com/img/task.png" />
-          </button>
-          <p>Líneas</p>
-        </div>
-
-        <div class="opcionMenu" id="historialIcono">
-          <button class="botonIcono" type="button" id="rutasIconoBoton">
-            <img src="https://dosxdos.app.iidos.com/img/historial.png" />
-          </button>
-          <p>Historial</p>
-        </div>
-      </nav>
-
-      <nav id="opcionesUsuario" class="displayOff">
-        <button type="button" id="editarUsuario" class="boton">
-          Editar usuario
-        </button>
-        <button type="button" id="cerrarSesion" class="boton2">
-          Cerrar sesión
-        </button>
-      </nav>
-
-      <div id="mensaje" class="displayOff">
-        <p id="textoMensaje"></p>
-        <img
-          id="imgCerrar"
-          src="https://dosxdos.app.iidos.com/img/cerrar.png"
-        />
-      </div>
-
-      <div id="cajaBuscador">
-        <div id="iconoBuscador">
-          <img src="https://dosxdos.app.iidos.com/img/lupa.png" />
-        </div>
-        <input type="text" id="buscador" />
-      </div>
-
-      <h1 id="titulo" class="displayOn"></h1>
-
-      <p id="actualizacion" class="displayOff">
-        PARA PODER USAR SIN CONEXIÓN A INTERNET EL NUEVO CAMPO "APP NOTAS",
-        DEBES CERRAR LA SESIÓN Y VOLVER A INICIAR LA SESIÓN (Cuando cierres la
-        sesión elimina por favor los datos de navegación de Google Chrome).
-      </p>
     </section>
+  </div>
 
-    <div id="contMapa">
-      <button id="mapa" class="ruta resaltado">MAPA</button>
-    </div>
-
-    <section id="contenido"></section>
-  </body>
+  <script src="https://dosxdos.app.iidos.com/js/index_db.js"></script>
 
   <script>
     const ruta = localStorage.getItem("ruta");
     if (ruta && ruta !== null) {
       console.log(ruta);
     } else {
-      window.location.href =
-        "https://dosxdos.app.iidos.com/rutas_montador.html";
+      window.location.href = "https://dosxdos.app.iidos.com/rutas_montador.html";
     }
     const nombreRuta = localStorage.getItem("nombreRuta");
     console.log(nombreRuta);
@@ -925,7 +481,7 @@
       });
     }
 
-    function leerDatos(database, store) {
+    function leerDatos2(database, store) {
       return new Promise((resolve, reject) => {
         datos = [];
         const request = indexedDB.open(database);
@@ -1135,14 +691,20 @@
       $contenido = document.getElementById("contenido"),
       $loader = document.getElementById("loader"),
       $body = document.getElementById("body"),
-      $mensaje = document.getElementById("mensaje"),
-      $imgCerrar = document.getElementById("imgCerrar"),
-      $textoMensaje = document.getElementById("textoMensaje"),
-      buscador = document.getElementById("buscador"),
       $nombreUsuario = document.getElementById("nombreUsuario"),
       $imagenUsuario = document.getElementById("imagenUsuario"),
       $botonRutas = document.getElementById("rutasIconoBoton");
-    let usuario, montador, rutas;
+    const buscador = document.getElementById("buscador");
+    let usuario, montador, rutas, notificacionesSinAcpetarNumero = 0;;
+
+    // event listener for back button
+    const volverBtn = document.getElementById("volverBtn");
+    if (volverBtn) {
+      volverBtn.addEventListener("click", () => {
+        window.location.href =
+          "https://dosxdos.app.iidos.com/rutas_montador.html";
+      });
+    }
 
     /* LOADER */
 
@@ -1169,26 +731,93 @@
       }, 1000);
     }
 
-    /* MENSAJE */
+    function alerta(mensaje) {
+      // Remove existing alert if present
+      const existingAlert = document.querySelector("#customAlert");
+      if (existingAlert) {
+        existingAlert.remove();
+      }
 
-    function mensajeOn() {
-      $mensaje.classList.remove("displayOff");
-      $mensaje.classList.add("displayOn");
-    }
+      // Create alert container
+      const alertContainer = document.createElement("div");
+      alertContainer.id = "customAlert";
+      alertContainer.className =
+        "fixed left-1/2 transform -translate-x-1/2 z-50 transition-all duration-300 ease-in-out w-[95%] md:w-[75%] lg:w-[65%]";
+      alertContainer.style.top = "-100px";
 
-    function mensajeOff() {
-      $mensaje.classList.remove("displayOn");
-      $mensaje.classList.add("displayOff");
-    }
+      // Create alert content
+      const alertContent = document.createElement("div");
+      alertContent.className = `
+    relative
+    bg-white
+    border-2 border-red-600
+    rounded-lg
+    shadow-lg
+    p-4 md:p-5
+    flex flex-col md:flex-row md:items-center gap-3 md:gap-4
+  `;
 
-    $imgCerrar.addEventListener("click", (e) => {
-      mensajeOff();
-    });
+      // Create close button
+      const closeButton = document.createElement("button");
+      closeButton.className =
+        "absolute -right-3 -top-3 hover:bg-red-400 p-1 bg-red-600 rounded-full p-1.5 transition-colors duration-200";
+      closeButton.innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+  `;
 
-    function alerta(men) {
-      $textoMensaje.innerHTML = men;
-      mensajeOn();
+      // Create main content container for mobile layout
+      const contentContainer = document.createElement("div");
+      contentContainer.className =
+        "flex flex-col md:flex-row items-center gap-3 md:gap-4 flex-1";
+
+      // Create icon with exclamation mark
+      const iconContainer = document.createElement("div");
+      iconContainer.className = "flex-shrink-0 text-red-600";
+      iconContainer.innerHTML = `
+<svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="12" r="10" />
+  <path d="M12 7v6" />
+  <path d="M12 16h0.01" />
+</svg>
+`;
+
+      // Create message text
+      const messageText = document.createElement("p");
+      messageText.className = "text-gray-900 text-base md:text-lg flex-1";
+      messageText.textContent = mensaje;
+
+      // Assemble the content container
+      contentContainer.appendChild(iconContainer);
+      contentContainer.appendChild(messageText);
+
+      // Assemble the alert
+      alertContent.appendChild(closeButton);
+      alertContent.appendChild(contentContainer);
+      alertContainer.appendChild(alertContent);
+      document.body.appendChild(alertContainer);
+
+      // Slide down animation
+      requestAnimationFrame(() => {
+        alertContainer.style.top = "56px";
+      });
+
+      // Add event listeners
+      closeButton.addEventListener("click", () => {
+        hideAlert(alertContainer);
+      });
+
+      // Hide loader if it exists
       loaderOff();
+    }
+
+    function hideAlert(alertContainer) {
+      alertContainer.style.top = "-100px";
+
+      setTimeout(() => {
+        alertContainer.remove();
+      }, 300);
     }
 
     /* CERRAR SESIÓN */
@@ -1242,9 +871,7 @@
           alerta(mensaje);
         }
       } else {
-        mensaje = "No es posible cerrar la sesión sin conexión a internet";
-        $textoMensaje.innerHTML = mensaje;
-        mensajeOn();
+        alerta("No es posible cerrar la sesión sin conexión a internet");
       }
     }
 
@@ -1253,8 +880,7 @@
     function fetchRutas() {
       return new Promise((resolve, reject) => {
         url =
-          "https://dosxdos.app.iidos.com/apirest/rutas.php?montador=" +
-          montador;
+          "https://dosxdos.app.iidos.com/apirest/rutas.php?montador=" + montador;
         fetch(url)
           .then((res) => {
             if (res.ok) {
@@ -1450,32 +1076,464 @@
       });
     }
 
-    function startBuscador() {
-      if (buscador.value) {
-        botones = document.querySelectorAll("#contenido button");
-        const valorBusqueda = buscador.value.toLowerCase();
-        botones.forEach((boton) => {
-          const textoBoton = boton.textContent.toLowerCase();
-          const span = boton.querySelector("span"); // Obtener el elemento <span> dentro del botón
-          if (textoBoton.includes(valorBusqueda)) {
-            boton.classList.replace("displayOff", "displayOn");
-            // Crear una expresión regular para buscar la coincidencia exacta
-            const regex = new RegExp(valorBusqueda, "gi");
-            const textoResaltado = boton.textContent.replace(
-              regex,
-              '<span class="resaltado">$&</span>'
-            );
-            span.innerHTML = textoResaltado;
+    // MENU AND USER INTERACTION SETUP
+    function setupMenuInteractions() {
+      console.log("Setting up menu interactions...");
+
+      // Desktop Menu
+      const userMenuButton = document.getElementById("userMenuButton");
+      const userDropdownMenu = document.getElementById("userDropdownMenu");
+
+      if (userMenuButton && userDropdownMenu) {
+        console.log("Setting up desktop menu button listener");
+        userMenuButton.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          userDropdownMenu.classList.toggle("hidden");
+          const isExpanded = !userDropdownMenu.classList.contains("hidden");
+          userMenuButton.setAttribute("aria-expanded", isExpanded.toString());
+        });
+      } else {
+        console.warn(
+          "Could not find userMenuButton or userDropdownMenu elements"
+        );
+      }
+
+      // Mobile Menu Links
+      const mobileMenuLinks = document.querySelectorAll("#mobileMenu nav a");
+      mobileMenuLinks.forEach((link) => {
+        link.addEventListener("click", (e) => {
+          e.stopPropagation();
+          window.location.href = link.href;
+          const menuButton = document.getElementById("menuButton");
+          if (menuButton) menuButton.click(); // Close menu after clicking
+        });
+      });
+
+      // Mobile Menu Toggle
+      const menuButton = document.getElementById("menuButton");
+      const mobileMenu = document.getElementById("mobileMenu");
+      const hamburgerTop = document.getElementById("hamburgerTop");
+      const hamburgerMiddle = document.getElementById("hamburgerMiddle");
+      const hamburgerBottom = document.getElementById("hamburgerBottom");
+
+      if (menuButton && mobileMenu) {
+        console.log("Setting up mobile menu button listener");
+        menuButton.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const isOpen = !mobileMenu.classList.contains("translate-x-full");
+          mobileMenu.classList.toggle("translate-x-full");
+          document.body.classList.toggle("overflow-hidden");
+
+          if (!isOpen) {
+            // Menu is opening
+            hamburgerTop.classList.remove("bg-gray-900");
+            hamburgerMiddle.classList.remove("bg-gray-900");
+            hamburgerBottom.classList.remove("bg-gray-900");
+            hamburgerTop.classList.add("bg-white");
+            hamburgerMiddle.classList.add("bg-white");
+            hamburgerBottom.classList.add("bg-white");
+
+            hamburgerTop.style.transform = "rotate(45deg) translate(10px, 7px)";
+            hamburgerMiddle.style.opacity = "0";
+            hamburgerBottom.style.transform =
+              "rotate(-45deg) translate(10px, -7px)";
           } else {
-            boton.classList.replace("displayOn", "displayOff");
-            // Restablecer el texto original sin resaltado
-            span.textContent = span.textContent;
+            // Menu is closing
+            hamburgerTop.classList.remove("bg-white");
+            hamburgerMiddle.classList.remove("bg-white");
+            hamburgerBottom.classList.remove("bg-white");
+            hamburgerTop.classList.add("bg-gray-900");
+            hamburgerMiddle.classList.add("bg-gray-900");
+            hamburgerBottom.classList.add("bg-gray-900");
+
+            hamburgerTop.style.transform = "";
+            hamburgerMiddle.style.opacity = "1";
+            hamburgerBottom.style.transform = "";
           }
+        });
+      } else {
+        console.warn("Could not find menuButton or mobileMenu elements");
+      }
+    }
+
+    // USER EDIT AND LOGOUT SETUP
+    function setupUserActions() {
+      // Edit User Buttons
+      const editarUsuarioDesktop = document.getElementById(
+        "editarUsuarioDesktop"
+      );
+      const editarUsuarioMobile = document.getElementById(
+        "editarUsuarioMobile"
+      );
+
+      [editarUsuarioDesktop, editarUsuarioMobile].forEach((button) => {
+        if (button) {
+          button.addEventListener("click", (e) => {
+            if (navigator.onLine) {
+              window.location.href = `https://dosxdos.app.iidos.com/dosxdos.php?modulo=editarUsuario&id=${usuario.id}`;
+            } else {
+              alerta(
+                "No es posible acceder a las opciones de edición de usuario sin conexión a internet"
+              );
+              scrollToTop();
+            }
+          });
+        }
+      });
+
+      // Logout Buttons
+      const cerrarSesionDesktop = document.getElementById(
+        "cerrarSesionDesktop"
+      );
+      const cerrarSesionMobile = document.getElementById("cerrarSesionMobile");
+
+      [cerrarSesionDesktop, cerrarSesionMobile].forEach((button) => {
+        if (button) {
+          button.addEventListener("click", () => {
+            closeSidebar(); // Close the sidebar first
+            cerrarSesion(); // Then proceed with logout
+          });
+        }
+      });
+    }
+
+    // GLOBAL MENU CLOSING LOGIC
+    function setupGlobalMenuClosing() {
+      // Close menus when clicking outside
+      document.addEventListener("click", (e) => {
+        const userMenuButton = document.getElementById("userMenuButton");
+        const userDropdownMenu = document.getElementById("userDropdownMenu");
+        const menuButton = document.getElementById("menuButton");
+        const mobileMenu = document.getElementById("mobileMenu");
+
+        // Close desktop dropdown if clicking outside
+        if (
+          userMenuButton &&
+          userDropdownMenu &&
+          !userMenuButton.contains(e.target) &&
+          !userDropdownMenu.contains(e.target)
+        ) {
+          userDropdownMenu.classList.add("hidden");
+          userMenuButton.setAttribute("aria-expanded", "false");
+        }
+
+        // Close mobile menu if clicking outside
+        if (
+          mobileMenu &&
+          menuButton &&
+          !mobileMenu.contains(e.target) &&
+          !menuButton.contains(e.target) &&
+          !mobileMenu.classList.contains("translate-x-full")
+        ) {
+          menuButton.click();
+        }
+      });
+
+      // Handle escape key
+      document.addEventListener("keydown", (e) => {
+        const userMenuButton = document.getElementById("userMenuButton");
+        const userDropdownMenu = document.getElementById("userDropdownMenu");
+        const menuButton = document.getElementById("menuButton");
+        const mobileMenu = document.getElementById("mobileMenu");
+
+        if (e.key === "Escape") {
+          // Close desktop dropdown
+          if (
+            userDropdownMenu &&
+            !userDropdownMenu.classList.contains("hidden")
+          ) {
+            userDropdownMenu.classList.add("hidden");
+            userMenuButton?.setAttribute("aria-expanded", "false");
+          }
+
+          // Close mobile menu
+          if (
+            mobileMenu &&
+            !mobileMenu.classList.contains("translate-x-full")
+          ) {
+            menuButton.click();
+          }
+        }
+      });
+    }
+
+    function closeSidebar() {
+      const mobileMenu = document.getElementById("mobileMenu");
+      const hamburgerTop = document.getElementById("hamburgerTop");
+      const hamburgerMiddle = document.getElementById("hamburgerMiddle");
+      const hamburgerBottom = document.getElementById("hamburgerBottom");
+
+      if (mobileMenu) {
+        mobileMenu.classList.add("translate-x-full");
+
+        // Reset hamburger icon colors and position
+        if (hamburgerTop && hamburgerMiddle && hamburgerBottom) {
+          // Remove white background
+          hamburgerTop.classList.remove("bg-white");
+          hamburgerMiddle.classList.remove("bg-white");
+          hamburgerBottom.classList.remove("bg-white");
+
+          // Add dark background
+          hamburgerTop.classList.add("bg-gray-900");
+          hamburgerMiddle.classList.add("bg-gray-900");
+          hamburgerBottom.classList.add("bg-gray-900");
+
+          // Reset transforms
+          hamburgerTop.style.transform = "";
+          hamburgerMiddle.style.opacity = "1";
+          hamburgerBottom.style.transform = "";
+        }
+      }
+    }
+
+    // for the search bar initialization
+    function initializeSearch() {
+      const buscador = document.getElementById("buscador");
+      if (buscador) {
+        buscador.addEventListener("input", () => {
+          const searchTerm = buscador.value.toLowerCase().trim();
+
+          document.querySelectorAll("[data-search-text]").forEach((card) => {
+            const searchText = card.getAttribute("data-search-text");
+
+            // Reset any previous highlighting
+            const highlightedElements = card.querySelectorAll(".bg-yellow-200");
+            highlightedElements.forEach((el) => {
+              // Replace the highlighted span with its text content
+              if (el.parentNode) {
+                el.outerHTML = el.textContent;
+              }
+            });
+
+            if (searchText.includes(searchTerm)) {
+              card.style.display = "block";
+
+              // If search term is present, highlight it
+              if (searchTerm) {
+                const textElements = card.querySelectorAll(
+                  "p, h3, span:not(.icon-span)"
+                );
+                textElements.forEach((el) => {
+                  const originalText = el.textContent;
+                  if (originalText.toLowerCase().includes(searchTerm)) {
+                    const regex = new RegExp(
+                      `(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`,
+                      "gi"
+                    );
+                    el.innerHTML = originalText.replace(
+                      regex,
+                      '<span class="bg-yellow-200 font-bold">$1</span>'
+                    );
+                  }
+                });
+              }
+            } else {
+              card.style.display = "none";
+            }
+          });
         });
       }
     }
 
-    /* INICIAR APP ONLINE */
+    // INITIALIZATION FUNCTION
+    function initializeApplication() {
+      // Set up menu interactions
+      setupMenuInteractions();
+      setupUserActions();
+      setupGlobalMenuClosing();
+
+      // Populate user information if available
+      if (usuario && usuario.nombre) {
+        const nombreUsuarioDesktop = document.getElementById(
+          "nombreUsuarioDesktop"
+        );
+        const nombreUsuarioMobile = document.getElementById(
+          "nombreUsuarioMobile"
+        );
+        const imagenUsuarioDesktop = document.getElementById(
+          "imagenUsuarioDesktop"
+        );
+        const imagenUsuarioMobile = document.getElementById(
+          "imagenUsuarioMobile"
+        );
+
+        // Update usernames
+        if (nombreUsuarioDesktop)
+          nombreUsuarioDesktop.textContent = usuario.nombre;
+        if (nombreUsuarioMobile)
+          nombreUsuarioMobile.textContent = usuario.nombre;
+
+        // Update profile images
+        if (usuario.imagen !== "0") {
+          if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
+          if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
+        }
+      }
+    }
+
+    function createLineDetailsModal(objeto) {
+      // Modal backdrop - Fullscreen, centered
+      const modalBackdrop = document.createElement('div');
+      modalBackdrop.className = 'fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4';
+
+      // MODAL CONTAINER (Limited Height, Forced to Never Overflow)
+      const modalContainer = document.createElement('div');
+      modalContainer.className = 'bg-white rounded-xl shadow-xl max-w-xl w-full mx-4 max-h-[85vh] flex flex-col overflow-hidden';
+
+      // MODAL HEADER 
+      const modalHeader = document.createElement('div');
+      modalHeader.className = 'text-white p-4 rounded-t-xl flex justify-between items-center sticky top-0 z-10';
+      modalHeader.style.backgroundImage =
+        "url('https://dosxdos.app.iidos.com/img/texture-red.svg')";
+      modalHeader.style.backgroundSize = "contain";
+      modalHeader.style.backgroundPosition = "center";
+
+      const modalTitle = document.createElement('h2');
+      modalTitle.className = 'text-xl font-bold pr-4';
+      modalTitle.textContent = objeto.NombrePuntoVenta;
+
+      const closeButton = document.createElement('button');
+      closeButton.className = 'text-white hover:text-gray-200';
+      closeButton.innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+  `;
+
+      modalHeader.appendChild(modalTitle);
+      modalHeader.appendChild(closeButton);
+
+      // MODAL BODY 
+      const modalBody = document.createElement('div');
+      modalBody.className = 'p-4 space-y-4 overflow-y-auto flex-grow';
+      modalBody.style.maxHeight = 'calc(85vh - 120px)';
+
+      // Sections for information
+      const infoSections = [
+        { title: 'Información General', fields: ['LineaActividad', 'NombreCliente', 'TipoTrabajo', 'Estado'] },
+        { title: 'Detalles de la Orden', fields: ['Navision_OT', 'OT', 'DescripcionOT', 'FechaActuacion'] },
+        { title: 'Ubicación', fields: ['DireccionPuntoVenta', 'Sector', 'Zona'] }
+      ];
+
+      infoSections.forEach(section => {
+        const sectionContainer = document.createElement('div');
+        sectionContainer.className = 'bg-gray-100 rounded-lg p-4';
+
+        const sectionTitle = document.createElement('h3');
+        sectionTitle.className = 'text-lg font-semibold text-gray-800 mb-3';
+        sectionTitle.textContent = section.title;
+        sectionContainer.appendChild(sectionTitle);
+
+        section.fields.forEach(field => {
+          if (objeto[field] && objeto[field] !== 'null') {
+            const infoRow = document.createElement('div');
+            infoRow.className = 'flex justify-between gap-4 py-1.5 border-b border-gray-200 last:border-b-0';
+
+            const label = document.createElement('span');
+            label.className = 'text-gray-600 font-medium text-sm';
+            label.textContent = field.replace(/([A-Z])/g, ' $1');
+
+            const value = document.createElement('span');
+            value.className = 'text-gray-900 text-sm text-right whitespace-normal break-words';
+            value.style.maxWidth = '70%';
+
+            value.textContent = objeto[field];
+
+            infoRow.appendChild(label);
+            infoRow.appendChild(value);
+            sectionContainer.appendChild(infoRow);
+          }
+        });
+
+        modalBody.appendChild(sectionContainer);
+      });
+
+      // OBSERVACIONES SECTION 
+      if (objeto.Observaciones || objeto.ObservacionesTecnico) {
+        const observationsContainer = document.createElement('div');
+        observationsContainer.className = 'bg-gray-100 rounded-lg p-4';
+
+        const obsTitle = document.createElement('h3');
+        obsTitle.className = 'text-lg font-semibold text-gray-800 mb-3';
+        obsTitle.textContent = "Observaciones";
+        observationsContainer.appendChild(obsTitle);
+
+        if (objeto.Observaciones) {
+          const obsValue = document.createElement('p');
+          obsValue.className = 'text-gray-900 text-sm whitespace-normal break-words';
+          obsValue.textContent = objeto.Observaciones;
+          observationsContainer.appendChild(obsValue);
+        }
+
+        if (objeto.ObservacionesTecnico) {
+          const obsTechValue = document.createElement('p');
+          obsTechValue.className = 'text-gray-900 text-sm whitespace-normal break-words mt-2';
+          obsTechValue.textContent = `Técnico: ${objeto.ObservacionesTecnico}`;
+          observationsContainer.appendChild(obsTechValue);
+        }
+
+        modalBody.appendChild(observationsContainer);
+      }
+
+      // MODAL FOOTER
+      const modalFooter = document.createElement('div');
+      modalFooter.className = 'bg-gray-100 p-4 rounded-b-xl flex justify-between items-center gap-4 sticky bottom-0';
+
+      const cancelButton = document.createElement('button');
+      cancelButton.className = 'bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 w-1/2 rounded-lg flex-grow';
+      cancelButton.textContent = 'Cerrar';
+
+      const reportarButton = document.createElement('button');
+      reportarButton.className = 'bg-red-600 hover:bg-red-700 text-white font-bold py-2 w-1/2 rounded-lg flex-grow';
+      reportarButton.textContent = 'Reportar';
+
+      // Restore scrolling when closing the modal
+      closeButton.addEventListener('click', () => {
+        document.body.style.overflow = ''; // Restore scrolling
+        document.body.removeChild(modalBackdrop);
+      });
+
+      cancelButton.addEventListener('click', () => {
+        document.body.style.overflow = ''; // Restore scrolling
+        document.body.removeChild(modalBackdrop);
+      });
+
+      reportarButton.addEventListener('click', () => {
+        localStorage.setItem("renderizarHistorial", false);
+        localStorage.setItem("linea", objeto.Linea);
+        localStorage.setItem("lineaActividad", objeto.LineaActividad);
+        localStorage.setItem("ot", objeto.OT);
+        localStorage.setItem("cliente", objeto.Cliente);
+        localStorage.setItem("nombreCliente", objeto.NombreCliente);
+
+        window.location.href = "https://dosxdos.app.iidos.com/linea_montador.html";
+      });
+
+      modalFooter.appendChild(cancelButton);
+      modalFooter.appendChild(reportarButton);
+
+      // Assemble Modal
+      modalContainer.appendChild(modalHeader);
+      modalContainer.appendChild(modalBody);
+      modalContainer.appendChild(modalFooter);
+      modalBackdrop.appendChild(modalContainer);
+      document.body.appendChild(modalBackdrop);
+
+      // Close Modal on Click Outside
+      modalBackdrop.addEventListener('click', (e) => {
+        if (e.target === modalBackdrop) {
+          document.body.style.overflow = ''; // Restore scrolling
+          document.body.removeChild(modalBackdrop);
+        }
+      });
+
+      //  Prevent Body Scroll When Modal is Open
+      document.body.style.overflow = 'hidden'; // Lock scroll only when modal is open
+    }
+
+
 
     async function appOnline() {
       try {
@@ -1494,120 +1552,651 @@
               usuario.clase;
           }
           montador = usuario.cod;
-          $nombreUsuario.innerHTML = usuario.nombre;
-          if (usuario.imagen != "0") {
-            $imagenUsuario.src = usuario.imagen;
-          }
+
+          // Initialize the new UI components
+          initializeApplication();
+
           sinc = await sincronizarDb2();
           sinc
             ? console.log("Base de datos sincronizada")
             : console.error("Error al sincronizar la base de datos");
+
           rutas = await leerDatos("dosxdos", "rutas");
           rutas = rutas.map((objeto) => ({
             cod: objeto["No."],
             nombre: objeto["Descripcion"],
           }));
+
           const TotalLineas = await leerDatos("dosxdos", "lineas");
           if (TotalLineas) {
-            //console.log(TotalLineas);
             const lineas = TotalLineas.filter((objeto) => {
               return objeto.Proyecto == ruta;
             });
             console.log(lineas);
-            const fragmento = document.createDocumentFragment();
-            lineas.forEach((objeto, index) => {
-              const button = document.createElement("button");
-              if (objeto.Estado == "Pendiente") {
-                button.className = "ruta displayOn";
+
+            // Clear the content area
+            $contenido.innerHTML = "";
+
+            // Extract unique sectors from the lines
+            const sectors = [];
+            lineas.forEach(line => {
+              // Extract main sector (first word before space)
+              const sectorText = line.Sector || '';
+              const sectorMain = sectorText.split(' ')[0];
+              if (sectorMain && !sectors.includes(sectorMain)) {
+                sectors.push(sectorMain);
               }
-              if (objeto.Estado == "Realizado") {
-                button.className = "ruta2 displayOn";
-              }
-              if (objeto.Estado == "" || objeto.Estado == null) {
-                button.className = "ruta displayOn";
-              }
-              button.type = "button";
-              button.id = `${objeto.Linea}`;
-              const observaciones = objeto.Observaciones;
-              const LineaActividad = objeto.LineaActividad;
-              const ot = objeto.OT;
-              const cliente = objeto.Cliente;
-              const nombreCliente = objeto.NombreCliente;
-              texto = "";
-              //NAVISION
-              const otNavision = objeto.Navision_OT;
-              if (observaciones) {
-                texto = `${objeto.Sector} _ ${objeto.Zona} _ ${LineaActividad} _ ${objeto.NombrePuntoVenta} _ ${objeto.NombreCliente} _ ${objeto.TipoTrabajo} _ ${observaciones} _ NAVISION: ${otNavision} _ CRM: ${ot}`;
-              } else {
-                texto = `${objeto.Sector} _ ${objeto.Zona} _ ${LineaActividad} _ ${objeto.NombrePuntoVenta} _ ${objeto.NombreCliente} _ ${objeto.TipoTrabajo} _ NAVISION: ${otNavision} _ CRM: ${ot}`;
-              }
-              span = document.createElement("span");
-              span.textContent = texto;
-              button.appendChild(span);
-              button.setAttribute("data-LineaActividad", LineaActividad);
-              button.addEventListener("click", () => {
-                const lineaStorage = button.id;
-                const LineaActividadStorage = LineaActividad;
-                const otStorage = ot;
-                const clienteStorage = cliente;
-                const nombreClienteStorage = nombreCliente;
-                localStorage.setItem("renderizarHistorial", false);
-                localStorage.setItem("linea", lineaStorage);
-                localStorage.setItem("lineaActividad", LineaActividadStorage);
-                localStorage.setItem("ot", otStorage);
-                localStorage.setItem("cliente", clienteStorage);
-                localStorage.setItem("nombreCliente", nombreClienteStorage);
-                window.location.href =
-                  "https://dosxdos.app.iidos.com/linea_montador.html";
+            });
+
+            if (sectors.length > 0) {
+              // Create the tabs container
+              const tabsContainer = document.createElement('div');
+              tabsContainer.className = 'mb-6 overflow-hidden';
+
+              // Create the tabs header
+              const tabsHeader = document.createElement('div');
+              tabsHeader.className = 'flex overflow-x-auto border-b border-gray-200';
+
+              // Create tab content container
+              const tabsContent = document.createElement('div');
+              tabsContent.className = 'my-4';
+
+              // Add TODOS tab first
+              const todosButton = document.createElement('button');
+              todosButton.className = 'p-2 text-gray-700 font-medium text-sm uppercase whitespace-nowrap transition-all duration-200 border-b-2 border-red-600 text-red-600';
+              todosButton.textContent = "TODOS";
+              todosButton.dataset.sector = "todos";
+
+              // Add count badge to TODOS tab
+              const todosCountBadge = document.createElement('span');
+              todosCountBadge.className = 'ml-2 bg-red-700 text-white text-xs rounded-full h-5 inline-flex items-center justify-center px-1.5';
+              todosCountBadge.textContent = lineas.length;
+              todosButton.appendChild(todosCountBadge);
+
+              // Create content div for TODOS tab
+              const todosContentDiv = document.createElement('div');
+              todosContentDiv.className = 'sector-content';
+              todosContentDiv.dataset.sector = "todos";
+              todosContentDiv.style.display = 'block'; // TODOS tab is active by default
+
+              // Create a grid for the TODOS tab
+              const todosGrid = document.createElement('div');
+              todosGrid.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 place-items-center';
+
+              // Create all cards for TODOS tab (all items)
+              lineas.forEach((objeto) => {
+                // Create card for each line
+                const card = document.createElement("div");
+                card.className = "relative rounded-xl shadow-lg overflow-hidden transition-all duration-300 border border-gray-200 w-full h-full";
+                card.style.backgroundColor = "#FFFFFF";
+
+                // Header with SVG Red Texture Background
+                const header = document.createElement("div");
+                header.className = "relative flex flex-col px-5 py-5 text-center text-white";
+                header.style.backgroundImage = "url('https://dosxdos.app.iidos.com/img/texture-red.svg')";
+                header.style.backgroundSize = "contain";
+                header.style.backgroundPosition = "center";
+
+                // Title
+                const titleContainer = document.createElement("div");
+                titleContainer.className = "flex items-center justify-center mb-1 my-2 lg:my-0";
+
+                const title = document.createElement("h3");
+                title.className = "text-white font-bold text-lg truncate max-w-full";
+                title.textContent = `${objeto.NombrePuntoVenta}`;
+
+                titleContainer.appendChild(title);
+                header.appendChild(titleContainer);
+
+                const locationIcon = document.createElement("div");
+                locationIcon.className = "mr-2";
+                locationIcon.innerHTML = `
+<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
+  <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+</svg>
+`;
+
+                // Subtitle
+                const subtitle = document.createElement("div");
+                subtitle.className = "text-white/95 text-xs font-medium";
+                subtitle.appendChild(locationIcon);
+                subtitle.textContent = `${objeto.Sector} - ${objeto.Zona}`;
+                header.appendChild(subtitle);
+
+                // "Pendiente" Badge
+                const statusBadge = document.createElement("div");
+                statusBadge.className = "absolute top-2 right-2 px-3 py-1 text-xs font-bold text-white rounded-md shadow-md";
+                statusBadge.textContent = objeto.Estado;
+                statusBadge.style.backgroundColor = "#A22323";
+                header.appendChild(statusBadge);
+
+                // Card Body
+                const body = document.createElement("div");
+                body.className = "text-gray-900 p-4 space-y-2 mb-12";
+
+                // Information Rows
+                const createInfoRow = (label, value) => {
+                  const row = document.createElement("div");
+                  row.className = "flex justify-between gap-4 items-center py-2 px-4 bg-gray-100 border border-gray-200 rounded-lg";
+
+                  const labelCol = document.createElement("div");
+                  labelCol.className = "text-gray-700 text-xs uppercase font-semibold";
+                  labelCol.textContent = label;
+
+                  const valueCol = document.createElement("div");
+                  valueCol.className = "text-gray-900 font-medium text-sm text-right";
+                  valueCol.textContent = value || "-";
+
+                  row.appendChild(labelCol);
+                  row.appendChild(valueCol);
+                  return row;
+                };
+
+                // Add Key Data
+                body.appendChild(createInfoRow("LÍNEA", objeto.LineaActividad));
+                body.appendChild(createInfoRow("CLIENTE", objeto.NombreCliente));
+                body.appendChild(createInfoRow("TIPO", objeto.TipoTrabajo));
+                body.appendChild(createInfoRow("OBSERVACIONES", objeto.Observaciones));
+                body.appendChild(createInfoRow("DIRECCIÓN", objeto.DireccionPuntoVenta));
+                body.appendChild(createInfoRow("OT NAVISION", objeto.Navision_OT));
+                body.appendChild(createInfoRow("OT CRM", objeto.OT));
+
+                // Footer with button
+                const footer = document.createElement("div");
+                footer.className = "flex justify-center bg-white rounded-b-lg px-4 pb-3";
+
+                // "Reportar" Button
+                const actionBtn = document.createElement("button");
+                actionBtn.className = "mx-6 absolute bottom-4 bg-red-600 hover:bg-red-700 text-white text-sm font-bold py-2 px-24 transition-all duration-300 rounded-lg shadow-sm mx-auto flex justify-center items-center";
+                actionBtn.innerHTML = "<span class='ml-1'>Más Detalles</span>";
+
+                actionBtn.onclick = (e) => {
+                  e.stopPropagation();
+
+                  localStorage.setItem("renderizarHistorial", false);
+                  localStorage.setItem("linea", objeto.Linea);
+                  localStorage.setItem("lineaActividad", objeto.LineaActividad);
+                  localStorage.setItem("ot", objeto.OT);
+                  localStorage.setItem("cliente", objeto.Cliente);
+                  localStorage.setItem("nombreCliente", objeto.NombreCliente);
+
+                  createLineDetailsModal(objeto);
+                };
+
+                footer.appendChild(actionBtn);
+
+                // Assemble Card
+                card.appendChild(header);
+                card.appendChild(body);
+                card.appendChild(footer);
+
+                // Full Card Search Data
+                const fullText = `${objeto.Sector} ${objeto.Zona} ${objeto.LineaActividad} ${objeto.NombrePuntoVenta} ${objeto.NombreCliente} ${objeto.TipoTrabajo} ${objeto.Observaciones || ""} DIRECCIÓN: ${objeto.DireccionPuntoVenta || ""} NAVISION: ${objeto.Navision_OT} CRM: ${objeto.OT}`;
+                card.setAttribute("data-search-text", fullText.toLowerCase());
+
+                // Append card to TODOS grid
+                todosGrid.appendChild(card);
               });
-              fragmento.appendChild(button);
-            });
-            $contenido.appendChild(fragmento);
-            startBuscador();
-            const editarUsuario = document.getElementById("editarUsuario");
-            editarUsuario.addEventListener("click", (e) => {
-              if (navigator.onLine) {
-                window.location.href =
-                  "https://dosxdos.app.iidos.com/dosxdos.php?modulo=editarUsuario&id=" +
-                  usuario.id;
-              } else {
-                mensaje =
-                  "No es posible acceder a las opciones de edición de usuario sin conexión a internet";
-                alerta(mensaje);
-                scrollToTop();
+
+              todosContentDiv.appendChild(todosGrid);
+
+              // Add TODOS tab to header first
+              tabsHeader.appendChild(todosButton);
+
+              // For each sector, create a tab and content section
+              sectors.forEach((sector, index) => {
+                // Create tab button (not active by default)
+                const tabButton = document.createElement('button');
+                tabButton.className = 'p-4 text-gray-700 font-medium text-sm uppercase whitespace-nowrap transition-all duration-200 border-b-2 border-transparent hover:text-red-600 hover:border-red-600/50';
+                tabButton.textContent = sector;
+                tabButton.dataset.sector = sector;
+
+                // Create content div for this sector
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'sector-content';
+                contentDiv.dataset.sector = sector;
+                contentDiv.style.display = 'none'; // Hidden by default (TODOS is active)
+
+                // Filter lines for this sector and add them to the content
+                const sectorLines = lineas.filter(line => {
+                  const lineSector = line.Sector?.split(' ')[0] || '';
+                  return lineSector === sector;
+                });
+
+                // Create a grid for the cards
+                const sectorGrid = document.createElement('div');
+                sectorGrid.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 place-items-center';
+
+                // Create cards for each line in this sector
+                sectorLines.forEach((objeto) => {
+                  // Create a card container for each item
+                  const card = document.createElement("div");
+                  card.className = "relative rounded-xl shadow-lg overflow-hidden transition-all duration-300 border border-gray-200 w-full h-full";
+                  card.style.backgroundColor = "#FFFFFF";
+
+                  // Header with SVG Red Texture Background
+                  const header = document.createElement("div");
+                  header.className = "relative flex flex-col px-5 py-5 text-center text-white";
+
+                  header.style.backgroundImage = "url('https://dosxdos.app.iidos.com/img/texture-red.svg')";
+                  header.style.backgroundSize = "contain";
+                  header.style.backgroundPosition = "center";
+
+                  // Title
+                  const titleContainer = document.createElement("div");
+                  titleContainer.className = "flex items-center justify-center mb-1 my-2 lg:my-0";
+
+                  const title = document.createElement("h3");
+                  title.className = "text-white font-bold text-lg truncate max-w-full";
+                  title.textContent = `${objeto.NombrePuntoVenta}`;
+
+                  titleContainer.appendChild(title);
+                  header.appendChild(titleContainer);
+
+                  const locationIcon = document.createElement("div");
+                  locationIcon.className = "mr-2";
+                  locationIcon.innerHTML = `
+<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
+  <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+</svg>
+`;
+
+                  // Subtitle
+                  const subtitle = document.createElement("div");
+                  subtitle.className = "text-white/95 text-xs font-medium";
+                  subtitle.appendChild(locationIcon);
+                  subtitle.textContent = `${objeto.Sector} - ${objeto.Zona}`;
+                  header.appendChild(subtitle);
+
+                  // "Pendiente" Badge
+                  const statusBadge = document.createElement("div");
+                  statusBadge.className = "absolute top-2 right-2 px-3 py-1 text-xs font-bold text-white rounded-md shadow-md";
+                  statusBadge.textContent = objeto.Estado;
+                  statusBadge.style.backgroundColor = "#A22323";
+                  header.appendChild(statusBadge);
+
+                  // Card Body
+                  const body = document.createElement("div");
+                  body.className = "text-gray-900 p-4 space-y-2 mb-12";
+
+                  // Information Rows
+                  const createInfoRow = (label, value) => {
+                    const row = document.createElement("div");
+                    row.className = "flex justify-between gap-4 items-center py-2 px-4 bg-gray-100 border border-gray-200 rounded-lg";
+
+                    const labelCol = document.createElement("div");
+                    labelCol.className = "text-gray-700 text-xs uppercase font-semibold";
+                    labelCol.textContent = label;
+
+                    const valueCol = document.createElement("div");
+                    valueCol.className = "text-gray-900 font-medium text-sm text-right";
+                    valueCol.textContent = value || "-";
+
+                    row.appendChild(labelCol);
+                    row.appendChild(valueCol);
+                    return row;
+                  };
+
+                  // Add Key Data
+                  body.appendChild(createInfoRow("LÍNEA", objeto.LineaActividad));
+                  body.appendChild(createInfoRow("CLIENTE", objeto.NombreCliente));
+                  body.appendChild(createInfoRow("TIPO", objeto.TipoTrabajo));
+                  body.appendChild(createInfoRow("OBSERVACIONES", objeto.Observaciones));
+                  body.appendChild(createInfoRow("DIRECCIÓN", objeto.DireccionPuntoVenta));
+                  body.appendChild(createInfoRow("OT NAVISION", objeto.Navision_OT));
+                  body.appendChild(createInfoRow("OT CRM", objeto.OT));
+
+                  // Footer - now more subtle with centered button
+                  const footer = document.createElement("div");
+                  footer.className = "flex justify-center bg-white rounded-b-lg px-4 pb-3";
+
+                  // "Reportar" Button - smaller and more subtle
+                  const actionBtn = document.createElement("button");
+                  actionBtn.className = "mx-6 absolute bottom-4 bg-red-600 hover:bg-red-700 text-white text-sm font-bold py-2 px-24 transition-all duration-300 rounded-lg shadow-sm mx-auto flex justify-center items-center";
+                  actionBtn.innerHTML = "<span class='ml-1'>Más Detalles</span>";
+
+                  actionBtn.onclick = (e) => {
+                    e.stopPropagation();
+
+                    localStorage.setItem("renderizarHistorial", false);
+                    localStorage.setItem("linea", objeto.Linea);
+                    localStorage.setItem("lineaActividad", objeto.LineaActividad);
+                    localStorage.setItem("ot", objeto.OT);
+                    localStorage.setItem("cliente", objeto.Cliente);
+                    localStorage.setItem("nombreCliente", objeto.NombreCliente);
+
+                    createLineDetailsModal(objeto);
+                  };
+
+                  footer.appendChild(actionBtn);
+
+                  // Assemble Card
+                  card.appendChild(header);
+                  card.appendChild(body);
+                  card.appendChild(footer);
+
+                  // Full Card Search Data
+                  const fullText = `${objeto.Sector} ${objeto.Zona} ${objeto.LineaActividad} ${objeto.NombrePuntoVenta} ${objeto.NombreCliente} ${objeto.TipoTrabajo} ${objeto.Observaciones || ""} DIRECCIÓN: ${objeto.DireccionPuntoVenta || ""} NAVISION: ${objeto.Navision_OT} CRM: ${objeto.OT}`;
+                  card.setAttribute("data-search-text", fullText.toLowerCase());
+
+                  // Append to Grid Container
+                  sectorGrid.appendChild(card);
+                });
+
+                contentDiv.appendChild(sectorGrid);
+
+                // Add count badge to tab
+                const countBadge = document.createElement('span');
+                countBadge.className = 'ml-2 bg-red-700 text-white text-xs rounded-full h-5  inline-flex items-center justify-center px-1.5';
+                countBadge.textContent = sectorLines.length;
+                tabButton.appendChild(countBadge);
+
+                // Add click event to switch tabs
+                tabButton.addEventListener('click', () => {
+                  // Remove active class and red border from all tabs
+                  const allTabs = tabsHeader.querySelectorAll('button');
+                  allTabs.forEach(tab => {
+                    tab.classList.remove('border-red-600', 'text-red-600');
+                    tab.classList.add('border-transparent');
+                    tab.classList.remove('bg-red-600', 'text-white');
+                    tab.classList.add('text-gray-700', 'hover:text-red-600', 'hover:border-red-600/50');
+                  });
+
+                  // Add red border and text to clicked tab
+                  tabButton.classList.add('border-red-600', 'text-red-600');
+                  tabButton.classList.remove('border-transparent');
+                  tabButton.classList.remove('bg-red-600', 'text-white', 'hover:text-red-600', 'hover:border-red-600/50');
+
+                  // Hide all content sections
+                  const allContent = tabsContent.querySelectorAll('.sector-content');
+                  allContent.forEach(content => {
+                    content.style.display = 'none';
+                  });
+
+                  // Show the selected content section
+                  const activeContent = tabsContent.querySelector(`.sector-content[data-sector="${sector}"]`);
+                  if (activeContent) {
+                    activeContent.style.display = 'block';
+                  }
+                });
+
+                // Add to containers
+                tabsHeader.appendChild(tabButton);
+                tabsContent.appendChild(contentDiv);
+              });
+
+              // Add TODOS tab click handler
+              todosButton.addEventListener('click', () => {
+                // Remove active class from all tabs
+                const allTabs = tabsHeader.querySelectorAll('button');
+                allTabs.forEach(tab => {
+                  tab.classList.remove('border-red-600', 'text-red-600');
+                  tab.classList.add('border-transparent');
+                  tab.classList.add('text-gray-700', 'hover:text-red-600', 'hover:border-red-600/50');
+                });
+
+                // Make TODOS tab active
+                todosButton.classList.add('border-red-600', 'text-red-600');
+                todosButton.classList.remove('border-transparent', 'hover:text-red-600', 'hover:border-red-600/50');
+
+                // Hide all content sections
+                const allContent = tabsContent.querySelectorAll('.sector-content');
+                allContent.forEach(content => {
+                  content.style.display = 'none';
+                });
+
+                // Show TODOS content
+                todosContentDiv.style.display = 'block';
+              });
+
+              // Add TODOS content to the tab contents
+              tabsContent.appendChild(todosContentDiv);
+
+              // Add tabs and content to the main container
+              tabsContainer.appendChild(tabsHeader);
+              tabsContainer.appendChild(tabsContent);
+
+              // Add to main content area
+              $contenido.appendChild(tabsContainer);
+            } else {
+              // Fallback to regular grid if no sectors found
+              const gridContainer = document.createElement("div");
+              gridContainer.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 place-items-center";
+
+              // Create cards for regular view if no sectors
+              lineas.forEach((objeto) => {
+                // Create a card container for each item
+                const card = document.createElement("div");
+                card.className = "relative rounded-xl shadow-lg overflow-hidden transition-all duration-300 border border-gray-200 w-full h-full";
+                card.style.backgroundColor = "#FFFFFF";
+
+                // Header with SVG Red Texture Background
+                const header = document.createElement("div");
+                header.className = "relative flex flex-col px-5 py-5 text-center text-white";
+
+                header.style.backgroundImage = "url('https://dosxdos.app.iidos.com/img/texture-red.svg')";
+                header.style.backgroundSize = "contain";
+                header.style.backgroundPosition = "center";
+
+                // Title
+                const titleContainer = document.createElement("div");
+                titleContainer.className = "flex items-center justify-center mb-1 my-2 lg:my-0";
+
+                const title = document.createElement("h3");
+                title.className = "text-white font-bold text-lg truncate max-w-full";
+                title.textContent = `${objeto.NombrePuntoVenta}`;
+
+                titleContainer.appendChild(title);
+                header.appendChild(titleContainer);
+
+                const locationIcon = document.createElement("div");
+                locationIcon.className = "mr-2";
+                locationIcon.innerHTML = `
+<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
+  <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+</svg>
+`;
+
+                // Subtitle
+                const subtitle = document.createElement("div");
+                subtitle.className = "text-white/95 text-xs font-medium";
+                subtitle.appendChild(locationIcon);
+                subtitle.textContent = `${objeto.Sector} - ${objeto.Zona}`;
+                header.appendChild(subtitle);
+
+                // "Pendiente" Badge
+                const statusBadge = document.createElement("div");
+                statusBadge.className = "absolute top-2 right-2 px-3 py-1 text-xs font-bold text-white rounded-md shadow-md";
+                statusBadge.textContent = objeto.Estado;
+                statusBadge.style.backgroundColor = "#A22323";
+                header.appendChild(statusBadge);
+
+                // Card Body
+                const body = document.createElement("div");
+                body.className = "text-gray-900 p-4 space-y-2 mb-12";
+
+                // Information Rows
+                const createInfoRow = (label, value) => {
+                  const row = document.createElement("div");
+                  row.className = "flex justify-between gap-4 items-center py-2 px-4 bg-gray-100 border border-gray-200 rounded-lg";
+
+                  const labelCol = document.createElement("div");
+                  labelCol.className = "text-gray-700 text-xs uppercase font-semibold";
+                  labelCol.textContent = label;
+
+                  const valueCol = document.createElement("div");
+                  valueCol.className = "text-gray-900 font-medium text-sm text-right";
+                  valueCol.textContent = value || "-";
+
+                  row.appendChild(labelCol);
+                  row.appendChild(valueCol);
+                  return row;
+                };
+
+                // Add Key Data
+                body.appendChild(createInfoRow("LÍNEA", objeto.LineaActividad));
+                body.appendChild(createInfoRow("CLIENTE", objeto.NombreCliente));
+                body.appendChild(createInfoRow("TIPO", objeto.TipoTrabajo));
+                body.appendChild(createInfoRow("OBSERVACIONES", objeto.Observaciones));
+                body.appendChild(createInfoRow("DIRECCIÓN", objeto.DireccionPuntoVenta));
+                body.appendChild(createInfoRow("OT NAVISION", objeto.Navision_OT));
+                body.appendChild(createInfoRow("OT CRM", objeto.OT));
+
+                // Footer - now more subtle with centered button
+                const footer = document.createElement("div");
+                footer.className = "flex justify-center bg-white rounded-b-lg px-4 pb-3";
+
+                // "Reportar" Button - smaller and more subtle
+                const actionBtn = document.createElement("button");
+                actionBtn.className = "mx-6 absolute bottom-4 bg-red-600 hover:bg-red-700 text-white text-sm font-bold py-2 px-24 transition-all duration-300 rounded-lg shadow-sm mx-auto flex justify-center items-center";
+                actionBtn.innerHTML = "<span class='ml-1'>Más Detalles</span>";
+
+                actionBtn.onclick = (e) => {
+                  e.stopPropagation();
+
+                  localStorage.setItem("renderizarHistorial", false);
+                  localStorage.setItem("linea", objeto.Linea);
+                  localStorage.setItem("lineaActividad", objeto.LineaActividad);
+                  localStorage.setItem("ot", objeto.OT);
+                  localStorage.setItem("cliente", objeto.Cliente);
+                  localStorage.setItem("nombreCliente", objeto.NombreCliente);
+
+                  createLineDetailsModal(objeto);
+                };
+
+                footer.appendChild(actionBtn);
+
+                // Assemble Card
+                card.appendChild(header);
+                card.appendChild(body);
+                card.appendChild(footer);
+
+                // Full Card Search Data
+                const fullText = `${objeto.Sector} ${objeto.Zona} ${objeto.LineaActividad} ${objeto.NombrePuntoVenta} ${objeto.NombreCliente} ${objeto.TipoTrabajo} ${objeto.Observaciones || ""} DIRECCIÓN: ${objeto.DireccionPuntoVenta || ""} NAVISION: ${objeto.Navision_OT} CRM: ${objeto.OT}`;
+                card.setAttribute("data-search-text", fullText.toLowerCase());
+
+                // Append to Grid Container
+                gridContainer.appendChild(card);
+              });
+
+              $contenido.appendChild(gridContainer);
+            }
+
+            // Update search to work across all tabs
+            buscador.addEventListener("input", () => {
+              const searchTerm = buscador.value.toLowerCase().trim();
+
+              // Get all tabs and cards
+              const sectorTabs = document.querySelectorAll('button[data-sector]');
+              const allCards = document.querySelectorAll("[data-search-text]");
+
+              // Remove any "no results" message
+              const noResults = document.getElementById('no-search-results');
+              if (noResults) noResults.remove();
+
+              if (searchTerm === '') {
+                // If search is cleared, reset view
+
+                // Make all cards visible first
+                allCards.forEach(card => {
+                  card.style.display = "block";
+                });
+
+                // Find active tab
+                const activeTab = document.querySelector('button[data-sector].border-red-600');
+
+                if (activeTab) {
+                  const activeSector = activeTab.dataset.sector;
+
+                  // Show only content for active tab
+                  document.querySelectorAll('.sector-content').forEach(content => {
+                    if (content.dataset.sector === activeSector) {
+                      content.style.display = 'block';
+                    } else {
+                      content.style.display = 'none';
+                    }
+                  });
+                }
+
+                return;
+              }
+
+              // When searching, always go to TODOS tab for complete results
+              if (sectors.length > 0) {
+                // Activate TODOS tab
+                const todosTab = document.querySelector('button[data-sector="todos"]');
+                if (todosTab) {
+                  // Deactivate all tabs
+                  sectorTabs.forEach(tab => {
+                    tab.classList.remove('border-red-600', 'text-red-600');
+                    tab.classList.add('border-transparent', 'text-gray-700');
+                  });
+
+                  // Activate TODOS tab
+                  todosTab.classList.add('border-red-600', 'text-red-600');
+                  todosTab.classList.remove('border-transparent');
+
+                  // Show TODOS content
+                  document.querySelectorAll('.sector-content').forEach(content => {
+                    if (content.dataset.sector === 'todos') {
+                      content.style.display = 'block';
+                    } else {
+                      content.style.display = 'none';
+                    }
+                  });
+                }
+              }
+
+              // Filter cards based on search
+              let hasResults = false;
+              allCards.forEach(card => {
+                const searchText = card.getAttribute("data-search-text");
+
+                if (searchText.includes(searchTerm)) {
+                  card.style.display = "block";
+                  hasResults = true;
+                } else {
+                  card.style.display = "none";
+                }
+              });
+
+              // Show no results message if needed
+              if (!hasResults) {
+                const noResultsMsg = document.createElement('div');
+                noResultsMsg.id = 'no-search-results';
+                noResultsMsg.className = 'p-8 bg-gray-100 rounded-lg text-center text-gray-500 my-4';
+                noResultsMsg.innerHTML = `No se encontraron resultados para <strong>"${searchTerm}"</strong>`;
+
+                const todosContent = document.querySelector('.sector-content[data-sector="todos"]');
+                if (todosContent) {
+                  todosContent.insertBefore(noResultsMsg, todosContent.firstChild);
+                } else {
+                  $contenido.insertBefore(noResultsMsg, $contenido.firstChild);
+                }
               }
             });
+
             const peticionesCierre = await procesarPeticiones2();
             setInterval(sincronizarDb, 300000);
             loaderOff();
           } else {
             alerta("Error al leer el almacén de líneas");
-            const editarUsuario = document.getElementById("editarUsuario");
-            editarUsuario.addEventListener("click", (e) => {
-              if (navigator.onLine) {
-                window.location.href =
-                  "https://dosxdos.app.iidos.com/dosxdos.php?modulo=editarUsuario&id=" +
-                  usuario.id;
-              } else {
-                mensaje =
-                  "No es posible acceder a las opciones de edición de usuario sin conexión a internet";
-                alerta(mensaje);
-                scrollToTop();
-              }
-            });
-            const peticionesCierre = await procesarPeticiones2();
+            initializeApplication(); // Initialize new menu functionality
+            initializeSearch();
             loaderOff();
           }
-          //await notificar();
+          const sincronizacionDeNotificaciones =
+            await sincronizarNotificaciones();
+          if (sincronizacionDeNotificaciones) {
+            await notificar();
+          }
         }
       } catch (error) {
-        mensaje = "ERROR: " + error.message;
+        const errorMsg = "ERROR: " + error.message;
         console.error(error);
-        alerta(mensaje);
+        alerta(errorMsg);
       }
     }
-
-    /* INICIAR APP OFFLINE */
 
     async function appOffline() {
       try {
@@ -1617,143 +2206,643 @@
         } else {
           const Arrayusuario = await leerDatos("dosxdos", "usuario");
           usuario = Arrayusuario[0];
+          let loginMontador = localStorage.getItem("loginMontador");
+          if (!loginMontador || loginMontador === null) {
+            window.location.href =
+              "https://dosxdos.app.iidos.com/dosxdos.php?id=" +
+              usuario.id +
+              "&rol=" +
+              usuario.clase;
+          }
           montador = usuario.cod;
-          $nombreUsuario.innerHTML = usuario.nombre;
+
           rutas = await leerDatos("dosxdos", "rutas");
           rutas = rutas.map((objeto) => ({
             cod: objeto["No."],
             nombre: objeto["Descripcion"],
           }));
+
           const TotalLineas = await leerDatos("dosxdos", "lineas");
           if (TotalLineas) {
-            //console.log(TotalLineas);
             const lineas = TotalLineas.filter((objeto) => {
               return objeto.Proyecto == ruta;
             });
-            //console.log(lineas);
-            const fragmento = document.createDocumentFragment();
-            lineas.forEach((objeto, index) => {
-              const button = document.createElement("button");
-              if (objeto.Estado == "Pendiente") {
-                button.className = "ruta displayOn";
+
+            // Clear the content area
+            $contenido.innerHTML = "";
+
+            // Extract unique sectors from the lines
+            const sectors = [];
+            lineas.forEach(line => {
+              // Extract main sector (first word before space)
+              const sectorText = line.Sector || '';
+              const sectorMain = sectorText.split(' ')[0];
+              if (sectorMain && !sectors.includes(sectorMain)) {
+                sectors.push(sectorMain);
               }
-              if (objeto.Estado == "Realizado") {
-                button.className = "ruta2 displayOn";
-              }
-              if (objeto.Estado == "" || objeto.Estado == null) {
-                button.className = "ruta displayOn";
-              }
-              button.type = "button";
-              button.id = `${objeto.Linea}`;
-              const observaciones = objeto.Observaciones;
-              const LineaActividad = objeto.LineaActividad;
-              const ot = objeto.OT;
-              texto = "";
-              //NAVISION
-              const otNavision = objeto.Navision_OT;
-              if (observaciones) {
-                texto = `${objeto.Sector} _ ${objeto.Zona} _ ${LineaActividad} _ ${objeto.NombrePuntoVenta} _ ${objeto.NombreCliente} _ ${objeto.TipoTrabajo} _ ${observaciones} _ NAVISION: ${otNavision} _ CRM: ${ot}`;
-              } else {
-                texto = `${objeto.Sector} _ ${objeto.Zona} _ ${LineaActividad} _ ${objeto.NombrePuntoVenta} _ ${objeto.NombreCliente} _ ${objeto.TipoTrabajo} _ NAVISION: ${otNavision} _ CRM: ${ot}`;
-              }
-              span = document.createElement("span");
-              span.textContent = texto;
-              button.appendChild(span);
-              button.setAttribute("data-LineaActividad", LineaActividad);
-              button.addEventListener("click", () => {
-                const lineaStorage = button.id;
-                const LineaActividadStorage = LineaActividad;
-                const otStorage = ot;
-                localStorage.setItem("renderizarHistorial", false);
-                localStorage.setItem("linea", lineaStorage);
-                localStorage.setItem("lineaActividad", LineaActividadStorage);
-                localStorage.setItem("ot", otStorage);
-                window.location.href =
-                  "https://dosxdos.app.iidos.com/linea_montador.html";
+            });
+
+            if (sectors.length > 0) {
+              // Create the tabs container
+              const tabsContainer = document.createElement('div');
+              tabsContainer.className = 'mb-6 overflow-hidden';
+
+              // Create the tabs header
+              const tabsHeader = document.createElement('div');
+              tabsHeader.className = 'flex overflow-x-auto border-b border-gray-200';
+
+              // Create tab content container
+              const tabsContent = document.createElement('div');
+              tabsContent.className = 'my-4';
+
+              // Add TODOS tab first
+              const todosButton = document.createElement('button');
+              todosButton.className = 'p-2 text-gray-700 font-medium text-sm uppercase whitespace-nowrap transition-all duration-200 border-b-2 border-red-600 text-red-600';
+              todosButton.textContent = "TODOS";
+              todosButton.dataset.sector = "todos";
+
+              // Add count badge to TODOS tab
+              const todosCountBadge = document.createElement('span');
+              todosCountBadge.className = 'ml-2 bg-red-700 text-white text-xs rounded-full h-5 inline-flex items-center justify-center px-1.5';
+              todosCountBadge.textContent = lineas.length;
+              todosButton.appendChild(todosCountBadge);
+
+              // Create content div for TODOS tab
+              const todosContentDiv = document.createElement('div');
+              todosContentDiv.className = 'sector-content';
+              todosContentDiv.dataset.sector = "todos";
+              todosContentDiv.style.display = 'block'; // TODOS tab is active by default
+
+              // Create a grid for the TODOS tab
+              const todosGrid = document.createElement('div');
+              todosGrid.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 place-items-center';
+
+              // Create all cards for TODOS tab (all items)
+              lineas.forEach((objeto) => {
+                // Create card for each line
+                const card = document.createElement("div");
+                card.className = "relative rounded-xl shadow-lg overflow-hidden transition-all duration-300 border border-gray-200 w-full h-full";
+                card.style.backgroundColor = "#FFFFFF";
+
+                // Header with SVG Red Texture Background
+                const header = document.createElement("div");
+                header.className = "relative flex flex-col px-5 py-5 text-center text-white";
+                header.style.backgroundImage = "url('https://dosxdos.app.iidos.com/img/texture-red.svg')";
+                header.style.backgroundSize = "contain";
+                header.style.backgroundPosition = "center";
+
+                // Title
+                const titleContainer = document.createElement("div");
+                titleContainer.className = "flex items-center justify-center mb-1 my-2 lg:my-0";
+
+                const title = document.createElement("h3");
+                title.className = "text-white font-bold text-lg truncate max-w-full";
+                title.textContent = `${objeto.NombrePuntoVenta}`;
+
+                titleContainer.appendChild(title);
+                header.appendChild(titleContainer);
+
+                const locationIcon = document.createElement("div");
+                locationIcon.className = "mr-2";
+                locationIcon.innerHTML = `
+<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
+  <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+</svg>
+`;
+
+                // Subtitle
+                const subtitle = document.createElement("div");
+                subtitle.className = "text-white/95 text-xs font-medium";
+                subtitle.appendChild(locationIcon);
+                subtitle.textContent = `${objeto.Sector} - ${objeto.Zona}`;
+                header.appendChild(subtitle);
+
+                // "Pendiente" Badge
+                const statusBadge = document.createElement("div");
+                statusBadge.className = "absolute top-2 right-2 px-3 py-1 text-xs font-bold text-white rounded-md shadow-md";
+                statusBadge.textContent = objeto.Estado;
+                statusBadge.style.backgroundColor = "#A22323";
+                header.appendChild(statusBadge);
+
+                // Card Body
+                const body = document.createElement("div");
+                body.className = "text-gray-900 p-4 space-y-2 mb-12";
+
+                // Information Rows
+                const createInfoRow = (label, value) => {
+                  const row = document.createElement("div");
+                  row.className = "flex justify-between gap-4 items-center py-2 px-4 bg-gray-100 border border-gray-200 rounded-lg";
+
+                  const labelCol = document.createElement("div");
+                  labelCol.className = "text-gray-700 text-xs uppercase font-semibold";
+                  labelCol.textContent = label;
+
+                  const valueCol = document.createElement("div");
+                  valueCol.className = "text-gray-900 font-medium text-sm text-right";
+                  valueCol.textContent = value || "-";
+
+                  row.appendChild(labelCol);
+                  row.appendChild(valueCol);
+                  return row;
+                };
+
+                // Add Key Data
+                body.appendChild(createInfoRow("LÍNEA", objeto.LineaActividad));
+                body.appendChild(createInfoRow("CLIENTE", objeto.NombreCliente));
+                body.appendChild(createInfoRow("TIPO", objeto.TipoTrabajo));
+                body.appendChild(createInfoRow("OBSERVACIONES", objeto.Observaciones));
+                body.appendChild(createInfoRow("DIRECCIÓN", objeto.DireccionPuntoVenta));
+                body.appendChild(createInfoRow("OT NAVISION", objeto.Navision_OT));
+                body.appendChild(createInfoRow("OT CRM", objeto.OT));
+
+                // Footer with button
+                const footer = document.createElement("div");
+                footer.className = "flex justify-center bg-white rounded-b-lg px-4 pb-3";
+
+                // "Reportar" Button
+                const actionBtn = document.createElement("button");
+                actionBtn.className = "mx-6 absolute bottom-4 bg-red-600 hover:bg-red-700 text-white text-sm font-bold py-2 px-24 transition-all duration-300 rounded-lg shadow-sm mx-auto flex justify-center items-center";
+                actionBtn.innerHTML = "<span class='ml-1'>Más Detalles</span>";
+
+                actionBtn.onclick = (e) => {
+                  e.stopPropagation();
+
+                  localStorage.setItem("renderizarHistorial", false);
+                  localStorage.setItem("linea", objeto.Linea);
+                  localStorage.setItem("lineaActividad", objeto.LineaActividad);
+                  localStorage.setItem("ot", objeto.OT);
+                  localStorage.setItem("cliente", objeto.Cliente);
+                  localStorage.setItem("nombreCliente", objeto.NombreCliente);
+
+                  createLineDetailsModal(objeto);
+                };
+
+                footer.appendChild(actionBtn);
+
+                // Assemble Card
+                card.appendChild(header);
+                card.appendChild(body);
+                card.appendChild(footer);
+
+                // Full Card Search Data
+                const fullText = `${objeto.Sector} ${objeto.Zona} ${objeto.LineaActividad} ${objeto.NombrePuntoVenta} ${objeto.NombreCliente} ${objeto.TipoTrabajo} ${objeto.Observaciones || ""} DIRECCIÓN: ${objeto.DireccionPuntoVenta || ""} NAVISION: ${objeto.Navision_OT} CRM: ${objeto.OT}`;
+                card.setAttribute("data-search-text", fullText.toLowerCase());
+
+                // Append card to TODOS grid
+                todosGrid.appendChild(card);
               });
-              fragmento.appendChild(button);
-            });
-            $contenido.appendChild(fragmento);
-            startBuscador();
-            const editarUsuario = document.getElementById("editarUsuario");
-            editarUsuario.addEventListener("click", (e) => {
-              if (navigator.onLine) {
-                window.location.href =
-                  "https://dosxdos.app.iidos.com/dosxdos.php?modulo=editarUsuario&id=" +
-                  usuario.id;
-              } else {
-                mensaje =
-                  "No es posible acceder a las opciones de edición de usuario sin conexión a internet";
-                alerta(mensaje);
-                scrollToTop();
+
+              todosContentDiv.appendChild(todosGrid);
+
+              // Add TODOS tab to header first
+              tabsHeader.appendChild(todosButton);
+
+              // For each sector, create a tab and content section
+              sectors.forEach((sector, index) => {
+                // Create tab button (not active by default)
+                const tabButton = document.createElement('button');
+                tabButton.className = 'p-4 text-gray-700 font-medium text-sm uppercase whitespace-nowrap transition-all duration-200 border-b-2 border-transparent hover:text-red-600 hover:border-red-600/50';
+                tabButton.textContent = sector;
+                tabButton.dataset.sector = sector;
+
+                // Create content div for this sector
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'sector-content';
+                contentDiv.dataset.sector = sector;
+                contentDiv.style.display = 'none'; // Hidden by default (TODOS is active)
+
+                // Filter lines for this sector and add them to the content
+                const sectorLines = lineas.filter(line => {
+                  const lineSector = line.Sector?.split(' ')[0] || '';
+                  return lineSector === sector;
+                });
+
+                // Create a grid for the cards
+                const sectorGrid = document.createElement('div');
+                sectorGrid.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 place-items-center';
+
+                // Create cards for each line in this sector
+                sectorLines.forEach((objeto) => {
+                  // Create a card container for each item
+                  const card = document.createElement("div");
+                  card.className = "relative rounded-xl shadow-lg overflow-hidden transition-all duration-300 border border-gray-200 w-full h-full";
+                  card.style.backgroundColor = "#FFFFFF";
+
+                  // Header with SVG Red Texture Background
+                  const header = document.createElement("div");
+                  header.className = "relative flex flex-col px-5 py-5 text-center text-white";
+
+                  header.style.backgroundImage = "url('https://dosxdos.app.iidos.com/img/texture-red.svg')";
+                  header.style.backgroundSize = "contain";
+                  header.style.backgroundPosition = "center";
+
+                  // Title
+                  const titleContainer = document.createElement("div");
+                  titleContainer.className = "flex items-center justify-center mb-1 my-2 lg:my-0";
+
+                  const title = document.createElement("h3");
+                  title.className = "text-white font-bold text-lg truncate max-w-full";
+                  title.textContent = `${objeto.NombrePuntoVenta}`;
+
+                  titleContainer.appendChild(title);
+                  header.appendChild(titleContainer);
+
+                  const locationIcon = document.createElement("div");
+                  locationIcon.className = "mr-2";
+                  locationIcon.innerHTML = `
+<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
+  <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+</svg>
+`;
+
+                  // Subtitle
+                  const subtitle = document.createElement("div");
+                  subtitle.className = "text-white/95 text-xs font-medium";
+                  subtitle.appendChild(locationIcon);
+                  subtitle.textContent = `${objeto.Sector} - ${objeto.Zona}`;
+                  header.appendChild(subtitle);
+
+                  // "Pendiente" Badge
+                  const statusBadge = document.createElement("div");
+                  statusBadge.className = "absolute top-2 right-2 px-3 py-1 text-xs font-bold text-white rounded-md shadow-md";
+                  statusBadge.textContent = objeto.Estado;
+                  statusBadge.style.backgroundColor = "#A22323";
+                  header.appendChild(statusBadge);
+
+                  // Card Body
+                  const body = document.createElement("div");
+                  body.className = "text-gray-900 p-4 space-y-2 mb-12";
+
+                  // Information Rows
+                  const createInfoRow = (label, value) => {
+                    const row = document.createElement("div");
+                    row.className = "flex justify-between gap-4 items-center py-2 px-4 bg-gray-100 border border-gray-200 rounded-lg";
+
+                    const labelCol = document.createElement("div");
+                    labelCol.className = "text-gray-700 text-xs uppercase font-semibold";
+                    labelCol.textContent = label;
+
+                    const valueCol = document.createElement("div");
+                    valueCol.className = "text-gray-900 font-medium text-sm text-right";
+                    valueCol.textContent = value || "-";
+
+                    row.appendChild(labelCol);
+                    row.appendChild(valueCol);
+                    return row;
+                  };
+
+                  // Add Key Data
+                  body.appendChild(createInfoRow("LÍNEA", objeto.LineaActividad));
+                  body.appendChild(createInfoRow("CLIENTE", objeto.NombreCliente));
+                  body.appendChild(createInfoRow("TIPO", objeto.TipoTrabajo));
+                  body.appendChild(createInfoRow("OBSERVACIONES", objeto.Observaciones));
+                  body.appendChild(createInfoRow("DIRECCIÓN", objeto.DireccionPuntoVenta));
+                  body.appendChild(createInfoRow("OT NAVISION", objeto.Navision_OT));
+                  body.appendChild(createInfoRow("OT CRM", objeto.OT));
+
+                  // Footer - now more subtle with centered button
+                  const footer = document.createElement("div");
+                  footer.className = "flex justify-center bg-white rounded-b-lg px-4 pb-3";
+
+                  // "Reportar" Button - smaller and more subtle
+                  const actionBtn = document.createElement("button");
+                  actionBtn.className = "mx-6 absolute bottom-4 bg-red-600 hover:bg-red-700 text-white text-sm font-bold py-2 px-24 transition-all duration-300 rounded-lg shadow-sm mx-auto flex justify-center items-center";
+                  actionBtn.innerHTML = "<span class='ml-1'>Más Detalles</span>";
+
+                  actionBtn.onclick = (e) => {
+                    e.stopPropagation();
+
+                    localStorage.setItem("renderizarHistorial", false);
+                    localStorage.setItem("linea", objeto.Linea);
+                    localStorage.setItem("lineaActividad", objeto.LineaActividad);
+                    localStorage.setItem("ot", objeto.OT);
+                    localStorage.setItem("cliente", objeto.Cliente);
+                    localStorage.setItem("nombreCliente", objeto.NombreCliente);
+
+                    createLineDetailsModal(objeto);
+                  };
+
+                  footer.appendChild(actionBtn);
+
+                  // Assemble Card
+                  card.appendChild(header);
+                  card.appendChild(body);
+                  card.appendChild(footer);
+
+                  // Full Card Search Data
+                  const fullText = `${objeto.Sector} ${objeto.Zona} ${objeto.LineaActividad} ${objeto.NombrePuntoVenta} ${objeto.NombreCliente} ${objeto.TipoTrabajo} ${objeto.Observaciones || ""} DIRECCIÓN: ${objeto.DireccionPuntoVenta || ""} NAVISION: ${objeto.Navision_OT} CRM: ${objeto.OT}`;
+                  card.setAttribute("data-search-text", fullText.toLowerCase());
+
+                  // Append to Grid Container
+                  sectorGrid.appendChild(card);
+                });
+
+                contentDiv.appendChild(sectorGrid);
+
+                // Add count badge to tab
+                const countBadge = document.createElement('span');
+                countBadge.className = 'ml-2 bg-red-700 text-white text-xs rounded-full h-5  inline-flex items-center justify-center px-1.5';
+                countBadge.textContent = sectorLines.length;
+                tabButton.appendChild(countBadge);
+
+                // Add click event to switch tabs
+                tabButton.addEventListener('click', () => {
+                  // Remove active class and red border from all tabs
+                  const allTabs = tabsHeader.querySelectorAll('button');
+                  allTabs.forEach(tab => {
+                    tab.classList.remove('border-red-600', 'text-red-600');
+                    tab.classList.add('border-transparent');
+                    tab.classList.remove('bg-red-600', 'text-white');
+                    tab.classList.add('text-gray-700', 'hover:text-red-600', 'hover:border-red-600/50');
+                  });
+
+                  // Add red border and text to clicked tab
+                  tabButton.classList.add('border-red-600', 'text-red-600');
+                  tabButton.classList.remove('border-transparent');
+                  tabButton.classList.remove('bg-red-600', 'text-white', 'hover:text-red-600', 'hover:border-red-600/50');
+
+                  // Hide all content sections
+                  const allContent = tabsContent.querySelectorAll('.sector-content');
+                  allContent.forEach(content => {
+                    content.style.display = 'none';
+                  });
+
+                  // Show the selected content section
+                  const activeContent = tabsContent.querySelector(`.sector-content[data-sector="${sector}"]`);
+                  if (activeContent) {
+                    activeContent.style.display = 'block';
+                  }
+                });
+
+                // Add to containers
+                tabsHeader.appendChild(tabButton);
+                tabsContent.appendChild(contentDiv);
+              });
+
+              // Add TODOS tab click handler
+              todosButton.addEventListener('click', () => {
+                // Remove active class from all tabs
+                const allTabs = tabsHeader.querySelectorAll('button');
+                allTabs.forEach(tab => {
+                  tab.classList.remove('border-red-600', 'text-red-600');
+                  tab.classList.add('border-transparent');
+                  tab.classList.add('text-gray-700', 'hover:text-red-600', 'hover:border-red-600/50');
+                });
+
+                // Make TODOS tab active
+                todosButton.classList.add('border-red-600', 'text-red-600');
+                todosButton.classList.remove('border-transparent', 'hover:text-red-600', 'hover:border-red-600/50');
+
+                // Hide all content sections
+                const allContent = tabsContent.querySelectorAll('.sector-content');
+                allContent.forEach(content => {
+                  content.style.display = 'none';
+                });
+
+                // Show TODOS content
+                todosContentDiv.style.display = 'block';
+              });
+
+              // Add TODOS content to the tab contents
+              tabsContent.appendChild(todosContentDiv);
+
+              // Add tabs and content to the main container
+              tabsContainer.appendChild(tabsHeader);
+              tabsContainer.appendChild(tabsContent);
+
+              // Add to main content area
+              $contenido.appendChild(tabsContainer);
+            } else {
+              // Fallback to regular grid if no sectors found
+              const gridContainer = document.createElement("div");
+              gridContainer.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 place-items-center";
+
+              // Create cards for regular view if no sectors
+              lineas.forEach((objeto) => {
+                // Create a card container for each item
+                const card = document.createElement("div");
+                card.className = "relative rounded-xl shadow-lg overflow-hidden transition-all duration-300 border border-gray-200 w-full h-full";
+                card.style.backgroundColor = "#FFFFFF";
+
+                // Header with SVG Red Texture Background
+                const header = document.createElement("div");
+                header.className = "relative flex flex-col px-5 py-5 text-center text-white";
+
+                header.style.backgroundImage = "url('https://dosxdos.app.iidos.com/img/texture-red.svg')";
+                header.style.backgroundSize = "contain";
+                header.style.backgroundPosition = "center";
+
+                // Title
+                const titleContainer = document.createElement("div");
+                titleContainer.className = "flex items-center justify-center mb-1 my-2 lg:my-0";
+
+                const title = document.createElement("h3");
+                title.className = "text-white font-bold text-lg truncate max-w-full";
+                title.textContent = `${objeto.NombrePuntoVenta}`;
+
+                titleContainer.appendChild(title);
+                header.appendChild(titleContainer);
+
+                const locationIcon = document.createElement("div");
+                locationIcon.className = "mr-2";
+                locationIcon.innerHTML = `
+<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
+  <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+</svg>
+`;
+
+                // Subtitle
+                const subtitle = document.createElement("div");
+                subtitle.className = "text-white/95 text-xs font-medium";
+                subtitle.appendChild(locationIcon);
+                subtitle.textContent = `${objeto.Sector} - ${objeto.Zona}`;
+                header.appendChild(subtitle);
+
+                // "Pendiente" Badge
+                const statusBadge = document.createElement("div");
+                statusBadge.className = "absolute top-2 right-2 px-3 py-1 text-xs font-bold text-white rounded-md shadow-md";
+                statusBadge.textContent = objeto.Estado;
+                statusBadge.style.backgroundColor = "#A22323";
+                header.appendChild(statusBadge);
+
+                // Card Body
+                const body = document.createElement("div");
+                body.className = "text-gray-900 p-4 space-y-2 mb-12";
+
+                // Information Rows
+                const createInfoRow = (label, value) => {
+                  const row = document.createElement("div");
+                  row.className = "flex justify-between gap-4 items-center py-2 px-4 bg-gray-100 border border-gray-200 rounded-lg";
+
+                  const labelCol = document.createElement("div");
+                  labelCol.className = "text-gray-700 text-xs uppercase font-semibold";
+                  labelCol.textContent = label;
+
+                  const valueCol = document.createElement("div");
+                  valueCol.className = "text-gray-900 font-medium text-sm text-right";
+                  valueCol.textContent = value || "-";
+
+                  row.appendChild(labelCol);
+                  row.appendChild(valueCol);
+                  return row;
+                };
+
+                // Add Key Data
+                body.appendChild(createInfoRow("LÍNEA", objeto.LineaActividad));
+                body.appendChild(createInfoRow("CLIENTE", objeto.NombreCliente));
+                body.appendChild(createInfoRow("TIPO", objeto.TipoTrabajo));
+                body.appendChild(createInfoRow("OBSERVACIONES", objeto.Observaciones));
+                body.appendChild(createInfoRow("DIRECCIÓN", objeto.DireccionPuntoVenta));
+                body.appendChild(createInfoRow("OT NAVISION", objeto.Navision_OT));
+                body.appendChild(createInfoRow("OT CRM", objeto.OT));
+
+                // Footer - now more subtle with centered button
+                const footer = document.createElement("div");
+                footer.className = "flex justify-center bg-white rounded-b-lg px-4 pb-3";
+
+                // "Reportar" Button - smaller and more subtle
+                const actionBtn = document.createElement("button");
+                actionBtn.className = "mx-6 absolute bottom-4 bg-red-600 hover:bg-red-700 text-white text-sm font-bold py-2 px-24 transition-all duration-300 rounded-lg shadow-sm mx-auto flex justify-center items-center";
+                actionBtn.innerHTML = "<span class='ml-1'>Más Detalles</span>";
+
+                actionBtn.onclick = (e) => {
+                  e.stopPropagation();
+
+                  localStorage.setItem("renderizarHistorial", false);
+                  localStorage.setItem("linea", objeto.Linea);
+                  localStorage.setItem("lineaActividad", objeto.LineaActividad);
+                  localStorage.setItem("ot", objeto.OT);
+                  localStorage.setItem("cliente", objeto.Cliente);
+                  localStorage.setItem("nombreCliente", objeto.NombreCliente);
+
+                  createLineDetailsModal(objeto);
+                };
+
+                footer.appendChild(actionBtn);
+
+                // Assemble Card
+                card.appendChild(header);
+                card.appendChild(body);
+                card.appendChild(footer);
+
+                // Full Card Search Data
+                const fullText = `${objeto.Sector} ${objeto.Zona} ${objeto.LineaActividad} ${objeto.NombrePuntoVenta} ${objeto.NombreCliente} ${objeto.TipoTrabajo} ${objeto.Observaciones || ""} DIRECCIÓN: ${objeto.DireccionPuntoVenta || ""} NAVISION: ${objeto.Navision_OT} CRM: ${objeto.OT}`;
+                card.setAttribute("data-search-text", fullText.toLowerCase());
+
+                // Append to Grid Container
+                gridContainer.appendChild(card);
+              });
+
+              $contenido.appendChild(gridContainer);
+            }
+
+            // Update search to work across all tabs
+            buscador.addEventListener("input", () => {
+              const searchTerm = buscador.value.toLowerCase().trim();
+
+              // Get all tabs and cards
+              const sectorTabs = document.querySelectorAll('button[data-sector]');
+              const allCards = document.querySelectorAll("[data-search-text]");
+
+              // Remove any "no results" message
+              const noResults = document.getElementById('no-search-results');
+              if (noResults) noResults.remove();
+
+              if (searchTerm === '') {
+                // If search is cleared, reset view
+
+                // Make all cards visible first
+                allCards.forEach(card => {
+                  card.style.display = "block";
+                });
+
+                // Find active tab
+                const activeTab = document.querySelector('button[data-sector].border-red-600');
+
+                if (activeTab) {
+                  const activeSector = activeTab.dataset.sector;
+
+                  // Show only content for active tab
+                  document.querySelectorAll('.sector-content').forEach(content => {
+                    if (content.dataset.sector === activeSector) {
+                      content.style.display = 'block';
+                    } else {
+                      content.style.display = 'none';
+                    }
+                  });
+                }
+
+                return;
+              }
+
+              // When searching, always go to TODOS tab for complete results
+              if (sectors.length > 0) {
+                // Activate TODOS tab
+                const todosTab = document.querySelector('button[data-sector="todos"]');
+                if (todosTab) {
+                  // Deactivate all tabs
+                  sectorTabs.forEach(tab => {
+                    tab.classList.remove('border-red-600', 'text-red-600');
+                    tab.classList.add('border-transparent', 'text-gray-700');
+                  });
+
+                  // Activate TODOS tab
+                  todosTab.classList.add('border-red-600', 'text-red-600');
+                  todosTab.classList.remove('border-transparent');
+
+                  // Show TODOS content
+                  document.querySelectorAll('.sector-content').forEach(content => {
+                    if (content.dataset.sector === 'todos') {
+                      content.style.display = 'block';
+                    } else {
+                      content.style.display = 'none';
+                    }
+                  });
+                }
+              }
+
+              // Filter cards based on search
+              let hasResults = false;
+              allCards.forEach(card => {
+                const searchText = card.getAttribute("data-search-text");
+
+                if (searchText.includes(searchTerm)) {
+                  card.style.display = "block";
+                  hasResults = true;
+                } else {
+                  card.style.display = "none";
+                }
+              });
+
+              // Show no results message if needed
+              if (!hasResults) {
+                const noResultsMsg = document.createElement('div');
+                noResultsMsg.id = 'no-search-results';
+                noResultsMsg.className = 'p-8 bg-gray-100 rounded-lg text-center text-gray-500 my-4';
+                noResultsMsg.innerHTML = `No se encontraron resultados para <strong>"${searchTerm}"</strong>`;
+
+                const todosContent = document.querySelector('.sector-content[data-sector="todos"]');
+                if (todosContent) {
+                  todosContent.insertBefore(noResultsMsg, todosContent.firstChild);
+                } else {
+                  $contenido.insertBefore(noResultsMsg, $contenido.firstChild);
+                }
               }
             });
+            await notificar();
             loaderOff();
           } else {
             alerta("Error al leer el almacén de líneas");
-            const editarUsuario = document.getElementById("editarUsuario");
-            editarUsuario.addEventListener("click", (e) => {
-              if (navigator.onLine) {
-                window.location.href =
-                  "https://dosxdos.app.iidos.com/dosxdos.php?modulo=editarUsuario&id=" +
-                  usuario.id;
-              } else {
-                mensaje =
-                  "No es posible acceder a las opciones de edición de usuario sin conexión a internet";
-                alerta(mensaje);
-                scrollToTop();
-              }
-            });
+            await notificar();
             loaderOff();
           }
-          await notificarOffline();
         }
       } catch (error) {
-        mensaje = "ERROR: " + error.message;
+        const mensaje = "ERROR: " + error.message;
         console.error(error);
         alerta(mensaje);
       }
     }
-
-    /* ERROR EN EVENTOS CLIC */
-
-    $casa.addEventListener("click", () => {
-      if ($opcionesMenu.classList.contains("displayOff")) {
-        $opcionesMenu.classList.replace("displayOff", "displayOn");
-        if ($opcionesUsuario.classList.contains("displayOn")) {
-          $opcionesUsuario.classList.replace("displayOn", "displayOff");
-        }
-      } else {
-        $opcionesMenu.classList.replace("displayOn", "displayOff");
-      }
-    });
-
-    $usuario.addEventListener("click", () => {
-      if ($opcionesUsuario.classList.contains("displayOff")) {
-        $opcionesUsuario.classList.replace("displayOff", "displayOn");
-        if ($opcionesMenu.classList.contains("displayOn")) {
-          $opcionesMenu.classList.replace("displayOn", "displayOff");
-        }
-      } else {
-        $opcionesUsuario.classList.replace("displayOn", "displayOff");
-      }
-    });
-
-    $botonRutas.addEventListener("click", () => {
-      window.location.href =
-        "https://dosxdos.app.iidos.com/rutas_montador.html";
-    });
-
-    const lineasIcono = document.getElementById("lineasIcono");
-    lineasIcono.addEventListener("click", () => {
-      window.location.href = "https://dosxdos.app.iidos.com/ruta_montador.html";
-    });
-
-    const historialIcono = document.getElementById("historialIcono");
-    historialIcono.addEventListener("click", () => {
-      window.location.href =
-        "https://dosxdos.app.iidos.com/historial_montador.html";
-    });
 
     /* EVENTOS CLIC */
 
@@ -1761,31 +2850,6 @@
       if (e.target.matches("#cerrarSesion")) {
         cerrarSesion();
       }
-    });
-
-    /* BUSCADOR */
-
-    buscador.addEventListener("input", () => {
-      botones = document.querySelectorAll("#contenido button");
-      const valorBusqueda = buscador.value.toLowerCase();
-      botones.forEach((boton) => {
-        const textoBoton = boton.textContent.toLowerCase();
-        const span = boton.querySelector("span"); // Obtener el elemento <span> dentro del botón
-        if (textoBoton.includes(valorBusqueda)) {
-          boton.classList.replace("displayOff", "displayOn");
-          // Crear una expresión regular para buscar la coincidencia exacta
-          const regex = new RegExp(valorBusqueda, "gi");
-          const textoResaltado = boton.textContent.replace(
-            regex,
-            '<span class="resaltado">$&</span>'
-          );
-          span.innerHTML = textoResaltado;
-        } else {
-          boton.classList.replace("displayOn", "displayOff");
-          // Restablecer el texto original sin resaltado
-          span.textContent = span.textContent;
-        }
-      });
     });
 
     /* PETICIONES PENDIENTES */
@@ -1804,10 +2868,10 @@
             res.ok
               ? res.json()
               : reject(
-                  new Error(
-                    `Error en los servidores al actualizar los datos de la línea`
-                  )
+                new Error(
+                  `Error en los servidores al actualizar los datos de la línea`
                 )
+              )
           )
           .then((res) => {
             if (res[0]) {
@@ -2068,7 +3132,7 @@
         localStorage.setItem("mensaje", mensaje);
         location.reload();
         /*alerta(mensaje);
-            scrollToTop();*/
+          scrollToTop();*/
       } catch (error) {
         console.error(error);
         alerta(error.message);
@@ -2192,8 +3256,7 @@
       console.log("Carga completa de los elementos de la página no fetch");
       let mensaje = localStorage.getItem("mensaje");
       if (mensaje && mensaje !== null) {
-        $textoMensaje.innerHTML = mensaje;
-        mensajeOn();
+        alerta(mensaje);
         localStorage.removeItem("mensaje");
       }
       let login = localStorage.getItem("login");
@@ -2213,5 +3276,8 @@
       appOffline();
     }
   </script>
+
+  <script src="https://dosxdos.app.iidos.com/js/notificaciones.js"></script>
+  <script src="https://dosxdos.app.iidos.com/js/loadFirebase.js"></script>
 
 </html>

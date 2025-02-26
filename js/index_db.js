@@ -120,6 +120,40 @@ function leerDatos(database, store) {
     })
 }
 
+function leerDatos2(database, store) {
+    return new Promise((resolve, reject) => {
+        datos = [];
+        const request = indexedDB.open(database);
+        request.onsuccess = (event) => {
+            const db = event.target.result;
+            const transaction = db.transaction(store, "readonly");
+            const almacen = transaction.objectStore(store);
+            const cursorRequest = almacen.openCursor();
+            cursorRequest.onsuccess = (event) => {
+                const cursor = event.target.result;
+                if (cursor) {
+                    datos.push(cursor.value);
+                    cursor.continue();
+                } else {
+                    resolve(datos);
+                }
+            };
+            cursorRequest.onerror = function (event) {
+                console.error(
+                    `Error en la función leerDatos al solcitar el cursor para leer el almacen ${store}: ${event.target.error}`
+                );
+                reject(event.target.error);
+            };
+        };
+        request.onerror = (event) => {
+            console.error(
+                `Error en la función leerDatos al solcitar abrir la base de datos para leer el almacen ${store}: ${event.target.error}`
+            );
+            reject(event.target.error);
+        };
+    });
+}
+
 function limpiarDatos(database, store) {
     return new Promise((resolve, reject) => {
         const request = indexedDB.open(database);
@@ -142,6 +176,61 @@ function limpiarDatos(database, store) {
         }
     })
 }
+
+function limpiarDatos2(database, store) {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open(database);
+        request.onsuccess = (event) => {
+            const db = event.target.result;
+            const transaction = db.transaction(store, "readwrite");
+            const datosStore = transaction.objectStore(store);
+            const clearRequest = datosStore.clear();
+            clearRequest.onsuccess = (clearEvent) => {
+                resolve(true);
+            };
+            clearRequest.onerror = (event) => {
+                console.error(
+                    `Error en la función limpiarDatos al solcitar limpiar el almacen ${store}: ${event.target.error}`
+                );
+                reject(event.target.error);
+            };
+        };
+        request.onerror = (event) => {
+            console.error(
+                `Error en la función limpiarDatos al solcitar abrir la base de datos para limpiar el almacen ${store}: ${event.target.error}`
+            );
+            reject(event.target.error);
+        };
+    });
+}
+
+function limpiarAlmacen(database, store) {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open(database);
+        request.onsuccess = (event) => {
+            const db = event.target.result;
+            const transaction = db.transaction(store, "readwrite");
+            const datosStore = transaction.objectStore(store);
+            const clearRequest = datosStore.clear();
+            clearRequest.onsuccess = (clearEvent) => {
+                resolve(true);
+            };
+            clearRequest.onerror = (event) => {
+                console.error(
+                    `Error en la función limpiarDatos al solcitar limpiar el almacen ${store}: ${event.target.error}`
+                );
+                reject(event.target.error);
+            };
+        };
+        request.onerror = (event) => {
+            console.error(
+                `Error en la función limpiarDatos al solcitar abrir la base de datos para limpiar el almacen ${store}: ${event.target.error}`
+            );
+            reject(event.target.error);
+        };
+    });
+}
+
 
 function agregarDato(database, store, data) {
     return new Promise((resolve, reject) => {
@@ -225,7 +314,7 @@ function agregarDatos(database, store, data) {
         resolve(true);
     })
 }
-//DELETE indexDB
+
 function deleteDB(database) {
     return new Promise((resolve, reject) => {
         const request = indexedDB.deleteDatabase(database);
@@ -246,6 +335,27 @@ function deleteDB(database) {
         request.onblocked = () => {
             console.warn(`La eliminación de la base de datos "${database}" está bloqueada. Asegúrate de cerrar todas las conexiones a esta base de datos.`);
             reject(new Error(`La eliminación de la base de datos "${database}" está bloqueada.`));
+        };
+    });
+}
+
+function deleteDB2(database) {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.deleteDatabase(database);
+
+        // Evento que se dispara cuando la base de datos se elimina correctamente
+        request.onsuccess = () => {
+            console.log(`Base de datos "${database}" eliminada exitosamente.`);
+            resolve(true);
+        };
+
+        // Evento que se dispara si ocurre un error al eliminar la base de datos
+        request.onerror = (event) => {
+            console.error(
+                `Error al eliminar la base de datos "${database}":`,
+                event.target.error
+            );
+            reject(event.target.error);
         };
     });
 }

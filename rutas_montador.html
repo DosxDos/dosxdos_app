@@ -9,149 +9,7 @@
   <!-- Favicons -->
   <link rel="icon" type="image/png" href="https://dosxdos.app.iidos.com/img/logoPwa256.png" />
   <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/tailwindmain.css" />
-  <style>
-    * {
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    /* Add the divider styles from notificaciones */
-    .website-divider-container-734167 {
-      overflow: hidden;
-      position: relative;
-      height: 100%;
-    }
-
-    .divider-img-734167 {
-      position: absolute;
-      width: 500%;
-      height: 105px;
-      transform: scale(1, 1);
-      bottom: 0px;
-      left: 0px;
-      fill: rgb(255, 255, 255);
-    }
-
-    /* Keep the important existing styles */
-    .displayOff {
-      display: none;
-    }
-
-    .displayOn {
-      display: flex;
-    }
-
-    /* Loader styles */
-    #loader {
-      width: 100vw;
-      height: 100vh;
-      position: absolute;
-      top: 0;
-      z-index: 2000;
-      background-color: rgba(0, 0, 0, 0.886);
-      justify-content: center;
-      align-items: center;
-    }
-
-    .loader {
-      transform: rotateZ(45deg);
-      perspective: 1000px;
-      border-radius: 50%;
-      width: 14vw;
-      height: 14vw;
-      color: #fff;
-    }
-
-    .loader:before,
-    .loader:after {
-      content: "";
-      display: block;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: inherit;
-      height: inherit;
-      border-radius: 50%;
-      transform: rotateX(70deg);
-      animation: 1s spin linear infinite;
-    }
-
-    .loader:after {
-      color: #b20b15;
-      transform: rotateY(70deg);
-      animation-delay: 0.4s;
-    }
-
-    @keyframes spin {
-
-      0%,
-      100% {
-        box-shadow: 0.2em 0px 0 0px currentcolor;
-      }
-
-      12% {
-        box-shadow: 0.2em 0.2em 0 0 currentcolor;
-      }
-
-      25% {
-        box-shadow: 0 0.2em 0 0px currentcolor;
-      }
-
-      37% {
-        box-shadow: -0.2em 0.2em 0 0 currentcolor;
-      }
-
-      50% {
-        box-shadow: -0.2em 0 0 0 currentcolor;
-      }
-
-      62% {
-        box-shadow: -0.2em -0.2em 0 0 currentcolor;
-      }
-
-      75% {
-        box-shadow: 0px -0.2em 0 0 currentcolor;
-      }
-
-      87% {
-        box-shadow: 0.2em -0.2em 0 0 currentcolor;
-      }
-    }
-
-    .bell-animate {
-      animation: bell-shake 2s ease-in-out infinite;
-      transform-origin: top center;
-    }
-
-    @keyframes bell-shake {
-      0% {
-        transform: rotate(0);
-      }
-
-      10% {
-        transform: rotate(10deg);
-      }
-
-      20% {
-        transform: rotate(-10deg);
-      }
-
-      30% {
-        transform: rotate(10deg);
-      }
-
-      40% {
-        transform: rotate(-10deg);
-      }
-
-      50% {
-        transform: rotate(0);
-      }
-
-      100% {
-        transform: rotate(0);
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/index.css" />
 </head>
 
 <body id="body" class="oyh">
@@ -406,7 +264,7 @@
         <img src="https://dosxdos.app.iidos.com/img/lupa.png"
           class="w-5 h-5 opacity-90 absolute left-16 top-1/2 transform -translate-y-1/2" />
         <input type="text" id="buscador"
-          class="shadow w-full h-12 pl-12 pr-4 bg-white/10 border border-white/20 rounded-lg text-lg focus:outline-none focus:ring-2 focus:ring-white/50 transition-all duration-300 ease-in-out text-black placeholder-white/70"
+          class="shadow w-full h-12 pl-12 pr-4 bg-white/10 border border-white/20 rounded-lg text-lg focus:outline-none focus:ring-2 focus:ring-red-600 transition-all duration-300 ease-in-out text-black placeholder-white/70"
           placeholder="Buscar rutas..." />
       </div>
       <h1 id="titulo" class="text-2xl font-bold text-center mb-4">RUTAS</h1>
@@ -425,72 +283,6 @@
 <script src="https://dosxdos.app.iidos.com/js/index_db.js"></script>
 
 <script>
-  function cache() {
-    const urlsToCache = [
-      "https://dosxdos.app.iidos.com/index.html?utm_source=web_app_manifest",
-      "https://dosxdos.app.iidos.com/index.html",
-      "https://dosxdos.app.iidos.com/manifest.json",
-      "https://dosxdos.app.iidos.com/serviceworker.js",
-      "https://dosxdos.app.iidos.com/sw.js",
-      "https://dosxdos.app.iidos.com/css/index.css",
-      "https://dosxdos.app.iidos.com/rutas_montador.html",
-      "https://dosxdos.app.iidos.com/css/rutas_montador.css",
-      "https://dosxdos.app.iidos.com/ruta_montador.html",
-      "https://dosxdos.app.iidos.com/css/ruta_montador.css",
-      "https://dosxdos.app.iidos.com/linea_montador.html",
-      "https://dosxdos.app.iidos.com/css/linea_montador.css",
-      "https://dosxdos.app.iidos.com/fotos_y_firmas.html",
-      "https://dosxdos.app.iidos.com/css/fotos_y_firmas.css",
-      "https://dosxdos.app.iidos.com/css/fuentes/Roboto/Roboto-Light.ttf",
-      "https://dosxdos.app.iidos.com/css/fuentes/Merriweather/Merriweather-Light.ttf",
-      "https://dosxdos.app.iidos.com/css/fuentes/Merriweather/Merriweather-Bold.ttf",
-      "https://dosxdos.app.iidos.com/css/fuentes/Lora/Lora-Regular.ttf",
-      "https://dosxdos.app.iidos.com/css/fuentes/Lora/Lora-Medium.ttf",
-      "https://dosxdos.app.iidos.com/css/fuentes/Lora/Lora-Bold.ttf",
-      "https://dosxdos.app.iidos.com/img/candado.png",
-      "https://dosxdos.app.iidos.com/img/casa.png",
-      "https://dosxdos.app.iidos.com/img/casaWhite.png",
-      "https://dosxdos.app.iidos.com/img/dosxdos.png",
-      "https://dosxdos.app.iidos.com/img/email.png",
-      "https://dosxdos.app.iidos.com/img/flechaAbajo.png",
-      "https://dosxdos.app.iidos.com/img/fondo.jpg",
-      "https://dosxdos.app.iidos.com/img/logoPwa1024.png",
-      "https://dosxdos.app.iidos.com/img/logoPwa512.png",
-      "https://dosxdos.app.iidos.com/img/logoPwa384.png",
-      "https://dosxdos.app.iidos.com/img/logoPwa256.png",
-      "https://dosxdos.app.iidos.com/img/logoPwa192.png",
-      "https://dosxdos.app.iidos.com/img/logoPwa128.png",
-      "https://dosxdos.app.iidos.com/img/logoPwa96.png",
-      "https://dosxdos.app.iidos.com/img/logoPwa64.png",
-      "https://dosxdos.app.iidos.com/img/logoPwa32.png",
-      "https://dosxdos.app.iidos.com/img/logoPwa16.png",
-      "https://dosxdos.app.iidos.com/img/logo300.png",
-      "https://dosxdos.app.iidos.com/img/lupa.png",
-      "https://dosxdos.app.iidos.com/img/reloj.png",
-      "https://dosxdos.app.iidos.com/img/relojWhite.png",
-      "https://dosxdos.app.iidos.com/img/usuario.png",
-      "https://dosxdos.app.iidos.com/img/rutasWhite.png",
-      "https://dosxdos.app.iidos.com/img/cerrar.png",
-      "https://dosxdos.app.iidos.com/img/usuarios.png",
-      "https://dosxdos.app.iidos.com/img/trash.png",
-      "https://dosxdos.app.iidos.com/img/folder.png",
-      "https://dosxdos.app.iidos.com/img/comprimido.png",
-      "https://dosxdos.app.iidos.com/img/task.png",
-      "https://dosxdos.app.iidos.com/css/dosxdos.css",
-    ];
-    caches.open("dosxdos").then((cache) => {
-      urlsToCache.forEach((resource) => {
-        cache.match(resource).then((response) => {
-          if (!response) {
-            fetch(resource).then((response) => {
-              cache.put(resource, response);
-              console.log(`se cacheó ${resource}`);
-            });
-          }
-        });
-      });
-    });
-  }
 
   const $rutas = document.getElementById("rutas"),
     $loader = document.getElementById("loader"),
@@ -616,166 +408,6 @@
     }, 300);
   }
 
-  /* LEER DATOS DE INDEXDB */
-
-  function leerDatos(store) {
-    return new Promise((resolve, reject) => {
-      datos = [];
-      const request = indexedDB.open("dosxdos");
-      request.onsuccess = (event) => {
-        const db = event.target.result;
-        const transaction = db.transaction(store, "readonly");
-        const almacen = transaction.objectStore(store);
-        const cursorRequest = almacen.openCursor();
-        cursorRequest.onsuccess = (event) => {
-          const cursor = event.target.result;
-          if (cursor) {
-            datos.push(cursor.value);
-            cursor.continue();
-          } else {
-            resolve(datos);
-          }
-        };
-        cursorRequest.onerror = function (event) {
-          error = event.target.error;
-          mensaje = "ERROR: " + error;
-          alerta(mensaje);
-          loaderOff();
-        };
-      };
-      request.onerror = (event) => {
-        error = event.target.error;
-        mensaje = "ERROR: " + error;
-        alerta(mensaje);
-        loaderOff();
-      };
-    });
-  }
-
-  function leerDatos2(database, store) {
-    return new Promise((resolve, reject) => {
-      datos = [];
-      const request = indexedDB.open(database);
-      request.onsuccess = (event) => {
-        const db = event.target.result;
-        const transaction = db.transaction(store, "readonly");
-        const almacen = transaction.objectStore(store);
-        const cursorRequest = almacen.openCursor();
-        cursorRequest.onsuccess = (event) => {
-          const cursor = event.target.result;
-          if (cursor) {
-            datos.push(cursor.value);
-            cursor.continue();
-          } else {
-            resolve(datos);
-          }
-        };
-        cursorRequest.onerror = function (event) {
-          console.error(
-            `Error en la función leerDatos al solcitar el cursor para leer el almacen ${store}: ${event.target.error}`
-          );
-          reject(event.target.error);
-        };
-      };
-      request.onerror = (event) => {
-        console.error(
-          `Error en la función leerDatos al solcitar abrir la base de datos para leer el almacen ${store}: ${event.target.error}`
-        );
-        reject(event.target.error);
-      };
-    });
-  }
-
-  /* LIMPIAR ALMACÉN DE INDEXDB */
-
-  function limpiarDatos2(database, store) {
-    return new Promise((resolve, reject) => {
-      const request = indexedDB.open(database);
-      request.onsuccess = (event) => {
-        const db = event.target.result;
-        const transaction = db.transaction(store, "readwrite");
-        const datosStore = transaction.objectStore(store);
-        const clearRequest = datosStore.clear();
-        clearRequest.onsuccess = (clearEvent) => {
-          resolve(true);
-        };
-        clearRequest.onerror = (event) => {
-          console.error(
-            `Error en la función limpiarDatos al solcitar limpiar el almacen ${store}: ${event.target.error}`
-          );
-          reject(event.target.error);
-        };
-      };
-      request.onerror = (event) => {
-        console.error(
-          `Error en la función limpiarDatos al solcitar abrir la base de datos para limpiar el almacen ${store}: ${event.target.error}`
-        );
-        reject(event.target.error);
-      };
-    });
-  }
-
-  function limpiarAlmacen(database, store) {
-    return new Promise((resolve, reject) => {
-      const request = indexedDB.open(database);
-      request.onsuccess = (event) => {
-        const db = event.target.result;
-        const transaction = db.transaction(store, "readwrite");
-        const datosStore = transaction.objectStore(store);
-        const clearRequest = datosStore.clear();
-        clearRequest.onsuccess = (clearEvent) => {
-          resolve(true);
-        };
-        clearRequest.onerror = (event) => {
-          console.error(
-            `Error en la función limpiarDatos al solcitar limpiar el almacen ${store}: ${event.target.error}`
-          );
-          reject(event.target.error);
-        };
-      };
-      request.onerror = (event) => {
-        console.error(
-          `Error en la función limpiarDatos al solcitar abrir la base de datos para limpiar el almacen ${store}: ${event.target.error}`
-        );
-        reject(event.target.error);
-      };
-    });
-  }
-
-  function almacenVacio(db, almacen) {
-    return new Promise((resolve, reject) => {
-      const dbName = db;
-      const storeName = almacen;
-      const request = indexedDB.open(dbName);
-      request.onsuccess = (event) => {
-        const db = event.target.result;
-        const transaction = db.transaction([storeName], "readonly");
-        const store = transaction.objectStore(storeName);
-        const getAllRequest = store.getAll();
-        getAllRequest.onsuccess = (event) => {
-          const data = event.target.result;
-          if (data.length > 0) {
-            resolve(false);
-          } else {
-            resolve(true);
-          }
-        };
-        getAllRequest.onerror = (event) => {
-          console.error(
-            `Error en la función almacenVacio al verificar si el almacen ${almacen} tiene contenido: ${event.target.error}`
-          );
-          reject(event.target.error);
-        };
-      };
-      request.onerror = (event) => {
-        console.error(
-          `Error en la función almacenVacio al abrir la base de datos ${db} para verificar si el almacen ${almacen} tiene contenido: ${event.target.error}`
-        );
-        reject(event.target.error);
-      };
-    });
-  }
-
   /* CERRAR SESIÓN */
 
   function eliminarCookie(nombre) {
@@ -786,26 +418,6 @@
   }
 
   //ESTA FUNCION ELIMINA POR COMPLETO DEL LADO DEL CLIENTE LA BASE DE DATOS CADA VEZ QUE SE EJEUTA
-  function deleteDB2(database) {
-    return new Promise((resolve, reject) => {
-      const request = indexedDB.deleteDatabase(database);
-
-      // Evento que se dispara cuando la base de datos se elimina correctamente
-      request.onsuccess = () => {
-        console.log(`Base de datos "${database}" eliminada exitosamente.`);
-        resolve(true);
-      };
-
-      // Evento que se dispara si ocurre un error al eliminar la base de datos
-      request.onerror = (event) => {
-        console.error(
-          `Error al eliminar la base de datos "${database}":`,
-          event.target.error
-        );
-        reject(event.target.error);
-      };
-    });
-  }
 
   async function cerrarSesion() {
     if (navigator.onLine) {
@@ -832,6 +444,7 @@
       mensajeOn();
     }
   }
+
 
   /* TRAER DATOS DE LOS SERVIDORES */
 
@@ -957,7 +570,7 @@
     try {
       loaderOn();
       const fRutas = await fetchRutas();
-      rutas = await leerDatos("rutas");
+      rutas = await leerDatos("dosxdos", "rutas");
       rutas = rutas.map((objeto) => ({
         cod: objeto["No."],
         nombre: objeto["Descripcion"],
@@ -1018,7 +631,7 @@
     return new Promise((resolve, reject) => {
       const login = localStorage.getItem("login");
       if (login && login !== null) {
-        leerDatos("usuario")
+        leerDatos("dosxdos", "usuario")
           .then((res) => {
             usuario = res[0];
             resolve(usuario.clase);
@@ -1065,7 +678,7 @@
       if (!login) {
         window.location.href = "https://dosxdos.app.iidos.com/index.html";
       } else {
-        const Arrayusuario = await leerDatos("usuario");
+        const Arrayusuario = await leerDatos("dosxdos", "usuario");
         usuario = Arrayusuario[0];
         let loginMontador = localStorage.getItem("loginMontador");
         if (!loginMontador || loginMontador === null) {
@@ -1102,7 +715,7 @@
         }
 
         const rutasResult = await fetchRutas();
-        rutas = await leerDatos("rutas");
+        rutas = await leerDatos("dosxdos", "rutas");
         rutas = rutas.map((objeto) => ({
           cod: objeto["No."],
           nombre: objeto["Descripcion"],
@@ -1183,7 +796,7 @@
       if (!login) {
         window.location.href = "https://dosxdos.app.iidos.com/index.html";
       } else {
-        const Arrayusuario = await leerDatos("usuario");
+        const Arrayusuario = await leerDatos("dosxdos", "usuario");
         usuario = Arrayusuario[0];
         montador = usuario.cod;
 
@@ -1211,7 +824,7 @@
           if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
         }
 
-        rutas = await leerDatos("rutas");
+        rutas = await leerDatos("dosxdos", "rutas");
         rutas = rutas.map((objeto) => ({
           cod: objeto["No."],
           nombre: objeto["Descripcion"],
