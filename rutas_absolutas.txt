@@ -1,6 +1,6 @@
-http://localhost/dosxdos_app/dosxdos_app/dosxdos_app/dosxdos_app
+https://dosxdos.app.iidos.com/dosxdos_app/dosxdos_app/dosxdos_app
 
-http://localhost/dosxdos_app
 https://dosxdos.app.iidos.com
+http://localhost/dosxdos_app
 
 ARCHIVOS DE CAMBIO:
