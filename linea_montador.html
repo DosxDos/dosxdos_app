@@ -3320,11 +3320,10 @@
         }
     }
 
-    /* TAREAS AL INICIAR LA PANTALLA CON EL ESTADO DE LA CONEXIÓN */
+    /* RENDERIZAR SEGÚN EL ESTADO DE LA CONEXIÓN */
 
     if (navigator.onLine) {
         console.log('La aplicación está en línea.');
-        //cache();
         appOnline();
     } else {
         console.log('La aplicación está fuera de línea.');
