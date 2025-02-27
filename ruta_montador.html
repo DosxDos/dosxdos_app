@@ -2182,7 +2182,7 @@
             loaderOff();
           } else {
             alerta("Error al leer el almacén de líneas");
-            initializeApplication(); // Initialize new menu functionality
+            initializeApplication(); 
             initializeSearch();
             loaderOff();
           }
@@ -2216,6 +2216,8 @@
               usuario.clase;
           }
           montador = usuario.cod;
+
+          initializeApplication();
 
           rutas = await leerDatos("dosxdos", "rutas");
           rutas = rutas.map((objeto) => ({
