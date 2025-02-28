@@ -1,665 +1,365 @@
 <!DOCTYPE html>
-
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Historial montador</title>
-    <!-- Favicons -->
-    <link rel="icon" type="image/png" href="https://dosxdos.app.iidos.com/img/logoPwa256.png">
-    <style>
-        @charset "UTF-8";
-
-        /* $variables - 40% */
-        :root {
-            --x1_7: 0.41vw;
-            --x60: 14.56vw;
-            --x10: 2.43vw;
-            --x300: 72.82vw;
-            --x15: 3.64vw;
-            --x5: 1.21vw;
-            --x70: 16.99vw;
-            --x25: 6.07vw;
-            --x3: 0.73vw;
-            --x1: 0.24vw;
-            --x20: 4.85vw;
-            --x250: 60.68vw;
-            --x30: 7.28vw;
-            --x22: 5.34vw;
-            --x28: 6.8vw;
-            --x1_5: 0.36vw;
-            --x2: 0.49vw;
-            --x18: 4.37vw;
-            --x2_5: 0.61vw;
-        }
-
-        /* INICIO */
-        * {
-            padding: 0;
-            margin: 0;
-            box-sizing: border-box;
-            letter-spacing: var(--x1_7);
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .displayOff {
-            display: none;
-        }
-
-        .displayOn {
-            display: flex;
-        }
-
-        .borde {
-            border: var(--x1) solid black;
-        }
-
-        body {
-            overflow-x: hidden;
-        }
-
-        .oyh {
-            overflow-y: hidden;
-        }
-
-        /* FUENTES */
-        @font-face {
-            font-family: 'Roboto';
-            src: url("https://dosxdos.app.iidos.com/css/fuentes/Roboto/Roboto-Light.ttf") format("truetype");
-        }
-
-        @font-face {
-            font-family: 'Merriweather';
-            src: url("https://dosxdos.app.iidos.com/css/fuentes/Merriweather/Merriweather-Light.ttf") format("truetype");
-        }
-
-        @font-face {
-            font-family: 'Merriweather-Bold';
-            src: url("https://dosxdos.app.iidos.com/css/fuentes/Merriweather/Merriweather-Bold.ttf") format("truetype");
-        }
-
-        @font-face {
-            font-family: 'Lora';
-            src: url("https://dosxdos.app.iidos.com/css/fuentes/Lora/Lora-Regular.ttf") format("truetype");
-        }
-
-        @font-face {
-            font-family: 'Lora-Medium';
-            src: url("https://dosxdos.app.iidos.com/css/fuentes/Lora/Lora-Medium.ttf") format("truetype");
-        }
-
-        @font-face {
-            font-family: 'Lora-Bold';
-            src: url("https://dosxdos.app.iidos.com/css/fuentes/Lora/Lora-Bold.ttf") format("truetype");
-        }
-
-        /* LOADER */
-        #loader {
-            width: 100vw;
-            height: 100vh;
-            position: absolute;
-            top: 0;
-            z-index: 2000;
-            background-color: rgba(0, 0, 0, 0.886);
-            justify-content: center;
-            align-items: center;
-        }
-
-        #loader {
-            width: 100vw;
-            height: 100vh;
-            position: absolute;
-            top: 0;
-            z-index: 6000;
-            background-color: rgba(0, 0, 0, 0.886);
-            justify-content: center;
-            align-items: center;
-        }
-
-        .loader {
-            border: 4px solid #ffffff;
-            /* Blanco */
-            border-top: 4px solid #d31216;
-            /* Rojo */
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* NAVEGACIÓN */
-        #encabezado {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            justify-content: center;
-            align-items: center;
-            background-color: #f4f4f4;
-        }
-
-        #logo {
-            display: flex;
-            width: 100%;
-            justify-content: center;
-            align-items: center;
-            padding: var(--x10);
-        }
-
-        #logo>img {
-            width: var(--x300);
-        }
-
-        #menu {
-            display: flex;
-            width: 100%;
-            align-items: center;
-            padding: var(--x10);
-            justify-content: space-between;
-            margin-top: var(--x10);
-        }
-
-        #usuario {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #usuario:hover {
-            cursor: pointer;
-        }
-
-        #iconoUsuario {
-            display: flex;
-            width: var(--x70);
-            height: var(--x70);
-            border-radius: 50%;
-        }
-
-        #iconoUsuario>img {
-            width: var(--x70);
-            height: var(--x70);
-            border-radius: 50%;
-        }
-
-        #nombreUsuario {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: var(--x25);
-            margin-left: var(--x5);
-            font-family: "Merriweather-Bold", "Merriweather-Bold";
-        }
-
-        #flechaUsuario {
-            display: flex;
-            width: var(--x25);
-            height: var(--x25);
-            margin-left: var(--x3);
-        }
-
-        #flechaUsuario>img {
-            width: var(--x25);
-            height: var(--x25);
-        }
-
-        .botonIcono {
-            border: var(--x1) solid gray;
-            display: flex;
-            width: var(--x70);
-            height: var(--x70);
-            border-radius: 20%;
-            background-color: #d31216;
-        }
-
-        .botonIcono:hover {
-            cursor: pointer;
-        }
-
-        .botonIcono:active {
-            background-color: #b20b15;
-        }
-
-        .botonIcono>img {
-            width: var(--x70);
-            height: var(--x70);
-            border-radius: 20%;
-            padding: var(--x10);
-        }
-
-        #opcionesMenu {
-            width: 100%;
-            padding: var(--x15);
-            justify-content: space-evenly;
-            align-items: center;
-        }
-
-        .opcionMenu {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .opcionMenu>p {
-            margin-top: var(--x3);
-            font-size: var(--x20);
-            font-family: "Merriweather-Bold", "Merriweather-Bold";
-        }
-
-        #opcionesUsuario {
-            width: 100%;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: var(--x15);
-        }
-
-        .boton {
-            width: var(--x250);
-            border-radius: var(--x30);
-            font-family: 'Merriweather-Bold', 'Merriweather-Bold';
-            font-size: var(--x22);
-            height: var(--x60);
-            padding: var(--x10);
-            border: var(--x1) solid gray;
-            color: white;
-            background-color: #d31216;
-        }
-
-        .boton2 {
-            width: var(--x250);
-            border-radius: var(--x30);
-            font-family: 'Merriweather-Bold', 'Merriweather-Bold';
-            font-size: var(--x22);
-            height: var(--x60);
-            padding: var(--x10);
-            border: var(--x1) solid gray;
-            color: white;
-            background-color: #d31216;
-            margin-top: var(--x15);
-        }
-
-        .boton:hover {
-            cursor: pointer;
-        }
-
-        .boton:active {
-            background-color: #b20b15;
-        }
-
-        .boton2:hover {
-            cursor: pointer;
-        }
-
-        .boton2:active {
-            background-color: #b20b15;
-        }
-
-        #titulo {
-            justify-content: center;
-            align-items: center;
-            font-family: 'Lora-Bold', 'Lora-Bold';
-            width: 100%;
-            font-size: var(--x28);
-            padding: var(--x5);
-            text-align: center;
-        }
-
-        #mensaje {
-            position: relative;
-            flex-wrap: wrap;
-            text-align: center;
-            font-size: var(--x18);
-            letter-spacing: var(--x2_5);
-            background-color: rgba(0, 0, 0, 0.573);
-            color: white;
-            padding: var(--x10);
-            font-family: 'Roboto', 'Roboto-Light';
-            width: 100%;
-            justify-content: center;
-        }
-
-        #mensaje>p {
-            display: flex;
-            flex-wrap: wrap;
-            margin-top: var(--x20);
-            margin-bottom: var(--x20);
-        }
-
-        #actualizacion {
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            padding: var(--x15);
-            text-align: center;
-            color: gray;
-        }
-
-        #imgCerrar {
-            position: absolute;
-            width: var(--x28);
-            top: var(--x2);
-            right: var(--x2);
-        }
-
-        #imgCerrar:hover {
-            cursor: pointer;
-        }
-
-        #cajaBuscador {
-            display: flex;
-            width: 100%;
-            justify-content: center;
-            align-items: center;
-            padding: var(--x15);
-        }
-
-        #buscador {
-            height: var(--x60);
-            width: var(--x300);
-            margin-left: var(--x5);
-            border: var(--x2) solid gray;
-            font-family: 'Lora', 'Lora-Regular';
-            font-size: var(--x28);
-            text-align: center;
-            border-radius: var(--x15);
-            padding: var(--x15);
-        }
-
-        #buscador:focus {
-            outline-color: #b20b15;
-        }
-
-        #contenido {
-            display: flex;
-            width: 100%;
-            flex-direction: column;
-            padding: var(--x15);
-            justify-content: center;
-            align-items: center;
-            background-color: #e1e1e1;
-        }
-
-        .ruta {
-            max-width: 100%;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            border-radius: var(--x30);
-            font-family: 'Lora-Bold', 'Lora-Bold';
-            font-size: var(--x22);
-            border: var(--x1) solid gray;
-            color: white;
-            background-color: #d31216;
-            margin-top: var(--x10);
-            margin-bottom: var(--x10);
-            padding: var(--x15);
-        }
-
-        .ruta:hover {
-            cursor: pointer;
-        }
-
-        .ruta:active {
-            background-color: #b20b15;
-        }
-
-        .ruta2 {
-            max-width: 100%;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            border-radius: var(--x30);
-            font-family: 'Lora-Bold', 'Lora-Bold';
-            font-size: var(--x22);
-            border: var(--x1) solid gray;
-            color: white;
-            background-color: #d312158a;
-            margin-top: var(--x10);
-            margin-bottom: var(--x10);
-            padding: var(--x15);
-        }
-
-        .ruta2:hover {
-            cursor: pointer;
-        }
-
-        .ruta2:active {
-            background-color: #b20b15;
-        }
-
-        .resaltado {
-            background-color: rgba(0, 0, 0, 0.573);
-        }
-
-        #contMapa {
-            display: flex;
-            width: 100%;
-            justify-content: center;
-            align-items: center;
-            padding: var(--x15);
-        }
-
-        /* MOVILES GRANDES */
-        @media screen and (min-width: 412px) and (max-width: 767px) {
-            :root {
-                --x1_7: 1.7px;
-                --x60: 60px;
-                --x10: 10px;
-                --x300: 300px;
-                --x15: 15px;
-                --x5: 5px;
-                --x70: 70px;
-                --x25: 25px;
-                --x3: 3px;
-                --x1: 1px;
-                --x20: 20px;
-                --x250: 250px;
-                --x30: 30px;
-                --x22: 22px;
-                --x28: 28px;
-                --x1_5: 1.5px;
-                --x2: 2px;
-                --x18: 18px;
-                --x2_5: 2.5px;
-            }
-        }
-
-        /* TABLETS */
-        @media screen and (min-width: 768px) and (max-width: 1199px) {
-            :root {
-                --x1_7: 0.09vw;
-                --x60: 3vw;
-                --x10: 0.5vw;
-                --x300: 15vw;
-                --x15: 0.75vw;
-                --x5: 0.25vw;
-                --x70: 3.5vw;
-                --x25: 1.25vw;
-                --x3: 0.15vw;
-                --x1: 0.05vw;
-                --x20: 1vw;
-                --x250: 12.5vw;
-                --x30: 1.5vw;
-                --x22: 1.1vw;
-                --x28: 1.4vw;
-                --x1_5: 0.08vw;
-                --x2: 0.1vw;
-                --x18: 0.9vw;
-                --x2_5: 0.13vw;
-            }
-
-            #menu {
-                justify-content: space-evenly;
-            }
-        }
-
-        /* ESCRITORIOS */
-        @media screen and (min-width: 1200px) {
-            :root {
-                --x1_7: 1.02px;
-                --x60: 36px;
-                --x10: 6px;
-                --x300: 180px;
-                --x15: 9px;
-                --x5: 3px;
-                --x70: 42px;
-                --x25: 15px;
-                --x3: 1.8px;
-                --x1: 0.6px;
-                --x20: 12px;
-                --x250: 150px;
-                --x30: 18px;
-                --x22: 13.2px;
-                --x28: 16.8px;
-                --x1_5: 0.9px;
-                --x2: 1.2px;
-                --x18: 10.8px;
-                --x2_5: 1.5px;
-            }
-
-            #menu {
-                justify-content: space-evenly;
-            }
-        }
-    </style>
-    <link rel="stylesheet" href="css/tailwindmain.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Historial Montador</title>
+    <link rel="icon" type="image/png" href="https://dosxdos.app.iidos.com/img/logoPwa256.png" />
+    <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/tailwindmain.css" />
+    <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/index.css" />
 </head>
 
-<body id="body" class="oyh">
-
-    <div id="loader" class="displayOn">
-        <div class="loader"></div>
+<body id="body" class="bg-gray-100 overflow-x-hidden">
+    <!-- Loader -->
+    <div id="loader" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center">
+        <span class="loader"></span>
     </div>
 
-    <section id="encabezado">
+    <!-- Navigation -->
+    <section id="encabezado" class="w-full bg-white shadow-md fixed top-0 z-30">
+        <!-- Main header -->
+        <div class="flex items-center justify-between w-full px-6 py-4">
+            <!-- Logo -->
+            <div class="flex items-center">
+                <img src="https://dosxdos.app.iidos.com/img/logo300.png" class="h-16 hidden xl:block"
+                    alt="Logo completo" />
+                <img src="https://dosxdos.app.iidos.com/img/Isotipo-38.png" class="h-16 xl:hidden" alt="Isotipo" />
+            </div>
 
-        <div id="logo">
-            <img src="https://dosxdos.app.iidos.com/img/logo300.png">
-        </div>
+            <!-- Desktop Navigation -->
+            <nav class="hidden xl:flex items-center space-x-8">
+                <a href="https://dosxdos.app.iidos.com/rutas_montador.html"
+                    class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 5c8 0 8 14 16 14" />
+                        <circle cx="4" cy="5" r="2" />
+                        <circle cx="12" cy="12" r="2" />
+                        <circle cx="20" cy="19" r="2" />
+                    </svg>
+                    <span>Rutas</span>
+                </a>
 
-        <nav id="menu">
+                <a href="https://dosxdos.app.iidos.com/ruta_montador.html"
+                    class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                        <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+                        <path d="M9 12h6" />
+                        <path d="M9 16h6" />
+                    </svg>
+                    <span>Líneas</span>
+                </a>
 
-            <div id="usuario">
-                <div id="iconoUsuario">
-                    <img src="https://dosxdos.app.iidos.com/img/usuario.png" id="imagenUsuario">
+                <a href="https://dosxdos.app.iidos.com/historial_montador.html"
+                    class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
+                    <svg class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10" />
+                        <polyline points="12 6 12 12 16 14" />
+                    </svg>
+                    <span>Historial</span>
+                </a>
+
+                <!-- Desktop Menu Notifications Bell -->
+                <a href="https://dosxdos.app.iidos.com/notificaciones.html" class="relative z-10"
+                    id="desktopBellContainer">
+                    <img id="bellDesktop" src="" class="text-gray-900 object-contain" />
+                    <span id="desktopNotificationCount"
+                        class="absolute top-0 -right-2 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] text-center border hidden"></span>
+                </a>
+
+                <!-- Desktop User Menu -->
+                <div class="relative group drop-shadow">
+                    <button id="userMenuButton"
+                        class="group flex items-center gap-3 py-1 pl-1.5 pr-4 rounded-full bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-gray-300 transition-all duration-200"
+                        aria-expanded="false">
+                        <div
+                            class="w-10 h-10 rounded-full overflow-hidden border-2 border-white shadow-sm bg-gray-100 flex items-center justify-center">
+                            <img id="imagenUsuarioDesktop" src="https://dosxdos.app.iidos.com/img/usuario.png"
+                                class="w-full h-full object-cover" alt="Profile"
+                                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+                            <svg class="w-5 h-5 text-gray-400 hidden" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+
+                        <span id="nombreUsuarioDesktop" class="text-gray-700 font-medium text-lg"></span>
+
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                            class="w-6 h-6 text-gray-400 group-hover:text-gray-600 transition-transform duration-200 group-hover:rotate-180"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+
+                    <!-- Desktop Dropdown Menu -->
+                    <div id="userDropdownMenu"
+                        class="hidden absolute right-0 mt-2 w-max bg-white rounded-lg shadow-lg p-4 z-50">
+                        <button id="editarUsuarioDesktop"
+                            class="flex items-center gap-2 w-full mb-4 text-left text-xl text-black hover:bg-red-600/20 rounded-lg transition-colors duration-200">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                            </svg>
+                            Editar Usuario
+                        </button>
+                        <button id="cerrarSesionDesktop"
+                            class="flex items-center gap-2 w-full text-left text-xl text-red-500 hover:bg-red-600/20 rounded-lg transition-colors duration-200">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                                <polyline points="16 17 21 12 16 7" />
+                                <line x1="21" y1="12" x2="9" y2="12" />
+                            </svg>
+                            Cerrar Sesión
+                        </button>
+                    </div>
                 </div>
-                <p id="nombreUsuario"></p>
-                <div id="flechaUsuario">
-                    <img src="https://dosxdos.app.iidos.com/img/flechaAbajo.png">
+            </nav>
+
+            <!-- Mobile Navigation -->
+            <div class="xl:hidden flex items-center space-x-2 mx-2">
+                <!-- Mobile Bell -->
+                <a href="https://dosxdos.app.iidos.com/notificaciones.html" class="relative z-10"
+                    id="mobileBellContainer">
+                    <img id="bellMobile" src="" class="text-gray-900 object-contain mt-2" />
+                    <span id="mobileNotificationCount"
+                        class="absolute top-2 right-0 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] text-center border hidden"></span>
+                </a>
+
+                <!-- Hamburger Button -->
+                <button id="menuButton" class="xl:hidden relative z-50 p-2 focus:outline-none">
+                    <div class="relative w-8 h-8">
+                        <span class="absolute h-1 w-8 bg-gray-900 transition-all duration-300 ease-in-out top-1"
+                            id="hamburgerTop"></span>
+                        <span class="absolute h-1 w-8 bg-gray-900 transition-all duration-300 ease-in-out top-4"
+                            id="hamburgerMiddle"></span>
+                        <span class="absolute h-1 w-8 bg-gray-900 transition-all duration-300 ease-in-out top-7"
+                            id="hamburgerBottom"></span>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobileMenu"
+                class="xl:hidden fixed inset-0 bg-gradient-to-r from-red-500 to-red-600 bg-opacity-95 transform translate-x-full transition-all duration-500 ease-in-out z-40 overflow-hidden backdrop-blur-sm flex flex-col">
+                <div class="absolute inset-0 z-0" style="
+                    background-image: url('https://dosxdos.app.iidos.com/img/texture-red.svg');
+                    background-size: contain;
+                    opacity: 0.7;
+                "></div>
+
+                <!-- User Profile Section -->
+                <div class="px-8 py-4 mt-20 relative z-10">
+                    <div class="relative flex items-center gap-3 py-1 pl-1.5 pr-4 bg-white shadow-lg rounded-full">
+                        <!-- Profile image -->
+                        <div
+                            class="absolute left-0 w-24 h-24 rounded-full overflow-hidden border-2 border-white bg-gray-100 flex items-center justify-center shadow-lg">
+                            <img id="imagenUsuarioMobile" src="https://dosxdos.app.iidos.com/img/usuario.png"
+                                class="w-full h-full object-cover" alt="Profile"
+                                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+                            <svg class="w-12 h-12 text-gray-400 hidden" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                        <div class="ml-28 flex items-center py-4">
+                            <!-- User name -->
+                            <span class="text-black font-medium text-xl">¡Hola,&nbsp;</span>
+                            <span id="nombreUsuarioMobile" class="text-black font-medium text-xl"></span>
+                            <span class="text-black font-medium text-xl">!</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Links -->
+                <nav class="px-8 py-6 space-y-2 relative z-10 flex-1 overflow-y-auto custom-scrollbar">
+                    <a href="https://dosxdos.app.iidos.com/notificaciones.html"
+                        class="z-10 flex items-center px-6 py-2 text-white bg-red-600 bg-opacity-60 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-xl group backdrop-blur-lg">
+                        <div
+                            class="flex items-center justify-center w-14 h-14 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all">
+                            <svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M18 8a6 6 0 0 0-12 0v5a6 6 0 0 1-2 4h16a6 6 0 0 1-2-4V8"></path>
+                                <line x1="12" y1="22" x2="12" y2="22"></line>
+                            </svg>
+                        </div>
+                        <span class="text-lg font-semibold tracking-wide">Notificaciones</span>
+                    </a>
+
+                    <a href="https://dosxdos.app.iidos.com/rutas_montador.html"
+                        class="z-10 flex items-center px-6 py-2 text-white bg-red-600 bg-opacity-60 shadow-xl backdrop-blur-lg hover:bg-white/20 rounded-xl transition-all duration-300 group">
+                        <div
+                            class="z-0 flex items-center justify-center w-14 h-14 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all">
+                            <svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 5c8 0 8 14 16 14" />
+                                <circle cx="4" cy="5" r="2" />
+                                <circle cx="12" cy="12" r="2" />
+                                <circle cx="20" cy="19" r="2" />
+                            </svg>
+                        </div>
+                        <span class="text-lg font-semibold tracking-wide">Rutas</span>
+                    </a>
+
+                    <a href="https://dosxdos.app.iidos.com/ruta_montador.html"
+                        class="z-10 flex items-center px-6 py-2 text-white bg-red-600 bg-opacity-60 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-xl group backdrop-blur-lg">
+                        <div
+                            class="flex items-center justify-center w-14 h-14 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all">
+                            <svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                                <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+                                <path d="M9 12h6" />
+                                <path d="M9 16h6" />
+                            </svg>
+                        </div>
+                        <span class="text-lg font-semibold tracking-wide">Líneas</span>
+                    </a>
+
+                    <a href="https://dosxdos.app.iidos.com/historial_montador.html"
+                        class="z-10 flex items-center px-6 py-2 text-white bg-red-600 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-xl group backdrop-blur-lg">
+                        <div
+                            class="flex items-center justify-center w-14 h-14 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all">
+                            <svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10" />
+                                <polyline points="12 6 12 12 16 14" />
+                            </svg>
+                        </div>
+                        <span class="text-lg font-semibold tracking-wide">Historial</span>
+                    </a>
+                </nav>
+
+                <div class="relative z-10">
+                    <div id="divider_id" class="website-divider-container-734167"
+                        style="height: 100px; overflow: visible">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="divider-img-734167" viewBox="0 0 1080 137"
+                            preserveAspectRatio="none" style="bottom: -20px">
+                            <path
+                                d="M 0,137 V 59.03716 c 158.97703,52.21241 257.17659,0.48065 375.35967,2.17167 118.18308,1.69101 168.54911,29.1665 243.12679,30.10771 C 693.06415,92.25775 855.93515,29.278599 1080,73.61449 V 137 Z"
+                                style="fill: #ffffff"></path>
+                            <path
+                                d="M 0,10.174557 C 83.419822,8.405668 117.65911,41.78116 204.11379,44.65308 290.56846,47.52499 396.02558,-7.4328 620.04248,94.40134 782.19141,29.627636 825.67279,15.823104 1080,98.55518 V 137 H 0 Z"
+                                style="fill: #ffffff; opacity: 0.5"></path>
+                            <path
+                                d="M 0,45.10182 C 216.27861,-66.146913 327.90348,63.09813 416.42665,63.52904 504.94982,63.95995 530.42054,22.125806 615.37532,25.210412 700.33012,28.295019 790.77619,132.60682 1080,31.125744 V 137 H 0 Z"
+                                style="fill: #ffffff; opacity: 0.25"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- User Actions -->
+                <div class="relative z-10 mt-auto px-8 pb-6 bg-white bg-opacity-05 shadow flex flex-col space-y-2">
+                    <button id="editarUsuarioMobile"
+                        class="z-30 flex items-center w-full px-6 py-2 text-white bg-red-600 shadow-xl backdrop-blur-lg rounded-xl transition-all duration-300 group">
+                        <div
+                            class="flex items-center justify-center w-12 h-10 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all">
+                            <svg class="w-6 h-6 shadow-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                            </svg>
+                        </div>
+                        <span class="text-lg font-medium">Editar usuario</span>
+                    </button>
+
+                    <button id="cerrarSesionMobile"
+                        class="z-30 flex items-center w-full px-6 py-2 bg-red-600 shadow-xl backdrop-blur-lg text-white rounded-xl transition-all duration-300 group mb-3">
+                        <div
+                            class="flex items-center justify-center w-12 h-10 bg-white/20 rounded-lg mr-4 group-hover:bg-white/30 transition-all">
+                            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                                <polyline points="16 17 21 12 16 7" />
+                                <line x1="21" y1="12" x2="9" y2="12" />
+                            </svg>
+                        </div>
+                        <span class="text-lg font-medium">Cerrar sesión</span>
+                    </button>
                 </div>
             </div>
-
-            <button id="casa" class="botonIcono">
-                <img src="https://dosxdos.app.iidos.com/img/casaWhite.png">
-            </button>
-
-        </nav>
-
-        <nav id="opcionesMenu" class="displayOff">
-
-            <div class="opcionMenu" id="horarios">
-                <button class="botonIcono" type="button" id="horarios">
-                    <img src="https://dosxdos.app.iidos.com/img/relojWhite.png">
-                </button>
-                <p>Horarios</p>
-            </div>
-
-            <div class="opcionMenu" id="rutasIcono">
-                <button class="botonIcono" type="button" id="rutasIconoBoton">
-                    <img src="https://dosxdos.app.iidos.com/img/rutasWhite.png">
-                </button>
-                <p>Rutas</p>
-            </div>
-
-            <div class="opcionMenu" id="lineasIcono">
-                <button class="botonIcono" type="button" id="rutasIconoBoton">
-                    <img src="https://dosxdos.app.iidos.com/img/task.png">
-                </button>
-                <p>Líneas</p>
-            </div>
-
-            <div class="opcionMenu" id="historialIcono">
-                <button class="botonIcono" type="button" id="rutasIconoBoton">
-                    <img src="https://dosxdos.app.iidos.com/img/historial.png">
-                </button>
-                <p>Historial</p>
-            </div>
-
-        </nav>
-
-        <nav id="opcionesUsuario" class="displayOff">
-
-            <button type="button" id="editarUsuario" class="boton">Editar usuario</button>
-            <button type="button" id="cerrarSesion" class="boton2">Cerrar sesión</button>
-
-        </nav>
-
-        <div id="mensaje" class="displayOff">
-            <p id="textoMensaje"></p><img id="imgCerrar" src="https://dosxdos.app.iidos.com/img/cerrar.png">
         </div>
-
-        <div id="cajaBuscador">
-
-            <div id="iconoBuscador" class="w-8">
-                <img src="https://dosxdos.app.iidos.com/img/lupa.png">
-            </div>
-            <input type="text" id="buscador">
-
-        </div>
-
-        <h1 id="titulo" class="displayOn"></h1>
-
-        <p id="actualizacion" class="displayOff">PARA PODER USAR SIN CONEXIÓN A INTERNET EL NUEVO CAMPO "APP NOTAS",
-            DEBES CERRAR LA SESIÓN Y VOLVER A INICIAR LA SESIÓN (Cuando cierres la sesión elimina por favor los datos de
-            navegación de Google Chrome).</p>
-
     </section>
 
+    <!-- Main Content Container -->
+    <div class="container mx-auto px-4 sm:px-6 pb-12 pt-32">
+        <!-- Header Section -->
+        <section class="mb-8">
+            <div class="rounded-xl shadow-lg overflow-hidden relative">
+                <div class="absolute inset-0"
+                    style="background-image: url('https://dosxdos.app.iidos.com/img/texture-red.svg'); background-size: contain;">
+                </div>
+                <div class="relative p-6 sm:p-8 text-white z-10">
+                    <h1 id="titulo" class="text-2xl sm:text-3xl font-bold mb-2">Historial de Montador</h1>
+                    <p id="subtitulo" class="text-sm sm:text-base opacity-90">Consulta tu historial de trabajos</p>
+                </div>
+            </div>
+        </section>
 
-    <div class="w-full max-w-md mx-auto flex">
-        <div class="bg-white p-8 rounded shadow-md w-full max-w-md">
-            <h2 class="text-2xl font-bold mb-6 text-center">Selecciona las Fechas</h2>
-            <div class="mb-4">
-                <label for="fecha-inicio" class="block text-gray-700 mb-2">Fecha de Inicio</label>
-                <input type="date" id="fecha-inicio" name="fecha-inicio"
-                    class="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300">
-            </div>
-            <div class="mb-6">
-                <label for="fecha-fin" class="block text-gray-700 mb-2">Fecha de Fin</label>
-                <input type="date" id="fecha-fin" name="fecha-fin"
-                    class="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300">
-            </div>
-            <div class="mb-6 flex justify-center me-4">
-                <Button type="button" id="consultar" name="consultar"
-                    class="text-red-700 text-center hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
-                    CONSULTAR
-                </Button>
+        <!-- Search Bar -->
+        <div class="mb-8 max-w-md mx-auto">
+            <div class="relative flex items-center">
+                <div id="iconoBuscador" class="absolute left-3 z-10">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
+                <input type="text" id="buscador"
+                    class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                    placeholder="Buscar en el historial...">
             </div>
         </div>
+
+        <!-- Date Selection -->
+        <section class="w-full max-w-md mx-auto flex mb-8">
+            <div class="bg-white p-8 rounded shadow-md w-full max-w-md">
+                <h2 class="text-2xl font-bold mb-6 text-center">Selecciona las Fechas</h2>
+                <div class="mb-4">
+                    <label for="fecha-inicio" class="block text-gray-700 mb-2">Fecha de Inicio</label>
+                    <input type="date" id="fecha-inicio" name="fecha-inicio"
+                        class="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300">
+                </div>
+                <div class="mb-6">
+                    <label for="fecha-fin" class="block text-gray-700 mb-2">Fecha de Fin</label>
+                    <input type="date" id="fecha-fin" name="fecha-fin"
+                        class="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300">
+                </div>
+                <div class="mb-6 flex justify-center me-4">
+                    <button type="button" id="consultar" name="consultar"
+                        class="text-red-700 text-center hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
+                        CONSULTAR
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mapa Button -->
+        <div class="flex justify-center mb-8">
+            <button id="mapa"
+                class="w-full max-w-md bg-red-600 text-white py-3 rounded-lg shadow-md hover:bg-red-700 transition-colors">
+                VER MAPA
+            </button>
+        </div>
+
+        <!-- Content Container -->
+        <section id="contenido" class="space-y-4">
+        </section>
     </div>
 
-    <div id="contMapa"><button id="mapa" class="ruta resaltado">MAPA</button></div>
-
-    <section id="contenido"></section>
-
 </body>
-
+<script src="https://dosxdos.app.iidos.com/js/index_db.js"></script>
 <script>
 
     //ESTA FUNCION REVISA EL HISTORIAL DE MONTADORES//
-
     const fechaInicio = document.getElementById('fecha-inicio');
     const fechaFin = document.getElementById('fecha-fin');
     const consultar = document.getElementById('consultar');
@@ -687,7 +387,6 @@
     //fechaInicio.addEventListener('change', verificarFechas);
     consultar.addEventListener('click', verificarFechas);
 
-    // Función que realiza la petición al servidor
     // Función que realiza la petición al servidor
     function enviarFechasAlServidor(fechaInicioVal, fechaFinVal) {
         return new Promise((resolve, reject) => {
@@ -784,16 +483,6 @@
                                 });
                                 $contenido.appendChild(fragmento);
                                 startBuscador();
-                                const editarUsuario = document.getElementById('editarUsuario');
-                                editarUsuario.addEventListener('click', e => {
-                                    if (navigator.onLine) {
-                                        window.location.href = "https://dosxdos.app.iidos.com/dosxdos.php?modulo=editarUsuario&id=" + usuario.id;
-                                    } else {
-                                        mensaje = 'No es posible acceder a las opciones de edición de usuario sin conexión a internet';
-                                        alerta(mensaje);
-                                        scrollToTop();
-                                    }
-                                })
                                 const peticionesCierre = await procesarPeticiones2();
                                 loaderOff();
                             }
@@ -834,7 +523,6 @@
 
 
     //AQUI ACABA LA FUNCION DEL HISTORIAL DE MONTADORES//
-
 
     const ruta = localStorage.getItem('ruta');
     if (ruta && ruta !== null) {
@@ -1145,18 +833,11 @@
 
     const $opcionesMenu = document.getElementById('opcionesMenu'),
         $opcionesUsuario = document.getElementById('opcionesUsuario'),
-        $casa = document.getElementById('casa'),
-        $usuario = document.getElementById('usuario'),
         $contenido = document.getElementById('contenido'),
         $loader = document.getElementById('loader'),
         $body = document.getElementById('body'),
-        $mensaje = document.getElementById('mensaje'),
         $imgCerrar = document.getElementById('imgCerrar'),
-        $textoMensaje = document.getElementById('textoMensaje'),
-        buscador = document.getElementById('buscador'),
-        $nombreUsuario = document.getElementById('nombreUsuario'),
-        $imagenUsuario = document.getElementById('imagenUsuario'),
-        $botonRutas = document.getElementById('rutasIconoBoton');
+        buscador = document.getElementById('buscador');
     let usuario,
         montador,
         rutas;
@@ -1186,26 +867,92 @@
         }, 1000)
     }
 
-    /* MENSAJE */
+    function alerta(mensaje) {
+        // Remove existing alert if present
+        const existingAlert = document.querySelector("#customAlert");
+        if (existingAlert) {
+            existingAlert.remove();
+        }
 
-    function mensajeOn() {
-        $mensaje.classList.remove('displayOff');
-        $mensaje.classList.add('displayOn');
-    }
+        // Create alert container
+        const alertContainer = document.createElement("div");
+        alertContainer.id = "customAlert";
+        alertContainer.className =
+            "fixed left-1/2 transform -translate-x-1/2 z-50 transition-all duration-300 ease-in-out w-[95%] md:w-[75%] lg:w-[65%]";
+        alertContainer.style.top = "-100px";
 
-    function mensajeOff() {
-        $mensaje.classList.remove('displayOn');
-        $mensaje.classList.add('displayOff');
-    }
+        // Create alert content
+        const alertContent = document.createElement("div");
+        alertContent.className = `
+    relative
+    bg-white
+    border-2 border-red-600
+    rounded-lg
+    shadow-lg
+    p-4 md:p-5
+    flex flex-col md:flex-row md:items-center gap-3 md:gap-4
+  `;
 
-    $imgCerrar.addEventListener('click', e => {
-        mensajeOff();
-    })
+        // Create close button
+        const closeButton = document.createElement("button");
+        closeButton.className =
+            "absolute -right-3 -top-3 hover:bg-red-400 p-1 bg-red-600 rounded-full p-1.5 transition-colors duration-200";
+        closeButton.innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+  `;
 
-    function alerta(men) {
-        $textoMensaje.innerHTML = men;
-        mensajeOn();
+        // Create main content container for mobile layout
+        const contentContainer = document.createElement("div");
+        contentContainer.className =
+            "flex flex-col md:flex-row items-center gap-3 md:gap-4 flex-1";
+
+        // Create icon with exclamation mark
+        const iconContainer = document.createElement("div");
+        iconContainer.className = "flex-shrink-0 text-red-600";
+        iconContainer.innerHTML = `
+<svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="12" r="10" />
+  <path d="M12 7v6" />
+  <path d="M12 16h0.01" />
+</svg>
+`;
+        // Create message text
+        const messageText = document.createElement("p");
+        messageText.className = "text-gray-900 text-base md:text-lg flex-1";
+        messageText.textContent = mensaje;
+
+        // Assemble the content container
+        contentContainer.appendChild(iconContainer);
+        contentContainer.appendChild(messageText);
+
+        // Assemble the alert
+        alertContent.appendChild(closeButton);
+        alertContent.appendChild(contentContainer);
+        alertContainer.appendChild(alertContent);
+        document.body.appendChild(alertContainer);
+
+        // Slide down animation
+        requestAnimationFrame(() => {
+            alertContainer.style.top = "56px";
+        });
+
+        // Add event listeners
+        closeButton.addEventListener("click", () => {
+            hideAlert(alertContainer);
+        });
+
+        // Hide loader if it exists
         loaderOff();
+    }
+
+    function hideAlert(alertContainer) {
+        alertContainer.style.top = "-100px";
+
+        setTimeout(() => {
+            alertContainer.remove();
+        }, 300);
     }
 
     /* CERRAR SESIÓN */
@@ -1250,8 +997,7 @@
         }
         else {
             mensaje = 'No es posible cerrar la sesión sin conexión a internet';
-            $textoMensaje.innerHTML = mensaje;
-            mensajeOn();
+            alerta(mensaje);
         }
     }
 
@@ -1474,19 +1220,45 @@
             const login = await vLogin();
             if (!login) {
                 window.location.href = "https://dosxdos.app.iidos.com/index.html";
-            }
-            else {
-                const Arrayusuario = await leerDatos('dosxdos', 'usuario');
+            } else {
+                const Arrayusuario = await leerDatos("dosxdos", "usuario");
                 usuario = Arrayusuario[0];
-                let loginMontador = localStorage.getItem('loginMontador');
+                let loginMontador = localStorage.getItem("loginMontador");
                 if (!loginMontador || loginMontador === null) {
-                    window.location.href = "https://dosxdos.app.iidos.com/dosxdos.php?id=" + usuario.id + "&rol=" + usuario.clase;
+                    window.location.href =
+                        "https://dosxdos.app.iidos.com/dosxdos.php?id=" +
+                        usuario.id +
+                        "&rol=" +
+                        usuario.clase;
                 }
                 montador = usuario.cod;
-                $nombreUsuario.innerHTML = usuario.nombre;
-                if (usuario.imagen != '0') {
-                    $imagenUsuario.src = usuario.imagen;
+
+                initializeApplication();
+
+                // Update the user information in the new UI elements
+                const nombreUsuarioDesktop = document.getElementById(
+                    "nombreUsuarioDesktop"
+                );
+                const nombreUsuarioMobile = document.getElementById(
+                    "nombreUsuarioMobile"
+                );
+                const imagenUsuarioDesktop = document.getElementById(
+                    "imagenUsuarioDesktop"
+                );
+                const imagenUsuarioMobile = document.getElementById(
+                    "imagenUsuarioMobile"
+                );
+
+                if (nombreUsuarioDesktop)
+                    nombreUsuarioDesktop.textContent = usuario.nombre;
+                if (nombreUsuarioMobile)
+                    nombreUsuarioMobile.textContent = usuario.nombre;
+
+                if (usuario.imagen !== "0") {
+                    if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
+                    if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
                 }
+
                 sinc = await sincronizarDb2();
                 sinc ? console.log("Base de datos sincronizada") : console.error("Error al sincronizar la base de datos");
                 rutas = await leerDatos('dosxdos', 'rutas');
@@ -1514,6 +1286,12 @@
                 console.log("Fecha inicio por defecto: " + fechaTresMesesAtras);
                 console.log("Fecha fin por defecto: " + fechaActual);
                 await enviarFechasAlServidor(fechaTresMesesAtras, fechaActual);
+                initializeSearch()
+                const sincronizacionDeNotificaciones =
+                    await sincronizarNotificaciones();
+                if (sincronizacionDeNotificaciones) {
+                    await notificar();
+                }
             }
         } catch (error) {
             mensaje = 'ERROR: ' + error.message;
@@ -1521,6 +1299,7 @@
             alerta(mensaje);
         }
     }
+
     //ESTO DEJA LAS FECHAS EN FORMATO YYYY-MM-DD
     // Función para formatear la fecha en "YYYY-MM-DD"
     function formatearFecha(fecha) {
@@ -1539,10 +1318,43 @@
                 window.location.href = "https://dosxdos.app.iidos.com/index.html";
             }
             else {
-                const Arrayusuario = await leerDatos('dosxdos', 'usuario');
+                const Arrayusuario = await leerDatos("dosxdos", "usuario");
                 usuario = Arrayusuario[0];
+                let loginMontador = localStorage.getItem("loginMontador");
+                if (!loginMontador || loginMontador === null) {
+                    window.location.href =
+                        "https://dosxdos.app.iidos.com/dosxdos.php?id=" +
+                        usuario.id +
+                        "&rol=" +
+                        usuario.clase;
+                }
                 montador = usuario.cod;
-                $nombreUsuario.innerHTML = usuario.nombre;
+
+                initializeApplication();
+
+                // Update the user information in the new UI elements
+                const nombreUsuarioDesktop = document.getElementById(
+                    "nombreUsuarioDesktop"
+                );
+                const nombreUsuarioMobile = document.getElementById(
+                    "nombreUsuarioMobile"
+                );
+                const imagenUsuarioDesktop = document.getElementById(
+                    "imagenUsuarioDesktop"
+                );
+                const imagenUsuarioMobile = document.getElementById(
+                    "imagenUsuarioMobile"
+                );
+
+                if (nombreUsuarioDesktop)
+                    nombreUsuarioDesktop.textContent = usuario.nombre;
+                if (nombreUsuarioMobile)
+                    nombreUsuarioMobile.textContent = usuario.nombre;
+
+                if (usuario.imagen !== "0") {
+                    if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
+                    if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
+                }
                 rutas = await leerDatos('dosxdos', 'rutas');
                 rutas = rutas.map(objeto => ({
                     cod: objeto['No.'],
@@ -1609,30 +1421,12 @@
                     });
                     $contenido.appendChild(fragmento);
                     startBuscador();
-                    const editarUsuario = document.getElementById('editarUsuario');
-                    editarUsuario.addEventListener('click', e => {
-                        if (navigator.onLine) {
-                            window.location.href = "https://dosxdos.app.iidos.com/dosxdos.php?modulo=editarUsuario&id=" + usuario.id;
-                        } else {
-                            mensaje = 'No es posible acceder a las opciones de edición de usuario sin conexión a internet';
-                            alerta(mensaje);
-                            scrollToTop();
-                        }
-                    })
+                    initializeSearch()
+                    notificar();
                     loaderOff();
                 }
                 else {
                     alerta('Error al leer el almacén de historial')
-                    const editarUsuario = document.getElementById('editarUsuario');
-                    editarUsuario.addEventListener('click', e => {
-                        if (navigator.onLine) {
-                            window.location.href = "https://dosxdos.app.iidos.com/dosxdos.php?modulo=editarUsuario&id=" + usuario.id;
-                        } else {
-                            mensaje = 'No es posible acceder a las opciones de edición de usuario sin conexión a internet';
-                            alerta(mensaje);
-                            scrollToTop();
-                        }
-                    })
                     loaderOff();
                 }
             }
@@ -1643,69 +1437,27 @@
         }
     }
 
-
-    /* ERROR EN EVENTOS CLIC */
-
-    $casa.addEventListener('click', () => {
-        if ($opcionesMenu.classList.contains("displayOff")) {
-            $opcionesMenu.classList.replace("displayOff", "displayOn");
-            if ($opcionesUsuario.classList.contains("displayOn")) {
-                $opcionesUsuario.classList.replace("displayOn", "displayOff");
-            }
-        } else {
-            $opcionesMenu.classList.replace("displayOn", "displayOff");
-        }
-    })
-
-    $usuario.addEventListener('click', () => {
-        if ($opcionesUsuario.classList.contains("displayOff")) {
-            $opcionesUsuario.classList.replace("displayOff", "displayOn");
-            if ($opcionesMenu.classList.contains("displayOn")) {
-                $opcionesMenu.classList.replace("displayOn", "displayOff");
-            }
-        } else {
-            $opcionesUsuario.classList.replace("displayOn", "displayOff");
-        }
-    })
-
-    $botonRutas.addEventListener('click', () => {
-        window.location.href = "https://dosxdos.app.iidos.com/rutas_montador.html";
-    })
-
-    const lineasIcono = document.getElementById('lineasIcono');
-    lineasIcono.addEventListener('click', () => {
-        window.location.href = "https://dosxdos.app.iidos.com/ruta_montador.html";
-    })
-
-    const historialIcono = document.getElementById('historialIcono');
-    historialIcono.addEventListener('click', () => {
-        window.location.href = "https://dosxdos.app.iidos.com/historial_montador.html";
-    })
-
-
     /* EVENTOS CLIC */
-
     document.addEventListener("click", (e) => {
-
         if (e.target.matches('#cerrarSesion')) {
             cerrarSesion();
         }
-
     })
 
-    /* BUSCADOR */
-
-    buscador.addEventListener('input', () => {
-        botones = document.querySelectorAll('#contenido button');
+    buscador.addEventListener("input", () => {
+        botones = document.querySelectorAll("#rutas button");
         const valorBusqueda = buscador.value.toLowerCase();
         botones.forEach((boton) => {
             const textoBoton = boton.textContent.toLowerCase();
-            const span = boton.querySelector('span'); // Obtener el elemento <span> dentro del botón
+            const span = boton.querySelector("span"); // Obtener el elemento <span> dentro del botón
             if (textoBoton.includes(valorBusqueda)) {
                 boton.classList.replace("displayOff", "displayOn");
                 // Crear una expresión regular para buscar la coincidencia exacta
-                const regex = new RegExp(valorBusqueda, 'gi');
-                const textoResaltado = boton.textContent.replace(regex, '<span class="resaltado">$&</span>');
+                const regex = new RegExp(valorBusqueda, "gi");
+                const textoResaltado = boton.textContent.replace(
+                    regex,
+                    '<span class="resaltado">$&</span>'
+                );
                 span.innerHTML = textoResaltado;
             } else {
                 boton.classList.replace("displayOn", "displayOff");
@@ -1714,6 +1466,46 @@
             }
         });
     });
+
+    // SEARCH FUNCTIONALITY
+    function initializeSearch() {
+        console.log("Initializing search...");
+        const buscador = document.getElementById("buscador");
+        if (buscador) {
+            buscador.addEventListener("input", () => {
+                const searchTerm = buscador.value.toLowerCase().trim();
+                const buttons = document.querySelectorAll("#rutas button");
+
+                console.log(
+                    `Searching for: "${searchTerm}" among ${buttons.length} routes`
+                );
+
+                buttons.forEach((button) => {
+                    const textContent = button.textContent.toLowerCase();
+                    const span = button.querySelector("span");
+
+                    if (textContent.includes(searchTerm)) {
+                        button.classList.remove("displayOff");
+                        button.classList.add("displayOn");
+
+                        // Highlight matching text
+                        if (searchTerm && span) {
+                            const regex = new RegExp(`(${searchTerm})`, "gi");
+                            span.innerHTML = span.textContent.replace(
+                                regex,
+                                '<span class="resaltado">$1</span>'
+                            );
+                        }
+                    } else {
+                        button.classList.remove("displayOn");
+                        button.classList.add("displayOff");
+                    }
+                });
+            });
+        } else {
+            console.warn("Could not find search input element");
+        }
+    }
 
     /* PETICIONES PENDIENTES */
 
@@ -2053,8 +1845,7 @@
         console.log('Carga completa de los elementos de la página no fetch');
         let mensaje = localStorage.getItem('mensaje');
         if (mensaje && mensaje !== null) {
-            $textoMensaje.innerHTML = mensaje;
-            mensajeOn();
+            alerta(mensaje);
             localStorage.removeItem('mensaje');
         }
         let login = localStorage.getItem('login');
@@ -2074,6 +1865,200 @@
         appOffline();
     }
 
+    // MENU AND USER INTERACTION SETUP
+    function setupMenuInteractions() {
+        console.log("Setting up menu interactions...");
+
+        // Desktop Menu
+        const userMenuButton = document.getElementById("userMenuButton");
+        const userDropdownMenu = document.getElementById("userDropdownMenu");
+
+        if (userMenuButton && userDropdownMenu) {
+            console.log("Setting up desktop menu button listener");
+            userMenuButton.addEventListener("click", (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                userDropdownMenu.classList.toggle("hidden");
+                const isExpanded = !userDropdownMenu.classList.contains("hidden");
+                userMenuButton.setAttribute("aria-expanded", isExpanded.toString());
+            });
+        } else {
+            console.warn(
+                "Could not find userMenuButton or userDropdownMenu elements"
+            );
+        }
+
+        // Mobile Menu Links
+        const mobileMenuLinks = document.querySelectorAll("#mobileMenu nav a");
+        mobileMenuLinks.forEach((link) => {
+            link.addEventListener("click", (e) => {
+                e.stopPropagation();
+                window.location.href = link.href;
+                const menuButton = document.getElementById("menuButton");
+                if (menuButton) menuButton.click(); // Close menu after clicking
+            });
+        });
+
+        // Mobile Menu Toggle
+        const menuButton = document.getElementById("menuButton");
+        const mobileMenu = document.getElementById("mobileMenu");
+        const hamburgerTop = document.getElementById("hamburgerTop");
+        const hamburgerMiddle = document.getElementById("hamburgerMiddle");
+        const hamburgerBottom = document.getElementById("hamburgerBottom");
+
+        if (menuButton && mobileMenu) {
+            console.log("Setting up mobile menu button listener");
+            menuButton.addEventListener("click", (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const isOpen = !mobileMenu.classList.contains("translate-x-full");
+                mobileMenu.classList.toggle("translate-x-full");
+                document.body.classList.toggle("overflow-hidden");
+
+                if (!isOpen) {
+                    // Menu is opening
+                    hamburgerTop.classList.remove("bg-gray-900");
+                    hamburgerMiddle.classList.remove("bg-gray-900");
+                    hamburgerBottom.classList.remove("bg-gray-900");
+                    hamburgerTop.classList.add("bg-white");
+                    hamburgerMiddle.classList.add("bg-white");
+                    hamburgerBottom.classList.add("bg-white");
+
+                    hamburgerTop.style.transform = "rotate(45deg) translate(10px, 7px)";
+                    hamburgerMiddle.style.opacity = "0";
+                    hamburgerBottom.style.transform =
+                        "rotate(-45deg) translate(10px, -7px)";
+                } else {
+                    // Menu is closing
+                    hamburgerTop.classList.remove("bg-white");
+                    hamburgerMiddle.classList.remove("bg-white");
+                    hamburgerBottom.classList.remove("bg-white");
+                    hamburgerTop.classList.add("bg-gray-900");
+                    hamburgerMiddle.classList.add("bg-gray-900");
+                    hamburgerBottom.classList.add("bg-gray-900");
+
+                    hamburgerTop.style.transform = "";
+                    hamburgerMiddle.style.opacity = "1";
+                    hamburgerBottom.style.transform = "";
+                }
+            });
+        } else {
+            console.warn("Could not find menuButton or mobileMenu elements");
+        }
+    }
+
+    // USER EDIT AND LOGOUT SETUP
+    function setupUserActions() {
+        // Edit User Buttons
+        const editarUsuarioDesktop = document.getElementById(
+            "editarUsuarioDesktop"
+        );
+        const editarUsuarioMobile = document.getElementById(
+            "editarUsuarioMobile"
+        );
+
+        [editarUsuarioDesktop, editarUsuarioMobile].forEach((button) => {
+            if (button) {
+                button.addEventListener("click", (e) => {
+                    if (navigator.onLine) {
+                        window.location.href = `https://dosxdos.app.iidos.com/dosxdos.php?modulo=editarUsuario&id=${usuario.id}`;
+                    } else {
+                        alerta(
+                            "No es posible acceder a las opciones de edición de usuario sin conexión a internet"
+                        );
+                        scrollToTop();
+                    }
+                });
+            }
+        });
+
+        // Logout Buttons
+        const cerrarSesionDesktop = document.getElementById(
+            "cerrarSesionDesktop"
+        );
+        const cerrarSesionMobile = document.getElementById("cerrarSesionMobile");
+
+        [cerrarSesionDesktop, cerrarSesionMobile].forEach((button) => {
+            if (button) {
+                button.addEventListener("click", () => {
+                    closeSidebar(); // Close the sidebar first
+                    cerrarSesion(); // Then proceed with logout
+                });
+            }
+        });
+    }
+
+    // GLOBAL MENU CLOSING LOGIC
+    function setupGlobalMenuClosing() {
+        // Close menus when clicking outside
+        document.addEventListener("click", (e) => {
+            const userMenuButton = document.getElementById("userMenuButton");
+            const userDropdownMenu = document.getElementById("userDropdownMenu");
+            const menuButton = document.getElementById("menuButton");
+            const mobileMenu = document.getElementById("mobileMenu");
+
+            // Close desktop dropdown if clicking outside
+            if (
+                userMenuButton &&
+                userDropdownMenu &&
+                !userMenuButton.contains(e.target) &&
+                !userDropdownMenu.contains(e.target)
+            ) {
+                userDropdownMenu.classList.add("hidden");
+                userMenuButton.setAttribute("aria-expanded", "false");
+            }
+
+            // Close mobile menu if clicking outside
+            if (
+                mobileMenu &&
+                menuButton &&
+                !mobileMenu.contains(e.target) &&
+                !menuButton.contains(e.target) &&
+                !mobileMenu.classList.contains("translate-x-full")
+            ) {
+                menuButton.click();
+            }
+        });
+    }
+
+    // INITIALIZATION FUNCTION
+    function initializeApplication() {
+        // Set up menu interactions
+        setupMenuInteractions();
+        setupUserActions();
+        setupGlobalMenuClosing();
+
+        // Populate user information if available
+        if (usuario && usuario.nombre) {
+            const nombreUsuarioDesktop = document.getElementById(
+                "nombreUsuarioDesktop"
+            );
+            const nombreUsuarioMobile = document.getElementById(
+                "nombreUsuarioMobile"
+            );
+            const imagenUsuarioDesktop = document.getElementById(
+                "imagenUsuarioDesktop"
+            );
+            const imagenUsuarioMobile = document.getElementById(
+                "imagenUsuarioMobile"
+            );
+
+            // Update usernames
+            if (nombreUsuarioDesktop)
+                nombreUsuarioDesktop.textContent = usuario.nombre;
+            if (nombreUsuarioMobile)
+                nombreUsuarioMobile.textContent = usuario.nombre;
+
+            // Update profile images
+            if (usuario.imagen !== "0") {
+                if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
+                if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
+            }
+        }
+    }
+
 </script>
+<script src="https://dosxdos.app.iidos.com/js/notificaciones.js"></script>
+<script src="https://dosxdos.app.iidos.com/js/loadFirebase.js"></script>
 
 </html>

@@ -464,6 +464,9 @@
                                 <span class="font-medium">Usar cámara</span>
                             </button>
 
+                            <!-- Camera options -->
+                            <div id="listaCamaras" class="hidden space-y-2 px-4 py-3 bg-gray-50 rounded-lg"></div>
+
                             <label for="fotosGaleria"
                                 class="flex items-center justify-center gap-2 bg-gray-50 hover:bg-gray-100 text-gray-700 border border-gray-300 rounded-lg py-3 px-4 shadow-sm transition-all cursor-pointer w-full">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-600" fill="none"
@@ -476,9 +479,6 @@
                                     accept="image/*,video/*" />
                             </label>
                         </div>
-
-                        <!-- Camera options (hidden by default) -->
-                        <div id="listaCamaras" class="hidden space-y-2 px-4 py-3 bg-gray-50 rounded-lg"></div>
 
                         <!-- Photo Grid -->
                         <div id="photosContainer" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 pt-2">
@@ -671,38 +671,15 @@
         </div>
     </div>
 
-    <!-- Camera Modal -->
-    <div id="camara" class="fixed inset-0 z-50 hidden bg-black bg-opacity-95 flex items-center justify-center">
-        <div class="bg-white rounded-xl shadow-lg overflow-hidden max-w-lg w-full mx-4">
-            <!-- Camera Header -->
-            <div class="bg-red-600 px-4 py-3 flex justify-between items-center text-white">
-                <h3 class="text-lg font-medium">Capturar imagen</h3>
-                <button id="imgCerrarCamara" class="p-1 rounded-full hover:bg-white/20 transition-colors">
-                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-
-            <!-- Camera Preview -->
-            <div class="relative bg-black">
-                <video id="video" autoplay playsinline class="w-full h-64 object-contain"></video>
-
-                <!-- Capture Button -->
-                <div class="absolute bottom-4 left-0 right-0 flex justify-center">
-                    <button id="captureButton" class="bg-white rounded-full p-2 shadow-lg">
-                        <div class="w-12 h-12 rounded-full border-4 border-red-600"></div>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Camera Instructions -->
-            <div class="p-4 text-center text-gray-600 bg-gray-100">
-                Toca el botón para capturar la imagen
-            </div>
-        </div>
+    <div id="camara" class="fixed inset-0 bg-black bg-opacity-50 z-40 flex items-center justify-center hidden">
+        <button id="imgCerrarCamara"
+            class="absolute top-4 right-4 bg-red-600 w-12 h-12 rounded-full flex items-center justify-center z-50 cursor-pointer text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+        <video id="video" class="flex w-full h-full bg-white" autoplay></video>
     </div>
 
     <!-- Signature Canvas Modal -->
@@ -912,299 +889,322 @@
             toggleElemento("datosLinea");
         });
 
+        const listaCamaras = document.getElementById('listaCamaras');
+        if (listaCamaras) {
+            listaCamaras.classList.add('hidden');
+        }
+
         const fotos = document.getElementById("fotos");
         fotos.addEventListener("click", () => {
+            const listaCamaras = document.getElementById('listaCamaras');
+            if (listaCamaras.classList.contains('hidden')) {
+                listCameras();
+            }
             toggleElemento("listaCamaras");
-            toggleElemento("fotosGaleria");
         });
 
-        const video = document.getElementById("video");
-        video.addEventListener("click", () => {
+
+        video.addEventListener('click', () => {
             capturePhoto(video);
         });
 
-        const cerrarCamara = document.getElementById("imgCerrarCamara");
-        cerrarCamara.addEventListener("click", () => {
-            toggleElemento("camara");
-            toggleElemento("encabezado");
-            toggleElemento("contenido");
-            fotos.scrollIntoView({ behavior: "smooth" });
+        // Add touch event for mobile devices
+        video.addEventListener('touchstart', (e) => {
+            e.preventDefault(); // Prevent default touch behavior
+            capturePhoto(video);
         });
 
-        const estado = document.getElementById("estado");
-        const cajaForm = document.getElementById("cajaForm");
+    });
 
-        navigator.mediaDevices
-            .enumerateDevices()
-            .then((devices) => {
-                const videoDevices = devices.filter(
-                    (device) => device.kind === "videoinput"
-                );
-                const cameraList = document.getElementById("listaCamaras");
+    function closeCamera() {
+        const camaraModal = document.getElementById("camara");
+        const video = document.getElementById("video");
+        const encabezado = document.getElementById("encabezado");
+        const contenido = document.getElementById("contenido");
 
-                videoDevices.forEach((device) => {
-                    const button = document.createElement("button");
-                    button.textContent =
-                        device.label || `Cámara ${cameraList.childNodes.length + 1}`;
-                    button.type = "button";
-                    button.className = "ruta";
-                    button.addEventListener("click", () =>
-                        startCamera(device.deviceId)
-                    );
-                    cameraList.appendChild(button);
-                });
-            })
-            .catch((err) => console.error("Error al enumerar dispositivos:", err));
+        // Stop video stream
+        if (video && video.srcObject) {
+            const stream = video.srcObject;
+            const tracks = stream.getTracks();
+            tracks.forEach(track => track.stop());
+            video.srcObject = null;
+        }
 
-        const canvasFirma = document.getElementById("canvasFirma");
+        // Hide camera modal
+        if (camaraModal) {
+            camaraModal.classList.add("hidden");
+        }
+
+        // Show header and content
+        if (encabezado) encabezado.classList.remove("hidden");
+        if (contenido) contenido.classList.remove("hidden");
+    }
+
+    // Consolidate camera close event listeners
+    document.addEventListener('DOMContentLoaded', () => {
+        const imgCerrarCamara = document.getElementById("imgCerrarCamara");
+        if (imgCerrarCamara) {
+            imgCerrarCamara.addEventListener('click', closeCamera);
+        }
+    });
+
+    const canvasFirma = document.getElementById("canvasFirma");
+    const anchoVentana = window.innerWidth;
+    if (anchoVentana >= 400) {
+        canvasFirma.width = 400;
+        canvasFirma.height = 250;
+    } else {
+        canvasFirma.width = anchoVentana - 20;
+        canvasFirma.height = 250;
+    }
+    window.addEventListener("resize", () => {
         const anchoVentana = window.innerWidth;
-        if (anchoVentana >= 400) {
+        if (anchoVentana >= 412) {
             canvasFirma.width = 400;
             canvasFirma.height = 250;
         } else {
             canvasFirma.width = anchoVentana - 20;
             canvasFirma.height = 250;
         }
-        window.addEventListener("resize", () => {
-            const anchoVentana = window.innerWidth;
-            if (anchoVentana >= 412) {
-                canvasFirma.width = 400;
-                canvasFirma.height = 250;
-            } else {
-                canvasFirma.width = anchoVentana - 20;
-                canvasFirma.height = 250;
-            }
-        });
-        canvasFirma.addEventListener("mousedown", startPosition);
-        canvasFirma.addEventListener("mouseup", endPosition);
-        canvasFirma.addEventListener("mousemove", draw);
-        canvasFirma.addEventListener("touchstart", startPosition);
-        canvasFirma.addEventListener("touchend", endPosition);
-        canvasFirma.addEventListener("touchmove", draw);
+    });
+    canvasFirma.addEventListener("mousedown", startPosition);
+    canvasFirma.addEventListener("mouseup", endPosition);
+    canvasFirma.addEventListener("mousemove", draw);
+    canvasFirma.addEventListener("touchstart", startPosition);
+    canvasFirma.addEventListener("touchend", endPosition);
+    canvasFirma.addEventListener("touchmove", draw);
 
-        const firmar = document.getElementById("firmar");
-        const cajaCanvasFirma = document.getElementById("cajaCanvasFirma");
-        const encabezado = document.getElementById("encabezado");
-        const contenido = document.getElementById("contenido");
-        const cerrarFirma = document.getElementById("imgCerrarFirma");
+    const firmar = document.getElementById("firmar");
+    const cajaCanvasFirma = document.getElementById("cajaCanvasFirma");
+    const cerrarFirma = document.getElementById("imgCerrarFirma");
 
-        function safeToggleElement(elementId) {
-            const elemento = document.getElementById(elementId);
-            if (elemento) {
-                elemento.classList.toggle("displayOn");
-                elemento.classList.toggle("displayOff");
-            } else {
-                console.warn(`Element with id ${elementId} not found`);
-            }
+    function safeToggleElement(elementId) {
+        const elemento = document.getElementById(elementId);
+        if (elemento) {
+            elemento.classList.toggle("hidden");
+        } else {
+            console.warn(`Element with id ${elementId} not found`);
         }
+    }
 
-        if (firmar) {
-            firmar.addEventListener("click", () => {
-                // Only toggle elements that exist
-                safeToggleElement("cajaCanvasFirma");
-            });
-        }
-
-        if (cerrarFirma) {
-            cerrarFirma.addEventListener("click", () => {
-                safeToggleElement("cajaCanvasFirma");
-            });
-        }
-
-        function toggleElemento(elementId) {
-            const elemento = document.getElementById(elementId);
-            if (elemento) {
-                elemento.classList.toggle("displayOn");
-                elemento.classList.toggle("displayOff");
-            } else {
-                console.warn(`Element with id ${elementId} not found`);
-            }
-        }
-
-        const fileInput = document.getElementById("fotosGaleria");
-        fileInput.addEventListener("change", (e) => {
-            handleFileUpload(e);
-            fotos.scrollIntoView({ behavior: "smooth" });
+    if (firmar) {
+        firmar.addEventListener("click", () => {
+            // Only toggle elements that exist
+            safeToggleElement("cajaCanvasFirma");
         });
+    }
 
-        const cancelar = document.getElementById("cancelar");
-        cancelar.addEventListener("click", (e) => {
-            window.location.href =
-                "https://dosxdos.app.iidos.com/ruta_montador.html";
+    if (cerrarFirma) {
+        cerrarFirma.addEventListener("click", () => {
+            safeToggleElement("cajaCanvasFirma");
         });
+    }
 
-        //SUBMIT
-        const formulario = document.getElementById("formLinea");
-        formulario.addEventListener("submit", (e) => {
-            //console.log('entra al evento submit');
-            e.preventDefault();
-            loaderOn();
-            let aviso = "",
-                caracteres = true,
-                fecha,
-                validarFecha,
-                vJsonFirmas = true,
-                vJsonFotos = true;
-            const estado = document.getElementById("estado").value;
-            //console.log(estado);
-            const incidencia = document.getElementById("incidencia").value;
-            //console.log(incidencia);
-            //console.log(fecha);
-            const dias = document.getElementById("dias").value;
-            //console.log(dias);
-            const horas = document.getElementById("horas").value;
-            //console.log(horas);
-            const minutos = document.getElementById("minutos").value;
-            //console.log(minutos);
-            let observaciones = document.getElementById(
-                "observacionesTecnico"
-            ).value;
-            //observaciones = escaparHTML(observaciones);
+    // Add this to your existing event listeners
+    window.addEventListener('pageshow', () => {
+        const listaCamaras = document.getElementById('listaCamaras');
+        if (listaCamaras) {
+            listaCamaras.classList.add('hidden');
+        }
+    });
 
-            //console.log(observaciones);
-            const numeroFotos = Object.keys(photos).length;
-            //console.log(numeroFotos);
-            const numeroFirmas = Object.keys(firmas).length;
-            //console.log(numeroFirmas);
-            const caracteresObs = observaciones.length;
-
-            if (estado == "Pendiente") {
-                fecha = "";
-                validarFecha = true;
-            } else {
-                fecha = document.getElementById("fecha").value;
-                if (fecha) {
-                    validarFecha = true;
-                } else {
-                    validarFecha = false;
-                    aviso += "Es necesario ingresar la fecha de actuación";
-                }
-            }
-
-            if (caracteresObs > 250) {
-                aviso +=
-                    "El campo de observaciones de NAVISION sólo permite un máximo de 250 caracteres - Utiliza mejor el campo de APP NOTAS";
-                caracteres = false;
-            }
-
-            let vNota;
-            const nota = $nota.value;
-            if (nota) {
-                vNota = true;
-            } else {
-                vNota = false;
-            }
-            const notaObj = {};
-            notaObj.ot = ot;
-            notaObj.linea = lineaActividad;
-            notaObj.nota = nota;
-            const notaJson = JSON.stringify(notaObj);
-
-            if (!caracteres || !validarFecha) {
-                alerta(aviso);
-                aviso = "";
-                loaderOff();
-            } else {
-                const bodyNavision = {
-                    CodigoRuta: ruta,
-                    LineaRuta: linea,
-                    DescripcionIncidencia: "",
-                    DiasActuacion: dias,
-                    Estado: estado,
-                    FechaActuacion: fecha,
-                    FirmaCliente: `https://dosxdos.app.iidos.com/fotos_y_firmas.php?ruta=${ruta}&linea=${linea}&ot=${ot}&lineaActividad=${lineaActividad}`,
-                    FotosSubidas: numeroFotos,
-                    HorasActuacion: horas,
-                    Incidencia: incidencia,
-                    MinutosActuacion: minutos,
-                    ObservacionesTecnico: observaciones,
-                    LinkWeb: `https://dosxdos.app.iidos.com/fotos_y_firmas.php?ruta=${ruta}&linea=${linea}&ot=${ot}&lineaActividad=${lineaActividad}`,
-                };
-
-                //console.log(bodyNavision);
-                const bodyNavisionJson = JSON.stringify(bodyNavision);
-                //console.log(bodyNavisionJson);
-
-                const valoresFotos = Object.values(photos);
-                const valoresFirmas = Object.values(firmas);
-
-                if (valoresFotos.length == 0) {
-                    vJsonFotos = false;
-                }
-
-                if (valoresFirmas.length == 0) {
-                    vJsonFirmas = false;
-                }
-
-                const totalFotos = {};
-                const totalFirmas = {};
-
-                totalFotos.ruta = ruta;
-                totalFotos.linea = linea;
-                totalFotos.ot = ot;
-                totalFotos.lineaActividad = lineaActividad;
-                totalFotos.fecha = fecha;
-                totalFotos.cliente = cliente;
-                totalFotos.nombreCliente = lineaObj.NombreCliente;
-                totalFotos.pv = lineaObj.PuntoVenta;
-                totalFotos.pvNombre = lineaObj.NombrePuntoVenta;
-                totalFotos.usuario = usuarioId;
-
-                totalFirmas.ruta = ruta;
-                totalFirmas.linea = linea;
-                totalFirmas.ot = ot;
-                totalFirmas.lineaActividad = lineaActividad;
-                totalFirmas.fecha = fecha;
-                totalFirmas.cliente = cliente;
-                totalFirmas.nombreCliente = lineaObj.NombreCliente;
-                totalFirmas.pv = lineaObj.PuntoVenta;
-                totalFirmas.pvNombre = lineaObj.NombrePuntoVenta;
-                totalFirmas.usuario = usuarioId;
-
-                totalFotos.fotos = [];
-                totalFotos.fotos = valoresFotos;
-                totalFirmas.firmas = [];
-                totalFirmas.firmas = valoresFirmas;
-
-                //console.log(totalFotos);
-                //console.log(totalFirmas);
-
-                const fotosJson = JSON.stringify(totalFotos);
-                const firmasJson = JSON.stringify(totalFirmas);
-
-                //console.log(fotosJson);
-                //console.log(firmasJson);
-
-                if (navigator.onLine) {
-                    procesarFormulario(
-                        bodyNavisionJson,
-                        vJsonFotos,
-                        fotosJson,
-                        vJsonFirmas,
-                        firmasJson,
-                        vNota,
-                        notaJson
-                    );
-                } else {
-                    procesarFormularioOff(
-                        bodyNavision,
-                        vJsonFotos,
-                        totalFotos,
-                        vJsonFirmas,
-                        totalFirmas,
-                        vNota,
-                        notaObj
-                    );
-                }
-            }
-        });
+    window.addEventListener('beforeunload', () => {
+        const listaCamaras = document.getElementById('listaCamaras');
+        if (listaCamaras) {
+            listaCamaras.classList.add('hidden');
+        }
     });
 
     function toggleElemento(elementId) {
         const elemento = document.getElementById(elementId);
-        elemento.classList.toggle("displayOn");
-        elemento.classList.toggle("displayOff");
+        if (elemento) {
+            if (elemento.classList.contains("hidden")) {
+                elemento.classList.remove("hidden");
+            } else {
+                elemento.classList.add("hidden");
+            }
+        } else {
+            console.warn(`Element with id ${elementId} not found`);
+        }
     }
+
+
+    const fileInput = document.getElementById("fotosGaleria");
+    fileInput.addEventListener("change", (e) => {
+        handleFileUpload(e);
+        fotos.scrollIntoView({ behavior: "smooth" });
+    });
+
+    const cancelar = document.getElementById("cancelar");
+    cancelar.addEventListener("click", (e) => {
+        window.location.href =
+            "https://dosxdos.app.iidos.com/ruta_montador.html";
+    });
+
+    //SUBMIT
+    const formulario = document.getElementById("formLinea");
+    formulario.addEventListener("submit", (e) => {
+        //console.log('entra al evento submit');
+        e.preventDefault();
+        loaderOn();
+        let aviso = "",
+            caracteres = true,
+            fecha,
+            validarFecha,
+            vJsonFirmas = true,
+            vJsonFotos = true;
+        const estado = document.getElementById("estado").value;
+        //console.log(estado);
+        const incidencia = document.getElementById("incidencia").value;
+        //console.log(incidencia);
+        //console.log(fecha);
+        const dias = document.getElementById("dias").value;
+        //console.log(dias);
+        const horas = document.getElementById("horas").value;
+        //console.log(horas);
+        const minutos = document.getElementById("minutos").value;
+        //console.log(minutos);
+        let observaciones = document.getElementById(
+            "observacionesTecnico"
+        ).value;
+        //observaciones = escaparHTML(observaciones);
+
+        //console.log(observaciones);
+        const numeroFotos = Object.keys(photos).length;
+        //console.log(numeroFotos);
+        const numeroFirmas = Object.keys(firmas).length;
+        //console.log(numeroFirmas);
+        const caracteresObs = observaciones.length;
+
+        if (estado == "Pendiente") {
+            fecha = "";
+            validarFecha = true;
+        } else {
+            fecha = document.getElementById("fecha").value;
+            if (fecha) {
+                validarFecha = true;
+            } else {
+                validarFecha = false;
+                aviso += "Es necesario ingresar la fecha de actuación";
+            }
+        }
+
+        if (caracteresObs > 250) {
+            aviso +=
+                "El campo de observaciones de NAVISION sólo permite un máximo de 250 caracteres - Utiliza mejor el campo de APP NOTAS";
+            caracteres = false;
+        }
+
+        let vNota;
+        const nota = $nota.value;
+        if (nota) {
+            vNota = true;
+        } else {
+            vNota = false;
+        }
+        const notaObj = {};
+        notaObj.ot = ot;
+        notaObj.linea = lineaActividad;
+        notaObj.nota = nota;
+        const notaJson = JSON.stringify(notaObj);
+
+        if (!caracteres || !validarFecha) {
+            alerta(aviso);
+            aviso = "";
+            loaderOff();
+        } else {
+            const bodyNavision = {
+                CodigoRuta: ruta,
+                LineaRuta: linea,
+                DescripcionIncidencia: "",
+                DiasActuacion: dias,
+                Estado: estado,
+                FechaActuacion: fecha,
+                FirmaCliente: `https://dosxdos.app.iidos.com/fotos_y_firmas.php?ruta=${ruta}&linea=${linea}&ot=${ot}&lineaActividad=${lineaActividad}`,
+                FotosSubidas: numeroFotos,
+                HorasActuacion: horas,
+                Incidencia: incidencia,
+                MinutosActuacion: minutos,
+                ObservacionesTecnico: observaciones,
+                LinkWeb: `https://dosxdos.app.iidos.com/fotos_y_firmas.php?ruta=${ruta}&linea=${linea}&ot=${ot}&lineaActividad=${lineaActividad}`,
+            };
+
+            //console.log(bodyNavision);
+            const bodyNavisionJson = JSON.stringify(bodyNavision);
+            //console.log(bodyNavisionJson);
+
+            const valoresFotos = Object.values(photos);
+            const valoresFirmas = Object.values(firmas);
+
+            if (valoresFotos.length == 0) {
+                vJsonFotos = false;
+            }
+
+            if (valoresFirmas.length == 0) {
+                vJsonFirmas = false;
+            }
+
+            const totalFotos = {};
+            const totalFirmas = {};
+
+            totalFotos.ruta = ruta;
+            totalFotos.linea = linea;
+            totalFotos.ot = ot;
+            totalFotos.lineaActividad = lineaActividad;
+            totalFotos.fecha = fecha;
+            totalFotos.cliente = cliente;
+            totalFotos.nombreCliente = lineaObj.NombreCliente;
+            totalFotos.pv = lineaObj.PuntoVenta;
+            totalFotos.pvNombre = lineaObj.NombrePuntoVenta;
+            totalFotos.usuario = usuarioId;
+
+            totalFirmas.ruta = ruta;
+            totalFirmas.linea = linea;
+            totalFirmas.ot = ot;
+            totalFirmas.lineaActividad = lineaActividad;
+            totalFirmas.fecha = fecha;
+            totalFirmas.cliente = cliente;
+            totalFirmas.nombreCliente = lineaObj.NombreCliente;
+            totalFirmas.pv = lineaObj.PuntoVenta;
+            totalFirmas.pvNombre = lineaObj.NombrePuntoVenta;
+            totalFirmas.usuario = usuarioId;
+            totalFotos.fotos = [];
+            totalFotos.fotos = valoresFotos;
+            totalFirmas.firmas = [];
+            totalFirmas.firmas = valoresFirmas;
+
+            //console.log(totalFotos);
+            //console.log(totalFirmas);
+
+            const fotosJson = JSON.stringify(totalFotos);
+            const firmasJson = JSON.stringify(totalFirmas);
+
+            //console.log(fotosJson);
+            //console.log(firmasJson);
+
+            if (navigator.onLine) {
+                procesarFormulario(
+                    bodyNavisionJson,
+                    vJsonFotos,
+                    fotosJson,
+                    vJsonFirmas,
+                    firmasJson,
+                    vNota,
+                    notaJson
+                );
+            } else {
+                procesarFormularioOff(
+                    bodyNavision,
+                    vJsonFotos,
+                    totalFotos,
+                    vJsonFirmas,
+                    totalFirmas,
+                    vNota,
+                    notaObj
+                );
+            }
+        }
+    });
 
     function redirectToRutas() {
         window.location.href = "https://dosxdos.app.iidos.com/rutas_montador.html";
@@ -1240,13 +1240,10 @@
         lineas,
         notificacionesSinAcpetarNumero = 0;
 
+
+
     // Camera Modal
     const camaraModal = document.getElementById("camara");
-    const imgCerrarCamara = document.getElementById("imgCerrarCamara");
-
-    imgCerrarCamara.addEventListener("click", () => {
-        camaraModal.classList.add("hidden");
-    });
 
     // Signature Canvas Modal
     const cajaCanvasFirmaModal = document.getElementById("cajaCanvasFirma");
@@ -1268,52 +1265,73 @@
     });
 
     function listCameras() {
-        navigator.mediaDevices
-            .enumerateDevices()
-            .then((devices) => {
-                const videoDevices = devices.filter(
-                    (device) => device.kind === "videoinput"
-                );
-                const cameraList = document.getElementById("listaCamaras");
+    navigator.mediaDevices
+        .enumerateDevices()
+        .then((devices) => {
+            const videoDevices = devices.filter(
+                (device) => device.kind === "videoinput"
+            );
+            const cameraList = document.getElementById("listaCamaras");
+            const addedCameras = new Set();
 
-                videoDevices.forEach((device) => {
+            // Verificar si el elemento existe antes de intentar modificarlo
+            if (!cameraList) {
+                console.error("Elemento #listaCamaras no encontrado.");
+                return;
+            }
+
+            // Limpiar la lista antes de agregar nuevas cámaras
+            cameraList.innerHTML = "";
+
+            if (videoDevices.length === 0) {
+                cameraList.innerHTML = "<p class='text-gray-700'>No se encontraron cámaras.</p>";
+                return;
+            }
+
+            videoDevices.forEach((device, index) => {
+                // Check if the camera has already been added
+                if (!addedCameras.has(device.deviceId)) {
                     const button = document.createElement("button");
-                    button.textContent =
-                        device.label || `Cámara ${cameraList.childNodes.length + 1}`;
+                    button.textContent = device.label || `Cámara ${addedCameras.size + 1}`;
                     button.type = "button";
-                    button.className = "ruta";
-                    button.addEventListener("click", () =>
-                        startCamera(device.deviceId)
-                    );
+                    button.className = "ruta p-2 bg-gray-200 hover:bg-gray-300 rounded-md w-full text-left";
+                    button.addEventListener("click", () => startCamera(device.deviceId));
                     cameraList.appendChild(button);
-                });
-            })
-            .catch((err) => console.error("Error al enumerar dispositivos:", err));
-    }
+                    addedCameras.add(device.deviceId);
+                }
+            });
+
+            // Asegurarse de que la lista de cámaras se muestre
+            cameraList.classList.remove("hidden");
+        })
+        .catch((err) => console.error("Error al enumerar dispositivos:", err));
+}
+
+
 
     function startCamera(device) {
         const video = document.getElementById("video");
         const camara = document.getElementById("camara");
-        const encabezado = document.getElementById("encabezado");
-        const contendio = document.getElementById("contenido");
         const constraints = {
             video: {
-                deviceId: device,
+                deviceId: device ? { exact: device } : undefined,
             },
         };
 
         navigator.mediaDevices
             .getUserMedia(constraints)
             .then((stream) => {
-                camara.classList.replace("displayOff", "displayOn");
-                encabezado.classList.replace("displayOn", "displayOff");
-                contendio.classList.replace("displayOn", "displayOff");
+                camara.classList.remove("hidden");
+                encabezado.classList.add("hidden");
+                contenido.classList.add("hidden");
                 video.srcObject = stream;
             })
-            .catch((err) =>
-                console.error("Error al acceder a la cámara seleccionada:", err)
-            );
+            .catch((err) => {
+                console.error("Error al acceder a la cámara seleccionada:", err);
+                alert("No se pudo acceder a la cámara. Por favor, compruebe los permisos.");
+            });
     }
+
 
     function capturePhoto(video) {
         const canvas = document.createElement("canvas");
@@ -1345,7 +1363,7 @@
         const deleteButton = document.createElement("button");
         deleteButton.className = "ruta2";
         deleteButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-600" viewBox="0 0 20 20" fill="currentColor">
-  <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+<path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
 </svg>`;
         deleteButton.onclick = function () {
             deletePhoto(photoId);
@@ -1358,7 +1376,6 @@
         container.appendChild(deleteButton);
 
         document.getElementById("photosContainer").appendChild(container);
-        //console.log(photos);
     }
 
     function deletePhoto(photoId) {
@@ -1459,8 +1476,6 @@
     }
 
     /* FIRMA */
-    const canvasFirma = document.getElementById("canvasFirma");
-    let anchoVentana = window.innerWidth;
 
     const ctx = canvasFirma.getContext("2d");
     let drawing = false;

@@ -2,10 +2,6 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-body {
-  overscroll-behavior: none !important
-}
-
 .website-divider-container-734167 {
   overflow: hidden;
   position: relative;
@@ -128,5 +124,5 @@ body {
 
 .map-container {
   touch-action: none;
-  overscroll-behavior: none
+  overscroll-behavior: none !important
 }
