@@ -1305,54 +1305,78 @@
     }
 
     // Prevent accidental page navigation on mobile devices
-      function preventUnintendedNavigation() {
-        // Disable default touch actions that might cause page navigation
-        const mapContainer = document.getElementById('map');
+    function preventUnintendedNavigation() {
+  // Disable default touch actions that might cause page navigation
+  const mapContainer = document.getElementById('map');
+  
+  if (mapContainer) {
+    // Disable touch actions
+    mapContainer.style.touchAction = 'none';
+    
+    // Prevent default behavior on touch events
+    mapContainer.addEventListener('touchstart', (e) => {
+      // Prevent default touch actions
+      e.preventDefault();
+    }, { passive: false });
 
-        if (mapContainer) {
-          // Prevent default touch behaviors
-          mapContainer.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-          }, { passive: false });
+    mapContainer.addEventListener('touchmove', (e) => {
+      // Prevent default touch actions
+      e.preventDefault();
+    }, { passive: false });
 
-          mapContainer.addEventListener('touchmove', (e) => {
-            e.preventDefault();
-          }, { passive: false });
-
-          // Prevent back/forward navigation on swipe
-          window.addEventListener('touchstart', (e) => {
-            // Track initial touch point
-            window.touchStartX = e.touches[0].clientX;
-            window.touchStartY = e.touches[0].clientY;
-          }, { passive: true });
-
-          window.addEventListener('touchend', (e) => {
-            if (!window.touchStartX || !window.touchStartY) return;
-
-            const touchEndX = e.changedTouches[0].clientX;
-            const touchEndY = e.changedTouches[0].clientY;
-
-            const deltaX = touchEndX - window.touchStartX;
-            const deltaY = touchEndY - window.touchStartY;
-
-            // Check if the swipe is more horizontal or vertical
-            if (Math.abs(deltaX) > Math.abs(deltaY)) {
-              // Horizontal swipe detected
-              e.preventDefault();
-            }
-
-            // Reset touch tracking
-            window.touchStartX = null;
-            window.touchStartY = null;
-          }, { passive: false });
-
-          // Prevent pull-to-refresh on some mobile browsers
-          document.body.style.overscrollBehavior = 'none';
-        }
+    // Prevent browser's default swipe navigation
+    document.addEventListener('touchmove', (e) => {
+      // Prevent horizontal swipes
+      if (Math.abs(e.touches[0].clientX - window.startX) > 10) {
+        e.preventDefault();
       }
+    }, { passive: false });
 
-      // Call the prevention function when the page loads
-      document.addEventListener('DOMContentLoaded', preventUnintendedNavigation);
+    // Track touch start position
+    document.addEventListener('touchstart', (e) => {
+      window.startX = e.touches[0].clientX;
+      window.startY = e.touches[0].clientY;
+    }, { passive: true });
+
+    // Prevent pull-to-refresh and back/forward navigation
+    document.body.style.overscrollBehavior = 'none';
+  }
+
+  // Prevent default touch actions on the entire body
+  document.body.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+  }, { passive: false });
+}
+
+// Call the prevention function when the page loads
+document.addEventListener('DOMContentLoaded', preventUnintendedNavigation);
+
+// Additional prevention for Google Maps
+if (window.google && window.google.maps) {
+  google.maps.event.addListenerOnce(map, 'idle', () => {
+    map.setOptions({
+      gestureHandling: 'none'
+    });
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  const mapContainer = document.getElementById('map');
+  
+  if (mapContainer) {
+    // Prevent default touch behaviors
+    mapContainer.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+    }, { passive: false });
+
+    mapContainer.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+    }, { passive: false });
+
+    // Disable pull-to-refresh
+    document.body.style.overscrollBehavior = 'none';
+  }
+});
   </script>
   <script src="https://dosxdos.app.iidos.com/js/notificaciones.js"></script>
   <script src="https://dosxdos.app.iidos.com/js/loadFirebase.js"></script>
