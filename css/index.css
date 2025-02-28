@@ -3,7 +3,7 @@
 }
 
 body {
-  overscroll-behavior: none
+  overscroll-behavior: none !important
 }
 
 .website-divider-container-734167 {
