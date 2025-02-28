@@ -120,3 +120,7 @@
   border-radius: 20px;
   border: transparent;
 }
+
+.map-container {
+  touch-action:none;
+}
