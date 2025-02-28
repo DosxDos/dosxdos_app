@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/index.css" />
 </head>
 
-<body id="body" class="oyh">
+<body id="body" class="oyh overflow-x-hidden">
   <div id="loader" class="displayOn">
     <span class="loader"></span>
   </div>
@@ -678,7 +678,7 @@
             lineas = await fetchLineas(rutas);
             if (lineas) {
               const mensaje =
-                "Se ha sincronizado la base de datos exitosamente";
+                " - Se ha sincronizado la base de datos exitosamente";
               localStorage.setItem("mensaje", mensaje);
               window.location.href =
                 "https://dosxdos.app.iidos.com/ruta_montador.html";
@@ -2795,9 +2795,9 @@
         }
         const sincronizarBaseDatos = await sincronizarDb2();
         if (sincronizarBaseDatos) {
-          mensaje += "-Se ha sincronizado la base de datos exitosamente-";
+          mensaje += " - Se ha sincronizado la base de datos exitosamente";
         } else {
-          mensaje += "-Error: No ha sido posible sincronizar la base de datos-";
+          mensaje += " - Error: No ha sido posible sincronizar la base de datos";
         }
         localStorage.setItem("mensaje", mensaje);
         location.reload();

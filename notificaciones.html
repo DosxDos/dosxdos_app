@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/index.css" />
 </head>
 
-<body id="body" class="bg-gray-100">
+<body id="body" class="bg-gray-100 overflow-x-hidden">
   <div id="loader" class="displayOn">
     <span class="loader"></span>
   </div>
@@ -294,18 +294,17 @@
     class="fixed inset-0 z-50 hidden opacity-0 pointer-events-none transition-all duration-300 ease-in-out">
     <div class="fixed inset-0 overflow-y-auto custom-scrollbar flex items-center justify-center p-4">
       <div
-        class="modal-content bg-white rounded-xl shadow-xl max-w-md w-full p-6 mx-4 transform scale-95 transition-all duration-300 ease-in-out">
+        class="modal-content bg-white rounded-xl shadow-xl max-w-md w-full p-4 mx-4 transform scale-95 transition-all duration-300 ease-in-out">
         <h2 class="modal-title text-xl font-bold mb-4"></h2>
         <p class="modal-description text-gray-600 mb-4"></p>
         <div class="modal-details text-sm text-gray-500 mb-6"></div>
         <div class="flex space-x-3">
-          <button id="confirmarAceptar"
-            class="flex-1 bg-red-600 text-white py-2 rounded-lg hover:bg-red-600 transition">
-            Aceptar
-          </button>
           <button id="cancelarAceptar"
             class="flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg hover:bg-gray-300 transition">
             Cancelar
+          </button><button id="confirmarAceptar"
+            class="flex-1 bg-red-600 text-white py-2 rounded-lg hover:bg-red-600 transition">
+            Aceptar
           </button>
         </div>
       </div>
