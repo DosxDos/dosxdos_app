@@ -122,5 +122,6 @@
 }
 
 .map-container {
-  touch-action:none;
+  touch-action: none;
+  overscroll-behavior: none
 }
