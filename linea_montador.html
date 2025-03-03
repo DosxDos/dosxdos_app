@@ -3451,105 +3451,287 @@
         }
     });
 
-    // Add media viewer functionality
-    document.addEventListener('DOMContentLoaded', function () {
-        // Create modal viewer if it doesn't exist yet
-        if (!document.getElementById('mediaViewerModal')) {
-            const modalHTML = `
-            <div id="mediaViewerModal" class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden flex items-center justify-center">
-                <div class="relative w-full h-full max-w-6xl mx-auto flex flex-col items-center justify-center p-4">
-                    <button id="closeMediaViewer" class="absolute top-4 right-4 z-10 text-white p-2 rounded-full transition-colors bg-red-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                    <div class="w-full h-full flex items-center justify-center">
-                        <div id="mediaViewerContent" class="max-w-full max-h-full"></div>
+    // media viewer functionality
+// Media Viewer Modal with Scrolling and Zooming
+document.addEventListener('DOMContentLoaded', function () {
+    // Create modal viewer if it doesn't exist yet
+    if (!document.getElementById('mediaViewerModal')) {
+        const modalHTML = `
+        <div id="mediaViewerModal" class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden flex items-center justify-center overflow-y-auto">
+            <div class="relative w-full h-full max-w-6xl mx-auto flex flex-col items-center justify-center p-4">
+                <button id="closeMediaViewer" class="absolute top-4 right-4 z-10 text-white p-2 rounded-full transition-colors bg-red-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+                <div class="w-full h-full flex items-center justify-center overflow-y-auto">
+                    <div id="mediaViewerContent" class="max-w-full h-screen flex items-center justify-center overflow-y-auto touch-none select-none">
+                        <!-- Media will be inserted here -->
                     </div>
                 </div>
             </div>
+        </div>
         `;
-            document.body.insertAdjacentHTML('beforeend', modalHTML);
-        }
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+    }
 
-        // Setup modal functionality
-        const modal = document.getElementById('mediaViewerModal');
-        const closeBtn = document.getElementById('closeMediaViewer');
-        const contentDiv = document.getElementById('mediaViewerContent');
+    // Setup modal functionality
+    const modal = document.getElementById('mediaViewerModal');
+    const closeBtn = document.getElementById('closeMediaViewer');
+    const contentDiv = document.getElementById('mediaViewerContent');
 
-        // Close modal function
-        function closeModal() {
-            modal.classList.add('hidden');
-            document.body.classList.remove('overflow-hidden');
-            contentDiv.innerHTML = '';
-        }
+    // Close modal function
+    function closeModal() {
+        modal.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+        contentDiv.innerHTML = '';
+    }
 
-        // Close on button click
-        closeBtn.addEventListener('click', closeModal);
+    // Close on button click
+    closeBtn.addEventListener('click', closeModal);
 
-        // Close on click outside
-        modal.addEventListener('click', function (e) {
-            if (e.target === modal) closeModal();
-        });
+    // Close on click outside
+    modal.addEventListener('click', function (e) {
+        if (e.target === modal) closeModal();
+    });
 
-        // Close on Escape key
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeModal();
-        });
+    // Close on Escape key
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeModal();
+    });
 
-        // Make media items clickable
-        function makeMediaClickable() {
-            // For photos
-            const photos = document.querySelectorAll('#photosContainer img.imgCamara');
-            photos.forEach(img => {
-                img.style.cursor = 'pointer';
-                img.addEventListener('click', function () {
-                    contentDiv.innerHTML = `<img src="${img.src}" class="max-h-full max-w-full object-contain" />`;
-                    modal.classList.remove('hidden');
-                    document.body.classList.add('overflow-hidden');
-                });
-            });
+    // Create a function to add zoom functionality to an element
+    function addZoomFunctionality(element) {
+    let scale = 1;
+    let translateX = 0;
+    let translateY = 0;
+    let startX = 0;
+    let startY = 0;
+    let lastTouchDistance = 0;
 
-            // For videos
-            const videos = document.querySelectorAll('#photosContainer video.imgCamara');
-            videos.forEach(video => {
-                video.style.cursor = 'pointer';
-                video.addEventListener('click', function () {
-                    contentDiv.innerHTML = `<video src="${video.src}" controls autoplay class="max-h-full max-w-full object-contain"></video>`;
-                    modal.classList.remove('hidden');
-                    document.body.classList.add('overflow-hidden');
-                });
-            });
+    // Reset zoom
+    function resetZoom() {
+        scale = 1;
+        translateX = 0;
+        translateY = 0;
+        element.style.transform = `scale(${scale}) translate(${translateX}px, ${translateY}px)`;
+    }
 
-            // For signatures
-            const signatures = document.querySelectorAll('#firmasContainer img.imgFirma');
-            signatures.forEach(img => {
-                img.style.cursor = 'pointer';
-                img.addEventListener('click', function () {
-                    contentDiv.innerHTML = `<img src="${img.src}" class="max-h-full max-w-full object-contain" />`;
-                    modal.classList.remove('hidden');
-                    document.body.classList.add('overflow-hidden');
-                });
-            });
-        }
+    // Apply transform with boundaries
+    function applyTransform() {
+        // Ensure the image stays within viewport when zoomed
+        const rect = element.getBoundingClientRect();
+        const containerRect = contentDiv.getBoundingClientRect();
+        
+        // Calculate max translation to prevent over-panning
+        const maxTranslateX = (rect.width * (scale - 1)) / 2;
+        const maxTranslateY = (rect.height * (scale - 1)) / 2;
 
-        // Run initially
-        makeMediaClickable();
+        // Constrain translation
+        translateX = Math.max(-maxTranslateX, Math.min(maxTranslateX, translateX));
+        translateY = Math.max(-maxTranslateY, Math.min(maxTranslateY, translateY));
 
-        // Create MutationObserver to detect when new images are added
-        const photosContainer = document.getElementById('photosContainer');
-        const firmasContainer = document.getElementById('firmasContainer');
+        element.style.transform = `scale(${scale}) translate(${translateX}px, ${translateY}px)`;
+    }
 
-        if (photosContainer) {
-            const photosObserver = new MutationObserver(makeMediaClickable);
-            photosObserver.observe(photosContainer, { childList: true, subtree: true });
-        }
+    // Mouse wheel zoom
+    element.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        const delta = e.deltaY > 0 ? -0.1 : 0.1;
+        scale = Math.max(1, Math.min(5, scale + delta));
+        
+        // Calculate mouse position relative to image
+        const rect = element.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
 
-        if (firmasContainer) {
-            const firmasObserver = new MutationObserver(makeMediaClickable);
-            firmasObserver.observe(firmasContainer, { childList: true, subtree: true });
+        // Adjust translate to zoom towards mouse cursor
+        const scaleDelta = delta;
+        translateX += (x - translateX) * scaleDelta;
+        translateY += (y - translateY) * scaleDelta;
+
+        applyTransform();
+    }, { passive: false });
+
+    // Touch zoom and pan
+    let touchStartDistance = 0;
+    element.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 2) {
+            // Two-finger touch for pinch zoom
+            const touch1 = e.touches[0];
+            const touch2 = e.touches[1];
+            touchStartDistance = Math.hypot(
+                touch2.pageX - touch1.pageX, 
+                touch2.pageY - touch1.pageY
+            );
+        } else if (e.touches.length === 1) {
+            // Single touch for panning
+            startX = e.touches[0].clientX - translateX;
+            startY = e.touches[0].clientY - translateY;
         }
     });
+
+    element.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        
+        if (e.touches.length === 2) {
+            // Pinch zoom
+            const touch1 = e.touches[0];
+            const touch2 = e.touches[1];
+            const currentDistance = Math.hypot(
+                touch2.pageX - touch1.pageX, 
+                touch2.pageY - touch1.pageY
+            );
+            
+            const scaleDelta = currentDistance / touchStartDistance;
+            scale = Math.max(1, Math.min(5, scale * scaleDelta));
+            touchStartDistance = currentDistance;
+        } else if (e.touches.length === 1 && scale > 1) {
+            // Pan when zoomed
+            const touch = e.touches[0];
+            translateX = touch.clientX - startX;
+            translateY = touch.clientY - startY;
+        }
+
+        applyTransform();
+    }, { passive: false });
+
+    // Double tap to reset zoom
+    let lastTap = 0;
+    element.addEventListener('touchend', (e) => {
+        const now = new Date().getTime();
+        const timesince = now - lastTap;
+        if (timesince < 300 && timesince > 0) {
+            // Double tap detected
+            resetZoom();
+        }
+        lastTap = now;
+    });
+
+    // Add double-click for desktop reset
+    element.addEventListener('dblclick', resetZoom);
+
+    // Prevent default touch behaviors
+    element.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+    }, { passive: false });
+}
+
+    // Make media items clickable with zoom
+    function makeMediaClickable() {
+        // For photos
+        const photos = document.querySelectorAll('#photosContainer img.imgCamara');
+        photos.forEach(img => {
+            img.style.cursor = 'pointer';
+            img.addEventListener('click', function () {
+                // Create zoomable container
+                const zoomContainer = document.createElement('div');
+                zoomContainer.style.display = 'flex';
+                zoomContainer.style.justifyContent = 'center';
+                zoomContainer.style.alignItems = 'center';
+                zoomContainer.style.width = '100vw';
+                zoomContainer.style.height = '100vh';
+                zoomContainer.style.maxHeight = '100vh';
+                zoomContainer.style.overflow = 'hidden';
+
+                const zoomImg = document.createElement('img');
+                zoomImg.src = img.src;
+                zoomImg.style.maxWidth = '100vw';
+                zoomImg.style.maxHeight = '100vh';
+                zoomImg.style.objectFit = 'contain';
+                zoomImg.style.transition = 'transform 0.2s ease';
+
+                zoomContainer.appendChild(zoomImg);
+                contentDiv.innerHTML = '';
+                contentDiv.appendChild(zoomContainer);
+
+                // Add zoom functionality
+                addZoomFunctionality(zoomImg);
+
+                modal.classList.remove('hidden');
+                document.body.classList.add('overflow-hidden');
+            });
+        });
+
+        // For videos
+        const videos = document.querySelectorAll('#photosContainer video.imgCamara');
+        videos.forEach(video => {
+            video.style.cursor = 'pointer';
+            video.addEventListener('click', function () {
+                contentDiv.innerHTML = `<video src="${video.src}" controls autoplay class="max-w-screen max-h-screen object-contain mx-auto" style="max-height: 100vh;"></video>`;
+                modal.classList.remove('hidden');
+                document.body.classList.add('overflow-hidden');
+            });
+        });
+
+        // For signatures
+        const signatures = document.querySelectorAll('#firmasContainer img.imgFirma');
+        signatures.forEach(img => {
+            img.style.cursor = 'pointer';
+            img.addEventListener('click', function () {
+                // Create zoomable container
+                const zoomContainer = document.createElement('div');
+                zoomContainer.style.display = 'flex';
+                zoomContainer.style.justifyContent = 'center';
+                zoomContainer.style.alignItems = 'center';
+                zoomContainer.style.width = '100vw';
+                zoomContainer.style.height = '100vh';
+                zoomContainer.style.maxHeight = '100vh';
+                zoomContainer.style.overflow = 'hidden';
+
+                const zoomImg = document.createElement('img');
+                zoomImg.src = img.src;
+                zoomImg.style.maxWidth = '100%';
+                zoomImg.style.maxHeight = '100%';
+                zoomImg.style.objectFit = 'contain';
+                zoomImg.style.transition = 'transform 0.2s ease';
+
+                zoomContainer.appendChild(zoomImg);
+                contentDiv.innerHTML = '';
+                contentDiv.appendChild(zoomContainer);
+
+                // Add zoom functionality
+                addZoomFunctionality(zoomImg);
+
+                modal.classList.remove('hidden');
+                document.body.classList.add('overflow-hidden');
+            });
+        });
+    }
+
+    // Run initially
+    makeMediaClickable();
+
+    // Create MutationObserver to detect when new images are added
+    const photosContainer = document.getElementById('photosContainer');
+    const firmasContainer = document.getElementById('firmasContainer');
+
+    if (photosContainer) {
+        const photosObserver = new MutationObserver(makeMediaClickable);
+        photosObserver.observe(photosContainer, { childList: true, subtree: true });
+    }
+
+    if (firmasContainer) {
+        const firmasObserver = new MutationObserver(makeMediaClickable);
+        firmasObserver.observe(firmasContainer, { childList: true, subtree: true });
+    }
+});
+
+// Signature Modal Fix
+document.addEventListener('DOMContentLoaded', function () {
+    const imgCerrarFirma = document.getElementById('imgCerrarFirma');
+    const cajaCanvasFirma = document.getElementById('cajaCanvasFirma');
+
+    if (imgCerrarFirma && cajaCanvasFirma) {
+        imgCerrarFirma.addEventListener('click', function () {
+            cajaCanvasFirma.classList.add('hidden');
+        });
+    }
+});
+
+window.addEventListener('orientationchange', function(e) {
+    e.preventDefault(); // Prevent default orientation change behavior
+}, false);
 </script>
 
 <script src="https://dosxdos.app.iidos.com/js/notificaciones.js"></script>

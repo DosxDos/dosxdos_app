@@ -304,9 +304,9 @@
 
   function scrollToTop() {
     // Para navegadores modernos
-    document.documentElement.scrollTop = 0;
+    $body.scrollTop = 0;
     // Para navegadores antiguos
-    document.body.scrollTop = 0;
+    $body.scrollTop = 0;
   }
 
   /* LOADER */
@@ -314,20 +314,22 @@
     scrollToTop();
     $loader.classList.remove("displayOff");
     $loader.classList.add("displayOn");
-    document.body.style.overflow = 'hidden';
-    document.documentElement.style.overflow = 'hidden';
-    document.body.style.position = 'fixed';
-    document.body.style.width = '100%';
+    $body.style.overflow = 'hidden';
+    $body.style.overflow = 'hidden';
+    $body.style.position = 'fixed';
+    $body.style.width = '100%';
+    $body.style.height = '100vh';
   }
 
   function loaderOff() {
     setTimeout(() => {
       $loader.classList.remove("displayOn");
       $loader.classList.add("displayOff");
-      document.body.style.overflow = '';
+      $body.style.overflow = '';
       document.documentElement.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
+      $body.style.position = '';
+      $body.style.width = '';
+      $body.style.height = '';
     }, 1000);
   }
 
@@ -396,7 +398,7 @@
     alertContent.appendChild(closeButton);
     alertContent.appendChild(contentContainer);
     alertContainer.appendChild(alertContent);
-    document.body.appendChild(alertContainer);
+    $body.appendChild(alertContainer);
 
     // Slide down animation
     requestAnimationFrame(() => {
@@ -1438,7 +1440,7 @@
         e.stopPropagation();
         const isOpen = !mobileMenu.classList.contains("translate-x-full");
         mobileMenu.classList.toggle("translate-x-full");
-        document.body.classList.toggle("overflow-hidden");
+        $body.classList.toggle("overflow-hidden");
 
         if (!isOpen) {
           // Menu is opening
