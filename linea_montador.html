@@ -452,7 +452,7 @@
                         <!-- Upload Buttons -->
                         <div class="flex flex-col sm:flex-row gap-3">
                             <!-- Mobile-only camera button (hidden on desktop) -->
-                            <button type="button" id="fotos"
+                            <!-- <button type="button" id="fotos"
                                 class="sm:hidden flex items-center justify-center gap-2 bg-gray-50 hover:bg-gray-100 text-gray-700 border border-gray-300 rounded-lg py-3 px-4 shadow-sm transition-all w-full">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-600" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor">
@@ -462,10 +462,10 @@
                                         d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
                                 </svg>
                                 <span class="font-medium">Usar cámara</span>
-                            </button>
+                            </button> -->
 
                             <!-- Camera options -->
-                            <div id="listaCamaras" class="hidden space-y-2 px-4 py-3 bg-gray-50 rounded-lg"></div>
+                            <!-- <div id="listaCamaras" class="hidden space-y-2 px-4 py-3 bg-gray-50 rounded-lg"></div> -->
 
                             <label for="fotosGaleria"
                                 class="flex items-center justify-center gap-2 bg-gray-50 hover:bg-gray-100 text-gray-700 border border-gray-300 rounded-lg py-3 px-4 shadow-sm transition-all cursor-pointer w-full">
@@ -882,6 +882,58 @@
         { passive: false }
     );
 
+    function openCameraDirectly() {
+        const video = document.getElementById("video");
+        const camara = document.getElementById("camara");
+        const encabezado = document.getElementById("encabezado");
+        const contenido = document.getElementById("contenido");
+
+        // Simple constraints - just ask for any camera
+        const constraints = {
+            video: true,
+            audio: false
+        };
+
+        // Basic error handler
+        function handleError(error) {
+            console.error("Camera error:", error);
+            alert("Error al acceder a la cámara: " + error.message);
+        }
+
+        // Try to get the camera stream
+        navigator.mediaDevices.getUserMedia(constraints)
+            .then(function (stream) {
+                // Show camera view, hide other elements
+                camara.classList.remove("hidden");
+                encabezado.classList.add("hidden");
+                contenido.classList.add("hidden");
+
+                // Set the video source
+                video.srcObject = stream;
+            })
+            .catch(handleError);
+    }
+
+    // Simple camera close function
+    function closeCameraBasic() {
+        const video = document.getElementById("video");
+        const camara = document.getElementById("camara");
+        const encabezado = document.getElementById("encabezado");
+        const contenido = document.getElementById("contenido");
+
+        // Stop video stream
+        if (video.srcObject) {
+            const tracks = video.srcObject.getTracks();
+            tracks.forEach(track => track.stop());
+            video.srcObject = null;
+        }
+
+        // Hide camera, show other elements
+        camara.classList.add("hidden");
+        encabezado.classList.remove("hidden");
+        contenido.classList.remove("hidden");
+    }
+
     /* LISTENERS */
     document.addEventListener("DOMContentLoaded", () => {
         const datosBoton = document.getElementById("datosBoton");
@@ -895,34 +947,35 @@
         }
 
         const fotos = document.getElementById("fotos");
-        fotos.addEventListener("click", () => {
-            const listaCamaras = document.getElementById('listaCamaras');
-            if (listaCamaras.classList.contains('hidden')) {
-                listCameras();
-            }
-            toggleElemento("listaCamaras");
-        });
+        if (fotos) {
+            fotos.addEventListener("click", openCameraDirectly);
+        }
 
+        const imgCerrarCamara = document.getElementById("imgCerrarCamara");
+        if (imgCerrarCamara) {
+            imgCerrarCamara.addEventListener("click", closeCameraBasic);
+        }
 
-        video.addEventListener('click', () => {
-            capturePhoto(video);
-        });
+        const video = document.getElementById("video");
+        if (video) {
+            video.addEventListener("click", function () {
+                capturePhoto(video);
+            });
 
-        // Add touch event for mobile devices
-        video.addEventListener('touchstart', (e) => {
-            e.preventDefault(); // Prevent default touch behavior
-            capturePhoto(video);
-        });
-
+            video.addEventListener("touchstart", function (e) {
+                e.preventDefault();
+                capturePhoto(video);
+            });
+        }
     });
 
     function closeCamera() {
-        const camaraModal = document.getElementById("camara");
         const video = document.getElementById("video");
+        const camara = document.getElementById("camara");
         const encabezado = document.getElementById("encabezado");
         const contenido = document.getElementById("contenido");
 
-        // Stop video stream
+        // Stop the video stream
         if (video && video.srcObject) {
             const stream = video.srcObject;
             const tracks = stream.getTracks();
@@ -930,12 +983,8 @@
             video.srcObject = null;
         }
 
-        // Hide camera modal
-        if (camaraModal) {
-            camaraModal.classList.add("hidden");
-        }
-
-        // Show header and content
+        // Hide camera container and show other elements
+        if (camara) camara.classList.add("hidden");
         if (encabezado) encabezado.classList.remove("hidden");
         if (contenido) contenido.classList.remove("hidden");
     }
@@ -1264,74 +1313,120 @@
         cajaCanvasFirmaModal.classList.add("hidden");
     });
 
+    // Check if the browser supports mediaDevices
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        console.error("Browser doesn't support mediaDevices API");
+        alert("Su navegador no soporta acceso a la cámara. Por favor, actualice su navegador.");
+    }
+
     function listCameras() {
-    navigator.mediaDevices
-        .enumerateDevices()
-        .then((devices) => {
-            const videoDevices = devices.filter(
-                (device) => device.kind === "videoinput"
-            );
-            const cameraList = document.getElementById("listaCamaras");
-            const addedCameras = new Set();
+        if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+            console.error("enumerateDevices() not supported.");
+            return;
+        }
 
-            // Verificar si el elemento existe antes de intentar modificarlo
-            if (!cameraList) {
-                console.error("Elemento #listaCamaras no encontrado.");
-                return;
-            }
+        // Request camera permission first to get labeled devices
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function (stream) {
+                // Stop the stream immediately after getting permission
+                stream.getTracks().forEach(track => track.stop());
 
-            // Limpiar la lista antes de agregar nuevas cámaras
-            cameraList.innerHTML = "";
+                // Now enumerate devices with labels
+                return navigator.mediaDevices.enumerateDevices();
+            })
+            .then(function (devices) {
+                const videoDevices = devices.filter(device => device.kind === 'videoinput');
+                const cameraList = document.getElementById('listaCamaras');
 
-            if (videoDevices.length === 0) {
-                cameraList.innerHTML = "<p class='text-gray-700'>No se encontraron cámaras.</p>";
-                return;
-            }
+                if (!cameraList) {
+                    console.error("Camera list element not found");
+                    return;
+                }
 
-            videoDevices.forEach((device, index) => {
-                // Check if the camera has already been added
-                if (!addedCameras.has(device.deviceId)) {
+                // Clear previous entries
+                cameraList.innerHTML = "";
+
+                if (videoDevices.length === 0) {
+                    cameraList.innerHTML = "<p>No se encontraron cámaras</p>";
+                    return;
+                }
+
+                // Add each camera to the list
+                videoDevices.forEach((device, index) => {
                     const button = document.createElement("button");
-                    button.textContent = device.label || `Cámara ${addedCameras.size + 1}`;
+                    button.textContent = device.label || `Cámara ${index + 1}`;
                     button.type = "button";
                     button.className = "ruta p-2 bg-gray-200 hover:bg-gray-300 rounded-md w-full text-left";
-                    button.addEventListener("click", () => startCamera(device.deviceId));
+                    button.addEventListener("click", function () {
+                        startCamera(device.deviceId);
+                    });
                     cameraList.appendChild(button);
-                    addedCameras.add(device.deviceId);
-                }
-            });
+                });
 
-            // Asegurarse de que la lista de cámaras se muestre
-            cameraList.classList.remove("hidden");
-        })
-        .catch((err) => console.error("Error al enumerar dispositivos:", err));
-}
-
-
-
-    function startCamera(device) {
-        const video = document.getElementById("video");
-        const camara = document.getElementById("camara");
-        const constraints = {
-            video: {
-                deviceId: device ? { exact: device } : undefined,
-            },
-        };
-
-        navigator.mediaDevices
-            .getUserMedia(constraints)
-            .then((stream) => {
-                camara.classList.remove("hidden");
-                encabezado.classList.add("hidden");
-                contenido.classList.add("hidden");
-                video.srcObject = stream;
+                // Make sure the list is visible
+                cameraList.classList.remove("hidden");
             })
-            .catch((err) => {
-                console.error("Error al acceder a la cámara seleccionada:", err);
-                alert("No se pudo acceder a la cámara. Por favor, compruebe los permisos.");
+            .catch(function (err) {
+                console.error("Error accessing camera:", err);
+                alert("Error al acceder a la cámara: " + err.message);
             });
     }
 
+    function startCamera(deviceId) {
+        const video = document.getElementById("video");
+        const camara = document.getElementById("camara");
+        const encabezado = document.getElementById("encabezado");
+        const contenido = document.getElementById("contenido");
+
+        if (!video || !camara || !encabezado || !contenido) {
+            console.error("Required elements not found");
+            return;
+        }
+
+        const constraints = {
+            video: deviceId ? { deviceId: { exact: deviceId } } : true
+        };
+
+        // Stop any existing streams first
+        if (video.srcObject) {
+            const tracks = video.srcObject.getTracks();
+            tracks.forEach(track => track.stop());
+        }
+
+        navigator.mediaDevices.getUserMedia(constraints)
+            .then(function (stream) {
+                // Show the camera view and hide other elements
+                camara.classList.remove("hidden");
+                encabezado.classList.add("hidden");
+                contenido.classList.add("hidden");
+
+                // Set the video source to the camera stream
+                video.srcObject = stream;
+
+                // Make sure autoplay works
+                video.play().catch(e => console.error("Error playing video:", e));
+
+                // Hide the camera list
+                const listaCamaras = document.getElementById('listaCamaras');
+                if (listaCamaras) {
+                    listaCamaras.classList.add("hidden");
+                }
+            })
+            .catch(function (err) {
+                console.error("Error starting camera:", err);
+
+                let errorMsg = "No se pudo acceder a la cámara. ";
+                if (err.name === "NotAllowedError") {
+                    errorMsg += "Acceso denegado. Por favor, permita el acceso a la cámara en la configuración de su navegador.";
+                } else if (err.name === "NotFoundError") {
+                    errorMsg += "No se encontró la cámara seleccionada.";
+                } else {
+                    errorMsg += err.message;
+                }
+
+                alert(errorMsg);
+            });
+    }
 
     function capturePhoto(video) {
         const canvas = document.createElement("canvas");
