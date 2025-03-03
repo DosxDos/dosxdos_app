@@ -222,20 +222,34 @@
   let bounds;
   let marcadores = [];
 
+  function scrollToTop() {
+      // Para navegadores modernos
+      document.documentElement.scrollTop = 0;
+      // Para navegadores antiguos
+      document.body.scrollTop = 0;
+    }
+
   // Funciones para mostrar y ocultar el loader
   function loaderOn() {
-    $loader.classList.remove('displayOff');
-    $loader.classList.add('displayOn');
-    $body.classList.add('oyh');
-  }
+        scrollToTop();
+        $loader.classList.remove("displayOff");
+        $loader.classList.add("displayOn");
+        document.body.style.overflow = 'hidden';
+        document.documentElement.style.overflow = 'hidden';
+        document.body.style.position = 'fixed';
+        document.body.style.width = '100%';
+    }
 
-  function loaderOff() {
-    setTimeout(() => {
-      $loader.classList.remove('displayOn');
-      $loader.classList.add('displayOff');
-      $body.classList.remove('oyh');
-    }, 1000);
-  }
+    function loaderOff() {
+        setTimeout(() => {
+            $loader.classList.remove("displayOn");
+            $loader.classList.add("displayOff");
+            document.body.style.overflow = '';
+            document.documentElement.style.overflow = '';
+            document.body.style.position = '';
+            document.body.style.width = '';
+        }, 1000);
+    }
 
   // Mostrar el nombre de la ruta o 'VOLVER'
   if (ruta) {

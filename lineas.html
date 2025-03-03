@@ -1510,17 +1510,23 @@
 
     function loaderOn() {
         scrollToTop();
-        $loader.classList.remove('displayOff');
-        $loader.classList.add('displayOn');
-        $body.classList.add('oyh');
+        $loader.classList.remove("displayOff");
+        $loader.classList.add("displayOn");
+        document.body.style.overflow = 'hidden';
+        document.documentElement.style.overflow = 'hidden';
+        document.body.style.position = 'fixed';
+        document.body.style.width = '100%';
     }
 
     function loaderOff() {
         setTimeout(() => {
-            $loader.classList.remove('displayOn');
-            $loader.classList.add('displayOff')
-            $body.classList.remove('oyh');
-        }, 1000)
+            $loader.classList.remove("displayOn");
+            $loader.classList.add("displayOff");
+            document.body.style.overflow = '';
+            document.documentElement.style.overflow = '';
+            document.body.style.position = '';
+            document.body.style.width = '';
+        }, 1000);
     }
 
     /* MENSAJE */
