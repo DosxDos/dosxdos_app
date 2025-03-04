@@ -1,445 +1,479 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mapa Rutas</title>
-  <link rel="icon" type="image/png" href="https://dosxdos.app.iidos.com/img/logoPwa256.png">
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDojih1XShuEEmyRVE8FYOGvJn37blq0ng"></script>
-  <style>
-    * {
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .displayOff {
-      display: none;
-    }
-
-    .displayOn {
-      display: flex;
-    }
-
-    #loader {
-      width: 100vw;
-      height: 100vh;
-      position: absolute;
-      top: 0;
-      z-index: 6000;
-      background-color: rgba(0, 0, 0, 0.886);
-      justify-content: center;
-      align-items: center;
-    }
-
-    .loader {
-      border: 4px solid #ffffff;
-      /* Blanco */
-      border-top: 4px solid #d31216;
-      /* Rojo */
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      0% {
-        transform: rotate(0deg);
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mapa Rutas</title>
+    <link
+      rel="icon"
+      type="image/png"
+      href="http://localhost/dosxdos_app/img/logoPwa256.png"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDojih1XShuEEmyRVE8FYOGvJn37blq0ng"></script>
+    <style>
+      * {
+        -webkit-tap-highlight-color: transparent;
       }
 
-      100% {
-        transform: rotate(360deg);
+      .displayOff {
+        display: none;
       }
-    }
 
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 4000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      justify-content: center;
-      align-items: center;
-    }
+      .displayOn {
+        display: flex;
+      }
 
-    .modal-content {
-      background-color: white;
-      padding: 20px;
-      border-radius: 5px;
-      max-width: 400px;
-      width: 100%;
-    }
+      #loader {
+        width: 100vw;
+        height: 100vh;
+        position: absolute;
+        top: 0;
+        z-index: 6000;
+        background-color: rgba(0, 0, 0, 0.886);
+        justify-content: center;
+        align-items: center;
+      }
 
-    body {
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-      height: 100vh;
-      overflow-x: hidden;
-    }
+      .loader {
+        border: 4px solid #ffffff;
+        /* Blanco */
+        border-top: 4px solid #d31216;
+        /* Rojo */
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+      }
 
-    .oyh {
-      overflow-y: hidden;
-    }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
 
-    #ruta-title {
-      display: flex;
-      position: fixed;
-      bottom: 2.5vh;
-      width: 50%;
-      justify-content: center;
-      text-align: center;
-      font-weight: bold;
-      z-index: 4000;
-      background-color: white;
-      opacity: 0.7;
-      align-self: center;
-      cursor: pointer;
-      border-radius: 5vw;
-    }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
 
-    #map {
-      display: flex;
-      position: relative;
-      top: 0;
-      width: 100%;
-      height: 100vh;
-      z-index: 3000;
-    }
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 4000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+      }
 
-    #modal {
-      z-index: 4000;
-    }
+      .modal-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 5px;
+        max-width: 400px;
+        width: 100%;
+      }
 
-    #navigate-button {
-      background-color: #d31216;
-      border-radius: 30px;
-      color: white;
-      padding: 10px;
-      margin: 12px 0 0 0;
-      font-family: "Lora-Bold", "Lora-Bold";
-      font-size: 20px;
-      border: 1px solid gray;
-    }
+      body {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100vh;
+        overflow-x: hidden;
+      }
 
-    #report-button {
-      background-color: black;
-      border-radius: 30px;
-      color: white;
-      padding: 10px;
-      margin: 12px 0 0 0;
-      font-family: "Lora-Bold", "Lora-Bold";
-      font-size: 20px;
-      border: 1px solid gray;
-    }
+      .oyh {
+        overflow-y: hidden;
+      }
 
-    #close-button {
-      background-color: rgba(0, 0, 0, 0.573);
-      border-radius: 30px;
-      padding: 10px;
-      color: white;
-      margin: 12px 0 0 0;
-      font-family: "Lora-Bold", "Lora-Bold";
-      font-size: 20px;
-      border: 1px solid gray;
-    }
+      #ruta-title {
+        display: flex;
+        position: fixed;
+        bottom: 2.5vh;
+        width: 50%;
+        justify-content: center;
+        text-align: center;
+        font-weight: bold;
+        z-index: 4000;
+        background-color: white;
+        opacity: 0.7;
+        align-self: center;
+        cursor: pointer;
+        border-radius: 5vw;
+      }
 
-    .alert {
-      background-color: #f8d7da;
-      border: 1px solid #d31216;
-      color: #721c24;
-      padding: 10px;
-      margin: 10px;
-      position: relative;
-      max-width: 300px;
-      z-index: 4000;
-    }
+      #map {
+        display: flex;
+        position: relative;
+        top: 0;
+        width: 100%;
+        height: 100vh;
+        z-index: 3000;
+      }
 
-    .alert-close {
-      position: absolute;
-      top: 0;
-      right: 10px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 20px;
-    }
+      #modal {
+        z-index: 4000;
+      }
 
-    .alert-container {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      z-index: 4000;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      width: 100%;
-      max-width: 300px;
-    }
-  </style>
-</head>
+      #navigate-button {
+        background-color: #d31216;
+        border-radius: 30px;
+        color: white;
+        padding: 10px;
+        margin: 12px 0 0 0;
+        font-family: "Lora-Bold", "Lora-Bold";
+        font-size: 20px;
+        border: 1px solid gray;
+      }
 
-<body id="body" class="oyh">
+      #report-button {
+        background-color: black;
+        border-radius: 30px;
+        color: white;
+        padding: 10px;
+        margin: 12px 0 0 0;
+        font-family: "Lora-Bold", "Lora-Bold";
+        font-size: 20px;
+        border: 1px solid gray;
+      }
 
-  <div id="loader" class="displayOn">
-    <div class="loader"></div>
-  </div>
+      #close-button {
+        background-color: rgba(0, 0, 0, 0.573);
+        border-radius: 30px;
+        padding: 10px;
+        color: white;
+        margin: 12px 0 0 0;
+        font-family: "Lora-Bold", "Lora-Bold";
+        font-size: 20px;
+        border: 1px solid gray;
+      }
 
-  <button id="ruta-title" class="p-2"></button>
+      .alert {
+        background-color: #f8d7da;
+        border: 1px solid #d31216;
+        color: #721c24;
+        padding: 10px;
+        margin: 10px;
+        position: relative;
+        max-width: 300px;
+        z-index: 4000;
+      }
 
-  <div id="map"></div>
+      .alert-close {
+        position: absolute;
+        top: 0;
+        right: 10px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 20px;
+      }
 
-  <!-- Modal Structure -->
-  <div id="modal" class="fixed top-0 left-0 right-0 z-50 hidden pointer-events-auto">
-    <div class="modal-content p-4 rounded shadow-xl w-full max-w-lg mx-auto mt-4">
-      <h2 id="point-name" class="text-lg font-bold h-[5vh]"></h2>
-      <p id="point-address" class="mt-2"></p>
-      <p id="point-lat" class="mt-2"></p>
-      <p id="point-lng" class="mt-2"></p>
-      <button id="navigate-button"
-        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Navegar</button>
-      <button id="report-button"
-        class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Reportar</button>
-      <button id="close-button"
-        class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Cerrar</button>
+      .alert-container {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        z-index: 4000;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        width: 100%;
+        max-width: 300px;
+      }
+    </style>
+  </head>
+
+  <body id="body" class="oyh">
+    <div id="loader" class="displayOn">
+      <div class="loader"></div>
     </div>
-  </div>
 
-  <div id="alert-container" class="alert-container"></div>
+    <button id="ruta-title" class="p-2"></button>
 
-</body>
+    <div id="map"></div>
 
-<script src="./js/index_db.js"></script>
+    <!-- Modal Structure -->
+    <div
+      id="modal"
+      class="fixed top-0 left-0 right-0 z-50 hidden pointer-events-auto"
+    >
+      <div
+        class="modal-content p-4 rounded shadow-xl w-full max-w-lg mx-auto mt-4"
+      >
+        <h2 id="point-name" class="text-lg font-bold h-[5vh]"></h2>
+        <p id="point-address" class="mt-2"></p>
+        <p id="point-lat" class="mt-2"></p>
+        <p id="point-lng" class="mt-2"></p>
+        <button
+          id="navigate-button"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Navegar
+        </button>
+        <button
+          id="report-button"
+          class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Reportar
+        </button>
+        <button
+          id="close-button"
+          class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Cerrar
+        </button>
+      </div>
+    </div>
 
-<script>
-  let montador;
-  const ruta = localStorage.getItem("ruta");
-  const $loader = document.getElementById('loader');
-  const $body = document.getElementById('body');
-  let bounds;
-  let marcadores = [];
+    <div id="alert-container" class="alert-container"></div>
+  </body>
 
-  function scrollToTop() {
+  <script src="./js/index_db.js"></script>
+
+  <script>
+    let montador;
+    const ruta = localStorage.getItem("ruta");
+    const $loader = document.getElementById("loader");
+    const $body = document.getElementById("body");
+    let bounds;
+    let marcadores = [];
+
+    function scrollToTop() {
       // Para navegadores modernos
       document.documentElement.scrollTop = 0;
       // Para navegadores antiguos
       document.body.scrollTop = 0;
     }
 
-  // Funciones para mostrar y ocultar el loader
-  function loaderOn() {
-        scrollToTop();
-        $loader.classList.remove("displayOff");
-        $loader.classList.add("displayOn");
-        document.body.style.overflow = 'hidden';
-        document.documentElement.style.overflow = 'hidden';
-        document.body.style.position = 'fixed';
-        document.body.style.width = '100%';
+    // Funciones para mostrar y ocultar el loader
+    function loaderOn() {
+      scrollToTop();
+      $loader.classList.remove("displayOff");
+      $loader.classList.add("displayOn");
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
+      document.body.style.position = "fixed";
+      document.body.style.width = "100%";
     }
 
     function loaderOff() {
-        setTimeout(() => {
-            $loader.classList.remove("displayOn");
-            $loader.classList.add("displayOff");
-            document.body.style.overflow = '';
-            document.documentElement.style.overflow = '';
-            document.body.style.position = '';
-            document.body.style.width = '';
-        }, 1000);
+      setTimeout(() => {
+        $loader.classList.remove("displayOn");
+        $loader.classList.add("displayOff");
+        document.body.style.overflow = "";
+        document.documentElement.style.overflow = "";
+        document.body.style.position = "";
+        document.body.style.width = "";
+      }, 1000);
     }
 
-  // Mostrar el nombre de la ruta o 'VOLVER'
-  if (ruta) {
-    document.getElementById("ruta-title").innerText = 'HISTORIAL-DE-RUTAS';
-  } else {
-    document.getElementById("ruta-title").innerText = 'VOLVER';
-  }
-
-  // Evento para el botón de título
-  document.getElementById("ruta-title").addEventListener('click', () => {
-    window.location.href = "https://dosxdos.app.iidos.com/historial_montador.html";
-  });
-
-  let lineasRuta = [];
-
-  // Función para leer las líneas desde IndexedDB
-  const lineas = async () => {
-    console.log("Iniciando carga de líneas");
-    loaderOn(); // Mostrar el loader al iniciar la carga
-    try {
-      const TotalLineas = await leerDatos("dosxdos", "historial");
-      console.log("TotalLineas:", TotalLineas);
-      if (TotalLineas && TotalLineas.length > 0) {
-        // Filtrar las líneas según el proyecto (ruta)
-        lineasRuta = TotalLineas;
-        console.log("lineasRuta filtradas:", lineasRuta);
-        if (lineasRuta.length === 0) {
-          alerta("No hay líneas para esta ruta.");
-        }
-        const storageLineas = JSON.stringify(lineasRuta);
-        localStorage.setItem('lineasRuta', storageLineas);
-        await initMap(lineasRuta);
-      } else {
-        alerta("No se encontraron líneas en 'historial'.");
-      }
-    } catch (error) {
-      console.error("Error en la función 'lineas':", error);
-      alerta("Error al cargar las líneas.");
-    } finally {
-      loaderOff(); // Ocultar el loader al finalizar la carga
+    // Mostrar el nombre de la ruta o 'VOLVER'
+    if (ruta) {
+      document.getElementById("ruta-title").innerText = "HISTORIAL-DE-RUTAS";
+    } else {
+      document.getElementById("ruta-title").innerText = "VOLVER";
     }
-  };
 
-  // Llamar a la función 'lineas' al cargar la página
-  lineas();
-
-  let map;
-  const modal = document.getElementById("modal");
-  const pointName = document.getElementById("point-name");
-  const pointAddress = document.getElementById("point-address");
-  const pointLat = document.getElementById("point-lat");
-  const pointLng = document.getElementById("point-lng");
-  const navigateButton = document.getElementById("navigate-button");
-  const reportButton = document.getElementById("report-button");
-  const closeButton = document.getElementById("close-button");
-
-  // Función para inicializar el mapa
-  function initMap(lineasInicio) {
-    console.log("Inicializando el mapa");
-    bounds = new google.maps.LatLngBounds();
-    map = new google.maps.Map(document.getElementById("map"), {
-      zoom: 8,
-      gestureHandling: "greedy",
-      fullscreenControl: false,
+    // Evento para el botón de título
+    document.getElementById("ruta-title").addEventListener("click", () => {
+      window.location.href =
+        "http://localhost/dosxdos_app/historial_montador.html";
     });
-    renderPins(lineasInicio);
-  }
 
-  // Función para renderizar los marcadores en el mapa
-  function renderPins(lineasRender) {
-    return new Promise((resolve, reject) => {
+    let lineasRuta = [];
+
+    // Función para leer las líneas desde IndexedDB
+    const lineas = async () => {
+      console.log("Iniciando carga de líneas");
+      loaderOn(); // Mostrar el loader al iniciar la carga
       try {
-        console.log("Renderizando marcadores");
-        const offset = 0.000070;
-        let i = 0;
-        for (const point of lineasRender) {
-          const lat = point.lat ? parseFloat(point.lat) : null;
-          const lng = point.lng ? parseFloat(point.lng) : null;
-          const firma = point.Firma_de_la_OT_relacionada || "Sin firma";
-          const observaciones = point.Observaciones_internas || "Sin observaciones";
-          const nameToDisplay = point.nombrePv || "Nombre del punto de venta no disponible";
-          const nombreCliente = point.nombreCliente || "Nombre del cliente no disponible";
-          const concatenatedName = `${point.RutaSelect} - ${point.Fecha_actuaci_n} - ${point.Codigo_de_l_nea} - ${nameToDisplay} - ${firma} - ${nombreCliente} - OT CRM: ${point.C_digo_de_OT_relacionada} - OT Navision: ${point.Navision_OT} - ${point.Tipo_de_OT} - ${observaciones} - ${point.Observaciones_montador}`;
-          if (lat !== null && lng !== null) {
-            const adjustedLat = lat + i * offset;
-            const adjustedLng = lng + i * offset;
-            const marker = new google.maps.Marker({
-              position: { lat: adjustedLat, lng: adjustedLng },
-              map: map,
-              title: concatenatedName,
-              icon: {
-                url: "https://dosxdos.app.iidos.com/img/marcador_de_historial.png",
-                scaledSize: new google.maps.Size(30, 30), // Tamaño ajustado
-                origin: new google.maps.Point(0, 0),
-                anchor: new google.maps.Point(15, 30)
-              }
-            });
-
-            // Añadir el marcador al bounds para ajustar la vista del mapa
-            bounds.extend(marker.position);
-
-            // Listener para el clic en el marcador
-            marker.addListener("click", () => {
-              pointName.innerText = concatenatedName;
-              pointAddress.innerText = point.Direcci_n || "Dirección no disponible";
-              pointLat.innerText = `Latitud: ${adjustedLat}`;
-              pointLng.innerText = `Longitud: ${adjustedLng}`;
-
-              // Mostrar el modal
-              modal.classList.remove("hidden");
-              modal.style.display = "flex";
-
-              // Centrar el mapa en el marcador y aumentar el zoom
-              map.setZoom(15);
-              map.setCenter(marker.getPosition());
-
-              // Función para el botón "Navegar"
-              navigateButton.onclick = () => {
-                if (lat !== null && lng !== null) {
-                  const url = `https://www.google.com/maps/dir/?api=1&destination=${adjustedLat},${adjustedLng}`;
-                  window.open(url, "_blank");
-                } else {
-                  alert('Las coordenadas no están disponibles para este punto.');
-                }
-              };
-              // Función para el botón "Reportar"
-              reportButton.onclick = () => {
-                const lineaStorage = point.Codigo_de_l_nea;
-                const LineaActividadStorage = point.Codigo_de_l_nea;
-                const otStorage = point.C_digo_de_OT_relacionada;
-                const clienteStorage = point.N_mero_del_cliente;
-                const nombreCliente = point.nombreCliente;
-
-                localStorage.setItem('id', point.Id);
-                localStorage.setItem('linea', lineaStorage);
-                localStorage.setItem('lineaActividad', LineaActividadStorage);
-                localStorage.setItem('ot', otStorage);
-                localStorage.setItem('cliente', clienteStorage);
-                localStorage.setItem('nombreCliente', nombreCliente);
-
-                window.location.href = "https://dosxdos.app.iidos.com/linea_historial_montador.html";
-              };
-            });
-
-            // Añadir una propiedad personalizada al marcador
-            marker.customId = point.Codigo_de_l_nea; // Usar un identificador único de tu objeto `point`
-
-            // Guardar el marcador en un array para gestionarlo más tarde si es necesario
-            marcadores.push(marker);
-          } else {
-            console.log(`Faltan coordenadas para el punto: ${JSON.stringify(point)}`);
-            alerta(`Fallo al cargar la ubicación para la línea: ${point.Codigo_de_l_nea}`);
-            i++;
-            continue;
+        const TotalLineas = await leerDatos("dosxdos", "historial");
+        console.log("TotalLineas:", TotalLineas);
+        if (TotalLineas && TotalLineas.length > 0) {
+          // Filtrar las líneas según el proyecto (ruta)
+          lineasRuta = TotalLineas;
+          console.log("lineasRuta filtradas:", lineasRuta);
+          if (lineasRuta.length === 0) {
+            alerta("No hay líneas para esta ruta.");
           }
-          i++;
-        };
-        map.fitBounds(bounds);
-        resolve(true);
+          const storageLineas = JSON.stringify(lineasRuta);
+          localStorage.setItem("lineasRuta", storageLineas);
+          await initMap(lineasRuta);
+        } else {
+          alerta("No se encontraron líneas en 'historial'.");
+        }
       } catch (error) {
-        console.error("Error en 'renderPins':", error);
-        alerta("Error al renderizar los puntos en el mapa, por favor carga de nuevo el mapa para intentarlo nuevamente");
-        resolve(false);
+        console.error("Error en la función 'lineas':", error);
+        alerta("Error al cargar las líneas.");
+      } finally {
+        loaderOff(); // Ocultar el loader al finalizar la carga
+      }
+    };
+
+    // Llamar a la función 'lineas' al cargar la página
+    lineas();
+
+    let map;
+    const modal = document.getElementById("modal");
+    const pointName = document.getElementById("point-name");
+    const pointAddress = document.getElementById("point-address");
+    const pointLat = document.getElementById("point-lat");
+    const pointLng = document.getElementById("point-lng");
+    const navigateButton = document.getElementById("navigate-button");
+    const reportButton = document.getElementById("report-button");
+    const closeButton = document.getElementById("close-button");
+
+    // Función para inicializar el mapa
+    function initMap(lineasInicio) {
+      console.log("Inicializando el mapa");
+      bounds = new google.maps.LatLngBounds();
+      map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 8,
+        gestureHandling: "greedy",
+        fullscreenControl: false,
+      });
+      renderPins(lineasInicio);
+    }
+
+    // Función para renderizar los marcadores en el mapa
+    function renderPins(lineasRender) {
+      return new Promise((resolve, reject) => {
+        try {
+          console.log("Renderizando marcadores");
+          const offset = 0.00007;
+          let i = 0;
+          for (const point of lineasRender) {
+            const lat = point.lat ? parseFloat(point.lat) : null;
+            const lng = point.lng ? parseFloat(point.lng) : null;
+            const firma = point.Firma_de_la_OT_relacionada || "Sin firma";
+            const observaciones =
+              point.Observaciones_internas || "Sin observaciones";
+            const nameToDisplay =
+              point.nombrePv || "Nombre del punto de venta no disponible";
+            const nombreCliente =
+              point.nombreCliente || "Nombre del cliente no disponible";
+            const concatenatedName = `${point.RutaSelect} - ${point.Fecha_actuaci_n} - ${point.Codigo_de_l_nea} - ${nameToDisplay} - ${firma} - ${nombreCliente} - OT CRM: ${point.C_digo_de_OT_relacionada} - OT Navision: ${point.Navision_OT} - ${point.Tipo_de_OT} - ${observaciones} - ${point.Observaciones_montador}`;
+            if (lat !== null && lng !== null) {
+              const adjustedLat = lat + i * offset;
+              const adjustedLng = lng + i * offset;
+              const marker = new google.maps.Marker({
+                position: { lat: adjustedLat, lng: adjustedLng },
+                map: map,
+                title: concatenatedName,
+                icon: {
+                  url: "http://localhost/dosxdos_app/img/marcador_de_historial.png",
+                  scaledSize: new google.maps.Size(30, 30), // Tamaño ajustado
+                  origin: new google.maps.Point(0, 0),
+                  anchor: new google.maps.Point(15, 30),
+                },
+              });
+
+              // Añadir el marcador al bounds para ajustar la vista del mapa
+              bounds.extend(marker.position);
+
+              // Listener para el clic en el marcador
+              marker.addListener("click", () => {
+                pointName.innerText = concatenatedName;
+                pointAddress.innerText =
+                  point.Direcci_n || "Dirección no disponible";
+                pointLat.innerText = `Latitud: ${adjustedLat}`;
+                pointLng.innerText = `Longitud: ${adjustedLng}`;
+
+                // Mostrar el modal
+                modal.classList.remove("hidden");
+                modal.style.display = "flex";
+
+                // Centrar el mapa en el marcador y aumentar el zoom
+                map.setZoom(15);
+                map.setCenter(marker.getPosition());
+
+                // Función para el botón "Navegar"
+                navigateButton.onclick = () => {
+                  if (lat !== null && lng !== null) {
+                    const url = `https://www.google.com/maps/dir/?api=1&destination=${adjustedLat},${adjustedLng}`;
+                    window.open(url, "_blank");
+                  } else {
+                    alert(
+                      "Las coordenadas no están disponibles para este punto."
+                    );
+                  }
+                };
+                // Función para el botón "Reportar"
+                reportButton.onclick = () => {
+                  const lineaStorage = point.Codigo_de_l_nea;
+                  const LineaActividadStorage = point.Codigo_de_l_nea;
+                  const otStorage = point.C_digo_de_OT_relacionada;
+                  const clienteStorage = point.N_mero_del_cliente;
+                  const nombreCliente = point.nombreCliente;
+
+                  localStorage.setItem("id", point.Id);
+                  localStorage.setItem("linea", lineaStorage);
+                  localStorage.setItem("lineaActividad", LineaActividadStorage);
+                  localStorage.setItem("ot", otStorage);
+                  localStorage.setItem("cliente", clienteStorage);
+                  localStorage.setItem("nombreCliente", nombreCliente);
+
+                  window.location.href =
+                    "http://localhost/dosxdos_app/linea_historial_montador.html";
+                };
+              });
+
+              // Añadir una propiedad personalizada al marcador
+              marker.customId = point.Codigo_de_l_nea; // Usar un identificador único de tu objeto `point`
+
+              // Guardar el marcador en un array para gestionarlo más tarde si es necesario
+              marcadores.push(marker);
+            } else {
+              console.log(
+                `Faltan coordenadas para el punto: ${JSON.stringify(point)}`
+              );
+              alerta(
+                `Fallo al cargar la ubicación para la línea: ${point.Codigo_de_l_nea}`
+              );
+              i++;
+              continue;
+            }
+            i++;
+          }
+          map.fitBounds(bounds);
+          resolve(true);
+        } catch (error) {
+          console.error("Error en 'renderPins':", error);
+          alerta(
+            "Error al renderizar los puntos en el mapa, por favor carga de nuevo el mapa para intentarlo nuevamente"
+          );
+          resolve(false);
+        }
+      });
+    }
+
+    // Listener para cerrar el modal
+    closeButton.onclick = () => {
+      modal.style.display = "none";
+    };
+
+    // Función para mostrar alertas
+    function alerta(mensaje) {
+      alert(mensaje);
+    }
+
+    // Event Listener para cuando la página se muestra
+    window.addEventListener("pageshow", (e) => {
+      console.log("Carga completa de los elementos de la página.");
+      let mensaje = localStorage.getItem("mensaje");
+      if (mensaje && mensaje !== null) {
+        alerta(mensaje);
+        localStorage.removeItem("mensaje");
+      }
+      let login = localStorage.getItem("login");
+      if (!login || login === null) {
+        window.location.href = "http://localhost/dosxdos_app/index.html";
       }
     });
-  }
-
-  // Listener para cerrar el modal
-  closeButton.onclick = () => {
-    modal.style.display = "none";
-  };
-
-  // Función para mostrar alertas
-  function alerta(mensaje) {
-    alert(mensaje);
-  }
-
-  // Event Listener para cuando la página se muestra
-  window.addEventListener('pageshow', (e) => {
-    console.log('Carga completa de los elementos de la página.');
-    let mensaje = localStorage.getItem('mensaje');
-    if (mensaje && mensaje !== null) {
-      alerta(mensaje);
-      localStorage.removeItem('mensaje');
-    }
-    let login = localStorage.getItem('login');
-    if (!login || login === null) {
-      window.location.href = "https://dosxdos.app.iidos.com/index.html";
-    }
-  });
-</script>
-
+  </script>
 </html>

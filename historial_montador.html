@@ -1,649 +1,909 @@
 <!DOCTYPE html>
 <html lang="es">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Historial Montador</title>
-    <link rel="icon" type="image/png" href="https://dosxdos.app.iidos.com/img/logoPwa256.png" />
-    <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/tailwindmain.css" />
-    <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/index.css" />
-</head>
+    <link
+      rel="icon"
+      type="image/png"
+      href="http://localhost/dosxdos_app/img/logoPwa256.png"
+    />
+    <link
+      rel="stylesheet"
+      href="http://localhost/dosxdos_app/css/tailwindmain.css"
+    />
+    <link rel="stylesheet" href="http://localhost/dosxdos_app/css/index.css" />
+  </head>
 
-<body id="body" class="bg-gray-100 overflow-x-hidden min-h-screen">
+  <body id="body" class="bg-gray-100 overflow-x-hidden min-h-screen">
     <!-- Loader -->
-    <div id="loader" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center">
-        <span class="loader"></span>
+    <div
+      id="loader"
+      class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center"
+    >
+      <span class="loader"></span>
     </div>
 
     <!-- Navigation -->
     <section id="encabezado" class="w-full bg-white shadow-md fixed top-0 z-30">
-        <!-- Main header -->
-        <div class="flex items-center justify-between w-full px-6 py-4">
-            <!-- Logo -->
-            <div class="flex items-center">
-                <img src="https://dosxdos.app.iidos.com/img/logo300.png" class="h-16 hidden xl:block"
-                    alt="Logo completo" />
-                <img src="https://dosxdos.app.iidos.com/img/Isotipo-38.png" class="h-16 xl:hidden" alt="Isotipo" />
-            </div>
-
-            <!-- Desktop Navigation -->
-            <nav class="hidden xl:flex items-center space-x-8">
-                <a href="https://dosxdos.app.iidos.com/rutas_montador.html"
-                    class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M4 5c8 0 8 14 16 14" />
-                        <circle cx="4" cy="5" r="2" />
-                        <circle cx="12" cy="12" r="2" />
-                        <circle cx="20" cy="19" r="2" />
-                    </svg>
-                    <span>Rutas</span>
-                </a>
-
-                <a href="https://dosxdos.app.iidos.com/ruta_montador.html"
-                    class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
-                        <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
-                        <path d="M9 12h6" />
-                        <path d="M9 16h6" />
-                    </svg>
-                    <span>Líneas</span>
-                </a>
-
-                <a href="https://dosxdos.app.iidos.com/historial_montador.html"
-                    class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
-                    <svg class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10" />
-                        <polyline points="12 6 12 12 16 14" />
-                    </svg>
-                    <span>Historial</span>
-                </a>
-
-                <!-- Desktop Menu Notifications Bell -->
-                <a href="https://dosxdos.app.iidos.com/notificaciones.html" class="relative z-10"
-                    id="desktopBellContainer">
-                    <img id="bellDesktop" src="" class="text-gray-900 object-contain" />
-                    <span id="desktopNotificationCount"
-                        class="absolute top-0 -right-2 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] text-center border hidden"></span>
-                </a>
-
-                <!-- Desktop User Menu -->
-                <div class="relative group drop-shadow">
-                    <button id="userMenuButton"
-                        class="group flex items-center gap-3 py-1 pl-1.5 pr-4 rounded-full bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-gray-300 transition-all duration-200"
-                        aria-expanded="false">
-                        <div
-                            class="w-10 h-10 rounded-full overflow-hidden border-2 border-white shadow-sm bg-gray-100 flex items-center justify-center">
-                            <img id="imagenUsuarioDesktop" src="https://dosxdos.app.iidos.com/img/usuario.png"
-                                class="w-full h-full object-cover" alt="Profile"
-                                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
-                            <svg class="w-5 h-5 text-gray-400 hidden" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2">
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="12" cy="7" r="4"></circle>
-                            </svg>
-                        </div>
-
-                        <span id="nombreUsuarioDesktop" class="text-gray-700 font-medium text-lg"></span>
-
-                        <svg xmlns="http://www.w3.org/2000/svg"
-                            class="w-6 h-6 text-gray-400 group-hover:text-gray-600 transition-transform duration-200 group-hover:rotate-180"
-                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="6 9 12 15 18 9"></polyline>
-                        </svg>
-                    </button>
-
-                    <!-- Desktop Dropdown Menu -->
-                    <div id="userDropdownMenu"
-                        class="hidden absolute right-0 mt-2 w-max bg-white rounded-lg shadow-lg p-4 z-50">
-                        <button id="editarUsuarioDesktop"
-                            class="flex items-center gap-2 w-full mb-4 text-left text-xl text-black hover:bg-red-600/20 rounded-lg transition-colors duration-200">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-                            </svg>
-                            Editar Usuario
-                        </button>
-                        <button id="cerrarSesionDesktop"
-                            class="flex items-center gap-2 w-full text-left text-xl text-red-500 hover:bg-red-600/20 rounded-lg transition-colors duration-200">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                                <polyline points="16 17 21 12 16 7" />
-                                <line x1="21" y1="12" x2="9" y2="12" />
-                            </svg>
-                            Cerrar Sesión
-                        </button>
-                    </div>
-                </div>
-            </nav>
-
-            <!-- Mobile Navigation -->
-            <div class="xl:hidden flex items-center space-x-2 mx-2">
-                <!-- Mobile Bell -->
-                <a href="https://dosxdos.app.iidos.com/notificaciones.html" class="relative z-10"
-                    id="mobileBellContainer">
-                    <img id="bellMobile" src="" class="text-gray-900 object-contain mt-2" />
-                    <span id="mobileNotificationCount"
-                        class="absolute top-2 right-0 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] text-center border hidden"></span>
-                </a>
-
-                <!-- Hamburger Button -->
-                <button id="menuButton" class="xl:hidden relative z-50 p-2 focus:outline-none">
-                    <div class="relative w-8 h-8">
-                        <span class="absolute h-1 w-8 bg-gray-900 transition-all duration-300 ease-in-out top-1"
-                            id="hamburgerTop"></span>
-                        <span class="absolute h-1 w-8 bg-gray-900 transition-all duration-300 ease-in-out top-4"
-                            id="hamburgerMiddle"></span>
-                        <span class="absolute h-1 w-8 bg-gray-900 transition-all duration-300 ease-in-out top-7"
-                            id="hamburgerBottom"></span>
-                    </div>
-                </button>
-            </div>
-
-            <!-- Mobile Menu -->
-            <div id="mobileMenu"
-                class="xl:hidden fixed inset-0 bg-gradient-to-r from-red-500 to-red-600 bg-opacity-95 transform translate-x-full transition-all duration-500 ease-in-out z-40 overflow-hidden backdrop-blur-sm flex flex-col">
-                <div class="absolute inset-0 z-0" style="
-                    background-image: url('https://dosxdos.app.iidos.com/img/texture-red.svg');
-                    background-size: contain;
-                    opacity: 0.7;
-                "></div>
-
-                <!-- User Profile Section -->
-                <div class="px-8 py-4 mt-20 relative z-10">
-                    <div class="relative flex items-center gap-3 py-1 pl-1.5 pr-4 bg-white shadow-lg rounded-full">
-                        <!-- Profile image -->
-                        <div
-                            class="absolute left-0 w-24 h-24 rounded-full overflow-hidden border-2 border-white bg-gray-100 flex items-center justify-center shadow-lg">
-                            <img id="imagenUsuarioMobile" src="https://dosxdos.app.iidos.com/img/usuario.png"
-                                class="w-full h-full object-cover" alt="Profile"
-                                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
-                            <svg class="w-12 h-12 text-gray-400 hidden" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2">
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="12" cy="7" r="4"></circle>
-                            </svg>
-                        </div>
-                        <div class="ml-28 flex items-center py-4">
-                            <!-- User name -->
-                            <span class="text-black font-medium text-xl">¡Hola,&nbsp;</span>
-                            <span id="nombreUsuarioMobile" class="text-black font-medium text-xl"></span>
-                            <span class="text-black font-medium text-xl">!</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Navigation Links -->
-                <nav class="px-8 py-6 space-y-2 relative z-10 flex-1 overflow-y-auto custom-scrollbar">
-                    <a href="https://dosxdos.app.iidos.com/notificaciones.html"
-                        class="z-10 flex items-center px-6 py-2 text-white bg-red-600 bg-opacity-60 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-xl group backdrop-blur-lg">
-                        <div
-                            class="flex items-center justify-center w-14 h-14 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all">
-                            <svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path d="M18 8a6 6 0 0 0-12 0v5a6 6 0 0 1-2 4h16a6 6 0 0 1-2-4V8"></path>
-                                <line x1="12" y1="22" x2="12" y2="22"></line>
-                            </svg>
-                        </div>
-                        <span class="text-lg font-semibold tracking-wide">Notificaciones</span>
-                    </a>
-
-                    <a href="https://dosxdos.app.iidos.com/rutas_montador.html"
-                        class="z-10 flex items-center px-6 py-2 text-white bg-red-600 bg-opacity-60 shadow-xl backdrop-blur-lg hover:bg-white/20 rounded-xl transition-all duration-300 group">
-                        <div
-                            class="z-0 flex items-center justify-center w-14 h-14 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all">
-                            <svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M4 5c8 0 8 14 16 14" />
-                                <circle cx="4" cy="5" r="2" />
-                                <circle cx="12" cy="12" r="2" />
-                                <circle cx="20" cy="19" r="2" />
-                            </svg>
-                        </div>
-                        <span class="text-lg font-semibold tracking-wide">Rutas</span>
-                    </a>
-
-                    <a href="https://dosxdos.app.iidos.com/ruta_montador.html"
-                        class="z-10 flex items-center px-6 py-2 text-white bg-red-600 bg-opacity-60 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-xl group backdrop-blur-lg">
-                        <div
-                            class="flex items-center justify-center w-14 h-14 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all">
-                            <svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
-                                <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
-                                <path d="M9 12h6" />
-                                <path d="M9 16h6" />
-                            </svg>
-                        </div>
-                        <span class="text-lg font-semibold tracking-wide">Líneas</span>
-                    </a>
-
-                    <a href="https://dosxdos.app.iidos.com/historial_montador.html"
-                        class="z-10 flex items-center px-6 py-2 text-white bg-red-600 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-xl group backdrop-blur-lg">
-                        <div
-                            class="flex items-center justify-center w-14 h-14 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all">
-                            <svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10" />
-                                <polyline points="12 6 12 12 16 14" />
-                            </svg>
-                        </div>
-                        <span class="text-lg font-semibold tracking-wide">Historial</span>
-                    </a>
-                </nav>
-
-                <div class="relative z-10">
-                    <div id="divider_id" class="website-divider-container-734167"
-                        style="height: 100px; overflow: visible">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="divider-img-734167" viewBox="0 0 1080 137"
-                            preserveAspectRatio="none" style="bottom: -20px">
-                            <path
-                                d="M 0,137 V 59.03716 c 158.97703,52.21241 257.17659,0.48065 375.35967,2.17167 118.18308,1.69101 168.54911,29.1665 243.12679,30.10771 C 693.06415,92.25775 855.93515,29.278599 1080,73.61449 V 137 Z"
-                                style="fill: #ffffff"></path>
-                            <path
-                                d="M 0,10.174557 C 83.419822,8.405668 117.65911,41.78116 204.11379,44.65308 290.56846,47.52499 396.02558,-7.4328 620.04248,94.40134 782.19141,29.627636 825.67279,15.823104 1080,98.55518 V 137 H 0 Z"
-                                style="fill: #ffffff; opacity: 0.5"></path>
-                            <path
-                                d="M 0,45.10182 C 216.27861,-66.146913 327.90348,63.09813 416.42665,63.52904 504.94982,63.95995 530.42054,22.125806 615.37532,25.210412 700.33012,28.295019 790.77619,132.60682 1080,31.125744 V 137 H 0 Z"
-                                style="fill: #ffffff; opacity: 0.25"></path>
-                        </svg>
-                    </div>
-                </div>
-
-                <!-- User Actions -->
-                <div
-                    class="relative z-10 mt-auto px-8 pb-6 bg-white shadow-lg flex justify-center space-x-6 pb-2 rounded-t-xl">
-                    <!-- Edit Button -->
-                    <button id="editarUsuarioMobile"
-                        class="flex items-center justify-center w-14 h-14 bg-white border-2 border-red-500 rounded-full hover:bg-red-100 transition-all duration-300">
-                        <svg class="w-12 h-12 text-red-600 pl-1" viewBox="0 0 24 24" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                            <g id="SVGRepo_iconCarrier">
-                                <path
-                                    d="M10.56 11.87C9.81832 11.87 9.0933 11.6501 8.47661 11.238C7.85993 10.826 7.37928 10.2403 7.09545 9.55506C6.81162 8.86984 6.73736 8.11584 6.88205 7.38841C7.02675 6.66098 7.3839 5.99279 7.90835 5.46835C8.4328 4.9439 9.10098 4.58675 9.82841 4.44205C10.5558 4.29736 11.3098 4.37162 11.9951 4.65545C12.6803 4.93928 13.266 5.41992 13.678 6.03661C14.0901 6.65329 14.31 7.37832 14.31 8.12C14.3074 9.11375 13.9114 10.066 13.2087 10.7687C12.506 11.4714 11.5538 11.8674 10.56 11.87ZM10.56 5.87C10.115 5.87 9.67998 6.00196 9.30997 6.24919C8.93996 6.49642 8.65157 6.84783 8.48127 7.25896C8.31097 7.67009 8.26642 8.12249 8.35323 8.55895C8.44005 8.99541 8.65434 9.39632 8.96901 9.71099C9.28368 10.0257 9.68459 10.2399 10.121 10.3268C10.5575 10.4136 11.0099 10.369 11.421 10.1987C11.8322 10.0284 12.1836 9.74004 12.4308 9.37003C12.678 9.00002 12.81 8.565 12.81 8.12C12.81 7.52326 12.5729 6.95096 12.151 6.52901C11.729 6.10705 11.1567 5.87 10.56 5.87Z"
-                                    fill="#e53935"></path>
-                                <path
-                                    d="M3.56 18.87C3.36109 18.87 3.17032 18.791 3.02967 18.6503C2.88902 18.5097 2.81 18.3189 2.81 18.12C2.81 13.37 8.24 13.37 10.56 13.37C11.28 13.37 11.92 13.37 12.5 13.44C12.6973 13.4553 12.8805 13.548 13.0098 13.6979C13.139 13.8477 13.2038 14.0426 13.19 14.24C13.1722 14.4381 13.0773 14.6214 12.9259 14.7504C12.7744 14.8794 12.5785 14.9439 12.38 14.93C11.84 14.93 11.24 14.87 10.56 14.87C5.38 14.87 4.31 16.17 4.31 18.12C4.31134 18.2189 4.29286 18.317 4.25565 18.4086C4.21843 18.5002 4.16324 18.5834 4.09333 18.6533C4.02341 18.7232 3.9402 18.7784 3.84859 18.8156C3.75699 18.8529 3.65886 18.8713 3.56 18.87Z"
-                                    fill="#e53935"></path>
-                                <path
-                                    d="M12.67 19.63C12.4711 19.6299 12.2805 19.5507 12.14 19.41C12.061 19.3348 12.0002 19.2426 11.9621 19.1404C11.9239 19.0382 11.9096 18.9286 11.92 18.82L12.08 16.9C12.0923 16.7235 12.1667 16.557 12.29 16.43L17.81 10.91C18.1908 10.5572 18.6908 10.3612 19.21 10.3612C19.7291 10.3612 20.2291 10.5572 20.61 10.91C20.7978 11.0993 20.9458 11.3242 21.0454 11.5715C21.145 11.8188 21.1942 12.0835 21.19 12.35C21.1939 12.5958 21.149 12.8398 21.0581 13.0681C20.9671 13.2964 20.8318 13.5044 20.66 13.68L15.14 19.2C15.0176 19.3256 14.8545 19.4035 14.68 19.42L12.74 19.6L12.67 19.63ZM13.55 17.29L13.49 18.05L14.27 17.98L19.6 12.65C19.6629 12.5746 19.6951 12.4782 19.69 12.38C19.6896 12.2408 19.64 12.1062 19.55 12C19.4517 11.927 19.3325 11.8875 19.21 11.8875C19.0875 11.8875 18.9683 11.927 18.87 12L13.55 17.29Z"
-                                    fill="#e53935"></path>
-                            </g>
-                        </svg>
-                    </button>
-
-                    <!-- Logout Button -->
-                    <button id="cerrarSesionMobile"
-                        class="flex items-center justify-center w-14 h-14 bg-red-600 rounded-full  transition-all duration-300">
-                        <svg class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                            <polyline points="16 17 21 12 16 7" />
-                            <line x1="21" y1="12" x2="9" y2="12" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
+      <!-- Main header -->
+      <div class="flex items-center justify-between w-full px-6 py-4">
+        <!-- Logo -->
+        <div class="flex items-center">
+          <img
+            src="http://localhost/dosxdos_app/img/logo300.png"
+            class="h-16 hidden xl:block"
+            alt="Logo completo"
+          />
+          <img
+            src="http://localhost/dosxdos_app/img/Isotipo-38.png"
+            class="h-16 xl:hidden"
+            alt="Isotipo"
+          />
         </div>
+
+        <!-- Desktop Navigation -->
+        <nav class="hidden xl:flex items-center space-x-8">
+          <a
+            href="http://localhost/dosxdos_app/rutas_montador.html"
+            class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-6 h-6 mr-2"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M4 5c8 0 8 14 16 14" />
+              <circle cx="4" cy="5" r="2" />
+              <circle cx="12" cy="12" r="2" />
+              <circle cx="20" cy="19" r="2" />
+            </svg>
+            <span>Rutas</span>
+          </a>
+
+          <a
+            href="http://localhost/dosxdos_app/ruta_montador.html"
+            class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-6 h-6 mr-2"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"
+              />
+              <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+              <path d="M9 12h6" />
+              <path d="M9 16h6" />
+            </svg>
+            <span>Líneas</span>
+          </a>
+
+          <a
+            href="http://localhost/dosxdos_app/historial_montador.html"
+            class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200"
+          >
+            <svg
+              class="w-6 h-6 mr-2"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+            <span>Historial</span>
+          </a>
+
+          <!-- Desktop Menu Notifications Bell -->
+          <a
+            href="http://localhost/dosxdos_app/notificaciones.html"
+            class="relative z-10"
+            id="desktopBellContainer"
+          >
+            <img id="bellDesktop" src="" class="text-gray-900 object-contain" />
+            <span
+              id="desktopNotificationCount"
+              class="absolute top-0 -right-2 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] text-center border hidden"
+            ></span>
+          </a>
+
+          <!-- Desktop User Menu -->
+          <div class="relative group drop-shadow">
+            <button
+              id="userMenuButton"
+              class="group flex items-center gap-3 py-1 pl-1.5 pr-4 rounded-full bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-gray-300 transition-all duration-200"
+              aria-expanded="false"
+            >
+              <div
+                class="w-10 h-10 rounded-full overflow-hidden border-2 border-white shadow-sm bg-gray-100 flex items-center justify-center"
+              >
+                <img
+                  id="imagenUsuarioDesktop"
+                  src="http://localhost/dosxdos_app/img/usuario.png"
+                  class="w-full h-full object-cover"
+                  alt="Profile"
+                  onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                />
+                <svg
+                  class="w-5 h-5 text-gray-400 hidden"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </div>
+
+              <span
+                id="nombreUsuarioDesktop"
+                class="text-gray-700 font-medium text-lg"
+              ></span>
+
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-6 h-6 text-gray-400 group-hover:text-gray-600 transition-transform duration-200 group-hover:rotate-180"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+
+            <!-- Desktop Dropdown Menu -->
+            <div
+              id="userDropdownMenu"
+              class="hidden absolute right-0 mt-2 w-max bg-white rounded-lg shadow-lg p-4 z-50"
+            >
+              <button
+                id="editarUsuarioDesktop"
+                class="flex items-center gap-2 w-full mb-4 text-left text-xl text-black hover:bg-red-600/20 rounded-lg transition-colors duration-200"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-5 h-5 mr-2"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+                  />
+                  <path
+                    d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
+                  />
+                </svg>
+                Editar Usuario
+              </button>
+              <button
+                id="cerrarSesionDesktop"
+                class="flex items-center gap-2 w-full text-left text-xl text-red-500 hover:bg-red-600/20 rounded-lg transition-colors duration-200"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-5 h-5 mr-2"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                  <polyline points="16 17 21 12 16 7" />
+                  <line x1="21" y1="12" x2="9" y2="12" />
+                </svg>
+                Cerrar Sesión
+              </button>
+            </div>
+          </div>
+        </nav>
+
+        <!-- Mobile Navigation -->
+        <div class="xl:hidden flex items-center space-x-2 mx-2">
+          <!-- Mobile Bell -->
+          <a
+            href="http://localhost/dosxdos_app/notificaciones.html"
+            class="relative z-10"
+            id="mobileBellContainer"
+          >
+            <img
+              id="bellMobile"
+              src=""
+              class="text-gray-900 object-contain mt-2"
+            />
+            <span
+              id="mobileNotificationCount"
+              class="absolute top-2 right-0 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] text-center border hidden"
+            ></span>
+          </a>
+
+          <!-- Hamburger Button -->
+          <button
+            id="menuButton"
+            class="xl:hidden relative z-50 p-2 focus:outline-none"
+          >
+            <div class="relative w-8 h-8">
+              <span
+                class="absolute h-1 w-8 bg-gray-900 transition-all duration-300 ease-in-out top-1"
+                id="hamburgerTop"
+              ></span>
+              <span
+                class="absolute h-1 w-8 bg-gray-900 transition-all duration-300 ease-in-out top-4"
+                id="hamburgerMiddle"
+              ></span>
+              <span
+                class="absolute h-1 w-8 bg-gray-900 transition-all duration-300 ease-in-out top-7"
+                id="hamburgerBottom"
+              ></span>
+            </div>
+          </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div
+          id="mobileMenu"
+          class="xl:hidden fixed inset-0 bg-gradient-to-r from-red-500 to-red-600 bg-opacity-95 transform translate-x-full transition-all duration-500 ease-in-out z-40 overflow-hidden backdrop-blur-sm flex flex-col"
+        >
+          <div
+            class="absolute inset-0 z-0"
+            style="
+              background-image: url('http://localhost/dosxdos_app/img/texture-red.svg');
+              background-size: contain;
+              opacity: 0.7;
+            "
+          ></div>
+
+          <!-- User Profile Section -->
+          <div class="px-8 py-4 mt-20 relative z-10">
+            <div
+              class="relative flex items-center gap-3 py-1 pl-1.5 pr-4 bg-white shadow-lg rounded-full"
+            >
+              <!-- Profile image -->
+              <div
+                class="absolute left-0 w-24 h-24 rounded-full overflow-hidden border-2 border-white bg-gray-100 flex items-center justify-center shadow-lg"
+              >
+                <img
+                  id="imagenUsuarioMobile"
+                  src="http://localhost/dosxdos_app/img/usuario.png"
+                  class="w-full h-full object-cover"
+                  alt="Profile"
+                  onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                />
+                <svg
+                  class="w-12 h-12 text-gray-400 hidden"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </div>
+              <div class="ml-28 flex items-center py-4">
+                <!-- User name -->
+                <span class="text-black font-medium text-xl">¡Hola,&nbsp;</span>
+                <span
+                  id="nombreUsuarioMobile"
+                  class="text-black font-medium text-xl"
+                ></span>
+                <span class="text-black font-medium text-xl">!</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Navigation Links -->
+          <nav
+            class="px-8 py-6 space-y-2 relative z-10 flex-1 overflow-y-auto custom-scrollbar"
+          >
+            <a
+              href="http://localhost/dosxdos_app/notificaciones.html"
+              class="z-10 flex items-center px-6 py-2 text-white bg-red-600 bg-opacity-60 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-xl group backdrop-blur-lg"
+            >
+              <div
+                class="flex items-center justify-center w-14 h-14 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all"
+              >
+                <svg
+                  class="w-7 h-7 text-white group-hover:text-gray-900 transition-all"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M18 8a6 6 0 0 0-12 0v5a6 6 0 0 1-2 4h16a6 6 0 0 1-2-4V8"
+                  ></path>
+                  <line x1="12" y1="22" x2="12" y2="22"></line>
+                </svg>
+              </div>
+              <span class="text-lg font-semibold tracking-wide"
+                >Notificaciones</span
+              >
+            </a>
+
+            <a
+              href="http://localhost/dosxdos_app/rutas_montador.html"
+              class="z-10 flex items-center px-6 py-2 text-white bg-red-600 bg-opacity-60 shadow-xl backdrop-blur-lg hover:bg-white/20 rounded-xl transition-all duration-300 group"
+            >
+              <div
+                class="z-0 flex items-center justify-center w-14 h-14 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all"
+              >
+                <svg
+                  class="w-7 h-7 text-white group-hover:text-gray-900 transition-all"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M4 5c8 0 8 14 16 14" />
+                  <circle cx="4" cy="5" r="2" />
+                  <circle cx="12" cy="12" r="2" />
+                  <circle cx="20" cy="19" r="2" />
+                </svg>
+              </div>
+              <span class="text-lg font-semibold tracking-wide">Rutas</span>
+            </a>
+
+            <a
+              href="http://localhost/dosxdos_app/ruta_montador.html"
+              class="z-10 flex items-center px-6 py-2 text-white bg-red-600 bg-opacity-60 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-xl group backdrop-blur-lg"
+            >
+              <div
+                class="flex items-center justify-center w-14 h-14 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all"
+              >
+                <svg
+                  class="w-7 h-7 text-white group-hover:text-gray-900 transition-all"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"
+                  />
+                  <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+                  <path d="M9 12h6" />
+                  <path d="M9 16h6" />
+                </svg>
+              </div>
+              <span class="text-lg font-semibold tracking-wide">Líneas</span>
+            </a>
+
+            <a
+              href="http://localhost/dosxdos_app/historial_montador.html"
+              class="z-10 flex items-center px-6 py-2 text-white bg-red-600 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-xl group backdrop-blur-lg"
+            >
+              <div
+                class="flex items-center justify-center w-14 h-14 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all"
+              >
+                <svg
+                  class="w-7 h-7 text-white group-hover:text-gray-900 transition-all"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12 6 12 12 16 14" />
+                </svg>
+              </div>
+              <span class="text-lg font-semibold tracking-wide">Historial</span>
+            </a>
+          </nav>
+
+          <div class="relative z-10">
+            <div
+              id="divider_id"
+              class="website-divider-container-734167"
+              style="height: 100px; overflow: visible"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="divider-img-734167"
+                viewBox="0 0 1080 137"
+                preserveAspectRatio="none"
+                style="bottom: -20px"
+              >
+                <path
+                  d="M 0,137 V 59.03716 c 158.97703,52.21241 257.17659,0.48065 375.35967,2.17167 118.18308,1.69101 168.54911,29.1665 243.12679,30.10771 C 693.06415,92.25775 855.93515,29.278599 1080,73.61449 V 137 Z"
+                  style="fill: #ffffff"
+                ></path>
+                <path
+                  d="M 0,10.174557 C 83.419822,8.405668 117.65911,41.78116 204.11379,44.65308 290.56846,47.52499 396.02558,-7.4328 620.04248,94.40134 782.19141,29.627636 825.67279,15.823104 1080,98.55518 V 137 H 0 Z"
+                  style="fill: #ffffff; opacity: 0.5"
+                ></path>
+                <path
+                  d="M 0,45.10182 C 216.27861,-66.146913 327.90348,63.09813 416.42665,63.52904 504.94982,63.95995 530.42054,22.125806 615.37532,25.210412 700.33012,28.295019 790.77619,132.60682 1080,31.125744 V 137 H 0 Z"
+                  style="fill: #ffffff; opacity: 0.25"
+                ></path>
+              </svg>
+            </div>
+          </div>
+
+          <!-- User Actions -->
+          <div
+            class="relative z-10 mt-auto px-8 pb-6 bg-white shadow-lg flex justify-center space-x-6 pb-2 rounded-t-xl"
+          >
+            <!-- Edit Button -->
+            <button
+              id="editarUsuarioMobile"
+              class="flex items-center justify-center w-14 h-14 bg-white border-2 border-red-500 rounded-full hover:bg-red-100 transition-all duration-300"
+            >
+              <svg
+                class="w-12 h-12 text-red-600 pl-1"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g
+                  id="SVGRepo_tracerCarrier"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></g>
+                <g id="SVGRepo_iconCarrier">
+                  <path
+                    d="M10.56 11.87C9.81832 11.87 9.0933 11.6501 8.47661 11.238C7.85993 10.826 7.37928 10.2403 7.09545 9.55506C6.81162 8.86984 6.73736 8.11584 6.88205 7.38841C7.02675 6.66098 7.3839 5.99279 7.90835 5.46835C8.4328 4.9439 9.10098 4.58675 9.82841 4.44205C10.5558 4.29736 11.3098 4.37162 11.9951 4.65545C12.6803 4.93928 13.266 5.41992 13.678 6.03661C14.0901 6.65329 14.31 7.37832 14.31 8.12C14.3074 9.11375 13.9114 10.066 13.2087 10.7687C12.506 11.4714 11.5538 11.8674 10.56 11.87ZM10.56 5.87C10.115 5.87 9.67998 6.00196 9.30997 6.24919C8.93996 6.49642 8.65157 6.84783 8.48127 7.25896C8.31097 7.67009 8.26642 8.12249 8.35323 8.55895C8.44005 8.99541 8.65434 9.39632 8.96901 9.71099C9.28368 10.0257 9.68459 10.2399 10.121 10.3268C10.5575 10.4136 11.0099 10.369 11.421 10.1987C11.8322 10.0284 12.1836 9.74004 12.4308 9.37003C12.678 9.00002 12.81 8.565 12.81 8.12C12.81 7.52326 12.5729 6.95096 12.151 6.52901C11.729 6.10705 11.1567 5.87 10.56 5.87Z"
+                    fill="#e53935"
+                  ></path>
+                  <path
+                    d="M3.56 18.87C3.36109 18.87 3.17032 18.791 3.02967 18.6503C2.88902 18.5097 2.81 18.3189 2.81 18.12C2.81 13.37 8.24 13.37 10.56 13.37C11.28 13.37 11.92 13.37 12.5 13.44C12.6973 13.4553 12.8805 13.548 13.0098 13.6979C13.139 13.8477 13.2038 14.0426 13.19 14.24C13.1722 14.4381 13.0773 14.6214 12.9259 14.7504C12.7744 14.8794 12.5785 14.9439 12.38 14.93C11.84 14.93 11.24 14.87 10.56 14.87C5.38 14.87 4.31 16.17 4.31 18.12C4.31134 18.2189 4.29286 18.317 4.25565 18.4086C4.21843 18.5002 4.16324 18.5834 4.09333 18.6533C4.02341 18.7232 3.9402 18.7784 3.84859 18.8156C3.75699 18.8529 3.65886 18.8713 3.56 18.87Z"
+                    fill="#e53935"
+                  ></path>
+                  <path
+                    d="M12.67 19.63C12.4711 19.6299 12.2805 19.5507 12.14 19.41C12.061 19.3348 12.0002 19.2426 11.9621 19.1404C11.9239 19.0382 11.9096 18.9286 11.92 18.82L12.08 16.9C12.0923 16.7235 12.1667 16.557 12.29 16.43L17.81 10.91C18.1908 10.5572 18.6908 10.3612 19.21 10.3612C19.7291 10.3612 20.2291 10.5572 20.61 10.91C20.7978 11.0993 20.9458 11.3242 21.0454 11.5715C21.145 11.8188 21.1942 12.0835 21.19 12.35C21.1939 12.5958 21.149 12.8398 21.0581 13.0681C20.9671 13.2964 20.8318 13.5044 20.66 13.68L15.14 19.2C15.0176 19.3256 14.8545 19.4035 14.68 19.42L12.74 19.6L12.67 19.63ZM13.55 17.29L13.49 18.05L14.27 17.98L19.6 12.65C19.6629 12.5746 19.6951 12.4782 19.69 12.38C19.6896 12.2408 19.64 12.1062 19.55 12C19.4517 11.927 19.3325 11.8875 19.21 11.8875C19.0875 11.8875 18.9683 11.927 18.87 12L13.55 17.29Z"
+                    fill="#e53935"
+                  ></path>
+                </g>
+              </svg>
+            </button>
+
+            <!-- Logout Button -->
+            <button
+              id="cerrarSesionMobile"
+              class="flex items-center justify-center w-14 h-14 bg-red-600 rounded-full transition-all duration-300"
+            >
+              <svg
+                class="w-8 h-8 text-white"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- Main Content Container -->
     <div class="container mx-auto px-4 sm:px-6 pb-12 pt-32">
-        <!-- Header Section -->
-        <section class="mb-8">
-            <div class="rounded-xl shadow-lg overflow-hidden relative">
-                <div class="absolute inset-0"
-                    style="background-image: url('https://dosxdos.app.iidos.com/img/texture-red.svg'); background-size: contain;">
-                </div>
-                <div class="relative p-6 sm:p-8 text-white z-10">
-                    <h1 id="titulo" class="text-2xl sm:text-3xl font-bold mb-2">Historial de Montador</h1>
-                    <p id="subtitulo" class="text-sm sm:text-base opacity-90">Consulta tu historial de trabajos</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Search Bar -->
-        <div class="mb-8 max-w-md mx-auto">
-            <div class="relative flex items-center">
-                <div id="iconoBuscador" class="absolute left-3 z-10">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                </div>
-                <input type="text" id="buscador"
-                    class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                    placeholder="Buscar en el historial...">
-            </div>
+      <!-- Header Section -->
+      <section class="mb-8">
+        <div class="rounded-xl shadow-lg overflow-hidden relative">
+          <div
+            class="absolute inset-0"
+            style="
+              background-image: url('http://localhost/dosxdos_app/img/texture-red.svg');
+              background-size: contain;
+            "
+          ></div>
+          <div class="relative p-6 sm:p-8 text-white z-10">
+            <h1 id="titulo" class="text-2xl sm:text-3xl font-bold mb-2">
+              Historial de Montador
+            </h1>
+            <p id="subtitulo" class="text-sm sm:text-base opacity-90">
+              Consulta tu historial de trabajos
+            </p>
+          </div>
         </div>
+      </section>
 
-        <!-- Date Selection -->
-        <section class="w-full max-w-md mx-auto flex mb-8">
-            <div class="bg-white p-8 rounded shadow-md w-full max-w-md">
-                <h2 class="text-2xl font-bold mb-6 text-center">Selecciona las Fechas</h2>
-                <div class="mb-4">
-                    <label for="fecha-inicio" class="block text-gray-700 mb-2">Fecha de Inicio</label>
-                    <input type="date" id="fecha-inicio" name="fecha-inicio"
-                        class="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300">
-                </div>
-                <div class="mb-6">
-                    <label for="fecha-fin" class="block text-gray-700 mb-2">Fecha de Fin</label>
-                    <input type="date" id="fecha-fin" name="fecha-fin"
-                        class="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300">
-                </div>
-                <div class="mb-6 flex justify-center me-4">
-                    <button type="button" id="consultar" name="consultar"
-                        class="text-red-700 text-center hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
-                        CONSULTAR
-                    </button>
-                </div>
-            </div>
-        </section>
+      <!-- Search Bar -->
+      <div class="mb-8 max-w-md mx-auto">
+        <div class="relative flex items-center">
+          <div id="iconoBuscador" class="absolute left-3 z-10">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6 text-gray-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+          </div>
+          <input
+            type="text"
+            id="buscador"
+            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+            placeholder="Buscar en el historial..."
+          />
+        </div>
+      </div>
 
-        <!-- Mapa Button -->
-        <div class="flex justify-center mb-8">
-            <button id="mapa"
-                class="w-full max-w-md bg-red-600 text-white py-3 rounded-lg shadow-md hover:bg-red-700 transition-colors">
-                VER MAPA
+      <!-- Date Selection -->
+      <section class="w-full max-w-md mx-auto flex mb-8">
+        <div class="bg-white p-8 rounded shadow-md w-full max-w-md">
+          <h2 class="text-2xl font-bold mb-6 text-center">
+            Selecciona las Fechas
+          </h2>
+          <div class="mb-4">
+            <label for="fecha-inicio" class="block text-gray-700 mb-2"
+              >Fecha de Inicio</label
+            >
+            <input
+              type="date"
+              id="fecha-inicio"
+              name="fecha-inicio"
+              class="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300"
+            />
+          </div>
+          <div class="mb-6">
+            <label for="fecha-fin" class="block text-gray-700 mb-2"
+              >Fecha de Fin</label
+            >
+            <input
+              type="date"
+              id="fecha-fin"
+              name="fecha-fin"
+              class="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300"
+            />
+          </div>
+          <div class="mb-6 flex justify-center me-4">
+            <button
+              type="button"
+              id="consultar"
+              name="consultar"
+              class="text-red-700 text-center hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
+            >
+              CONSULTAR
             </button>
+          </div>
         </div>
+      </section>
 
-        <!-- Content Container -->
-        <section id="contenido" class="space-y-4">
-        </section>
+      <!-- Mapa Button -->
+      <div class="flex justify-center mb-8">
+        <button
+          id="mapa"
+          class="w-full max-w-md bg-red-600 text-white py-3 rounded-lg shadow-md hover:bg-red-700 transition-colors"
+        >
+          VER MAPA
+        </button>
+      </div>
+
+      <!-- Content Container -->
+      <section id="contenido" class="space-y-4"></section>
     </div>
-
-</body>
-<script src="https://dosxdos.app.iidos.com/js/index_db.js"></script>
-<script>
-
+  </body>
+  <script src="http://localhost/dosxdos_app/js/index_db.js"></script>
+  <script>
     //ESTA FUNCION REVISA EL HISTORIAL DE MONTADORES//
-    const fechaInicio = document.getElementById('fecha-inicio');
-    const fechaFin = document.getElementById('fecha-fin');
-    const consultar = document.getElementById('consultar');
-
+    const fechaInicio = document.getElementById("fecha-inicio");
+    const fechaFin = document.getElementById("fecha-fin");
+    const consultar = document.getElementById("consultar");
 
     // Función para verificar si ambas fechas tienen valor
     function verificarFechas() {
-        if (navigator.onLine) {
-            let inicioVal = fechaInicio.value;
-            let finVal = fechaFin.value;
-            localStorage.setItem("fechaInicioHistorial", inicioVal);
-            localStorage.setItem("fechaFinHistorial", finVal);
-            if (inicioVal && finVal) {
-                // Ambas fechas tienen valor, aquí puedes hacer la petición
-                enviarFechasAlServidor(inicioVal, finVal);
-            } else {
-                alerta(inicioVal + " " + finVal + " No se han encontrado valores en las fechas");
-            }
+      if (navigator.onLine) {
+        let inicioVal = fechaInicio.value;
+        let finVal = fechaFin.value;
+        localStorage.setItem("fechaInicioHistorial", inicioVal);
+        localStorage.setItem("fechaFinHistorial", finVal);
+        if (inicioVal && finVal) {
+          // Ambas fechas tienen valor, aquí puedes hacer la petición
+          enviarFechasAlServidor(inicioVal, finVal);
         } else {
-            alerta("No es posible realizar esta acción sin conexión a internet");
-            scrollToTop();
+          alerta(
+            inicioVal +
+              " " +
+              finVal +
+              " No se han encontrado valores en las fechas"
+          );
         }
+      } else {
+        alerta("No es posible realizar esta acción sin conexión a internet");
+        scrollToTop();
+      }
     }
     // Agregamos el listener a los inputs de fecha
     //fechaInicio.addEventListener('change', verificarFechas);
-    consultar.addEventListener('click', verificarFechas);
+    consultar.addEventListener("click", verificarFechas);
 
     // Función que realiza la petición al servidor
     function enviarFechasAlServidor(fechaInicioVal, fechaFinVal) {
-        return new Promise((resolve, reject) => {
-            loaderOn();
-            console.log(fechaInicioVal + " " + fechaFinVal);
+      return new Promise((resolve, reject) => {
+        loaderOn();
+        console.log(fechaInicioVal + " " + fechaFinVal);
 
-            // Crear el body en formato JSON
-            const bodyData = JSON.stringify({
-                fecha1: fechaInicioVal,
-                fecha2: fechaFinVal
-            });
-            console.log(bodyData);
-
-            // Realizar la petición fetch (POST) al PHP
-            fetch('https://dosxdos.app.iidos.com/apirest/historial_montador.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: bodyData
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        console.error(response.text());
-                        throw new Error('Error en la respuesta del servidor');
-                    }
-                    return response.json();
-                })
-                .then(async data => {
-                    console.log('📡 Respuesta del servidor:', data);
-
-                    if (data[0] === true && Array.isArray(data[1])) {
-                        let lineas = data[1]; // Array con las líneas/rutas
-
-                        // 🔥 Remove duplicates before saving to IndexedDB
-                        const uniqueLineas = [];
-                        const seen = new Set();
-
-                        lineas.forEach(item => {
-                            const key = JSON.stringify(item); // Compare full object
-                            if (!seen.has(key)) {
-                                seen.add(key);
-                                uniqueLineas.push(item);
-                            }
-                        });
-
-                        console.log(`✅ Cleaned data: ${uniqueLineas.length} unique items`);
-
-                        const limpiarHistorial = await limpiarDatos('dosxdos', 'historial');
-                        const actualizarHistorial = await agregarDatos('dosxdos', 'historial', uniqueLineas);
-
-                        if (limpiarHistorial && actualizarHistorial) {
-                            $contenido.replaceChildren();
-
-                            const TotalLineas = await leerDatos('dosxdos', 'historial');
-                            console.log("📂 IndexedDB Read - Total Items Retrieved:", TotalLineas.length, "Expected: 166");
-
-                            if (TotalLineas) {
-                                console.log(TotalLineas);
-                                enhancedHistoryRendering(TotalLineas);
-                                initializeSearch();
-                                await procesarPeticiones2();
-                                loaderOff();
-                            } else {
-                                alerta('Error al leer el almacén de historial');
-                                loaderOff();
-                            }
-                            resolve(true);
-                        } else {
-                            reject('Error al limpiar o actualizar la tabla historial');
-                            loaderOff();
-                        }
-                    } else {
-                        console.error('El servidor no devolvió un array de rutas válido');
-                        loaderOff();
-                    }
-                })
-                .catch(error => {
-                    console.error('Error en la petición:', error);
-                    alerta("Error, por favor inténtalo nuevamente: " + error);
-                    loaderOff();
-                    resolve(false);
-                });
+        // Crear el body en formato JSON
+        const bodyData = JSON.stringify({
+          fecha1: fechaInicioVal,
+          fecha2: fechaFinVal,
         });
+        console.log(bodyData);
+
+        // Realizar la petición fetch (POST) al PHP
+        fetch("http://localhost/dosxdos_app/apirest/historial_montador.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: bodyData,
+        })
+          .then((response) => {
+            if (!response.ok) {
+              console.error(response.text());
+              throw new Error("Error en la respuesta del servidor");
+            }
+            return response.json();
+          })
+          .then(async (data) => {
+            console.log("📡 Respuesta del servidor:", data);
+
+            if (data[0] === true && Array.isArray(data[1])) {
+              let lineas = data[1]; // Array con las líneas/rutas
+
+              // 🔥 Remove duplicates before saving to IndexedDB
+              const uniqueLineas = [];
+              const seen = new Set();
+
+              lineas.forEach((item) => {
+                const key = JSON.stringify(item); // Compare full object
+                if (!seen.has(key)) {
+                  seen.add(key);
+                  uniqueLineas.push(item);
+                }
+              });
+
+              console.log(
+                `✅ Cleaned data: ${uniqueLineas.length} unique items`
+              );
+
+              const limpiarHistorial = await limpiarDatos(
+                "dosxdos",
+                "historial"
+              );
+              const actualizarHistorial = await agregarDatos(
+                "dosxdos",
+                "historial",
+                uniqueLineas
+              );
+
+              if (limpiarHistorial && actualizarHistorial) {
+                $contenido.replaceChildren();
+
+                const TotalLineas = await leerDatos("dosxdos", "historial");
+                console.log(
+                  "📂 IndexedDB Read - Total Items Retrieved:",
+                  TotalLineas.length,
+                  "Expected: 166"
+                );
+
+                if (TotalLineas) {
+                  console.log(TotalLineas);
+                  enhancedHistoryRendering(TotalLineas);
+                  initializeSearch();
+                  await procesarPeticiones2();
+                  loaderOff();
+                } else {
+                  alerta("Error al leer el almacén de historial");
+                  loaderOff();
+                }
+                resolve(true);
+              } else {
+                reject("Error al limpiar o actualizar la tabla historial");
+                loaderOff();
+              }
+            } else {
+              console.error("El servidor no devolvió un array de rutas válido");
+              loaderOff();
+            }
+          })
+          .catch((error) => {
+            console.error("Error en la petición:", error);
+            alerta("Error, por favor inténtalo nuevamente: " + error);
+            loaderOff();
+            resolve(false);
+          });
+      });
     }
 
     //AQUI ACABA LA FUNCION DEL HISTORIAL DE MONTADORES//
 
-    const ruta = localStorage.getItem('ruta');
+    const ruta = localStorage.getItem("ruta");
     if (ruta && ruta !== null) {
-        console.log(ruta);
+      console.log(ruta);
+    } else {
+      console.log("No existe la variable ruta en local_storage");
     }
-    else {
-        console.log("No existe la variable ruta en local_storage");
-    }
-    const nombreRuta = localStorage.getItem('nombreRuta');
+    const nombreRuta = localStorage.getItem("nombreRuta");
     console.log(nombreRuta);
     //Titulo de cabecera dinamico
-    $titulo = document.getElementById('titulo');
-    $titulo.innerHTML = 'HISTORIAL DE MONTADOR';
+    $titulo = document.getElementById("titulo");
+    $titulo.innerHTML = "HISTORIAL DE MONTADOR";
 
-    const mapa = document.getElementById('mapa')
-    mapa.addEventListener('click', () => {
-        if (navigator.onLine) {
-            leerDatos('dosxdos', 'historial').then((datos) => {
-                if (datos && datos.length > 0) {
-                    window.location.href = "https://dosxdos.app.iidos.com/mapa_ruta_historial.html";
-                } else {
-                    alerta("Necesitas hacer 1 historial de fechas primero antes de entrar a la navegación con el mapa");
-                }
-            }).catch((error) => {
-                console.error("Error:", error);
-            });
-        } else {
-            alerta("No es posibler crear el mapa sin conexión a internet");
-        }
+    const mapa = document.getElementById("mapa");
+    mapa.addEventListener("click", () => {
+      if (navigator.onLine) {
+        leerDatos("dosxdos", "historial")
+          .then((datos) => {
+            if (datos && datos.length > 0) {
+              window.location.href =
+                "http://localhost/dosxdos_app/mapa_ruta_historial.html";
+            } else {
+              alerta(
+                "Necesitas hacer 1 historial de fechas primero antes de entrar a la navegación con el mapa"
+              );
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      } else {
+        alerta("No es posibler crear el mapa sin conexión a internet");
+      }
     });
 
     /* MANEJO DE RECURSOS ESTÁTICOS */
 
     const urls = [
-        'https://dosxdos.app.iidos.com/index.html?utm_source=web_app_manifest',
-        'https://dosxdos.app.iidos.com/index.html',
-        'https://dosxdos.app.iidos.com/manifest.json',
-        'https://dosxdos.app.iidos.com/serviceworker.js',
-        'https://dosxdos.app.iidos.com/sw.js',
-        'https://dosxdos.app.iidos.com/css/index.css',
-        'https://dosxdos.app.iidos.com/rutas_montador.html',
-        'https://dosxdos.app.iidos.com/css/rutas_montador.css',
-        'https://dosxdos.app.iidos.com/ruta_montador.html',
-        'https://dosxdos.app.iidos.com/css/ruta_montador.css',
-        'https://dosxdos.app.iidos.com/linea_montador.html',
-        'https://dosxdos.app.iidos.com/css/linea_montador.css',
-        'https://dosxdos.app.iidos.com/fotos_y_firmas.html',
-        'https://dosxdos.app.iidos.com/css/fotos_y_firmas.css',
-        'https://dosxdos.app.iidos.com/css/fuentes/Roboto/Roboto-Light.ttf',
-        'https://dosxdos.app.iidos.com/css/fuentes/Merriweather/Merriweather-Light.ttf',
-        'https://dosxdos.app.iidos.com/css/fuentes/Merriweather/Merriweather-Bold.ttf',
-        'https://dosxdos.app.iidos.com/css/fuentes/Lora/Lora-Regular.ttf',
-        'https://dosxdos.app.iidos.com/css/fuentes/Lora/Lora-Medium.ttf',
-        'https://dosxdos.app.iidos.com/css/fuentes/Lora/Lora-Bold.ttf',
-        'https://dosxdos.app.iidos.com/img/candado.png',
-        'https://dosxdos.app.iidos.com/img/casa.png',
-        'https://dosxdos.app.iidos.com/img/casaWhite.png',
-        'https://dosxdos.app.iidos.com/img/dosxdos.png',
-        'https://dosxdos.app.iidos.com/img/email.png',
-        'https://dosxdos.app.iidos.com/img/flechaAbajo.png',
-        'https://dosxdos.app.iidos.com/img/fondo.jpg',
-        'https://dosxdos.app.iidos.com/img/logoPwa1024.png',
-        'https://dosxdos.app.iidos.com/img/logoPwa512.png',
-        'https://dosxdos.app.iidos.com/img/logoPwa384.png',
-        'https://dosxdos.app.iidos.com/img/logoPwa256.png',
-        'https://dosxdos.app.iidos.com/img/logoPwa192.png',
-        'https://dosxdos.app.iidos.com/img/logoPwa128.png',
-        'https://dosxdos.app.iidos.com/img/logoPwa96.png',
-        'https://dosxdos.app.iidos.com/img/logoPwa64.png',
-        'https://dosxdos.app.iidos.com/img/logoPwa32.png',
-        'https://dosxdos.app.iidos.com/img/logoPwa16.png',
-        'https://dosxdos.app.iidos.com/img/logo300.png',
-        'https://dosxdos.app.iidos.com/img/lupa.png',
-        'https://dosxdos.app.iidos.com/img/reloj.png',
-        'https://dosxdos.app.iidos.com/img/relojWhite.png',
-        'https://dosxdos.app.iidos.com/img/usuario.png',
-        'https://dosxdos.app.iidos.com/img/rutasWhite.png',
-        'https://dosxdos.app.iidos.com/img/cerrar.png',
-        'https://dosxdos.app.iidos.com/img/usuarios.png',
-        'https://dosxdos.app.iidos.com/img/trash.png',
-        'https://dosxdos.app.iidos.com/img/folder.png',
-        'https://dosxdos.app.iidos.com/img/comprimido.png',
-        'https://dosxdos.app.iidos.com/img/task.png',
-        'https://dosxdos.app.iidos.com/css/dosxdos.css',
-
-    ]
+      "http://localhost/dosxdos_app/index.html?utm_source=web_app_manifest",
+      "http://localhost/dosxdos_app/index.html",
+      "http://localhost/dosxdos_app/manifest.json",
+      "http://localhost/dosxdos_app/serviceworker.js",
+      "http://localhost/dosxdos_app/sw.js",
+      "http://localhost/dosxdos_app/css/index.css",
+      "http://localhost/dosxdos_app/rutas_montador.html",
+      "http://localhost/dosxdos_app/css/rutas_montador.css",
+      "http://localhost/dosxdos_app/ruta_montador.html",
+      "http://localhost/dosxdos_app/css/ruta_montador.css",
+      "http://localhost/dosxdos_app/linea_montador.html",
+      "http://localhost/dosxdos_app/css/linea_montador.css",
+      "http://localhost/dosxdos_app/fotos_y_firmas.html",
+      "http://localhost/dosxdos_app/css/fotos_y_firmas.css",
+      "http://localhost/dosxdos_app/css/fuentes/Roboto/Roboto-Light.ttf",
+      "http://localhost/dosxdos_app/css/fuentes/Merriweather/Merriweather-Light.ttf",
+      "http://localhost/dosxdos_app/css/fuentes/Merriweather/Merriweather-Bold.ttf",
+      "http://localhost/dosxdos_app/css/fuentes/Lora/Lora-Regular.ttf",
+      "http://localhost/dosxdos_app/css/fuentes/Lora/Lora-Medium.ttf",
+      "http://localhost/dosxdos_app/css/fuentes/Lora/Lora-Bold.ttf",
+      "http://localhost/dosxdos_app/img/candado.png",
+      "http://localhost/dosxdos_app/img/casa.png",
+      "http://localhost/dosxdos_app/img/casaWhite.png",
+      "http://localhost/dosxdos_app/img/dosxdos.png",
+      "http://localhost/dosxdos_app/img/email.png",
+      "http://localhost/dosxdos_app/img/flechaAbajo.png",
+      "http://localhost/dosxdos_app/img/fondo.jpg",
+      "http://localhost/dosxdos_app/img/logoPwa1024.png",
+      "http://localhost/dosxdos_app/img/logoPwa512.png",
+      "http://localhost/dosxdos_app/img/logoPwa384.png",
+      "http://localhost/dosxdos_app/img/logoPwa256.png",
+      "http://localhost/dosxdos_app/img/logoPwa192.png",
+      "http://localhost/dosxdos_app/img/logoPwa128.png",
+      "http://localhost/dosxdos_app/img/logoPwa96.png",
+      "http://localhost/dosxdos_app/img/logoPwa64.png",
+      "http://localhost/dosxdos_app/img/logoPwa32.png",
+      "http://localhost/dosxdos_app/img/logoPwa16.png",
+      "http://localhost/dosxdos_app/img/logo300.png",
+      "http://localhost/dosxdos_app/img/lupa.png",
+      "http://localhost/dosxdos_app/img/reloj.png",
+      "http://localhost/dosxdos_app/img/relojWhite.png",
+      "http://localhost/dosxdos_app/img/usuario.png",
+      "http://localhost/dosxdos_app/img/rutasWhite.png",
+      "http://localhost/dosxdos_app/img/cerrar.png",
+      "http://localhost/dosxdos_app/img/usuarios.png",
+      "http://localhost/dosxdos_app/img/trash.png",
+      "http://localhost/dosxdos_app/img/folder.png",
+      "http://localhost/dosxdos_app/img/comprimido.png",
+      "http://localhost/dosxdos_app/img/task.png",
+      "http://localhost/dosxdos_app/css/dosxdos.css",
+    ];
 
     function cache() {
-        caches.open('dosxdos').
-            then((cache) => {
-                urls.forEach((resource) => {
-                    cache.match(resource)
-                        .then((response) => {
-                            if (!response) {
-                                fetch(resource)
-                                    .then((response) => {
-                                        cache.put(resource, response);
-                                        console.log(`se cacheó ${resource}`);
-                                    })
-                            }
-                        })
-                })
-            })
+      caches.open("dosxdos").then((cache) => {
+        urls.forEach((resource) => {
+          cache.match(resource).then((response) => {
+            if (!response) {
+              fetch(resource).then((response) => {
+                cache.put(resource, response);
+                console.log(`se cacheó ${resource}`);
+              });
+            }
+          });
+        });
+      });
     }
 
-    const $opcionesMenu = document.getElementById('opcionesMenu'),
-        $opcionesUsuario = document.getElementById('opcionesUsuario'),
-        $contenido = document.getElementById('contenido'),
-        $loader = document.getElementById('loader'),
-        $body = document.getElementById('body'),
-        $imgCerrar = document.getElementById('imgCerrar');
-    let usuario,
-        montador,
-        rutas;
+    const $opcionesMenu = document.getElementById("opcionesMenu"),
+      $opcionesUsuario = document.getElementById("opcionesUsuario"),
+      $contenido = document.getElementById("contenido"),
+      $loader = document.getElementById("loader"),
+      $body = document.getElementById("body"),
+      $imgCerrar = document.getElementById("imgCerrar");
+    let usuario, montador, rutas;
 
     /* LOADER */
 
     function scrollToTop() {
-        // Para navegadores modernos
-        document.documentElement.scrollTop = 0;
-        // Para navegadores antiguos
-        document.body.scrollTop = 0;
+      // Para navegadores modernos
+      document.documentElement.scrollTop = 0;
+      // Para navegadores antiguos
+      document.body.scrollTop = 0;
     }
 
     /* LOADER */
     function loaderOn() {
-        scrollToTop();
-        $loader.classList.remove("displayOff");
-        $loader.classList.add("displayOn");
-        document.body.style.overflow = 'hidden';
-        document.documentElement.style.overflow = 'hidden';
-        document.body.style.position = 'fixed';
-        document.body.style.width = '100%';
+      scrollToTop();
+      $loader.classList.remove("displayOff");
+      $loader.classList.add("displayOn");
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
+      document.body.style.position = "fixed";
+      document.body.style.width = "100%";
     }
 
     function loaderOff() {
-        setTimeout(() => {
-            $loader.classList.remove("displayOn");
-            $loader.classList.add("displayOff");
-            document.body.style.overflow = '';
-            document.documentElement.style.overflow = '';
-            document.body.style.position = '';
-            document.body.style.width = '';
-        }, 1000);
+      setTimeout(() => {
+        $loader.classList.remove("displayOn");
+        $loader.classList.add("displayOff");
+        document.body.style.overflow = "";
+        document.documentElement.style.overflow = "";
+        document.body.style.position = "";
+        document.body.style.width = "";
+      }, 1000);
     }
 
     function alerta(mensaje) {
-        // Remove existing alert if present
-        const existingAlert = document.querySelector("#customAlert");
-        if (existingAlert) {
-            existingAlert.remove();
-        }
+      // Remove existing alert if present
+      const existingAlert = document.querySelector("#customAlert");
+      if (existingAlert) {
+        existingAlert.remove();
+      }
 
-        // Create alert container
-        const alertContainer = document.createElement("div");
-        alertContainer.id = "customAlert";
-        alertContainer.className =
-            "fixed left-1/2 transform -translate-x-1/2 z-50 transition-all duration-300 ease-in-out w-[95%] md:w-[75%] lg:w-[65%]";
-        alertContainer.style.top = "-100px";
+      // Create alert container
+      const alertContainer = document.createElement("div");
+      alertContainer.id = "customAlert";
+      alertContainer.className =
+        "fixed left-1/2 transform -translate-x-1/2 z-50 transition-all duration-300 ease-in-out w-[95%] md:w-[75%] lg:w-[65%]";
+      alertContainer.style.top = "-100px";
 
-        // Create alert content
-        const alertContent = document.createElement("div");
-        alertContent.className = `
+      // Create alert content
+      const alertContent = document.createElement("div");
+      alertContent.className = `
     relative
     bg-white
     border-2 border-red-600
@@ -653,540 +913,575 @@
     flex flex-col md:flex-row md:items-center gap-3 md:gap-4
   `;
 
-        // Create close button
-        const closeButton = document.createElement("button");
-        closeButton.className =
-            "absolute -right-3 -top-3 hover:bg-red-400 p-1 bg-red-600 rounded-full p-1.5 transition-colors duration-200";
-        closeButton.innerHTML = `
+      // Create close button
+      const closeButton = document.createElement("button");
+      closeButton.className =
+        "absolute -right-3 -top-3 hover:bg-red-400 p-1 bg-red-600 rounded-full p-1.5 transition-colors duration-200";
+      closeButton.innerHTML = `
     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
     </svg>
   `;
 
-        // Create main content container for mobile layout
-        const contentContainer = document.createElement("div");
-        contentContainer.className =
-            "flex flex-col md:flex-row items-center gap-3 md:gap-4 flex-1";
+      // Create main content container for mobile layout
+      const contentContainer = document.createElement("div");
+      contentContainer.className =
+        "flex flex-col md:flex-row items-center gap-3 md:gap-4 flex-1";
 
-        // Create icon with exclamation mark
-        const iconContainer = document.createElement("div");
-        iconContainer.className = "flex-shrink-0 text-red-600";
-        iconContainer.innerHTML = `
+      // Create icon with exclamation mark
+      const iconContainer = document.createElement("div");
+      iconContainer.className = "flex-shrink-0 text-red-600";
+      iconContainer.innerHTML = `
 <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
   <circle cx="12" cy="12" r="10" />
   <path d="M12 7v6" />
   <path d="M12 16h0.01" />
 </svg>
 `;
-        // Create message text
-        const messageText = document.createElement("p");
-        messageText.className = "text-gray-900 text-base md:text-lg flex-1";
-        messageText.textContent = mensaje;
+      // Create message text
+      const messageText = document.createElement("p");
+      messageText.className = "text-gray-900 text-base md:text-lg flex-1";
+      messageText.textContent = mensaje;
 
-        // Assemble the content container
-        contentContainer.appendChild(iconContainer);
-        contentContainer.appendChild(messageText);
+      // Assemble the content container
+      contentContainer.appendChild(iconContainer);
+      contentContainer.appendChild(messageText);
 
-        // Assemble the alert
-        alertContent.appendChild(closeButton);
-        alertContent.appendChild(contentContainer);
-        alertContainer.appendChild(alertContent);
-        document.body.appendChild(alertContainer);
+      // Assemble the alert
+      alertContent.appendChild(closeButton);
+      alertContent.appendChild(contentContainer);
+      alertContainer.appendChild(alertContent);
+      document.body.appendChild(alertContainer);
 
-        // Slide down animation
-        requestAnimationFrame(() => {
-            alertContainer.style.top = "56px";
-        });
+      // Slide down animation
+      requestAnimationFrame(() => {
+        alertContainer.style.top = "56px";
+      });
 
-        // Add event listeners
-        closeButton.addEventListener("click", () => {
-            hideAlert(alertContainer);
-        });
+      // Add event listeners
+      closeButton.addEventListener("click", () => {
+        hideAlert(alertContainer);
+      });
 
-        // Hide loader if it exists
-        loaderOff();
+      // Hide loader if it exists
+      loaderOff();
     }
 
     function hideAlert(alertContainer) {
-        alertContainer.style.top = "-100px";
+      alertContainer.style.top = "-100px";
 
-        setTimeout(() => {
-            alertContainer.remove();
-        }, 300);
+      setTimeout(() => {
+        alertContainer.remove();
+      }, 300);
     }
 
     /* CERRAR SESIÓN */
     function eliminarCookie(nombre) {
-        const tiempoExpiracion = 1; // Segundo 1 de la Época Unix
-        document.cookie = `${nombre}=; expires=${new Date(tiempoExpiracion * 1000).toUTCString()}; path=/;`;
+      const tiempoExpiracion = 1; // Segundo 1 de la Época Unix
+      document.cookie = `${nombre}=; expires=${new Date(
+        tiempoExpiracion * 1000
+      ).toUTCString()}; path=/;`;
     }
 
     function deleteDB2(database) {
-        return new Promise((resolve, reject) => {
-            const request = indexedDB.deleteDatabase(database);
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.deleteDatabase(database);
 
-            // Evento que se dispara cuando la base de datos se elimina correctamente
-            request.onsuccess = () => {
-                console.log(`Base de datos "${database}" eliminada exitosamente.`);
-                resolve(true);
-            };
+        // Evento que se dispara cuando la base de datos se elimina correctamente
+        request.onsuccess = () => {
+          console.log(`Base de datos "${database}" eliminada exitosamente.`);
+          resolve(true);
+        };
 
-            // Evento que se dispara si ocurre un error al eliminar la base de datos
-            request.onerror = (event) => {
-                console.error(`Error al eliminar la base de datos "${database}":`, event.target.error);
-                reject(event.target.error);
-            };
-
-        });
+        // Evento que se dispara si ocurre un error al eliminar la base de datos
+        request.onerror = (event) => {
+          console.error(
+            `Error al eliminar la base de datos "${database}":`,
+            event.target.error
+          );
+          reject(event.target.error);
+        };
+      });
     }
 
     async function cerrarSesion() {
-        if (navigator.onLine) {
-            try {
-                loaderOn();
-                localStorage.clear();
-                eliminarCookie('login');
-                eliminarCookie('usuario');
-                await deleteDB2('dosxdos') ? console.log("Base de datos eliminada exitosamente") : console.error("error al eliminar la base de datos");
-                window.location.href = "https://dosxdos.app.iidos.com/index.html";
-            } catch (error) {
-                mensaje = 'ERROR: ' + error.message;
-                console.error(error);
-                alerta(mensaje);
-            }
+      if (navigator.onLine) {
+        try {
+          loaderOn();
+          localStorage.clear();
+          eliminarCookie("login");
+          eliminarCookie("usuario");
+          (await deleteDB2("dosxdos"))
+            ? console.log("Base de datos eliminada exitosamente")
+            : console.error("error al eliminar la base de datos");
+          window.location.href = "http://localhost/dosxdos_app/index.html";
+        } catch (error) {
+          mensaje = "ERROR: " + error.message;
+          console.error(error);
+          alerta(mensaje);
         }
-        else {
-            mensaje = 'No es posible cerrar la sesión sin conexión a internet';
-            alerta(mensaje);
-        }
+      } else {
+        mensaje = "No es posible cerrar la sesión sin conexión a internet";
+        alerta(mensaje);
+      }
     }
 
     /* TRAER DATOS DE LOS SERVIDORES */
 
     function fetchRutas() {
-        return new Promise((resolve, reject) => {
-            url = 'https://dosxdos.app.iidos.com/apirest/rutas.php?montador=' + montador;
-            fetch(url)
-                .then((res) => {
-                    if (res.ok) {
-                        return res.json()
-                    }
-                    else {
-                        mensaje = 'Error: no se pudo recibir una respuesta de la api intermedia en la función fetchRutas'
-                        alerta(mensaje);
-                    };
-                })
-                .then((res) => {
-                    if (res[0]) {
-                        const request = indexedDB.open('dosxdos');
-                        request.onsuccess = (event) => {
-                            const db = event.target.result;
-                            const transaction = db.transaction('rutas', 'readwrite');
-                            const datosStore = transaction.objectStore('rutas');
-                            const clearRequest = datosStore.clear();
-                            clearRequest.onsuccess = (clearEvent) => {
-                                const datos = res[1];
-                                datos.forEach(item => {
-                                    datosStore.add(item);
-                                });
-                                resolve(true);
-                            };
-                            clearRequest.onerror = (event) => {
-                                error = event.target.error;
-                                mensaje = `ERROR: ` + error;
-                                console.error(error);
-                                alerta(mensaje);
-                            };
-                        };
-                        request.onerror = (event) => {
-                            error = event.target.error;
-                            mensaje = `ERROR: ` + error;
-                            console.error(error);
-                            alerta(mensaje);
-                        }
-                    }
-                    else {
-                        mensaje = res[1];
-                        console.error(error);
-                        alerta(mensaje);
-                    }
-                })
-                .catch((res) => {
-                    mensaje = 'Sin conexión: ' + res.message;
-                    console.error(error);
-                    alerta(mensaje);
-                })
-        })
+      return new Promise((resolve, reject) => {
+        url =
+          "http://localhost/dosxdos_app/apirest/rutas.php?montador=" + montador;
+        fetch(url)
+          .then((res) => {
+            if (res.ok) {
+              return res.json();
+            } else {
+              mensaje =
+                "Error: no se pudo recibir una respuesta de la api intermedia en la función fetchRutas";
+              alerta(mensaje);
+            }
+          })
+          .then((res) => {
+            if (res[0]) {
+              const request = indexedDB.open("dosxdos");
+              request.onsuccess = (event) => {
+                const db = event.target.result;
+                const transaction = db.transaction("rutas", "readwrite");
+                const datosStore = transaction.objectStore("rutas");
+                const clearRequest = datosStore.clear();
+                clearRequest.onsuccess = (clearEvent) => {
+                  const datos = res[1];
+                  datos.forEach((item) => {
+                    datosStore.add(item);
+                  });
+                  resolve(true);
+                };
+                clearRequest.onerror = (event) => {
+                  error = event.target.error;
+                  mensaje = `ERROR: ` + error;
+                  console.error(error);
+                  alerta(mensaje);
+                };
+              };
+              request.onerror = (event) => {
+                error = event.target.error;
+                mensaje = `ERROR: ` + error;
+                console.error(error);
+                alerta(mensaje);
+              };
+            } else {
+              mensaje = res[1];
+              console.error(error);
+              alerta(mensaje);
+            }
+          })
+          .catch((res) => {
+            mensaje = "Sin conexión: " + res.message;
+            console.error(error);
+            alerta(mensaje);
+          });
+      });
     }
 
     function fetchLineas(vectorRutas) {
-        return new Promise(async (resolve, reject) => {
-            try {
-                const promises = vectorRutas.map(async (objeto) => {
-                    const url = 'https://dosxdos.app.iidos.com/apirest/lineas.php?ruta=' + objeto.cod;
-                    const res = await fetch(url);
+      return new Promise(async (resolve, reject) => {
+        try {
+          const promises = vectorRutas.map(async (objeto) => {
+            const url =
+              "http://localhost/dosxdos_app/apirest/lineas.php?ruta=" +
+              objeto.cod;
+            const res = await fetch(url);
 
-                    if (!res.ok) {
-                        throw new Error(`Error en la solicitud de las líneas de la ruta ${objeto.cod}: ${res.status}`);
-                    }
-
-                    const resJson = await res.json();
-
-                    if (resJson[0]) {
-                        const db = await new Promise((dbResolve, dbReject) => {
-                            const request = indexedDB.open('dosxdos');
-                            request.onsuccess = (event) => {
-                                const db = event.target.result;
-                                dbResolve(db);
-                            };
-                            request.onerror = (event) => {
-                                dbReject(new Error(`Error al abrir la base de datos para ingresar las líneas de la ruta: ${objeto.cod}`));
-                            };
-                        });
-
-                        const transaction = db.transaction('lineas', 'readwrite');
-                        const datosStore = transaction.objectStore('lineas');
-                        const datos = resJson[1];
-                        if (Array.isArray(datos)) {
-                            datos.forEach((item) => {
-                                datosStore.add(item);
-                            });
-                        } else {
-                            datosStore.add(datos);
-                        }
-                    } else {
-                        throw new Error(`Error al solicitar las líneas de la ruta ${objeto.cod}: ${resJson[1]}`);
-                    }
-                });
-
-                await Promise.all(promises);
-                resolve(true);
-            } catch (err) {
-                console.error(err);
-                reject(err);
+            if (!res.ok) {
+              throw new Error(
+                `Error en la solicitud de las líneas de la ruta ${objeto.cod}: ${res.status}`
+              );
             }
-        });
-    }
 
+            const resJson = await res.json();
+
+            if (resJson[0]) {
+              const db = await new Promise((dbResolve, dbReject) => {
+                const request = indexedDB.open("dosxdos");
+                request.onsuccess = (event) => {
+                  const db = event.target.result;
+                  dbResolve(db);
+                };
+                request.onerror = (event) => {
+                  dbReject(
+                    new Error(
+                      `Error al abrir la base de datos para ingresar las líneas de la ruta: ${objeto.cod}`
+                    )
+                  );
+                };
+              });
+
+              const transaction = db.transaction("lineas", "readwrite");
+              const datosStore = transaction.objectStore("lineas");
+              const datos = resJson[1];
+              if (Array.isArray(datos)) {
+                datos.forEach((item) => {
+                  datosStore.add(item);
+                });
+              } else {
+                datosStore.add(datos);
+              }
+            } else {
+              throw new Error(
+                `Error al solicitar las líneas de la ruta ${objeto.cod}: ${resJson[1]}`
+              );
+            }
+          });
+
+          await Promise.all(promises);
+          resolve(true);
+        } catch (err) {
+          console.error(err);
+          reject(err);
+        }
+      });
+    }
 
     /* SINCRONIZAR BASE DE DATOS */
 
     async function sincronizarDb() {
-        try {
-            if (navigator.onLine) {
-                loaderOn();
-                const fRutas = await fetchRutas();
-                rutas = await leerDatos('dosxdos', 'rutas');
-                rutas = rutas.map(objeto => ({
-                    cod: objeto['No.'],
-                    nombre: objeto['Descripcion']
-                }));
-                const limpiarLineas = await limpiarDatos('dosxdos', 'lineas');
-                if (limpiarLineas) {
-                    lineas = await fetchLineas(rutas);
-                    if (lineas) {
-                        const mensaje = 'Se ha sincronizado la base de datos exitosamente';
-                        localStorage.setItem('mensaje', mensaje);
-                        window.location.href = "https://dosxdos.app.iidos.com/historial_montador.html";
-                    }
-                    else {
-                        alerta('Error al cargar las líneas de las rutas del servidor, se han sincronizado las rutas pero no las líneas')
-                        loaderOff();
-                    }
-                }
+      try {
+        if (navigator.onLine) {
+          loaderOn();
+          const fRutas = await fetchRutas();
+          rutas = await leerDatos("dosxdos", "rutas");
+          rutas = rutas.map((objeto) => ({
+            cod: objeto["No."],
+            nombre: objeto["Descripcion"],
+          }));
+          const limpiarLineas = await limpiarDatos("dosxdos", "lineas");
+          if (limpiarLineas) {
+            lineas = await fetchLineas(rutas);
+            if (lineas) {
+              const mensaje =
+                "Se ha sincronizado la base de datos exitosamente";
+              localStorage.setItem("mensaje", mensaje);
+              window.location.href =
+                "http://localhost/dosxdos_app/historial_montador.html";
+            } else {
+              alerta(
+                "Error al cargar las líneas de las rutas del servidor, se han sincronizado las rutas pero no las líneas"
+              );
+              loaderOff();
             }
-        } catch (error) {
-            const mensaje = 'No se ha sincronizado la base de datos: ' + error.message;
-            localStorage.setItem('mensaje', mensaje);
-            window.location.href = "https://dosxdos.app.iidos.com/historial_montador.html";
+          }
         }
+      } catch (error) {
+        const mensaje =
+          "No se ha sincronizado la base de datos: " + error.message;
+        localStorage.setItem("mensaje", mensaje);
+        window.location.href =
+          "http://localhost/dosxdos_app/historial_montador.html";
+      }
     }
 
     async function sincronizarDb2() {
-        return new Promise(async (resolve, reject) => {
-            try {
-
-                loaderOn();
-                const fRutas = await fetchRutas();
-                rutas = await leerDatos('dosxdos', 'rutas');
-                rutas = rutas.map(objeto => ({
-                    cod: objeto['No.'],
-                    nombre: objeto['Descripcion']
-                }));
-                const limpiarLineas = await limpiarDatos('dosxdos', 'lineas');
-                if (limpiarLineas) {
-                    lineas = await fetchLineas(rutas);
-                    if (lineas) {
-                        resolve(true);
-                    }
-                    else {
-                        resolve(false);
-                    }
-                }
-            } catch (error) {
-                console.error(error);
-                reject(false);
+      return new Promise(async (resolve, reject) => {
+        try {
+          loaderOn();
+          const fRutas = await fetchRutas();
+          rutas = await leerDatos("dosxdos", "rutas");
+          rutas = rutas.map((objeto) => ({
+            cod: objeto["No."],
+            nombre: objeto["Descripcion"],
+          }));
+          const limpiarLineas = await limpiarDatos("dosxdos", "lineas");
+          if (limpiarLineas) {
+            lineas = await fetchLineas(rutas);
+            if (lineas) {
+              resolve(true);
+            } else {
+              resolve(false);
             }
-        })
+          }
+        } catch (error) {
+          console.error(error);
+          reject(false);
+        }
+      });
     }
 
     /* LOGIN */
 
     function vLogin() {
-        return new Promise((resolve, reject) => {
-            const login = localStorage.getItem('login');
-            if (login && login !== null) {
-                leerDatos('dosxdos', 'usuario')
-                    .then(res => {
-                        usuario = res[0];
-                        resolve(usuario.clase);
-                    })
-                    .catch(err => {
-                        resolve(false);
-                    })
-            }
-            else {
-                resolve(false);
-            }
-        })
+      return new Promise((resolve, reject) => {
+        const login = localStorage.getItem("login");
+        if (login && login !== null) {
+          leerDatos("dosxdos", "usuario")
+            .then((res) => {
+              usuario = res[0];
+              resolve(usuario.clase);
+            })
+            .catch((err) => {
+              resolve(false);
+            });
+        } else {
+          resolve(false);
+        }
+      });
     }
 
     /* INICIAR APP ONLINE */
 
     async function appOnline() {
-        try {
-            const login = await vLogin();
-            if (!login) {
-                window.location.href = "https://dosxdos.app.iidos.com/index.html";
-            } else {
-                const Arrayusuario = await leerDatos("dosxdos", "usuario");
-                usuario = Arrayusuario[0];
-                let loginMontador = localStorage.getItem("loginMontador");
-                if (!loginMontador || loginMontador === null) {
-                    window.location.href =
-                        "https://dosxdos.app.iidos.com/dosxdos.php?id=" +
-                        usuario.id +
-                        "&rol=" +
-                        usuario.clase;
-                }
-                montador = usuario.cod;
+      try {
+        const login = await vLogin();
+        if (!login) {
+          window.location.href = "http://localhost/dosxdos_app/index.html";
+        } else {
+          const Arrayusuario = await leerDatos("dosxdos", "usuario");
+          usuario = Arrayusuario[0];
+          let loginMontador = localStorage.getItem("loginMontador");
+          if (!loginMontador || loginMontador === null) {
+            window.location.href =
+              "http://localhost/dosxdos_app/dosxdos.php?id=" +
+              usuario.id +
+              "&rol=" +
+              usuario.clase;
+          }
+          montador = usuario.cod;
 
-                initializeApplication();
+          initializeApplication();
 
-                // Update the user information in the new UI elements
-                const nombreUsuarioDesktop = document.getElementById(
-                    "nombreUsuarioDesktop"
-                );
-                const nombreUsuarioMobile = document.getElementById(
-                    "nombreUsuarioMobile"
-                );
-                const imagenUsuarioDesktop = document.getElementById(
-                    "imagenUsuarioDesktop"
-                );
-                const imagenUsuarioMobile = document.getElementById(
-                    "imagenUsuarioMobile"
-                );
+          // Update the user information in the new UI elements
+          const nombreUsuarioDesktop = document.getElementById(
+            "nombreUsuarioDesktop"
+          );
+          const nombreUsuarioMobile = document.getElementById(
+            "nombreUsuarioMobile"
+          );
+          const imagenUsuarioDesktop = document.getElementById(
+            "imagenUsuarioDesktop"
+          );
+          const imagenUsuarioMobile = document.getElementById(
+            "imagenUsuarioMobile"
+          );
 
-                if (nombreUsuarioDesktop)
-                    nombreUsuarioDesktop.textContent = usuario.nombre;
-                if (nombreUsuarioMobile)
-                    nombreUsuarioMobile.textContent = usuario.nombre;
+          if (nombreUsuarioDesktop)
+            nombreUsuarioDesktop.textContent = usuario.nombre;
+          if (nombreUsuarioMobile)
+            nombreUsuarioMobile.textContent = usuario.nombre;
 
-                if (usuario.imagen !== "0") {
-                    if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
-                    if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
-                }
+          if (usuario.imagen !== "0") {
+            if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
+            if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
+          }
 
-                sinc = await sincronizarDb2();
-                sinc ? console.log("Base de datos sincronizada") : console.error("Error al sincronizar la base de datos");
-                rutas = await leerDatos('dosxdos', 'rutas');
-                rutas = rutas.map(objeto => ({
-                    cod: objeto['No.'],
-                    nombre: objeto['Descripcion']
-                }));
-                var fechaTresMesesAtras, fechaActual;
+          sinc = await sincronizarDb2();
+          sinc
+            ? console.log("Base de datos sincronizada")
+            : console.error("Error al sincronizar la base de datos");
+          rutas = await leerDatos("dosxdos", "rutas");
+          rutas = rutas.map((objeto) => ({
+            cod: objeto["No."],
+            nombre: objeto["Descripcion"],
+          }));
+          var fechaTresMesesAtras, fechaActual;
 
-                fechaActual = formatearFecha(new Date());
-                let fechaTresMesesAtrasDate = new Date();
+          fechaActual = formatearFecha(new Date());
+          let fechaTresMesesAtrasDate = new Date();
 
-                fechaTresMesesAtrasDate.setMonth(fechaTresMesesAtrasDate.getMonth() - 1);
+          fechaTresMesesAtrasDate.setMonth(
+            fechaTresMesesAtrasDate.getMonth() - 1
+          );
 
-                // Restar 3 meses a la fecha clonada
-                fechaTresMesesAtras = formatearFecha(fechaTresMesesAtrasDate);
+          // Restar 3 meses a la fecha clonada
+          fechaTresMesesAtras = formatearFecha(fechaTresMesesAtrasDate);
 
-                localStorage.setItem("fechaInicioHistorial", fechaTresMesesAtras);
-                localStorage.setItem("fechaFinHistorial", fechaActual);
+          localStorage.setItem("fechaInicioHistorial", fechaTresMesesAtras);
+          localStorage.setItem("fechaFinHistorial", fechaActual);
 
-                // Asignar el valor formateado a los inputs de tipo date
-                fechaInicio.value = fechaTresMesesAtras;
-                fechaFin.value = fechaActual;
+          // Asignar el valor formateado a los inputs de tipo date
+          fechaInicio.value = fechaTresMesesAtras;
+          fechaFin.value = fechaActual;
 
-                console.log("Fecha inicio por defecto: " + fechaTresMesesAtras);
-                console.log("Fecha fin por defecto: " + fechaActual);
-                await enviarFechasAlServidor(fechaTresMesesAtras, fechaActual);
-                initializeSearch()
-                const sincronizacionDeNotificaciones =
-                    await sincronizarNotificaciones();
-                if (sincronizacionDeNotificaciones) {
-                    await notificar();
-                }
-            }
-        } catch (error) {
-            mensaje = 'ERROR: ' + error.message;
-            console.error(error);
-            alerta(mensaje);
+          console.log("Fecha inicio por defecto: " + fechaTresMesesAtras);
+          console.log("Fecha fin por defecto: " + fechaActual);
+          await enviarFechasAlServidor(fechaTresMesesAtras, fechaActual);
+          initializeSearch();
+          const sincronizacionDeNotificaciones =
+            await sincronizarNotificaciones();
+          if (sincronizacionDeNotificaciones) {
+            await notificar();
+          }
         }
+      } catch (error) {
+        mensaje = "ERROR: " + error.message;
+        console.error(error);
+        alerta(mensaje);
+      }
     }
 
     //ESTO DEJA LAS FECHAS EN FORMATO YYYY-MM-DD
     // Función para formatear la fecha en "YYYY-MM-DD"
     function formatearFecha(fecha) {
-        const año = fecha.getFullYear();
-        const mes = String(fecha.getMonth() + 1).padStart(2, '0');
-        const dia = String(fecha.getDate()).padStart(2, '0');
-        return `${año}-${mes}-${dia}`;
+      const año = fecha.getFullYear();
+      const mes = String(fecha.getMonth() + 1).padStart(2, "0");
+      const dia = String(fecha.getDate()).padStart(2, "0");
+      return `${año}-${mes}-${dia}`;
     }
 
     /* INICIAR APP OFFLINE */
 
     async function appOffline() {
-        try {
-            const login = await vLogin();
-            if (!login) {
-                window.location.href = "https://dosxdos.app.iidos.com/index.html";
-            }
-            else {
-                const Arrayusuario = await leerDatos("dosxdos", "usuario");
-                usuario = Arrayusuario[0];
-                let loginMontador = localStorage.getItem("loginMontador");
-                if (!loginMontador || loginMontador === null) {
-                    window.location.href =
-                        "https://dosxdos.app.iidos.com/dosxdos.php?id=" +
-                        usuario.id +
-                        "&rol=" +
-                        usuario.clase;
-                }
-                montador = usuario.cod;
+      try {
+        const login = await vLogin();
+        if (!login) {
+          window.location.href = "http://localhost/dosxdos_app/index.html";
+        } else {
+          const Arrayusuario = await leerDatos("dosxdos", "usuario");
+          usuario = Arrayusuario[0];
+          let loginMontador = localStorage.getItem("loginMontador");
+          if (!loginMontador || loginMontador === null) {
+            window.location.href =
+              "http://localhost/dosxdos_app/dosxdos.php?id=" +
+              usuario.id +
+              "&rol=" +
+              usuario.clase;
+          }
+          montador = usuario.cod;
 
-                initializeApplication();
+          initializeApplication();
 
-                // Update the user information in the new UI elements
-                const nombreUsuarioDesktop = document.getElementById(
-                    "nombreUsuarioDesktop"
-                );
-                const nombreUsuarioMobile = document.getElementById(
-                    "nombreUsuarioMobile"
-                );
-                const imagenUsuarioDesktop = document.getElementById(
-                    "imagenUsuarioDesktop"
-                );
-                const imagenUsuarioMobile = document.getElementById(
-                    "imagenUsuarioMobile"
-                );
+          // Update the user information in the new UI elements
+          const nombreUsuarioDesktop = document.getElementById(
+            "nombreUsuarioDesktop"
+          );
+          const nombreUsuarioMobile = document.getElementById(
+            "nombreUsuarioMobile"
+          );
+          const imagenUsuarioDesktop = document.getElementById(
+            "imagenUsuarioDesktop"
+          );
+          const imagenUsuarioMobile = document.getElementById(
+            "imagenUsuarioMobile"
+          );
 
-                if (nombreUsuarioDesktop)
-                    nombreUsuarioDesktop.textContent = usuario.nombre;
-                if (nombreUsuarioMobile)
-                    nombreUsuarioMobile.textContent = usuario.nombre;
+          if (nombreUsuarioDesktop)
+            nombreUsuarioDesktop.textContent = usuario.nombre;
+          if (nombreUsuarioMobile)
+            nombreUsuarioMobile.textContent = usuario.nombre;
 
-                if (usuario.imagen !== "0") {
-                    if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
-                    if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
-                }
-                rutas = await leerDatos('dosxdos', 'rutas');
-                rutas = rutas.map(objeto => ({
-                    cod: objeto['No.'],
-                    nombre: objeto['Descripcion']
-                }));
-                $contenido.replaceChildren();
-                if (localStorage.getItem("fechaInicioHistorial") == null || localStorage.getItem("fechaFinHistorial") == null) {
-                    alerta("No tienes historial consultado anteriormente con conexión");
-                    loaderOff();
-                    return;
-                }
-                fechaInicio.value = localStorage.getItem("fechaInicioHistorial");
-                fechaFin.value = localStorage.getItem("fechaFinHistorial");
+          if (usuario.imagen !== "0") {
+            if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
+            if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
+          }
+          rutas = await leerDatos("dosxdos", "rutas");
+          rutas = rutas.map((objeto) => ({
+            cod: objeto["No."],
+            nombre: objeto["Descripcion"],
+          }));
+          $contenido.replaceChildren();
+          if (
+            localStorage.getItem("fechaInicioHistorial") == null ||
+            localStorage.getItem("fechaFinHistorial") == null
+          ) {
+            alerta("No tienes historial consultado anteriormente con conexión");
+            loaderOff();
+            return;
+          }
+          fechaInicio.value = localStorage.getItem("fechaInicioHistorial");
+          fechaFin.value = localStorage.getItem("fechaFinHistorial");
 
-                const TotalLineas = await leerDatos('dosxdos', 'historial');
-                if (TotalLineas) {
-                    console.log(TotalLineas);
+          const TotalLineas = await leerDatos("dosxdos", "historial");
+          if (TotalLineas) {
+            console.log(TotalLineas);
 
-                    // Use the new enhanced rendering function
-                    enhancedHistoryRendering(TotalLineas);
+            // Use the new enhanced rendering function
+            enhancedHistoryRendering(TotalLineas);
 
-                    // Reinitialize search after rendering
-                    initializeSearch();
+            // Reinitialize search after rendering
+            initializeSearch();
 
-                    const procesarPeticionesCierre = await procesarPeticiones2();
-                    loaderOff();
-                }
-                else {
-                    alerta('Error al leer el almacén de historial')
-                    loaderOff();
-                }
-            }
-        } catch (error) {
-            mensaje = 'ERROR: ' + error.message;
-            console.error(error);
-            alerta(mensaje);
+            const procesarPeticionesCierre = await procesarPeticiones2();
+            loaderOff();
+          } else {
+            alerta("Error al leer el almacén de historial");
+            loaderOff();
+          }
         }
+      } catch (error) {
+        mensaje = "ERROR: " + error.message;
+        console.error(error);
+        alerta(mensaje);
+      }
     }
 
     /* EVENTOS CLIC */
     document.addEventListener("click", (e) => {
-        if (e.target.matches('#cerrarSesion')) {
-            cerrarSesion();
-        }
-    })
+      if (e.target.matches("#cerrarSesion")) {
+        cerrarSesion();
+      }
+    });
 
     function parseHistoryItemDetails(texto) {
-        const parts = texto.split(' _ ');
-        return {
-            ruta: parts[0] || '-',
-            sector: parts[1] || '-',
-            zona: parts[2] || '-',
-            codigoLinea: parts[3] || '-',
-            nombrePv: parts[4] || '-',
-            nombreCliente: parts[5] || '-',
-            tipoDeTrabajo: parts[6] || '-',
-            observaciones: parts[7] && parts[7].startsWith('Observaciones') ? parts[7] : '-',
-            navision: parts.find(p => p.includes('NAVISION:'))?.replace('NAVISION:', '').trim() || '-',
-            crm: parts.find(p => p.includes('CRM:'))?.replace('CRM:', '').trim() || '-'
-        };
+      const parts = texto.split(" _ ");
+      return {
+        ruta: parts[0] || "-",
+        sector: parts[1] || "-",
+        zona: parts[2] || "-",
+        codigoLinea: parts[3] || "-",
+        nombrePv: parts[4] || "-",
+        nombreCliente: parts[5] || "-",
+        tipoDeTrabajo: parts[6] || "-",
+        observaciones:
+          parts[7] && parts[7].startsWith("Observaciones") ? parts[7] : "-",
+        navision:
+          parts
+            .find((p) => p.includes("NAVISION:"))
+            ?.replace("NAVISION:", "")
+            .trim() || "-",
+        crm:
+          parts
+            .find((p) => p.includes("CRM:"))
+            ?.replace("CRM:", "")
+            .trim() || "-",
+      };
     }
 
     function highlightText(text, searchTerm) {
-        if (!searchTerm) return text;
-        const escapedTerm = searchTerm.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
-        const regex = new RegExp(`(${escapedTerm})`, "gi");
-        return text.replace(regex, `<mark class="bg-white bg-opacity-70">$1</mark>`);
+      if (!searchTerm) return text;
+      const escapedTerm = searchTerm.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
+      const regex = new RegExp(`(${escapedTerm})`, "gi");
+      return text.replace(
+        regex,
+        `<mark class="bg-white bg-opacity-70">$1</mark>`
+      );
     }
 
     function createHistoryItemElement(objeto, searchTerm = "") {
-        const containerDiv = document.createElement('div');
-        containerDiv.className = 'w-full mb-4';
-        containerDiv.setAttribute('data-linea-id', objeto.Codigo_de_l_nea);
-        containerDiv.setAttribute('data-estado',
-            objeto.Estado_de_Actuaci_n === 'Realizado' ? 'realizado' : 'pendiente'
-        );
+      const containerDiv = document.createElement("div");
+      containerDiv.className = "w-full mb-4";
+      containerDiv.setAttribute("data-linea-id", objeto.Codigo_de_l_nea);
+      containerDiv.setAttribute(
+        "data-estado",
+        objeto.Estado_de_Actuaci_n === "Realizado" ? "realizado" : "pendiente"
+      );
 
-        const historialItemContent = document.createElement('div');
-        historialItemContent.className = objeto.Estado_de_Actuaci_n === 'Realizado'
-            ? 'bg-gradient-to-r from-red-500 to-red-600 text-white opacity-80'
-            : 'bg-gradient-to-r from-red-500 to-red-600 text-white';
-        historialItemContent.classList.add(
-            'rounded-xl',
-            'p-4',
-            'cursor-pointer',
-            'relative'
-        );
+      const historialItemContent = document.createElement("div");
+      historialItemContent.className =
+        objeto.Estado_de_Actuaci_n === "Realizado"
+          ? "bg-gradient-to-r from-red-500 to-red-600 text-white opacity-80"
+          : "bg-gradient-to-r from-red-500 to-red-600 text-white";
+      historialItemContent.classList.add(
+        "rounded-xl",
+        "p-4",
+        "cursor-pointer",
+        "relative"
+      );
 
-        historialItemContent.innerHTML = `
+      historialItemContent.innerHTML = `
     <div class="flex justify-between items-center">
       <div
         class="absolute inset-0 -z-10 rounded-xl"
         style="
-          background-image: url('https://dosxdos.app.iidos.com/img/texture-red.svg');
+          background-image: url('http://localhost/dosxdos_app/img/texture-red.svg');
           background-size: contain;
           opacity: 0.7;
         "
@@ -1194,40 +1489,48 @@
       <h3 class="font-bold text-lg flex-grow pr-2 pt-4 lg:pt-0 pb-2 z-10">
         ${highlightText(`Ruta ${objeto.RutaSelect}`, searchTerm)}
       </h3>
-      <span class="${objeto.Estado_de_Actuaci_n === 'Realizado'
-                ? 'bg-gray-200 text-gray-600'
-                : 'bg-white text-red-600'} 
+      <span class="${
+        objeto.Estado_de_Actuaci_n === "Realizado"
+          ? "bg-gray-200 text-gray-600"
+          : "bg-white text-red-600"
+      } 
         absolute top-2 right-2 px-2 py-0.5 rounded-full text-xs font-semibold tracking-tight">
-        ${objeto.Estado_de_Actuaci_n || 'Pendiente'}
+        ${objeto.Estado_de_Actuaci_n || "Pendiente"}
       </span>
     </div>
     <p class="text-sm opacity-75 mt-2">
-      ${highlightText(`Línea ${objeto.Codigo_de_l_nea} - ${objeto.nombreCliente} - ${objeto.Tipo_de_trabajo}`, searchTerm)}
+      ${highlightText(
+        `Línea ${objeto.Codigo_de_l_nea} - ${objeto.nombreCliente} - ${objeto.Tipo_de_trabajo}`,
+        searchTerm
+      )}
     </p>
   `;
 
-        // Add click event to show modal
-        historialItemContent.addEventListener('click', () => openHistoryItemModal(objeto));
+      // Add click event to show modal
+      historialItemContent.addEventListener("click", () =>
+        openHistoryItemModal(objeto)
+      );
 
-        containerDiv.appendChild(historialItemContent);
-        return containerDiv;
+      containerDiv.appendChild(historialItemContent);
+      return containerDiv;
     }
 
     function openHistoryItemModal(objeto) {
-        let modal = document.getElementById('datosModal');
+      let modal = document.getElementById("datosModal");
 
-        // If the modal doesn't exist, create it dynamically
-        if (!modal) {
-            modal = document.createElement('div');
-            modal.id = 'datosModal';
-            modal.className = 'fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 hidden';
+      // If the modal doesn't exist, create it dynamically
+      if (!modal) {
+        modal = document.createElement("div");
+        modal.id = "datosModal";
+        modal.className =
+          "fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 hidden";
 
-            // Copy the entire modal HTML from the previous implementation
-            modal.innerHTML = `
+        // Copy the entire modal HTML from the previous implementation
+        modal.innerHTML = `
     <div class="bg-white rounded-xl shadow-xl max-w-xl w-full mx-4 max-h-[85vh] flex flex-col overflow-hidden">
         <!-- Modal Header -->
         <div class="text-white p-4 rounded-t-xl flex justify-between items-center sticky top-0 z-10"
-            style="background-image: url('https://dosxdos.app.iidos.com/img/texture-red.svg'); background-size: contain;">
+            style="background-image: url('http://localhost/dosxdos_app/img/texture-red.svg'); background-size: contain;">
             <h2 class="text-xl font-bold pr-4">Detalles de la OT</h2>
             <button class="text-white hover:text-gray-100" id="closeModal">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
@@ -1365,699 +1668,785 @@
     </div>
     `;
 
-            document.body.appendChild(modal);
-        }
+        document.body.appendChild(modal);
+      }
 
-        // Populate modal fields
-        document.getElementById('cliente').textContent = objeto.nombreCliente || '-';
-        document.getElementById('ot').textContent = objeto.C_digo_de_OT_relacionada || '-';
-        document.getElementById('tipoOt').textContent = objeto.Tipo_de_trabajo || '-';
-        document.getElementById('descripcionOt').textContent = objeto.Observaciones_internas || '-';
-        document.getElementById('lineaOt').textContent = objeto.Codigo_de_l_nea || '-';
-        document.getElementById('puntoDeVenta').textContent = objeto.nombrePv || '-';
-        document.getElementById('zona').textContent = objeto.Zona || '-';
-        document.getElementById('sector').textContent = objeto.Sector || '-';
-        document.getElementById('direccion').textContent = objeto.Direccion || '-';
-        document.getElementById('observaciones').textContent = objeto.Observaciones_internas || '-';
-        document.getElementById('tipoDeTrabajo').textContent = objeto.Tipo_de_trabajo || '-';
-        document.getElementById('navisionOt').textContent = objeto.Navision_OT || '-';
-        document.getElementById('revisado').textContent = objeto.Revisado || '-';
+      // Populate modal fields
+      document.getElementById("cliente").textContent =
+        objeto.nombreCliente || "-";
+      document.getElementById("ot").textContent =
+        objeto.C_digo_de_OT_relacionada || "-";
+      document.getElementById("tipoOt").textContent =
+        objeto.Tipo_de_trabajo || "-";
+      document.getElementById("descripcionOt").textContent =
+        objeto.Observaciones_internas || "-";
+      document.getElementById("lineaOt").textContent =
+        objeto.Codigo_de_l_nea || "-";
+      document.getElementById("puntoDeVenta").textContent =
+        objeto.nombrePv || "-";
+      document.getElementById("zona").textContent = objeto.Zona || "-";
+      document.getElementById("sector").textContent = objeto.Sector || "-";
+      document.getElementById("direccion").textContent =
+        objeto.Direccion || "-";
+      document.getElementById("observaciones").textContent =
+        objeto.Observaciones_internas || "-";
+      document.getElementById("tipoDeTrabajo").textContent =
+        objeto.Tipo_de_trabajo || "-";
+      document.getElementById("navisionOt").textContent =
+        objeto.Navision_OT || "-";
+      document.getElementById("revisado").textContent = objeto.Revisado || "-";
 
-        // Add more fields as needed
-        document.getElementById('firmaDatos').textContent = '-';
-        document.getElementById('tipoDeTrabajo2').textContent = objeto.Tipo_de_trabajo || '-';
-        document.getElementById('poner').textContent = '-';
-        document.getElementById('quitar').textContent = '-';
-        document.getElementById('alto').textContent = '-';
-        document.getElementById('ancho').textContent = '-';
+      // Add more fields as needed
+      document.getElementById("firmaDatos").textContent = "-";
+      document.getElementById("tipoDeTrabajo2").textContent =
+        objeto.Tipo_de_trabajo || "-";
+      document.getElementById("poner").textContent = "-";
+      document.getElementById("quitar").textContent = "-";
+      document.getElementById("alto").textContent = "-";
+      document.getElementById("ancho").textContent = "-";
 
-        // Show the modal
-        modal.classList.remove('hidden');
+      // Show the modal
+      modal.classList.remove("hidden");
 
-        // Close modal event listeners
-        const closeButtons = modal.querySelectorAll('#closeModal, #closeModalBottom');
-        closeButtons.forEach(button => {
-            button.onclick = () => {
-                modal.classList.add('hidden');
-            };
-        });
-
-        // Add reporting button event listener
-        const irAReportarButton = modal.querySelector('#irAReportar');
-        irAReportarButton.onclick = () => {
-            // Store necessary data for the next page
-            localStorage.setItem('renderizarHistorial', true);
-            localStorage.setItem('linea', objeto.Codigo_de_l_nea);
-            localStorage.setItem('lineaActividad', objeto.Codigo_de_l_nea);
-            localStorage.setItem('ot', objeto.C_digo_de_OT_relacionada);
-            localStorage.setItem('cliente', objeto.N_mero_del_cliente);
-            localStorage.setItem('nombreCliente', objeto.nombreCliente);
-            localStorage.setItem('id', objeto.Id);
-
-            // Navigate to the reporting page
-            window.location.href = "https://dosxdos.app.iidos.com/linea_historial_montador.html";
+      // Close modal event listeners
+      const closeButtons = modal.querySelectorAll(
+        "#closeModal, #closeModalBottom"
+      );
+      closeButtons.forEach((button) => {
+        button.onclick = () => {
+          modal.classList.add("hidden");
         };
+      });
+
+      // Add reporting button event listener
+      const irAReportarButton = modal.querySelector("#irAReportar");
+      irAReportarButton.onclick = () => {
+        // Store necessary data for the next page
+        localStorage.setItem("renderizarHistorial", true);
+        localStorage.setItem("linea", objeto.Codigo_de_l_nea);
+        localStorage.setItem("lineaActividad", objeto.Codigo_de_l_nea);
+        localStorage.setItem("ot", objeto.C_digo_de_OT_relacionada);
+        localStorage.setItem("cliente", objeto.N_mero_del_cliente);
+        localStorage.setItem("nombreCliente", objeto.nombreCliente);
+        localStorage.setItem("id", objeto.Id);
+
+        // Navigate to the reporting page
+        window.location.href =
+          "http://localhost/dosxdos_app/linea_historial_montador.html";
+      };
     }
 
     function closeHistoryItemModal() {
-        const modal = document.getElementById('historyItemModal');
-        if (modal) {
-            modal.classList.remove('opacity-100', 'pointer-events-auto');
-            modal.classList.add('opacity-0', 'pointer-events-none');
-            setTimeout(() => {
-                modal.classList.add('hidden');
-            }, 300);
-        }
+      const modal = document.getElementById("historyItemModal");
+      if (modal) {
+        modal.classList.remove("opacity-100", "pointer-events-auto");
+        modal.classList.add("opacity-0", "pointer-events-none");
+        setTimeout(() => {
+          modal.classList.add("hidden");
+        }, 300);
+      }
     }
 
-    function enhancedHistoryRendering(TotalLineas, searchTerm = '') {
-        console.log(`🖌 Rendering Started with ${TotalLineas.length} items (Expected: 166)`);
+    function enhancedHistoryRendering(TotalLineas, searchTerm = "") {
+      console.log(
+        `🖌 Rendering Started with ${TotalLineas.length} items (Expected: 166)`
+      );
 
-        // Add a safeguard to prevent duplicate rendering
-        if ($contenido.children.length > 0) {
-            console.warn("⚠️ Rendering skipped! Content is already filled.");
-            return;
-        }
+      // Add a safeguard to prevent duplicate rendering
+      if ($contenido.children.length > 0) {
+        console.warn("⚠️ Rendering skipped! Content is already filled.");
+        return;
+      }
 
-        requestAnimationFrame(() => {
-            $contenido.innerHTML = ''; // Ensure it's cleared
+      requestAnimationFrame(() => {
+        $contenido.innerHTML = ""; // Ensure it's cleared
 
-            const countElement = document.createElement('div');
-            countElement.id = 'trabajos-count';
-            countElement.textContent = `${TotalLineas.length} Trabajos Encontrados`;
+        const countElement = document.createElement("div");
+        countElement.id = "trabajos-count";
+        countElement.textContent = `${TotalLineas.length} Trabajos Encontrados`;
 
-            $contenido.appendChild(countElement);
+        $contenido.appendChild(countElement);
 
-            TotalLineas.forEach((objeto, index) => {
-                console.log(`📌 Rendering item ${index + 1}:`, objeto);
-                const historyItem = createHistoryItemElement(objeto, searchTerm);
-                $contenido.appendChild(historyItem);
-            });
-
-            console.log(`✅ Rendering completed: ${TotalLineas.length} unique items displayed`);
+        TotalLineas.forEach((objeto, index) => {
+          console.log(`📌 Rendering item ${index + 1}:`, objeto);
+          const historyItem = createHistoryItemElement(objeto, searchTerm);
+          $contenido.appendChild(historyItem);
         });
+
+        console.log(
+          `✅ Rendering completed: ${TotalLineas.length} unique items displayed`
+        );
+      });
     }
 
     async function initializeSearch() {
-        const buscador = document.getElementById('buscador');
-        let originalData = await leerDatos('dosxdos', 'historial'); // Fetch only once
+      const buscador = document.getElementById("buscador");
+      let originalData = await leerDatos("dosxdos", "historial"); // Fetch only once
 
-        console.log("🔍 Search Initialized");
+      console.log("🔍 Search Initialized");
 
-        if (!buscador) return;
+      if (!buscador) return;
 
-        // Remove previous event listener to prevent duplicate triggers
-        buscador.removeEventListener('input', handleSearch);
-        buscador.addEventListener('input', handleSearch);
+      // Remove previous event listener to prevent duplicate triggers
+      buscador.removeEventListener("input", handleSearch);
+      buscador.addEventListener("input", handleSearch);
 
-        function handleSearch() {
-            const searchTerm = buscador.value.toLowerCase().trim();
+      function handleSearch() {
+        const searchTerm = buscador.value.toLowerCase().trim();
 
-            console.log(`🔍 Search started with term: "${searchTerm}"`);
+        console.log(`🔍 Search started with term: "${searchTerm}"`);
 
-            // Force a fresh, immutable copy of originalData
-            const freshData = JSON.parse(JSON.stringify(originalData));
+        // Force a fresh, immutable copy of originalData
+        const freshData = JSON.parse(JSON.stringify(originalData));
 
-            // Clear the content before inserting new results
-            $contenido.innerHTML = '';
+        // Clear the content before inserting new results
+        $contenido.innerHTML = "";
 
-            let filteredResults = freshData;
-            if (searchTerm !== '') {
-                filteredResults = freshData.filter((objeto) => {
-                    const fullText = `${objeto.RutaSelect} _ ${objeto.Sector} _ ${objeto.Zona} _ ${objeto.Codigo_de_l_nea} _ ${objeto.nombrePv} _ ${objeto.nombreCliente} _ ${objeto.Tipo_de_trabajo} _ NAVISION: ${objeto.Navision_OT} _ CRM: ${objeto.C_digo_de_OT_relacionada}`.toLowerCase();
-                    return fullText.includes(searchTerm);
-                });
-            }
-
-            // Update item count
-            console.log(`🔎 Search Found: ${filteredResults.length} Items (Expected: ≤ 166)`);
-
-            const countElement = document.createElement('div');
-            countElement.id = 'trabajos-count';
-            countElement.className = 'w-full text-left text-gray-600 font-medium mb-4 bg-gray-100 p-2 rounded-lg';
-            countElement.textContent = `${filteredResults.length} Trabajos Encontrados`;
-            $contenido.appendChild(countElement);
-
-            // Render new results
-            filteredResults.forEach((objeto) => {
-                const historyItem = createHistoryItemElement(objeto, searchTerm);
-                $contenido.appendChild(historyItem);
-            });
+        let filteredResults = freshData;
+        if (searchTerm !== "") {
+          filteredResults = freshData.filter((objeto) => {
+            const fullText =
+              `${objeto.RutaSelect} _ ${objeto.Sector} _ ${objeto.Zona} _ ${objeto.Codigo_de_l_nea} _ ${objeto.nombrePv} _ ${objeto.nombreCliente} _ ${objeto.Tipo_de_trabajo} _ NAVISION: ${objeto.Navision_OT} _ CRM: ${objeto.C_digo_de_OT_relacionada}`.toLowerCase();
+            return fullText.includes(searchTerm);
+          });
         }
+
+        // Update item count
+        console.log(
+          `🔎 Search Found: ${filteredResults.length} Items (Expected: ≤ 166)`
+        );
+
+        const countElement = document.createElement("div");
+        countElement.id = "trabajos-count";
+        countElement.className =
+          "w-full text-left text-gray-600 font-medium mb-4 bg-gray-100 p-2 rounded-lg";
+        countElement.textContent = `${filteredResults.length} Trabajos Encontrados`;
+        $contenido.appendChild(countElement);
+
+        // Render new results
+        filteredResults.forEach((objeto) => {
+          const historyItem = createHistoryItemElement(objeto, searchTerm);
+          $contenido.appendChild(historyItem);
+        });
+      }
     }
 
     /* PETICIONES PENDIENTES */
 
     function actualizarLinea(json) {
-        return new Promise((resolve, reject) => {
-            console.log(json);
-            fetch("https://dosxdos.app.iidos.com/apirest/lineas.php",
-                {
-                    method: "PUT",
-                    headers: {
-                        "Content-type": "application/json; charset=utf-8"
-                    },
-                    body: json
-                })
-                .then((res) => (res.ok ? res.json() : reject(new Error(`Error en los servidores al actualizar los datos de la línea`))))
-                .then((res) => {
-                    if (res[0]) {
-                        resolve(true);
-                    }
-                    else {
-                        resolve(false);
-                    }
-                })
-                .catch((err) => {
-                    console.log(err);
-                    reject(err);
-                })
+      return new Promise((resolve, reject) => {
+        console.log(json);
+        fetch("http://localhost/dosxdos_app/apirest/lineas.php", {
+          method: "PUT",
+          headers: {
+            "Content-type": "application/json; charset=utf-8",
+          },
+          body: json,
         })
+          .then((res) =>
+            res.ok
+              ? res.json()
+              : reject(
+                  new Error(
+                    `Error en los servidores al actualizar los datos de la línea`
+                  )
+                )
+          )
+          .then((res) => {
+            if (res[0]) {
+              resolve(true);
+            } else {
+              resolve(false);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            reject(err);
+          });
+      });
     }
 
     function subirFotos(json) {
-        return new Promise((resolve, reject) => {
-            fetch("https://dosxdos.app.iidos.com/apirest/fotos.php",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-type": "application/json; charset=utf-8"
-                    },
-                    body: json
-                })
-                .then((res) => {
-                    if (!res.ok) {
-                        throw new Error(`Error en el servidor de la API intermedia al guardar las fotos. Status: ${res.status}`);
-                    }
-                    return res.json();
-                })
-                .then((res) => {
-                    if (res[0]) {
-                        resolve(true);
-                    }
-                    else {
-                        resolve(false);
-                    }
-                })
-                .catch((err) => {
-                    console.log(err);
-                    reject(err);
-                })
+      return new Promise((resolve, reject) => {
+        fetch("http://localhost/dosxdos_app/apirest/fotos.php", {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json; charset=utf-8",
+          },
+          body: json,
         })
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error(
+                `Error en el servidor de la API intermedia al guardar las fotos. Status: ${res.status}`
+              );
+            }
+            return res.json();
+          })
+          .then((res) => {
+            if (res[0]) {
+              resolve(true);
+            } else {
+              resolve(false);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            reject(err);
+          });
+      });
     }
 
     function subirFirmas(json) {
-        return new Promise((resolve, reject) => {
-            fetch("https://dosxdos.app.iidos.com/apirest/firmas.php",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-type": "application/json; charset=utf-8"
-                    },
-                    body: json
-                })
-                .then((res) => {
-                    if (!res.ok) {
-                        throw new Error(`Error en el servidor de la API intermedia al guardar las firmas. Status: ${res.status}`);
-                    }
-                    return res.json();
-                })
-                .then((res) => {
-                    if (res[0]) {
-                        resolve(true);
-                    }
-                    else {
-                        resolve(false);
-                    }
-                })
-                .catch((err) => {
-                    console.log(err);
-                    reject(err);
-                })
+      return new Promise((resolve, reject) => {
+        fetch("http://localhost/dosxdos_app/apirest/firmas.php", {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json; charset=utf-8",
+          },
+          body: json,
         })
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error(
+                `Error en el servidor de la API intermedia al guardar las firmas. Status: ${res.status}`
+              );
+            }
+            return res.json();
+          })
+          .then((res) => {
+            if (res[0]) {
+              resolve(true);
+            } else {
+              resolve(false);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            reject(err);
+          });
+      });
     }
 
     function subirNota(json) {
-        return new Promise((resolve, reject) => {
-            fetch("https://dosxdos.app.iidos.com/apirest/notas.php",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-type": "application/json; charset=utf-8"
-                    },
-                    body: json
-                })
-                .then((res) => {
-                    if (!res.ok) {
-                        throw new Error(`Error en el servidor de la API intermedia al guardar la nota. Status: ${res.status}`);
-                    }
-                    return res.json();
-                })
-                .then((res) => {
-                    if (res[0]) {
-                        resolve(true);
-                    }
-                    else {
-                        resolve(false);
-                    }
-                })
-                .catch((err) => {
-                    console.log(err);
-                    reject(err);
-                })
+      return new Promise((resolve, reject) => {
+        fetch("http://localhost/dosxdos_app/apirest/notas.php", {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json; charset=utf-8",
+          },
+          body: json,
         })
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error(
+                `Error en el servidor de la API intermedia al guardar la nota. Status: ${res.status}`
+              );
+            }
+            return res.json();
+          })
+          .then((res) => {
+            if (res[0]) {
+              resolve(true);
+            } else {
+              resolve(false);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            reject(err);
+          });
+      });
     }
 
-
     async function enviarPeticiones(vectorObjDb, tipoVector) {
-        return new Promise(async (resolve, reject) => {
-            try {
-                let solicitud,
-                    mensaje = '',
-                    vaciarStore;
-                for (const objeto of vectorObjDb) {
-                    jsonObjeto = JSON.stringify(objeto);
-                    if (tipoVector == 'lineas') {
-                        solicitud = await actualizarLinea(jsonObjeto);
-                        if (!solicitud) {
-                            mensaje += `-Error en el envío de la petición pendiente de la actualización de datos en la api de Navision en la ruta: ${objeto.CodigoRuta} y la línea de ruta: ${objeto.LineaRuta}-`;
-                        }
-                    } else if (tipoVector == 'fotos') {
-                        solicitud = await subirFotos(jsonObjeto);
-                        if (!solicitud) {
-                            mensaje += `-Error al subir las fotos pendientes de la ot: ${objeto.ot} y la línea: ${objeto.lineaActividad}-`;
-                        }
-
-                    } else if (tipoVector == 'firmas') {
-                        solicitud = await subirFirmas(jsonObjeto);
-                        if (!solicitud) {
-                            mensaje += `-Error al subir las firmas pendientes de la ot: ${objeto.ot} y la línea: ${objeto.lineaActividad}-`;
-                        }
-                    } else if (tipoVector == 'notas') {
-                        solicitud = await subirNota(jsonObjeto);
-                        if (!solicitud) {
-                            mensaje += `-Error al subir las notas pendientes de la ot: ${objeto.ot} y la línea: ${objeto.linea}-`;
-                        }
-                    }
-                };
-                if (tipoVector == 'lineas') {
-                    vaciarStore = await limpiarDatos('dosxdos', 'peticionesLineas');
-                    mensaje += '-Datos pendientes enviados al servidor-';
-                } else if (tipoVector == 'fotos') {
-                    vaciarStore = await limpiarDatos('dosxdos', 'peticionesFotos');
-                    mensaje += '-Fotos pendientes subidas al servidor-';
-                } else if (tipoVector == 'firmas') {
-                    vaciarStore = await limpiarDatos('dosxdos', 'peticionesFirmas');
-                    mensaje += '-Firmas pendientes subidas al servidor-';
-                } else if (tipoVector == 'notas') {
-                    vaciarStore = await limpiarDatos('dosxdos', 'notas');
-                    mensaje += '-Notas pendientes subidas al servidor-';
-                }
-                resolve(mensaje);
-            } catch (err) {
-                console.error(err);
-                alerta(err.message);
-                scrollToTop();
-                reject(err);
+      return new Promise(async (resolve, reject) => {
+        try {
+          let solicitud,
+            mensaje = "",
+            vaciarStore;
+          for (const objeto of vectorObjDb) {
+            jsonObjeto = JSON.stringify(objeto);
+            if (tipoVector == "lineas") {
+              solicitud = await actualizarLinea(jsonObjeto);
+              if (!solicitud) {
+                mensaje += `-Error en el envío de la petición pendiente de la actualización de datos en la api de Navision en la ruta: ${objeto.CodigoRuta} y la línea de ruta: ${objeto.LineaRuta}-`;
+              }
+            } else if (tipoVector == "fotos") {
+              solicitud = await subirFotos(jsonObjeto);
+              if (!solicitud) {
+                mensaje += `-Error al subir las fotos pendientes de la ot: ${objeto.ot} y la línea: ${objeto.lineaActividad}-`;
+              }
+            } else if (tipoVector == "firmas") {
+              solicitud = await subirFirmas(jsonObjeto);
+              if (!solicitud) {
+                mensaje += `-Error al subir las firmas pendientes de la ot: ${objeto.ot} y la línea: ${objeto.lineaActividad}-`;
+              }
+            } else if (tipoVector == "notas") {
+              solicitud = await subirNota(jsonObjeto);
+              if (!solicitud) {
+                mensaje += `-Error al subir las notas pendientes de la ot: ${objeto.ot} y la línea: ${objeto.linea}-`;
+              }
             }
-        });
+          }
+          if (tipoVector == "lineas") {
+            vaciarStore = await limpiarDatos("dosxdos", "peticionesLineas");
+            mensaje += "-Datos pendientes enviados al servidor-";
+          } else if (tipoVector == "fotos") {
+            vaciarStore = await limpiarDatos("dosxdos", "peticionesFotos");
+            mensaje += "-Fotos pendientes subidas al servidor-";
+          } else if (tipoVector == "firmas") {
+            vaciarStore = await limpiarDatos("dosxdos", "peticionesFirmas");
+            mensaje += "-Firmas pendientes subidas al servidor-";
+          } else if (tipoVector == "notas") {
+            vaciarStore = await limpiarDatos("dosxdos", "notas");
+            mensaje += "-Notas pendientes subidas al servidor-";
+          }
+          resolve(mensaje);
+        } catch (err) {
+          console.error(err);
+          alerta(err.message);
+          scrollToTop();
+          reject(err);
+        }
+      });
     }
 
     async function procesarPeticiones() {
-        try {
-            loaderOn();
-            mensaje = '';
-            const exPeticionesLineas = await almacenVacio('dosxdos', 'peticionesLineas');
-            if (!exPeticionesLineas) {
-                const peticionesLineas = await leerDatos('dosxdos', 'peticionesLineas');
-                if (peticionesLineas) {
-                    //console.log(peticionesLineas);
-                    const enviarPeticionesLineas = await enviarPeticiones(peticionesLineas, 'lineas')
-                    if (enviarPeticionesLineas) {
-                        mensaje += enviarPeticionesLineas;
-                    }
-                } else {
-                    mensaje += '-Error al leer las peticiones de las líneas. Las peticiones pendientes de las líneas no han sido procesadas-'
-                }
+      try {
+        loaderOn();
+        mensaje = "";
+        const exPeticionesLineas = await almacenVacio(
+          "dosxdos",
+          "peticionesLineas"
+        );
+        if (!exPeticionesLineas) {
+          const peticionesLineas = await leerDatos(
+            "dosxdos",
+            "peticionesLineas"
+          );
+          if (peticionesLineas) {
+            //console.log(peticionesLineas);
+            const enviarPeticionesLineas = await enviarPeticiones(
+              peticionesLineas,
+              "lineas"
+            );
+            if (enviarPeticionesLineas) {
+              mensaje += enviarPeticionesLineas;
             }
-            const exPeticionesFotos = await almacenVacio('dosxdos', 'peticionesFotos');
-            if (!exPeticionesFotos) {
-                const peticionesFotos = await leerDatos('dosxdos', 'peticionesFotos');
-                if (peticionesFotos) {
-                    //console.log(peticionesFotos);
-                    const enviarPeticionesFotos = await enviarPeticiones(peticionesFotos, 'fotos')
-                    if (enviarPeticionesFotos) {
-                        mensaje += enviarPeticionesFotos;
-                    }
-                } else {
-                    mensaje += '-Error al leer las peticiones de las fotos. Las peticiones pendientes de las fotos no han sido procesadas-'
-                }
-            }
-            const exPeticionesFirmas = await almacenVacio('dosxdos', 'peticionesFirmas');
-            if (!exPeticionesFirmas) {
-                const peticionesFirmas = await leerDatos('dosxdos', 'peticionesFirmas');
-                if (peticionesFirmas) {
-                    //console.log(peticionesFirmas);
-                    const enviarPeticionesFirmas = await enviarPeticiones(peticionesFirmas, 'firmas')
-                    if (enviarPeticionesFirmas) {
-                        mensaje += enviarPeticionesFirmas;
-                    }
-                } else {
-                    mensaje += '-Error al leer las peticiones de las firmas. Las peticiones pendientes de las firmas no han sido procesadas-'
-                }
-            }
-            const exPeticionesNotas = await almacenVacio('dosxdos', 'notas');
-            if (!exPeticionesNotas) {
-                const peticionesNotas = await leerDatos('dosxdos', 'notas');
-                if (peticionesNotas) {
-                    //console.log(peticionesFirmas);
-                    const enviarPeticionesNotas = await enviarPeticiones(peticionesNotas, 'notas')
-                    if (enviarPeticionesNotas) {
-                        mensaje += enviarPeticionesNotas;
-                    }
-                } else {
-                    mensaje += '-Error al leer las peticiones de las notas. Las peticiones pendientes de las notas no han sido procesadas-'
-                }
-            }
-            if (!mensaje) {
-                mensaje = 'No hay datos pendientes para ser enviados al servidor'
-            }
-            const sincronizarBaseDatos = await sincronizarDb2();
-            if (sincronizarBaseDatos) {
-                mensaje += '-Se ha sincronizado la base de datos exitosamente-'
-            } else {
-                mensaje += '-Error: No ha sido posible sincronizar la base de datos-'
-            }
-            localStorage.setItem('mensaje', mensaje);
-            location.reload();
-            /*alerta(mensaje);
-            scrollToTop();*/
-        } catch (error) {
-            console.error(error);
-            alerta(error.message);
-            scrollToTop();
+          } else {
+            mensaje +=
+              "-Error al leer las peticiones de las líneas. Las peticiones pendientes de las líneas no han sido procesadas-";
+          }
         }
+        const exPeticionesFotos = await almacenVacio(
+          "dosxdos",
+          "peticionesFotos"
+        );
+        if (!exPeticionesFotos) {
+          const peticionesFotos = await leerDatos("dosxdos", "peticionesFotos");
+          if (peticionesFotos) {
+            //console.log(peticionesFotos);
+            const enviarPeticionesFotos = await enviarPeticiones(
+              peticionesFotos,
+              "fotos"
+            );
+            if (enviarPeticionesFotos) {
+              mensaje += enviarPeticionesFotos;
+            }
+          } else {
+            mensaje +=
+              "-Error al leer las peticiones de las fotos. Las peticiones pendientes de las fotos no han sido procesadas-";
+          }
+        }
+        const exPeticionesFirmas = await almacenVacio(
+          "dosxdos",
+          "peticionesFirmas"
+        );
+        if (!exPeticionesFirmas) {
+          const peticionesFirmas = await leerDatos(
+            "dosxdos",
+            "peticionesFirmas"
+          );
+          if (peticionesFirmas) {
+            //console.log(peticionesFirmas);
+            const enviarPeticionesFirmas = await enviarPeticiones(
+              peticionesFirmas,
+              "firmas"
+            );
+            if (enviarPeticionesFirmas) {
+              mensaje += enviarPeticionesFirmas;
+            }
+          } else {
+            mensaje +=
+              "-Error al leer las peticiones de las firmas. Las peticiones pendientes de las firmas no han sido procesadas-";
+          }
+        }
+        const exPeticionesNotas = await almacenVacio("dosxdos", "notas");
+        if (!exPeticionesNotas) {
+          const peticionesNotas = await leerDatos("dosxdos", "notas");
+          if (peticionesNotas) {
+            //console.log(peticionesFirmas);
+            const enviarPeticionesNotas = await enviarPeticiones(
+              peticionesNotas,
+              "notas"
+            );
+            if (enviarPeticionesNotas) {
+              mensaje += enviarPeticionesNotas;
+            }
+          } else {
+            mensaje +=
+              "-Error al leer las peticiones de las notas. Las peticiones pendientes de las notas no han sido procesadas-";
+          }
+        }
+        if (!mensaje) {
+          mensaje = "No hay datos pendientes para ser enviados al servidor";
+        }
+        const sincronizarBaseDatos = await sincronizarDb2();
+        if (sincronizarBaseDatos) {
+          mensaje += "-Se ha sincronizado la base de datos exitosamente-";
+        } else {
+          mensaje += "-Error: No ha sido posible sincronizar la base de datos-";
+        }
+        localStorage.setItem("mensaje", mensaje);
+        location.reload();
+        /*alerta(mensaje);
+            scrollToTop();*/
+      } catch (error) {
+        console.error(error);
+        alerta(error.message);
+        scrollToTop();
+      }
     }
 
     async function procesarPeticiones2(mensaje) {
-        try {
-            if (mensaje == null) {
-                mensaje = '';
-            }
-            const exPeticionesLineas = await almacenVacio('dosxdos', 'peticionesLineas');
-            if (!exPeticionesLineas) {
-                const peticionesLineas = await leerDatos('dosxdos', 'peticionesLineas');
-                if (peticionesLineas) {
-                    //console.log(peticionesLineas);
-                    const enviarPeticionesLineas = await enviarPeticiones(peticionesLineas, 'lineas')
-                    if (enviarPeticionesLineas) {
-                        mensaje += enviarPeticionesLineas;
-                    }
-                } else {
-                    mensaje += '-Error al leer las peticiones de las líneas. Las peticiones pendientes de las líneas no han sido procesadas-'
-                }
-            }
-            const exPeticionesFotos = await almacenVacio('dosxdos', 'peticionesFotos');
-            if (!exPeticionesFotos) {
-                const peticionesFotos = await leerDatos('dosxdos', 'peticionesFotos');
-                if (peticionesFotos) {
-                    //console.log(peticionesFotos);
-                    const enviarPeticionesFotos = await enviarPeticiones(peticionesFotos, 'fotos')
-                    if (enviarPeticionesFotos) {
-                        mensaje += enviarPeticionesFotos;
-                    }
-                } else {
-                    mensaje += '-Error al leer las peticiones de las fotos. Las peticiones pendientes de las fotos no han sido procesadas-'
-                }
-            }
-            const exPeticionesFirmas = await almacenVacio('dosxdos', 'peticionesFirmas');
-            if (!exPeticionesFirmas) {
-                const peticionesFirmas = await leerDatos('dosxdos', 'peticionesFirmas');
-                if (peticionesFirmas) {
-                    //console.log(peticionesFirmas);
-                    const enviarPeticionesFirmas = await enviarPeticiones(peticionesFirmas, 'firmas')
-                    if (enviarPeticionesFirmas) {
-                        mensaje += enviarPeticionesFirmas;
-                    }
-                } else {
-                    mensaje += '-Error al leer las peticiones de las firmas. Las peticiones pendientes de las firmas no han sido procesadas-'
-                }
-            }
-            const exPeticionesNotas = await almacenVacio('dosxdos', 'notas');
-            if (!exPeticionesNotas) {
-                const peticionesNotas = await leerDatos('dosxdos', 'notas');
-                if (peticionesNotas) {
-                    //console.log(peticionesFirmas);
-                    const enviarPeticionesNotas = await enviarPeticiones(peticionesNotas, 'notas')
-                    if (enviarPeticionesNotas) {
-                        mensaje += enviarPeticionesNotas;
-                    }
-                } else {
-                    mensaje += '-Error al leer las peticiones de las notas. Las peticiones pendientes de las notas no han sido procesadas-'
-                }
-            }
-            if (mensaje) {
-                alerta(mensaje);
-                scrollToTop();
-            }
-        } catch (error) {
-            console.error(error);
-            alerta(error.message);
-            scrollToTop();
+      try {
+        if (mensaje == null) {
+          mensaje = "";
         }
+        const exPeticionesLineas = await almacenVacio(
+          "dosxdos",
+          "peticionesLineas"
+        );
+        if (!exPeticionesLineas) {
+          const peticionesLineas = await leerDatos(
+            "dosxdos",
+            "peticionesLineas"
+          );
+          if (peticionesLineas) {
+            //console.log(peticionesLineas);
+            const enviarPeticionesLineas = await enviarPeticiones(
+              peticionesLineas,
+              "lineas"
+            );
+            if (enviarPeticionesLineas) {
+              mensaje += enviarPeticionesLineas;
+            }
+          } else {
+            mensaje +=
+              "-Error al leer las peticiones de las líneas. Las peticiones pendientes de las líneas no han sido procesadas-";
+          }
+        }
+        const exPeticionesFotos = await almacenVacio(
+          "dosxdos",
+          "peticionesFotos"
+        );
+        if (!exPeticionesFotos) {
+          const peticionesFotos = await leerDatos("dosxdos", "peticionesFotos");
+          if (peticionesFotos) {
+            //console.log(peticionesFotos);
+            const enviarPeticionesFotos = await enviarPeticiones(
+              peticionesFotos,
+              "fotos"
+            );
+            if (enviarPeticionesFotos) {
+              mensaje += enviarPeticionesFotos;
+            }
+          } else {
+            mensaje +=
+              "-Error al leer las peticiones de las fotos. Las peticiones pendientes de las fotos no han sido procesadas-";
+          }
+        }
+        const exPeticionesFirmas = await almacenVacio(
+          "dosxdos",
+          "peticionesFirmas"
+        );
+        if (!exPeticionesFirmas) {
+          const peticionesFirmas = await leerDatos(
+            "dosxdos",
+            "peticionesFirmas"
+          );
+          if (peticionesFirmas) {
+            //console.log(peticionesFirmas);
+            const enviarPeticionesFirmas = await enviarPeticiones(
+              peticionesFirmas,
+              "firmas"
+            );
+            if (enviarPeticionesFirmas) {
+              mensaje += enviarPeticionesFirmas;
+            }
+          } else {
+            mensaje +=
+              "-Error al leer las peticiones de las firmas. Las peticiones pendientes de las firmas no han sido procesadas-";
+          }
+        }
+        const exPeticionesNotas = await almacenVacio("dosxdos", "notas");
+        if (!exPeticionesNotas) {
+          const peticionesNotas = await leerDatos("dosxdos", "notas");
+          if (peticionesNotas) {
+            //console.log(peticionesFirmas);
+            const enviarPeticionesNotas = await enviarPeticiones(
+              peticionesNotas,
+              "notas"
+            );
+            if (enviarPeticionesNotas) {
+              mensaje += enviarPeticionesNotas;
+            }
+          } else {
+            mensaje +=
+              "-Error al leer las peticiones de las notas. Las peticiones pendientes de las notas no han sido procesadas-";
+          }
+        }
+        if (mensaje) {
+          alerta(mensaje);
+          scrollToTop();
+        }
+      } catch (error) {
+        console.error(error);
+        alerta(error.message);
+        scrollToTop();
+      }
     }
 
     /* TAREAS EN LA INTERMITENCIA DE LA CONEXIÓN */
 
-    window.addEventListener('online', () => {
-        console.log('La conexión a Internet se ha recuperado.');
-        //cache();
-        procesarPeticiones();
+    window.addEventListener("online", () => {
+      console.log("La conexión a Internet se ha recuperado.");
+      //cache();
+      procesarPeticiones();
     });
 
-    window.addEventListener('offline', () => {
-        console.log('La conexión a Internet se ha perdido.');
+    window.addEventListener("offline", () => {
+      console.log("La conexión a Internet se ha perdido.");
     });
 
     /* PAGESHOW */
-    window.addEventListener('pageshow', (e) => {
-        console.log('Carga completa de los elementos de la página no fetch');
-        let mensaje = localStorage.getItem('mensaje');
-        if (mensaje && mensaje !== null) {
-            alerta(mensaje);
-            localStorage.removeItem('mensaje');
-        }
-        let login = localStorage.getItem('login');
-        if (!login || login === null) {
-            window.location.href = "https://dosxdos.app.iidos.com/index.html";
-        }
-    })
+    window.addEventListener("pageshow", (e) => {
+      console.log("Carga completa de los elementos de la página no fetch");
+      let mensaje = localStorage.getItem("mensaje");
+      if (mensaje && mensaje !== null) {
+        alerta(mensaje);
+        localStorage.removeItem("mensaje");
+      }
+      let login = localStorage.getItem("login");
+      if (!login || login === null) {
+        window.location.href = "http://localhost/dosxdos_app/index.html";
+      }
+    });
 
     /* TAREAS AL INICIAR LA PANTALLA CON EL ESTADO DE LA CONEXIÓN */
 
     if (navigator.onLine) {
-        console.log('La aplicación está en línea.');
-        //cache();
-        appOnline();
+      console.log("La aplicación está en línea.");
+      //cache();
+      appOnline();
     } else {
-        console.log('La aplicación está fuera de línea.');
-        appOffline();
+      console.log("La aplicación está fuera de línea.");
+      appOffline();
     }
 
     // MENU AND USER INTERACTION SETUP
     function setupMenuInteractions() {
-        console.log("Setting up menu interactions...");
+      console.log("Setting up menu interactions...");
 
-        // Desktop Menu
-        const userMenuButton = document.getElementById("userMenuButton");
-        const userDropdownMenu = document.getElementById("userDropdownMenu");
+      // Desktop Menu
+      const userMenuButton = document.getElementById("userMenuButton");
+      const userDropdownMenu = document.getElementById("userDropdownMenu");
 
-        if (userMenuButton && userDropdownMenu) {
-            console.log("Setting up desktop menu button listener");
-            userMenuButton.addEventListener("click", (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                userDropdownMenu.classList.toggle("hidden");
-                const isExpanded = !userDropdownMenu.classList.contains("hidden");
-                userMenuButton.setAttribute("aria-expanded", isExpanded.toString());
-            });
-        } else {
-            console.warn(
-                "Could not find userMenuButton or userDropdownMenu elements"
-            );
-        }
-
-        // Mobile Menu Links
-        const mobileMenuLinks = document.querySelectorAll("#mobileMenu nav a");
-        mobileMenuLinks.forEach((link) => {
-            link.addEventListener("click", (e) => {
-                e.stopPropagation();
-                window.location.href = link.href;
-                const menuButton = document.getElementById("menuButton");
-                if (menuButton) menuButton.click(); // Close menu after clicking
-            });
+      if (userMenuButton && userDropdownMenu) {
+        console.log("Setting up desktop menu button listener");
+        userMenuButton.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          userDropdownMenu.classList.toggle("hidden");
+          const isExpanded = !userDropdownMenu.classList.contains("hidden");
+          userMenuButton.setAttribute("aria-expanded", isExpanded.toString());
         });
+      } else {
+        console.warn(
+          "Could not find userMenuButton or userDropdownMenu elements"
+        );
+      }
 
-        // Mobile Menu Toggle
-        const menuButton = document.getElementById("menuButton");
-        const mobileMenu = document.getElementById("mobileMenu");
-        const hamburgerTop = document.getElementById("hamburgerTop");
-        const hamburgerMiddle = document.getElementById("hamburgerMiddle");
-        const hamburgerBottom = document.getElementById("hamburgerBottom");
+      // Mobile Menu Links
+      const mobileMenuLinks = document.querySelectorAll("#mobileMenu nav a");
+      mobileMenuLinks.forEach((link) => {
+        link.addEventListener("click", (e) => {
+          e.stopPropagation();
+          window.location.href = link.href;
+          const menuButton = document.getElementById("menuButton");
+          if (menuButton) menuButton.click(); // Close menu after clicking
+        });
+      });
 
-        if (menuButton && mobileMenu) {
-            console.log("Setting up mobile menu button listener");
-            menuButton.addEventListener("click", (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                const isOpen = !mobileMenu.classList.contains("translate-x-full");
-                mobileMenu.classList.toggle("translate-x-full");
-                document.body.classList.toggle("overflow-hidden");
+      // Mobile Menu Toggle
+      const menuButton = document.getElementById("menuButton");
+      const mobileMenu = document.getElementById("mobileMenu");
+      const hamburgerTop = document.getElementById("hamburgerTop");
+      const hamburgerMiddle = document.getElementById("hamburgerMiddle");
+      const hamburgerBottom = document.getElementById("hamburgerBottom");
 
-                if (!isOpen) {
-                    // Menu is opening
-                    hamburgerTop.classList.remove("bg-gray-900");
-                    hamburgerMiddle.classList.remove("bg-gray-900");
-                    hamburgerBottom.classList.remove("bg-gray-900");
-                    hamburgerTop.classList.add("bg-white");
-                    hamburgerMiddle.classList.add("bg-white");
-                    hamburgerBottom.classList.add("bg-white");
+      if (menuButton && mobileMenu) {
+        console.log("Setting up mobile menu button listener");
+        menuButton.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const isOpen = !mobileMenu.classList.contains("translate-x-full");
+          mobileMenu.classList.toggle("translate-x-full");
+          document.body.classList.toggle("overflow-hidden");
 
-                    hamburgerTop.style.transform = "rotate(45deg) translate(10px, 7px)";
-                    hamburgerMiddle.style.opacity = "0";
-                    hamburgerBottom.style.transform =
-                        "rotate(-45deg) translate(10px, -7px)";
-                } else {
-                    // Menu is closing
-                    hamburgerTop.classList.remove("bg-white");
-                    hamburgerMiddle.classList.remove("bg-white");
-                    hamburgerBottom.classList.remove("bg-white");
-                    hamburgerTop.classList.add("bg-gray-900");
-                    hamburgerMiddle.classList.add("bg-gray-900");
-                    hamburgerBottom.classList.add("bg-gray-900");
+          if (!isOpen) {
+            // Menu is opening
+            hamburgerTop.classList.remove("bg-gray-900");
+            hamburgerMiddle.classList.remove("bg-gray-900");
+            hamburgerBottom.classList.remove("bg-gray-900");
+            hamburgerTop.classList.add("bg-white");
+            hamburgerMiddle.classList.add("bg-white");
+            hamburgerBottom.classList.add("bg-white");
 
-                    hamburgerTop.style.transform = "";
-                    hamburgerMiddle.style.opacity = "1";
-                    hamburgerBottom.style.transform = "";
-                }
-            });
-        } else {
-            console.warn("Could not find menuButton or mobileMenu elements");
-        }
+            hamburgerTop.style.transform = "rotate(45deg) translate(10px, 7px)";
+            hamburgerMiddle.style.opacity = "0";
+            hamburgerBottom.style.transform =
+              "rotate(-45deg) translate(10px, -7px)";
+          } else {
+            // Menu is closing
+            hamburgerTop.classList.remove("bg-white");
+            hamburgerMiddle.classList.remove("bg-white");
+            hamburgerBottom.classList.remove("bg-white");
+            hamburgerTop.classList.add("bg-gray-900");
+            hamburgerMiddle.classList.add("bg-gray-900");
+            hamburgerBottom.classList.add("bg-gray-900");
+
+            hamburgerTop.style.transform = "";
+            hamburgerMiddle.style.opacity = "1";
+            hamburgerBottom.style.transform = "";
+          }
+        });
+      } else {
+        console.warn("Could not find menuButton or mobileMenu elements");
+      }
     }
 
     // USER EDIT AND LOGOUT SETUP
     function setupUserActions() {
-        // Edit User Buttons
-        const editarUsuarioDesktop = document.getElementById(
-            "editarUsuarioDesktop"
-        );
-        const editarUsuarioMobile = document.getElementById(
-            "editarUsuarioMobile"
-        );
+      // Edit User Buttons
+      const editarUsuarioDesktop = document.getElementById(
+        "editarUsuarioDesktop"
+      );
+      const editarUsuarioMobile = document.getElementById(
+        "editarUsuarioMobile"
+      );
 
-        [editarUsuarioDesktop, editarUsuarioMobile].forEach((button) => {
-            if (button) {
-                button.addEventListener("click", (e) => {
-                    if (navigator.onLine) {
-                        window.location.href = `https://dosxdos.app.iidos.com/dosxdos.php?modulo=editarUsuario&id=${usuario.id}`;
-                    } else {
-                        alerta(
-                            "No es posible acceder a las opciones de edición de usuario sin conexión a internet"
-                        );
-                        scrollToTop();
-                    }
-                });
+      [editarUsuarioDesktop, editarUsuarioMobile].forEach((button) => {
+        if (button) {
+          button.addEventListener("click", (e) => {
+            if (navigator.onLine) {
+              window.location.href = `http://localhost/dosxdos_app/dosxdos.php?modulo=editarUsuario&id=${usuario.id}`;
+            } else {
+              alerta(
+                "No es posible acceder a las opciones de edición de usuario sin conexión a internet"
+              );
+              scrollToTop();
             }
-        });
+          });
+        }
+      });
 
-        // Logout Buttons
-        const cerrarSesionDesktop = document.getElementById(
-            "cerrarSesionDesktop"
-        );
-        const cerrarSesionMobile = document.getElementById("cerrarSesionMobile");
+      // Logout Buttons
+      const cerrarSesionDesktop = document.getElementById(
+        "cerrarSesionDesktop"
+      );
+      const cerrarSesionMobile = document.getElementById("cerrarSesionMobile");
 
-        [cerrarSesionDesktop, cerrarSesionMobile].forEach((button) => {
-            if (button) {
-                button.addEventListener("click", () => {
-                    closeSidebar(); // Close the sidebar first
-                    cerrarSesion(); // Then proceed with logout
-                });
-            }
-        });
+      [cerrarSesionDesktop, cerrarSesionMobile].forEach((button) => {
+        if (button) {
+          button.addEventListener("click", () => {
+            closeSidebar(); // Close the sidebar first
+            cerrarSesion(); // Then proceed with logout
+          });
+        }
+      });
     }
 
     // GLOBAL MENU CLOSING LOGIC
     function setupGlobalMenuClosing() {
-        // Close menus when clicking outside
-        document.addEventListener("click", (e) => {
-            const userMenuButton = document.getElementById("userMenuButton");
-            const userDropdownMenu = document.getElementById("userDropdownMenu");
-            const menuButton = document.getElementById("menuButton");
-            const mobileMenu = document.getElementById("mobileMenu");
+      // Close menus when clicking outside
+      document.addEventListener("click", (e) => {
+        const userMenuButton = document.getElementById("userMenuButton");
+        const userDropdownMenu = document.getElementById("userDropdownMenu");
+        const menuButton = document.getElementById("menuButton");
+        const mobileMenu = document.getElementById("mobileMenu");
 
-            // Close desktop dropdown if clicking outside
-            if (
-                userMenuButton &&
-                userDropdownMenu &&
-                !userMenuButton.contains(e.target) &&
-                !userDropdownMenu.contains(e.target)
-            ) {
-                userDropdownMenu.classList.add("hidden");
-                userMenuButton.setAttribute("aria-expanded", "false");
-            }
+        // Close desktop dropdown if clicking outside
+        if (
+          userMenuButton &&
+          userDropdownMenu &&
+          !userMenuButton.contains(e.target) &&
+          !userDropdownMenu.contains(e.target)
+        ) {
+          userDropdownMenu.classList.add("hidden");
+          userMenuButton.setAttribute("aria-expanded", "false");
+        }
 
-            // Close mobile menu if clicking outside
-            if (
-                mobileMenu &&
-                menuButton &&
-                !mobileMenu.contains(e.target) &&
-                !menuButton.contains(e.target) &&
-                !mobileMenu.classList.contains("translate-x-full")
-            ) {
-                menuButton.click();
-            }
-        });
+        // Close mobile menu if clicking outside
+        if (
+          mobileMenu &&
+          menuButton &&
+          !mobileMenu.contains(e.target) &&
+          !menuButton.contains(e.target) &&
+          !mobileMenu.classList.contains("translate-x-full")
+        ) {
+          menuButton.click();
+        }
+      });
     }
 
     // INITIALIZATION FUNCTION
     function initializeApplication() {
-        // Set up menu interactions
-        setupMenuInteractions();
-        setupUserActions();
-        setupGlobalMenuClosing();
+      // Set up menu interactions
+      setupMenuInteractions();
+      setupUserActions();
+      setupGlobalMenuClosing();
 
-        // Populate user information if available
-        if (usuario && usuario.nombre) {
-            const nombreUsuarioDesktop = document.getElementById(
-                "nombreUsuarioDesktop"
-            );
-            const nombreUsuarioMobile = document.getElementById(
-                "nombreUsuarioMobile"
-            );
-            const imagenUsuarioDesktop = document.getElementById(
-                "imagenUsuarioDesktop"
-            );
-            const imagenUsuarioMobile = document.getElementById(
-                "imagenUsuarioMobile"
-            );
+      // Populate user information if available
+      if (usuario && usuario.nombre) {
+        const nombreUsuarioDesktop = document.getElementById(
+          "nombreUsuarioDesktop"
+        );
+        const nombreUsuarioMobile = document.getElementById(
+          "nombreUsuarioMobile"
+        );
+        const imagenUsuarioDesktop = document.getElementById(
+          "imagenUsuarioDesktop"
+        );
+        const imagenUsuarioMobile = document.getElementById(
+          "imagenUsuarioMobile"
+        );
 
-            // Update usernames
-            if (nombreUsuarioDesktop)
-                nombreUsuarioDesktop.textContent = usuario.nombre;
-            if (nombreUsuarioMobile)
-                nombreUsuarioMobile.textContent = usuario.nombre;
+        // Update usernames
+        if (nombreUsuarioDesktop)
+          nombreUsuarioDesktop.textContent = usuario.nombre;
+        if (nombreUsuarioMobile)
+          nombreUsuarioMobile.textContent = usuario.nombre;
 
-            // Update profile images
-            if (usuario.imagen !== "0") {
-                if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
-                if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
-            }
+        // Update profile images
+        if (usuario.imagen !== "0") {
+          if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
+          if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
         }
+      }
     }
-
-</script>
-<script src="https://dosxdos.app.iidos.com/js/notificaciones.js"></script>
-<script src="https://dosxdos.app.iidos.com/js/loadFirebase.js"></script>
-
+  </script>
+  <script src="http://localhost/dosxdos_app/js/notificaciones.js"></script>
+  <script src="http://localhost/dosxdos_app/js/loadFirebase.js"></script>
 </html>

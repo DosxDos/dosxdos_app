@@ -1,670 +1,728 @@
 <!DOCTYPE html>
 <html lang="es">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gastos Rutas</title>
-  <style>
-    * {
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    #loader {
-      width: 100vw;
-      height: 100vh;
-      position: absolute;
-      top: 0;
-      z-index: 6000;
-      background-color: rgba(0, 0, 0, 0.886);
-      justify-content: center;
-      align-items: center;
-    }
-
-    .loader {
-      border: 4px solid #ffffff;
-      border-top: 4px solid #d31216;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      0% {
-        transform: rotate(0deg);
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gastos Rutas</title>
+    <style>
+      * {
+        -webkit-tap-highlight-color: transparent;
       }
 
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-
-    .displayOff {
-      display: none;
-    }
-
-    .displayOn {
-      display: flex;
-    }
-
-    body {
-      overflow-x: hidden;
-    }
-
-    .oyh {
-      overflow-y: hidden;
-    }
-
-    /* Message */
-    .message-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: rgba(0, 0, 0, 0.6);
-      z-index: 1000;
-    }
-
-    .fade {
-      animation: fade 0.5s;
-    }
-
-    @keyframes fade {
-      from {
-        opacity: 0;
+      #loader {
+        width: 100vw;
+        height: 100vh;
+        position: absolute;
+        top: 0;
+        z-index: 6000;
+        background-color: rgba(0, 0, 0, 0.886);
+        justify-content: center;
+        align-items: center;
       }
 
-      to {
-        opacity: 1;
+      .loader {
+        border: 4px solid #ffffff;
+        border-top: 4px solid #d31216;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
       }
-    }
 
-    .feedback {
-      color: #d31216;
-      font-size: 14px;
-      margin-top: 5px;
-    }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
 
-    .checkbox-item label {
-      margin-left: 8px;
-    }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
 
-    .selected-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 8px;
-    }
+      .displayOff {
+        display: none;
+      }
 
-    .tag {
-      background-color: #f1f1f1;
-      padding: 5px 10px;
-      border-radius: 20px;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
+      .displayOn {
+        display: flex;
+      }
 
-    .tag .tag-close {
-      cursor: pointer;
-      font-weight: bold;
-      color: #d31216;
-    }
+      body {
+        overflow-x: hidden;
+      }
 
-    #volver {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      background-color: #d31216;
-      padding: 12px;
-      border-radius: 20%;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 3001;
-    }
+      .oyh {
+        overflow-y: hidden;
+      }
 
-    #volver img {
-      width: 24px;
-      height: 24px;
-    }
+      /* Message */
+      .message-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(0, 0, 0, 0.6);
+        z-index: 1000;
+      }
 
-    /* Results Table Styles */
+      .fade {
+        animation: fade 0.5s;
+      }
 
-    .table-container {
-      max-height: calc(100vh - 200px);
-      overflow-y: auto;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      margin-bottom: 20px;
-      padding: 40px;
-    }
+      @keyframes fade {
+        from {
+          opacity: 0;
+        }
 
-    .error-message {
-      color: #d31216;
-      font-weight: bold;
-      margin-bottom: 20px;
-    }
+        to {
+          opacity: 1;
+        }
+      }
 
-    .results-table {
-      width: 85%;
-      margin-inline: auto;
-      margin: 20px auto;
-      border-collapse: collapse;
-    }
+      .feedback {
+        color: #d31216;
+        font-size: 14px;
+        margin-top: 5px;
+      }
 
-    .results-table th,
-    .results-table td {
-      border: 1px solid #ddd;
-      padding: 15px;
-      text-align: center;
-    }
+      .checkbox-item label {
+        margin-left: 8px;
+      }
 
-    .results-table thead th {
-      position: sticky;
-      background-color: #d31216;
-      color: white;
-      font-weight: bold;
-      text-transform: uppercase;
-    }
+      .selected-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 8px;
+      }
 
-    .results-table th {
-      position: sticky;
-      top: 0;
-      background-color: #d31216;
-      z-index: 10;
-    }
+      .tag {
+        background-color: #f1f1f1;
+        padding: 5px 10px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
 
-    .results-table tbody tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
+      .tag .tag-close {
+        cursor: pointer;
+        font-weight: bold;
+        color: #d31216;
+      }
 
-    .results-table tfoot td {
-      font-weight: bold;
-      background-color: #eee;
-    }
+      #volver {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background-color: #d31216;
+        padding: 12px;
+        border-radius: 20%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 3001;
+      }
 
-    .action-buttons {
-      display: flex;
-      gap: 15px;
-      margin-top: 20px;
-    }
+      #volver img {
+        width: 24px;
+        height: 24px;
+      }
 
-    .action-buttons button {
-      padding: 12px 25px;
-      font-size: 16px;
-      border: none;
-      cursor: pointer;
-      border-radius: 5px;
-      transition: all 0.2s;
-    }
+      /* Results Table Styles */
 
-    .action-buttons button:hover {
-      transform: scale(1.05);
-    }
-  </style>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
+      .table-container {
+        max-height: calc(100vh - 200px);
+        overflow-y: auto;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin-bottom: 20px;
+        padding: 40px;
+      }
 
-<body id="body" class="bg-gray-100 text-black p-5 flex flex-col justify-center items-center my-auto">
-  <div id="loader" class="displayOn">
-    <span class="loader"></span>
-  </div>
+      .error-message {
+        color: #d31216;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
 
-  <div id="volver" onclick="goBack()"
-    class="absolute top-5 left-5 flex items-center bg-red-600 p-3 rounded-[20%] cursor-pointer hover:bg-red-700">
-    <img src="https://dosxdos.app.iidos.com/img/back.png" alt="Volver Icon" class="w-7 h-7" />
-  </div>
+      .results-table {
+        width: 85%;
+        margin-inline: auto;
+        margin: 20px auto;
+        border-collapse: collapse;
+      }
 
-  <h1 id="titulo" class="relative text-4xl mb-8 mt-16 text-black font-bold mx-auto">
-    Gastos Rutas
-  </h1>
+      .results-table th,
+      .results-table td {
+        border: 1px solid #ddd;
+        padding: 15px;
+        text-align: center;
+      }
 
-  <form id="gastosRutasForm" class="w-full max-w-lg mx-auto">
-    <div class="mb-5 w-full">
-      <label for="fechaInicial" class="block text-lg mb-2 font-semibold">Fecha Inicial</label>
-      <input type="date" id="fechaInicial" name="fechaInicial" required
-        class="w-full p-3 border border-gray-300 rounded-lg" />
-      <div id="fechaInicialFeedback" class="feedback"></div>
+      .results-table thead th {
+        position: sticky;
+        background-color: #d31216;
+        color: white;
+        font-weight: bold;
+        text-transform: uppercase;
+      }
+
+      .results-table th {
+        position: sticky;
+        top: 0;
+        background-color: #d31216;
+        z-index: 10;
+      }
+
+      .results-table tbody tr:nth-child(even) {
+        background-color: #f9f9f9;
+      }
+
+      .results-table tfoot td {
+        font-weight: bold;
+        background-color: #eee;
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+      }
+
+      .action-buttons button {
+        padding: 12px 25px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: all 0.2s;
+      }
+
+      .action-buttons button:hover {
+        transform: scale(1.05);
+      }
+    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body
+    id="body"
+    class="bg-gray-100 text-black p-5 flex flex-col justify-center items-center my-auto"
+  >
+    <div id="loader" class="displayOn">
+      <span class="loader"></span>
     </div>
 
-    <div class="mb-5 w-full">
-      <label for="fechaFinal" class="block text-lg mb-2 font-semibold">Fecha Final</label>
-      <input type="date" id="fechaFinal" name="fechaFinal" required
-        class="w-full p-3 border border-gray-300 rounded-lg" />
-      <div id="fechaFinalFeedback" class="feedback"></div>
+    <div
+      id="volver"
+      onclick="goBack()"
+      class="absolute top-5 left-5 flex items-center bg-red-600 p-3 rounded-[20%] cursor-pointer hover:bg-red-700"
+    >
+      <img
+        src="http://localhost/dosxdos_app/img/back.png"
+        alt="Volver Icon"
+        class="w-7 h-7"
+      />
     </div>
 
-    <div class="mb-5 w-full">
-      <label class="block text-lg font-semibold">Rutas</label>
-      <div class="dropdown">
-        <button type="button" class="dropbtn w-full p-3 bg-red-600 text-white rounded-lg text-left"
-          onclick="toggleDropdown('rutas')">
-          Seleccionar Rutas
-        </button>
-        <div id="rutasContent"
-          class="dropdown-content z-10 w-full bg-white border border-gray-300 rounded-lg mt-1 p-3 hidden">
-          <input type="text" class="search-input w-full p-3 mb-3 border border-gray-300 rounded-lg"
-            id="rutasSearchInput" placeholder="Buscar Rutas..." onkeyup="filterItems('rutas')" />
-          <div id="rutasCheckboxes"></div>
-        </div>
+    <h1
+      id="titulo"
+      class="relative text-4xl mb-8 mt-16 text-black font-bold mx-auto"
+    >
+      Gastos Rutas
+    </h1>
+
+    <form id="gastosRutasForm" class="w-full max-w-lg mx-auto">
+      <div class="mb-5 w-full">
+        <label for="fechaInicial" class="block text-lg mb-2 font-semibold"
+          >Fecha Inicial</label
+        >
+        <input
+          type="date"
+          id="fechaInicial"
+          name="fechaInicial"
+          required
+          class="w-full p-3 border border-gray-300 rounded-lg"
+        />
+        <div id="fechaInicialFeedback" class="feedback"></div>
       </div>
-      <div id="selectedRutas" class="selected-tags"></div>
-      <div id="rutasFeedback" class="feedback"></div>
-    </div>
 
-    <div class="mb-5 w-full">
-      <label class="block text-lg font-semibold">Montadores</label>
-      <div class="dropdown">
-        <button type="button" class="dropbtn w-full p-3 bg-red-600 text-white rounded-lg text-left"
-          onclick="toggleDropdown('montadores')">
-          Seleccionar Montadores
-        </button>
-        <div id="montadoresContent"
-          class="dropdown-content z-10 w-full bg-white border border-gray-300 rounded-lg mt-1 p-3 hidden">
-          <input type="text" class="search-input w-full p-3 mb-3 border border-gray-300 rounded-lg"
-            id="montadoresSearchInput" placeholder="Buscar Montadores..." onkeyup="filterItems('montadores')" />
-          <div id="montadoresCheckboxes"></div>
-        </div>
+      <div class="mb-5 w-full">
+        <label for="fechaFinal" class="block text-lg mb-2 font-semibold"
+          >Fecha Final</label
+        >
+        <input
+          type="date"
+          id="fechaFinal"
+          name="fechaFinal"
+          required
+          class="w-full p-3 border border-gray-300 rounded-lg"
+        />
+        <div id="fechaFinalFeedback" class="feedback"></div>
       </div>
-      <div id="selectedMontadores" class="selected-tags"></div>
-      <div id="montadoresFeedback" class="feedback"></div>
+
+      <div class="mb-5 w-full">
+        <label class="block text-lg font-semibold">Rutas</label>
+        <div class="dropdown">
+          <button
+            type="button"
+            class="dropbtn w-full p-3 bg-red-600 text-white rounded-lg text-left"
+            onclick="toggleDropdown('rutas')"
+          >
+            Seleccionar Rutas
+          </button>
+          <div
+            id="rutasContent"
+            class="dropdown-content z-10 w-full bg-white border border-gray-300 rounded-lg mt-1 p-3 hidden"
+          >
+            <input
+              type="text"
+              class="search-input w-full p-3 mb-3 border border-gray-300 rounded-lg"
+              id="rutasSearchInput"
+              placeholder="Buscar Rutas..."
+              onkeyup="filterItems('rutas')"
+            />
+            <div id="rutasCheckboxes"></div>
+          </div>
+        </div>
+        <div id="selectedRutas" class="selected-tags"></div>
+        <div id="rutasFeedback" class="feedback"></div>
+      </div>
+
+      <div class="mb-5 w-full">
+        <label class="block text-lg font-semibold">Montadores</label>
+        <div class="dropdown">
+          <button
+            type="button"
+            class="dropbtn w-full p-3 bg-red-600 text-white rounded-lg text-left"
+            onclick="toggleDropdown('montadores')"
+          >
+            Seleccionar Montadores
+          </button>
+          <div
+            id="montadoresContent"
+            class="dropdown-content z-10 w-full bg-white border border-gray-300 rounded-lg mt-1 p-3 hidden"
+          >
+            <input
+              type="text"
+              class="search-input w-full p-3 mb-3 border border-gray-300 rounded-lg"
+              id="montadoresSearchInput"
+              placeholder="Buscar Montadores..."
+              onkeyup="filterItems('montadores')"
+            />
+            <div id="montadoresCheckboxes"></div>
+          </div>
+        </div>
+        <div id="selectedMontadores" class="selected-tags"></div>
+        <div id="montadoresFeedback" class="feedback"></div>
+      </div>
+
+      <div class="action-buttons flex gap-5 justify-center mt-5 flex-wrap">
+        <button
+          type="button"
+          id="calcularBtn"
+          class="bg-red-600 text-white px-5 py-3 rounded-lg hover:bg-red-700"
+          onclick="validateForm()"
+        >
+          Calcular
+        </button>
+        <button
+          type="button"
+          id="borrarTodoBtn"
+          class="bg-gray-300 text-black px-5 py-3 rounded-lg hover:bg-gray-400"
+          onclick="clearForm()"
+        >
+          Borrar Todo
+        </button>
+      </div>
+    </form>
+
+    <div id="tableSection" class="hidden">
+      <div class="table-container" id="firstTableContainer"></div>
+      <div class="table-container hidden" id="secondTableContainer"></div>
     </div>
 
-    <div class="action-buttons flex gap-5 justify-center mt-5 flex-wrap">
-      <button type="button" id="calcularBtn" class="bg-red-600 text-white px-5 py-3 rounded-lg hover:bg-red-700"
-        onclick="validateForm()">
-        Calcular
-      </button>
-      <button type="button" id="borrarTodoBtn" class="bg-gray-300 text-black px-5 py-3 rounded-lg hover:bg-gray-400"
-        onclick="clearForm()">
-        Borrar Todo
-      </button>
-    </div>
-  </form>
+    <script>
+      let rutasData = [];
+      let montadoresData = [];
+      const $loader = document.getElementById("loader");
+      const $body = document.getElementById("body");
+      let originalTableData = null;
 
-  <div id="tableSection" class="hidden">
-    <div class="table-container" id="firstTableContainer"></div>
-    <div class="table-container hidden" id="secondTableContainer"></div>
-  </div>
+      function scrollToTop() {
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+      }
 
-  <script>
-    let rutasData = [];
-    let montadoresData = [];
-    const $loader = document.getElementById("loader");
-    const $body = document.getElementById("body");
-    let originalTableData = null;
-
-    function scrollToTop() {
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-    }
-
-    function loaderOn() {
+      function loaderOn() {
         scrollToTop();
         $loader.classList.remove("displayOff");
         $loader.classList.add("displayOn");
-        document.body.style.overflow = 'hidden';
-        document.documentElement.style.overflow = 'hidden';
-        document.body.style.position = 'fixed';
-        document.body.style.width = '100%';
-    }
-
-    function loaderOff() {
-        setTimeout(() => {
-            $loader.classList.remove("displayOn");
-            $loader.classList.add("displayOff");
-            document.body.style.overflow = '';
-            document.documentElement.style.overflow = '';
-            document.body.style.position = '';
-            document.body.style.width = '';
-        }, 1000);
-    }
-
-    function goBack() {
-      window.history.back();
-    }
-
-    function toggleDropdown(type) {
-      const content = document.getElementById(`${type}Content`);
-      const isVisible = content.style.display === "block";
-
-      const dropdowns = document.getElementsByClassName("dropdown-content");
-      Array.from(dropdowns).forEach((dropdown) => {
-        dropdown.style.display = "none";
-      });
-
-      if (!isVisible) {
-        content.style.display = "block";
-        document.getElementById(`${type}SearchInput`).focus();
+        document.body.style.overflow = "hidden";
+        document.documentElement.style.overflow = "hidden";
+        document.body.style.position = "fixed";
+        document.body.style.width = "100%";
       }
-    }
 
-    document.addEventListener("click", function (event) {
-      if (!event.target.closest(".dropdown")) {
+      function loaderOff() {
+        setTimeout(() => {
+          $loader.classList.remove("displayOn");
+          $loader.classList.add("displayOff");
+          document.body.style.overflow = "";
+          document.documentElement.style.overflow = "";
+          document.body.style.position = "";
+          document.body.style.width = "";
+        }, 1000);
+      }
+
+      function goBack() {
+        window.history.back();
+      }
+
+      function toggleDropdown(type) {
+        const content = document.getElementById(`${type}Content`);
+        const isVisible = content.style.display === "block";
+
         const dropdowns = document.getElementsByClassName("dropdown-content");
         Array.from(dropdowns).forEach((dropdown) => {
           dropdown.style.display = "none";
         });
+
+        if (!isVisible) {
+          content.style.display = "block";
+          document.getElementById(`${type}SearchInput`).focus();
+        }
       }
-    });
 
-    document.addEventListener("DOMContentLoaded", () => {
-      loaderOn();
-      Promise.all([
-        fetch("https://dosxdos.app.iidos.com/apirest/rutas.php"),
-        fetch("https://dosxdos.app.iidos.com/apirest/crm.php?montadores"),
-      ])
-        .then(([rutasResponse, montadoresResponse]) =>
-          Promise.all([rutasResponse.json(), montadoresResponse.json()])
-        )
-        .then(([rutasDataResponse, montadoresDataResponse]) => {
-          rutasData = rutasDataResponse[1].sort((a, b) =>
-            a.Name.localeCompare(b.Name)
-          );
-          montadoresData = montadoresDataResponse[1].data.sort((a, b) =>
-            a.Name.localeCompare(b.Name)
-          );
-          populateDropdown("rutas", rutasData);
-          populateDropdown("montadores", montadoresData);
-        })
-        .catch((error) => {
-          console.error("Error fetching data:", error);
-          displayErrorMessage("Error al cargar los datos iniciales");
-        })
-        .finally(() => loaderOff());
-    });
-
-    function populateDropdown(type, items) {
-      const container = document.getElementById(`${type}Checkboxes`);
-      container.innerHTML = "";
-
-      items.forEach((item) => {
-        const div = document.createElement("div");
-        div.className =
-          "checkbox-item flex items-center p-2 cursor-pointer hover:bg-gray-100";
-
-        const checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.id = `${type}-${item.id}`;
-        checkbox.checked = false;
-
-        const label = document.createElement("label");
-        label.htmlFor = `${type}-${item.id}`;
-
-        const fullName =
-          type === "montadores"
-            ? [item.Name, item.Apellido_del_montador]
-              .filter(Boolean)
-              .join(" ")
-            : item.Name;
-
-        label.textContent = fullName;
-
-        div.appendChild(checkbox);
-        div.appendChild(label);
-        container.appendChild(div);
-
-        checkbox.addEventListener("change", () => {
-          if (checkbox.checked) {
-            addTag(type, { ...item, Name: fullName });
-          } else {
-            removeTag(type, item.id);
-          }
-        });
+      document.addEventListener("click", function (event) {
+        if (!event.target.closest(".dropdown")) {
+          const dropdowns = document.getElementsByClassName("dropdown-content");
+          Array.from(dropdowns).forEach((dropdown) => {
+            dropdown.style.display = "none";
+          });
+        }
       });
-    }
 
-    function addTag(type, item) {
-      const container = document.getElementById(
-        `selected${capitalizeFirstLetter(type)}`
-      );
-      const tag = document.createElement("div");
-      tag.className = "tag";
-      tag.dataset.id = `${type}-${item.id}`;
-      tag.innerHTML = `${item.Name} <span class="tag-close" onclick="removeTag('${type}', '${item.id}')">&times;</span>`;
-      container.appendChild(tag);
-    }
+      document.addEventListener("DOMContentLoaded", () => {
+        loaderOn();
+        Promise.all([
+          fetch("http://localhost/dosxdos_app/apirest/rutas.php"),
+          fetch("http://localhost/dosxdos_app/apirest/crm.php?montadores"),
+        ])
+          .then(([rutasResponse, montadoresResponse]) =>
+            Promise.all([rutasResponse.json(), montadoresResponse.json()])
+          )
+          .then(([rutasDataResponse, montadoresDataResponse]) => {
+            rutasData = rutasDataResponse[1].sort((a, b) =>
+              a.Name.localeCompare(b.Name)
+            );
+            montadoresData = montadoresDataResponse[1].data.sort((a, b) =>
+              a.Name.localeCompare(b.Name)
+            );
+            populateDropdown("rutas", rutasData);
+            populateDropdown("montadores", montadoresData);
+          })
+          .catch((error) => {
+            console.error("Error fetching data:", error);
+            displayErrorMessage("Error al cargar los datos iniciales");
+          })
+          .finally(() => loaderOff());
+      });
 
-    function removeTag(type, id) {
-      const container = document.getElementById(
-        `selected${capitalizeFirstLetter(type)}`
-      );
-      const tag = container.querySelector(`div[data-id="${type}-${id}"]`);
-      if (tag) {
-        tag.remove();
-        const checkbox = document.getElementById(`${type}-${id}`);
-        if (checkbox) {
+      function populateDropdown(type, items) {
+        const container = document.getElementById(`${type}Checkboxes`);
+        container.innerHTML = "";
+
+        items.forEach((item) => {
+          const div = document.createElement("div");
+          div.className =
+            "checkbox-item flex items-center p-2 cursor-pointer hover:bg-gray-100";
+
+          const checkbox = document.createElement("input");
+          checkbox.type = "checkbox";
+          checkbox.id = `${type}-${item.id}`;
           checkbox.checked = false;
+
+          const label = document.createElement("label");
+          label.htmlFor = `${type}-${item.id}`;
+
+          const fullName =
+            type === "montadores"
+              ? [item.Name, item.Apellido_del_montador]
+                  .filter(Boolean)
+                  .join(" ")
+              : item.Name;
+
+          label.textContent = fullName;
+
+          div.appendChild(checkbox);
+          div.appendChild(label);
+          container.appendChild(div);
+
+          checkbox.addEventListener("change", () => {
+            if (checkbox.checked) {
+              addTag(type, { ...item, Name: fullName });
+            } else {
+              removeTag(type, item.id);
+            }
+          });
+        });
+      }
+
+      function addTag(type, item) {
+        const container = document.getElementById(
+          `selected${capitalizeFirstLetter(type)}`
+        );
+        const tag = document.createElement("div");
+        tag.className = "tag";
+        tag.dataset.id = `${type}-${item.id}`;
+        tag.innerHTML = `${item.Name} <span class="tag-close" onclick="removeTag('${type}', '${item.id}')">&times;</span>`;
+        container.appendChild(tag);
+      }
+
+      function removeTag(type, id) {
+        const container = document.getElementById(
+          `selected${capitalizeFirstLetter(type)}`
+        );
+        const tag = container.querySelector(`div[data-id="${type}-${id}"]`);
+        if (tag) {
+          tag.remove();
+          const checkbox = document.getElementById(`${type}-${id}`);
+          if (checkbox) {
+            checkbox.checked = false;
+          }
         }
       }
-    }
 
-    function capitalizeFirstLetter(string) {
-      return string.charAt(0).toUpperCase() + string.slice(1);
-    }
+      function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+      }
 
-    function filterItems(type) {
-      const searchInput = document.getElementById(`${type}SearchInput`);
-      const searchTerm = searchInput.value.toLowerCase();
-      const checkboxes = document.querySelectorAll(
-        `#${type}Checkboxes .checkbox-item`
-      );
+      function filterItems(type) {
+        const searchInput = document.getElementById(`${type}SearchInput`);
+        const searchTerm = searchInput.value.toLowerCase();
+        const checkboxes = document.querySelectorAll(
+          `#${type}Checkboxes .checkbox-item`
+        );
 
-      checkboxes.forEach((checkbox) => {
-        const label = checkbox.querySelector("label");
-        const itemText = label.textContent.toLowerCase();
-        checkbox.style.display = itemText.includes(searchTerm)
-          ? "flex"
-          : "none";
-      });
-    }
+        checkboxes.forEach((checkbox) => {
+          const label = checkbox.querySelector("label");
+          const itemText = label.textContent.toLowerCase();
+          checkbox.style.display = itemText.includes(searchTerm)
+            ? "flex"
+            : "none";
+        });
+      }
 
-    function requestBackend(
-      endpoint,
-      metodo,
-      cuerpo = false,
-      cabeceras = false
-    ) {
-      return new Promise((resolve, reject) => {
-        let options;
-        if (cuerpo) {
-          if (cabeceras) {
-            options = {
-              method: metodo,
-              headers: cabeceras,
-              body: cuerpo,
-            };
+      function requestBackend(
+        endpoint,
+        metodo,
+        cuerpo = false,
+        cabeceras = false
+      ) {
+        return new Promise((resolve, reject) => {
+          let options;
+          if (cuerpo) {
+            if (cabeceras) {
+              options = {
+                method: metodo,
+                headers: cabeceras,
+                body: cuerpo,
+              };
+            } else {
+              options = {
+                method: metodo,
+                headers: { "Content-Type": "application/json" },
+                body: cuerpo,
+              };
+            }
           } else {
-            options = {
-              method: metodo,
-              headers: { "Content-Type": "application/json" },
-              body: cuerpo,
-            };
+            if (cabeceras) {
+              options = {
+                method: metodo,
+                headers: cabeceras,
+              };
+            } else {
+              options = {
+                method: metodo,
+              };
+            }
           }
-        } else {
-          if (cabeceras) {
-            options = {
-              method: metodo,
-              headers: cabeceras,
-            };
-          } else {
-            options = {
-              method: metodo,
-            };
-          }
-        }
-        console.log(endpoint);
-        console.log(options);
-        fetch(endpoint, options)
-          .then((response) => {
-            // Verificar si el estado de la respuesta no es exitoso (códigos 4xx o 5xx)
-            if (!response.ok) {
-              // Verificar si fue un error de la API
-              //Intentar obtener el cuerpo de la respuesta como JSON
+          console.log(endpoint);
+          console.log(options);
+          fetch(endpoint, options)
+            .then((response) => {
+              // Verificar si el estado de la respuesta no es exitoso (códigos 4xx o 5xx)
+              if (!response.ok) {
+                // Verificar si fue un error de la API
+                //Intentar obtener el cuerpo de la respuesta como JSON
+                return response
+                  .clone()
+                  .json()
+                  .then((errorResponse) => {
+                    console.error("Error enviado por la API");
+                    console.error(errorResponse);
+                    resolve(errorResponse);
+                  })
+                  .catch(() => {
+                    // Si no es posible parsear el cuerpo como JSON, obtenerlo como texto
+                    return response.text().then((errorText) => {
+                      respuestaErrorPersonalizada = [false, errorText, 500];
+                      console.error(
+                        "Error en el backend, ha respondido el servidor del backend y no la API"
+                      );
+                      console.error(respuestaErrorPersonalizada);
+                      resolve(respuestaErrorPersonalizada);
+                    });
+                  });
+              }
               return response
                 .clone()
                 .json()
-                .then((errorResponse) => {
-                  console.error("Error enviado por la API");
-                  console.error(errorResponse);
-                  resolve(errorResponse);
+                .then((response) => {
+                  console.log(response);
+                  resolve(response);
                 })
                 .catch(() => {
                   // Si no es posible parsear el cuerpo como JSON, obtenerlo como texto
                   return response.text().then((errorText) => {
                     respuestaErrorPersonalizada = [false, errorText, 500];
                     console.error(
-                      "Error en el backend, ha respondido el servidor del backend y no la API"
+                      "Error, la API ha respondido pero no lo ha hecho en formato JSON"
                     );
                     console.error(respuestaErrorPersonalizada);
                     resolve(respuestaErrorPersonalizada);
                   });
                 });
-            }
-            return response
-              .clone()
-              .json()
-              .then((response) => {
-                console.log(response);
-                resolve(response);
-              })
-              .catch(() => {
-                // Si no es posible parsear el cuerpo como JSON, obtenerlo como texto
-                return response.text().then((errorText) => {
-                  respuestaErrorPersonalizada = [false, errorText, 500];
-                  console.error(
-                    "Error, la API ha respondido pero no lo ha hecho en formato JSON"
-                  );
-                  console.error(respuestaErrorPersonalizada);
-                  resolve(respuestaErrorPersonalizada);
-                });
-              });
-          })
-          .catch((error) => {
-            // Verificar si el error fue de red
-            if (error.message === "Failed to fetch") {
-              respuestaErrorPersonalizada = [
-                false,
-                "Error de red: No se pudo conectar con el servidor.",
-                500,
-              ];
-              console.error(
-                "Error en el cliente, no se ha podido conectar a la API"
-              );
-              console.error(respuestaErrorPersonalizada);
-              resolve(respuestaErrorPersonalizada);
-            } else {
-              console.error("Error en el código del frontend");
-              console.error(error);
-              respuestaErrorPersonalizada = [false, error.message, 500];
-              console.error(respuestaErrorPersonalizada);
-              resolve(respuestaErrorPersonalizada);
-            }
-          });
-      });
-    }
-
-    async function validateForm() {
-      const fechaInicial = document.getElementById("fechaInicial");
-      const fechaFinal = document.getElementById("fechaFinal");
-      const selectedRutas = Array.from(
-        document.getElementById("selectedRutas").children
-      ).map((tag) => tag.dataset.id.replace("rutas-", ""));
-      const selectedMontadores = Array.from(
-        document.getElementById("selectedMontadores").children
-      ).map((tag) => tag.dataset.id.replace("montadores-", ""));
-
-      let isValid = true;
-      document
-        .querySelectorAll(".feedback")
-        .forEach((el) => (el.textContent = ""));
-
-      if (!fechaInicial.value) {
-        document.getElementById("fechaInicialFeedback").textContent =
-          "La fecha inicial es requerida.";
-        isValid = false;
+            })
+            .catch((error) => {
+              // Verificar si el error fue de red
+              if (error.message === "Failed to fetch") {
+                respuestaErrorPersonalizada = [
+                  false,
+                  "Error de red: No se pudo conectar con el servidor.",
+                  500,
+                ];
+                console.error(
+                  "Error en el cliente, no se ha podido conectar a la API"
+                );
+                console.error(respuestaErrorPersonalizada);
+                resolve(respuestaErrorPersonalizada);
+              } else {
+                console.error("Error en el código del frontend");
+                console.error(error);
+                respuestaErrorPersonalizada = [false, error.message, 500];
+                console.error(respuestaErrorPersonalizada);
+                resolve(respuestaErrorPersonalizada);
+              }
+            });
+        });
       }
-      if (!fechaFinal.value) {
-        document.getElementById("fechaFinalFeedback").textContent =
-          "La fecha final es requerida.";
-        isValid = false;
-      }
-      // Remove rutas validation check since it's now optional
 
-      if (isValid) {
-        const formData = {
-          fechas: {
-            fechaInicial: fechaInicial.value,
-            fechaFinal: fechaFinal.value,
-          },
-          // Optional rutas: null if none selected, array if some selected
-          rutas: selectedRutas.length > 0
-            ? rutasData.filter((ruta) => selectedRutas.includes(ruta.id))
-            : null,
-          // Optional montadores: null if none selected, array if some selected
-          montadores: selectedMontadores.length > 0
-            ? montadoresData.filter((montador) => selectedMontadores.includes(montador.id))
-            : null,
-        };
+      async function validateForm() {
+        const fechaInicial = document.getElementById("fechaInicial");
+        const fechaFinal = document.getElementById("fechaFinal");
+        const selectedRutas = Array.from(
+          document.getElementById("selectedRutas").children
+        ).map((tag) => tag.dataset.id.replace("rutas-", ""));
+        const selectedMontadores = Array.from(
+          document.getElementById("selectedMontadores").children
+        ).map((tag) => tag.dataset.id.replace("montadores-", ""));
 
-        loaderOn();
+        let isValid = true;
+        document
+          .querySelectorAll(".feedback")
+          .forEach((el) => (el.textContent = ""));
 
-        const response = await requestBackend(
-          "https://dosxdos.app.iidos.com/gastos_rutas.php",
-          "POST",
-          JSON.stringify(formData)
-        );
+        if (!fechaInicial.value) {
+          document.getElementById("fechaInicialFeedback").textContent =
+            "La fecha inicial es requerida.";
+          isValid = false;
+        }
+        if (!fechaFinal.value) {
+          document.getElementById("fechaFinalFeedback").textContent =
+            "La fecha final es requerida.";
+          isValid = false;
+        }
+        // Remove rutas validation check since it's now optional
 
-        loaderOff();
+        if (isValid) {
+          const formData = {
+            fechas: {
+              fechaInicial: fechaInicial.value,
+              fechaFinal: fechaFinal.value,
+            },
+            // Optional rutas: null if none selected, array if some selected
+            rutas:
+              selectedRutas.length > 0
+                ? rutasData.filter((ruta) => selectedRutas.includes(ruta.id))
+                : null,
+            // Optional montadores: null if none selected, array if some selected
+            montadores:
+              selectedMontadores.length > 0
+                ? montadoresData.filter((montador) =>
+                    selectedMontadores.includes(montador.id)
+                  )
+                : null,
+          };
 
-        if (response && response[0]) {
-          let objeto = response[1];
-          console.log(objeto);
-          let totalOts = Object.keys(objeto).length;
-          console.log("Total OTS: " + totalOts);
-          displayResults(response[1]);
-        } else {
-          displayErrorMessage(
-            response ? response[1] : "Error al procesar la solicitud"
+          loaderOn();
+
+          const response = await requestBackend(
+            "http://localhost/dosxdos_app/gastos_rutas.php",
+            "POST",
+            JSON.stringify(formData)
           );
+
+          loaderOff();
+
+          if (response && response[0]) {
+            let objeto = response[1];
+            console.log(objeto);
+            let totalOts = Object.keys(objeto).length;
+            console.log("Total OTS: " + totalOts);
+            displayResults(response[1]);
+          } else {
+            displayErrorMessage(
+              response ? response[1] : "Error al procesar la solicitud"
+            );
+          }
         }
       }
-    }
 
-    function displayMessage(title, message, type) {
-      const messageContainer = document.createElement("div");
-      messageContainer.className = `message-container ${type}`;
-      messageContainer.innerHTML = `
+      function displayMessage(title, message, type) {
+        const messageContainer = document.createElement("div");
+        messageContainer.className = `message-container ${type}`;
+        messageContainer.innerHTML = `
           <div class="message-title">${title}</div>
           <div class="message-content">${message}</div>
         `;
-      document.body.appendChild(messageContainer);
-      const botonCerrar = document.createElement("button");
-      botonCerrar.className = "cerrar";
-      botonCerrar.onclick(() => {
-        messageContainer.remove();
-      });
-      document.body.appendChild(botonCerrar);
-    }
-
-    function displayErrorMessage(message) {
-      const existingMessage = document.querySelector(".message-container");
-      if (existingMessage) {
-        existingMessage.remove();
+        document.body.appendChild(messageContainer);
+        const botonCerrar = document.createElement("button");
+        botonCerrar.className = "cerrar";
+        botonCerrar.onclick(() => {
+          messageContainer.remove();
+        });
+        document.body.appendChild(botonCerrar);
       }
 
-      const container = document.createElement("div");
-      container.className =
-        "message-container flex items-center justify-center";
+      function displayErrorMessage(message) {
+        const existingMessage = document.querySelector(".message-container");
+        if (existingMessage) {
+          existingMessage.remove();
+        }
 
-      container.innerHTML = `
+        const container = document.createElement("div");
+        container.className =
+          "message-container flex items-center justify-center";
+
+        container.innerHTML = `
         <div class="bg-white p-8 rounded-lg shadow-lg w-96 text-center">
             <h2 class="text-2xl font-bold text-red-600 mb-4">Error</h2>
             <p class="text-gray-700 mb-6">${message}</p>
@@ -675,71 +733,71 @@
         </div>
     `;
 
-      document.body.appendChild(container);
-    }
-
-    function copyResults(tableId) {
-      const table = document.getElementById(tableId);
-      if (!table) {
-        alert("No hay resultados para copiar.");
-        return;
+        document.body.appendChild(container);
       }
 
-      const rows = Array.from(table.querySelectorAll("tr"));
-      const text = rows
-        .map((row) =>
-          Array.from(row.querySelectorAll("th, td"))
-            .map((cell) => cell.textContent.trim())
-            .join("\t")
-        )
-        .join("\n");
+      function copyResults(tableId) {
+        const table = document.getElementById(tableId);
+        if (!table) {
+          alert("No hay resultados para copiar.");
+          return;
+        }
 
-      navigator.clipboard
-        .writeText(text)
-        .then(() => alert("Resultados copiados al portapapeles."))
-        .catch((err) =>
-          alert("Error al copiar los resultados: " + err.message)
-        );
-    }
+        const rows = Array.from(table.querySelectorAll("tr"));
+        const text = rows
+          .map((row) =>
+            Array.from(row.querySelectorAll("th, td"))
+              .map((cell) => cell.textContent.trim())
+              .join("\t")
+          )
+          .join("\n");
 
-    function clearForm() {
-      document.getElementById("fechaInicial").value = "";
-      document.getElementById("fechaFinal").value = "";
-      document.getElementById("selectedRutas").innerHTML = "";
-      document.getElementById("selectedMontadores").innerHTML = "";
-
-      const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-      checkboxes.forEach((checkbox) => {
-        checkbox.checked = false;
-      });
-
-      const feedbacks = document.querySelectorAll(".feedback");
-      feedbacks.forEach((feedback) => {
-        feedback.textContent = "";
-      });
-    }
-
-    function displayResults(data) {
-      if (!data || Object.keys(data).length === 0) {
-        displayErrorMessage(
-          "No se encontraron resultados para los filtros seleccionados."
-        );
-        return;
+        navigator.clipboard
+          .writeText(text)
+          .then(() => alert("Resultados copiados al portapapeles."))
+          .catch((err) =>
+            alert("Error al copiar los resultados: " + err.message)
+          );
       }
 
-      originalTableData = data;
-      document.getElementById("gastosRutasForm").style.display = "none";
-      document.getElementById("tableSection").classList.remove("hidden");
-      document
-        .getElementById("firstTableContainer")
-        .classList.remove("hidden");
-      document.getElementById("secondTableContainer").classList.add("hidden");
-      displayFirstTable(data);
-    }
+      function clearForm() {
+        document.getElementById("fechaInicial").value = "";
+        document.getElementById("fechaFinal").value = "";
+        document.getElementById("selectedRutas").innerHTML = "";
+        document.getElementById("selectedMontadores").innerHTML = "";
 
-    function displayFirstTable(data) {
-      const container = document.getElementById("firstTableContainer");
-      container.innerHTML = `
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach((checkbox) => {
+          checkbox.checked = false;
+        });
+
+        const feedbacks = document.querySelectorAll(".feedback");
+        feedbacks.forEach((feedback) => {
+          feedback.textContent = "";
+        });
+      }
+
+      function displayResults(data) {
+        if (!data || Object.keys(data).length === 0) {
+          displayErrorMessage(
+            "No se encontraron resultados para los filtros seleccionados."
+          );
+          return;
+        }
+
+        originalTableData = data;
+        document.getElementById("gastosRutasForm").style.display = "none";
+        document.getElementById("tableSection").classList.remove("hidden");
+        document
+          .getElementById("firstTableContainer")
+          .classList.remove("hidden");
+        document.getElementById("secondTableContainer").classList.add("hidden");
+        displayFirstTable(data);
+      }
+
+      function displayFirstTable(data) {
+        const container = document.getElementById("firstTableContainer");
+        container.innerHTML = `
         <div class="w-screen h-auto flex flex-col items-center justify-center">
           <h2 class="text-2xl font-bold mb-4">Resultados del Cálculo</h2>
           <input
@@ -753,11 +811,11 @@
           </button>
           <table id="firstResultsTable" class="results-table">
             ${generateTableHTML(data, [
-        "OT CRM",
-        "OT NAVISION",
-        "TOTAL MINUTOS",
-        "PORCENTAJE",
-      ])}
+              "OT CRM",
+              "OT NAVISION",
+              "TOTAL MINUTOS",
+              "PORCENTAJE",
+            ])}
           </table>
           <div class="action-buttons">
             <button onclick="copyResults('firstResultsTable')" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">
@@ -769,20 +827,20 @@
           </div>
         </div>
     `;
-    }
+      }
 
-    function displaySecondTable(data) {
-      const container = document.getElementById("secondTableContainer");
-      container.innerHTML = `
+      function displaySecondTable(data) {
+        const container = document.getElementById("secondTableContainer");
+        container.innerHTML = `
         <div class="w-screen h-auto flex flex-col items-center justify-center">
           <h2 class="text-2xl font-bold mb-4">Resultados en Euros</h2>
           <table id="secondResultsTable" class="results-table">
             ${generateTableHTML(data, [
-        "OT CRM",
-        "OT NAVISION",
-        "PORCENTAJE",
-        "TOTAL EUROS",
-      ])}
+              "OT CRM",
+              "OT NAVISION",
+              "PORCENTAJE",
+              "TOTAL EUROS",
+            ])}
           </table>
           <div class="action-buttons">
             <button onclick="copyResults('secondResultsTable')" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">
@@ -794,120 +852,119 @@
           </div>
         </div>
     `;
-      container.classList.remove("hidden");
-      document.getElementById("firstTableContainer").classList.add("hidden");
-    }
-
-    function processGastos() {
-      const gastos = parseFloat(document.getElementById("gastosInput").value);
-      if (isNaN(gastos) || gastos <= 0) {
-        alert("Por favor, ingrese un monto válido.");
-        return;
+        container.classList.remove("hidden");
+        document.getElementById("firstTableContainer").classList.add("hidden");
       }
 
-      const calculatedData = {};
-      Object.entries(originalTableData).forEach(([key, value]) => {
-        calculatedData[key] = {
-          ...value,
-          euros: ((gastos * (value.porcentaje || 0)) / 100).toFixed(3),
-        };
-      });
-
-      displaySecondTable(calculatedData);
-    }
-
-    function calculateEuros(data, gastos) {
-      const newData = {};
-
-      Object.entries(data).forEach(([otCRM, details]) => {
-        const percentage = details.porcentaje || 0;
-        newData[otCRM] = {
-          ...details,
-          euros: (gastos * (percentage / 100)).toFixed(3),
-        };
-      });
-
-      return newData;
-    }
-
-    function reloadForm() {
-      const existingMessage = document.querySelector(".message-container");
-      if (existingMessage) {
-        existingMessage.remove();
-      }
-      clearForm();
-      document.getElementById("gastosRutasForm").style.display = "block";
-      document.getElementById("tableSection").classList.add("hidden");
-    }
-
-    function createTableContainer(title) {
-      const container = document.createElement("div");
-      container.className = "message-container fade";
-      container.innerHTML = `<h2 class="text-2xl font-bold mb-4">${title}</h2>`;
-      return container;
-    }
-
-    function generateTableHTML(data, headers) {
-      let totalPorcentaje = 0;
-      let totalMinutos = 0;
-      let totalEuros = 0;
-
-      let html = "<thead><tr>";
-      headers.forEach((header) => (html += `<th>${header}</th>`));
-      html += "</tr></thead><tbody>";
-
-      Object.entries(data).forEach(([key, value]) => {
-        if (headers.includes("TOTAL EUROS")) {
-          totalEuros += parseFloat(value.euros || 0);
+      function processGastos() {
+        const gastos = parseFloat(document.getElementById("gastosInput").value);
+        if (isNaN(gastos) || gastos <= 0) {
+          alert("Por favor, ingrese un monto válido.");
+          return;
         }
-        totalPorcentaje += value.porcentaje || 0;
-        totalMinutos += value.totalMinutos || 0;
 
+        const calculatedData = {};
+        Object.entries(originalTableData).forEach(([key, value]) => {
+          calculatedData[key] = {
+            ...value,
+            euros: ((gastos * (value.porcentaje || 0)) / 100).toFixed(3),
+          };
+        });
+
+        displaySecondTable(calculatedData);
+      }
+
+      function calculateEuros(data, gastos) {
+        const newData = {};
+
+        Object.entries(data).forEach(([otCRM, details]) => {
+          const percentage = details.porcentaje || 0;
+          newData[otCRM] = {
+            ...details,
+            euros: (gastos * (percentage / 100)).toFixed(3),
+          };
+        });
+
+        return newData;
+      }
+
+      function reloadForm() {
+        const existingMessage = document.querySelector(".message-container");
+        if (existingMessage) {
+          existingMessage.remove();
+        }
+        clearForm();
+        document.getElementById("gastosRutasForm").style.display = "block";
+        document.getElementById("tableSection").classList.add("hidden");
+      }
+
+      function createTableContainer(title) {
+        const container = document.createElement("div");
+        container.className = "message-container fade";
+        container.innerHTML = `<h2 class="text-2xl font-bold mb-4">${title}</h2>`;
+        return container;
+      }
+
+      function generateTableHTML(data, headers) {
+        let totalPorcentaje = 0;
+        let totalMinutos = 0;
+        let totalEuros = 0;
+
+        let html = "<thead><tr>";
+        headers.forEach((header) => (html += `<th>${header}</th>`));
+        html += "</tr></thead><tbody>";
+
+        Object.entries(data).forEach(([key, value]) => {
+          if (headers.includes("TOTAL EUROS")) {
+            totalEuros += parseFloat(value.euros || 0);
+          }
+          totalPorcentaje += value.porcentaje || 0;
+          totalMinutos += value.totalMinutos || 0;
+
+          html += "<tr>";
+          html += `<td>${key}</td>`;
+          html += `<td>${value.navision || ""}</td>`;
+          if (headers.includes("TOTAL MINUTOS")) {
+            html += `<td>${value.totalMinutos || 0}</td>`;
+          }
+          if (headers.includes("TOTAL EUROS")) {
+            html += `<td>${value.porcentaje?.toFixed(3) || 0}%</td>`;
+            html += `<td>${value.euros || "0.00"} €</td>`;
+          } else {
+            html += `<td>${value.porcentaje?.toFixed(3) || 0}%</td>`;
+          }
+          html += "</tr>";
+        });
+
+        // Footer row
         html += "<tr>";
-        html += `<td>${key}</td>`;
-        html += `<td>${value.navision || ""}</td>`;
+        html += `<td colspan="2" class="font-bold">Totales</td>`;
         if (headers.includes("TOTAL MINUTOS")) {
-          html += `<td>${value.totalMinutos || 0}</td>`;
+          html += `<td class="font-bold">${totalMinutos}</td>`;
         }
         if (headers.includes("TOTAL EUROS")) {
-          html += `<td>${value.porcentaje?.toFixed(3) || 0}%</td>`;
-          html += `<td>${value.euros || "0.00"} €</td>`;
+          html += `<td class="font-bold">${totalPorcentaje.toFixed(3)}%</td>`;
+          html += `<td class="font-bold">${totalEuros.toFixed(3)} €</td>`;
         } else {
-          html += `<td>${value.porcentaje?.toFixed(3) || 0}%</td>`;
+          html += `<td class="font-bold">${totalPorcentaje.toFixed(3)}%</td>`;
         }
-        html += "</tr>";
-      });
+        html += "</tr></tbody>";
 
-      // Footer row
-      html += "<tr>";
-      html += `<td colspan="2" class="font-bold">Totales</td>`;
-      if (headers.includes("TOTAL MINUTOS")) {
-        html += `<td class="font-bold">${totalMinutos}</td>`;
+        return html;
       }
-      if (headers.includes("TOTAL EUROS")) {
-        html += `<td class="font-bold">${totalPorcentaje.toFixed(3)}%</td>`;
-        html += `<td class="font-bold">${totalEuros.toFixed(3)} €</td>`;
-      } else {
-        html += `<td class="font-bold">${totalPorcentaje.toFixed(3)}%</td>`;
+
+      function calculateTotalMinutes(data) {
+        return Object.values(data).reduce(
+          (sum, item) => sum + (item.totalMinutos || 0),
+          0
+        );
       }
-      html += "</tr></tbody>";
 
-      return html;
-    }
-
-    function calculateTotalMinutes(data) {
-      return Object.values(data).reduce(
-        (sum, item) => sum + (item.totalMinutos || 0),
-        0
-      );
-    }
-
-    function calculateTotalEuros(data) {
-      return Object.values(data)
-        .reduce((sum, item) => sum + parseFloat(item.euros || 0), 0)
-        .toFixed(3);
-    }
-  </script>
-</body>
-
+      function calculateTotalEuros(data) {
+        return Object.values(data)
+          .reduce((sum, item) => sum + parseFloat(item.euros || 0), 0)
+          .toFixed(3);
+      }
+    </script>
+  </body>
 </html>
