@@ -13,7 +13,7 @@ class Lineas extends Conexion
     {
         try {
             $crm = new Crm;
-            $camposLineas = "Codigo_de_l_nea,C_digo_de_OT_relacionada,Punto_de_venta,rea,Tipo_de_OT,Tipo_de_trabajo,Descripci_n_Tipo_Trabajo,Zona,Sector,Direcci_n,Nombre_de_Empresa,Fecha_actuaci_n,Fase,Motivo_de_incidencia,Observaciones_internas,Observaciones_montador,Horas_actuaci_n,D_as_actuaci_n,Minutos_actuaci_n,Poner,Quitar,Alto_medida,Ancho_medida,Fotos,Firma_de_la_OT_relacionada,Estado_de_Actuaci_n,nombreCliente,nombreOt,nombrePv,codPv,Navision_OT,lat,lng";
+            $camposLineas = "Codigo_de_l_nea,C_digo_de_OT_relacionada,Punto_de_venta,rea,Tipo_de_OT,Tipo_de_trabajo,Descripci_n_Tipo_Trabajo,Zona,Sector,Direcci_n,Nombre_de_Empresa,Fecha_actuaci_n,Fase,Motivo_de_incidencia,Observaciones_internas,Observaciones_montador,Horas_actuaci_n,D_as_actuaci_n,Minutos_actuaci_n,Poner,Quitar,Alto_medida,Ancho_medida,Fotos,Firma_de_la_OT_relacionada,Estado_de_Actuaci_n,nombreCliente,nombreOt,nombrePv,codPv,Navision_OT,lat,lng,Linea_nueva_en_Ruta,Urgente";
             $query = "SELECT $camposLineas FROM Products WHERE Fase=\"$ruta\"";
             $crm->query($query);
             if ($crm->estado) {
@@ -67,6 +67,8 @@ class Lineas extends Conexion
                         $lineas[$iLineas]['Navision_OT'] = $lineaData['Navision_OT'];
                         $lineas[$iLineas]['lat'] = $lineaData['lat'];
                         $lineas[$iLineas]['lng'] = $lineaData['lng'];
+                        $lineas[$iLineas]['nueva'] = $lineaData['Linea_nueva_en_Ruta'];
+                        $lineas[$iLineas]['urgente'] = $lineaData['Urgente'];
                         $iLineas++;
                     }
                     $respuestas = new Respuestas;
@@ -338,7 +340,7 @@ class Lineas extends Conexion
     {
         try {
             $crm = new Crm;
-            $camposLineas = "Codigo_de_l_nea,C_digo_de_OT_relacionada,Punto_de_venta,rea,Tipo_de_OT,Tipo_de_trabajo,Descripci_n_Tipo_Trabajo,Zona,Sector,Direcci_n,Nombre_de_Empresa,Fecha_actuaci_n,Fase,Motivo_de_incidencia,Observaciones_internas,Observaciones_montador,Horas_actuaci_n,D_as_actuaci_n,Minutos_actuaci_n,Poner,Quitar,Alto_medida,Ancho_medida,Fotos,Firma_de_la_OT_relacionada,Estado_de_Actuaci_n,nombreCliente,nombreOt,nombrePv,codPv,Navision_OT";
+            $camposLineas = "Codigo_de_l_nea,C_digo_de_OT_relacionada,Punto_de_venta,rea,Tipo_de_OT,Tipo_de_trabajo,Descripci_n_Tipo_Trabajo,Zona,Sector,Direcci_n,Nombre_de_Empresa,Fecha_actuaci_n,Fase,Motivo_de_incidencia,Observaciones_internas,Observaciones_montador,Horas_actuaci_n,D_as_actuaci_n,Minutos_actuaci_n,Poner,Quitar,Alto_medida,Ancho_medida,Fotos,Firma_de_la_OT_relacionada,Estado_de_Actuaci_n,nombreCliente,nombreOt,nombrePv,codPv,Navision_OT,Linea_nueva_en_Ruta,Urgente";
             $query = "SELECT $camposLineas FROM Products WHERE Codigo_de_l_nea = $lineaBuscar";
             $crm->query($query);
             if ($crm->estado) {
@@ -388,6 +390,8 @@ class Lineas extends Conexion
                     $lineas[0]['WebLink'] = $lineaData['Fotos'];
                     $lineas[0]['Firma'] = $lineaData['Firma_de_la_OT_relacionada'];
                     $lineas[0]['Navision_OT'] = $lineaData['Navision_OT'];
+                    $lineas[0]['nueva'] = $lineaData['Linea_nueva_en_Ruta'];
+                    $lineas[0]['urgente'] = $lineaData['Urgente'];
                     $respuestas = new Respuestas;
                     $answer = $respuestas->ok($lineas);
                     $this->respuesta = $answer;
@@ -415,7 +419,7 @@ class Lineas extends Conexion
     {
         try {
             $crm = new Crm;
-            $camposLineas = "Codigo_de_l_nea,C_digo_de_OT_relacionada,Punto_de_venta,rea,Tipo_de_OT,Tipo_de_trabajo,Descripci_n_Tipo_Trabajo,Zona,Sector,Direcci_n,Nombre_de_Empresa,Fecha_actuaci_n,Fase,Motivo_de_incidencia,Observaciones_internas,Observaciones_montador,Horas_actuaci_n,D_as_actuaci_n,Minutos_actuaci_n,Poner,Quitar,Alto_medida,Ancho_medida,Fotos,Firma_de_la_OT_relacionada,Estado_de_Actuaci_n,nombreCliente,nombreOt,nombrePv,codPv";
+            $camposLineas = "Codigo_de_l_nea,C_digo_de_OT_relacionada,Punto_de_venta,rea,Tipo_de_OT,Tipo_de_trabajo,Descripci_n_Tipo_Trabajo,Zona,Sector,Direcci_n,Nombre_de_Empresa,Fecha_actuaci_n,Fase,Motivo_de_incidencia,Observaciones_internas,Observaciones_montador,Horas_actuaci_n,D_as_actuaci_n,Minutos_actuaci_n,Poner,Quitar,Alto_medida,Ancho_medida,Fotos,Firma_de_la_OT_relacionada,Estado_de_Actuaci_n,nombreCliente,nombreOt,nombrePv,codPv,Linea_nueva_en_Ruta,Urgente";
             $query = "SELECT $camposLineas FROM Products WHERE Codigo_de_l_nea = $lineaBuscar";
             $crm->query($query);
             if ($crm->estado) {
