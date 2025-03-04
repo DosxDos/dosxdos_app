@@ -230,211 +230,250 @@ if ($idUsuario == $id && $usuarioEditado) {
 
 ?>
 
-<section id="contenido" class="displayOn">
+<div class="container mx-auto px-4 sm:px-6 pb-12 pt-32">
+    <!-- Header Section -->
+    <section class="mb-8">
+        <div class="rounded-xl shadow-lg overflow-hidden relative">
+            <div class="absolute inset-0"
+                style="background-image: url('https://dosxdos.app.iidos.com/img/texture-red.svg'); background-size: contain;">
+            </div>
+            <div class="relative p-6 sm:p-8 text-white z-10">
+                <h1 id="titulo" class="text-2xl sm:text-3xl font-bold mb-2">Editar Usuario</h1>
+                <p id="subtitulo" class="text-sm sm:text-base opacity-90"><?php echo $nombreE . ' ' . $apellidoE; ?></p>
+            </div>
+        </div>
+    </section>
 
-    <nav id="opcionesMenu2" class="displayOn">
-        <?php
-        if ($clase == 'admon') {
-        ?>
-            <div class="opcionMenu displayOn" id="crearUsuario">
-                <a href="https://dosxdos.app.iidos.com/dosxdos.php?modulo=usuarios" class="enlaceBoton">
-                    <div class="opcionMenu" id="lineasIcono">
-                        <button class="botonIcono" type="button" id="rutasIconoBoton">
-                            <img src="https://dosxdos.app.iidos.com/img/back.png">
-                        </button>
-                    </div>
+    <!-- Quick Actions Row -->
+    <section class="mb-8">
+        <div class="flex flex-col md:flex-row gap-3">
+            <!-- Back Button -->
+            <?php if ($clase == 'admon') { ?>
+                <a href="https://dosxdos.app.iidos.com/dosxdos.php?modulo=usuarios" class="flex items-center gap-2 text-red-600 mb-3 md:mb-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                    </svg>
+                    <span class="font-medium">Volver</span>
                 </a>
-                <p class='bolder'>Volver</p>
-            </div>
-        <?php
-        }
-        if ($clase == 'montador') {
-        ?>
-            <div class="opcionMenu displayOn" id="crearUsuario">
-                <a href="https://dosxdos.app.iidos.com/rutas_montador.html" class="enlaceBoton">
-                    <div class="opcionMenu" id="lineasIcono">
-                        <button class="botonIcono" type="button" id="rutasIconoBoton">
-                            <img src="https://dosxdos.app.iidos.com/img/back.png">
-                        </button>
-                    </div>
+            <?php } else if ($clase == 'montador') { ?>
+                <a href="https://dosxdos.app.iidos.com/rutas_montador.html" class="flex items-center gap-2 text-red-600 mb-3 md:mb-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                    </svg>
+                    <span class="font-medium">Volver</span>
                 </a>
-                <p class='bolder'>Volver</p>
-            </div>
-        <?php
-        }
-        if ($clase != 'montador' && $clase != 'admon') {
-            ?>
-                <div class="opcionMenu displayOn" id="crearUsuario">
-                    <a href="https://dosxdos.app.iidos.com/ot.html" class="enlaceBoton">
-                        <div class="opcionMenu" id="lineasIcono">
-                            <button class="botonIcono" type="button" id="rutasIconoBoton">
-                                <img src="https://dosxdos.app.iidos.com/img/back.png">
-                            </button>
+            <?php } else { ?>
+                <a href="https://dosxdos.app.iidos.com/ot.html" class="flex items-center gap-2 text-red-600 mb-3 md:mb-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                    </svg>
+                    <span class="font-medium">Volver</span>
+                </a>
+            <?php } ?>
+        </div>
+    </section>
+
+    <!-- Main Form Container -->
+    <section class="bg-white rounded-xl shadow-md">
+        <div class="p-6">
+            <form action="editar_usuario.php" method="post" id="editarUsuarioFormulario" enctype="multipart/form-data" class="space-y-6" novalidate>
+                
+  <!-- User profile image preview -->
+<div class="flex justify-center mb-8 -mt-12">
+    <div class="w-48 h-48 rounded-full overflow-hidden border-2 border-red-600 bg-gradient-to-r from-red-500 to-red-600 flex items-center justify-center shadow-2xl transform hover:scale-105 transition-all duration-300">
+        <img src="<?php if ($imagenE) { echo ('https://dosxdos.app.iidos.com/' . $imagenE); } else { echo 'https://dosxdos.app.iidos.com/img/usuario.png'; } ?>" 
+            id="imagenPerfil" alt="Perfil" class="w-full h-full object-cover" />
+    </div>
+</div>
+
+                <!-- Username and Role -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- User input -->
+                    <div class="space-y-2">
+                        <label for="usuario" class="block text-sm font-medium text-gray-700">USUARIO: <span class="text-red-600">*</span></label>
+                        <input type="text" name="usuario" id="usuario" value="<?php echo $usuarioE; ?>" maxlength="8"
+                            class="block w-full p-2.5 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent" />
+                    </div>
+
+                    <!-- Role/Class Selection -->
+                    <?php if ($clase == 'admon') { ?>
+                        <div class="space-y-2">
+                            <label for="clase" class="block text-sm font-medium text-gray-700">CLASE: <span class="text-red-600">*</span></label>
+                            <div class="relative">
+                                <select name="clase" id="clase"
+                                    class="block w-full p-2.5 pr-12 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent cursor-pointer appearance-none">
+                                    <option value="montador" <?php if ($claseE == 'montador') echo 'selected'; ?>>Montador</option>
+                                    <option value="oficina" <?php if ($claseE == 'oficina') echo 'selected'; ?>>Oficina</option>
+                                    <option value="cliente" <?php if ($claseE == 'cliente') echo 'selected'; ?>>Cliente</option>
+                                    <option value="diseno" <?php if ($claseE == 'diseno') echo 'selected'; ?>>Diseño</option>
+                                    <option value="estudio" <?php if ($claseE == 'estudio') echo 'selected'; ?>>Estudio</option>
+                                    <option value="admon" <?php if ($claseE == 'admon') echo 'selected'; ?>>Administrador</option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                    </svg>
+                                </div>
+                            </div>
                         </div>
-                    </a>
-                    <p class='bolder'>Volver</p>
+                    <?php } else { ?>
+                        <input type="hidden" name="clase" value="<?php echo $claseE; ?>">
+                    <?php } ?>
                 </div>
-            <?php
-            }
-        ?>
 
-    </nav>
+                <!-- Code and other inputs -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Code Input (Admin only) -->
+                    <?php if ($clase == 'admon') { ?>
+                        <div class="space-y-2">
+                            <label for="cod" class="block text-sm font-medium text-gray-700">CÓDIGO: <span class="text-red-600">*</span></label>
+                            <input type="text" name="cod" id="cod" value="<?php echo $codE; ?>"
+                                class="block w-full p-2.5 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent" />
+                        </div>
+                    <?php } else { ?>
+                        <input type="hidden" name="cod" value="<?php echo $codE; ?>">
+                    <?php } ?>
+                    
+                    <!-- Status (Admin only) -->
+                    <?php if ($clase == 'admon') { ?>
+                        <div class="space-y-2">
+                            <label for="activo" class="block text-sm font-medium text-gray-700">ESTADO:</label>
+                            <div class="relative">
+                                <select name="activo" id="activo"
+                                    class="block w-full p-2.5 pr-12 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent cursor-pointer appearance-none">
+                                    <option value="1" <?php if ($activoE == 1) echo 'selected'; ?>>Activo</option>
+                                    <option value="0" <?php if ($activoE == 0) echo 'selected'; ?>>Inactivo</option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    <?php } else { ?>
+                        <input type="hidden" name="activo" value="<?php echo $activoE; ?>">
+                    <?php } ?>
+                </div>
 
-    <form action="editar_usuario.php" method="post" id="editarUsuarioFormulario" enctype="multipart/form-data" class="row g-4" novalidate>
+                <!-- Password fields -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label for="contrasena" class="block text-sm font-medium text-gray-700">CONTRASEÑA: <span class="text-red-600">*</span></label>
+                        <input type="password" name="contrasena" id="contrasena" value="<?php echo $contrasenaE; ?>" maxlength="12"
+                            class="block w-full p-2.5 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent" />
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <label for="contrasena2" class="block text-sm font-medium text-gray-700">REPETIR CONTRASEÑA: <span class="text-red-600">*</span></label>
+                        <input type="password" name="contrasena2" id="contrasena2" value="<?php echo $contrasenaE; ?>" maxlength="12"
+                            class="block w-full p-2.5 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent" />
+                    </div>
+                </div>
 
-        <!-- Clase -->
-        <?php
-        if ($clase == 'admon') {
-        ?>
-            <div class="cInput">
-                <label for="clase" class="requerido">CLASE:</label>
-                <select id="clase" name="clase">
-                    <option value="montador" <?php if ($claseE == 'montador') echo 'selected'; ?>>Montador</option>
-                    <option value="oficina" <?php if ($claseE == 'oficina') echo 'selected'; ?>>Oficina</option>
-                    <option value="cliente" <?php if ($claseE == 'cliente') echo 'selected'; ?>>Cliente</option>
-                    <option value="diseno" <?php if ($claseE == 'diseno') echo 'selected'; ?>>Diseño</option>
-                    <option value="estudio" <?php if ($claseE == 'estudio') echo 'selected'; ?>>Estudio</option>
-                    <option value="admon" <?php if ($claseE == 'admon') echo 'selected'; ?>>Administrador</option>
-                </select>
-            </div>
-        <?php
-        } else {
-        ?>
-            <input type="hidden" name="clase" value="<?php echo $claseE; ?>">
-        <?php
-        }
-        ?>
+                <!-- Contact information -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label for="nombre" class="block text-sm font-medium text-gray-700">NOMBRE: <span class="text-red-600">*</span></label>
+                        <input type="text" name="nombre" id="nombre" value="<?php echo $nombreE; ?>"
+                            class="block w-full p-2.5 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent" />
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <label for="apellido" class="block text-sm font-medium text-gray-700">APELLIDO:</label>
+                        <input type="text" name="apellido" id="apellido" value="<?php echo $apellidoE; ?>"
+                            class="block w-full p-2.5 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent" />
+                    </div>
+                </div>
 
-        <input type="hidden" name="usuarioActual" value="<?php echo $usuarioE; ?>">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label for="correo" class="block text-sm font-medium text-gray-700">CORREO: <span class="text-red-600">*</span></label>
+                        <input type="email" name="correo" id="correo" value="<?php echo $correoE; ?>"
+                            class="block w-full p-2.5 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent" />
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <label for="movil" class="block text-sm font-medium text-gray-700">MÓVIL:</label>
+                        <input type="number" name="movil" id="movil" value="<?php echo $movilE; ?>"
+                            class="block w-full p-2.5 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent" />
+                    </div>
+                </div>
 
-        <!-- Usuario -->
-        <div class="cInput">
-            <label for="usuario" class="requerido">USUARIO:</label>
-            <input type="text" name="usuario" id="usuario" value="<?php echo $usuarioE; ?>" maxlength="8">
+                <!-- Profile image upload -->
+                <div class="space-y-2 mt-4">
+                    <label for="imagen" class="block text-sm font-medium text-gray-700">IMAGEN DE PERFIL:</label>
+                    <label class="flex items-center justify-center gap-2 bg-gray-50 hover:bg-gray-100 text-gray-700 border border-gray-300 rounded-lg py-3 px-4 shadow-sm transition-all cursor-pointer w-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <span class="font-medium">Seleccionar imagen</span>
+                        <input type="file" name="imagen[]" id="imagen" accept="image/*" class="hidden" />
+                    </label>
+                </div>
+
+                <input type="hidden" name="editarUsuario" value="1">
+                <input type="hidden" name="usuarioActual" value="<?php echo $usuarioE; ?>">
+                <input type="hidden" name="imagenActual" value="<?php echo $imagenE ?>" id="imagenActual">
+                <input type="hidden" name="id" value="<?php echo $id; ?>">
+
+                <!-- Submit and Cancel Buttons -->
+                <div class="flex flex-col-reverse md:flex-row gap-3 pt-4 border-t border-gray-200">
+                    <?php if ($clase == 'admon') { ?>
+                        <a href="https://dosxdos.app.iidos.com/dosxdos.php?modulo=usuarios" id="cancelar" class="w-full">
+                            <button type="button" class="w-full flex items-center justify-center gap-2 bg-gray-300 hover:bg-gray-400 text-gray-800 py-3 px-6 rounded-lg shadow-md transition-all text-base font-medium">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                                CANCELAR
+                            </button>
+                        </a>
+                    <?php } else if ($clase == 'montador') { ?>
+                        <a href="https://dosxdos.app.iidos.com/rutas_montador.html" id="cancelar" class="w-full">
+                            <button type="button" class="w-full flex items-center justify-center gap-2 bg-gray-300 hover:bg-gray-400 text-gray-800 py-3 px-6 rounded-lg shadow-md transition-all text-base font-medium">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                                CANCELAR
+                            </button>
+                        </a>
+                    <?php } else { ?>
+                        <a href="https://dosxdos.app.iidos.com/ot.html" id="cancelar" class="w-full">
+                            <button type="button" class="w-full flex items-center justify-center gap-2 bg-gray-300 hover:bg-gray-400 text-gray-800 py-3 px-6 rounded-lg shadow-md transition-all text-base font-medium">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                                CANCELAR
+                            </button>
+                        </a>
+                    <?php } ?>
+
+                    <?php if ($clase == 'admon') { ?>
+                        <a href="https://dosxdos.app.iidos.com/editar_usuario.php?eliminar=1&id=<?php echo $id ?>" class="eliminar w-full">
+                            <button type="button" id="eliminarUsuario" class="w-full flex items-center justify-center gap-2 bg-gray-800 hover:bg-gray-900 text-white py-3 px-6 rounded-lg shadow-md transition-all text-base font-medium">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                                ELIMINAR USUARIO
+                            </button>
+                        </a>
+                    <?php } ?>
+
+<button type="button" id="enviar" class="w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white py-3 px-6 rounded-lg shadow-md transition-all text-base font-medium">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        GUARDAR CAMBIOS
+                    </button>
+                </div>
+            </form>
         </div>
-
-        <!-- Código -->
-        <?php
-        if ($clase == 'admon') {
-        ?>
-            <div class="cInput">
-                <label for="cod" class="requerido">CÓDIGO:</label>
-                <input type="text" name="cod" id="cod" value="<?php echo $codE; ?>">
-            </div>
-        <?php
-        } else {
-        ?>
-            <input type="hidden" name="cod" value="<?php echo $codE; ?>">
-        <?php
-        }
-        ?>
-
-        <!-- Contraseña -->
-        <div class="cInput">
-            <label for="contrasena" class="requerido">CONTRASEÑA:</label>
-            <input type="password" name="contrasena" id="contrasena" value="<?php echo $contrasenaE; ?>" maxlength="12">
-        </div>
-
-        <!-- Contraseña2 -->
-        <div class="cInput">
-            <label for="contrasena2" class="requerido">REPETIR CONTRASEÑA:</label>
-            <input type="password" name="contrasena2" id="contrasena2" value="<?php echo $contrasenaE; ?>" maxlength="12">
-        </div>
-
-        <!-- Correo -->
-        <div class="cInput">
-            <label for="correo">CORREO:</label>
-            <input type="mail" name="correo" id="correo" value="<?php echo $correoE; ?>">
-        </div>
-
-        <!-- Móvil -->
-        <div class="cInput">
-            <label for="movil">MÓVIL:</label>
-            <input type="number" name="movil" id="movil" value="<?php echo $movilE; ?>">
-        </div>
-
-        <!-- Nombre -->
-        <div class="cInput" class="requerido">
-            <label for="nombre" class="requerido">NOMBRE:</label>
-            <input type="text" name="nombre" id="nombre" value="<?php echo $nombreE; ?>">
-        </div>
-
-        <!-- Apellido -->
-        <div class="cInput">
-            <label for="apellido">APELLIDO:</label>
-            <input type="text" name="apellido" id="apellido" value="<?php echo $apellidoE; ?>">
-        </div>
-
-        <!-- Imagen -->
-        <div class="cInput">
-            <label for="apellido">IMAGEN:</label>
-            <input type="file" name="imagen[]" accept="image/*" id="imagen">
-        </div>
-
-        <div id="CajaimagenPerfil"><img src="<?php if ($imagenE) {
-                                                    echo ('https://dosxdos.app.iidos.com/' . $imagenE);
-                                                } else {
-                                                    echo 'https://dosxdos.app.iidos.com/img/usuario.png';
-                                                }  ?>" id="imagenPerfil"></div>
-
-        <input type="hidden" name="editarUsuario" value="1">
-
-        <input type="hidden" name="imagenActual" value="<?php echo $imagenE ?>" id="imagenActual">
-
-        <input type="hidden" name="id" value="<?php echo $id; ?>">
-
-        <?php
-        if ($clase == 'admon') {
-        ?>
-            <div class="cInput">
-                <label for="activo">ESTADO:</label>
-                <select id="activo" name="activo">
-                    <option value="1" <?php if ($activoE == 1) echo 'selected'; ?>>Activo</option>
-                    <option value="0" <?php if ($activoE == 0) echo 'selected'; ?>>Inactivo</option>
-                </select>
-            </div>
-        <?php
-        } else {
-        ?>
-            <input type="hidden" name="activo" value="<?php echo $activoE; ?>">
-        <?php
-        }
-        ?>
-
-        <button type="button" id="enviar" class="ruta">EDITAR USUARIO</button>
-
-        <?php
-        if ($clase == 'admon') {
-        ?>
-            <a href="https://dosxdos.app.iidos.com/editar_usuario.php?eliminar=1&id=<?php echo $id ?>" class="eliminar"><button type="button" id="eliminarUsuario" class="ruta">ELIMINAR USUARIO</button></a>
-        <?php
-        }
-        if ($clase == 'admon') {
-        ?>
-            <a href="https://dosxdos.app.iidos.com/dosxdos.php?modulo=usuarios" id="cancelar"><button type="button" class="ruta">CANCELAR</button></a>
-        <?php
-        }
-        if ($clase == 'montador') {
-            ?>
-                <a href="https://dosxdos.app.iidos.com/rutas_montador.html" id="cancelar"><button type="button" class="ruta">CANCELAR</button></a>
-            <?php
-            }
-        if ($clase != 'montador' && $clase != 'admon') {
-            ?>
-                <a href="https://dosxdos.app.iidos.com/ot.html" id="cancelar"><button type="button" class="ruta">CANCELAR</button></a>
-            <?php
-            }
-        ?>
-        
-    </form>
-
-</section>
-
+    </section>
+</div>
 <script>
     actualizarUsuario = false;
-    titulo1 = <?php echo ("'" . $nombre . '_' . 'EDITAR USUARIO - ' . $nombreE . ' ' . $apellidoE . "'") ?>;
-    titulo2 = <?php echo ("'" . 'EDITAR USUARIO - ' . $nombreE . ' ' . $apellidoE . "'") ?>;
-    /* CAMBIO DE IMAGEN */
+    titulo1 = <?php echo ("'EDITAR USUARIO'"); ?>;
+    titulo2 = <?php echo ("'EDITAR USUARIO'"); ?>;    /* CAMBIO DE IMAGEN */
     const $imagen = document.getElementById('imagen'),
         $imagenPerfil = document.getElementById('imagenPerfil');
     const cambioImagen = file => new Promise((resolve, reject) => {
