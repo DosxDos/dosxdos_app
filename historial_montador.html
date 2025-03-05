@@ -352,9 +352,23 @@
         <!-- Mapa Button -->
         <div class="flex justify-center mb-8">
             <button id="mapa"
-                class="w-full max-w-md bg-red-600 text-white py-3 rounded-lg shadow-md hover:bg-red-700 transition-colors">
-                VER MAPA
-            </button>
+            class="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition-colors duration-200 shadow-sm px-4 py-2">
+            <span class="whitespace-nowrap">Ver en mapa</span>
+            <svg width="32" height="32" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+              <!-- Map outline -->
+              <path d="M3 7l6 3l6-3l6 3v10l-6-3l-6 3l-6-3V7z" stroke="white" stroke-width="1.5" stroke-linecap="round"
+                stroke-linejoin="round" />
+    
+              <!-- Map fold lines -->
+              <path d="M9 10v10" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M15 7v10" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    
+              <!-- Larger Location pin - prominent teardrop shape -->
+              <path d="M12 4c-2.2 0-4 1.8-4 4c0 4 4 8 4 8s4-4 4-8c0-2.2-1.8-4-4-4z" fill="white" stroke="white"
+                stroke-width="0.5" />
+              <circle cx="12" cy="8" r="1.5" fill="#e11d48" stroke="none" />
+            </svg>
+          </button>
         </div>
 
         <!-- Content Container -->

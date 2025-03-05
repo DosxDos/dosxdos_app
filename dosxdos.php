@@ -341,27 +341,6 @@ if ($conexion && $idUsuario) {
         </div>
     </div>
 
-    <!-- Alert/Message Container -->
-    <div id="mensaje" class="fixed left-1/2 transform -translate-x-1/2 z-50 transition-all duration-300 ease-in-out w-[95%] md:w-[75%] lg:w-[65%] displayOff" style="top: -100px;">
-        <div class="relative bg-white border-2 border-red-600 rounded-lg shadow-lg p-4 md:p-5 flex flex-col md:flex-row md:items-center gap-3 md:gap-4">
-            <button id="imgCerrar" class="absolute -right-3 -top-3 hover:bg-red-400 p-1 bg-red-600 rounded-full p-1.5 transition-colors duration-200">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-            <div class="flex flex-col md:flex-row items-center gap-3 md:gap-4 flex-1">
-                <div class="flex-shrink-0 text-red-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10" />
-                        <path d="M12 7v6" />
-                        <path d="M12 16h0.01" />
-                    </svg>
-                </div>
-                <p id="textoMensaje" class="text-gray-900 text-base md:text-lg flex-1"></p>
-            </div>
-        </div>
-    </div>
-
     <!-- <div id="tituloVisible"></div> -->
     <!-- <h1 id="titulo" class="text-2xl sm:text-3xl font-bold mb-2 text-center mt-24 pt-4 displayOn"></h1> -->
 </section>
@@ -397,29 +376,6 @@ if ($conexion && $idUsuario) {
 </body>
 
 <script>
-    const tituloElement = document.getElementById('titulo');
-    const tituloVisible = document.getElementById('tituloVisible');
-
-    function checkVisibility() {
-        const tituloVisiblePosition = tituloVisible.getBoundingClientRect();
-        const isVisible = tituloVisiblePosition.top > 0;
-        const tieneClaseTitulo = tituloElement.classList.contains('tituloFijo');
-        if (isVisible && tieneClaseTitulo) {
-            tituloElement.classList.remove('tituloFijo');
-            tituloElement.classList.add('titulo');
-        } else if (!isVisible && !tieneClaseTitulo) {
-            tituloElement.classList.remove('titulo');
-            tituloElement.classList.add('tituloFijo');
-        }
-    }
-    // Llama a checkVisibility al cargar la página y al cambiar el tamaño de la ventana
-    window.addEventListener('load', checkVisibility);
-    window.addEventListener('resize', checkVisibility);
-    // Llama a checkVisibility al hacer scroll, utilizando requestAnimationFrame
-    window.addEventListener('scroll', () => {
-        requestAnimationFrame(checkVisibility);
-    });
-
     //ALERTAS AL ELIMINAR
     $(document).ready(function() {
         $(".eliminar").click(function(e) {
@@ -450,9 +406,6 @@ if ($conexion && $idUsuario) {
         $rutas = document.getElementById('rutas'),
         $loader = document.getElementById('loader'),
         $body = document.getElementById('body'),
-        $mensaje = document.getElementById('mensaje'),
-        $imgCerrar = document.getElementById('imgCerrar'),
-        $textoMensaje = document.getElementById('textoMensaje'),
         buscador = document.getElementById('buscador'),
         $nombreUsuario = document.getElementById('nombreUsuario'),
         $imagenUsuario = document.getElementById('imagenUsuario'),
@@ -712,27 +665,93 @@ if ($conexion && $idUsuario) {
         }, 1000);
     }
 
-    /* MENSAJE */
-
-    function mensajeOn() {
-        $mensaje.classList.remove('displayOff');
-        $mensaje.classList.add('displayOn');
+    function alerta(mensaje) {
+    // Remove existing alert if present
+    const existingAlert = document.querySelector("#customAlert");
+    if (existingAlert) {
+        existingAlert.remove();
     }
 
-    function mensajeOff() {
-        $mensaje.classList.remove('displayOn');
-        $mensaje.classList.add('displayOff');
-    }
+    // Create alert container
+    const alertContainer = document.createElement("div");
+    alertContainer.id = "customAlert";
+    alertContainer.className =
+        "fixed left-1/2 transform -translate-x-1/2 z-50 transition-all duration-300 ease-in-out w-[95%] md:w-[75%] lg:w-[65%]";
+    alertContainer.style.top = "-100px";
 
-    $imgCerrar.addEventListener('click', e => {
-        mensajeOff();
-    })
+    // Create alert content
+    const alertContent = document.createElement("div");
+    alertContent.className = `
+    relative
+    bg-white
+    border-2 border-red-600
+    rounded-lg
+    shadow-lg
+    p-4 md:p-5
+    flex flex-col md:flex-row md:items-center gap-3 md:gap-4
+  `;
 
-    function alerta(men) {
-        $textoMensaje.innerHTML = men;
-        mensajeOn();
-        loaderOff();
-    }
+    // Create close button
+    const closeButton = document.createElement("button");
+    closeButton.className =
+        "absolute -right-3 -top-3 hover:bg-red-400 p-1 bg-red-600 rounded-full p-1.5 transition-colors duration-200";
+    closeButton.innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+  `;
+
+    // Create main content container for mobile layout
+    const contentContainer = document.createElement("div");
+    contentContainer.className =
+        "flex flex-col md:flex-row items-center gap-3 md:gap-4 flex-1";
+
+    // Create icon with exclamation mark
+    const iconContainer = document.createElement("div");
+    iconContainer.className = "flex-shrink-0 text-red-600";
+    iconContainer.innerHTML = `
+<svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="12" r="10" />
+  <path d="M12 7v6" />
+  <path d="M12 16h0.01" />
+</svg>
+`;
+    // Create message text
+    const messageText = document.createElement("p");
+    messageText.className = "text-gray-900 text-base md:text-lg flex-1";
+    messageText.textContent = mensaje;
+
+    // Assemble the content container
+    contentContainer.appendChild(iconContainer);
+    contentContainer.appendChild(messageText);
+
+    // Assemble the alert
+    alertContent.appendChild(closeButton);
+    alertContent.appendChild(contentContainer);
+    alertContainer.appendChild(alertContent);
+    document.body.appendChild(alertContainer);
+
+    // Slide down animation
+    requestAnimationFrame(() => {
+        alertContainer.style.top = "56px";
+    });
+
+    // Add event listeners
+    closeButton.addEventListener("click", () => {
+        hideAlert(alertContainer);
+    });
+
+    // Hide loader if it exists
+    loaderOff();
+}
+
+function hideAlert(alertContainer) {
+    alertContainer.style.top = "-100px";
+
+    setTimeout(() => {
+        alertContainer.remove();
+    }, 300);
+}
 
     if (mensajePhp) {
         alerta(mensajePhp);
@@ -767,8 +786,7 @@ if ($conexion && $idUsuario) {
             }
         } else {
             mensaje = 'No es posible cerrar la sesión sin conexión a internet';
-            $textoMensaje.innerHTML = mensaje;
-            mensajeOn();
+            alerta(mensaje)
         }
     }
 
@@ -936,8 +954,7 @@ if ($conexion && $idUsuario) {
         }
         let mensaje = localStorage.getItem('mensaje');
         if (mensaje && mensaje !== null) {
-            $textoMensaje.innerHTML = mensaje;
-            mensajeOn();
+            alerta(mensaje)
             localStorage.removeItem('mensaje');
         }
     })

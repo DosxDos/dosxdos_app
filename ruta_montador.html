@@ -65,7 +65,7 @@
         <a href="https://dosxdos.app.iidos.com/notificaciones.html" class="relative z-10" id="desktopBellContainer">
           <img id="bellDesktop" src="" class="text-gray-900 object-contain" />
           <span id="desktopNotificationCount"
-            class="absolute top-0 -right-2 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] text-center border hidden"></span>
+            class="absolute top-0 -right-0 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] text-center border hidden"></span>
         </a>
 
         <!-- Desktop User Menu -->
@@ -1214,7 +1214,19 @@
       document.body.style.overflow = 'hidden'; // Lock scroll only when modal is open
     }
 
+    // Function to handle featured items (urgent and new)
+    function processAndSortItems(items) {
+      // First sort items: urgent ones first, then new ones, then the rest
+      items.sort((a, b) => {
+        if (a.urgente && !b.urgente) return -1;
+        if (!a.urgente && b.urgente) return 1;
+        if (a.nueva && !b.nueva) return -1;
+        if (!a.nueva && b.nueva) return 1;
+        return 0;
+      });
 
+      return items;
+    }
 
     async function appOnline() {
       try {
@@ -1308,12 +1320,25 @@
               lineas.forEach((objeto) => {
                 // Create card for each line
                 const card = document.createElement("div");
-                card.className = "relative rounded-xl shadow-lg overflow-hidden transition-all duration-300 border border-gray-200 w-full h-full";
+                card.className = "relative rounded-xl shadow-lg transition-all duration-300 border border-gray-200 w-full h-full";
                 card.style.backgroundColor = "#FFFFFF";
+
+                // Special styling for urgent and new items
+                if (objeto.urgente) {
+                  card.style.backgroundColor = "#FEF2F2"; // Light red background
+
+                  card.style.borderLeft = "4px solid #dc2626"; // Red border all around
+                  card.style.order = "-2"; // Will appear first
+
+                } else if (objeto.nueva) {
+                  card.style.backgroundColor = "#EFF6FF"; // Light blue background
+                  card.style.borderLeft = "4px solid #3b82f6"; // Blue border
+                  card.style.order = "-1"; // Will appear after urgent items
+                }
 
                 // Header with SVG Red Texture Background
                 const header = document.createElement("div");
-                header.className = "relative flex flex-col px-5 py-5 text-center text-white";
+                header.className = "relative flex flex-col px-5 py-5 text-center text-white rounded-t-lg";
                 header.style.backgroundImage = "url('https://dosxdos.app.iidos.com/img/texture-red.svg')";
                 header.style.backgroundSize = "contain";
                 header.style.backgroundPosition = "center";
@@ -1351,6 +1376,114 @@
                 statusBadge.style.backgroundColor = "#A22323";
                 header.appendChild(statusBadge);
 
+           // Add badges for urgent or new items
+           if (objeto.urgente && objeto.nueva) {
+                    // Create a container for badges that allows them to be side by side
+                    const badgesContainer = document.createElement("div");
+                    badgesContainer.className = "absolute -top-2 left-2 flex space-x-2 z-10";
+
+                    // Urgent Badge
+                    const urgentBadge = document.createElement("div");
+                    urgentBadge.className = "px-3 py-1 text-xs font-bold rounded-md shadow-md flex items-center";
+                    urgentBadge.style.backgroundColor = "#FFFFFF";
+                    urgentBadge.style.color = "#dc2626"; // Red text
+                    urgentBadge.style.border = "2px solid #dc2626";
+                    urgentBadge.style.animation = "pulse 2s infinite";
+
+                    // Add alert icon SVG
+                    const alertIcon = document.createElement("span");
+                    alertIcon.innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="#dc2626">
+      <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+    </svg>
+  `;
+                    urgentBadge.appendChild(alertIcon);
+
+                    // Add urgent text
+                    const urgentText = document.createElement("span");
+                    urgentText.textContent = "URGENTE";
+                    urgentBadge.appendChild(urgentText);
+
+                    // New Badge
+                    const newBadge = document.createElement("div");
+                    newBadge.className = "px-3 py-1 text-xs font-bold text-white rounded-md shadow-md flex items-center";
+                    newBadge.style.backgroundColor = "#3b82f6";
+
+                    // Add star icon SVG
+                    const newIcon = document.createElement("span");
+                    newIcon.innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+    </svg>
+  `;
+                    newBadge.appendChild(newIcon);
+
+                    // Add new text
+                    const newText = document.createElement("span");
+                    newText.textContent = "NUEVA";
+                    newBadge.appendChild(newText);
+
+                    // Add both badges to container
+                    badgesContainer.appendChild(urgentBadge);
+                    badgesContainer.appendChild(newBadge);
+
+                    // Add badges container to header
+                    header.appendChild(badgesContainer);
+
+                    // Modify card style to accommodate both badges
+                    card.style.backgroundColor = "#FEF2F2"; // Light red background
+                    card.style.borderLeft = "4px solid #dc2626"; // Red border
+                    card.style.order = "-3"; // Will appear first among displayed items
+                  } else if (objeto.urgente && !objeto.nueva) {
+                      const urgentBadge = document.createElement("div");
+                      // Use a white badge with red text for contrast against red background
+                      urgentBadge.className = "absolute -top-2 left-2 px-3 py-1 text-xs font-bold rounded-md shadow-md flex items-center";
+                      urgentBadge.style.backgroundColor = "#FFFFFF";
+                      urgentBadge.style.color = "#dc2626"; // Red text
+                      urgentBadge.style.border = "2px solid #dc2626";
+                      urgentBadge.style.zIndex = "10";
+                      urgentBadge.style.animation = "pulse 2s infinite";
+
+                      // Add alert icon SVG
+                      const alertIcon = document.createElement("span");
+                      alertIcon.innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="#dc2626">
+      <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+    </svg>
+  `;
+                      urgentBadge.appendChild(alertIcon);
+
+                      // Add text
+                      const badgeText = document.createElement("span");
+                      badgeText.textContent = "URGENTE";
+                      urgentBadge.appendChild(badgeText);
+
+                      header.appendChild(urgentBadge);
+                    } else if (objeto.nueva && !objeto.urgente) {
+                      const newBadge = document.createElement("div");
+                      // Use a blue badge with white text - matching position with urgent badge
+                      newBadge.className = "absolute -top-2 left-2 px-3 py-1 text-xs font-bold text-white rounded-md shadow-md flex items-center";
+                      newBadge.style.backgroundColor = "#3b82f6";
+                      newBadge.style.zIndex = "10";
+
+                      // Add star icon SVG
+                      const newIcon = document.createElement("span");
+                      newIcon.innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+    </svg>
+  `;
+                      newBadge.appendChild(newIcon);
+
+                      // Add text
+                      const badgeText = document.createElement("span");
+                      badgeText.textContent = "NUEVA";
+                      newBadge.appendChild(badgeText);
+
+                      header.appendChild(newBadge);
+                    }
+
+
                 // Card Body
                 const body = document.createElement("div");
                 body.className = "text-gray-900 p-4 space-y-2 mb-12";
@@ -1384,7 +1517,7 @@
 
                 // Footer with button
                 const footer = document.createElement("div");
-                footer.className = "flex justify-center bg-white rounded-b-lg px-4 pb-3";
+                footer.className = "flex justify-center bg-white rounded-b-lg px-4 mb-3";
 
                 // "Reportar" Button
                 const actionBtn = document.createElement("button");
@@ -1449,15 +1582,30 @@
                 sectorGrid.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 place-items-center';
 
                 // Create cards for each line in this sector
-                sectorLines.forEach((objeto) => {
-                  // Create a card container for each item
+                // Sort the lines to have urgent and new items first
+                const sortedLines = processAndSortItems(sectorLines);
+                sortedLines.forEach((objeto) => {                  // Create a card container for each item
                   const card = document.createElement("div");
-                  card.className = "relative rounded-xl shadow-lg overflow-hidden transition-all duration-300 border border-gray-200 w-full h-full";
+                  card.className = "relative rounded-xl shadow-lg transition-all duration-300 border border-gray-200 w-full h-full";
                   card.style.backgroundColor = "#FFFFFF";
+
+
+                  // Special styling for urgent and new items
+                  if (objeto.urgente) {
+                    card.style.backgroundColor = "#FEF2F2"; // Light red background
+
+                    card.style.borderLeft = "4px solid #dc2626"; // Red border all around
+                    card.style.order = "-2"; // Will appear first
+
+                  } else if (objeto.nueva) {
+                    card.style.backgroundColor = "#EFF6FF"; // Light blue background
+                    card.style.borderLeft = "4px solid #3b82f6"; // Blue border
+                    card.style.order = "-1"; // Will appear after urgent items
+                  }
 
                   // Header with SVG Red Texture Background
                   const header = document.createElement("div");
-                  header.className = "relative flex flex-col px-5 py-5 text-center text-white";
+                  header.className = "relative flex flex-col px-5 py-5 text-center text-white rounded-t-lg";
 
                   header.style.backgroundImage = "url('https://dosxdos.app.iidos.com/img/texture-red.svg')";
                   header.style.backgroundSize = "contain";
@@ -1496,6 +1644,114 @@
                   statusBadge.style.backgroundColor = "#A22323";
                   header.appendChild(statusBadge);
 
+
+                  // Add badges for urgent or new items
+                  if (objeto.urgente && objeto.nueva) {
+                    // Create a container for badges that allows them to be side by side
+                    const badgesContainer = document.createElement("div");
+                    badgesContainer.className = "absolute -top-2 left-2 flex space-x-2 z-10";
+
+                    // Urgent Badge
+                    const urgentBadge = document.createElement("div");
+                    urgentBadge.className = "px-3 py-1 text-xs font-bold rounded-md shadow-md flex items-center";
+                    urgentBadge.style.backgroundColor = "#FFFFFF";
+                    urgentBadge.style.color = "#dc2626"; // Red text
+                    urgentBadge.style.border = "2px solid #dc2626";
+                    urgentBadge.style.animation = "pulse 2s infinite";
+
+                    // Add alert icon SVG
+                    const alertIcon = document.createElement("span");
+                    alertIcon.innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="#dc2626">
+      <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+    </svg>
+  `;
+                    urgentBadge.appendChild(alertIcon);
+
+                    // Add urgent text
+                    const urgentText = document.createElement("span");
+                    urgentText.textContent = "URGENTE";
+                    urgentBadge.appendChild(urgentText);
+
+                    // New Badge
+                    const newBadge = document.createElement("div");
+                    newBadge.className = "px-3 py-1 text-xs font-bold text-white rounded-md shadow-md flex items-center";
+                    newBadge.style.backgroundColor = "#3b82f6";
+
+                    // Add star icon SVG
+                    const newIcon = document.createElement("span");
+                    newIcon.innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+    </svg>
+  `;
+                    newBadge.appendChild(newIcon);
+
+                    // Add new text
+                    const newText = document.createElement("span");
+                    newText.textContent = "NUEVA";
+                    newBadge.appendChild(newText);
+
+                    // Add both badges to container
+                    badgesContainer.appendChild(urgentBadge);
+                    badgesContainer.appendChild(newBadge);
+
+                    // Add badges container to header
+                    header.appendChild(badgesContainer);
+
+                    // Modify card style to accommodate both badges
+                    card.style.backgroundColor = "#FEF2F2"; // Light red background
+                    card.style.borderLeft = "4px solid #dc2626"; // Red border
+                    card.style.order = "-3"; // Will appear first among displayed items
+                  } else if (objeto.urgente && !objeto.nueva) {
+                      const urgentBadge = document.createElement("div");
+                      // Use a white badge with red text for contrast against red background
+                      urgentBadge.className = "absolute -top-2 left-2 px-3 py-1 text-xs font-bold rounded-md shadow-md flex items-center";
+                      urgentBadge.style.backgroundColor = "#FFFFFF";
+                      urgentBadge.style.color = "#dc2626"; // Red text
+                      urgentBadge.style.border = "2px solid #dc2626";
+                      urgentBadge.style.zIndex = "10";
+                      urgentBadge.style.animation = "pulse 2s infinite";
+
+                      // Add alert icon SVG
+                      const alertIcon = document.createElement("span");
+                      alertIcon.innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="#dc2626">
+      <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+    </svg>
+  `;
+                      urgentBadge.appendChild(alertIcon);
+
+                      // Add text
+                      const badgeText = document.createElement("span");
+                      badgeText.textContent = "URGENTE";
+                      urgentBadge.appendChild(badgeText);
+
+                      header.appendChild(urgentBadge);
+                    } else if (objeto.nueva && !objeto.urgente) {
+                      const newBadge = document.createElement("div");
+                      // Use a blue badge with white text - matching position with urgent badge
+                      newBadge.className = "absolute -top-2 left-2 px-3 py-1 text-xs font-bold text-white rounded-md shadow-md flex items-center";
+                      newBadge.style.backgroundColor = "#3b82f6";
+                      newBadge.style.zIndex = "10";
+
+                      // Add star icon SVG
+                      const newIcon = document.createElement("span");
+                      newIcon.innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+    </svg>
+  `;
+                      newBadge.appendChild(newIcon);
+
+                      // Add text
+                      const badgeText = document.createElement("span");
+                      badgeText.textContent = "NUEVA";
+                      newBadge.appendChild(badgeText);
+
+                      header.appendChild(newBadge);
+                    }
+
                   // Card Body
                   const body = document.createElement("div");
                   body.className = "text-gray-900 p-4 space-y-2 mb-12";
@@ -1529,7 +1785,7 @@
 
                   // Footer - now more subtle with centered button
                   const footer = document.createElement("div");
-                  footer.className = "flex justify-center bg-white rounded-b-lg px-4 pb-3";
+                  footer.className = "flex justify-center bg-white rounded-b-lg px-4 mb-3";
 
                   // "Reportar" Button - smaller and more subtle
                   const actionBtn = document.createElement("button");
@@ -1663,6 +1919,18 @@
                 const titleContainer = document.createElement("div");
                 titleContainer.className = "flex items-center justify-center mb-1 my-2 lg:my-0";
 
+                // Add star icon for featured items
+                if (objeto.urgente || objeto.nueva) {
+                  const starIcon = document.createElement("span");
+                  starIcon.innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-300" viewBox="0 0 20 20" fill="currentColor">
+      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+    </svg>
+  `;
+                  starIcon.className = "mr-2";
+                  titleContainer.appendChild(starIcon);
+                }
+
                 const title = document.createElement("h3");
                 title.className = "text-white font-bold text-lg truncate max-w-full";
                 title.textContent = `${objeto.NombrePuntoVenta}`;
@@ -1725,7 +1993,7 @@
 
                 // Footer - now more subtle with centered button
                 const footer = document.createElement("div");
-                footer.className = "flex justify-center bg-white rounded-b-lg px-4 pb-3";
+                footer.className = "flex justify-center bg-white rounded-b-lg px-4 mb-3";
 
                 // "Reportar" Button - smaller and more subtle
                 const actionBtn = document.createElement("button");
@@ -1977,6 +2245,18 @@
                 const titleContainer = document.createElement("div");
                 titleContainer.className = "flex items-center justify-center mb-1 my-2 lg:my-0";
 
+                // Add star icon for featured items
+                if (objeto.urgente || objeto.nueva) {
+                  const starIcon = document.createElement("span");
+                  starIcon.innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-300" viewBox="0 0 20 20" fill="currentColor">
+      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+    </svg>
+  `;
+                  starIcon.className = "mr-2";
+                  titleContainer.appendChild(starIcon);
+                }
+
                 const title = document.createElement("h3");
                 title.className = "text-white font-bold text-lg truncate max-w-full";
                 title.textContent = `${objeto.NombrePuntoVenta}`;
@@ -2039,11 +2319,21 @@
 
                 // Footer with button
                 const footer = document.createElement("div");
-                footer.className = "flex justify-center bg-white rounded-b-lg px-4 pb-3";
+                footer.className = "flex justify-center bg-white rounded-b-lg px-4 mb-3";
 
                 // "Reportar" Button
                 const actionBtn = document.createElement("button");
-                actionBtn.className = "mx-6 absolute bottom-4 bg-red-600 hover:bg-red-700 text-white text-sm font-bold py-2 px-24 transition-all duration-300 rounded-lg shadow-sm mx-auto flex justify-center items-center";
+                // Change button color based on item type
+                let btnClass = "mx-6 absolute bottom-4 text-white text-sm font-bold py-2 px-24 transition-all duration-300 rounded-lg shadow-sm mx-auto flex justify-center items-center";
+
+                if (objeto.urgente) {
+                  btnClass += " bg-red-700 hover:bg-red-800"; // Darker red for urgent
+                } else if (objeto.nueva) {
+                  btnClass += " bg-blue-600 hover:bg-blue-700"; // Blue for new
+                } else {
+                  btnClass += " bg-red-600 hover:bg-red-700"; // Default red
+                }
+                actionBtn.className = btnClass;
                 actionBtn.innerHTML = "<span class='ml-1'>Más Detalles</span>";
 
                 actionBtn.onclick = (e) => {
@@ -2104,8 +2394,9 @@
                 sectorGrid.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 place-items-center';
 
                 // Create cards for each line in this sector
-                sectorLines.forEach((objeto) => {
-                  // Create a card container for each item
+                // Sort the lines to have urgent and new items first
+                const sortedLines = processAndSortItems(sectorLines);
+                sortedLines.forEach((objeto) => {                  // Create a card container for each item
                   const card = document.createElement("div");
                   card.className = "relative rounded-xl shadow-lg overflow-hidden transition-all duration-300 border border-gray-200 w-full h-full";
                   card.style.backgroundColor = "#FFFFFF";
@@ -2184,11 +2475,21 @@
 
                   // Footer - now more subtle with centered button
                   const footer = document.createElement("div");
-                  footer.className = "flex justify-center bg-white rounded-b-lg px-4 pb-3";
+                  footer.className = "flex justify-center bg-white rounded-b-lg px-4 mb-3";
 
                   // "Reportar" Button - smaller and more subtle
                   const actionBtn = document.createElement("button");
-                  actionBtn.className = "mx-6 absolute bottom-4 bg-red-600 hover:bg-red-700 text-white text-sm font-bold py-2 px-24 transition-all duration-300 rounded-lg shadow-sm mx-auto flex justify-center items-center";
+                  // Change button color based on item type
+                  let btnClass = "mx-6 absolute bottom-4 text-white text-sm font-bold py-2 px-24 transition-all duration-300 rounded-lg shadow-sm mx-auto flex justify-center items-center";
+
+                  if (objeto.urgente) {
+                    btnClass += " bg-red-700 hover:bg-red-800"; // Darker red for urgent
+                  } else if (objeto.nueva) {
+                    btnClass += " bg-blue-600 hover:bg-blue-700"; // Blue for new
+                  } else {
+                    btnClass += " bg-red-600 hover:bg-red-700"; // Default red
+                  }
+                  actionBtn.className = btnClass;
                   actionBtn.innerHTML = "<span class='ml-1'>Más Detalles</span>";
 
                   actionBtn.onclick = (e) => {
@@ -2306,6 +2607,18 @@
                 card.className = "relative rounded-xl shadow-lg overflow-hidden transition-all duration-300 border border-gray-200 w-full h-full";
                 card.style.backgroundColor = "#FFFFFF";
 
+                // Special styling for urgent and new items
+                if (objeto.urgente) {
+                  card.style.backgroundColor = "#FEF2F2"; // Light red background
+                  card.style.boxShadow = "0 0 15px rgba(220, 38, 38, 0.5)";
+                  card.style.borderLeft = "4px solid #dc2626"; // Red border
+                  card.style.order = "-2"; // Will appear first
+                } else if (objeto.nueva) {
+                  card.style.backgroundColor = "#EFF6FF"; // Light blue background
+                  card.style.borderLeft = "4px solid #3b82f6"; // Blue border
+                  card.style.order = "-1"; // Will appear after urgent items
+                }
+
                 // Header with SVG Red Texture Background
                 const header = document.createElement("div");
                 header.className = "relative flex flex-col px-5 py-5 text-center text-white";
@@ -2380,7 +2693,7 @@
 
                 // Footer - now more subtle with centered button
                 const footer = document.createElement("div");
-                footer.className = "flex justify-center bg-white rounded-b-lg px-4 pb-3";
+                footer.className = "flex justify-center bg-white rounded-b-lg px-4 mb-3";
 
                 // "Reportar" Button - smaller and more subtle
                 const actionBtn = document.createElement("button");

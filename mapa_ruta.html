@@ -525,6 +525,146 @@
         gestureHandling: "greedy",
         fullscreenControl: false,
       });
+
+      // Create legend div with slide animation
+      const legendDiv = document.createElement('div');
+      legendDiv.style.position = 'absolute';
+      legendDiv.style.bottom = '20px';
+      legendDiv.style.left = '0';
+      legendDiv.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+      legendDiv.style.borderRadius = '0 8px 8px 0';
+      legendDiv.style.boxShadow = '0 2px 6px rgba(0,0,0,0.1)';
+      legendDiv.style.padding = '12px 12px 12px 20px'; 
+      legendDiv.style.width = '200px';
+      legendDiv.style.zIndex = '1000';
+      legendDiv.style.transition = 'transform 0.25s ease';
+      legendDiv.style.display = 'flex';
+      legendDiv.style.alignItems = 'center';
+      legendDiv.style.justifyContent = 'space-between';
+      legendDiv.style.height = '100px';
+      legendDiv.style.transform = 'translateX(0)';
+      legendDiv.style.boxSizing = 'border-box';
+
+      // Content for the legend
+      const legendContent = document.createElement('div');
+      legendContent.style.flex = '1';
+
+      // Add title
+      const title = document.createElement('div');
+      title.textContent = 'Leyenda de Marcadores';
+      title.style.marginBlock = '10px';
+      title.style.fontWeight = 'bold';
+      title.style.color = '#333';
+      legendContent.appendChild(title);
+
+      // Add markers
+      const items = [
+        {
+          svg: `<svg width="24" height="24" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10" stroke="#4A90E2" stroke-width="1" fill="white"/>
+        <path d="M12 4.248l2.136 4.874 5.44.397-4.184 3.538 1.282 5.015L12 15.65l-4.674 3.422 1.282-5.015-4.184-3.538 5.44-.397L12 4.248z" fill="#4A90E2"/>
+      </svg>`,
+          text: 'Nueva línea'
+        },
+        {
+          svg: `<svg width="24" height="24" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10" stroke="#DC2626" stroke-width="1" fill="white"/>
+        <line x1="12" y1="7" x2="12" y2="13" stroke="#DC2626" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="12" cy="16.5" r="1.5" fill="#DC2626"/>
+      </svg>`,
+          text: 'Línea urgente'
+        }
+      ];
+
+      items.forEach((item, index) => {
+        const itemDiv = document.createElement('div');
+        itemDiv.style.display = 'flex';
+        itemDiv.style.alignItems = 'center';
+        itemDiv.style.marginBottom = '5px';
+
+        const icon = document.createElement('div');
+        icon.innerHTML = item.svg;
+        icon.style.marginRight = '10px';
+
+        const text = document.createElement('div');
+        text.textContent = item.text;
+        text.style.color = '#666';
+
+        itemDiv.appendChild(icon);
+        itemDiv.appendChild(text);
+        legendContent.appendChild(itemDiv);
+      });
+
+      // Toggle chevron/arrow
+      const toggleArrow = document.createElement('div');
+
+      toggleArrow.innerHTML = `
+  <svg width="28" height="32" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="15 18 9 12 15 6"></polyline>
+  </svg>
+  `;
+      toggleArrow.style.cursor = 'pointer';
+      toggleArrow.style.display = 'flex';
+      toggleArrow.style.alignItems = 'center';
+      toggleArrow.style.justifyContent = 'center';
+      toggleArrow.style.padding = '5px';
+      toggleArrow.style.width = '28px';
+
+      // Add components to legend
+      legendDiv.appendChild(legendContent);
+      legendDiv.appendChild(toggleArrow);
+
+      // Add to map
+      map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(legendDiv);
+
+      // Collapse/expand functionality using translateX
+      let isExpanded = true;
+
+      function toggleLegend() {
+        if (isExpanded) {
+          // Calculate how much to slide based on the legend width minus the space for arrow
+          const slideAmount = legendDiv.offsetWidth - 50; // Leave room for arrow and padding
+          legendDiv.style.transform = `translateX(-${slideAmount}px)`;
+          toggleArrow.innerHTML = `
+  <svg width="28" height="32" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="9 18 15 12 9 6"></polyline>
+  </svg>
+`;
+        } else {
+          // Slide in
+          legendDiv.style.transform = 'translateX(0)';
+          toggleArrow.innerHTML = `
+        <svg width="28" height="32" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      `;
+        }
+        isExpanded = !isExpanded;
+      }
+
+      // Click events
+      toggleArrow.addEventListener('click', toggleLegend);
+      toggleArrow.addEventListener('touchend', function (e) {
+        e.preventDefault();
+        toggleLegend();
+      });
+
+      // Auto-collapse on map interaction
+      google.maps.event.addListener(map, 'dragstart', function () {
+        if (isExpanded) {
+          toggleLegend();
+        }
+      });
+
+      const mapDiv = document.getElementById('map');
+      if (mapDiv) {
+        mapDiv.addEventListener('touchstart', function () {
+          if (isExpanded) {
+            toggleLegend();
+          }
+        }, { passive: true });
+      }
+
       renderPins(lineasInicio);
     }
 
@@ -535,8 +675,7 @@
           let i = 0;
           for (const point of lineasRender) {
             const nameToDisplay =
-              point.NombrePuntoVenta ||
-              "Nombre del punto de venta no disponible";
+              point.NombrePuntoVenta || "Nombre del punto de venta no disponible";
             const firma = point.Firma || "Sin firma";
             const observaciones = point.Observaciones || "Sin observaciones";
             const nombreCliente =
@@ -544,58 +683,97 @@
             const concatenatedName = `${point.Linea} - ${nameToDisplay} - ${firma} - ${nombreCliente} - OT CRM: ${point.OT} - OT Navision: ${point.Navision_OT} - ${point.TipoOT} - ${observaciones}`;
             const lat = point.lat ? parseFloat(point.lat) : null;
             const lng = point.lng ? parseFloat(point.lng) : null;
+
             if (lat !== null && lng !== null) {
               const adjustedLat = lat + i * offset;
               const adjustedLng = lng + i * offset;
+
+              // Custom marker icon logic
+              let markerIcon = null;
+              if (point.urgente === true || point.urgente === "true") {
+                // Red circular border with alert icon
+                markerIcon = {
+                  url: "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(`
+                <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='44' height='44' fill='none' stroke='red' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>
+                  <circle cx='12' cy='12' r='10' fill='white' stroke='red' stroke-width='2'/>
+                  <path d='M12 7v6' stroke='red' stroke-width='2'/>
+                  <path d='M12 16h0.01' stroke='red' stroke-width='2'/>
+                </svg>`),
+                  scaledSize: new google.maps.Size(48, 48),
+                  anchor: new google.maps.Point(24, 24)
+                };
+              } else if (point.nueva === true || point.nueva === "true") {
+                // Blue circular border with properly centered star icon
+                markerIcon = {
+                  url: "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(`
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='44' height='44'>
+  <!-- White background circle with gradient and shadow -->
+  <circle 
+    cx='12' 
+    cy='12' 
+    r='10' 
+    fill='url(#backgroundGradient)' 
+    stroke='#4A90E2' 
+    stroke-width='1.5'
+  />
+  
+  <!-- Gradient definition -->
+  <defs>
+    <linearGradient id="backgroundGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#F0F0F0;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Star path with a more refined look -->
+  <path 
+    d='M12 4.248l2.136 4.874 5.44.397-4.184 3.538 1.282 5.015L12 15.65l-4.674 3.422 1.282-5.015-4.184-3.538 5.44-.397L12 4.248z' 
+    fill='#4A90E2'
+    stroke='#3A7CA5'
+    stroke-width='0.5'
+  />
+</svg>`),
+                  scaledSize: new google.maps.Size(48, 48),
+                  anchor: new google.maps.Point(24, 24)
+                };
+              }
+
               const marker = new google.maps.Marker({
                 position: { lat: adjustedLat, lng: adjustedLng },
                 map: map,
                 title: concatenatedName,
+                icon: markerIcon
               });
               bounds.extend(marker.position);
               marker.addListener("click", () => {
-                // Update modal content with this point's data
                 updateModalContent(point, adjustedLat, adjustedLng);
-
-                // Show the modal
                 modal.classList.remove("hidden");
                 modal.classList.add("flex");
-
-                // Center the map on this point
                 map.setZoom(19);
                 map.setCenter(marker.getPosition());
 
-                // Set up navigation button
                 navigateButton.onclick = () => {
                   if (lat !== null && lng !== null) {
                     const url = `https://www.google.com/maps/dir/?api=1&destination=${adjustedLat},${adjustedLng}`;
                     window.open(url, "_blank");
                   } else {
-                    alert(
-                      "Las coordenadas no están disponibles para este punto."
-                    );
+                    alert("Las coordenadas no están disponibles para este punto.");
                   }
                 };
-
-                // Set up report button
                 reportButton.onclick = () => {
                   localStorage.setItem("linea", point.Linea);
                   localStorage.setItem("lineaActividad", point.Linea);
                   localStorage.setItem("ot", point.OT);
                   localStorage.setItem("cliente", point.Cliente);
                   localStorage.setItem("nombreCliente", point.NombreCliente);
-                  window.location.href =
-                    "https://dosxdos.app.iidos.com/linea_montador.html";
+                  window.location.href = "https://dosxdos.app.iidos.com/linea_montador.html";
                 };
               });
-              // Agregar una propiedad personalizada al marcador
-              marker.customId = point.Linea; // Usa un identificador único de tu objeto `point`
-              // Guarda el marcador en un array para gestionarlo más tarde si es necesario
+
+              marker.customId = point.Linea;
               marcadores.push(marker);
             } else {
-              console.log(
-                `Missing coordinates for point: ${JSON.stringify(point)}`
-              );
+              console.log(`Missing coordinates for point: ${JSON.stringify(point)}`);
               const alertMessage = `Fallo al cargar la ubicación para la línea: `;
               showAlert(alertMessage, concatenatedName);
               i++;
@@ -607,9 +785,7 @@
           resolve(true);
         } catch (error) {
           console.error(error);
-          showAlertMessage(
-            "Error al renderizar los puntos en el mapa, por favor carga de nuevo el mapa para intentarlo nuevamente"
-          );
+          showAlertMessage("Error al renderizar los puntos en el mapa, por favor carga de nuevo el mapa para intentarlo nuevamente");
           resolve(false);
         }
       });
@@ -1107,8 +1283,8 @@
       return formattedHTML;
     }
 
-    // Function to process marker data for the modal
     function updateModalContent(point, adjustedLat, adjustedLng) {
+      console.log("----> opening modal for line:", point)
       // Parse the point ID and name
       const id = point.Linea || "";
       document.getElementById("point-id").textContent = id;
@@ -1133,6 +1309,64 @@
         point.DireccionPuntoVenta || "Dirección no disponible";
       document.getElementById("point-lat").textContent = adjustedLat;
       document.getElementById("point-lng").textContent = adjustedLng;
+
+      // First, let's make the modal relative for positioning
+      const modalContent = document.querySelector(".modal .bg-red-600");
+      if (modalContent) {
+        modalContent.style.position = "relative";
+      }
+
+      // Find point-id element which we know exists
+      const pointIdElement = document.getElementById("point-id");
+
+      // Always remove any existing badges first
+      const existingBadgeContainer = document.getElementById("badge-container");
+      if (existingBadgeContainer) {
+        existingBadgeContainer.remove();
+      }
+
+      // Only create new badges if the properties are actually true
+      if ((point.urgente === true || point.urgente === "true") ||
+        (point.nueva === true || point.nueva === "true")) {
+
+        // Create container for badges
+        const container = document.createElement("div");
+        container.id = "badge-container";
+        container.style.position = "absolute";
+        container.style.top = "0px";
+        container.style.marginLeft = "25%";
+
+        // Add badges to container based on individual properties
+        if (point.urgente === true || point.urgente === "true") {
+          const urgentBadge = document.createElement("span");
+          urgentBadge.textContent = "URGENTE";
+          urgentBadge.style.backgroundColor = "#FFFFFF";
+          urgentBadge.style.color = "#dc2626";
+          urgentBadge.style.fontSize = "10px";
+          urgentBadge.style.fontWeight = "bold";
+          urgentBadge.style.padding = "3px 6px";
+          urgentBadge.style.marginInline = '5px';
+          urgentBadge.style.borderRadius = "4px";
+          container.appendChild(urgentBadge);
+        }
+
+        if (point.nueva === true || point.nueva === "true") {
+          const newBadge = document.createElement("span");
+          newBadge.textContent = "NUEVA";
+          newBadge.style.backgroundColor = "#3b82f6";
+          newBadge.style.color = "#FFFFFF";
+          newBadge.style.fontSize = "10px";
+          newBadge.style.fontWeight = "bold";
+          newBadge.style.padding = "3px 6px";
+          newBadge.style.borderRadius = "4px";
+          container.appendChild(newBadge);
+        }
+
+        // Insert badges right after point-id (only if we have badges to show)
+        if (container.childNodes.length > 0) {
+          pointIdElement.parentNode.insertBefore(container, pointIdElement.nextSibling);
+        }
+      }
     }
 
     // Add event listeners for modal closing
