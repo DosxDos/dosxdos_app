@@ -1237,9 +1237,7 @@
         </form>
 
     </section>
-
-</body>
-
+    <script src="https://dosxdos.app.iidos.com/js/index_db.js"></script>
 <script>
 
     let lineaObj;
@@ -2265,36 +2263,6 @@
         document.cookie = `${nombre}=; expires=${new Date(tiempoExpiracion * 1000).toUTCString()}; path=/;`;
     }
 
-    async function cerrarSesions() {
-        if (navigator.onLine) {
-            try {
-                loaderOn();
-                const limpiarUsuario = await limpiarDatos('dosxdos', 'usuario');
-                const limpiarRutas = await limpiarDatos('dosxdos', 'rutas');
-                const limpiarLineas = await limpiarDatos('dosxdos', 'lineas');
-                localStorage.removeItem('login');
-                localStorage.removeItem('loginMontador');
-                localStorage.removeItem('ruta');
-                localStorage.removeItem('mensaje');
-                localStorage.removeItem('linea');
-                localStorage.removeItem('lineaActividad');
-                localStorage.removeItem('ot');
-                eliminarCookie('login');
-                eliminarCookie('usuario');
-                window.location.href = "https://dosxdos.app.iidos.com/index.html";
-            } catch (error) {
-                mensaje = 'ERROR: ' + error.message;
-                console.error(error);
-                alerta(mensaje);
-            }
-        }
-        else {
-            mensaje = 'No es posible cerrar la sesión sin conexión a internet';
-            $textoMensaje.innerHTML = mensaje;
-            mensajeOn();
-        }
-    }
-
     /* TRAER DATOS DE LOS SERVIDORES */
 
     function fetchLinea(ruta, linea) {
@@ -3124,5 +3092,5 @@
 "Estado": "Pendiente", "FechaActuacion": "01/02/2023", "FirmaCliente": "prueba1", "FotosSubidas": "20",
 "HorasActuacion": "3,5", "Incidencia": "03", "MinutosActuacion": "45", "ObservacionesTecnico": "prueba1",
 "LinkWeb": "https://google.es"} -->
-
+</body>
 </html>

@@ -413,7 +413,7 @@
     const alertContainer = document.createElement("div");
     alertContainer.id = "customAlert";
     alertContainer.className =
-      "fixed left-1/2 transform -translate-x-1/2 z-50 transition-all duration-300 ease-in-out w-[95%] md:w-[75%] lg:w-[65%]";
+      "fixed left-1/2 transform -translate-x-1/2 z-50 transition-all duration-300 ease-in-out w-[85vw] md:w-[80vw] lg:w-[75vw]";
     alertContainer.style.top = "-100px";
 
     // Create alert content
@@ -514,32 +514,6 @@
         reject(event.target.error);
       };
     });
-  }
-
-  async function cerrarSesion() {
-    if (navigator.onLine) {
-      try {
-        loaderOn();
-        const eliminarBaseDeDatosCliente = await deleteDB2("dosxdos");
-        if (eliminarBaseDeDatosCliente) {
-          const eliminarTokenDeLasNotificaciones = eliminarTokenNotificaciones()
-          if (eliminarTokenDeLasNotificaciones) {
-            localStorage.clear();
-            eliminarCookie("login");
-            eliminarCookie("usuario");
-            window.location.href = "https://dosxdos.app.iidos.com/index.html";
-          }
-        }
-      } catch (error) {
-        mensaje = "ERROR: " + error.message;
-        console.error(error);
-        alerta(mensaje);
-      }
-    } else {
-      mensaje = "No es posible cerrar la sesión sin conexión a internet";
-      $textoMensaje.innerHTML = mensaje;
-      mensajeOn();
-    }
   }
 
   /* API AND DATA FUNCTIONS */
@@ -716,38 +690,32 @@
       pendientesContainer.innerHTML = "";
       aceptadasContainer.innerHTML = "";
 
-      const mostrarPendientes =
-        pestañaPendientes.classList.contains("border-red-500");
-      pendientesContainer.style.display = mostrarPendientes
-        ? "block"
-        : "none";
+      const mostrarPendientes = pestañaPendientes.classList.contains("border-red-500");
+      pendientesContainer.style.display = mostrarPendientes ? "block" : "none";
       aceptadasContainer.style.display = mostrarPendientes ? "none" : "block";
 
-      const TotalNotificaciones = await leerDatos(
-        "dosxdos",
-        "notificaciones"
-      );
-      const pendientes = TotalNotificaciones.filter(
-        (notif) => notif.visto === 0
-      );
-      const aceptadas = TotalNotificaciones.filter(
-        (notif) => notif.visto === 1
-      );
+      const TotalNotificaciones = await leerDatos("dosxdos", "notificaciones");
+
+      // Sort notifications by date in reverse chronological order (newest first)
+      TotalNotificaciones.sort((a, b) => {
+        return new Date(b.fecha_envio) - new Date(a.fecha_envio);
+      });
+
+      const pendientes = TotalNotificaciones.filter(notif => notif.visto === 0);
+      const aceptadas = TotalNotificaciones.filter(notif => notif.visto === 1);
 
       // Update counters
-      document.getElementById("contadorPendientes").textContent =
-        pendientes.length;
-      document.getElementById("contadorAceptadas").textContent =
-        aceptadas.length;
+      document.getElementById("contadorPendientes").textContent = pendientes.length;
+      document.getElementById("contadorAceptadas").textContent = aceptadas.length;
 
       // Add notifications to containers
-      pendientes.forEach((notif) => {
+      pendientes.forEach(notif => {
         const searchTerm = elements.buscador.value.toLowerCase().trim();
         const element = createNotificationElement(notif, searchTerm);
         pendientesContainer.appendChild(element);
       });
 
-      aceptadas.forEach((notif) => {
+      aceptadas.forEach(notif => {
         const searchTerm = elements.buscador.value.toLowerCase().trim();
         const element = createNotificationElement(notif, searchTerm);
         aceptadasContainer.appendChild(element);
@@ -756,6 +724,7 @@
       isUpdating = false;
     }
   };
+
 
   async function updateCounters() {
     const TotalNotificaciones = await leerDatos("dosxdos", "notificaciones");
@@ -861,6 +830,9 @@
       "relative"
     );
 
+    // Format date for display
+    const formattedDate = formatDate(objeto.fecha_envio);
+
     notificationContent.innerHTML = `
     <div class="flex justify-between items-center">
         <div
@@ -882,10 +854,11 @@
         ${objeto.visto === 1 ? "Aceptada" : "Pendiente"}
       </span>
     </div>
-    <p class="text-sm opacity-75 mt-2">${highlightText(
+    <p class="text-sm opacity-75 mt-2 mb-6">${highlightText(
         objeto.mensaje,
         searchTerm
       )}</p>
+    <p class="text-xs opacity-75 absolute bottom-2 right-4">${formattedDate}</p>
   `;
 
     notificationContent.addEventListener("click", () =>
@@ -899,93 +872,125 @@
   // CODE FOR THE NOTIFICATION MODAL
   function openNotificationModal(objeto) {
     const modal = document.getElementById("modalNotificacion");
-    const modalTitle = modal.querySelector(".modal-title");
-    const modalDetails = modal.querySelector(".modal-details");
-    const confirmButton = document.getElementById("confirmarAceptar");
-    const cancelButton = document.getElementById("cancelarAceptar");
 
-    // Extract data
+    // Parse data
     const lineNumber = extractLineNumber(objeto.titulo);
     const parsedDetails = parseLineDetails(objeto.mensaje, objeto.titulo);
+    const cleanedTitle = objeto.titulo.replace(/\s*con\s*línea\s*\d+/i, "").trim();
 
     // Determine if the notification is already read
     const isReadTab = !document
       .getElementById("pestañaPendientes")
       .classList.contains("border-red-500");
 
-    // Modal content
-    const formattedDetails = `
-        <div class="space-y-4 bg-gray-50 p-4 rounded-lg">
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <p class="text-xs font-semibold text-gray-500 uppercase">Número de Línea</p>
-              <p class="text-lg font-bold text-red-600">${lineNumber}</p>
-            </div>
-            <div>
-              <p class="text-xs font-semibold text-gray-500 uppercase">Fecha</p>
-              <p class="text-base text-gray-800">${formatDate(
-      objeto.fecha_envio
-    )}</p>
-            </div>
-          </div>
+    // Create new modal content
+    const modalContent = `
+    <div class="bg-white rounded-xl shadow-xl max-w-lg w-full mx-auto overflow-hidden">
+      <!-- Modal Header with improved layout -->
+      <div class="relative bg-red-600 p-4 text-white">
+        <div class="absolute inset-0 opacity-70" style="
+              background-image: url('https://dosxdos.app.iidos.com/img/texture-red.svg');
+              background-size: contain;
+            "></div>
 
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <p class="text-xs font-semibold text-gray-500 uppercase mb-1">Cliente</p>
-              <p class="text-base text-gray-800">${parsedDetails.client}</p>
-            </div>
-            <div>
-              <p class="text-xs font-semibold text-gray-500 uppercase mb-1">OT</p>
-              <p class="text-base text-gray-800">${parsedDetails.ot}</p>
-            </div>
-          </div>
-
+        <!-- Title and Close Button Row -->
+        <div class="relative z-10 flex justify-between items-start">
           <div>
-            <p class="text-xs font-semibold text-gray-500 uppercase mb-1">Ruta</p>
-            <p class="text-base text-gray-800">${parsedDetails.route}</p>
+            <h2 id="notification-line" class="text-xl font-bold">${lineNumber}</h2>
+            <h3 id="notification-title" class="text-lg font-medium mt-1">
+              ${cleanedTitle}
+            </h3>
           </div>
 
-          <div>
-            <p class="text-xs font-semibold text-gray-500 uppercase mb-1">Dirección</p>
-            <p class="text-base text-gray-800">${parsedDetails.address}</p>
+          <button id="modal-close" class="p-1 text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Info Grid -->
+        <div class="mt-4 relative z-10 grid grid-cols-2 gap-y-2 gap-x-10 text-sm">
+          <div class="flex gap-2">
+            <div class="text-white opacity-80 font-medium">Fecha:</div>
+            <div id="notification-date" class="font-medium">${formatDate(objeto.fecha_envio)}</div>
+          </div>
+
+          <div class="flex gap-2">
+            <div class="text-white opacity-80 font-medium">Cliente:</div>
+            <div id="notification-client" class="font-medium">
+              ${parsedDetails.client}
+            </div>
+          </div>
+
+          <div class="flex gap-2">
+            <div class="text-white opacity-80 font-medium">OT:</div>
+            <div id="notification-ot" class="font-medium">${parsedDetails.ot}</div>
+          </div>
+
+          <div class="flex gap-2">
+            <div class="text-white opacity-80 font-medium">Ruta:</div>
+            <div id="notification-route" class="font-medium">${parsedDetails.route}</div>
           </div>
         </div>
-      `;
+      </div>
 
-    const cleanedTitle = objeto.titulo
-      .replace(/\s*con\s*línea\s*\d+/i, "")
-      .trim();
+      <!-- Modal Body -->
+      <div class="p-4 space-y-3">
+        <div class="bg-gray-100 p-3 rounded-lg">
+          <p class="text-sm text-gray-700 font-medium">Dirección</p>
+          <p id="notification-address" class="text-gray-900 font-medium">${parsedDetails.address}</p>
+        </div>
 
-    // Apply modal content
-    modalTitle.textContent = cleanedTitle;
-    modalDetails.innerHTML = formattedDetails;
+        <div id="modal-description" class="bg-gray-100 p-3 rounded-lg" style="${objeto.mensaje ? '' : 'display: none;'}">
+          <p class="text-sm text-gray-700 font-medium">Observaciones</p>
+          <p id="notification-observaciones" class="text-gray-900 font-medium">${objeto.mensaje || ''}</p>
+        </div>
+      </div>
 
-    const modalDescription = modal.querySelector(".modal-description");
-    if (modalDescription) modalDescription.style.display = "none";
+      <!-- Modal Footer -->
+      <div class="p-4 flex gap-3">
+        <button id="cancelarAceptar"
+          class="flex-1 h-12 bg-gray-200 hover:bg-gray-400 text-gray-700 font-bold rounded-lg transition-colors flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd"
+              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+              clip-rule="evenodd" />
+          </svg>
+          Cancelar
+        </button>
+                ${isReadTab ? '' : `
+        <button id="confirmarAceptar"
+          class="flex-1 h-12 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg transition-colors flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd"
+              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+              clip-rule="evenodd" />
+          </svg>
+          Aceptar
+        </button>
+        `}
+      </div>
+    </div>
+  `;
 
-    confirmButton.replaceWith(confirmButton.cloneNode(true));
-    cancelButton.replaceWith(cancelButton.cloneNode(true));
+    // Set modal content
+    modal.innerHTML = modalContent;
 
-    const updatedConfirmButton = document.getElementById("confirmarAceptar");
-    const updatedCancelButton = document.getElementById("cancelarAceptar");
+    // Add event listeners
+    document.getElementById("modal-close").addEventListener("click", closeModal);
+    document.getElementById("cancelarAceptar").addEventListener("click", closeModal);
 
-    if (isReadTab) {
-      // No button for read notifications
-      updatedConfirmButton.style.display = "none";
-    } else {
-      updatedConfirmButton.textContent = "Aceptar";
-      updatedConfirmButton.classList.replace("bg-red-500", "bg-red-600");
-      updatedConfirmButton.style.display = "block"; // Ensure it's visible
-      updatedConfirmButton.addEventListener("click", () =>
+    if (!isReadTab) {
+      document.getElementById("confirmarAceptar").addEventListener("click", () =>
         aceptarNotificacion(objeto)
       );
     }
 
-    updatedCancelButton.addEventListener("click", closeModal);
-
     // Show modal
     modal.classList.remove("hidden", "opacity-0", "pointer-events-none");
-    modal.classList.add("opacity-100", "pointer-events-auto");
+    modal.classList.add("fixed", "inset-0", "bg-black", "bg-opacity-50", "z-40", "flex", "items-center", "justify-center", "p-4", "opacity-100", "pointer-events-auto");
   }
 
   // Date formatting function
@@ -1525,28 +1530,26 @@
       console.warn("TotalNotificaciones", TotalNotificaciones);
 
       if (TotalNotificaciones) {
+        // Sort notifications by date (newest first)
+        TotalNotificaciones.sort((a, b) => {
+          return new Date(b.fecha_envio) - new Date(a.fecha_envio);
+        });
+
         // Split notifications
-        const pendientes = TotalNotificaciones.filter(
-          (objeto) => objeto.visto == 0
-        );
-        const aceptadas = TotalNotificaciones.filter(
-          (objeto) => objeto.visto == 1
-        );
+        const pendientes = TotalNotificaciones.filter(objeto => objeto.visto == 0);
+        const aceptadas = TotalNotificaciones.filter(objeto => objeto.visto == 1);
 
         console.log("Pendientes:", pendientes);
         console.log("Aceptadas:", aceptadas);
 
         // Populate notification containers
-        const pendientesContainer = document.getElementById(
-          "contenidoPendientes"
-        );
-        const aceptadasContainer =
-          document.getElementById("contenidoAceptadas");
+        const pendientesContainer = document.getElementById("contenidoPendientes");
+        const aceptadasContainer = document.getElementById("contenidoAceptadas");
 
         pendientesContainer.innerHTML = "";
         aceptadasContainer.innerHTML = "";
 
-        pendientes.forEach((objeto) => {
+        pendientes.forEach(objeto => {
           const element = createNotificationElement(objeto);
           pendientesContainer.appendChild(element);
         });

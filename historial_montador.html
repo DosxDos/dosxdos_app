@@ -352,23 +352,25 @@
         <!-- Mapa Button -->
         <div class="flex justify-center mb-8">
             <button id="mapa"
-            class="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition-colors duration-200 shadow-sm px-4 py-2">
-            <span class="whitespace-nowrap">Ver en mapa</span>
-            <svg width="32" height="32" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
-              <!-- Map outline -->
-              <path d="M3 7l6 3l6-3l6 3v10l-6-3l-6 3l-6-3V7z" stroke="white" stroke-width="1.5" stroke-linecap="round"
-                stroke-linejoin="round" />
-    
-              <!-- Map fold lines -->
-              <path d="M9 10v10" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-              <path d="M15 7v10" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-    
-              <!-- Larger Location pin - prominent teardrop shape -->
-              <path d="M12 4c-2.2 0-4 1.8-4 4c0 4 4 8 4 8s4-4 4-8c0-2.2-1.8-4-4-4z" fill="white" stroke="white"
-                stroke-width="0.5" />
-              <circle cx="12" cy="8" r="1.5" fill="#e11d48" stroke="none" />
-            </svg>
-          </button>
+                class="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition-colors duration-200 shadow-sm px-4 py-2">
+                <span class="whitespace-nowrap">Ver en mapa</span>
+                <svg width="32" height="32" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+                    <!-- Map outline -->
+                    <path d="M3 7l6 3l6-3l6 3v10l-6-3l-6 3l-6-3V7z" stroke="white" stroke-width="1.5"
+                        stroke-linecap="round" stroke-linejoin="round" />
+
+                    <!-- Map fold lines -->
+                    <path d="M9 10v10" stroke="white" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <path d="M15 7v10" stroke="white" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+
+                    <!-- Larger Location pin - prominent teardrop shape -->
+                    <path d="M12 4c-2.2 0-4 1.8-4 4c0 4 4 8 4 8s4-4 4-8c0-2.2-1.8-4-4-4z" fill="white" stroke="white"
+                        stroke-width="0.5" />
+                    <circle cx="12" cy="8" r="1.5" fill="#e11d48" stroke="none" />
+                </svg>
+            </button>
         </div>
 
         <!-- Content Container -->
@@ -376,7 +378,7 @@
         </section>
     </div>
 
-</body>
+
 <script src="https://dosxdos.app.iidos.com/js/index_db.js"></script>
 <script>
 
@@ -754,26 +756,7 @@
         });
     }
 
-    async function cerrarSesion() {
-        if (navigator.onLine) {
-            try {
-                loaderOn();
-                localStorage.clear();
-                eliminarCookie('login');
-                eliminarCookie('usuario');
-                await deleteDB2('dosxdos') ? console.log("Base de datos eliminada exitosamente") : console.error("error al eliminar la base de datos");
-                window.location.href = "https://dosxdos.app.iidos.com/index.html";
-            } catch (error) {
-                mensaje = 'ERROR: ' + error.message;
-                console.error(error);
-                alerta(mensaje);
-            }
-        }
-        else {
-            mensaje = 'No es posible cerrar la sesión sin conexión a internet';
-            alerta(mensaje);
-        }
-    }
+    
 
     /* TRAER DATOS DE LOS SERVIDORES */
 
@@ -2047,6 +2030,35 @@
         });
     }
 
+    function closeSidebar() {
+        const mobileMenu = document.getElementById("mobileMenu");
+        const hamburgerTop = document.getElementById("hamburgerTop");
+        const hamburgerMiddle = document.getElementById("hamburgerMiddle");
+        const hamburgerBottom = document.getElementById("hamburgerBottom");
+
+        if (mobileMenu) {
+            mobileMenu.classList.add("translate-x-full");
+
+            // Reset hamburger icon colors and position
+            if (hamburgerTop && hamburgerMiddle && hamburgerBottom) {
+                // Remove white background
+                hamburgerTop.classList.remove("bg-white");
+                hamburgerMiddle.classList.remove("bg-white");
+                hamburgerBottom.classList.remove("bg-white");
+
+                // Add dark background
+                hamburgerTop.classList.add("bg-gray-900");
+                hamburgerMiddle.classList.add("bg-gray-900");
+                hamburgerBottom.classList.add("bg-gray-900");
+
+                // Reset transforms
+                hamburgerTop.style.transform = "";
+                hamburgerMiddle.style.opacity = "1";
+                hamburgerBottom.style.transform = "";
+            }
+        }
+    }
+
     // INITIALIZATION FUNCTION
     function initializeApplication() {
         // Set up menu interactions
@@ -2086,5 +2098,5 @@
 </script>
 <script src="https://dosxdos.app.iidos.com/js/notificaciones.js"></script>
 <script src="https://dosxdos.app.iidos.com/js/loadFirebase.js"></script>
-
+</body>
 </html>

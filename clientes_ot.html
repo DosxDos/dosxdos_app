@@ -1590,9 +1590,9 @@
         </section>
     </main>
 </body>
+<script src="https://dosxdos.app.iidos.com/js/index_db.js"></script>
 
 </html>
-
 <script>
 
     /* VARIABLES GLOBALES */
@@ -1818,21 +1818,6 @@
     function eliminarCookie(nombre) {
         const tiempoExpiracion = 1; // Segundo 1 de la Época Unix
         document.cookie = `${nombre}=; expires=${new Date(tiempoExpiracion * 1000).toUTCString()}; path=/;`;
-    }
-
-    function cerrarSesions() {
-        try {
-            loaderOn();
-            localStorage.removeItem('login');
-            localStorage.removeItem('usuario');
-            eliminarCookie('login');
-            eliminarCookie('usuario');
-            window.location.href = "https://dosxdos.app.iidos.com/index.html";
-        } catch (error) {
-            mensaje = 'ERROR: ' + error.message;
-            console.error(error);
-            alerta(mensaje);
-        }
     }
 
     function limpiarContenedor(contenedor) {

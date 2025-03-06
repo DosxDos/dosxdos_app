@@ -359,3 +359,55 @@ function deleteDB2(database) {
         };
     });
 }
+
+
+async function cerrarSesion() {
+    if (navigator.onLine) {
+      try {
+        loaderOn();
+        const eliminarBaseDeDatosCliente = await deleteDB2("dosxdos");
+        if (eliminarBaseDeDatosCliente) {
+          const eliminarTokenDeLasNotificaciones = eliminarTokenNotificaciones()
+          if (eliminarTokenDeLasNotificaciones) {
+            localStorage.clear();
+            eliminarCookie("login");
+            eliminarCookie("usuario");
+            window.location.href = "https://dosxdos.app.iidos.com/index.html";
+          }
+        }
+      } catch (error) {
+        mensaje = "ERROR: " + error.message;
+        console.error(error);
+        alerta(mensaje);
+      }
+    } else {
+      mensaje = "No es posible cerrar la sesión sin conexión a internet";
+      $textoMensaje.innerHTML = mensaje;
+      mensajeOn();
+    }
+  }
+
+  async function cerrarSesions() {
+    if (navigator.onLine) {
+      try {
+        const eliminarBaseDeDatosCliente = await deleteDB2("dosxdos");
+        if (eliminarBaseDeDatosCliente) {
+          const eliminarTokenDeLasNotificaciones = eliminarTokenNotificaciones()
+          if (eliminarTokenDeLasNotificaciones) {
+            localStorage.clear();
+            eliminarCookie("login");
+            eliminarCookie("usuario");
+            window.location.href = "https://dosxdos.app.iidos.com/index.html";
+          }
+        }
+      } catch (error) {
+        mensaje = "ERROR: " + error.message;
+        console.error(error);
+        alerta(mensaje);
+      }
+    } else {
+      mensaje = "No es posible cerrar la sesión sin conexión a internet";
+      $textoMensaje.innerHTML = mensaje;
+      mensajeOn();
+    }
+  }

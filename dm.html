@@ -1702,32 +1702,6 @@
       ).toUTCString()}; path=/;`;
     }
 
-    function cerrarSesions() {
-      if (navigator.onLine) {
-        try {
-          loaderOn();
-          localStorage.removeItem("login");
-          localStorage.removeItem("ruta");
-          localStorage.removeItem("mensaje");
-          localStorage.removeItem("linea");
-          localStorage.removeItem("lineaActividad");
-          localStorage.removeItem("ot");
-          eliminarCookie("login");
-          eliminarCookie("usuario");
-          window.location.href = "https://dosxdos.app.iidos.com/index.html";
-        } catch (error) {
-          mensaje = "ERROR: " + error.message;
-          console.error(error);
-          alerta(mensaje);
-          scrollToTop();
-        }
-      } else {
-        mensaje = "No es posible cerrar la sesión sin conexión a internet";
-        $textoMensaje.innerHTML = mensaje;
-        mensajeOn();
-      }
-    }
-
     function convertirFecha(fecha) {
       // Separar la fecha y la hora
       const [fechaParte, horaParte] = fecha.split(" ");

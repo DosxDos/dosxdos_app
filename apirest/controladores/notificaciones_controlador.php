@@ -607,18 +607,21 @@ class NotificacionesControlador
 
     //Método de burbuja ordena de menor fecha a mayor fecha
     public function ordenarNotificacionesPorFecha($notificaciones)
-    {
-        $n = count($notificaciones);
-        for ($i = 0; $i < $n - 1; $i++) {
-            for ($j = 0; $j < $n - $i - 1; $j++) {
-                if (strtotime($notificaciones[$j]['fecha_envio']) < strtotime($notificaciones[$j + 1]['fecha_envio'])) {
-                    // Intercambiar las notificaciones
-                    $temp = $notificaciones[$j];
-                    $notificaciones[$j] = $notificaciones[$j + 1];
-                    $notificaciones[$j + 1] = $temp;
-                }
+{
+    $n = count($notificaciones);
+    // Ordenamiento burbuja
+    for ($i = 0; $i < $n - 1; $i++) {
+        for ($j = 0; $j < $n - $i - 1; $j++) {
+            // Si la fecha en $j es más reciente que la fecha en $j+1, intercambiamos
+            if (strtotime($notificaciones[$j]['fecha_envio']) > strtotime($notificaciones[$j + 1]['fecha_envio'])) {
+                // Intercambiar las notificaciones
+                $temp = $notificaciones[$j];
+                $notificaciones[$j] = $notificaciones[$j + 1];
+                $notificaciones[$j + 1] = $temp;
             }
         }
-        return $notificaciones;
     }
+    return $notificaciones;
+}   
+
 }

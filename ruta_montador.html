@@ -445,7 +445,7 @@
       const alertContainer = document.createElement("div");
       alertContainer.id = "customAlert";
       alertContainer.className =
-        "fixed left-1/2 transform -translate-x-1/2 z-50 transition-all duration-300 ease-in-out w-[95%] md:w-[75%] lg:w-[65%]";
+      "fixed left-1/2 transform -translate-x-1/2 z-50 transition-all duration-300 ease-in-out w-[85vw] md:w-[80vw] lg:w-[75vw]";
       alertContainer.style.top = "-100px";
 
       // Create alert content
@@ -528,32 +528,6 @@
       document.cookie = `${nombre}=; expires=${new Date(
         tiempoExpiracion * 1000
       ).toUTCString()}; path=/;`;
-    }
-
-    async function cerrarSesion() {
-      if (navigator.onLine) {
-        try {
-          loaderOn();
-          const eliminarBaseDeDatosCliente = await deleteDB2("dosxdos");
-          if (eliminarBaseDeDatosCliente) {
-            const eliminarTokenDeLasNotificaciones = eliminarTokenNotificaciones()
-            if (eliminarTokenDeLasNotificaciones) {
-              localStorage.clear();
-              eliminarCookie("login");
-              eliminarCookie("usuario");
-              window.location.href = "https://dosxdos.app.iidos.com/index.html";
-            }
-          }
-        } catch (error) {
-          mensaje = "ERROR: " + error.message;
-          console.error(error);
-          alerta(mensaje);
-        }
-      } else {
-        mensaje = "No es posible cerrar la sesión sin conexión a internet";
-        $textoMensaje.innerHTML = mensaje;
-        mensajeOn();
-      }
     }
 
     /* TRAER DATOS DE LOS SERVIDORES */
