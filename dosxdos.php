@@ -65,10 +65,10 @@ if ($conexion && $idUsuario) {
     <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/tailwindmain.css" />
     <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/index.css" />
     <link rel="icon" type="image/png" href="https://dosxdos.app.iidos.com/img/logoPwa256.png">
-    <script src="js/jquery.js"></script>
-    <script src="js/data_tables.js"></script>
-    <script src="js/cdn_data_tables.js"></script>
-    <script src="js/index_db.js"></script>
+    <script src="https://dosxdos.app.iidos.com/js/jquery.js"></script>
+    <script src="https://dosxdos.app.iidos.com/js/data_tables.js"></script>
+    <script src="https://dosxdos.app.iidos.com/js/cdn_data_tables.js"></script>
+    <script src="https://dosxdos.app.iidos.com/js/index_db.js"></script>
     <script>
         let titulo1,
             titulo2,
@@ -945,20 +945,21 @@ function hideAlert(alertContainer) {
         console.log('La conexión a Internet se ha perdido.');
     });
 
-// Add this function right after the setupGlobalMenuClosing function
 function setupGlobalClickHandler() {
-  // This is just an alias for setupGlobalMenuClosing to fix the reference error
   setupGlobalMenuClosing();
 }
 
-// Replace the setupMenuInteractions function with this improved version
 function setupMenuInteractions() {
   // Desktop User Menu
   const userMenuButton = document.getElementById("userMenuButton");
   const userDropdownMenu = document.getElementById("opcionesUsuario");
 
   if (userMenuButton && userDropdownMenu) {
-    userMenuButton.addEventListener("click", (e) => {
+    // Remove existing listeners for user menu
+    const newUserMenuButton = userMenuButton.cloneNode(true);
+    userMenuButton.parentNode.replaceChild(newUserMenuButton, userMenuButton);
+    
+    newUserMenuButton.addEventListener("click", (e) => {
       e.preventDefault();
       e.stopPropagation();
       if (userDropdownMenu.classList.contains("hidden")) {
@@ -967,19 +968,27 @@ function setupMenuInteractions() {
         userDropdownMenu.classList.add("hidden");
       }
       const isExpanded = !userDropdownMenu.classList.contains("hidden");
-      userMenuButton.setAttribute("aria-expanded", isExpanded.toString());
+      newUserMenuButton.setAttribute("aria-expanded", isExpanded.toString());
     });
   }
 
   // Mobile Menu Toggle
   const menuButton = document.getElementById("menuButton");
   const mobileMenu = document.getElementById("opcionesMenu");
-  const hamburgerTop = document.getElementById("hamburgerTop");
-  const hamburgerMiddle = document.getElementById("hamburgerMiddle");
-  const hamburgerBottom = document.getElementById("hamburgerBottom");
-
+  
   if (menuButton && mobileMenu) {
-    menuButton.addEventListener("click", (e) => {
+    // Remove existing listeners for mobile menu
+    const newMenuButton = menuButton.cloneNode(true);
+    menuButton.parentNode.replaceChild(newMenuButton, menuButton);
+    
+    // Get fresh references after DOM changes
+    const freshMenuButton = document.getElementById("menuButton");
+    // Get hamburger icon elements
+    const hamburgerTop = document.getElementById("hamburgerTop");
+    const hamburgerMiddle = document.getElementById("hamburgerMiddle");
+    const hamburgerBottom = document.getElementById("hamburgerBottom");
+    
+    freshMenuButton.addEventListener("click", (e) => {
       e.preventDefault();
       e.stopPropagation();
       
@@ -999,30 +1008,30 @@ function setupMenuInteractions() {
       
       if (isOpen) {
         // Menu is opening - change hamburger to X
-        hamburgerTop.style.transform = "rotate(45deg) translate(10px, 7px)";
-        hamburgerMiddle.style.opacity = "0";
-        hamburgerBottom.style.transform = "rotate(-45deg) translate(10px, -7px)";
+        document.getElementById("hamburgerTop").style.transform = "rotate(45deg) translate(10px, 7px)";
+        document.getElementById("hamburgerMiddle").style.opacity = "0";
+        document.getElementById("hamburgerBottom").style.transform = "rotate(-45deg) translate(10px, -7px)";
         
-        hamburgerTop.classList.remove("bg-gray-900");
-        hamburgerMiddle.classList.remove("bg-gray-900");
-        hamburgerBottom.classList.remove("bg-gray-900");
+        document.getElementById("hamburgerTop").classList.remove("bg-gray-900");
+        document.getElementById("hamburgerMiddle").classList.remove("bg-gray-900");
+        document.getElementById("hamburgerBottom").classList.remove("bg-gray-900");
         
-        hamburgerTop.classList.add("bg-white");
-        hamburgerMiddle.classList.add("bg-white");
-        hamburgerBottom.classList.add("bg-white");
+        document.getElementById("hamburgerTop").classList.add("bg-white");
+        document.getElementById("hamburgerMiddle").classList.add("bg-white");
+        document.getElementById("hamburgerBottom").classList.add("bg-white");
       } else {
         // Menu is closing - change X back to hamburger
-        hamburgerTop.style.transform = "";
-        hamburgerMiddle.style.opacity = "1";
-        hamburgerBottom.style.transform = "";
+        document.getElementById("hamburgerTop").style.transform = "";
+        document.getElementById("hamburgerMiddle").style.opacity = "1";
+        document.getElementById("hamburgerBottom").style.transform = "";
         
-        hamburgerTop.classList.remove("bg-white");
-        hamburgerMiddle.classList.remove("bg-white");
-        hamburgerBottom.classList.remove("bg-white");
+        document.getElementById("hamburgerTop").classList.remove("bg-white");
+        document.getElementById("hamburgerMiddle").classList.remove("bg-white");
+        document.getElementById("hamburgerBottom").classList.remove("bg-white");
         
-        hamburgerTop.classList.add("bg-gray-900");
-        hamburgerMiddle.classList.add("bg-gray-900");
-        hamburgerBottom.classList.add("bg-gray-900");
+        document.getElementById("hamburgerTop").classList.add("bg-gray-900");
+        document.getElementById("hamburgerMiddle").classList.add("bg-gray-900");
+        document.getElementById("hamburgerBottom").classList.add("bg-gray-900");
       }
     });
   }
@@ -1032,7 +1041,11 @@ function setupMenuInteractions() {
   const logoutMobile = document.getElementById("cerrarSesionMobile");
 
   if (editUserMobile) {
-    editUserMobile.addEventListener("click", () => {
+    // Remove existing listeners
+    const newEditUserMobile = editUserMobile.cloneNode(true);
+    editUserMobile.parentNode.replaceChild(newEditUserMobile, editUserMobile);
+    
+    newEditUserMobile.addEventListener("click", () => {
       if (navigator.onLine && usuario) {
         window.location.href = `https://dosxdos.app.iidos.com/dosxdos.php?modulo=editarUsuario&id=${usuario.id}`;
       } else {
@@ -1042,13 +1055,20 @@ function setupMenuInteractions() {
   }
 
   if (logoutMobile) {
-    logoutMobile.addEventListener("click", () => {
-      cerrarSesions();
+    // Remove existing listeners
+    const newLogoutMobile = logoutMobile.cloneNode(true);
+    logoutMobile.parentNode.replaceChild(newLogoutMobile, logoutMobile);
+    
+    newLogoutMobile.addEventListener("click", () => {
+      if (typeof cerrarSesion === 'function') {
+        cerrarSesion();
+      } else if (typeof cerrarSesions === 'function') {
+        cerrarSesions();
+      }
     });
   }
 }
 
-// Update the setupGlobalMenuClosing function to handle the mobile menu correctly
 function setupGlobalMenuClosing() {
   document.addEventListener("click", (e) => {
     const userMenuButton = document.getElementById("userMenuButton");

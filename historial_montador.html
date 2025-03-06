@@ -328,7 +328,7 @@
 
         <!-- Date Selection -->
         <section class="w-full max-w-md mx-auto flex mb-8">
-            <div class="bg-white p-8 rounded shadow-md w-full max-w-md">
+            <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
                 <h2 class="text-2xl font-bold mb-6 text-center">Selecciona las Fechas</h2>
                 <div class="mb-4">
                     <label for="fecha-inicio" class="block text-gray-700 mb-2">Fecha de Inicio</label>
@@ -1883,7 +1883,6 @@
         const userDropdownMenu = document.getElementById("userDropdownMenu");
 
         if (userMenuButton && userDropdownMenu) {
-            console.log("Setting up desktop menu button listener");
             userMenuButton.addEventListener("click", (e) => {
                 e.preventDefault();
                 e.stopPropagation();
