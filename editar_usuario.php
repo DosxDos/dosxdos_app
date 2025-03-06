@@ -277,14 +277,18 @@ if ($idUsuario == $id && $usuarioEditado) {
     <section class="bg-white rounded-xl shadow-md">
         <div class="p-6">
             <form action="editar_usuario.php" method="post" id="editarUsuarioFormulario" enctype="multipart/form-data" class="space-y-6" novalidate>
-                
-  <!-- User profile image preview -->
-<div class="flex justify-center mb-8 -mt-12">
-    <div class="w-48 h-48 rounded-full overflow-hidden border-2 border-red-600 bg-gradient-to-r from-red-500 to-red-600 flex items-center justify-center shadow-2xl transform hover:scale-105 transition-all duration-300">
-        <img src="<?php if ($imagenE) { echo ('https://dosxdos.app.iidos.com/' . $imagenE); } else { echo 'https://dosxdos.app.iidos.com/img/usuario.png'; } ?>" 
-            id="imagenPerfil" alt="Perfil" class="w-full h-full object-cover" />
-    </div>
-</div>
+
+                <!-- User profile image preview -->
+                <div class="flex justify-center mb-8 -mt-12">
+                    <div class="w-48 h-48 rounded-full overflow-hidden border-2 border-red-600 bg-gradient-to-r from-red-500 to-red-600 flex items-center justify-center shadow-2xl transform hover:scale-105 transition-all duration-300">
+                        <img src="<?php if ($imagenE) {
+                                        echo ('https://dosxdos.app.iidos.com/' . $imagenE);
+                                    } else {
+                                        echo 'https://dosxdos.app.iidos.com/img/usuario.png';
+                                    } ?>"
+                            id="imagenPerfil" alt="Perfil" class="w-full h-full object-cover" />
+                    </div>
+                </div>
 
                 <!-- Username and Role -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -333,7 +337,7 @@ if ($idUsuario == $id && $usuarioEditado) {
                     <?php } else { ?>
                         <input type="hidden" name="cod" value="<?php echo $codE; ?>">
                     <?php } ?>
-                    
+
                     <!-- Status (Admin only) -->
                     <?php if ($clase == 'admon') { ?>
                         <div class="space-y-2">
@@ -363,7 +367,7 @@ if ($idUsuario == $id && $usuarioEditado) {
                         <input type="password" name="contrasena" id="contrasena" value="<?php echo $contrasenaE; ?>" maxlength="12"
                             class="block w-full p-2.5 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent" />
                     </div>
-                    
+
                     <div class="space-y-2">
                         <label for="contrasena2" class="block text-sm font-medium text-gray-700">REPETIR CONTRASEÑA: <span class="text-red-600">*</span></label>
                         <input type="password" name="contrasena2" id="contrasena2" value="<?php echo $contrasenaE; ?>" maxlength="12"
@@ -378,7 +382,7 @@ if ($idUsuario == $id && $usuarioEditado) {
                         <input type="text" name="nombre" id="nombre" value="<?php echo $nombreE; ?>"
                             class="block w-full p-2.5 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent" />
                     </div>
-                    
+
                     <div class="space-y-2">
                         <label for="apellido" class="block text-sm font-medium text-gray-700">APELLIDO:</label>
                         <input type="text" name="apellido" id="apellido" value="<?php echo $apellidoE; ?>"
@@ -392,7 +396,7 @@ if ($idUsuario == $id && $usuarioEditado) {
                         <input type="email" name="correo" id="correo" value="<?php echo $correoE; ?>"
                             class="block w-full p-2.5 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent" />
                     </div>
-                    
+
                     <div class="space-y-2">
                         <label for="movil" class="block text-sm font-medium text-gray-700">MÓVIL:</label>
                         <input type="number" name="movil" id="movil" value="<?php echo $movilE; ?>"
@@ -459,7 +463,7 @@ if ($idUsuario == $id && $usuarioEditado) {
                         </a>
                     <?php } ?>
 
-<button type="button" id="enviar" class="w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white py-3 px-6 rounded-lg shadow-md transition-all text-base font-medium">
+                    <button type="button" id="enviar" class="w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white py-3 px-6 rounded-lg shadow-md transition-all text-base font-medium">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                         </svg>
@@ -473,7 +477,7 @@ if ($idUsuario == $id && $usuarioEditado) {
 <script>
     actualizarUsuario = false;
     titulo1 = <?php echo ("'EDITAR USUARIO'"); ?>;
-    titulo2 = <?php echo ("'EDITAR USUARIO'"); ?>;    /* CAMBIO DE IMAGEN */
+    titulo2 = <?php echo ("'EDITAR USUARIO'"); ?>; /* CAMBIO DE IMAGEN */
     const $imagen = document.getElementById('imagen'),
         $imagenPerfil = document.getElementById('imagenPerfil');
     const cambioImagen = file => new Promise((resolve, reject) => {

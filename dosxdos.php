@@ -86,264 +86,266 @@ if ($conexion && $idUsuario) {
     </div>
 
     <section id="encabezado" class="w-full bg-white shadow-md fixed top-0 z-30">
-    <!-- Main header -->
-    <div class="flex items-center justify-between w-full px-6 py-4">
-        <!-- Logo -->
-        <div class="flex items-center">
-            <img src="https://dosxdos.app.iidos.com/img/logo300.png" class="h-16 hidden xl:block" alt="Logo completo" />
-            <img src="https://dosxdos.app.iidos.com/img/Isotipo-38.png" class="h-16 xl:hidden" alt="Isotipo" />
-        </div>
-
-        <!-- Desktop Navigation -->
-        <nav class="hidden xl:flex items-center space-x-8">
-            <!-- Menu options will be programmatically shown/hidden in JS -->
-            <div id="horarios" class="displayOff">
-                <a href="https://dosxdos.app.iidos.com/horarios.html" class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"/>
-                        <polyline points="12 6 12 12 16 14"/>
-                    </svg>
-                    <span>Horarios</span>
-                </a>
+        <!-- Main header -->
+        <div class="flex items-center justify-between w-full px-6 py-4">
+            <!-- Logo -->
+            <div class="flex items-center">
+                <img src="https://dosxdos.app.iidos.com/img/logo300.png" class="h-16 hidden xl:block" alt="Logo completo" />
+                <img src="https://dosxdos.app.iidos.com/img/Isotipo-38.png" class="h-16 xl:hidden" alt="Isotipo" />
             </div>
 
-            <div id="archivos" class="displayOff">
-                <a href="https://dosxdos.app.iidos.com/ot.html" class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
-                        <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
-                    </svg>
-                    <span>OT</span>
+            <!-- Desktop Navigation -->
+            <nav class="hidden xl:flex items-center space-x-8">
+                <!-- Menu options will be programmatically shown/hidden in JS -->
+
+                <div id="archivos" class="displayOff">
+                    <a href="https://dosxdos.app.iidos.com/ot.html" class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                            <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+                        </svg>
+                        <span>OT</span>
+                    </a>
+                </div>
+
+                <div id="icLineasOt" class="displayOff">
+                    <a href="https://dosxdos.app.iidos.com/lineas_ot.html" class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 12h6" />
+                            <path d="M9 16h6" />
+                            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                            <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+                        </svg>
+                        <span>Líneas OT</span>
+                    </a>
+                </div>
+
+                <div id="pv" class="displayOff">
+                    <a href="https://dosxdos.app.iidos.com/pv.html" class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                        </svg>
+                        <span>PV</span>
+                    </a>
+                </div>
+
+                <div id="rutasIcono" class="displayOff">
+                    <a href="https://dosxdos.app.iidos.com/rutas.html" class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 5c8 0 8 14 16 14" />
+                            <circle cx="4" cy="5" r="2" />
+                            <circle cx="12" cy="12" r="2" />
+                            <circle cx="20" cy="19" r="2" />
+                        </svg>
+                        <span>Rutas</span>
+                    </a>
+                </div>
+
+                <div id="lineasIcono" class="displayOff">
+                    <a href="https://dosxdos.app.iidos.com/lineas.html" class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                            <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+                            <path d="M9 12h6" />
+                            <path d="M9 16h6" />
+                        </svg>
+                        <span>Líneas</span>
+                    </a>
+                </div>
+
+                <div id="usuarios" class="displayOff">
+                    <a href="https://dosxdos.app.iidos.com/dosxdos.php?modulo=usuarios" class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                        <span>Usuarios</span>
+                    </a>
+                </div>
+
+                <div id="usuariosOficina" class="displayOff">
+                    <a href="https://dosxdos.app.iidos.com/usuarios_oficina.html" class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                        <span>Usuarios</span>
+                    </a>
+                </div>
+
+                <div id="rutasMontador" class="displayOff">
+                    <a href="https://dosxdos.app.iidos.com/rutas_montador.html" class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 5c8 0 8 14 16 14" />
+                            <circle cx="4" cy="5" r="2" />
+                            <circle cx="12" cy="12" r="2" />
+                            <circle cx="20" cy="19" r="2" />
+                        </svg>
+                        <span>Rutas</span>
+                    </a>
+                </div>
+
+                <div id="lineasMontador" class="displayOff">
+                    <a href="https://dosxdos.app.iidos.com/ruta_montador.html" class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                            <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+                            <path d="M9 12h6" />
+                            <path d="M9 16h6" />
+                        </svg>
+                        <span>Líneas</span>
+                    </a>
+                </div>
+
+                <div id="historial" class="displayOff">
+                    <a href="https://dosxdos.app.iidos.com/historial_montador.html" class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
+                        <svg class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="12 6 12 12 16 14" />
+                        </svg>
+                        <span>Historial</span>
+                    </a>
+                </div>
+
+                <div id="dm" class="displayOff">
+                    <a href="https://dosxdos.app.iidos.com/dm.html" class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                            <line x1="3" y1="9" x2="21" y2="9" />
+                            <line x1="9" y1="21" x2="9" y2="9" />
+                        </svg>
+                        <span>DM</span>
+                    </a>
+                </div>
+
+                <div id="reciclar" class="displayOff">
+                    <a href="https://dosxdos.app.iidos.com/reciclar.html" class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            <line x1="10" y1="11" x2="10" y2="17"></line>
+                            <line x1="14" y1="11" x2="14" y2="17"></line>
+                        </svg>
+                        <span>Reciclar</span>
+                    </a>
+                </div>
+
+                <!-- Desktop Menu Notifications Bell -->
+                <a href="https://dosxdos.app.iidos.com/notificaciones.html" class="relative z-10" id="desktopBellContainer">
+                    <img id="bellDesktop" src="https://dosxdos.app.iidos.com/img/bell2.png" class="w-7 text-gray-900 object-contain" />
+                    <span id="desktopNotificationCount" class="absolute top-0 -right-2 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] text-center border hidden"></span>
                 </a>
+
+                <!-- Desktop User Menu -->
+                <div class="relative group drop-shadow">
+                    <button id="userMenuButton" class="group flex items-center gap-3 py-1 pl-1.5 pr-4 rounded-full bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-gray-300 transition-all duration-200" aria-expanded="false">
+                        <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-white shadow-sm bg-gray-100 flex items-center justify-center">
+                            <img id="imagenUsuario" src="https://dosxdos.app.iidos.com/img/usuario.png" class="w-full h-full object-cover" alt="Profile" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+                            <svg class="w-5 h-5 text-gray-400 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+
+                        <span id="nombreUsuario" class="text-gray-700 font-medium text-lg"></span>
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-400 group-hover:text-gray-600 transition-transform duration-200 group-hover:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+
+                    <!-- Desktop Dropdown Menu -->
+                    <div id="opcionesUsuario" class="hidden absolute right-0 mt-2 w-max bg-white rounded-lg shadow-lg p-4 z-50">
+                        <button id="cerrarSesion" class="flex items-center gap-2 w-full text-left text-xl text-red-500 hover:bg-red-600/20 rounded-lg transition-colors duration-200 p-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                                <polyline points="16 17 21 12 16 7" />
+                                <line x1="21" y1="12" x2="9" y2="12" />
+                            </svg>
+                            Cerrar Sesión
+                        </button>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Mobile Navigation -->
+            <div class="xl:hidden flex items-center space-x-2 mx-2">
+                <!-- Mobile Bell -->
+                <a href="https://dosxdos.app.iidos.com/notificaciones.html" class="relative z-10" id="mobileBellContainer">
+                    <img id="bellMobile" src="https://dosxdos.app.iidos.com/img/bell2.png" class="w-8 text-gray-900 object-contain mt-2" />
+                    <span id="mobileNotificationCount" class="absolute top-2 right-0 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] text-center border hidden"></span>
+                </a>
+
+                <!-- Mobile Menu Button -->
+                <button id="menuButton" class="xl:hidden relative z-50 p-2 focus:outline-none">
+                    <div class="relative w-8 h-8">
+                        <span class="absolute h-1 w-8 bg-gray-900 transition-all duration-300 ease-in-out top-1" id="hamburgerTop"></span>
+                        <span class="absolute h-1 w-8 bg-gray-900 transition-all duration-300 ease-in-out top-4" id="hamburgerMiddle"></span>
+                        <span class="absolute h-1 w-8 bg-gray-900 transition-all duration-300 ease-in-out top-7" id="hamburgerBottom"></span>
+                    </div>
+                </button>
             </div>
 
-            <div id="icLineasOt" class="displayOff">
-                <a href="https://dosxdos.app.iidos.com/lineas_ot.html" class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M9 12h6"/>
-                        <path d="M9 16h6"/>
-                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
-                        <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
-                    </svg>
-                    <span>Líneas OT</span>
-                </a>
-            </div>
+            <div id="opcionesMenu" class="xl:hidden fixed inset-0 bg-gradient-to-r from-red-500 to-red-600 bg-opacity-95 transform translate-x-full transition-all duration-500 ease-in-out z-40 overflow-hidden backdrop-blur-sm flex flex-col">
+                <div class="absolute inset-0 z-0" style="background-image: url('https://dosxdos.app.iidos.com/img/texture-red.svg'); background-size: contain; opacity: 0.7;"></div>
+                <!-- User Profile Section -->
+                <div class="px-8 py-4 mt-20 relative z-10">
+                    <div class="relative flex items-center gap-3 py-1 pl-1.5 pr-4 bg-white shadow-lg rounded-full">
+                        <!-- Profile image -->
+                        <div class="absolute left-0 w-28 h-28 rounded-full overflow-hidden border-4 border-white bg-gradient-to-br from-red-50 to-white flex items-center justify-center shadow-xl" style="transform: translateX(-15%);">
+                            <img id="imagenUsuarioMobile" src="https://dosxdos.app.iidos.com/img/usuario.png" class="w-full h-full object-cover" alt="Profile" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+                            <svg class="w-12 h-12 text-gray-400 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                        <div class="ml-28 flex items-center py-4">
+                            <!-- User name -->
+                            <span class="text-black font-medium text-xl">¡Hola,&nbsp;</span>
+                            <span id="nombreUsuarioMobile" class="text-black font-medium text-xl"></span>
+                            <span class="text-black font-medium text-xl">!</span>
+                        </div>
+                    </div>
+                </div>
 
-            <div id="pv" class="displayOff">
-                <a href="https://dosxdos.app.iidos.com/pv.html" class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                    </svg>
-                    <span>PV</span>
-                </a>
-            </div>
+                <!-- Mobile Menu Navigation Links -->
+                <nav class="px-8 py-6 space-y-2 relative z-10 flex-1 overflow-y-auto custom-scrollbar">
+                    <!-- Dynamic menu items will be added here based on user role -->
+                </nav>
 
-            <div id="rutasIcono" class="displayOff">
-                <a href="https://dosxdos.app.iidos.com/rutas.html" class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M4 5c8 0 8 14 16 14"/>
-                        <circle cx="4" cy="5" r="2"/>
-                        <circle cx="12" cy="12" r="2"/>
-                        <circle cx="20" cy="19" r="2"/>
-                    </svg>
-                    <span>Rutas</span>
-                </a>
-            </div>
-
-            <div id="lineasIcono" class="displayOff">
-                <a href="https://dosxdos.app.iidos.com/lineas.html" class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
-                        <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
-                        <path d="M9 12h6"/>
-                        <path d="M9 16h6"/>
-                    </svg>
-                    <span>Líneas</span>
-                </a>
-            </div>
-
-            <div id="usuarios" class="displayOff">
-                <a href="https://dosxdos.app.iidos.com/dosxdos.php?modulo=usuarios" class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="9" cy="7" r="4"></circle>
-                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                    </svg>
-                    <span>Usuarios</span>
-                </a>
-            </div>
-
-            <div id="usuariosOficina" class="displayOff">
-                <a href="https://dosxdos.app.iidos.com/usuarios_oficina.html" class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="9" cy="7" r="4"></circle>
-                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                    </svg>
-                    <span>Usuarios</span>
-                </a>
-            </div>
-
-            <div id="rutasMontador" class="displayOff">
-                <a href="https://dosxdos.app.iidos.com/rutas_montador.html" class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M4 5c8 0 8 14 16 14"/>
-                        <circle cx="4" cy="5" r="2"/>
-                        <circle cx="12" cy="12" r="2"/>
-                        <circle cx="20" cy="19" r="2"/>
-                    </svg>
-                    <span>Rutas</span>
-                </a>
-            </div>
-
-            <div id="lineasMontador" class="displayOff">
-                <a href="https://dosxdos.app.iidos.com/ruta_montador.html" class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
-                        <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
-                        <path d="M9 12h6"/>
-                        <path d="M9 16h6"/>
-                    </svg>
-                    <span>Líneas</span>
-                </a>
-            </div>
-
-            <div id="dm" class="displayOff">
-                <a href="https://dosxdos.app.iidos.com/dm.html" class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                        <line x1="3" y1="9" x2="21" y2="9"/>
-                        <line x1="9" y1="21" x2="9" y2="9"/>
-                    </svg>
-                    <span>DM</span>
-                </a>
-            </div>
-
-            <div id="reciclar" class="displayOff">
-                <a href="https://dosxdos.app.iidos.com/reciclar.html" class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="3 6 5 6 21 6"></polyline>
-                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                        <line x1="10" y1="11" x2="10" y2="17"></line>
-                        <line x1="14" y1="11" x2="14" y2="17"></line>
-                    </svg>
-                    <span>Reciclar</span>
-                </a>
-            </div>
-
-            <!-- Desktop Menu Notifications Bell -->
-<a href="https://dosxdos.app.iidos.com/notificaciones.html" class="relative z-10" id="desktopBellContainer">
-    <img id="bellDesktop" src="https://dosxdos.app.iidos.com/img/bell2.png" class="w-7 text-gray-900 object-contain" />
-    <span id="desktopNotificationCount" class="absolute top-0 -right-2 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] text-center border hidden"></span>
-</a>
-
-            <!-- Desktop User Menu -->
-            <div class="relative group drop-shadow">
-                <button id="userMenuButton" class="group flex items-center gap-3 py-1 pl-1.5 pr-4 rounded-full bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-gray-300 transition-all duration-200" aria-expanded="false">
-                    <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-white shadow-sm bg-gray-100 flex items-center justify-center">
-                        <img id="imagenUsuario" src="https://dosxdos.app.iidos.com/img/usuario.png" class="w-full h-full object-cover" alt="Profile" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
-                        <svg class="w-5 h-5 text-gray-400 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="12" cy="7" r="4"></circle>
+                <!-- Mobile Menu Footer -->
+                <div class="relative z-10">
+                    <div class="website-divider-container-734167" style="height: 100px; overflow: visible">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="divider-img-734167" viewBox="0 0 1080 137" preserveAspectRatio="none" style="bottom: -20px">
+                            <path d="M 0,137 V 59.03716 c 158.97703,52.21241 257.17659,0.48065 375.35967,2.17167 118.18308,1.69101 168.54911,29.1665 243.12679,30.10771 C 693.06415,92.25775 855.93515,29.278599 1080,73.61449 V 137 Z" style="fill: #ffffff"></path>
+                            <path d="M 0,10.174557 C 83.419822,8.405668 117.65911,41.78116 204.11379,44.65308 290.56846,47.52499 396.02558,-7.4328 620.04248,94.40134 782.19141,29.627636 825.67279,15.823104 1080,98.55518 V 137 H 0 Z" style="fill: #ffffff; opacity: 0.5"></path>
+                            <path d="M 0,45.10182 C 216.27861,-66.146913 327.90348,63.09813 416.42665,63.52904 504.94982,63.95995 530.42054,22.125806 615.37532,25.210412 700.33012,28.295019 790.77619,132.60682 1080,31.125744 V 137 H 0 Z" style="fill: #ffffff; opacity: 0.25"></path>
                         </svg>
                     </div>
+                </div>
 
-                    <span id="nombreUsuario" class="text-gray-700 font-medium text-lg"></span>
-
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-400 group-hover:text-gray-600 transition-transform duration-200 group-hover:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="6 9 12 15 18 9"></polyline>
-                    </svg>
-                </button>
-
-                <!-- Desktop Dropdown Menu -->
-                <div id="opcionesUsuario" class="hidden absolute right-0 mt-2 w-max bg-white rounded-lg shadow-lg p-4 z-50">
-                    <button id="cerrarSesion" class="flex items-center gap-2 w-full text-left text-xl text-red-500 hover:bg-red-600/20 rounded-lg transition-colors duration-200 p-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <!-- User Actions -->
+                <div class="relative z-10 mt-auto px-8 pb-6 bg-white shadow-lg flex justify-center space-x-6 pb-2 rounded-t-xl">
+                    <!-- Logout Button -->
+                    <button id="cerrarSesionMobile" class="flex items-center justify-center w-14 h-14 bg-red-600 rounded-full transition-all duration-300">
+                        <svg class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
                             <polyline points="16 17 21 12 16 7" />
                             <line x1="21" y1="12" x2="9" y2="12" />
                         </svg>
-                        Cerrar Sesión
                     </button>
                 </div>
             </div>
-        </nav>
-
-        <!-- Mobile Navigation -->
-<div class="xl:hidden flex items-center space-x-2 mx-2">
-    <!-- Mobile Bell -->
-    <a href="https://dosxdos.app.iidos.com/notificaciones.html" class="relative z-10" id="mobileBellContainer">
-        <img id="bellMobile" src="https://dosxdos.app.iidos.com/img/bell2.png" class="w-8 text-gray-900 object-contain mt-2" />
-        <span id="mobileNotificationCount" class="absolute top-2 right-0 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] text-center border hidden"></span>
-    </a>
-    
-    <!-- Mobile Menu Button -->
-    <button id="menuButton" class="xl:hidden relative z-50 p-2 focus:outline-none">
-        <div class="relative w-8 h-8">
-            <span class="absolute h-1 w-8 bg-gray-900 transition-all duration-300 ease-in-out top-1" id="hamburgerTop"></span>
-            <span class="absolute h-1 w-8 bg-gray-900 transition-all duration-300 ease-in-out top-4" id="hamburgerMiddle"></span>
-            <span class="absolute h-1 w-8 bg-gray-900 transition-all duration-300 ease-in-out top-7" id="hamburgerBottom"></span>
         </div>
-    </button>
-</div>
 
-<div id="opcionesMenu" class="xl:hidden fixed inset-0 bg-gradient-to-r from-red-500 to-red-600 bg-opacity-95 transform translate-x-full transition-all duration-500 ease-in-out z-40 overflow-hidden backdrop-blur-sm flex flex-col">            <div class="absolute inset-0 z-0" style="background-image: url('https://dosxdos.app.iidos.com/img/texture-red.svg'); background-size: contain; opacity: 0.7;"></div>
-            <!-- User Profile Section -->
-            <div class="px-8 py-4 mt-20 relative z-10">
-                <div class="relative flex items-center gap-3 py-1 pl-1.5 pr-4 bg-white shadow-lg rounded-full">
-                    <!-- Profile image -->
-                    <div class="absolute left-0 w-28 h-28 rounded-full overflow-hidden border-4 border-white bg-gradient-to-br from-red-50 to-white flex items-center justify-center shadow-xl" style="transform: translateX(-15%);">                        
-                        <img id="imagenUsuarioMobile" src="https://dosxdos.app.iidos.com/img/usuario.png" class="w-full h-full object-cover" alt="Profile" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
-                        <svg class="w-12 h-12 text-gray-400 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="12" cy="7" r="4"></circle>
-                        </svg>
-                    </div>
-                    <div class="ml-28 flex items-center py-4">
-                        <!-- User name -->
-                        <span class="text-black font-medium text-xl">¡Hola,&nbsp;</span>
-                        <span id="nombreUsuarioMobile" class="text-black font-medium text-xl"></span>
-                        <span class="text-black font-medium text-xl">!</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Mobile Menu Navigation Links -->
-            <nav class="px-8 py-6 space-y-2 relative z-10 flex-1 overflow-y-auto custom-scrollbar">
-                <!-- Dynamic menu items will be added here based on user role -->
-            </nav>
-
-            <!-- Mobile Menu Footer -->
-            <div class="relative z-10">
-                <div class="website-divider-container-734167" style="height: 100px; overflow: visible">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="divider-img-734167" viewBox="0 0 1080 137" preserveAspectRatio="none" style="bottom: -20px">
-                        <path d="M 0,137 V 59.03716 c 158.97703,52.21241 257.17659,0.48065 375.35967,2.17167 118.18308,1.69101 168.54911,29.1665 243.12679,30.10771 C 693.06415,92.25775 855.93515,29.278599 1080,73.61449 V 137 Z" style="fill: #ffffff"></path>
-                        <path d="M 0,10.174557 C 83.419822,8.405668 117.65911,41.78116 204.11379,44.65308 290.56846,47.52499 396.02558,-7.4328 620.04248,94.40134 782.19141,29.627636 825.67279,15.823104 1080,98.55518 V 137 H 0 Z" style="fill: #ffffff; opacity: 0.5"></path>
-                        <path d="M 0,45.10182 C 216.27861,-66.146913 327.90348,63.09813 416.42665,63.52904 504.94982,63.95995 530.42054,22.125806 615.37532,25.210412 700.33012,28.295019 790.77619,132.60682 1080,31.125744 V 137 H 0 Z" style="fill: #ffffff; opacity: 0.25"></path>
-                    </svg>
-                </div>
-            </div>
-
-            <!-- User Actions -->
-            <div class="relative z-10 mt-auto px-8 pb-6 bg-white shadow-lg flex justify-center space-x-6 pb-2 rounded-t-xl">
-                <!-- Logout Button -->
-                <button id="cerrarSesionMobile" class="flex items-center justify-center w-14 h-14 bg-red-600 rounded-full transition-all duration-300">
-                    <svg class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                        <polyline points="16 17 21 12 16 7" />
-                        <line x1="21" y1="12" x2="9" y2="12" />
-                    </svg>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- <div id="tituloVisible"></div> -->
-    <!-- <h1 id="titulo" class="text-2xl sm:text-3xl font-bold mb-2 text-center mt-24 pt-4 displayOn"></h1> -->
-</section>
+        <!-- <div id="tituloVisible"></div> -->
+        <!-- <h1 id="titulo" class="text-2xl sm:text-3xl font-bold mb-2 text-center mt-24 pt-4 displayOn"></h1> -->
+    </section>
 
     <?php
     if (isset($_GET['modulo'])) {
@@ -666,22 +668,22 @@ if ($conexion && $idUsuario) {
     }
 
     function alerta(mensaje) {
-    // Remove existing alert if present
-    const existingAlert = document.querySelector("#customAlert");
-    if (existingAlert) {
-        existingAlert.remove();
-    }
+        // Remove existing alert if present
+        const existingAlert = document.querySelector("#customAlert");
+        if (existingAlert) {
+            existingAlert.remove();
+        }
 
-    // Create alert container
-    const alertContainer = document.createElement("div");
-    alertContainer.id = "customAlert";
-    alertContainer.className =
-        "fixed left-1/2 transform -translate-x-1/2 z-50 transition-all duration-300 ease-in-out w-[95%] md:w-[75%] lg:w-[65%]";
-    alertContainer.style.top = "-100px";
+        // Create alert container
+        const alertContainer = document.createElement("div");
+        alertContainer.id = "customAlert";
+        alertContainer.className =
+            "fixed left-1/2 transform -translate-x-1/2 z-50 transition-all duration-300 ease-in-out w-[95%] md:w-[75%] lg:w-[65%]";
+        alertContainer.style.top = "-100px";
 
-    // Create alert content
-    const alertContent = document.createElement("div");
-    alertContent.className = `
+        // Create alert content
+        const alertContent = document.createElement("div");
+        alertContent.className = `
     relative
     bg-white
     border-2 border-red-600
@@ -691,67 +693,67 @@ if ($conexion && $idUsuario) {
     flex flex-col md:flex-row md:items-center gap-3 md:gap-4
   `;
 
-    // Create close button
-    const closeButton = document.createElement("button");
-    closeButton.className =
-        "absolute -right-3 -top-3 hover:bg-red-400 p-1 bg-red-600 rounded-full p-1.5 transition-colors duration-200";
-    closeButton.innerHTML = `
+        // Create close button
+        const closeButton = document.createElement("button");
+        closeButton.className =
+            "absolute -right-3 -top-3 hover:bg-red-400 p-1 bg-red-600 rounded-full p-1.5 transition-colors duration-200";
+        closeButton.innerHTML = `
     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
     </svg>
   `;
 
-    // Create main content container for mobile layout
-    const contentContainer = document.createElement("div");
-    contentContainer.className =
-        "flex flex-col md:flex-row items-center gap-3 md:gap-4 flex-1";
+        // Create main content container for mobile layout
+        const contentContainer = document.createElement("div");
+        contentContainer.className =
+            "flex flex-col md:flex-row items-center gap-3 md:gap-4 flex-1";
 
-    // Create icon with exclamation mark
-    const iconContainer = document.createElement("div");
-    iconContainer.className = "flex-shrink-0 text-red-600";
-    iconContainer.innerHTML = `
+        // Create icon with exclamation mark
+        const iconContainer = document.createElement("div");
+        iconContainer.className = "flex-shrink-0 text-red-600";
+        iconContainer.innerHTML = `
 <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
   <circle cx="12" cy="12" r="10" />
   <path d="M12 7v6" />
   <path d="M12 16h0.01" />
 </svg>
 `;
-    // Create message text
-    const messageText = document.createElement("p");
-    messageText.className = "text-gray-900 text-base md:text-lg flex-1";
-    messageText.textContent = mensaje;
+        // Create message text
+        const messageText = document.createElement("p");
+        messageText.className = "text-gray-900 text-base md:text-lg flex-1";
+        messageText.textContent = mensaje;
 
-    // Assemble the content container
-    contentContainer.appendChild(iconContainer);
-    contentContainer.appendChild(messageText);
+        // Assemble the content container
+        contentContainer.appendChild(iconContainer);
+        contentContainer.appendChild(messageText);
 
-    // Assemble the alert
-    alertContent.appendChild(closeButton);
-    alertContent.appendChild(contentContainer);
-    alertContainer.appendChild(alertContent);
-    document.body.appendChild(alertContainer);
+        // Assemble the alert
+        alertContent.appendChild(closeButton);
+        alertContent.appendChild(contentContainer);
+        alertContainer.appendChild(alertContent);
+        document.body.appendChild(alertContainer);
 
-    // Slide down animation
-    requestAnimationFrame(() => {
-        alertContainer.style.top = "56px";
-    });
+        // Slide down animation
+        requestAnimationFrame(() => {
+            alertContainer.style.top = "56px";
+        });
 
-    // Add event listeners
-    closeButton.addEventListener("click", () => {
-        hideAlert(alertContainer);
-    });
+        // Add event listeners
+        closeButton.addEventListener("click", () => {
+            hideAlert(alertContainer);
+        });
 
-    // Hide loader if it exists
-    loaderOff();
-}
+        // Hide loader if it exists
+        loaderOff();
+    }
 
-function hideAlert(alertContainer) {
-    alertContainer.style.top = "-100px";
+    function hideAlert(alertContainer) {
+        alertContainer.style.top = "-100px";
 
-    setTimeout(() => {
-        alertContainer.remove();
-    }, 300);
-}
+        setTimeout(() => {
+            alertContainer.remove();
+        }, 300);
+    }
 
     if (mensajePhp) {
         alerta(mensajePhp);
@@ -827,96 +829,98 @@ function hideAlert(alertContainer) {
     }
 
     async function appOnline() {
-    try {
-        const login = await vLogin();
-        if (!login) {
-            window.location.href = "https://dosxdos.app.iidos.com/index.html";
-        } else {
-            const Arrayusuario = await leerDatos('dosxdos', 'usuario');
-            usuario = Arrayusuario[0];
-            $nombreUsuario.innerHTML = usuario.nombre;
-            if (usuario.imagen != '0') {
-                $imagenUsuario.src = usuario.imagen;
-            }
+        try {
+            const login = await vLogin();
+            if (!login) {
+                window.location.href = "https://dosxdos.app.iidos.com/index.html";
+            } else {
+                const Arrayusuario = await leerDatos('dosxdos', 'usuario');
+                usuario = Arrayusuario[0];
+                $nombreUsuario.innerHTML = usuario.nombre;
+                if (usuario.imagen != '0') {
+                    $imagenUsuario.src = usuario.imagen;
+                }
 
-            // Get references to menu items
-            const menuItems = {
-                horarios: document.getElementById('horarios'),
-                archivos: document.getElementById('archivos'),
-                pv: document.getElementById('pv'),
-                rutasIcono: document.getElementById('rutasIcono'),
-                lineasIcono: document.getElementById('lineasIcono'),
-                icLineasOt: document.getElementById('icLineasOt'),
-                usuarios: document.getElementById('usuarios'),
-                usuariosOficina: document.getElementById('usuariosOficina'),
-                rutasMontador: document.getElementById('rutasMontador'),
-                lineasMontador: document.getElementById('lineasMontador'),
-                dm: document.getElementById('dm'),
-                reciclar: document.getElementById('reciclar')
-            };
+                // Get references to menu items
+                const menuItems = {
+                    notificaciones: document.getElementById('notificaciones'),
+                    horarios: document.getElementById('horarios'),
+                    archivos: document.getElementById('archivos'),
+                    pv: document.getElementById('pv'),
+                    rutasIcono: document.getElementById('rutasIcono'),
+                    lineasIcono: document.getElementById('lineasIcono'),
+                    icLineasOt: document.getElementById('icLineasOt'),
+                    usuarios: document.getElementById('usuarios'),
+                    usuariosOficina: document.getElementById('usuariosOficina'),
+                    rutasMontador: document.getElementById('rutasMontador'),
+                    lineasMontador: document.getElementById('lineasMontador'),
+                    historial: document.getElementById('historial'),
+                    dm: document.getElementById('dm'),
+                    reciclar: document.getElementById('reciclar')
+                };
 
-            // Reset all menu items to displayOff
-            Object.values(menuItems).forEach(item => {
-                if (item) item.classList.replace('displayOn', 'displayOff');
-            });
+                // Reset all menu items to displayOff
+                Object.values(menuItems).forEach(item => {
+                    if (item) item.classList.replace('displayOn', 'displayOff');
+                });
 
-            // Show menu items based on user role
-            if (usuario.clase == 'admon') {
-                ['horarios', 'archivos', 'pv', 'usuarios', 'rutasIcono', 'lineasIcono', 'icLineasOt', 'dm', 'reciclar']
+                // Show menu items based on user role
+                if (usuario.clase == 'admon') {
+                    ['notificaciones', 'archivos', 'pv', 'usuarios', 'rutasIcono', 'lineasIcono', 'icLineasOt', 'dm', 'reciclar']
                     .forEach(key => {
                         if (menuItems[key]) menuItems[key].classList.replace('displayOff', 'displayOn');
                     });
-            }
+                }
 
-            if (usuario.clase == 'oficina' || usuario.clase == 'diseno' || usuario.clase == 'estudio') {
-                ['horarios', 'pv', 'archivos', 'rutasIcono', 'lineasIcono', 'icLineasOt']
+                if (usuario.clase == 'oficina' || usuario.clase == 'diseno' || usuario.clase == 'estudio') {
+                    ['notificaciones', 'pv', 'archivos', 'rutasIcono', 'lineasIcono', 'icLineasOt']
                     .forEach(key => {
                         if (menuItems[key]) menuItems[key].classList.replace('displayOff', 'displayOn');
-                        
+
                         // Special handling for users office
                         if (key === 'usuarios') {
                             const usuariosOficina = document.getElementById('usuariosOficina');
                             if (usuariosOficina) usuariosOficina.classList.replace('displayOff', 'displayOn');
                         }
                     });
-            }
+                }
 
-            if (usuario.clase == 'montador') {
-                ['horarios', 'rutasMontador', 'lineasMontador']
+                if (usuario.clase == 'montador') {
+                    ['notificaciones', 'rutasMontador', 'lineasMontador', 'historial']
                     .forEach(key => {
                         if (menuItems[key]) menuItems[key].classList.replace('displayOff', 'displayOn');
                     });
-            }
+                }
 
-            // Edit user button logic
-            const editarUsuario = document.getElementById('editarUsuario');
-            if (editarUsuario) {
-                editarUsuario.addEventListener('click', e => {
-                    if (navigator.onLine) {
-                        window.location.href = "https://dosxdos.app.iidos.com/dosxdos.php?modulo=editarUsuario&id=" + usuario.id;
-                    } else {
-                        alerta('No es posible acceder a las opciones de edición de usuario sin conexión a internet');
-                        scrollToTop();
-                    }
-                });
-            }
+                // Edit user button logic
+                const editarUsuario = document.getElementById('editarUsuario');
+                if (editarUsuario) {
+                    editarUsuario.addEventListener('click', e => {
+                        if (navigator.onLine) {
+                            window.location.href = "https://dosxdos.app.iidos.com/dosxdos.php?modulo=editarUsuario&id=" + usuario.id;
+                        } else {
+                            alerta('No es posible acceder a las opciones de edición de usuario sin conexión a internet');
+                            scrollToTop();
+                        }
+                    });
+                }
 
-            // Sync notifications
-            const sincronizacionDeNotificaciones = await sincronizarNotificaciones();
-            if (sincronizacionDeNotificaciones) {
-                await notificar();
-            }
+                // Sync notifications
+                const sincronizacionDeNotificaciones = await sincronizarNotificaciones();
+                if (sincronizacionDeNotificaciones) {
+                    await notificar();
+                }
 
+                loaderOff();
+            }
+        } catch (error) {
+            mensaje = 'ERROR: ' + error.message;
+            console.error(error);
+            alerta(mensaje);
+            scrollToTop();
             loaderOff();
         }
-    } catch (error) {
-        mensaje = 'ERROR: ' + error.message;
-        console.error(error);
-        alerta(mensaje);
-        scrollToTop();
-        loaderOff();
     }
-}
 
     appOnline();
 
@@ -945,440 +949,464 @@ function hideAlert(alertContainer) {
         console.log('La conexión a Internet se ha perdido.');
     });
 
-function setupGlobalClickHandler() {
-  setupGlobalMenuClosing();
-}
-
-function setupMenuInteractions() {
-  // Desktop User Menu
-  const userMenuButton = document.getElementById("userMenuButton");
-  const userDropdownMenu = document.getElementById("opcionesUsuario");
-
-  if (userMenuButton && userDropdownMenu) {
-    // Remove existing listeners for user menu
-    const newUserMenuButton = userMenuButton.cloneNode(true);
-    userMenuButton.parentNode.replaceChild(newUserMenuButton, userMenuButton);
-    
-    newUserMenuButton.addEventListener("click", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      if (userDropdownMenu.classList.contains("hidden")) {
-        userDropdownMenu.classList.remove("hidden");
-      } else {
-        userDropdownMenu.classList.add("hidden");
-      }
-      const isExpanded = !userDropdownMenu.classList.contains("hidden");
-      newUserMenuButton.setAttribute("aria-expanded", isExpanded.toString());
-    });
-  }
-
-  // Mobile Menu Toggle
-  const menuButton = document.getElementById("menuButton");
-  const mobileMenu = document.getElementById("opcionesMenu");
-  
-  if (menuButton && mobileMenu) {
-    // Remove existing listeners for mobile menu
-    const newMenuButton = menuButton.cloneNode(true);
-    menuButton.parentNode.replaceChild(newMenuButton, menuButton);
-    
-    // Get fresh references after DOM changes
-    const freshMenuButton = document.getElementById("menuButton");
-    // Get hamburger icon elements
-    const hamburgerTop = document.getElementById("hamburgerTop");
-    const hamburgerMiddle = document.getElementById("hamburgerMiddle");
-    const hamburgerBottom = document.getElementById("hamburgerBottom");
-    
-    freshMenuButton.addEventListener("click", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      
-      // First, remove the displayOff class if it exists
-      if (mobileMenu.classList.contains("displayOff")) {
-        mobileMenu.classList.remove("displayOff");
-      }
-      
-      // Then toggle the transform class for the slide animation
-      mobileMenu.classList.toggle("translate-x-full");
-      
-      // Toggle body overflow
-      document.body.classList.toggle("overflow-hidden");
-
-      // Hamburger animation
-      const isOpen = !mobileMenu.classList.contains("translate-x-full");
-      
-      if (isOpen) {
-        // Menu is opening - change hamburger to X
-        document.getElementById("hamburgerTop").style.transform = "rotate(45deg) translate(10px, 7px)";
-        document.getElementById("hamburgerMiddle").style.opacity = "0";
-        document.getElementById("hamburgerBottom").style.transform = "rotate(-45deg) translate(10px, -7px)";
-        
-        document.getElementById("hamburgerTop").classList.remove("bg-gray-900");
-        document.getElementById("hamburgerMiddle").classList.remove("bg-gray-900");
-        document.getElementById("hamburgerBottom").classList.remove("bg-gray-900");
-        
-        document.getElementById("hamburgerTop").classList.add("bg-white");
-        document.getElementById("hamburgerMiddle").classList.add("bg-white");
-        document.getElementById("hamburgerBottom").classList.add("bg-white");
-      } else {
-        // Menu is closing - change X back to hamburger
-        document.getElementById("hamburgerTop").style.transform = "";
-        document.getElementById("hamburgerMiddle").style.opacity = "1";
-        document.getElementById("hamburgerBottom").style.transform = "";
-        
-        document.getElementById("hamburgerTop").classList.remove("bg-white");
-        document.getElementById("hamburgerMiddle").classList.remove("bg-white");
-        document.getElementById("hamburgerBottom").classList.remove("bg-white");
-        
-        document.getElementById("hamburgerTop").classList.add("bg-gray-900");
-        document.getElementById("hamburgerMiddle").classList.add("bg-gray-900");
-        document.getElementById("hamburgerBottom").classList.add("bg-gray-900");
-      }
-    });
-  }
-
-  // Mobile Menu Edit and Logout Buttons
-  const editUserMobile = document.getElementById("editarUsuarioMobile");
-  const logoutMobile = document.getElementById("cerrarSesionMobile");
-
-  if (editUserMobile) {
-    // Remove existing listeners
-    const newEditUserMobile = editUserMobile.cloneNode(true);
-    editUserMobile.parentNode.replaceChild(newEditUserMobile, editUserMobile);
-    
-    newEditUserMobile.addEventListener("click", () => {
-      if (navigator.onLine && usuario) {
-        window.location.href = `https://dosxdos.app.iidos.com/dosxdos.php?modulo=editarUsuario&id=${usuario.id}`;
-      } else {
-        alerta('No es posible acceder a las opciones de edición de usuario sin conexión a internet');
-      }
-    });
-  }
-
-  if (logoutMobile) {
-    // Remove existing listeners
-    const newLogoutMobile = logoutMobile.cloneNode(true);
-    logoutMobile.parentNode.replaceChild(newLogoutMobile, logoutMobile);
-    
-    newLogoutMobile.addEventListener("click", () => {
-      if (typeof cerrarSesion === 'function') {
-        cerrarSesion();
-      } else if (typeof cerrarSesions === 'function') {
-        cerrarSesions();
-      }
-    });
-  }
-}
-
-function setupGlobalMenuClosing() {
-  document.addEventListener("click", (e) => {
-    const userMenuButton = document.getElementById("userMenuButton");
-    const userDropdownMenu = document.getElementById("opcionesUsuario");
-    const menuButton = document.getElementById("menuButton");
-    const mobileMenu = document.getElementById("opcionesMenu");
-
-    // Close desktop dropdown if clicking outside
-    if (userDropdownMenu && userMenuButton && 
-        !userMenuButton.contains(e.target) && 
-        !userDropdownMenu.contains(e.target) &&
-        !userDropdownMenu.classList.contains("hidden")) {
-      userDropdownMenu.classList.add("hidden");
-      userMenuButton.setAttribute("aria-expanded", "false");
+    function setupGlobalClickHandler() {
+        setupGlobalMenuClosing();
     }
 
-    // Close mobile menu if clicking outside
-    if (mobileMenu && menuButton && 
-        !mobileMenu.contains(e.target) && 
-        !menuButton.contains(e.target) && 
-        !mobileMenu.classList.contains("translate-x-full")) {
-      menuButton.click();
+    function setupMenuInteractions() {
+        // Desktop User Menu
+        const userMenuButton = document.getElementById("userMenuButton");
+        const userDropdownMenu = document.getElementById("opcionesUsuario");
+
+        if (userMenuButton && userDropdownMenu) {
+            // Remove existing listeners for user menu
+            const newUserMenuButton = userMenuButton.cloneNode(true);
+            userMenuButton.parentNode.replaceChild(newUserMenuButton, userMenuButton);
+
+            newUserMenuButton.addEventListener("click", (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (userDropdownMenu.classList.contains("hidden")) {
+                    userDropdownMenu.classList.remove("hidden");
+                } else {
+                    userDropdownMenu.classList.add("hidden");
+                }
+                const isExpanded = !userDropdownMenu.classList.contains("hidden");
+                newUserMenuButton.setAttribute("aria-expanded", isExpanded.toString());
+            });
+        }
+
+        // Mobile Menu Toggle
+        const menuButton = document.getElementById("menuButton");
+        const mobileMenu = document.getElementById("opcionesMenu");
+
+        if (menuButton && mobileMenu) {
+            // Remove existing listeners for mobile menu
+            const newMenuButton = menuButton.cloneNode(true);
+            menuButton.parentNode.replaceChild(newMenuButton, menuButton);
+
+            // Get fresh references after DOM changes
+            const freshMenuButton = document.getElementById("menuButton");
+            // Get hamburger icon elements
+            const hamburgerTop = document.getElementById("hamburgerTop");
+            const hamburgerMiddle = document.getElementById("hamburgerMiddle");
+            const hamburgerBottom = document.getElementById("hamburgerBottom");
+
+            freshMenuButton.addEventListener("click", (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+
+                // First, remove the displayOff class if it exists
+                if (mobileMenu.classList.contains("displayOff")) {
+                    mobileMenu.classList.remove("displayOff");
+                }
+
+                // Then toggle the transform class for the slide animation
+                mobileMenu.classList.toggle("translate-x-full");
+
+                // Toggle body overflow
+                document.body.classList.toggle("overflow-hidden");
+
+                // Hamburger animation
+                const isOpen = !mobileMenu.classList.contains("translate-x-full");
+
+                if (isOpen) {
+                    // Menu is opening - change hamburger to X
+                    document.getElementById("hamburgerTop").style.transform = "rotate(45deg) translate(10px, 7px)";
+                    document.getElementById("hamburgerMiddle").style.opacity = "0";
+                    document.getElementById("hamburgerBottom").style.transform = "rotate(-45deg) translate(10px, -7px)";
+
+                    document.getElementById("hamburgerTop").classList.remove("bg-gray-900");
+                    document.getElementById("hamburgerMiddle").classList.remove("bg-gray-900");
+                    document.getElementById("hamburgerBottom").classList.remove("bg-gray-900");
+
+                    document.getElementById("hamburgerTop").classList.add("bg-white");
+                    document.getElementById("hamburgerMiddle").classList.add("bg-white");
+                    document.getElementById("hamburgerBottom").classList.add("bg-white");
+                } else {
+                    // Menu is closing - change X back to hamburger
+                    document.getElementById("hamburgerTop").style.transform = "";
+                    document.getElementById("hamburgerMiddle").style.opacity = "1";
+                    document.getElementById("hamburgerBottom").style.transform = "";
+
+                    document.getElementById("hamburgerTop").classList.remove("bg-white");
+                    document.getElementById("hamburgerMiddle").classList.remove("bg-white");
+                    document.getElementById("hamburgerBottom").classList.remove("bg-white");
+
+                    document.getElementById("hamburgerTop").classList.add("bg-gray-900");
+                    document.getElementById("hamburgerMiddle").classList.add("bg-gray-900");
+                    document.getElementById("hamburgerBottom").classList.add("bg-gray-900");
+                }
+            });
+        }
+
+        // Mobile Menu Edit and Logout Buttons
+        const editUserMobile = document.getElementById("editarUsuarioMobile");
+        const logoutMobile = document.getElementById("cerrarSesionMobile");
+
+        if (editUserMobile) {
+            // Remove existing listeners
+            const newEditUserMobile = editUserMobile.cloneNode(true);
+            editUserMobile.parentNode.replaceChild(newEditUserMobile, editUserMobile);
+
+            newEditUserMobile.addEventListener("click", () => {
+                if (navigator.onLine && usuario) {
+                    window.location.href = `https://dosxdos.app.iidos.com/dosxdos.php?modulo=editarUsuario&id=${usuario.id}`;
+                } else {
+                    alerta('No es posible acceder a las opciones de edición de usuario sin conexión a internet');
+                }
+            });
+        }
+
+        if (logoutMobile) {
+            // Remove existing listeners
+            const newLogoutMobile = logoutMobile.cloneNode(true);
+            logoutMobile.parentNode.replaceChild(newLogoutMobile, logoutMobile);
+
+            newLogoutMobile.addEventListener("click", () => {
+                if (typeof cerrarSesion === 'function') {
+                    cerrarSesion();
+                } else if (typeof cerrarSesions === 'function') {
+                    cerrarSesions();
+                }
+            });
+        }
     }
-  });
 
-  // Handle escape key
-  document.addEventListener("keydown", (e) => {
-    const userDropdownMenu = document.getElementById("opcionesUsuario");
-    const userMenuButton = document.getElementById("userMenuButton");
-    const mobileMenu = document.getElementById("opcionesMenu");
-    const menuButton = document.getElementById("menuButton");
+    function setupGlobalMenuClosing() {
+        document.addEventListener("click", (e) => {
+            const userMenuButton = document.getElementById("userMenuButton");
+            const userDropdownMenu = document.getElementById("opcionesUsuario");
+            const menuButton = document.getElementById("menuButton");
+            const mobileMenu = document.getElementById("opcionesMenu");
 
-    if (e.key === "Escape") {
-      // Close desktop dropdown
-      if (userDropdownMenu && !userDropdownMenu.classList.contains("hidden")) {
-        userDropdownMenu.classList.add("hidden");
-        userMenuButton?.setAttribute("aria-expanded", "false");
-      }
+            // Close desktop dropdown if clicking outside
+            if (userDropdownMenu && userMenuButton &&
+                !userMenuButton.contains(e.target) &&
+                !userDropdownMenu.contains(e.target) &&
+                !userDropdownMenu.classList.contains("hidden")) {
+                userDropdownMenu.classList.add("hidden");
+                userMenuButton.setAttribute("aria-expanded", "false");
+            }
 
-      // Close mobile menu
-      if (mobileMenu && !mobileMenu.classList.contains("translate-x-full")) {
-        menuButton.click();
-      }
+            // Close mobile menu if clicking outside
+            if (mobileMenu && menuButton &&
+                !mobileMenu.contains(e.target) &&
+                !menuButton.contains(e.target) &&
+                !mobileMenu.classList.contains("translate-x-full")) {
+                menuButton.click();
+            }
+        });
+
+        // Handle escape key
+        document.addEventListener("keydown", (e) => {
+            const userDropdownMenu = document.getElementById("opcionesUsuario");
+            const userMenuButton = document.getElementById("userMenuButton");
+            const mobileMenu = document.getElementById("opcionesMenu");
+            const menuButton = document.getElementById("menuButton");
+
+            if (e.key === "Escape") {
+                // Close desktop dropdown
+                if (userDropdownMenu && !userDropdownMenu.classList.contains("hidden")) {
+                    userDropdownMenu.classList.add("hidden");
+                    userMenuButton?.setAttribute("aria-expanded", "false");
+                }
+
+                // Close mobile menu
+                if (mobileMenu && !mobileMenu.classList.contains("translate-x-full")) {
+                    menuButton.click();
+                }
+            }
+        });
     }
-  });
-}
 
     // POPULATE MOBILE MENU WITH NAVIGATION ITEMS
     function populateMobileMenu() {
-  const mobileMenuNav = document.querySelector("#opcionesMenu nav");
-  
-  if (!mobileMenuNav) return;
-  
-  // Clear existing content
-  mobileMenuNav.innerHTML = '';
-  
-  // Helper function to create mobile menu items
-  function createMobileMenuItem(id, href, iconPath, text) {
-    const element = document.getElementById(id);
-    if (element && !element.classList.contains('displayOff')) {
-      const link = document.createElement('a');
-      link.href = href;
-      link.className = "z-10 flex items-center px-6 py-2 text-white bg-red-600 bg-opacity-60 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-xl group backdrop-blur-lg";
-      link.innerHTML = `
+        const mobileMenuNav = document.querySelector("#opcionesMenu nav");
+
+        if (!mobileMenuNav) return;
+
+        // Clear existing content
+        mobileMenuNav.innerHTML = '';
+
+        // Helper function to create mobile menu items
+        function createMobileMenuItem(id, href, iconPath, text) {
+            // Special case for notifications - always show it for all user types
+            const forceShow = (id === "notificaciones");
+
+            // For notifications, don't check for DOM element existence
+            const element = forceShow ? {
+                classList: {
+                    contains: () => false
+                }
+            } : document.getElementById(id);
+
+            if (forceShow || (element && !element.classList.contains('displayOff'))) {
+                const link = document.createElement('a');
+                link.href = href;
+                link.className = "z-10 flex items-center px-6 py-2 text-white bg-red-600 bg-opacity-60 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-xl group backdrop-blur-lg";
+                link.innerHTML = `
         <div class="flex items-center justify-center w-14 h-14 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all">
           ${iconPath}
         </div>
         <span class="text-lg font-semibold tracking-wide">${text}</span>
       `;
-      mobileMenuNav.appendChild(link);
-    }
-  }
-  
-  // Add menu items based on user role
-  createMobileMenuItem(
-    "horarios", 
-    "https://dosxdos.app.iidos.com/horarios.html",
-    `<svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <circle cx="12" cy="12" r="10" />
-      <polyline points="12 6 12 12 16 14" />
-    </svg>`,
-    "Horarios"
-  );
-  
-  createMobileMenuItem(
-    "archivos", 
-    "https://dosxdos.app.iidos.com/ot.html",
-    `<svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                mobileMenuNav.appendChild(link);
+            }
+        }
+
+        // Add menu items based on user role
+        createMobileMenuItem(
+            "notificaciones",
+            "https://dosxdos.app.iidos.com/notificaciones.html",
+            `<svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M18 8a6 6 0 0 0-12 0v5a6 6 0 0 1-2 4h16a6 6 0 0 1-2-4V8"></path>
+                                <line x1="12" y1="22" x2="12" y2="22"></line>
+                                <!-- Small bell clapper -->
+                            </svg>`,
+            "Notificaciones"
+        );
+
+        createMobileMenuItem(
+            "archivos",
+            "https://dosxdos.app.iidos.com/ot.html",
+            `<svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
       <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
     </svg>`,
-    "OT"
-  );
-  
-  createMobileMenuItem(
-    "pv", 
-    "https://dosxdos.app.iidos.com/pv.html",
-    `<svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            "OT"
+        );
+
+        createMobileMenuItem(
+            "pv",
+            "https://dosxdos.app.iidos.com/pv.html",
+            `<svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
       <polyline points="9 22 9 12 15 12 15 22"></polyline>
     </svg>`,
-    "PV"
-  );
-  
-  createMobileMenuItem(
-    "rutasIcono", 
-    "https://dosxdos.app.iidos.com/rutas.html",
-    `<svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            "PV"
+        );
+
+        createMobileMenuItem(
+            "rutasIcono",
+            "https://dosxdos.app.iidos.com/rutas.html",
+            `<svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M4 5c8 0 8 14 16 14"/>
       <circle cx="4" cy="5" r="2"/>
       <circle cx="12" cy="12" r="2"/>
       <circle cx="20" cy="19" r="2"/>
     </svg>`,
-    "Rutas"
-  );
-  
-  createMobileMenuItem(
-    "lineasIcono", 
-    "https://dosxdos.app.iidos.com/lineas.html",
-    `<svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            "Rutas"
+        );
+
+        createMobileMenuItem(
+            "lineasIcono",
+            "https://dosxdos.app.iidos.com/lineas.html",
+            `<svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
       <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
       <path d="M9 12h6"/>
       <path d="M9 16h6"/>
     </svg>`,
-    "Líneas"
-  );
-  
-  createMobileMenuItem(
-    "icLineasOt", 
-    "https://dosxdos.app.iidos.com/lineas_ot.html",
-    `<svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            "Líneas"
+        );
+
+        createMobileMenuItem(
+            "icLineasOt",
+            "https://dosxdos.app.iidos.com/lineas_ot.html",
+            `<svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M9 12h6"/>
       <path d="M9 16h6"/>
       <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
       <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
     </svg>`,
-    "Líneas OT"
-  );
-  
-  createMobileMenuItem(
-    "usuarios", 
-    "https://dosxdos.app.iidos.com/dosxdos.php?modulo=usuarios",
-    `<svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            "Líneas OT"
+        );
+
+        createMobileMenuItem(
+            "usuarios",
+            "https://dosxdos.app.iidos.com/dosxdos.php?modulo=usuarios",
+            `<svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
       <circle cx="9" cy="7" r="4"></circle>
       <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
       <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
     </svg>`,
-    "Usuarios"
-  );
-  
-  createMobileMenuItem(
-    "usuariosOficina", 
-    "https://dosxdos.app.iidos.com/usuarios_oficina.html",
-    `<svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            "Usuarios"
+        );
+
+        createMobileMenuItem(
+            "usuariosOficina",
+            "https://dosxdos.app.iidos.com/usuarios_oficina.html",
+            `<svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
       <circle cx="9" cy="7" r="4"></circle>
       <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
       <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
     </svg>`,
-    "Usuarios Oficina"
-  );
-  
-  createMobileMenuItem(
-    "rutasMontador", 
-    "https://dosxdos.app.iidos.com/rutas_montador.html",
-    `<svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            "Usuarios Oficina"
+        );
+
+        createMobileMenuItem(
+            "rutasMontador",
+            "https://dosxdos.app.iidos.com/rutas_montador.html",
+            `<svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M4 5c8 0 8 14 16 14"/>
       <circle cx="4" cy="5" r="2"/>
       <circle cx="12" cy="12" r="2"/>
       <circle cx="20" cy="19" r="2"/>
     </svg>`,
-    "Rutas Montador"
-  );
-  
-  createMobileMenuItem(
-    "lineasMontador", 
-    "https://dosxdos.app.iidos.com/ruta_montador.html",
-    `<svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            "Rutas"
+        );
+
+        createMobileMenuItem(
+            "lineasMontador",
+            "https://dosxdos.app.iidos.com/ruta_montador.html",
+            `<svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
       <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
       <path d="M9 12h6"/>
       <path d="M9 16h6"/>
     </svg>`,
-    "Líneas Montador"
-  );
-  
-  createMobileMenuItem(
-    "dm", 
-    "https://dosxdos.app.iidos.com/dm.html",
-    `<svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            "Líneas"
+        );
+
+        createMobileMenuItem(
+            "dm",
+            "https://dosxdos.app.iidos.com/dm.html",
+            `<svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
       <line x1="3" y1="9" x2="21" y2="9"/>
       <line x1="9" y1="21" x2="9" y2="9"/>
     </svg>`,
-    "DM"
-  );
-  
-  createMobileMenuItem(
-    "reciclar", 
-    "https://dosxdos.app.iidos.com/reciclar.html",
-    `<svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            "DM"
+        );
+
+        createMobileMenuItem(
+            "reciclar",
+            "https://dosxdos.app.iidos.com/reciclar.html",
+            `<svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <polyline points="3 6 5 6 21 6"></polyline>
       <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
       <line x1="10" y1="11" x2="10" y2="17"></line>
       <line x1="14" y1="11" x2="14" y2="17"></line>
     </svg>`,
-    "Reciclar"
-  );
-}
+            "Reciclar"
+        );
+
+        createMobileMenuItem(
+            "historial",
+            "https://dosxdos.app.iidos.com/historial_montador.html",
+            `       <svg class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10" />
+                        <polyline points="12 6 12 12 16 14" />
+                    </svg>`,
+            "Historial"
+        );
+    }
+
 
     // INITIALIZE MENU SYSTEM
     function initializeMenuSystem() {
-  // Setup the menu interactions
-  setupMenuInteractions();
-  
-  // Setup global click handler
-  setupGlobalClickHandler();
-  
-  // Populate mobile menu
-  populateMobileMenu();
-  
-  // Update mobile username
-  const nombreUsuarioMobile = document.getElementById('nombreUsuarioMobile');
-  if (nombreUsuarioMobile && usuario && usuario.nombre) {
-    nombreUsuarioMobile.textContent = usuario.nombre;
-  }
-  
-  // Update mobile user image
-  const imagenUsuarioMobile = document.getElementById('imagenUsuarioMobile');
-  if (imagenUsuarioMobile && usuario && usuario.imagen && usuario.imagen !== '0') {
-    imagenUsuarioMobile.src = usuario.imagen;
-  }
-}
+        // Setup the menu interactions
+        setupMenuInteractions();
 
-// Run after appOnline has initialized usuario
-document.addEventListener('DOMContentLoaded', function() {
-  const checkUserInterval = setInterval(function() {
-    if (typeof usuario !== 'undefined' && usuario) {
-      initializeMenuSystem();
-      clearInterval(checkUserInterval);
-    }
-  }, 100);
-  
-  // Safety timeout after 5 seconds
-  setTimeout(function() {
-    clearInterval(checkUserInterval);
-  }, 5000);
-});
+        // Setup global click handler
+        setupGlobalClickHandler();
 
-   // Function to toggle menu with transform instead of display
-function toggleElementoModern(elementId) {
-  const elemento = document.getElementById(elementId);
-  if (elemento) {
-    if (elementId === 'opcionesMenu') {
-      elemento.classList.toggle('translate-x-full');
-      document.body.classList.toggle('overflow-hidden');
-    } else if (elementId === 'opcionesUsuario') {
-      elemento.classList.toggle('hidden');
-    }
-  }
-}
+        // Populate mobile menu
+        populateMobileMenu();
 
-// Override the old toggle function to use the new one
-const originalToggleElemento = toggleElemento;
-window.toggleElemento = function(elementId) {
-  if (elementId === 'opcionesMenu' || elementId === 'opcionesUsuario') {
-    toggleElementoModern(elementId);
-  } else {
-    originalToggleElemento(elementId);
-  }
-};
+        // Update mobile username
+        const nombreUsuarioMobile = document.getElementById('nombreUsuarioMobile');
+        if (nombreUsuarioMobile && usuario && usuario.nombre) {
+            nombreUsuarioMobile.textContent = usuario.nombre;
+        }
 
-// Make sure the menu system initializes properly
-document.addEventListener('DOMContentLoaded', function() {
-  console.log("DOM fully loaded - initializing menu system");
-  
-  // First try to setup immediately if user data is available
-  if (typeof usuario !== 'undefined' && usuario) {
-    initializeMenuSystem();
-  }
-  
-  // Fall back to interval check
-  const checkUserInterval = setInterval(function() {
-    if (typeof usuario !== 'undefined' && usuario) {
-      initializeMenuSystem();
-      clearInterval(checkUserInterval);
-      console.log("Menu system initialized through interval check");
+        // Update mobile user image
+        const imagenUsuarioMobile = document.getElementById('imagenUsuarioMobile');
+        if (imagenUsuarioMobile && usuario && usuario.imagen && usuario.imagen !== '0') {
+            imagenUsuarioMobile.src = usuario.imagen;
+        }
     }
-  }, 100);
-  
-  // Safety timeout after 5 seconds
-  setTimeout(function() {
-    clearInterval(checkUserInterval);
-    
-    // As a last resort, try one more time
-    if (typeof usuario !== 'undefined' && usuario) {
-      initializeMenuSystem();
-      console.log("Menu system initialized through timeout check");
-    } else {
-      console.warn("Failed to initialize menu system - user data not available");
-      // Try to initialize anyway
-      setupMenuInteractions();
-      setupGlobalMenuClosing();
-      populateMobileMenu();
+
+    // Run after appOnline has initialized usuario
+    document.addEventListener('DOMContentLoaded', function() {
+        const checkUserInterval = setInterval(function() {
+            if (typeof usuario !== 'undefined' && usuario) {
+                initializeMenuSystem();
+                clearInterval(checkUserInterval);
+            }
+        }, 100);
+
+        // Safety timeout after 5 seconds
+        setTimeout(function() {
+            clearInterval(checkUserInterval);
+        }, 5000);
+    });
+
+    // Function to toggle menu with transform instead of display
+    function toggleElementoModern(elementId) {
+        const elemento = document.getElementById(elementId);
+        if (elemento) {
+            if (elementId === 'opcionesMenu') {
+                elemento.classList.toggle('translate-x-full');
+                document.body.classList.toggle('overflow-hidden');
+            } else if (elementId === 'opcionesUsuario') {
+                elemento.classList.toggle('hidden');
+            }
+        }
     }
-  }, 5000);
-});
+
+    // Override the old toggle function to use the new one
+    const originalToggleElemento = toggleElemento;
+    window.toggleElemento = function(elementId) {
+        if (elementId === 'opcionesMenu' || elementId === 'opcionesUsuario') {
+            toggleElementoModern(elementId);
+        } else {
+            originalToggleElemento(elementId);
+        }
+    };
+
+    // Make sure the menu system initializes properly
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log("DOM fully loaded - initializing menu system");
+
+        // First try to setup immediately if user data is available
+        if (typeof usuario !== 'undefined' && usuario) {
+            initializeMenuSystem();
+        }
+
+        // Fall back to interval check
+        const checkUserInterval = setInterval(function() {
+            if (typeof usuario !== 'undefined' && usuario) {
+                initializeMenuSystem();
+                clearInterval(checkUserInterval);
+                console.log("Menu system initialized through interval check");
+            }
+        }, 100);
+
+        // Safety timeout after 5 seconds
+        setTimeout(function() {
+            clearInterval(checkUserInterval);
+
+            // As a last resort, try one more time
+            if (typeof usuario !== 'undefined' && usuario) {
+                initializeMenuSystem();
+                console.log("Menu system initialized through timeout check");
+            } else {
+                console.warn("Failed to initialize menu system - user data not available");
+                // Try to initialize anyway
+                setupMenuInteractions();
+                setupGlobalMenuClosing();
+                populateMobileMenu();
+            }
+        }, 5000);
+    });
 </script>
 <script src="https://dosxdos.app.iidos.com/js/notificaciones.js"></script>
 <script src="https://dosxdos.app.iidos.com/js/loadFirebase.js"></script>
+
 </html>

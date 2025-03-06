@@ -174,11 +174,14 @@
     }
 
     #olvidar {
-      text-align: end;
+      display: flex;
+      margin-left: auto;
       font-family: "FuturaLight";
       color: rgb(255, 255, 255);
       margin-bottom: var(--z2);
       font-size: var(--x0_8);
+      width: fit-content;
+      margin-top: var(--x2);
     }
 
     #olvidar:hover {
@@ -410,7 +413,7 @@
       <input type="text" name="usuario" id="usuario" maxlength="8" />
       <label for="contrasena" id="labelContrasena"></label>
       <input type="password" name="contrasena" id="contrasena" maxlength="12" />
-      <p id="olvidar"></p>
+      <p class="w-fit" id="olvidar"></p>
       <button type="submit" id="acceder" class="accion"></button>
     </form>
     <form action="index.html" method="post" id="formularioRecordar" class="displayOff formulario">
