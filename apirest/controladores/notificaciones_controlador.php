@@ -177,7 +177,7 @@ class NotificacionesControlador
  
         $datos = [
             'usuario_id' => $idAppMontadores,
-            'titulo' => 'Nueva línea en la ruta ' . $faseRuta . ' con línea ' . $camposLinea['Codigo_de_l_nea'],
+            'titulo' => 'Nueva línea agregada en la ruta ' . $faseRuta . ' con el código: ' . $camposLinea['Codigo_de_l_nea'],
             'mensaje' => 'Datos de línea: '.$camposLinea['Product_Name'],
             'tipo_usuario' => 'montador'
         ];
@@ -252,7 +252,7 @@ class NotificacionesControlador
  
         $datos = [
             'usuario_id' => $idAppMontadores,
-            'titulo' => '"LÍNEA URGENTE" en la ruta ' . $faseRuta . ' con línea ' . $camposLinea['Codigo_de_l_nea'],
+            'titulo' => '"LÍNEA URGENTE" en la ruta ' . $faseRuta . ' con el código: ' . $camposLinea['Codigo_de_l_nea'],
             'mensaje' => 'Datos de línea: '.$camposLinea['Product_Name'],
             'tipo_usuario' => 'montador'
         ];
@@ -309,7 +309,7 @@ class NotificacionesControlador
         $datos = [
             'usuario_id' => $idAppMontadores,
             'titulo' => 'Se ha abierto la ruta ' . $faseRuta,
-            'mensaje' => 'la ruta esta abierta y se van a ir añadiendo rutas en la ruta: ' . $faseRuta,
+            'mensaje' => 'La ruta está abierta y se van a ir añadiendo líneas en la ruta: ' . $faseRuta,
             'tipo_usuario' => 'montador'
         ];
 
@@ -363,7 +363,7 @@ class NotificacionesControlador
         $datos = [
             'usuario_id' => $idAppMontadores,
             'titulo' => 'Se ha cerrado la ruta ' . $faseRuta,
-            'mensaje' => 'la ruta esta cerrada y se van a ir añadiendo solo la líneas urgentes en la ruta: ' . $faseRuta,
+            'mensaje' => 'La ruta está cerrada, las líneas que se añadan a la ruta tendrán sólo la categoría de urgente o nueva: ' . $faseRuta,
             'tipo_usuario' => 'montador'
         ];
 

@@ -1132,7 +1132,7 @@ if ($conexion && $idUsuario) {
         // Helper function to create mobile menu items
         function createMobileMenuItem(id, href, iconPath, text) {
             // Special case for notifications - always show it for all user types
-            const forceShow = (id === "notificaciones");
+            const forceShow = (id === "notificaciones" && usuario && usuario.clase !== 'cliente');
 
             // For notifications, don't check for DOM element existence
             const element = forceShow ? {
@@ -1156,18 +1156,20 @@ if ($conexion && $idUsuario) {
         }
 
         // Add menu items based on user role
-        createMobileMenuItem(
-            "notificaciones",
-            "https://dosxdos.app.iidos.com/notificaciones.html",
-            `<svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24"
+        if (usuario && usuario.clase !== 'cliente') {
+            createMobileMenuItem(
+                "notificaciones",
+                "https://dosxdos.app.iidos.com/notificaciones.html",
+                `<svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round">
                                 <path d="M18 8a6 6 0 0 0-12 0v5a6 6 0 0 1-2 4h16a6 6 0 0 1-2-4V8"></path>
                                 <line x1="12" y1="22" x2="12" y2="22"></line>
                                 <!-- Small bell clapper -->
                             </svg>`,
-            "Notificaciones"
-        );
+                "Notificaciones"
+            );
+        }
 
         createMobileMenuItem(
             "archivos",
