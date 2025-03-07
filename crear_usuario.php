@@ -45,10 +45,9 @@ if ((isset($_REQUEST["crearUsuario"]))) {
         header("location: dosxdos.php?modulo=crearUsuario&mensaje=Error de base de datos, el usuario no ha sido creado. Por favor verifica si el usuario ya existe - $error");
     }
 }
-
 ?>
 
-<section id="contenido" class="displayOn">
+<section id="contenido" class="displayOn mt-36">
 
     <nav id="opcionesMenu2" class="displayOn">
 

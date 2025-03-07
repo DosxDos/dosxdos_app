@@ -1,5 +1,4 @@
 /* FUNCIONES DE INDEXDB */
-
 function db(database, stores) {
     return new Promise((resolve, reject) => {
         const request = indexedDB.open(database, 1);
@@ -89,6 +88,45 @@ function almacenVacio(db, almacen) {
         }
     })
 }
+
+function eliminarTokenNotificaciones() {
+    return new Promise((resolve) => {
+      tokenEliminar = localStorage.getItem("tokenNotificaciones");
+      if (tokenEliminar != null) {
+        urlTokenEliminar =
+          "https://dosxdos.app.iidos.com/apirest/rutas_notificaciones.php/notificaciones/token/" +
+          tokenEliminar;
+        fetch(urlTokenEliminar, {
+          method: "DELETE",
+        })
+          .then((res) =>
+            res.ok
+              ? res.json()
+              : reject(
+                new Error(`Error al eliminar el token de las notificaciones.`)
+              )
+          )
+          .then((res) => {
+            if (res.success) {
+              localStorage.setItem("tokenNotificaciones", null);
+              resolve(true);
+            } else {
+              console.error(res);
+              alerta(
+                "Error al eliminar el token de las notificaciones: " + res.message
+              );
+              resolve(false);
+            }
+          })
+          .catch((err) => {
+            mensaje = err.message;
+            console.error(err);
+            alerta(mensaje);
+            reject(new Error(mensaje));
+          });
+      }
+    });
+  }
 
 function leerDatos(database, store) {
     return new Promise((resolve, reject) => {
@@ -360,15 +398,23 @@ function deleteDB2(database) {
     });
 }
 
-
 async function cerrarSesion() {
     if (navigator.onLine) {
       try {
         loaderOn();
         const eliminarBaseDeDatosCliente = await deleteDB2("dosxdos");
         if (eliminarBaseDeDatosCliente) {
-          const eliminarTokenDeLasNotificaciones = eliminarTokenNotificaciones()
-          if (eliminarTokenDeLasNotificaciones) {
+          // Add null check before calling eliminarTokenNotificaciones
+          if (typeof eliminarTokenNotificaciones === 'function') {
+            const eliminarTokenDeLasNotificaciones = await eliminarTokenNotificaciones();
+            if (eliminarTokenDeLasNotificaciones) {
+              localStorage.clear();
+              eliminarCookie("login");
+              eliminarCookie("usuario");
+              window.location.href = "https://dosxdos.app.iidos.com/index.html";
+            }
+          } else {
+            // If the function doesn't exist, proceed anyway
             localStorage.clear();
             eliminarCookie("login");
             eliminarCookie("usuario");
@@ -382,32 +428,25 @@ async function cerrarSesion() {
       }
     } else {
       mensaje = "No es posible cerrar la sesión sin conexión a internet";
-      $textoMensaje.innerHTML = mensaje;
-      mensajeOn();
+      alerta(mensaje);
     }
   }
 
   async function cerrarSesions() {
-    if (navigator.onLine) {
-      try {
-        const eliminarBaseDeDatosCliente = await deleteDB2("dosxdos");
-        if (eliminarBaseDeDatosCliente) {
-          const eliminarTokenDeLasNotificaciones = eliminarTokenNotificaciones()
-          if (eliminarTokenDeLasNotificaciones) {
-            localStorage.clear();
-            eliminarCookie("login");
-            eliminarCookie("usuario");
-            window.location.href = "https://dosxdos.app.iidos.com/index.html";
-          }
-        }
-      } catch (error) {
-        mensaje = "ERROR: " + error.message;
-        console.error(error);
-        alerta(mensaje);
+    try {
+      loaderOn();
+      // Only call if the function exists
+      if (typeof eliminarTokenNotificaciones === 'function') {
+        await eliminarTokenNotificaciones();
       }
-    } else {
-      mensaje = "No es posible cerrar la sesión sin conexión a internet";
-      $textoMensaje.innerHTML = mensaje;
-      mensajeOn();
+      localStorage.removeItem('login');
+      localStorage.removeItem('usuario');
+      eliminarCookie('login');
+      eliminarCookie('usuario');
+      window.location.href = "https://dosxdos.app.iidos.com/index.html";
+    } catch (error) {
+      mensaje = 'ERROR: ' + error.message;
+      console.error(error);
+      alerta(mensaje);
     }
   }

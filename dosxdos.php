@@ -70,13 +70,64 @@ if ($conexion && $idUsuario) {
     <script src="https://dosxdos.app.iidos.com/js/cdn_data_tables.js"></script>
     <script src="https://dosxdos.app.iidos.com/js/index_db.js"></script>
     <script>
-        let titulo1,
-            titulo2,
-            mensajePhp;
+        let mensajePhp;
         <?php if ($mensaje) {
             echo 'mensajePhp = "' . $mensaje . '"';
         } ?>
     </script>
+    <style>
+        /* Desktop dropdown menu improvements */
+        .desktop-dropdown {
+            display: none;
+            position: absolute;
+            left: 0;
+            top: 100%;
+            margin-top: 0.5rem;
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            z-index: 50;
+            min-width: 12rem;
+            padding: 0.5rem 0;
+            border: 1px solid rgba(229, 231, 235, 1);
+        }
+
+        .desktop-dropdown-visible {
+            display: block;
+        }
+
+        .desktop-dropdown a {
+            padding: 0.75rem 1rem;
+            display: block;
+            transition: all 0.2s;
+        }
+
+        /* Mobile submenu improvements */
+        .mobile-submenu-header {
+            position: relative;
+            margin-bottom: 0.25rem;
+        }
+
+        .mobile-submenu-content {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 0.75rem;
+            padding: 0.5rem;
+            margin: 0.25rem 0 0.75rem 3.5rem;
+        }
+
+        .mobile-submenu-item {
+            padding: 0.75rem 1rem;
+            display: block;
+            color: white;
+            border-radius: 0.5rem;
+            margin-bottom: 0.25rem;
+            font-weight: 500;
+        }
+
+        .mobile-submenu-item:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+    </style>
 </head>
 
 <body id="body" class="">
@@ -96,8 +147,7 @@ if ($conexion && $idUsuario) {
 
             <!-- Desktop Navigation -->
             <nav class="hidden xl:flex items-center space-x-8">
-                <!-- Menu options will be programmatically shown/hidden in JS -->
-
+                <!-- OT Option -->
                 <div id="archivos" class="displayOff">
                     <a href="https://dosxdos.app.iidos.com/ot.html" class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -108,6 +158,20 @@ if ($conexion && $idUsuario) {
                     </a>
                 </div>
 
+                <!-- Lineas Ruta Option -->
+                <div id="lineasIcono" class="displayOff">
+                    <a href="https://dosxdos.app.iidos.com/lineas.html" class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                            <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+                            <path d="M9 12h6" />
+                            <path d="M9 16h6" />
+                        </svg>
+                        <span>Líneas Ruta</span>
+                    </a>
+                </div>
+
+                <!-- Lineas OT Option -->
                 <div id="icLineasOt" class="displayOff">
                     <a href="https://dosxdos.app.iidos.com/lineas_ot.html" class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -120,16 +184,7 @@ if ($conexion && $idUsuario) {
                     </a>
                 </div>
 
-                <div id="pv" class="displayOff">
-                    <a href="https://dosxdos.app.iidos.com/pv.html" class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                        </svg>
-                        <span>PV</span>
-                    </a>
-                </div>
-
+                <!-- Rutas Option -->
                 <div id="rutasIcono" class="displayOff">
                     <a href="https://dosxdos.app.iidos.com/rutas.html" class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -142,18 +197,7 @@ if ($conexion && $idUsuario) {
                     </a>
                 </div>
 
-                <div id="lineasIcono" class="displayOff">
-                    <a href="https://dosxdos.app.iidos.com/lineas.html" class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
-                            <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
-                            <path d="M9 12h6" />
-                            <path d="M9 16h6" />
-                        </svg>
-                        <span>Líneas</span>
-                    </a>
-                </div>
-
+                <!-- Usuarios Option -->
                 <div id="usuarios" class="displayOff">
                     <a href="https://dosxdos.app.iidos.com/dosxdos.php?modulo=usuarios" class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -166,73 +210,76 @@ if ($conexion && $idUsuario) {
                     </a>
                 </div>
 
-                <div id="usuariosOficina" class="displayOff">
-                    <a href="https://dosxdos.app.iidos.com/usuarios_oficina.html" class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
+                <!-- Gastos Dropdown -->
+                <div id="gastos" class="displayOff relative">
+                    <button class="dropdown-toggle flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200" data-dropdown="gastosDropdown">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="5" width="20" height="14" rx="2" />
+                            <line x1="2" y1="10" x2="22" y2="10" />
+                            <line x1="7" y1="15" x2="9" y2="15" />
+                            <line x1="15" y1="15" x2="17" y2="15" />
+                        </svg>
+                        <span>Gastos</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-1 transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+                    <div id="gastosDropdown" class="desktop-dropdown w-56">
+                        <a href="https://dosxdos.app.iidos.com/gastos_rutas.html" class="text-sm text-gray-700 hover:bg-red-600 hover:text-white">
+                            Gastos Rutas
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Sincronización Dropdown -->
+                <div id="sincronizacion" class="displayOff relative">
+                    <button class="dropdown-toggle flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200" data-dropdown="sincronizacionDropdown">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 2v6h-6"></path>
+                            <path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path>
+                            <path d="M3 22v-6h6"></path>
+                            <path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path>
+                        </svg>
+                        <span>Sincronización</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-1 transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+                    <div id="sincronizacionDropdown" class="desktop-dropdown w-72">
+                        <a href="#" class="text-sm text-gray-700 hover:bg-red-600 hover:text-white">
+                            Sinc. OT Navision
+                        </a>
+                        <a href="https://dosxdos.app.iidos.com/apirest/sincronizador2.php" class="text-sm text-gray-700 hover:bg-red-600 hover:text-white">
+                            Sinc. Total OT Navision
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Clientes Dropdown -->
+                <div id="clientes" class="displayOff relative">
+                    <button class="dropdown-toggle flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200" data-dropdown="clientesDropdown">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                             <circle cx="9" cy="7" r="4"></circle>
                             <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
                             <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                         </svg>
-                        <span>Usuarios</span>
-                    </a>
-                </div>
-
-                <div id="rutasMontador" class="displayOff">
-                    <a href="https://dosxdos.app.iidos.com/rutas_montador.html" class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M4 5c8 0 8 14 16 14" />
-                            <circle cx="4" cy="5" r="2" />
-                            <circle cx="12" cy="12" r="2" />
-                            <circle cx="20" cy="19" r="2" />
+                        <span>Clientes</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-1 transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
                         </svg>
-                        <span>Rutas</span>
-                    </a>
-                </div>
-
-                <div id="lineasMontador" class="displayOff">
-                    <a href="https://dosxdos.app.iidos.com/ruta_montador.html" class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
-                            <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
-                            <path d="M9 12h6" />
-                            <path d="M9 16h6" />
-                        </svg>
-                        <span>Líneas</span>
-                    </a>
-                </div>
-
-                <div id="historial" class="displayOff">
-                    <a href="https://dosxdos.app.iidos.com/historial_montador.html" class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
-                        <svg class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10" />
-                            <polyline points="12 6 12 12 16 14" />
-                        </svg>
-                        <span>Historial</span>
-                    </a>
-                </div>
-
-                <div id="dm" class="displayOff">
-                    <a href="https://dosxdos.app.iidos.com/dm.html" class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                            <line x1="3" y1="9" x2="21" y2="9" />
-                            <line x1="9" y1="21" x2="9" y2="9" />
-                        </svg>
-                        <span>DM</span>
-                    </a>
-                </div>
-
-                <div id="reciclar" class="displayOff">
-                    <a href="https://dosxdos.app.iidos.com/reciclar.html" class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="3 6 5 6 21 6"></polyline>
-                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                            <line x1="10" y1="11" x2="10" y2="17"></line>
-                            <line x1="14" y1="11" x2="14" y2="17"></line>
-                        </svg>
-                        <span>Reciclar</span>
-                    </a>
+                    </button>
+                    <div id="clientesDropdown" class="desktop-dropdown w-72">
+                        <a href="https://dosxdos.app.iidos.com/clientes_dm.html" class="text-sm text-gray-700 hover:bg-red-600 hover:text-white">
+                            Todos los Clientes
+                        </a>
+                        <a href="https://dosxdos.app.iidos.com/ots_clientes.html" class="text-sm text-gray-700 hover:bg-red-600 hover:text-white">
+                            Restricciones Tipos de OT
+                        </a>
+                        <a href="https://dosxdos.app.iidos.com/firmas_clientes.html" class="text-sm text-gray-700 hover:bg-red-600 hover:text-white">
+                            Restricciones Firmas
+                        </a>
+                    </div>
                 </div>
 
                 <!-- Desktop Menu Notifications Bell -->
@@ -261,6 +308,13 @@ if ($conexion && $idUsuario) {
 
                     <!-- Desktop Dropdown Menu -->
                     <div id="opcionesUsuario" class="hidden absolute right-0 mt-2 w-max bg-white rounded-lg shadow-lg p-4 z-50">
+                        <button id="editarUsuario" class="flex items-center gap-2 w-full mb-4 text-left text-xl text-black hover:bg-red-600/20 rounded-lg transition-colors duration-200 p-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                            </svg>
+                            Editar Usuario
+                        </button>
                         <button id="cerrarSesion" class="flex items-center gap-2 w-full text-left text-xl text-red-500 hover:bg-red-600/20 rounded-lg transition-colors duration-200 p-2">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
@@ -331,6 +385,14 @@ if ($conexion && $idUsuario) {
 
                 <!-- User Actions -->
                 <div class="relative z-10 mt-auto px-8 pb-6 bg-white shadow-lg flex justify-center space-x-6 pb-2 rounded-t-xl">
+                    <!-- Edit Button -->
+                    <button id="editarUsuarioMobile" class="flex items-center justify-center w-14 h-14 bg-white border-2 border-red-500 rounded-full hover:bg-red-100 transition-all duration-300">
+                        <svg class="w-8 h-8 text-red-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                        </svg>
+                    </button>
+
                     <!-- Logout Button -->
                     <button id="cerrarSesionMobile" class="flex items-center justify-center w-14 h-14 bg-red-600 rounded-full transition-all duration-300">
                         <svg class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -622,20 +684,6 @@ if ($conexion && $idUsuario) {
         elemento.classList.toggle('displayOff');
     }
 
-    if (titulo1) {
-        document.title = titulo1;
-    } else {
-        document.title = 'DOS.DOS';
-    }
-
-    if (titulo2) {
-        $titulo = document.getElementById('titulo');
-        $titulo.innerHTML = titulo2;
-    } else {
-        $titulo = document.getElementById('titulo');
-        $titulo.innerHTML = 'DOS.DOS';
-    }
-
     /* LOADER */
 
     function scrollToTop() {
@@ -807,9 +855,7 @@ if ($conexion && $idUsuario) {
         });
     }
 
-
     /* LOGIN */
-
     function vLogin() {
         return new Promise((resolve, reject) => {
             const login = localStorage.getItem('login');
@@ -866,9 +912,10 @@ if ($conexion && $idUsuario) {
 
                 // Show menu items based on user role
                 if (usuario.clase == 'admon') {
-                    ['notificaciones', 'archivos', 'pv', 'usuarios', 'rutasIcono', 'lineasIcono', 'icLineasOt', 'dm', 'reciclar']
+                    ['notificaciones', 'archivos', 'lineasIcono', 'icLineasOt', 'rutasIcono', 'usuarios', 'gastos', 'sincronizacion', 'clientes']
                     .forEach(key => {
-                        if (menuItems[key]) menuItems[key].classList.replace('displayOff', 'displayOn');
+                        const item = document.getElementById(key);
+                        if (item) item.classList.replace('displayOff', 'displayOn');
                     });
                 }
 
@@ -894,8 +941,21 @@ if ($conexion && $idUsuario) {
 
                 // Edit user button logic
                 const editarUsuario = document.getElementById('editarUsuario');
+                const editarUsuarioMobile = document.getElementById('editarUsuarioMobile');
+
                 if (editarUsuario) {
                     editarUsuario.addEventListener('click', e => {
+                        if (navigator.onLine) {
+                            window.location.href = "https://dosxdos.app.iidos.com/dosxdos.php?modulo=editarUsuario&id=" + usuario.id;
+                        } else {
+                            alerta('No es posible acceder a las opciones de edición de usuario sin conexión a internet');
+                            scrollToTop();
+                        }
+                    });
+                }
+
+                if (editarUsuarioMobile) {
+                    editarUsuarioMobile.addEventListener('click', e => {
                         if (navigator.onLine) {
                             window.location.href = "https://dosxdos.app.iidos.com/dosxdos.php?modulo=editarUsuario&id=" + usuario.id;
                         } else {
@@ -1155,6 +1215,66 @@ if ($conexion && $idUsuario) {
             }
         }
 
+        // Helper function to create mobile submenu items
+        function createMobileSubmenu(id, text, iconPath, items) {
+            if (usuario && usuario.clase === 'admon') {
+                const submenuContainer = document.createElement('div');
+                submenuContainer.className = "mb-4";
+
+                // Create submenu header
+                const submenuHeader = document.createElement('div');
+                submenuHeader.className = "z-10 flex items-center px-6 py-2 text-white bg-red-600 bg-opacity-60 hover:bg-red-500/60 rounded-xl transition-all duration-300 shadow-xl mobile-submenu-header cursor-pointer";
+                submenuHeader.innerHTML = `
+            <div class="flex items-center justify-center w-14 h-14 bg-white/20 rounded-xl mr-4 transition-all">
+                ${iconPath}
+            </div>
+            <span class="text-lg font-semibold tracking-wide flex-1">${text}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white transition-transform duration-300 submenu-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+        `;
+
+                // Create submenu content
+                const submenuContent = document.createElement('div');
+                submenuContent.className = "hidden mobile-submenu-content";
+
+                // Add submenu items
+                items.forEach(item => {
+                    const submenuItem = document.createElement('a');
+                    submenuItem.href = item.url;
+                    submenuItem.className = "mobile-submenu-item";
+                    submenuItem.textContent = item.text;
+                    submenuContent.appendChild(submenuItem);
+                });
+
+                // Assemble submenu
+                submenuContainer.appendChild(submenuHeader);
+                submenuContainer.appendChild(submenuContent);
+                mobileMenuNav.appendChild(submenuContainer);
+
+                // Add toggle functionality
+                submenuHeader.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    const toggle = this.querySelector('.submenu-toggle');
+                    const content = this.nextElementSibling;
+
+                    // Toggle this submenu
+                    content.classList.toggle('hidden');
+                    toggle.classList.toggle('rotate-180');
+
+                    // Close other submenus
+                    document.querySelectorAll('.mobile-submenu-header').forEach(header => {
+                        if (header !== this) {
+                            header.querySelector('.submenu-toggle').classList.remove('rotate-180');
+                            header.nextElementSibling.classList.add('hidden');
+                        }
+                    });
+                });
+            }
+        }
+
         // Add menu items based on user role
         if (usuario && usuario.clase !== 'cliente') {
             createMobileMenuItem(
@@ -1307,6 +1427,69 @@ if ($conexion && $idUsuario) {
                     </svg>`,
             "Historial"
         );
+
+        if (usuario && usuario.clase === 'admon') {
+            createMobileSubmenu(
+                "gastos-mobile",
+                "Gastos",
+                `<svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="5" width="20" height="14" rx="2" />
+            <line x1="2" y1="10" x2="22" y2="10" />
+            <line x1="7" y1="15" x2="9" y2="15" />
+            <line x1="15" y1="15" x2="17" y2="15" />
+        </svg>`,
+                [{
+                    text: "Gastos Rutas",
+                    url: "https://dosxdos.app.iidos.com/gastos_rutas.html"
+                }]
+            );
+
+            // Add Sincronización Submenu for admin
+            createMobileSubmenu(
+                "sync-mobile",
+                "Sincronización",
+                `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 2v6h-6"></path>
+    <path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path>
+    <path d="M3 22v-6h6"></path>
+    <path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path>
+</svg>`,
+                [{
+                        text: "Sinc. OT Navision",
+                        url: "#"
+                    },
+                    {
+                        text: "Sinc. Total OT Navision",
+                        url: "https://dosxdos.app.iidos.com/apirest/sincronizador2.php"
+                    }
+                ]
+            );
+
+            // Add Clientes Submenu for admin
+            createMobileSubmenu(
+                "clientes-mobile",
+                "Clientes",
+                `<svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+  <circle cx="9" cy="7" r="4"></circle>
+  <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+</svg>`,
+                [{
+                        text: "Todos los Clientes",
+                        url: "https://dosxdos.app.iidos.com/clientes_dm.html"
+                    },
+                    {
+                        text: "Restricciones Tipos de OT",
+                        url: "https://dosxdos.app.iidos.com/ots_clientes.html"
+                    },
+                    {
+                        text: "Restricciones Firmas",
+                        url: "https://dosxdos.app.iidos.com/firmas_clientes.html"
+                    }
+                ]
+            );
+        }
     }
 
 
@@ -1406,6 +1589,108 @@ if ($conexion && $idUsuario) {
                 populateMobileMenu();
             }
         }, 5000);
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Direct reference to logout buttons
+        const logoutDesktop = document.getElementById('cerrarSesion');
+        const logoutMobile = document.getElementById('cerrarSesionMobile');
+
+        // Check if elements exist to avoid null reference errors
+        if (logoutDesktop) {
+            logoutDesktop.addEventListener('click', function() {
+                if (typeof cerrarSesion === 'function') {
+                    cerrarSesion();
+                } else if (typeof cerrarSesions === 'function') {
+                    cerrarSesions();
+                } else {
+                    // Fallback if neither function is available
+                    handleLogout();
+                }
+            });
+        }
+
+        if (logoutMobile) {
+            logoutMobile.addEventListener('click', function() {
+                if (typeof cerrarSesion === 'function') {
+                    cerrarSesion();
+                } else if (typeof cerrarSesions === 'function') {
+                    cerrarSesions();
+                } else {
+                    // Fallback if neither function is available
+                    handleLogout();
+                }
+            });
+        }
+
+        // Fallback logout function
+        function handleLogout() {
+            loaderOn();
+            try {
+                // Basic logout functionality
+                localStorage.removeItem('login');
+                localStorage.removeItem('usuario');
+
+                // Delete cookies
+                document.cookie = "login=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                document.cookie = "usuario=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+                // Redirect to login page
+                window.location.href = "https://dosxdos.app.iidos.com/index.html";
+            } catch (error) {
+                console.error("Error during logout:", error);
+                loaderOff();
+                alerta("Error al cerrar sesión: " + error.message);
+            }
+        }
+    });
+
+    // Setup dropdown toggle functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set up desktop dropdown toggles
+        const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+
+        dropdownToggles.forEach(toggle => {
+            toggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                const dropdownId = this.getAttribute('data-dropdown');
+                const dropdown = document.getElementById(dropdownId);
+
+                // Close all other dropdowns
+                document.querySelectorAll('.desktop-dropdown').forEach(dd => {
+                    if (dd.id !== dropdownId) {
+                        dd.classList.remove('desktop-dropdown-visible');
+                    }
+                });
+
+                // Toggle arrow rotation
+                document.querySelectorAll('.dropdown-toggle svg:last-child').forEach(arrow => {
+                    if (arrow.parentElement === this) {
+                        arrow.classList.toggle('rotate-180');
+                    } else {
+                        arrow.classList.remove('rotate-180');
+                    }
+                });
+
+                // Toggle current dropdown
+                dropdown.classList.toggle('desktop-dropdown-visible');
+            });
+        });
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.dropdown-toggle') && !e.target.closest('.desktop-dropdown')) {
+                document.querySelectorAll('.desktop-dropdown').forEach(dropdown => {
+                    dropdown.classList.remove('desktop-dropdown-visible');
+                });
+
+                document.querySelectorAll('.dropdown-toggle svg:last-child').forEach(arrow => {
+                    arrow.classList.remove('rotate-180');
+                });
+            }
+        });
     });
 </script>
 <script src="https://dosxdos.app.iidos.com/js/notificaciones.js"></script>

@@ -476,8 +476,7 @@ if ($idUsuario == $id && $usuarioEditado) {
 </div>
 <script>
     actualizarUsuario = false;
-    titulo1 = <?php echo ("'EDITAR USUARIO'"); ?>;
-    titulo2 = <?php echo ("'EDITAR USUARIO'"); ?>; /* CAMBIO DE IMAGEN */
+     /* CAMBIO DE IMAGEN */
     const $imagen = document.getElementById('imagen'),
         $imagenPerfil = document.getElementById('imagenPerfil');
     const cambioImagen = file => new Promise((resolve, reject) => {
