@@ -229,8 +229,8 @@ if ($idUsuario == $id && $usuarioEditado) {
 }
 
 ?>
-
-<div class="container mx-auto px-4 sm:px-6 pb-12 pt-32">
+<div class=" px-4 sm:px-6 pb-12 pt-32 bg-gray-100">
+<div class="container mx-auto">
     <!-- Header Section -->
     <section class="mb-8">
         <div class="rounded-xl shadow-lg overflow-hidden relative">
@@ -473,7 +473,7 @@ if ($idUsuario == $id && $usuarioEditado) {
             </form>
         </div>
     </section>
-</div>
+</div></div>
 <script>
     actualizarUsuario = false;
      /* CAMBIO DE IMAGEN */

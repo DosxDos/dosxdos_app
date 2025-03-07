@@ -308,7 +308,7 @@ if ($conexion && $idUsuario) {
 
                     <!-- Desktop Dropdown Menu -->
                     <div id="opcionesUsuario" class="hidden absolute right-0 mt-2 w-max bg-white rounded-lg shadow-lg p-4 z-50">
-                        <button id="editarUsuario" class="flex items-center gap-2 w-full mb-4 text-left text-xl text-black hover:bg-red-600/20 rounded-lg transition-colors duration-200 p-2">
+                        <button id="editarUsuario" class="flex items-center gap-2 w-full text-left text-xl text-black hover:bg-red-600/20 rounded-lg transition-colors duration-200 p-2">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
                                 <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
