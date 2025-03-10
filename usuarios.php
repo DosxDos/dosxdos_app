@@ -27,7 +27,7 @@ if (!isset($_COOKIE['login'])) {
         <div class="bg-white rounded-xl shadow-lg overflow-hidden">
             <div class="p-6">
                 <!-- Search Bar -->
-                   <div class="relative flex items-center w-full mb-8">
+                <div class="relative flex items-center w-full mb-8">
                     <svg xmlns="http://www.w3.org/2000/svg"
                         class="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor">
@@ -65,8 +65,15 @@ if (!isset($_COOKIE['login'])) {
                                     $userDataJson = htmlspecialchars(json_encode($row), ENT_QUOTES, 'UTF-8');
                             ?>
                                     <tr class="border-b border-gray-100 hover:bg-gray-50 cursor-pointer" data-user-id="<?php echo $row['id']; ?>" data-user-info='<?php echo $userDataJson; ?>'>
-                                        <td class="px-4 py-3">
-                                            <img src="<?php echo $row['imagen'] ?: 'img/usuario.png'; ?>" class="shrink-0 w-12 h-12 rounded-full border border-gray-200 object-cover flex mx-auto" alt="Usuario">
+                                        <td class="px-4 py-3 w-[80px] max-w-[80px]">
+                                            <div class="flex items-center justify-center w-full h-full">
+                                                <div class="w-12 h-12 flex-shrink-0">
+                                                    <img
+                                                        src="<?php echo $row['imagen'] ?: 'img/usuario.png'; ?>"
+                                                        class="w-full h-full rounded-full border border-gray-200 object-cover"
+                                                        alt="Usuario">
+                                                </div>
+                                            </div>
                                         </td>
                                         <td class="px-4 py-3 font-medium"><?php echo $row['nombre']; ?></td>
                                         <td class="px-4 py-3"><?php echo $row['apellido']; ?></td>
