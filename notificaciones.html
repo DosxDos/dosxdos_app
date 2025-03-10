@@ -560,7 +560,8 @@
             };
           } else {
             mensaje = res[1];
-            alerta(mensaje);
+            console.warn(mensaje);
+            resolve(true);
           }
         })
         .catch((res) => {
@@ -1471,10 +1472,10 @@
 
       let loginMontador = localStorage.getItem("loginMontador");
 
-      if (!loginMontador) {
-        window.location.href = `https://dosxdos.app.iidos.com/dosxdos.php?id=${usuario.id}&rol=${usuario.clase}`;
-        return;
-      }
+      // if (!loginMontador) {
+      //   window.location.href = `https://dosxdos.app.iidos.com/dosxdos.php?id=${usuario.id}&rol=${usuario.clase}`;
+      //   return;
+      // }
 
       montador = usuario.cod;
 
@@ -1613,10 +1614,10 @@
 
       let loginMontador = localStorage.getItem("loginMontador");
 
-      if (!loginMontador) {
-        window.location.href = `https://dosxdos.app.iidos.com/dosxdos.php?id=${usuario.id}&rol=${usuario.clase}`;
-        return;
-      }
+      // if (!loginMontador) {
+      //   window.location.href = `https://dosxdos.app.iidos.com/dosxdos.php?id=${usuario.id}&rol=${usuario.clase}`;
+      //   return;
+      // }
 
       montador = usuario.cod;
 

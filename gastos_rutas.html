@@ -3,93 +3,13 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Gastos Rutas</title>
+  <link rel="icon" type="image/png" href="https://dosxdos.app.iidos.com/img/logoPwa256.png" />
+  <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/tailwindmain.css" />
+  <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/index.css" />
+
   <style>
-    * {
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    #loader {
-      width: 100vw;
-      height: 100vh;
-      position: absolute;
-      top: 0;
-      z-index: 6000;
-      background-color: rgba(0, 0, 0, 0.886);
-      justify-content: center;
-      align-items: center;
-    }
-
-    .loader {
-      border: 4px solid #ffffff;
-      border-top: 4px solid #d31216;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      0% {
-        transform: rotate(0deg);
-      }
-
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-
-    .displayOff {
-      display: none;
-    }
-
-    .displayOn {
-      display: flex;
-    }
-
-    body {
-      overflow-x: hidden;
-    }
-
-    .oyh {
-      overflow-y: hidden;
-    }
-
-    /* Message */
-    .message-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: rgba(0, 0, 0, 0.6);
-      z-index: 1000;
-    }
-
-    .fade {
-      animation: fade 0.5s;
-    }
-
-    @keyframes fade {
-      from {
-        opacity: 0;
-      }
-
-      to {
-        opacity: 1;
-      }
-    }
-
-    .feedback {
-      color: #d31216;
-      font-size: 14px;
-      margin-top: 5px;
-    }
-
     .checkbox-item label {
       margin-left: 8px;
     }
@@ -113,224 +33,683 @@
     .tag .tag-close {
       cursor: pointer;
       font-weight: bold;
-      color: #d31216;
+      color: #e53935;
     }
 
-    #volver {
+
+    .desktop-dropdown {
+      display: none;
       position: absolute;
-      top: 20px;
-      left: 20px;
-      background-color: #d31216;
-      padding: 12px;
-      border-radius: 20%;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 3001;
+      top: 100%;
+      left: 0;
+      z-index: 50;
+      min-width: 10rem;
+      padding: 0.5rem 0;
+      margin-top: 0.5rem;
+      font-size: 0.875rem;
+      background-color: #fff;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 0.375rem;
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
     }
 
-    #volver img {
-      width: 24px;
-      height: 24px;
+    .desktop-dropdown-visible {
+      display: block;
     }
 
-    /* Results Table Styles */
-
-    .table-container {
-      max-height: calc(100vh - 200px);
-      overflow-y: auto;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      margin-bottom: 20px;
-      padding: 40px;
-    }
-
-    .error-message {
-      color: #d31216;
-      font-weight: bold;
-      margin-bottom: 20px;
-    }
-
-    .results-table {
-      width: 85%;
-      margin-inline: auto;
-      margin: 20px auto;
-      border-collapse: collapse;
-    }
-
-    .results-table th,
-    .results-table td {
-      border: 1px solid #ddd;
-      padding: 15px;
-      text-align: center;
-    }
-
-    .results-table thead th {
-      position: sticky;
-      background-color: #d31216;
-      color: white;
-      font-weight: bold;
-      text-transform: uppercase;
-    }
-
-    .results-table th {
-      position: sticky;
-      top: 0;
-      background-color: #d31216;
-      z-index: 10;
-    }
-
-    .results-table tbody tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
-
-    .results-table tfoot td {
-      font-weight: bold;
-      background-color: #eee;
-    }
-
-    .action-buttons {
-      display: flex;
-      gap: 15px;
-      margin-top: 20px;
-    }
-
-    .action-buttons button {
-      padding: 12px 25px;
-      font-size: 16px;
-      border: none;
-      cursor: pointer;
-      border-radius: 5px;
-      transition: all 0.2s;
-    }
-
-    .action-buttons button:hover {
-      transform: scale(1.05);
+    .desktop-dropdown a {
+      display: block;
+      padding: 0.5rem 1rem;
+      clear: both;
+      font-weight: 400;
+      text-align: inherit;
+      white-space: nowrap;
+      background-color: transparent;
+      border: 0;
+      transition: background-color 0.15s ease;
     }
   </style>
-  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body id="body" class="bg-gray-100 text-black p-5 flex flex-col justify-center items-center my-auto">
-  <div id="loader" class="displayOn">
+<body id="body" class="bg-gray-100 overflow-x-hidden min-h-screen">
+  <!-- Loader -->
+  <div id="loader" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center">
     <span class="loader"></span>
   </div>
 
-  <div id="volver" onclick="goBack()"
-    class="absolute top-5 left-5 flex items-center bg-red-600 p-3 rounded-[20%] cursor-pointer hover:bg-red-700">
-    <img src="https://dosxdos.app.iidos.com/img/back.png" alt="Volver Icon" class="w-7 h-7" />
-  </div>
+  <!-- Navigation -->
+  <section id="encabezado" class="w-full bg-white shadow-md fixed top-0 z-30">
+    <!-- Main header -->
+    <div class="flex items-center justify-between w-full px-6 py-4">
+      <!-- Logo -->
+      <div class="flex items-center">
+        <img src="https://dosxdos.app.iidos.com/img/logo300.png" class="h-16 hidden xl:block" alt="Logo completo" />
+        <img src="https://dosxdos.app.iidos.com/img/Isotipo-38.png" class="h-16 xl:hidden" alt="Isotipo" />
+      </div>
 
-  <h1 id="titulo" class="relative text-4xl mb-8 mt-16 text-black font-bold mx-auto">
-    Gastos Rutas
-  </h1>
+      <!-- Desktop Navigation -->
+      <nav class="hidden xl:flex items-center space-x-8">
+        <!-- OT Option -->
+        <div id="archivos" class="displayOff">
+          <a href="https://dosxdos.app.iidos.com/ot.html"
+            class="flex items-center text-gray-700 hover:text-red-600 group transition-colors duration-200">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-6 h-6 mr-2"
+              xmlns="http://www.w3.org/2000/svg">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+              <g id="SVGRepo_iconCarrier">
+                <path d="M12.37 8.87988H17.62" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path d="M6.38 8.87988L7.13 9.62988L9.38 7.37988" stroke-width="1.5" stroke-linecap="round"
+                  stroke-linejoin="round"></path>
+                <path d="M12.37 15.8799H17.62" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path d="M6.38 15.8799L7.13 16.6299L9.38 14.3799" stroke-width="1.5" stroke-linecap="round"
+                  stroke-linejoin="round"></path>
+                <path d="M9 22H15C20 22 22 20 22 15V9C22 4 20 2 15 2H9C4 2 2 4 2 9V15C2 20 4 22 9 22Z"
+                  stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </g>
+            </svg>
+            <span>OT</span>
+          </a>
+        </div>
 
-  <form id="gastosRutasForm" class="w-full max-w-lg mx-auto">
-    <div class="mb-5 w-full">
-      <label for="fechaInicial" class="block text-lg mb-2 font-semibold">Fecha Inicial</label>
-      <input type="date" id="fechaInicial" name="fechaInicial" required
-        class="w-full p-3 border border-gray-300 rounded-lg" />
-      <div id="fechaInicialFeedback" class="feedback"></div>
-    </div>
+        <!-- Lineas OT Option -->
+        <div id="icLineasOt" class="displayOff">
+          <a href="https://dosxdos.app.iidos.com/lineas_ot.html"
+            class="flex items-center text-gray-700 group hover:text-red-600 transition-colors duration-200">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+              <path d="M9 15l2 2 4-4" />
+            </svg>
+            <span>Líneas OT</span>
+          </a>
+        </div>
 
-    <div class="mb-5 w-full">
-      <label for="fechaFinal" class="block text-lg mb-2 font-semibold">Fecha Final</label>
-      <input type="date" id="fechaFinal" name="fechaFinal" required
-        class="w-full p-3 border border-gray-300 rounded-lg" />
-      <div id="fechaFinalFeedback" class="feedback"></div>
-    </div>
+        <!-- Rutas Option -->
+        <div id="rutasIcono" class="displayOff">
+          <a href="https://dosxdos.app.iidos.com/rutas.html"
+            class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
+            <svg viewBox="0 0 100 100" class="w-6 h-6 mr-2" fill="none" stroke="currentColor"
+              xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
+              role="img" preserveAspectRatio="xMidYMid meet">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+              <g id="SVGRepo_iconCarrier">
+                <path
+                  d="M21 32C9.459 32 0 41.43 0 52.94c0 4.46 1.424 8.605 3.835 12.012l14.603 25.244c2.045 2.672 3.405 2.165 5.106-.14l16.106-27.41c.325-.59.58-1.216.803-1.856A20.668 20.668 0 0 0 42 52.94C42 41.43 32.544 32 21 32zm0 9.812c6.216 0 11.16 4.931 11.16 11.129c0 6.198-4.944 11.127-11.16 11.127c-6.215 0-11.16-4.93-11.16-11.127c0-6.198 4.945-11.129 11.16-11.129z"
+                  fill="currentColor" stroke="currentColor"></path>
+                <path
+                  d="M87.75 0C81.018 0 75.5 5.501 75.5 12.216c0 2.601.83 5.019 2.237 7.006l8.519 14.726c1.193 1.558 1.986 1.262 2.978-.082l9.395-15.99c.19-.343.339-.708.468-1.082a12.05 12.05 0 0 0 .903-4.578C100 5.5 94.484 0 87.75 0zm0 5.724c3.626 0 6.51 2.876 6.51 6.492c0 3.615-2.884 6.49-6.51 6.49c-3.625 0-6.51-2.875-6.51-6.49c0-3.616 2.885-6.492 6.51-6.492z"
+                  fill="currentColor" stroke="currentColor"></path>
+                <path
+                  d="M88.209 37.412c-2.247.05-4.5.145-6.757.312l.348 5.532a126.32 126.32 0 0 1 6.513-.303zm-11.975.82c-3.47.431-6.97 1.045-10.43 2.032l1.303 5.361c3.144-.896 6.402-1.475 9.711-1.886zM60.623 42.12a24.52 24.52 0 0 0-3.004 1.583l-.004.005l-.006.002c-1.375.866-2.824 1.965-4.007 3.562c-.857 1.157-1.558 2.62-1.722 4.35l5.095.565c.038-.406.246-.942.62-1.446h.002v-.002c.603-.816 1.507-1.557 2.582-2.235l.004-.002a19.64 19.64 0 0 1 2.388-1.256zM58 54.655l-3.303 4.235c.783.716 1.604 1.266 2.397 1.726l.01.005l.01.006c2.632 1.497 5.346 2.342 7.862 3.144l1.446-5.318c-2.515-.802-4.886-1.576-6.918-2.73c-.582-.338-1.092-.691-1.504-1.068zm13.335 5.294l-1.412 5.327l.668.208l.82.262c2.714.883 5.314 1.826 7.638 3.131l2.358-4.92c-2.81-1.579-5.727-2.611-8.538-3.525l-.008-.002l-.842-.269zm14.867 7.7l-3.623 3.92c.856.927 1.497 2.042 1.809 3.194l.002.006l.002.009c.372 1.345.373 2.927.082 4.525l5.024 1.072c.41-2.256.476-4.733-.198-7.178c-.587-2.162-1.707-4.04-3.098-5.548zM82.72 82.643a11.84 11.84 0 0 1-1.826 1.572h-.002c-1.8 1.266-3.888 2.22-6.106 3.04l1.654 5.244c2.426-.897 4.917-1.997 7.245-3.635l.006-.005l.003-.002a16.95 16.95 0 0 0 2.639-2.287zm-12.64 6.089c-3.213.864-6.497 1.522-9.821 2.08l.784 5.479c3.421-.575 6.856-1.262 10.27-2.18zm-14.822 2.836c-3.346.457-6.71.83-10.084 1.148l.442 5.522c3.426-.322 6.858-.701 10.285-1.17zm-15.155 1.583c-3.381.268-6.77.486-10.162.67l.256 5.536c3.425-.185 6.853-.406 10.28-.678zm-15.259.92c-2.033.095-4.071.173-6.114.245l.168 5.541a560.1 560.1 0 0 0 6.166-.246z"
+                  fill="currentColor" stroke="currentColor" fill-rule="evenodd"></path>
+              </g>
+            </svg>
+            <span>Rutas</span>
+          </a>
+        </div>
 
-    <div class="mb-5 w-full">
-      <label class="block text-lg font-semibold">Rutas</label>
-      <div class="dropdown">
-        <button type="button" class="dropbtn w-full p-3 bg-red-600 text-white rounded-lg text-left"
-          onclick="toggleDropdown('rutas')">
-          Seleccionar Rutas
+        <!-- Lineas Ruta Option -->
+        <div id="lineasIcono" class="displayOff">
+          <a href="https://dosxdos.app.iidos.com/lineas.html"
+            class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
+            <svg class="w-6 h-6 mr-2" fill="currentColor" stroke="none" viewBox="-3 0 32 32" version="1.1"
+              xmlns="http://www.w3.org/2000/svg">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+              <g id="SVGRepo_iconCarrier">
+                <path
+                  d="M23.36 9.32c-1.32 0-2.36 1.080-2.36 2.36 0 0.28 0.040 0.56 0.12 0.8l-4.8 4.080c-0.32-0.2-0.72-0.28-1.16-0.28s-0.88 0.12-1.24 0.36l-2.72-2.2c0.080-0.24 0.12-0.44 0.12-0.72 0-1.32-1.080-2.36-2.36-2.36-1.32 0-2.36 1.080-2.36 2.36 0 0.36 0.080 0.68 0.2 0.96l-3.44 3.44c-0.28-0.12-0.64-0.2-0.96-0.2-1.32 0-2.36 1.080-2.36 2.36 0 1.32 1.080 2.36 2.36 2.36s2.36-1.080 2.36-2.36c0-0.36-0.080-0.68-0.2-0.96l3.44-3.44c0.28 0.12 0.64 0.2 0.96 0.2 0.44 0 0.88-0.12 1.24-0.36l2.76 2.12c-0.080 0.24-0.080 0.44-0.080 0.72 0 1.32 1.080 2.36 2.36 2.36s2.36-1.080 2.36-2.36c0-0.28-0.040-0.56-0.12-0.8l4.8-4.080c0.32 0.2 0.72 0.28 1.16 0.28 1.32 0 2.36-1.080 2.36-2.36-0.040-1.2-1.16-2.28-2.44-2.28zM2.36 21c-0.36 0-0.68-0.32-0.68-0.68 0-0.4 0.32-0.68 0.68-0.68s0.68 0.32 0.68 0.68c0 0.36-0.28 0.68-0.68 0.68zM8.24 13.76c0-0.4 0.32-0.68 0.68-0.68s0.68 0.32 0.68 0.68-0.32 0.68-0.68 0.68c-0.36 0-0.68-0.32-0.68-0.68zM15.2 19.28c-0.4 0-0.68-0.32-0.68-0.68s0.32-0.68 0.68-0.68 0.68 0.32 0.68 0.68c-0.040 0.4-0.28 0.68-0.68 0.68zM23.36 12.36c-0.36 0-0.68-0.32-0.68-0.68 0-0.4 0.32-0.68 0.68-0.68 0.4 0 0.68 0.32 0.68 0.68 0 0.4-0.32 0.68-0.68 0.68z">
+                </path>
+              </g>
+            </svg>
+            <span>Líneas Ruta</span>
+          </a>
+        </div>
+
+        <!-- Gastos Dropdown -->
+        <div id="gastos" class="displayOff relative">
+          <button
+            class="dropdown-toggle flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200"
+            data-dropdown="gastosDropdown">
+            <svg viewBox="0 0 24 24" class="w-6 h-6 mr-2" fill="currentColor" stroke="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+              <g id="SVGRepo_iconCarrier">
+                <path
+                  d="M5 16C5 15.4477 5.44772 15 6 15H8C8.55229 15 9 15.4477 9 16C9 16.5523 8.55229 17 8 17H6C5.44772 17 5 16.5523 5 16Z">
+                </path>
+                <path
+                  d="M11 15C10.4477 15 10 15.4477 10 16C10 16.5523 10.4477 17 11 17H12C12.5523 17 13 16.5523 13 16C13 15.4477 12.5523 15 12 15H11Z">
+                </path>
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                  d="M6.788 3C5.96948 2.99999 5.29393 2.99998 4.74393 3.04565C4.17258 3.0931 3.64774 3.19496 3.1561 3.45035C2.42553 3.82985 1.82985 4.42553 1.45035 5.1561C1.19496 5.64774 1.0931 6.17258 1.04565 6.74393C0.999977 7.29393 0.999988 7.96946 1 8.78798V15.212C0.999988 16.0305 0.999977 16.7061 1.04565 17.2561C1.0931 17.8274 1.19496 18.3523 1.45035 18.8439C1.82985 19.5745 2.42553 20.1702 3.1561 20.5497C3.64774 20.805 4.17258 20.9069 4.74393 20.9544C5.29394 21 5.96949 21 6.78803 21H17.212C18.0305 21 18.7061 21 19.2561 20.9544C19.8274 20.9069 20.3523 20.805 20.8439 20.5497C21.5745 20.1702 22.1702 19.5745 22.5497 18.8439C22.805 18.3523 22.9069 17.8274 22.9544 17.2561C23 16.7061 23 16.0305 23 15.212V8.78802C23 7.96949 23 7.29394 22.9544 6.74393C22.9069 6.17258 22.805 5.64774 22.5497 5.1561C22.1702 4.42553 21.5745 3.82985 20.8439 3.45035C20.3523 3.19496 19.8274 3.0931 19.2561 3.04565C18.7061 2.99998 18.0305 2.99999 17.212 3H6.788ZM4.07805 5.22517C4.23663 5.1428 4.46402 5.07578 4.90945 5.03879C5.36686 5.00081 5.95898 5 6.83 5H17.17C18.041 5 18.6331 5.00081 19.0906 5.03879C19.536 5.07578 19.7634 5.1428 19.922 5.22517C20.2872 5.41493 20.5851 5.71277 20.7748 6.07805C20.8572 6.23663 20.9242 6.46402 20.9612 6.90945C20.9857 7.20418 20.9947 7.55484 20.9981 8H3.00194C3.00528 7.55484 3.01431 7.20418 3.03879 6.90945C3.07578 6.46402 3.1428 6.23663 3.22517 6.07805C3.41493 5.71277 3.71277 5.41493 4.07805 5.22517ZM3 10V15.17C3 16.041 3.00081 16.6331 3.03879 17.0906C3.07578 17.536 3.1428 17.7634 3.22517 17.922C3.41493 18.2872 3.71277 18.5851 4.07805 18.7748C4.23663 18.8572 4.46402 18.9242 4.90945 18.9612C5.36686 18.9992 5.95898 19 6.83 19H17.17C18.041 19 18.6331 18.9992 19.0906 18.9612C19.536 18.9242 19.7634 18.8572 19.922 18.7748C20.2872 18.5851 20.5851 18.2872 20.7748 17.922C20.8572 17.7634 20.9242 17.536 20.9612 17.0906C20.9992 16.6331 21 16.041 21 15.17V10H3Z">
+                </path>
+              </g>
+            </svg>
+            <span>Gastos</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-1 transition-transform duration-200"
+              viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div id="gastosDropdown" class="desktop-dropdown w-auto">
+            <a href="https://dosxdos.app.iidos.com/gastos_rutas.html"
+              class="text-sm text-gray-700 hover:bg-red-600 hover:text-white">
+              Gastos Rutas
+            </a>
+            <a href="" class="text-sm text-gray-700 hover:bg-red-600 hover:text-white">
+              Reportar Gastos (próximamente)
+            </a>
+          </div>
+        </div>
+
+        <!-- Clientes Dropdown -->
+        <div id="clientes" class="displayOff relative">
+          <button
+            class="dropdown-toggle flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200"
+            data-dropdown="clientesDropdown">
+            <svg viewBox="0 0 28 28" class="w-6 h-6 mr-2" fill="currentColor" stroke="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+              <g id="SVGRepo_iconCarrier">
+                <path clip-rule="evenodd"
+                  d="M1.82047 1C1.36734 1 1 1.35728 1 1.79801V2.39948C1 2.84021 1.36734 3.19749 1.82047 3.19749H3.72716C4.03867 3.19749 4.3233 3.36906 4.46192 3.64038L5.4947 5.93251C5.53326 6.00798 5.56364 6.09443 5.62081 6.15194L10.057 16.4429C10.0129 16.4634 9.97056 16.4883 9.93075 16.5176C8.70163 17.4226 7.87009 18.5878 7.87001 19.7604C7.86996 20.4429 8.16289 21.0807 8.75002 21.5212C9.30752 21.9394 10.0364 22.1118 10.8189 22.1118H10.8446C10.336 22.6308 10.0238 23.3336 10.0238 24.1072C10.0238 25.7049 11.3554 27 12.998 27C14.6406 27 15.9722 25.7049 15.9722 24.1072C15.9722 23.3336 15.66 22.6308 15.1513 22.1118H19.0494C18.5408 22.6308 18.2285 23.3336 18.2285 24.1072C18.2285 25.7049 19.5601 27 21.2027 27C22.8454 27 24.177 25.7049 24.177 24.1072C24.177 23.3336 23.8647 22.6308 23.3561 22.1118H23.9718C24.425 22.1118 24.7923 21.7545 24.7923 21.3138V20.9148C24.7923 20.474 24.425 20.1167 23.9718 20.1167H10.8189C10.3192 20.1167 10.0864 20.0041 10.0028 19.9414C9.94878 19.9009 9.92119 19.8618 9.9212 19.7606C9.92122 19.4917 10.1711 18.8708 11.069 18.1827C11.1084 18.1524 11.1453 18.1194 11.1792 18.084C11.2692 18.1089 11.3635 18.1221 11.4601 18.1221H23.9235C24.4248 18.1221 24.8527 17.7696 24.9351 17.2885L26.9858 5.31837C27.09 4.71036 26.6079 4.1569 25.9742 4.1569H7.35431C7.1981 4.1569 7.05618 4.06597 6.9909 3.92405L5.84968 1.44289C5.71106 1.17157 5.42642 1 5.11492 1H1.82047ZM8.47667 6.15194C8.18952 6.15194 7.99591 6.44552 8.10899 6.70946L12.04 15.8846C12.103 16.0317 12.2476 16.1271 12.4076 16.1271H22.7173C22.9122 16.1271 23.0787 15.9867 23.1116 15.7946L24.6834 6.61948C24.7253 6.37513 24.5371 6.15194 24.2892 6.15194H8.47667ZM11.8698 24.1072C11.8698 23.5012 12.3749 23.0099 12.998 23.0099C13.621 23.0099 14.1261 23.5012 14.1261 24.1072C14.1261 24.7132 13.621 25.2045 12.998 25.2045C12.3749 25.2045 11.8698 24.7132 11.8698 24.1072ZM21.2027 23.0099C20.5797 23.0099 20.0746 23.5012 20.0746 24.1072C20.0746 24.7132 20.5797 25.2045 21.2027 25.2045C21.8258 25.2045 22.3309 24.7132 22.3309 24.1072C22.3309 23.5012 21.8258 23.0099 21.2027 23.0099Z"
+                  fill-rule="evenodd"></path>
+              </g>
+            </svg>
+            <span>Clientes</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-1 transition-transform duration-200"
+              viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div id="clientesDropdown" class="desktop-dropdown w-72">
+            <a href="https://dosxdos.app.iidos.com/ots_clientes.html"
+              class="text-sm text-gray-700 hover:bg-red-600 hover:text-white">
+              Restricciones Tipos de OT
+            </a>
+            <a href="https://dosxdos.app.iidos.com/firmas_clientes.html"
+              class="text-sm text-gray-700 hover:bg-red-600 hover:text-white">
+              Restricciones Firmas
+            </a>
+          </div>
+        </div>
+
+        <!-- Usuarios Option -->
+        <div id="usuarios" class="displayOff">
+          <a href="https://dosxdos.app.iidos.com/dosxdos.php?modulo=usuarios"
+            class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+            <span>Usuarios</span>
+          </a>
+        </div>
+
+        <!-- Sincronización Dropdown -->
+        <div id="sincronizacion" class="displayOff relative">
+          <button
+            class="dropdown-toggle flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200"
+            data-dropdown="sincronizacionDropdown">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 2v6h-6"></path>
+              <path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path>
+              <path d="M3 22v-6h6"></path>
+              <path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path>
+            </svg>
+            <span>Sincronización</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-1 transition-transform duration-200"
+              viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+
+          <div id="sincronizacionDropdown" class="desktop-dropdown w-72">
+            <a href="#" class="text-sm text-gray-700 hover:bg-red-600 hover:text-white">
+              Sinc. OT Navision
+            </a>
+            <a href="https://dosxdos.app.iidos.com/apirest/sincronizador2.php"
+              class="text-sm text-gray-700 hover:bg-red-600 hover:text-white">
+              Sinc. Total OT Navision
+            </a>
+          </div>
+        </div>
+
+        <!-- Desktop Menu Notifications Bell -->
+        <a href="https://dosxdos.app.iidos.com/notificaciones.html" class="relative z-10" id="desktopBellContainer">
+          <img id="bellDesktop" src="https://dosxdos.app.iidos.com/img/bell2.png"
+            class="w-7 text-gray-900 object-contain" />
+          <span id="desktopNotificationCount"
+            class="absolute top-0 -right-2 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] text-center border hidden"></span>
+        </a>
+
+        <!-- Desktop User Menu -->
+        <div class="relative group drop-shadow">
+          <button id="userMenuButton"
+            class="group flex items-center gap-3 py-1 pl-1.5 pr-4 rounded-full bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-gray-300 transition-all duration-200"
+            aria-expanded="false">
+            <div
+              class="w-10 h-10 rounded-full overflow-hidden border-2 border-white shadow-sm bg-gray-100 flex items-center justify-center">
+              <img id="imagenUsuario" src="https://dosxdos.app.iidos.com/img/usuario.png"
+                class="w-full h-full object-cover" alt="Profile"
+                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+              <svg class="w-5 h-5 text-gray-400 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+            </div>
+
+            <span id="nombreUsuario" class="text-gray-700 font-medium text-lg"></span>
+
+            <svg xmlns="http://www.w3.org/2000/svg"
+              class="w-6 h-6 text-gray-400 group-hover:text-gray-600 transition-transform duration-200 group-hover:rotate-180"
+              viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+
+          <!-- Desktop Dropdown Menu -->
+          <div id="opcionesUsuario" class="hidden absolute right-0 mt-2 w-max bg-white rounded-lg shadow-lg z-50 py-2">
+            <button id="editarUsuario"
+              class="flex items-center gap-2 w-full text-left text-lg text-black hover:bg-red-600 hover:text-white transition-colors duration-200 px-4 py-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+              </svg>
+              Editar Usuario
+            </button>
+            <button id="cerrarSesion"
+              class="flex items-center gap-2 w-full text-left text-lg text-red-500 hover:bg-red-600 hover:text-white transition-colors duration-200 px-4 py-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+              </svg>
+              Cerrar Sesión
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Mobile Navigation -->
+      <div class="xl:hidden flex items-center space-x-2 mx-2">
+        <!-- Mobile Bell -->
+        <a href="https://dosxdos.app.iidos.com/notificaciones.html" class="relative z-10" id="mobileBellContainer">
+          <img id="bellMobile" src="https://dosxdos.app.iidos.com/img/bell2.png"
+            class="w-8 text-gray-900 object-contain mt-2" />
+          <span id="mobileNotificationCount"
+            class="absolute top-2 right-0 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] text-center border hidden"></span>
+        </a>
+
+        <!-- Mobile Menu Button -->
+        <button id="menuButton" class="xl:hidden relative z-50 p-2 focus:outline-none">
+          <div class="relative w-8 h-8">
+            <span class="absolute h-1 w-8 bg-gray-900 transition-all duration-300 ease-in-out top-1"
+              id="hamburgerTop"></span>
+            <span class="absolute h-1 w-8 bg-gray-900 transition-all duration-300 ease-in-out top-4"
+              id="hamburgerMiddle"></span>
+            <span class="absolute h-1 w-8 bg-gray-900 transition-all duration-300 ease-in-out top-7"
+              id="hamburgerBottom"></span>
+          </div>
         </button>
-        <div id="rutasContent"
-          class="dropdown-content z-10 w-full bg-white border border-gray-300 rounded-lg mt-1 p-3 hidden">
-          <input type="text" class="search-input w-full p-3 mb-3 border border-gray-300 rounded-lg"
-            id="rutasSearchInput" placeholder="Buscar Rutas..." onkeyup="filterItems('rutas')" />
-          <div id="rutasCheckboxes"></div>
+      </div>
+
+    </div>
+
+    <div id="opcionesMenu"
+      class="xl:hidden fixed inset-0 bg-gradient-to-r from-red-500 to-red-600 bg-opacity-95 transform translate-x-full transition-all duration-500 ease-in-out z-40 overflow-hidden backdrop-blur-sm flex flex-col">
+      <div class="absolute inset-0 z-0"
+        style="background-image: url('https://dosxdos.app.iidos.com/img/texture-red.svg'); background-size: contain; opacity: 0.7;">
+      </div>
+      <!-- User Profile Section -->
+      <div class="px-8 py-4 mt-20 relative z-10">
+        <div class="relative flex items-center gap-3 py-1 pl-1.5 pr-4 bg-white shadow-lg rounded-full">
+          <!-- Profile image -->
+          <div
+            class="absolute left-0 w-28 h-28 rounded-full overflow-hidden border-4 border-white bg-gradient-to-br from-red-50 to-white flex items-center justify-center shadow-xl"
+            style="transform: translateX(-15%);">
+            <img id="imagenUsuarioMobile" src="https://dosxdos.app.iidos.com/img/usuario.png"
+              class="w-full h-full object-cover" alt="Profile"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+            <svg class="w-12 h-12 text-gray-400 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </div>
+          <div class="ml-28 flex items-center py-4">
+            <!-- User name -->
+            <span class="text-black font-medium text-xl">¡Hola,&nbsp;</span>
+            <span id="nombreUsuarioMobile" class="text-black font-medium text-xl"></span>
+            <span class="text-black font-medium text-xl">!</span>
+          </div>
         </div>
       </div>
-      <div id="selectedRutas" class="selected-tags"></div>
-      <div id="rutasFeedback" class="feedback"></div>
-    </div>
 
-    <div class="mb-5 w-full">
-      <label class="block text-lg font-semibold">Montadores</label>
-      <div class="dropdown">
-        <button type="button" class="dropbtn w-full p-3 bg-red-600 text-white rounded-lg text-left"
-          onclick="toggleDropdown('montadores')">
-          Seleccionar Montadores
-        </button>
-        <div id="montadoresContent"
-          class="dropdown-content z-10 w-full bg-white border border-gray-300 rounded-lg mt-1 p-3 hidden">
-          <input type="text" class="search-input w-full p-3 mb-3 border border-gray-300 rounded-lg"
-            id="montadoresSearchInput" placeholder="Buscar Montadores..." onkeyup="filterItems('montadores')" />
-          <div id="montadoresCheckboxes"></div>
+      <!-- Mobile Menu Navigation Links -->
+      <nav class="px-8 py-6 space-y-2 relative z-10 flex-1 overflow-y-auto custom-scrollbar">
+        <!-- Dynamic menu items will be added here based on user role -->
+      </nav>
+
+      <!-- Mobile Menu Footer -->
+      <div class="relative z-10">
+        <div class="website-divider-container-734167" style="height: 100px; overflow: visible">
+          <svg xmlns="http://www.w3.org/2000/svg" class="divider-img-734167" viewBox="0 0 1080 137"
+            preserveAspectRatio="none" style="bottom: -20px">
+            <path
+              d="M 0,137 V 59.03716 c 158.97703,52.21241 257.17659,0.48065 375.35967,2.17167 118.18308,1.69101 168.54911,29.1665 243.12679,30.10771 C 693.06415,92.25775 855.93515,29.278599 1080,73.61449 V 137 Z"
+              style="fill: #ffffff"></path>
+            <path
+              d="M 0,10.174557 C 83.419822,8.405668 117.65911,41.78116 204.11379,44.65308 290.56846,47.52499 396.02558,-7.4328 620.04248,94.40134 782.19141,29.627636 825.67279,15.823104 1080,98.55518 V 137 H 0 Z"
+              style="fill: #ffffff; opacity: 0.5"></path>
+            <path
+              d="M 0,45.10182 C 216.27861,-66.146913 327.90348,63.09813 416.42665,63.52904 504.94982,63.95995 530.42054,22.125806 615.37532,25.210412 700.33012,28.295019 790.77619,132.60682 1080,31.125744 V 137 H 0 Z"
+              style="fill: #ffffff; opacity: 0.25"></path>
+          </svg>
         </div>
       </div>
-      <div id="selectedMontadores" class="selected-tags"></div>
-      <div id="montadoresFeedback" class="feedback"></div>
-    </div>
 
-    <div class="action-buttons flex gap-5 justify-center mt-5 flex-wrap">
-      <button type="button" id="calcularBtn" class="bg-red-600 text-white px-5 py-3 rounded-lg hover:bg-red-700"
-        onclick="validateForm()">
-        Calcular
-      </button>
-      <button type="button" id="borrarTodoBtn" class="bg-gray-300 text-black px-5 py-3 rounded-lg hover:bg-gray-400"
-        onclick="clearForm()">
-        Borrar Todo
-      </button>
-    </div>
-  </form>
+      <!-- User Actions -->
+      <div class="relative z-10 mt-auto px-8 pb-6 bg-white shadow-lg flex justify-center space-x-6 pb-2 rounded-t-xl">
+        <!-- Edit Button -->
+        <button id="editarUsuarioMobile"
+          class="flex items-center justify-center w-14 h-14 bg-white border-2 border-red-500 rounded-full hover:bg-red-100 transition-all duration-300">
+          <svg class="w-8 h-8 text-red-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+        </button>
 
-  <div id="tableSection" class="hidden">
-    <div class="table-container" id="firstTableContainer"></div>
-    <div class="table-container hidden" id="secondTableContainer"></div>
+        <!-- Logout Button -->
+        <button id="cerrarSesionMobile"
+          class="flex items-center justify-center w-14 h-14 bg-red-600 rounded-full transition-all duration-300">
+          <svg class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+    </div>
+  </section>
+
+  <!-- Main Content Container -->
+  <div class="container mx-auto px-4 sm:px-6 pb-12 pt-32">
+    <!-- Header Section -->
+    <section class="mb-8">
+      <div class="bg-white rounded-xl shadow-lg overflow-hidden relative">
+        <div class="absolute inset-0 bg-gradient-to-r from-red-600 to-red-700"
+          style="background-image: url('https://dosxdos.app.iidos.com/img/texture-red.svg'); background-size: contain; ">
+        </div>
+        <div class="relative p-6 sm:p-8 text-white z-10">
+          <h1 id="titulo" class="text-2xl sm:text-3xl font-bold mb-2">Gastos Rutas</h1>
+          <p class="text-sm sm:text-base opacity-90">Calcula y visualiza los gastos distribuidos por órdenes de trabajo
+          </p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Main Form Section -->
+    <section class="bg-white rounded-xl shadow-md mb-8">
+      <form id="gastosRutasForm" class="p-6">
+        <!-- Date Range Selector -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div class="space-y-2">
+            <label for="fechaInicial" class="block text-sm font-medium text-gray-700">Fecha Inicial</label>
+            <div class="relative">
+              <input type="date" id="fechaInicial" name="fechaInicial" required
+                class="block w-full p-3 text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent" />
+              <div id="fechaInicialFeedback" class="text-red-600 text-xs mt-1"></div>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <label for="fechaFinal" class="block text-sm font-medium text-gray-700">Fecha Final</label>
+            <div class="relative">
+              <input type="date" id="fechaFinal" name="fechaFinal" required
+                class="block w-full p-3 text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent" />
+              <div id="fechaFinalFeedback" class="text-red-600 text-xs mt-1"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rutas Selector -->
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 mb-2">Rutas</label>
+          <div class="dropdown">
+            <button type="button"
+              class="dropbtn w-full flex items-center justify-between p-3 bg-gray-100 text-black rounded-lg hover:bg-gray-200 transition-colors"
+              onclick="toggleDropdown('rutas')">
+              <span>Seleccionar Rutas</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd" />
+              </svg>
+            </button>
+            <div id="rutasContent"
+              class="dropdown-content z-10 w-full bg-white border border-gray-300 rounded-lg mt-1 p-3 hidden">
+              <div class="p-3 border-b border-gray-200">
+                <input type="text" id="rutasSearchInput" placeholder="Buscar Rutas..." type="text" id="rutasSearchInput"
+                  placeholder="Buscar Rutas..." onkeyup="filterItems('rutas')"
+                  class="w-full p-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent" />
+              </div>
+              <div id="rutasCheckboxes" class="max-h-60 overflow-y-auto custom-scrollbar p-2"></div>
+            </div>
+          </div>
+          <div id="selectedRutas" class="selected-tags mt-2"></div>
+          <div id="rutasFeedback" class="text-red-600 text-xs mt-1"></div>
+        </div>
+
+        <!-- Montadores Selector -->
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 mb-2">Montadores</label>
+          <div class="dropdown">
+            <button type="button"
+              class="dropbtn w-full flex items-center justify-between p-3 bg-gray-100 text-black rounded-lg hover:bg-gray-200 transition-colors"
+              onclick="toggleDropdown('montadores')">
+              <span>Seleccionar Montadores</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd" />
+              </svg>
+            </button>
+            <div id="montadoresContent"
+              class="dropdown-content z-10 w-full bg-white border border-gray-300 rounded-lg mt-1 p-3 hidden">
+              <div class="p-3 border-b border-gray-200">
+                <input type="text" id="montadoresSearchInput" placeholder="Buscar Montadores..."
+                  onkeyup="filterItems('montadores')"
+                  class="w-full p-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent" />
+              </div>
+              <div id="montadoresCheckboxes" class="max-h-60 overflow-y-auto custom-scrollbar p-2"></div>
+            </div>
+          </div>
+          <div id="selectedMontadores" class="selected-tags mt-2"></div>
+          <div id="montadoresFeedback" class="text-red-600 text-xs mt-1"></div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col-reverse sm:flex-row gap-3 justify-center mt-8">
+          <button type="button" id="borrarTodoBtn"
+            class="flex-1 flex items-center justify-center gap-2 bg-gray-200 text-gray-800 py-3 px-6 rounded-lg hover:bg-gray-300 transition-all shadow-md text-base font-medium"
+            onclick="clearForm()">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd"
+                d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                clip-rule="evenodd" />
+            </svg>
+            BORRAR TODO
+          </button>
+          <button type="button" id="calcularBtn"
+            class="flex-1 flex items-center justify-center gap-2 bg-red-600 text-white py-3 px-6 rounded-lg hover:bg-red-700 transition-all shadow-md text-base font-medium"
+            onclick="validateForm()">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd"
+                d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6zm1 2a1 1 0 000 2h6a1 1 0 100-2H7zm6 7a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1zm-3 3a1 1 0 100 2h.01a1 1 0 100-2H10zm-4 1a1 1 0 011-1h.01a1 1 0 110 2H7a1 1 0 01-1-1zm1-4a1 1 0 100 2h.01a1 1 0 100-2H7zm2 1a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1zm4-4a1 1 0 100 2h.01a1 1 0 100-2H13zM9 9a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1zM7 8a1 1 0 000 2h.01a1 1 0 000-2H7z"
+                clip-rule="evenodd" />
+            </svg>
+            CALCULAR
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Results Section -->
+    <section id="tableSection" class="hidden space-y-6">
+      <!-- First Table Container -->
+      <div class="bg-white rounded-xl shadow-md overflow-hidden" id="firstTableContainer">
+        <!-- Content will be generated dynamically -->
+      </div>
+
+      <!-- Second Table Container -->
+      <div class="bg-white rounded-xl shadow-md overflow-hidden hidden" id="secondTableContainer">
+        <!-- Content will be generated dynamically -->
+      </div>
+    </section>
   </div>
+
+  <script src="https://dosxdos.app.iidos.com/js/index_db.js"></script>
+  <script src="https://dosxdos.app.iidos.com/js/notificaciones.js"></script>
+  <script src="https://dosxdos.app.iidos.com/js/loadFirebase.js"></script>
 
   <script>
     let rutasData = [];
     let montadoresData = [];
+    let originalTableData = null;
+    let usuario;
+
     const $loader = document.getElementById("loader");
     const $body = document.getElementById("body");
-    let originalTableData = null;
 
+    /* UTILIDADES BÁSICAS */
     function scrollToTop() {
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
     }
 
     function loaderOn() {
-        scrollToTop();
-        $loader.classList.remove("displayOff");
-        $loader.classList.add("displayOn");
-        document.body.style.overflow = 'hidden';
-        document.documentElement.style.overflow = 'hidden';
-        document.body.style.position = 'fixed';
-        document.body.style.width = '100%';
+      scrollToTop();
+      $loader.classList.remove("hidden");
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
     }
 
     function loaderOff() {
-        setTimeout(() => {
-            $loader.classList.remove("displayOn");
-            $loader.classList.add("displayOff");
-            document.body.style.overflow = '';
-            document.documentElement.style.overflow = '';
-            document.body.style.position = '';
-            document.body.style.width = '';
-        }, 1000);
+      setTimeout(() => {
+        $loader.classList.add("hidden");
+        document.body.style.overflow = '';
+        document.documentElement.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.width = '';
+      }, 1000);
     }
 
-    function goBack() {
-      window.history.back();
+    /* FUNCIÓN DE ALERTA MEJORADA */
+    function alerta(mensaje) {
+      // Remove existing alert if present
+      const existingAlert = document.querySelector("#customAlert");
+      if (existingAlert) {
+        existingAlert.remove();
+      }
+
+      // Create alert container
+      const alertContainer = document.createElement("div");
+      alertContainer.id = "customAlert";
+      alertContainer.className = "fixed left-1/2 transform -translate-x-1/2 z-50 transition-all duration-300 ease-in-out w-[95%] md:w-[75%] lg:w-[65%]";
+      alertContainer.style.top = "-100px";
+
+      // Create alert content
+      const alertContent = document.createElement("div");
+      alertContent.className = `
+        relative
+        bg-white
+        border-2 border-red-600
+        rounded-lg
+        shadow-lg
+        p-4 md:p-5
+        flex flex-col md:flex-row md:items-center gap-3 md:gap-4
+      `;
+
+      // Create close button
+      const closeButton = document.createElement("button");
+      closeButton.className = "absolute -right-3 -top-3 hover:bg-red-400 p-1 bg-red-600 rounded-full p-1.5 transition-colors duration-200";
+      closeButton.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      `;
+
+      // Create main content container
+      const contentContainer = document.createElement("div");
+      contentContainer.className = "flex flex-col md:flex-row items-center gap-3 md:gap-4 flex-1";
+
+      // Create icon with exclamation mark
+      const iconContainer = document.createElement("div");
+      iconContainer.className = "flex-shrink-0 text-red-600";
+      iconContainer.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <path d="M12 7v6" />
+        <path d="M12 16h0.01" />
+      </svg>
+      `;
+
+      // Create message text
+      const messageText = document.createElement("p");
+      messageText.className = "text-gray-900 text-base md:text-lg flex-1";
+      messageText.textContent = mensaje;
+
+      // Assemble the content container
+      contentContainer.appendChild(iconContainer);
+      contentContainer.appendChild(messageText);
+
+      // Assemble the alert
+      alertContent.appendChild(closeButton);
+      alertContent.appendChild(contentContainer);
+      alertContainer.appendChild(alertContent);
+      document.body.appendChild(alertContainer);
+
+      // Slide down animation
+      requestAnimationFrame(() => {
+        alertContainer.style.top = "56px";
+      });
+
+      // Add event listeners
+      closeButton.addEventListener("click", () => {
+        hideAlert(alertContainer);
+      });
+
+      // Hide loader if it exists
+      loaderOff();
     }
 
+    function hideAlert(alertContainer) {
+      alertContainer.style.top = "-100px";
+
+      setTimeout(() => {
+        alertContainer.remove();
+      }, 300);
+    }
+
+    /* DROPDOWN FUNCTIONS */
     function toggleDropdown(type) {
       const content = document.getElementById(`${type}Content`);
       const isVisible = content.style.display === "block";
@@ -355,31 +734,504 @@
       }
     });
 
-    document.addEventListener("DOMContentLoaded", () => {
-      loaderOn();
-      Promise.all([
-        fetch("https://dosxdos.app.iidos.com/apirest/rutas.php"),
-        fetch("https://dosxdos.app.iidos.com/apirest/crm.php?montadores"),
-      ])
-        .then(([rutasResponse, montadoresResponse]) =>
-          Promise.all([rutasResponse.json(), montadoresResponse.json()])
-        )
-        .then(([rutasDataResponse, montadoresDataResponse]) => {
-          rutasData = rutasDataResponse[1].sort((a, b) =>
-            a.Name.localeCompare(b.Name)
-          );
-          montadoresData = montadoresDataResponse[1].data.sort((a, b) =>
-            a.Name.localeCompare(b.Name)
-          );
-          populateDropdown("rutas", rutasData);
-          populateDropdown("montadores", montadoresData);
-        })
-        .catch((error) => {
-          console.error("Error fetching data:", error);
-          displayErrorMessage("Error al cargar los datos iniciales");
-        })
-        .finally(() => loaderOff());
-    });
+    /* DATA FETCH AND FORM HANDLING */
+    async function initializeApp() {
+      try {
+        loaderOn();
+
+        // Check if user is logged in
+        const login = await vLogin();
+        if (!login) {
+          window.location.href = "https://dosxdos.app.iidos.com/index.html";
+          return;
+        }
+
+        // Get user data
+        const userArray = await leerDatos("dosxdos", "usuario");
+        usuario = userArray[0];
+
+        // Update user display
+        updateUserDisplay();
+
+        // Set up menu based on user role
+        setupMenu(usuario.clase);
+
+        // Set up dropdown menus and actions
+        setupMenuInteractions();
+        setupUserActions();
+        setupGlobalMenuClosing();
+
+        // Fetch data for dropdowns
+        await Promise.all([
+          fetch("https://dosxdos.app.iidos.com/apirest/rutas.php"),
+          fetch("https://dosxdos.app.iidos.com/apirest/crm.php?montadores"),
+        ])
+          .then(([rutasResponse, montadoresResponse]) =>
+            Promise.all([rutasResponse.json(), montadoresResponse.json()])
+          )
+          .then(([rutasDataResponse, montadoresDataResponse]) => {
+            rutasData = rutasDataResponse[1].sort((a, b) =>
+              a.Name.localeCompare(b.Name)
+            );
+            montadoresData = montadoresDataResponse[1].data.sort((a, b) =>
+              a.Name.localeCompare(b.Name)
+            );
+            populateDropdown("rutas", rutasData);
+            populateDropdown("montadores", montadoresData);
+          });
+
+        // Check for notifications
+        const syncNotifications = await sincronizarNotificaciones();
+        if (syncNotifications) {
+          await notificar();
+        }
+
+        loaderOff();
+      } catch (error) {
+        console.error("Error initializing app:", error);
+        alerta("Error al inicializar la aplicación: " + error.message);
+        loaderOff();
+      }
+    }
+
+    function updateUserDisplay() {
+      if (usuario) {
+        // Desktop user
+        const nombreUsuarioElement = document.getElementById("nombreUsuario");
+        if (nombreUsuarioElement) {
+          nombreUsuarioElement.textContent = usuario.nombre;
+        }
+
+        const imagenUsuarioElement = document.getElementById("imagenUsuario");
+        if (imagenUsuarioElement && usuario.imagen !== "0") {
+          imagenUsuarioElement.src = usuario.imagen;
+        }
+
+        // Mobile user
+        const nombreUsuarioMobileElement = document.getElementById("nombreUsuarioMobile");
+        if (nombreUsuarioMobileElement) {
+          nombreUsuarioMobileElement.textContent = usuario.nombre;
+        }
+
+        const imagenUsuarioMobileElement = document.getElementById("imagenUsuarioMobile");
+        if (imagenUsuarioMobileElement && usuario.imagen !== "0") {
+          imagenUsuarioMobileElement.src = usuario.imagen;
+        }
+      }
+    }
+
+    /* USER ROLE MANAGEMENT */
+    function setupMenu(userRole) {
+      // Menu items to show based on roles
+      const menuItems = {
+        admon: ["archivos", "icLineasOt", "rutasIcono", "lineasIcono", "gastos", "clientes", "usuarios", "sincronizacion"],
+        oficina: ["archivos", "icLineasOt", "rutasIcono", "lineasIcono", "gastos"],
+        diseno: ["archivos", "icLineasOt", "rutasIcono", "lineasIcono", "gastos"],
+        estudio: ["archivos", "icLineasOt", "rutasIcono", "lineasIcono", "gastos"],
+        montador: []
+      };
+
+      // Hide all menu items first
+      const allItems = ["archivos", "icLineasOt", "rutasIcono", "lineasIcono", "gastos", "clientes", "usuarios", "sincronizacion"];
+      allItems.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.classList.add("displayOff");
+          element.classList.remove("displayOn");
+        }
+      });
+
+      // Show items based on user role
+      const itemsToShow = menuItems[userRole] || [];
+      itemsToShow.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.classList.remove("displayOff");
+          element.classList.add("displayOn");
+        }
+      });
+
+      // Populate mobile menu based on user role
+      populateMobileMenu(userRole);
+    }
+
+    function populateMobileMenu(userRole) {
+      const mobileMenuNav = document.querySelector("#opcionesMenu nav");
+      if (!mobileMenuNav) return;
+
+      mobileMenuNav.innerHTML = '';
+
+      const mobileMenuItems = {
+        admon: [
+          {
+            id: "archivos",
+            href: "https://dosxdos.app.iidos.com/ot.html",
+            icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+        <g id="SVGRepo_iconCarrier">
+          <path d="M12.37 8.87988H17.62" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+          <path d="M6.38 8.87988L7.13 9.62988L9.38 7.37988" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+          <path d="M12.37 15.8799H17.62" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+          <path d="M6.38 15.8799L7.13 16.6299L9.38 14.3799" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+          <path d="M9 22H15C20 22 22 20 22 15V9C22 4 20 2 15 2H9C4 2 2 4 2 9V15C2 20 4 22 9 22Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+        </g>
+      </svg>`,
+            text: "OT"
+          },
+          {
+            id: "icLineasOt",
+            href: "https://dosxdos.app.iidos.com/lineas_ot.html",
+            icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+        <polyline points="14 2 14 8 20 8" />
+        <path d="M9 15l2 2 4-4" />
+      </svg>`,
+            text: "Líneas OT"
+          },
+          {
+            id: "rutasIcono",
+            href: "https://dosxdos.app.iidos.com/rutas.html",
+            icon: `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" preserveAspectRatio="xMidYMid meet">
+        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+        <g id="SVGRepo_iconCarrier">
+          <path d="M21 32C9.459 32 0 41.43 0 52.94c0 4.46 1.424 8.605 3.835 12.012l14.603 25.244c2.045 2.672 3.405 2.165 5.106-.14l16.106-27.41c.325-.59.58-1.216.803-1.856A20.668 20.668 0 0 0 42 52.94C42 41.43 32.544 32 21 32zm0 9.812c6.216 0 11.16 4.931 11.16 11.129c0 6.198-4.944 11.127-11.16 11.127c-6.215 0-11.16-4.93-11.16-11.127c0-6.198 4.945-11.129 11.16-11.129z" fill="currentColor" stroke="currentColor"></path>
+          <path d="M87.75 0C81.018 0 75.5 5.501 75.5 12.216c0 2.601.83 5.019 2.237 7.006l8.519 14.726c1.193 1.558 1.986 1.262 2.978-.082l9.395-15.99c.19-.343.339-.708.468-1.082a12.05 12.05 0 0 0 .903-4.578C100 5.5 94.484 0 87.75 0zm0 5.724c3.626 0 6.51 2.876 6.51 6.492c0 3.615-2.884 6.49-6.51 6.49c-3.625 0-6.51-2.875-6.51-6.49c0-3.616 2.885-6.492 6.51-6.492z" fill="currentColor" stroke="currentColor"></path>
+          <!-- Rest of the SVG paths -->
+        </g>
+      </svg>`,
+            text: "Rutas"
+          },
+          {
+            id: "lineasIcono",
+            href: "https://dosxdos.app.iidos.com/lineas.html",
+            icon: `<svg class="w-6 h-6 mr-2" fill="currentColor" stroke="none" viewBox="-3 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+        <g id="SVGRepo_iconCarrier">
+          <path d="M23.36 9.32c-1.32 0-2.36 1.080-2.36 2.36 0 0.28 0.040 0.56 0.12 0.8l-4.8 4.080c-0.32-0.2-0.72-0.28-1.16-0.28s-0.88 0.12-1.24 0.36l-2.72-2.2c0.080-0.24 0.12-0.44 0.12-0.72 0-1.32-1.080-2.36-2.36-2.36-1.32 0-2.36 1.080-2.36 2.36 0 0.36 0.080 0.68 0.2 0.96l-3.44 3.44c-0.28-0.12-0.64-0.2-0.96-0.2-1.32 0-2.36 1.080-2.36 2.36 0 1.32 1.080 2.36 2.36 2.36s2.36-1.080 2.36-2.36c0-0.36-0.080-0.68-0.2-0.96l3.44-3.44c0.28 0.12 0.64 0.2 0.96 0.2 0.44 0 0.88-0.12 1.24-0.36l2.76 2.12c-0.080 0.24-0.080 0.44-0.080 0.72 0 1.32 1.080 2.36 2.36 2.36s2.36-1.080 2.36-2.36c0-0.28-0.040-0.56-0.12-0.8l4.8-4.080c0.32 0.2 0.72 0.28 1.16 0.28 1.32 0 2.36-1.080 2.36-2.36-0.040-1.2-1.16-2.28-2.44-2.28zM2.36 21c-0.36 0-0.68-0.32-0.68-0.68 0-0.4 0.32-0.68 0.68-0.68s0.68 0.32 0.68 0.68c0 0.36-0.28 0.68-0.68 0.68zM8.24 13.76c0-0.4 0.32-0.68 0.68-0.68s0.68 0.32 0.68 0.68-0.32 0.68-0.68 0.68c-0.36 0-0.68-0.32-0.68-0.68zM15.2 19.28c-0.4 0-0.68-0.32-0.68-0.68s0.32-0.68 0.68-0.68 0.68 0.32 0.68 0.68c-0.040 0.4-0.28 0.68-0.68 0.68zM23.36 12.36c-0.36 0-0.68-0.32-0.68-0.68 0-0.4 0.32-0.68 0.68-0.68 0.4 0 0.68 0.32 0.68 0.68 0 0.4-0.32 0.68-0.68 0.68z"></path>
+        </g>
+      </svg>`,
+            text: "Líneas Ruta"
+          },
+          {
+            id: "gastos",
+            text: "Gastos",
+            icon: `<svg viewBox="0 0 24 24" class="w-6 h-6 mr-2" fill="currentColor" stroke="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+              <g id="SVGRepo_iconCarrier">
+                <path
+                  d="M5 16C5 15.4477 5.44772 15 6 15H8C8.55229 15 9 15.4477 9 16C9 16.5523 8.55229 17 8 17H6C5.44772 17 5 16.5523 5 16Z">
+                </path>
+                <path
+                  d="M11 15C10.4477 15 10 15.4477 10 16C10 16.5523 10.4477 17 11 17H12C12.5523 17 13 16.5523 13 16C13 15.4477 12.5523 15 12 15H11Z">
+                </path>
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                  d="M6.788 3C5.96948 2.99999 5.29393 2.99998 4.74393 3.04565C4.17258 3.0931 3.64774 3.19496 3.1561 3.45035C2.42553 3.82985 1.82985 4.42553 1.45035 5.1561C1.19496 5.64774 1.0931 6.17258 1.04565 6.74393C0.999977 7.29393 0.999988 7.96946 1 8.78798V15.212C0.999988 16.0305 0.999977 16.7061 1.04565 17.2561C1.0931 17.8274 1.19496 18.3523 1.45035 18.8439C1.82985 19.5745 2.42553 20.1702 3.1561 20.5497C3.64774 20.805 4.17258 20.9069 4.74393 20.9544C5.29394 21 5.96949 21 6.78803 21H17.212C18.0305 21 18.7061 21 19.2561 20.9544C19.8274 20.9069 20.3523 20.805 20.8439 20.5497C21.5745 20.1702 22.1702 19.5745 22.5497 18.8439C22.805 18.3523 22.9069 17.8274 22.9544 17.2561C23 16.7061 23 16.0305 23 15.212V8.78802C23 7.96949 23 7.29394 22.9544 6.74393C22.9069 6.17258 22.805 5.64774 22.5497 5.1561C22.1702 4.42553 21.5745 3.82985 20.8439 3.45035C20.3523 3.19496 19.8274 3.0931 19.2561 3.04565C18.7061 2.99998 18.0305 2.99999 17.212 3H6.788ZM4.07805 5.22517C4.23663 5.1428 4.46402 5.07578 4.90945 5.03879C5.36686 5.00081 5.95898 5 6.83 5H17.17C18.041 5 18.6331 5.00081 19.0906 5.03879C19.536 5.07578 19.7634 5.1428 19.922 5.22517C20.2872 5.41493 20.5851 5.71277 20.7748 6.07805C20.8572 6.23663 20.9242 6.46402 20.9612 6.90945C20.9857 7.20418 20.9947 7.55484 20.9981 8H3.00194C3.00528 7.55484 3.01431 7.20418 3.03879 6.90945C3.07578 6.46402 3.1428 6.23663 3.22517 6.07805C3.41493 5.71277 3.71277 5.41493 4.07805 5.22517ZM3 10V15.17C3 16.041 3.00081 16.6331 3.03879 17.0906C3.07578 17.536 3.1428 17.7634 3.22517 17.922C3.41493 18.2872 3.71277 18.5851 4.07805 18.7748C4.23663 18.8572 4.46402 18.9242 4.90945 18.9612C5.36686 18.9992 5.95898 19 6.83 19H17.17C18.041 19 18.6331 18.9992 19.0906 18.9612C19.536 18.9242 19.7634 18.8572 19.922 18.7748C20.2872 18.5851 20.5851 18.2872 20.7748 17.922C20.8572 17.7634 20.9242 17.536 20.9612 17.0906C20.9992 16.6331 21 16.041 21 15.17V10H3Z">
+                </path>
+              </g>
+            </svg>`,
+            submenu: [
+              {
+                href: "https://dosxdos.app.iidos.com/gastos_rutas.html",
+                text: "Gastos Rutas"
+              },
+              {
+                href: "",
+                text: "Reportar Gastos (próximamente)"
+              }
+            ]
+          },
+          {
+            id: "clientes",
+            text: "Clientes",
+            icon: `<svg viewBox="0 0 28 28" class="w-6 h-6 mr-2" fill="currentColor" stroke="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+              <g id="SVGRepo_iconCarrier">
+                <path clip-rule="evenodd"
+                  d="M1.82047 1C1.36734 1 1 1.35728 1 1.79801V2.39948C1 2.84021 1.36734 3.19749 1.82047 3.19749H3.72716C4.03867 3.19749 4.3233 3.36906 4.46192 3.64038L5.4947 5.93251C5.53326 6.00798 5.56364 6.09443 5.62081 6.15194L10.057 16.4429C10.0129 16.4634 9.97056 16.4883 9.93075 16.5176C8.70163 17.4226 7.87009 18.5878 7.87001 19.7604C7.86996 20.4429 8.16289 21.0807 8.75002 21.5212C9.30752 21.9394 10.0364 22.1118 10.8189 22.1118H10.8446C10.336 22.6308 10.0238 23.3336 10.0238 24.1072C10.0238 25.7049 11.3554 27 12.998 27C14.6406 27 15.9722 25.7049 15.9722 24.1072C15.9722 23.3336 15.66 22.6308 15.1513 22.1118H19.0494C18.5408 22.6308 18.2285 23.3336 18.2285 24.1072C18.2285 25.7049 19.5601 27 21.2027 27C22.8454 27 24.177 25.7049 24.177 24.1072C24.177 23.3336 23.8647 22.6308 23.3561 22.1118H23.9718C24.425 22.1118 24.7923 21.7545 24.7923 21.3138V20.9148C24.7923 20.474 24.425 20.1167 23.9718 20.1167H10.8189C10.3192 20.1167 10.0864 20.0041 10.0028 19.9414C9.94878 19.9009 9.92119 19.8618 9.9212 19.7606C9.92122 19.4917 10.1711 18.8708 11.069 18.1827C11.1084 18.1524 11.1453 18.1194 11.1792 18.084C11.2692 18.1089 11.3635 18.1221 11.4601 18.1221H23.9235C24.4248 18.1221 24.8527 17.7696 24.9351 17.2885L26.9858 5.31837C27.09 4.71036 26.6079 4.1569 25.9742 4.1569H7.35431C7.1981 4.1569 7.05618 4.06597 6.9909 3.92405L5.84968 1.44289C5.71106 1.17157 5.42642 1 5.11492 1H1.82047ZM8.47667 6.15194C8.18952 6.15194 7.99591 6.44552 8.10899 6.70946L12.04 15.8846C12.103 16.0317 12.2476 16.1271 12.4076 16.1271H22.7173C22.9122 16.1271 23.0787 15.9867 23.1116 15.7946L24.6834 6.61948C24.7253 6.37513 24.5371 6.15194 24.2892 6.15194H8.47667ZM11.8698 24.1072C11.8698 23.5012 12.3749 23.0099 12.998 23.0099C13.621 23.0099 14.1261 23.5012 14.1261 24.1072C14.1261 24.7132 13.621 25.2045 12.998 25.2045C12.3749 25.2045 11.8698 24.7132 11.8698 24.1072ZM21.2027 23.0099C20.5797 23.0099 20.0746 23.5012 20.0746 24.1072C20.0746 24.7132 20.5797 25.2045 21.2027 25.2045C21.8258 25.2045 22.3309 24.7132 22.3309 24.1072C22.3309 23.5012 21.8258 23.0099 21.2027 23.0099Z"
+                  fill-rule="evenodd"></path>
+              </g>
+            </svg>`,
+            submenu: [
+              {
+                href: "https://dosxdos.app.iidos.com/ots_clientes.html",
+                text: "Restricciones Tipos de OT"
+              },
+              {
+                href: "https://dosxdos.app.iidos.com/firmas_clientes.html",
+                text: "Restricciones Firmas"
+              }
+            ]
+          },
+          {
+            id: "usuarios",
+            href: "https://dosxdos.app.iidos.com/dosxdos.php?modulo=usuarios",
+            icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>`,
+            text: "Usuarios"
+          },
+          {
+            id: "sincronizacion",
+            text: "Sincronización",
+            icon: `<path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>`,
+            submenu: [
+              {
+                href: "#",
+                text: "Sinc. OT Navision"
+              },
+              {
+                href: "https://dosxdos.app.iidos.com/apirest/sincronizador2.php",
+                text: "Sinc. Total OT Navision"
+              }
+            ]
+          }
+        ],
+        oficina: [
+          {
+            id: "archivos",
+            href: "https://dosxdos.app.iidos.com/ot.html",
+            icon: `<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline>`,
+            text: "OT"
+          },
+          {
+            id: "icLineasOt",
+            href: "https://dosxdos.app.iidos.com/lineas_ot.html",
+            icon: `<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>`,
+            text: "Líneas OT"
+          },
+          {
+            id: "rutasIcono",
+            href: "https://dosxdos.app.iidos.com/rutas.html",
+            icon: `<path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>`,
+            text: "Rutas"
+          },
+          {
+            id: "lineasIcono",
+            href: "https://dosxdos.app.iidos.com/lineas.html",
+            icon: `<path d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>`,
+            text: "Líneas Ruta"
+          },
+          {
+            id: "gastos",
+            text: "Gastos",
+            icon: `<path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>`,
+            submenu: [
+              {
+                href: "https://dosxdos.app.iidos.com/gastos_rutas.html",
+                text: "Gastos Rutas"
+              },
+              {
+                href: "",
+                text: "Reportar Gastos (próximamente)"
+              }
+            ]
+          }
+        ],
+        diseno: [
+          {
+            id: "archivos",
+            href: "https://dosxdos.app.iidos.com/ot.html",
+            icon: `<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline>`,
+            text: "OT"
+          },
+          {
+            id: "icLineasOt",
+            href: "https://dosxdos.app.iidos.com/lineas_ot.html",
+            icon: `<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>`,
+            text: "Líneas OT"
+          },
+          {
+            id: "rutasIcono",
+            href: "https://dosxdos.app.iidos.com/rutas.html",
+            icon: `<path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>`,
+            text: "Rutas"
+          },
+          {
+            id: "lineasIcono",
+            href: "https://dosxdos.app.iidos.com/lineas.html",
+            icon: `<path d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>`,
+            text: "Líneas Ruta"
+          },
+          {
+            id: "gastos",
+            text: "Gastos",
+            icon: `<path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>`,
+            submenu: [
+              {
+                href: "https://dosxdos.app.iidos.com/gastos_rutas.html",
+                text: "Gastos Rutas"
+              },
+              {
+                href: "",
+                text: "Reportar Gastos (próximamente)"
+              }
+            ]
+          }
+        ],
+        estudio: [
+          {
+            id: "archivos",
+            href: "https://dosxdos.app.iidos.com/ot.html",
+            icon: `<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline>`,
+            text: "OT"
+          },
+          {
+            id: "icLineasOt",
+            href: "https://dosxdos.app.iidos.com/lineas_ot.html",
+            icon: `<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>`,
+            text: "Líneas OT"
+          },
+          {
+            id: "rutasIcono",
+            href: "https://dosxdos.app.iidos.com/rutas.html",
+            icon: `<path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>`,
+            text: "Rutas"
+          },
+          {
+            id: "lineasIcono",
+            href: "https://dosxdos.app.iidos.com/lineas.html",
+            icon: `<path d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>`,
+            text: "Líneas Ruta"
+          },
+          {
+            id: "gastos",
+            text: "Gastos",
+            icon: `<path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>`,
+            submenu: [
+              {
+                href: "https://dosxdos.app.iidos.com/gastos_rutas.html",
+                text: "Gastos Rutas"
+              },
+              {
+                href: "",
+                text: "Reportar Gastos (próximamente)"
+              }
+            ]
+          }
+        ],
+        montador: [
+          {
+            id: "rutasMontador",
+            href: "https://dosxdos.app.iidos.com/rutas_montador.html",
+            icon: `<path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>`,
+            text: "Rutas"
+          },
+          {
+            id: "lineasMontador",
+            href: "https://dosxdos.app.iidos.com/ruta_montador.html",
+            icon: `<path d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>`,
+            text: "Líneas"
+          },
+          {
+            id: "historial",
+            href: "https://dosxdos.app.iidos.com/historial_montador.html",
+            icon: `<path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>`,
+            text: "Historial"
+          }
+        ]
+      };
+
+      function createMenuItem(item) {
+        const menuItemElement = document.createElement('div');
+        menuItemElement.className = 'mobile-menu-item relative z-10';
+
+        const renderIcon = (iconMarkup) => `
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        ${iconMarkup}
+      </svg>
+    `;
+
+        if (item.submenu) {
+          menuItemElement.innerHTML = `
+        <div>
+          <div class="z-10 flex items-center px-6 py-2 text-white bg-red-600 bg-opacity-60 hover:bg-red-500/60 rounded-xl transition-all duration-300 shadow-xl mobile-submenu-header cursor-pointer">
+            <div class="flex items-center justify-center w-14 h-14 bg-white/20 rounded-xl mr-4 transition-all">
+              ${renderIcon(item.icon)}
+            </div>
+            <span class="text-lg font-semibold tracking-wide flex-1">${item.text}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white transition-transform duration-300 submenu-toggle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+          <div class="hidden mobile-submenu-content bg-white/10 rounded-lg mt-2 overflow-hidden">
+            ${item.submenu.map(subitem => `
+              <a href="${subitem.href}" class="block px-8 py-3 text-white hover:bg-white/20 transition-colors">
+                ${subitem.text}
+              </a>
+            `).join('')}
+          </div>
+        </div>
+      `;
+
+          const submenuHeader = menuItemElement.querySelector('.mobile-submenu-header');
+          const submenuContent = menuItemElement.querySelector('.mobile-submenu-content');
+          const submenuToggle = submenuHeader.querySelector('.submenu-toggle');
+
+          submenuHeader.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            submenuContent.classList.toggle('hidden');
+            submenuToggle.classList.toggle('rotate-180');
+
+            document.querySelectorAll('.mobile-submenu-header').forEach(header => {
+              if (header !== submenuHeader) {
+                const otherToggle = header.querySelector('.submenu-toggle');
+                const otherContent = header.nextElementSibling;
+
+                otherToggle.classList.remove('rotate-180');
+                otherContent.classList.add('hidden');
+              }
+            });
+          });
+
+        } else {
+          menuItemElement.innerHTML = `
+        <a href="${item.href}" class="w-full flex items-center px-6 py-4 text-white bg-red-600 bg-opacity-60 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-xl group backdrop-blur-lg">
+          <div class="flex items-center ml-4 mr-8 justify-center w-7 h-7 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all">
+            ${renderIcon(item.icon)}
+          </div>
+          <span class="text-lg font-semibold tracking-wide">${item.text}</span>
+        </a>
+      `;
+        }
+
+        return menuItemElement;
+      }
+
+      const notificationLink = document.createElement('a');
+      notificationLink.href = "https://dosxdos.app.iidos.com/notificaciones.html";
+      notificationLink.className = "z-10 flex items-center px-6 text-white bg-red-600 bg-opacity-60 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-xl group backdrop-blur-lg";
+      notificationLink.innerHTML = `
+    <div class="flex items-center justify-center w-14 h-14 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all">
+      <svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 8a6 6 0 0 0-12 0v5a6 6 0 0 1-2 4h16a6 6 0 0 1-2-4V8"></path>
+        <line x1="12" y1="22" x2="12" y2="22"></line>
+      </svg>
+    </div>
+    <span class="text-lg font-semibold tracking-wide">Notificaciones</span>
+  `;
+
+      const menuItems = mobileMenuItems[userRole] || [];
+
+      mobileMenuNav.appendChild(notificationLink);
+
+      menuItems.forEach(item => {
+        const menuItemElement = createMenuItem(item);
+        mobileMenuNav.appendChild(menuItemElement);
+      });
+    }
 
     function populateDropdown(type, items) {
       const container = document.getElementById(`${type}Checkboxes`);
@@ -387,16 +1239,17 @@
 
       items.forEach((item) => {
         const div = document.createElement("div");
-        div.className =
-          "checkbox-item flex items-center p-2 cursor-pointer hover:bg-gray-100";
+        div.className = "flex items-center p-2 cursor-pointer hover:bg-gray-100 rounded-md transition-colors";
 
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.id = `${type}-${item.id}`;
+        checkbox.className = "form-checkbox h-5 w-5 text-red-600 transition duration-150 ease-in-out cursor-pointer";
         checkbox.checked = false;
 
         const label = document.createElement("label");
         label.htmlFor = `${type}-${item.id}`;
+        label.className = "ml-2 block text-sm text-gray-900 cursor-pointer";
 
         const fullName =
           type === "montadores"
@@ -422,20 +1275,16 @@
     }
 
     function addTag(type, item) {
-      const container = document.getElementById(
-        `selected${capitalizeFirstLetter(type)}`
-      );
+      const container = document.getElementById(`selected${capitalizeFirstLetter(type)}`);
       const tag = document.createElement("div");
-      tag.className = "tag";
+      tag.className = "tag bg-gray-200 text-gray-800 rounded-full px-3 py-1 text-sm flex items-center";
       tag.dataset.id = `${type}-${item.id}`;
-      tag.innerHTML = `${item.Name} <span class="tag-close" onclick="removeTag('${type}', '${item.id}')">&times;</span>`;
+      tag.innerHTML = `${item.Name} <span class="tag-close ml-2 text-red-600 hover:text-red-800 font-bold" onclick="removeTag('${type}', '${item.id}')">&times;</span>`;
       container.appendChild(tag);
     }
 
     function removeTag(type, id) {
-      const container = document.getElementById(
-        `selected${capitalizeFirstLetter(type)}`
-      );
+      const container = document.getElementById(`selected${capitalizeFirstLetter(type)}`);
       const tag = container.querySelector(`div[data-id="${type}-${id}"]`);
       if (tag) {
         tag.remove();
@@ -453,25 +1302,16 @@
     function filterItems(type) {
       const searchInput = document.getElementById(`${type}SearchInput`);
       const searchTerm = searchInput.value.toLowerCase();
-      const checkboxes = document.querySelectorAll(
-        `#${type}Checkboxes .checkbox-item`
-      );
+      const checkboxes = document.querySelectorAll(`#${type}Checkboxes > div`);
 
       checkboxes.forEach((checkbox) => {
         const label = checkbox.querySelector("label");
         const itemText = label.textContent.toLowerCase();
-        checkbox.style.display = itemText.includes(searchTerm)
-          ? "flex"
-          : "none";
+        checkbox.style.display = itemText.includes(searchTerm) ? "flex" : "none";
       });
     }
 
-    function requestBackend(
-      endpoint,
-      metodo,
-      cuerpo = false,
-      cabeceras = false
-    ) {
+    function requestBackend(endpoint, metodo, cuerpo = false, cabeceras = false) {
       return new Promise((resolve, reject) => {
         let options;
         if (cuerpo) {
@@ -500,14 +1340,10 @@
             };
           }
         }
-        console.log(endpoint);
-        console.log(options);
+
         fetch(endpoint, options)
           .then((response) => {
-            // Verificar si el estado de la respuesta no es exitoso (códigos 4xx o 5xx)
             if (!response.ok) {
-              // Verificar si fue un error de la API
-              //Intentar obtener el cuerpo de la respuesta como JSON
               return response
                 .clone()
                 .json()
@@ -517,47 +1353,38 @@
                   resolve(errorResponse);
                 })
                 .catch(() => {
-                  // Si no es posible parsear el cuerpo como JSON, obtenerlo como texto
                   return response.text().then((errorText) => {
                     respuestaErrorPersonalizada = [false, errorText, 500];
-                    console.error(
-                      "Error en el backend, ha respondido el servidor del backend y no la API"
-                    );
+                    console.error("Error en el backend, ha respondido el servidor del backend y no la API");
                     console.error(respuestaErrorPersonalizada);
                     resolve(respuestaErrorPersonalizada);
                   });
                 });
             }
+
             return response
               .clone()
               .json()
               .then((response) => {
-                console.log(response);
                 resolve(response);
               })
               .catch(() => {
-                // Si no es posible parsear el cuerpo como JSON, obtenerlo como texto
                 return response.text().then((errorText) => {
                   respuestaErrorPersonalizada = [false, errorText, 500];
-                  console.error(
-                    "Error, la API ha respondido pero no lo ha hecho en formato JSON"
-                  );
+                  console.error("Error, la API ha respondido pero no lo ha hecho en formato JSON");
                   console.error(respuestaErrorPersonalizada);
                   resolve(respuestaErrorPersonalizada);
                 });
               });
           })
           .catch((error) => {
-            // Verificar si el error fue de red
             if (error.message === "Failed to fetch") {
               respuestaErrorPersonalizada = [
                 false,
                 "Error de red: No se pudo conectar con el servidor.",
                 500,
               ];
-              console.error(
-                "Error en el cliente, no se ha podido conectar a la API"
-              );
+              console.error("Error en el cliente, no se ha podido conectar a la API");
               console.error(respuestaErrorPersonalizada);
               resolve(respuestaErrorPersonalizada);
             } else {
@@ -582,9 +1409,7 @@
       ).map((tag) => tag.dataset.id.replace("montadores-", ""));
 
       let isValid = true;
-      document
-        .querySelectorAll(".feedback")
-        .forEach((el) => (el.textContent = ""));
+      document.querySelectorAll('[id$="Feedback"]').forEach((el) => (el.textContent = ""));
 
       if (!fechaInicial.value) {
         document.getElementById("fechaInicialFeedback").textContent =
@@ -596,7 +1421,6 @@
           "La fecha final es requerida.";
         isValid = false;
       }
-      // Remove rutas validation check since it's now optional
 
       if (isValid) {
         const formData = {
@@ -626,62 +1450,19 @@
 
         if (response && response[0]) {
           let objeto = response[1];
-          console.log(objeto);
           let totalOts = Object.keys(objeto).length;
           console.log("Total OTS: " + totalOts);
           displayResults(response[1]);
         } else {
-          displayErrorMessage(
-            response ? response[1] : "Error al procesar la solicitud"
-          );
+          alerta(response ? response[1] : "Error al procesar la solicitud");
         }
       }
-    }
-
-    function displayMessage(title, message, type) {
-      const messageContainer = document.createElement("div");
-      messageContainer.className = `message-container ${type}`;
-      messageContainer.innerHTML = `
-          <div class="message-title">${title}</div>
-          <div class="message-content">${message}</div>
-        `;
-      document.body.appendChild(messageContainer);
-      const botonCerrar = document.createElement("button");
-      botonCerrar.className = "cerrar";
-      botonCerrar.onclick(() => {
-        messageContainer.remove();
-      });
-      document.body.appendChild(botonCerrar);
-    }
-
-    function displayErrorMessage(message) {
-      const existingMessage = document.querySelector(".message-container");
-      if (existingMessage) {
-        existingMessage.remove();
-      }
-
-      const container = document.createElement("div");
-      container.className =
-        "message-container flex items-center justify-center";
-
-      container.innerHTML = `
-        <div class="bg-white p-8 rounded-lg shadow-lg w-96 text-center">
-            <h2 class="text-2xl font-bold text-red-600 mb-4">Error</h2>
-            <p class="text-gray-700 mb-6">${message}</p>
-            <button onclick="reloadForm()" 
-                    class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors">
-                Volver al Formulario
-            </button>
-        </div>
-    `;
-
-      document.body.appendChild(container);
     }
 
     function copyResults(tableId) {
       const table = document.getElementById(tableId);
       if (!table) {
-        alert("No hay resultados para copiar.");
+        alerta("No hay resultados para copiar.");
         return;
       }
 
@@ -696,9 +1477,9 @@
 
       navigator.clipboard
         .writeText(text)
-        .then(() => alert("Resultados copiados al portapapeles."))
+        .then(() => alerta("Resultados copiados al portapapeles."))
         .catch((err) =>
-          alert("Error al copiar los resultados: " + err.message)
+          alerta("Error al copiar los resultados: " + err.message)
         );
     }
 
@@ -713,26 +1494,19 @@
         checkbox.checked = false;
       });
 
-      const feedbacks = document.querySelectorAll(".feedback");
-      feedbacks.forEach((feedback) => {
-        feedback.textContent = "";
-      });
+      document.querySelectorAll('[id$="Feedback"]').forEach((el) => (el.textContent = ""));
     }
 
     function displayResults(data) {
       if (!data || Object.keys(data).length === 0) {
-        displayErrorMessage(
-          "No se encontraron resultados para los filtros seleccionados."
-        );
+        alerta("No se encontraron resultados para los filtros seleccionados.");
         return;
       }
 
       originalTableData = data;
-      document.getElementById("gastosRutasForm").style.display = "none";
+      document.getElementById("gastosRutasForm").parentElement.classList.add("hidden");
       document.getElementById("tableSection").classList.remove("hidden");
-      document
-        .getElementById("firstTableContainer")
-        .classList.remove("hidden");
+      document.getElementById("firstTableContainer").classList.remove("hidden");
       document.getElementById("secondTableContainer").classList.add("hidden");
       displayFirstTable(data);
     }
@@ -740,18 +1514,36 @@
     function displayFirstTable(data) {
       const container = document.getElementById("firstTableContainer");
       container.innerHTML = `
-        <div class="w-screen h-auto flex flex-col items-center justify-center">
-          <h2 class="text-2xl font-bold mb-4">Resultados del Cálculo</h2>
-          <input
-            type="number"
-            id="gastosInput"
-            placeholder="Ingrese monto de gastos en euros"
-            class="w-[90vw] lg:w-[50vw] p-3 border mb-3 flex mx-auto"
-          />
-          <button onclick="processGastos()" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
-            Calcular Euros
-          </button>
-          <table id="firstResultsTable" class="results-table">
+      <div class="p-6">
+        <h2 class="text-2xl font-bold mb-6 text-center">Resultados del Cálculo</h2>
+        
+        <div class="mb-6">
+          <div class="flex flex-col md:flex-row md:items-end gap-4">
+            <div class="flex-grow">
+              <label for="gastosInput" class="block text-sm font-medium text-gray-700 mb-1">Ingrese monto de gastos en euros</label>
+              <input
+                type="number"
+                id="gastosInput"
+                placeholder="0.00"
+                class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-red-600 focus:border-transparent"
+              />
+            </div>
+            <button 
+              onclick="processGastos()" 
+              class="flex items-center justify-center gap-2 bg-red-600 text-white py-3 px-6 rounded-lg hover:bg-red-700 transition-colors shadow-md whitespace-nowrap"
+            >
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd"
+                d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6zm1 2a1 1 0 000 2h6a1 1 0 100-2H7zm6 7a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1zm-3 3a1 1 0 100 2h.01a1 1 0 100-2H10zm-4 1a1 1 0 011-1h.01a1 1 0 110 2H7a1 1 0 01-1-1zm1-4a1 1 0 100 2h.01a1 1 0 100-2H7zm2 1a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1zm4-4a1 1 0 100 2h.01a1 1 0 100-2H13zM9 9a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1zM7 8a1 1 0 000 2h.01a1 1 0 000-2H7z"
+                clip-rule="evenodd" />
+            </svg>
+              Calcular Euros
+            </button>
+          </div>
+        </div>
+        
+        <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-md">
+          <table id="firstResultsTable" class="w-full border-collapse bg-white text-left text-sm text-gray-700">
             ${generateTableHTML(data, [
         "OT CRM",
         "OT NAVISION",
@@ -759,24 +1551,41 @@
         "PORCENTAJE",
       ])}
           </table>
-          <div class="action-buttons">
-            <button onclick="copyResults('firstResultsTable')" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">
-              Copiar Resultados
-            </button>
-            <button onclick="reloadForm()" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
-              Volver al Formulario
-            </button>
-          </div>
         </div>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center mt-6">
+          <button 
+            onclick="copyResults('firstResultsTable')" 
+            class="flex items-center justify-center gap-2 bg-gray-600 text-white py-2 px-6 rounded-lg hover:bg-gray-700 transition-colors shadow-md"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
+              <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
+            </svg>
+            Copiar Resultados
+          </button>
+          <button 
+            onclick="reloadForm()" 
+            class="flex items-center justify-center gap-2 bg-red-600 text-white py-2 px-6 rounded-lg hover:bg-red-700 transition-colors shadow-md"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
+            </svg>
+            Volver al Formulario
+          </button>
+        </div>
+      </div>
     `;
     }
 
     function displaySecondTable(data) {
       const container = document.getElementById("secondTableContainer");
       container.innerHTML = `
-        <div class="w-screen h-auto flex flex-col items-center justify-center">
-          <h2 class="text-2xl font-bold mb-4">Resultados en Euros</h2>
-          <table id="secondResultsTable" class="results-table">
+      <div class="p-6">
+        <h2 class="text-2xl font-bold mb-6 text-center">Resultados en Euros</h2>
+        
+        <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-md">
+          <table id="secondResultsTable" class="w-full border-collapse bg-white text-left text-sm text-gray-700">
             ${generateTableHTML(data, [
         "OT CRM",
         "OT NAVISION",
@@ -784,15 +1593,30 @@
         "TOTAL EUROS",
       ])}
           </table>
-          <div class="action-buttons">
-            <button onclick="copyResults('secondResultsTable')" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">
-              Copiar Resultados
-            </button>
-            <button onclick="reloadForm()" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
-              Volver al Formulario
-            </button>
-          </div>
         </div>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center mt-6">
+          <button 
+            onclick="copyResults('secondResultsTable')" 
+            class="flex items-center justify-center gap-2 bg-gray-600 text-white py-2 px-6 rounded-lg hover:bg-gray-700 transition-colors shadow-md"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
+              <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
+            </svg>
+            Copiar Resultados
+          </button>
+          <button 
+            onclick="reloadForm()" 
+            class="flex items-center justify-center gap-2 bg-red-600 text-white py-2 px-6 rounded-lg hover:bg-red-700 transition-colors shadow-md"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
+            </svg>
+            Volver al Formulario
+          </button>
+        </div>
+      </div>
     `;
       container.classList.remove("hidden");
       document.getElementById("firstTableContainer").classList.add("hidden");
@@ -801,7 +1625,7 @@
     function processGastos() {
       const gastos = parseFloat(document.getElementById("gastosInput").value);
       if (isNaN(gastos) || gastos <= 0) {
-        alert("Por favor, ingrese un monto válido.");
+        alerta("Por favor, ingrese un monto válido.");
         return;
       }
 
@@ -816,35 +1640,10 @@
       displaySecondTable(calculatedData);
     }
 
-    function calculateEuros(data, gastos) {
-      const newData = {};
-
-      Object.entries(data).forEach(([otCRM, details]) => {
-        const percentage = details.porcentaje || 0;
-        newData[otCRM] = {
-          ...details,
-          euros: (gastos * (percentage / 100)).toFixed(3),
-        };
-      });
-
-      return newData;
-    }
-
     function reloadForm() {
-      const existingMessage = document.querySelector(".message-container");
-      if (existingMessage) {
-        existingMessage.remove();
-      }
-      clearForm();
-      document.getElementById("gastosRutasForm").style.display = "block";
+      document.getElementById("gastosRutasForm").parentElement.classList.remove("hidden");
       document.getElementById("tableSection").classList.add("hidden");
-    }
-
-    function createTableContainer(title) {
-      const container = document.createElement("div");
-      container.className = "message-container fade";
-      container.innerHTML = `<h2 class="text-2xl font-bold mb-4">${title}</h2>`;
-      return container;
+      clearForm();
     }
 
     function generateTableHTML(data, headers) {
@@ -852,9 +1651,20 @@
       let totalMinutos = 0;
       let totalEuros = 0;
 
-      let html = "<thead><tr>";
-      headers.forEach((header) => (html += `<th>${header}</th>`));
-      html += "</tr></thead><tbody>";
+      let html = `
+      <thead class="bg-red-600 text-white">
+        <tr>
+    `;
+
+      headers.forEach((header) => {
+        html += `<th scope="col" class="px-6 py-4 font-medium">${header}</th>`;
+      });
+
+      html += `
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200">
+    `;
 
       Object.entries(data).forEach(([key, value]) => {
         if (headers.includes("TOTAL EUROS")) {
@@ -863,50 +1673,310 @@
         totalPorcentaje += value.porcentaje || 0;
         totalMinutos += value.totalMinutos || 0;
 
-        html += "<tr>";
-        html += `<td>${key}</td>`;
-        html += `<td>${value.navision || ""}</td>`;
+        html += `<tr class="hover:bg-gray-50">`;
+        html += `<td class="px-6 py-4">${key}</td>`;
+        html += `<td class="px-6 py-4">${value.navision || ""}</td>`;
+
         if (headers.includes("TOTAL MINUTOS")) {
-          html += `<td>${value.totalMinutos || 0}</td>`;
+          html += `<td class="px-6 py-4">${value.totalMinutos || 0}</td>`;
         }
+
         if (headers.includes("TOTAL EUROS")) {
-          html += `<td>${value.porcentaje?.toFixed(3) || 0}%</td>`;
-          html += `<td>${value.euros || "0.00"} €</td>`;
+          html += `<td class="px-6 py-4">${value.porcentaje?.toFixed(3) || 0}%</td>`;
+          html += `<td class="px-6 py-4">${value.euros || "0.00"} €</td>`;
         } else {
-          html += `<td>${value.porcentaje?.toFixed(3) || 0}%</td>`;
+          html += `<td class="px-6 py-4">${value.porcentaje?.toFixed(3) || 0}%</td>`;
         }
-        html += "</tr>";
+
+        html += `</tr>`;
       });
 
       // Footer row
-      html += "<tr>";
-      html += `<td colspan="2" class="font-bold">Totales</td>`;
+      html += `
+      <tr class="bg-gray-100 font-medium">
+        <td colspan="2" class="px-6 py-4">Totales</td>
+    `;
+
       if (headers.includes("TOTAL MINUTOS")) {
-        html += `<td class="font-bold">${totalMinutos}</td>`;
+        html += `<td class="px-6 py-4">${totalMinutos}</td>`;
       }
+
       if (headers.includes("TOTAL EUROS")) {
-        html += `<td class="font-bold">${totalPorcentaje.toFixed(3)}%</td>`;
-        html += `<td class="font-bold">${totalEuros.toFixed(3)} €</td>`;
+        html += `<td class="px-6 py-4">${totalPorcentaje.toFixed(3)}%</td>`;
+        html += `<td class="px-6 py-4">${totalEuros.toFixed(3)} €</td>`;
       } else {
-        html += `<td class="font-bold">${totalPorcentaje.toFixed(3)}%</td>`;
+        html += `<td class="px-6 py-4">${totalPorcentaje.toFixed(3)}%</td>`;
       }
-      html += "</tr></tbody>";
+
+      html += `
+      </tr>
+      </tbody>
+    `;
 
       return html;
     }
 
-    function calculateTotalMinutes(data) {
-      return Object.values(data).reduce(
-        (sum, item) => sum + (item.totalMinutos || 0),
-        0
-      );
+    /* MENU INTERACTION FUNCTIONS */
+    function setupMenuInteractions() {
+      // Set up desktop dropdown toggles
+      const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+
+      dropdownToggles.forEach(toggle => {
+        toggle.addEventListener('click', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+
+          const dropdownId = this.getAttribute('data-dropdown');
+          const dropdown = document.getElementById(dropdownId);
+
+          // Close all other dropdowns
+          document.querySelectorAll('.desktop-dropdown').forEach(dd => {
+            if (dd.id !== dropdownId) {
+              dd.classList.remove('desktop-dropdown-visible');
+            }
+          });
+
+          // Toggle arrow rotation
+          document.querySelectorAll('.dropdown-toggle svg:last-child').forEach(arrow => {
+            if (arrow.parentElement === this) {
+              arrow.classList.toggle('rotate-180');
+            } else {
+              arrow.classList.remove('rotate-180');
+            }
+          });
+
+          // Toggle current dropdown
+          dropdown.classList.toggle('desktop-dropdown-visible');
+        });
+      });
+
+      // Mobile Menu Toggle
+      const menuButton = document.getElementById("menuButton");
+      const mobileMenu = document.getElementById("opcionesMenu");
+      const hamburgerTop = document.getElementById("hamburgerTop");
+      const hamburgerMiddle = document.getElementById("hamburgerMiddle");
+      const hamburgerBottom = document.getElementById("hamburgerBottom");
+
+      if (menuButton && mobileMenu) {
+        menuButton.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          mobileMenu.classList.toggle("translate-x-full");
+          document.body.classList.toggle("overflow-hidden");
+
+          // Toggle hamburger to X animation
+          const isOpen = !mobileMenu.classList.contains("translate-x-full");
+
+          if (isOpen) {
+            hamburgerTop.style.transform = "rotate(45deg) translate(10px, 7px)";
+            hamburgerMiddle.style.opacity = "0";
+            hamburgerBottom.style.transform = "rotate(-45deg) translate(10px, -7px)";
+            hamburgerTop.classList.replace("bg-gray-900", "bg-white");
+            hamburgerMiddle.classList.replace("bg-gray-900", "bg-white");
+            hamburgerBottom.classList.replace("bg-gray-900", "bg-white");
+          } else {
+            hamburgerTop.style.transform = "";
+            hamburgerMiddle.style.opacity = "1";
+            hamburgerBottom.style.transform = "";
+            hamburgerTop.classList.replace("bg-white", "bg-gray-900");
+            hamburgerMiddle.classList.replace("bg-white", "bg-gray-900");
+            hamburgerBottom.classList.replace("bg-white", "bg-gray-900");
+          }
+        });
+      }
+
+      // Desktop User Menu
+      const userMenuButton = document.getElementById("userMenuButton");
+      const userDropdownMenu = document.getElementById("opcionesUsuario");
+
+      if (userMenuButton && userDropdownMenu) {
+        userMenuButton.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          userDropdownMenu.classList.toggle("hidden");
+          const isExpanded = !userDropdownMenu.classList.contains("hidden");
+          userMenuButton.setAttribute("aria-expanded", isExpanded.toString());
+        });
+      }
     }
 
-    function calculateTotalEuros(data) {
-      return Object.values(data)
-        .reduce((sum, item) => sum + parseFloat(item.euros || 0), 0)
-        .toFixed(3);
+    function setupUserActions() {
+      // Edit User Buttons
+      const editarUsuario = document.getElementById("editarUsuario");
+      const editarUsuarioMobile = document.getElementById("editarUsuarioMobile");
+
+      if (editarUsuario) {
+        editarUsuario.addEventListener("click", e => {
+          if (navigator.onLine) {
+            window.location.href = "https://dosxdos.app.iidos.com/dosxdos.php?modulo=editarUsuario&id=" + usuario.id;
+          } else {
+            alerta('No es posible acceder a las opciones de edición de usuario sin conexión a internet');
+            scrollToTop();
+          }
+        });
+      }
+
+      if (editarUsuarioMobile) {
+        editarUsuarioMobile.addEventListener("click", e => {
+          if (navigator.onLine) {
+            window.location.href = "https://dosxdos.app.iidos.com/dosxdos.php?modulo=editarUsuario&id=" + usuario.id;
+          } else {
+            alerta('No es posible acceder a las opciones de edición de usuario sin conexión a internet');
+            scrollToTop();
+          }
+        });
+      }
+
+      // Logout Buttons
+      const cerrarSesionBtn = document.getElementById("cerrarSesion");
+      const cerrarSesionMobileBtn = document.getElementById("cerrarSesionMobile");
+
+      if (cerrarSesionBtn) {
+        cerrarSesionBtn.addEventListener("click", cerrarSesion);
+      }
+
+      if (cerrarSesionMobileBtn) {
+        cerrarSesionMobileBtn.addEventListener("click", cerrarSesion);
+      }
     }
+
+
+
+    function setupGlobalMenuClosing() {
+      document.addEventListener("click", (e) => {
+        // Close desktop dropdowns if clicking outside
+        if (!e.target.closest('.dropdown-toggle') && !e.target.closest('.desktop-dropdown')) {
+          document.querySelectorAll('.desktop-dropdown').forEach(dropdown => {
+            dropdown.classList.remove('desktop-dropdown-visible');
+          });
+
+          // Reset rotation of all dropdown arrows
+          document.querySelectorAll('.dropdown-toggle svg:last-child').forEach(arrow => {
+            arrow.classList.remove('rotate-180');
+          });
+        }
+
+        // Close user menu if clicking outside
+        const userMenuButton = document.getElementById("userMenuButton");
+        const userDropdownMenu = document.getElementById("opcionesUsuario");
+
+        if (userDropdownMenu && userMenuButton &&
+          !userMenuButton.contains(e.target) &&
+          !userDropdownMenu.contains(e.target) &&
+          !userDropdownMenu.classList.contains("hidden")) {
+          userDropdownMenu.classList.add("hidden");
+          userMenuButton.setAttribute("aria-expanded", "false");
+        }
+
+        // Close mobile menu if clicking outside
+        const menuButton = document.getElementById("menuButton");
+        const mobileMenu = document.getElementById("opcionesMenu");
+
+        if (mobileMenu && menuButton &&
+          !mobileMenu.contains(e.target) &&
+          !menuButton.contains(e.target) &&
+          !mobileMenu.classList.contains("translate-x-full")) {
+          menuButton.click();
+        }
+      });
+
+      // Handle escape key
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          // Close all desktop dropdowns
+          document.querySelectorAll('.desktop-dropdown').forEach(dropdown => {
+            dropdown.classList.remove('desktop-dropdown-visible');
+          });
+
+          // Reset rotation of all dropdown arrows
+          document.querySelectorAll('.dropdown-toggle svg:last-child').forEach(arrow => {
+            arrow.classList.remove('rotate-180');
+          });
+
+          // Close user dropdown
+          const userDropdownMenu = document.getElementById("opcionesUsuario");
+          if (userDropdownMenu && !userDropdownMenu.classList.contains("hidden")) {
+            userDropdownMenu.classList.add("hidden");
+            document.getElementById("userMenuButton")?.setAttribute("aria-expanded", "false");
+          }
+
+          // Close mobile menu
+          const mobileMenu = document.getElementById("opcionesMenu");
+          if (mobileMenu && !mobileMenu.classList.contains("translate-x-full")) {
+            document.getElementById("menuButton").click();
+          }
+        }
+      });
+    }
+
+    function cerrarSesion() {
+      loaderOn();
+      try {
+        // Clear localStorage
+        localStorage.removeItem('login');
+        localStorage.removeItem('usuario');
+        localStorage.removeItem('loginMontador');
+
+        // Clear cookies
+        document.cookie = "login=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        document.cookie = "usuario=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+        // Redirect to login page
+        window.location.href = "https://dosxdos.app.iidos.com/index.html";
+      } catch (error) {
+        console.error("Error during logout:", error);
+        loaderOff();
+        alerta("Error al cerrar sesión: " + error.message);
+      }
+    }
+
+    /* USER LOGIN CHECK */
+    function vLogin() {
+      return new Promise((resolve, reject) => {
+        const login = localStorage.getItem('login');
+        if (login && login !== null) {
+          leerDatos('dosxdos', 'usuario')
+            .then(res => {
+              usuario = res[0];
+              resolve(true);
+            })
+            .catch(err => {
+              resolve(false);
+            });
+        } else {
+          resolve(false);
+        }
+      });
+    }
+
+    /* INITIALIZATION AND EVENT LISTENERS */
+    document.addEventListener("DOMContentLoaded", initializeApp);
+
+    // Handle online/offline events
+    window.addEventListener("online", () => {
+      console.log("La conexión a Internet se ha recuperado.");
+      // You might want to sync data here if needed
+    });
+
+    window.addEventListener("offline", () => {
+      console.log("La conexión a Internet se ha perdido.");
+      alerta("Se ha perdido la conexión a Internet. Algunas funciones pueden no estar disponibles.");
+    });
+
+    // Prevent form resubmission on refresh
+    if (window.history.replaceState) {
+      window.history.replaceState(null, null, window.location.href);
+    }
+
+    // MAKE THESE FUNCTIONS AVAILABLE IN THE GLOBAL SCOPE
+    window.toggleDropdown = toggleDropdown;
+    window.removeTag = removeTag;
+    window.validateForm = validateForm;
+    window.clearForm = clearForm;
+    window.processGastos = processGastos;
+    window.copyResults = copyResults;
+    window.reloadForm = reloadForm;
+    window.filterItems = filterItems;
   </script>
 </body>
 

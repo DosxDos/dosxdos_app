@@ -75,62 +75,6 @@ if ($conexion && $idUsuario) {
             echo 'mensajePhp = "' . $mensaje . '"';
         } ?>
     </script>
-    <style>
-        /* Desktop dropdown menu improvements */
-        .desktop-dropdown {
-            display: none;
-            position: absolute;
-            left: 0;
-            top: 100%;
-            margin-top: 0.5rem;
-            background-color: white;
-            border-radius: 0.5rem;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            z-index: 50;
-            min-width: 12rem;
-            padding: 0.5rem 0;
-            border: 1px solid rgba(229, 231, 235, 1);
-        }
-
-        .desktop-dropdown-visible {
-            display: block;
-        }
-
-        .desktop-dropdown a {
-            padding: 0.75rem 1rem;
-            display: block;
-            transition: all 0.2s;
-        }
-
-        .mobile-submenu-header {
-            position: relative;
-            margin-bottom: 0.25rem;
-        }
-
-        .mobile-submenu-content {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 0.75rem;
-            padding: 0.5rem;
-            margin: 0.25rem 0 0.75rem 3.5rem;
-        }
-
-        .mobile-submenu-item {
-            padding: 0.75rem 1rem;
-            display: block;
-            color: white;
-            border-radius: 0.5rem;
-            margin-bottom: 0.25rem;
-            font-weight: 500;
-        }
-
-        .mobile-submenu-item:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-
-        g:hover path:hover {
-            color: red !important;
-        }
-    </style>
 </head>
 
 <body id="body" class="">
