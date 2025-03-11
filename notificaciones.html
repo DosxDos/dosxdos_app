@@ -227,8 +227,27 @@
     </div>
   </div>
 
-  <section id="contenidoPendientes" class="p-6 bg-gray-100"></section>
-  <section id="contenidoAceptadas" class="hidden p-6 bg-gray-100"></section>
+  <section id="contenidoPendientes" class="p-6 bg-gray-100">
+    <div id="emptyPendientes" class="flex flex-col items-center justify-center p-8 bg-gray-100 rounded-xl text-center">
+      <h3 class="text-2xl font-bold text-gray-800 mb-3">
+        Sin Notificaciones Pendientes
+      </h3>
+      <p class="text-gray-600 mb-6">
+        Parece que no tienes ninguna notificación pendiente en este momento.
+      </p>
+    </div>
+  </section>
+
+  <section id="contenidoAceptadas" class="hidden p-6 bg-gray-100">
+    <div id="emptyAceptadas" class="flex flex-col items-center justify-center p-8 bg-gray-100 rounded-xl text-center">
+      <h3 class="text-2xl font-bold text-gray-800 mb-3">
+        No Hay Notificaciones Aceptadas
+      </h3>
+      <p class="text-gray-600 mb-6¡">
+        Aún no has aceptado ninguna notificación.
+      </p>
+    </div>
+  </section>
 
   <div id="modalNotificacion"
     class="fixed inset-0 z-50 hidden opacity-0 pointer-events-none transition-all duration-300 ease-in-out">
@@ -286,28 +305,12 @@
     });
   }
 
-  // Core Element References
   const elements = {
     buscador: document.getElementById("buscador"),
     loader: document.getElementById("loader"),
     body: document.getElementById("body"),
-    nombreUsuarioDesktop: document.getElementById("nombreUsuarioDesktop"),
-    nombreUsuarioMobile: document.getElementById("nombreUsuarioMobile"),
-    imagenUsuarioDesktop: document.getElementById("imagenUsuarioDesktop"),
-    imagenUsuarioMobile: document.getElementById("imagenUsuarioMobile"),
     contenidoPendientes: document.getElementById("contenidoPendientes"),
     contenidoAceptadas: document.getElementById("contenidoAceptadas"),
-    userMenuButton: document.getElementById("userMenuButton"),
-    userDropdownMenu: document.getElementById("userDropdownMenu"),
-    menuButton: document.getElementById("menuButton"),
-    mobileMenu: document.getElementById("mobileMenu"),
-    hamburgerTop: document.getElementById("hamburgerTop"),
-    hamburgerMiddle: document.getElementById("hamburgerMiddle"),
-    hamburgerBottom: document.getElementById("hamburgerBottom"),
-    editarUsuarioDesktop: document.getElementById("editarUsuarioDesktop"),
-    editarUsuarioMobile: document.getElementById("editarUsuarioMobile"),
-    cerrarSesionDesktop: document.getElementById("cerrarSesionDesktop"),
-    cerrarSesionMobile: document.getElementById("cerrarSesionMobile"),
     pestañaPendientes: document.getElementById("pestañaPendientes"),
     pestañaAceptadas: document.getElementById("pestañaAceptadas"),
   };
@@ -616,121 +619,62 @@
   let isUpdating = false;
 
   const actualizarVistaNotificaciones = async () => {
-    console.log('Starting actualizarVistaNotificaciones');
+    return new Promise(async (resolve, reject) => {
+      try {
+        const pendientesContainer = elements.contenidoPendientes;
+        const aceptadasContainer = elements.contenidoAceptadas;
+        const emptyPendientes = document.getElementById('emptyPendientes');
+        const emptyAceptadas = document.getElementById('emptyAceptadas');
+        const pestañaPendientes = elements.pestañaPendientes;
+        const mostrarPendientes = pestañaPendientes.classList.contains("border-red-500");
+        const TotalNotificaciones = await leerDatos("dosxdos", "notificaciones");
 
-    if (isUpdating) {
-      console.log('Already updating, returning');
-      return;
-    }
+        // Sort notifications by date in reverse chronological order (newest first)
+        TotalNotificaciones.sort((a, b) => {
+          return new Date(b.fecha_envio) - new Date(a.fecha_envio);
+        });
 
-    isUpdating = true;
+        const pendientes = TotalNotificaciones.filter(notif => notif.visto === 0);
+        const aceptadas = TotalNotificaciones.filter(notif => notif.visto === 1);
 
-    try {
-      const pendientesContainer = elements.contenidoPendientes;
-      const aceptadasContainer = elements.contenidoAceptadas;
-      const pestañaPendientes = elements.pestañaPendientes;
-
-      console.log('Containers:', {
-        pendientes: pendientesContainer,
-        aceptadas: aceptadasContainer
-      });
-
-      const mostrarPendientes = pestañaPendientes.classList.contains("border-red-500");
-      console.log('Showing pending notifications:', mostrarPendientes);
-
-      pendientesContainer.style.display = mostrarPendientes ? "block" : "none";
-      aceptadasContainer.style.display = mostrarPendientes ? "none" : "block";
-
-      console.log('Fetching notifications');
-      const TotalNotificaciones = await leerDatos("dosxdos", "notificaciones");
-
-      console.log('Total notifications:', TotalNotificaciones);
-
-      // Sort notifications by date in reverse chronological order (newest first)
-      TotalNotificaciones.sort((a, b) => {
-        return new Date(b.fecha_envio) - new Date(a.fecha_envio);
-      });
-
-      const pendientes = TotalNotificaciones.filter(notif => notif.visto === 0);
-      const aceptadas = TotalNotificaciones.filter(notif => notif.visto === 1);
-
-      console.log('Pending notifications:', pendientes);
-      console.log('Accepted notifications:', aceptadas);
-
-      // Update counters
-      document.getElementById("contadorPendientes").textContent = pendientes.length;
-      document.getElementById("contadorAceptadas").textContent = aceptadas.length;
-
-      // Check if we should show empty state
-      const shouldShowEmptyState = mostrarPendientes ? pendientes.length === 0 : aceptadas.length === 0;
-      console.log('Should show empty state:', shouldShowEmptyState);
-
-      if (shouldShowEmptyState) {
-        const emptyStateHTML = mostrarPendientes
-          ? `
-        <div class="flex flex-col items-center justify-center p-8 bg-gray-100 rounded-xl text-center">
-          <div class="mb-6">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 text-gray-400 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.5a1.5 1.5 0 010-3h2.5v3z" />
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 8v4l3 3" />
-            </svg>
-          </div>
-          <h3 class="text-2xl font-bold text-gray-800 mb-3">
-            Sin Notificaciones Pendientes
-          </h3>
-          <p class="text-gray-600 mb-6 max-w-md">
-            Parece que no tienes ninguna notificación pendiente en este momento.
-          </p>
-        </div>`
-          : `
-        <div class="flex flex-col items-center justify-center p-8 bg-gray-100 rounded-xl text-center">
-          <div class="mb-6">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 text-gray-400 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.5a1.5 1.5 0 010-3h2.5v3z" />
-              <path stroke-linecap="round" stroke-lienjoin="round" stroke-width="1" d="M12 8v4l3 3" />
-            </svg>
-          </div>
-          <h3 class="text-2xl font-bold text-gray-800 mb-3">
-            No Hay Notificaciones Aceptadas
-          </h3>
-          <p class="text-gray-600 mb-6 max-w-md">
-            Aún no has aceptado ninguna notificación.
-          </p>
-        </div>`;
-
-        console.log('Rendering empty state');
+        // Update counters
+        document.getElementById("contadorPendientes").textContent = pendientes.length;
+        document.getElementById("contadorAceptadas").textContent = aceptadas.length;
 
         if (mostrarPendientes) {
-          pendientesContainer.innerHTML = emptyStateHTML;
+          if (pendientes.length === 0) {
+            emptyPendientes.style.display = 'block';
+          } else {
+            emptyPendientes.style.display = 'none';
+            pendientes.forEach(notif => {
+              const searchTerm = elements.buscador.value.toLowerCase().trim();
+              const element = createNotificationElement(notif, searchTerm);
+              pendientesContainer.appendChild(element);
+            });
+          }
         } else {
-          aceptadasContainer.innerHTML = emptyStateHTML;
+          if (aceptadas.length === 0) {
+            emptyAceptadas.style.display = 'block';
+          } else {
+            emptyAceptadas.style.display = 'none';
+            aceptadas.forEach(notif => {
+              const searchTerm = elements.buscador.value.toLowerCase().trim();
+              const element = createNotificationElement(notif, searchTerm);
+              aceptadasContainer.appendChild(element);
+            });
+          }
         }
-      } else {
-        console.log('Rendering notifications');
-        // Clear containers first
-        pendientesContainer.innerHTML = '';
-        aceptadasContainer.innerHTML = '';
 
-        // Add notifications to containers
-        pendientes.forEach(notif => {
-          const searchTerm = elements.buscador.value.toLowerCase().trim();
-          const element = createNotificationElement(notif, searchTerm);
-          pendientesContainer.appendChild(element);
-        });
+        pendientesContainer.style.display = mostrarPendientes ? "block" : "none";
+        aceptadasContainer.style.display = mostrarPendientes ? "none" : "block";
 
-        aceptadas.forEach(notif => {
-          const searchTerm = elements.buscador.value.toLowerCase().trim();
-          const element = createNotificationElement(notif, searchTerm);
-          aceptadasContainer.appendChild(element);
-        });
+        console.log('Finished actualizarVistaNotificaciones');
+        resolve();
+      } catch (error) {
+        console.error('Error in actualizarVistaNotificaciones:', error);
+        reject(error);
       }
-
-      console.log('Finished actualizarVistaNotificaciones');
-    } catch (error) {
-      console.error('Error in actualizarVistaNotificaciones:', error);
-    } finally {
-      isUpdating = false;
-    }
+    });
   };
 
 
