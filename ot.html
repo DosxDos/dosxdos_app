@@ -3,1492 +3,247 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
-    <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/cdn_data_tables.css">
-    <!-- Favicons -->
-    <link rel="icon" type="image/png" href="https://dosxdos.app.iidos.com/img/logoPwa256.png">
-    <style>
-        @charset "UTF-8";
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>OTS</title>
+    <link rel="icon" type="image/png" href="https://dosxdos.app.iidos.com/img/logoPwa256.png" />
+    <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/tailwindmain.css" />
+    <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/index.css" />
 
-        /* $variables - 40% */
-        :root {
-            --x1_7: 0.41vw;
-            --x60: 14.56vw;
-            --x10: 2.43vw;
-            --x300: 72.82vw;
-            --x15: 3.64vw;
-            --x5: 1.21vw;
-            --x70: 16.99vw;
-            --x25: 6.07vw;
-            --x3: 0.73vw;
-            --x1: 0.24vw;
-            --x20: 4.85vw;
-            --x250: 60.68vw;
-            --x30: 7.28vw;
-            --x22: 5.34vw;
-            --x28: 6.8vw;
-            --x1_5: 0.36vw;
-            --x2: 0.49vw;
-            --x18: 4.37vw;
-            --x2_5: 0.61vw;
-            --x220: 53.4vw;
-            --x50: 12.14vw;
-            --x380: 92.23vw;
-            --x150: 36.41vw;
-        }
-
-        /* INICIO */
-        * {
-            padding: 0;
-            margin: 0;
-            box-sizing: border-box;
-            letter-spacing: var(--x1_7);
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .displayOff {
-            display: none;
-        }
-
-        .displayOn {
-            display: flex;
-        }
-
-        .borde {
-            border: var(--x1) solid black;
-        }
-
-        body {
-            overflow-x: hidden;
-        }
-
-        .oyh {
-            overflow-y: hidden;
-        }
-
-        /* FUENTES */
-        @font-face {
-            font-family: 'Roboto';
-            src: url("https://dosxdos.app.iidos.com/css/fuentes/Roboto/Roboto-Light.ttf") format("truetype");
-        }
-
-        @font-face {
-            font-family: 'Merriweather';
-            src: url("https://dosxdos.app.iidos.com/css/fuentes/Merriweather/Merriweather-Light.ttf") format("truetype");
-        }
-
-        @font-face {
-            font-family: 'Merriweather-Bold';
-            src: url("https://dosxdos.app.iidos.com/css/fuentes/Merriweather/Merriweather-Bold.ttf") format("truetype");
-        }
-
-        @font-face {
-            font-family: 'Lora';
-            src: url("https://dosxdos.app.iidos.com/css/fuentes/Lora/Lora-Regular.ttf") format("truetype");
-        }
-
-        @font-face {
-            font-family: 'Lora-Medium';
-            src: url("https://dosxdos.app.iidos.com/css/fuentes/Lora/Lora-Medium.ttf") format("truetype");
-        }
-
-        @font-face {
-            font-family: 'Lora-Bold';
-            src: url("https://dosxdos.app.iidos.com/css/fuentes/Lora/Lora-Bold.ttf") format("truetype");
-        }
-
-        /* LOADER */
-        #loader {
-            width: 100vw;
-            height: 100vh;
-            position: absolute;
-            top: 0;
-            z-index: 2000;
-            background-color: rgba(0, 0, 0, 0.886);
-            justify-content: center;
-            align-items: center;
-        }
-
-        .loader {
-            transform: rotateZ(45deg);
-            perspective: 1000px;
-            border-radius: 50%;
-            width: var(--x60);
-            height: var(--x60);
-            color: #fff;
-        }
-
-        .loader:before,
-        .loader:after {
-            content: '';
-            display: block;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: inherit;
-            height: inherit;
-            border-radius: 50%;
-            transform: rotateX(70deg);
-            animation: 1s spin linear infinite;
-        }
-
-        .loader:after {
-            color: #b20b15;
-            transform: rotateY(70deg);
-            animation-delay: .4s;
-        }
-
-        @keyframes rotate {
-            0% {
-                transform: translate(-50%, -50%) rotateZ(0deg);
-            }
-
-            100% {
-                transform: translate(-50%, -50%) rotateZ(360deg);
-            }
-        }
-
-        @keyframes rotateccw {
-            0% {
-                transform: translate(-50%, -50%) rotate(0deg);
-            }
-
-            100% {
-                transform: translate(-50%, -50%) rotate(-360deg);
-            }
-        }
-
-        @keyframes spin {
-
-            0%,
-            100% {
-                box-shadow: .2em 0px 0 0px currentcolor;
-            }
-
-            12% {
-                box-shadow: .2em .2em 0 0 currentcolor;
-            }
-
-            25% {
-                box-shadow: 0 .2em 0 0px currentcolor;
-            }
-
-            37% {
-                box-shadow: -.2em .2em 0 0 currentcolor;
-            }
-
-            50% {
-                box-shadow: -.2em 0 0 0 currentcolor;
-            }
-
-            62% {
-                box-shadow: -.2em -.2em 0 0 currentcolor;
-            }
-
-            75% {
-                box-shadow: 0px -.2em 0 0 currentcolor;
-            }
-
-            87% {
-                box-shadow: .2em -.2em 0 0 currentcolor;
-            }
-        }
-
-        /* NAVEGACIÓN */
-        #encabezado {
-            flex-direction: column;
-            width: 100%;
-            justify-content: center;
-            align-items: center;
-            background-color: #f4f4f4;
-        }
-
-        #logo {
-            display: flex;
-            width: 100%;
-            justify-content: center;
-            align-items: center;
-            padding: var(--x10);
-        }
-
-        #logo>img {
-            width: var(--x300);
-        }
-
-        #menu {
-            display: flex;
-            width: 100%;
-            align-items: center;
-            padding: var(--x10);
-            justify-content: space-between;
-            margin-top: var(--x10);
-        }
-
-        #usuario {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #usuario:hover {
-            cursor: pointer;
-        }
-
-        #iconoUsuario {
-            display: flex;
-            width: var(--x70);
-            height: var(--x70);
-            border-radius: 50%;
-        }
-
-        #iconoUsuario>img {
-            width: var(--x70);
-            height: var(--x70);
-            border-radius: 50%;
-        }
-
-        #nombreUsuario {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: var(--x25);
-            margin-left: var(--x5);
-            font-family: "Merriweather-Bold", "Merriweather-Bold";
-        }
-
-        #flechaUsuario {
-            display: flex;
-            width: var(--x25);
-            height: var(--x25);
-            margin-left: var(--x3);
-        }
-
-        #flechaUsuario>img {
-            width: var(--x25);
-            height: var(--x25);
-        }
-
-        .botonIcono {
-            border: var(--x1) solid gray;
-            display: flex;
-            width: var(--x70);
-            height: var(--x70);
-            border-radius: 20%;
-            background-color: #d31216;
-        }
-
-        .botonIcono:hover {
-            cursor: pointer;
-        }
-
-        .botonIcono:active {
-            background-color: #b20b15;
-        }
-
-        .botonIcono>img {
-            width: var(--x70);
-            height: var(--x70);
-            border-radius: 20%;
-            padding: var(--x10);
-        }
-
-        #opcionesMenu {
-            width: 100%;
-            padding: var(--x15);
-            justify-content: space-evenly;
-            align-items: flex-start;
-            flex-wrap: wrap;
-            overflow-x: auto;
-        }
-
-        #opcionesMenu2 {
-            width: 100%;
-            padding: var(--x15);
-            justify-content: space-evenly;
-            align-items: flex-start;
-            flex-wrap: wrap;
-            overflow-x: auto;
-        }
-
-        .opcionMenu {
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .opcionMenu p {
-            display: flex;
-            width: var(--x150);
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            flex-wrap: wrap;
-            font-size: var(--x20);
-            font-family: "Merriweather-Bold", "Merriweather-Bold";
-        }
-
-        #opcionesUsuario {
-            width: 100%;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: var(--x15);
-        }
-
-        .boton {
-            width: var(--x250);
-            border-radius: var(--x30);
-            font-family: 'Merriweather-Bold', 'Merriweather-Bold';
-            font-size: var(--x22);
-            height: var(--x60);
-            padding: var(--x10);
-            border: var(--x1) solid gray;
-            color: white;
-            background-color: #d31216;
-        }
-
-        .boton2 {
-            width: var(--x250);
-            border-radius: var(--x30);
-            font-family: 'Merriweather-Bold', 'Merriweather-Bold';
-            font-size: var(--x22);
-            height: var(--x60);
-            padding: var(--x10);
-            border: var(--x1) solid gray;
-            color: white;
-            background-color: #d31216;
-            margin-top: var(--x15);
-        }
-
-        .boton:hover {
-            cursor: pointer;
-        }
-
-        .boton:active {
-            background-color: #b20b15;
-        }
-
-        .boton2:hover {
-            cursor: pointer;
-        }
-
-        .boton2:active {
-            background-color: #b20b15;
-        }
-
-        .titulo {
-            justify-content: center;
-            align-items: center;
-            font-family: 'Lora-Bold', 'Lora-Bold';
-            width: 100%;
-            font-size: var(--x28);
-            padding: var(--x5);
-            text-align: center;
-            margin-top: var(--x20);
-            position: relative;
-        }
-
-        #filtrarPorAno {
-            justify-content: center;
-            align-items: center;
-            font-family: 'Lora-Bold', 'Lora-Bold';
-            width: 100%;
-            font-size: var(--x25);
-            padding: var(--x5);
-            text-align: center;
-            margin-top: var(--x20);
-            position: relative;
-        }
-
-        .tituloFijo {
-            justify-content: center;
-            align-items: center;
-            font-family: 'Lora-Bold', 'Lora-Bold';
-            width: 100%;
-            font-size: var(--x28);
-            padding: var(--x5);
-            text-align: center;
-            position: fixed;
-            top: 0;
-            margin-top: 0;
-            z-index: 10000;
-            background-color: #f4f4f4;
-        }
-
-        #mensaje {
-            position: relative;
-            flex-wrap: wrap;
-            text-align: center;
-            font-size: var(--x18);
-            letter-spacing: var(--x2_5);
-            background-color: rgba(0, 0, 0, 0.573);
-            color: white;
-            padding: var(--x10);
-            font-family: 'Roboto', 'Roboto-Light';
-            width: 100%;
-            justify-content: center;
-        }
-
-        #mensaje>p {
-            display: flex;
-            flex-wrap: wrap;
-            margin-top: var(--x20);
-            margin-bottom: var(--x20);
-        }
-
-        #imgCerrar {
-            position: absolute;
-            width: var(--x28);
-            top: var(--x2);
-            right: var(--x2);
-        }
-
-        #imgCerrar:hover {
-            cursor: pointer;
-        }
-
-        #contenido {
-            width: 100%;
-            flex-direction: column;
-            padding: var(--x15);
-            justify-content: center;
-            align-items: center;
-            background-color: #e1e1e1;
-            overflow-x: auto;
-        }
-
-        .ruta {
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            border-radius: var(--x30);
-            font-family: 'Lora-Bold', 'Lora-Bold';
-            font-size: var(--x22);
-            border: var(--x1) solid gray;
-            color: white;
-            background-color: #d31216;
-            margin-top: var(--x10);
-            margin-bottom: var(--x10);
-            padding: var(--x15);
-        }
-
-        .ruta:hover {
-            cursor: pointer;
-        }
-
-        .ruta:active {
-            background-color: #b20b15;
-        }
-
-        .ruta2 {
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            border-radius: var(--x30);
-            font-family: 'Lora-Bold', 'Lora-Bold';
-            font-size: var(--x22);
-            border: var(--x1) solid gray;
-            color: white;
-            background-color: black;
-            margin-top: var(--x10);
-            margin-bottom: var(--x10);
-            padding: var(--x15);
-        }
-
-        .ruta2:hover {
-            cursor: pointer;
-        }
-
-        .ruta2:active {
-            background-color: #b20b15;
-        }
-
-        .resaltado {
-            background-color: rgba(0, 0, 0, 0.573);
-        }
-
-        /* LINEA_MONTADOR */
-        #datosBoton {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            border-radius: var(--x30);
-            font-family: 'Lora-Bold', 'Lora-Bold';
-            font-size: var(--x22);
-            border: var(--x1) solid gray;
-            color: white;
-            background-color: rgba(0, 0, 0, 0.573);
-            margin-top: var(--x20);
-            margin-bottom: var(--x10);
-            padding: var(--x15);
-        }
-
-        #datosBoton:hover {
-            cursor: pointer;
-        }
-
-        #datosBoton:active {
-            background-color: black;
-        }
-
-        #cajaCanvasFirma {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            z-index: 2000;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background-color: #e1e1e1;
-        }
-
-        #borrarFirma {
-            margin-top: var(--x60);
-            margin-bottom: var(--x20);
-        }
-
-        .bDark {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            border-radius: var(--x30);
-            font-family: 'Lora-Bold', 'Lora-Bold';
-            font-size: var(--x22);
-            border: var(--x1) solid gray;
-            color: white;
-            background-color: rgba(0, 0, 0, 0.573);
-            margin-top: var(--x10);
-            margin-bottom: var(--x10);
-            padding: var(--x15);
-        }
-
-        .bDark:hover {
-            cursor: pointer;
-        }
-
-        .bDark:active {
-            background-color: black;
-        }
-
-        #fotos {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            border-radius: var(--x30);
-            font-family: 'Lora-Bold', 'Lora-Bold';
-            font-size: var(--x22);
-            border: var(--x1) solid gray;
-            color: white;
-            background-color: rgba(0, 0, 0, 0.573);
-            margin-top: var(--x20);
-            padding: var(--x15);
-            margin-top: var(--x30);
-            margin-bottom: var(--x20);
-        }
-
-        #fotos:hover {
-            cursor: pointer;
-        }
-
-        #fotos:active {
-            background-color: black;
-        }
-
-        #datosLinea {
-            width: 100%;
-            flex-direction: column;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            padding: var(--x20);
-            padding-bottom: var(--x30);
-            border: var(--x1) solid black;
-        }
-
-        .tituloDatos {
-            display: flex;
-            width: 100%;
-            margin-top: var(--x20);
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            text-align: center;
-            font-size: var(--x22);
-            font-weight: normal;
-        }
-
-        .pDatos {
-            display: flex;
-            width: 100%;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            text-align: center;
-            font-size: var(--x20);
-            color: #d31216;
-        }
-
-        label {
-            display: flex;
-            width: 100%;
-            margin-top: var(--x20);
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            text-align: center;
-            font-size: var(--x22);
-        }
-
-        input {
-            display: flex;
-            width: var(--x300);
-            height: var(--x50);
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            font-size: var(--x22);
-            color: #d31216;
-            margin-top: var(--x10);
-            padding: var(--x10);
-            border: var(--x1) solid black;
-        }
-
-        input:focus {
-            outline-color: #b20b15;
-        }
-
-        #fotosGaleria {
-            font-size: var(--x28);
-            width: var(--x380);
-            height: var(--x60);
-            padding: 0;
-            border: none;
-        }
-
-        #fotosGaleria:hover {
-            cursor: pointer;
-        }
-
-        select {
-            display: flex;
-            width: var(--x300);
-            height: var(--x50);
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            font-size: var(--x22);
-            color: #d31216;
-            margin-top: var(--x10);
-            padding: var(--x10);
-            border: var(--x1) solid black;
-        }
-
-        select:focus {
-            outline-color: #b20b15;
-        }
-
-        textarea {
-            width: var(--x380);
-            height: var(--x150);
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            font-size: var(--x22);
-            color: #d31216;
-            margin-top: var(--x10);
-            padding: var(--x10);
-            border: var(--x1) solid black;
-        }
-
-        textarea:focus {
-            outline-color: #b20b15;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #cajaEstado {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #cajaForm {
-            width: 100%;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #listaCamaras {
-            width: 100%;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: var(--x20);
-        }
-
-        #camara {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-            background-color: #e1e1e1;
-        }
-
-        #video {
-            display: flex;
-            width: 100%;
-            height: 100%;
-        }
-
-        #video:active {
-            background-color: rgba(0, 0, 0, 0.573);
-        }
-
-        #imgCerrarCamara {
-            position: absolute;
-            width: var(--x30);
-            top: var(--x10);
-            right: var(--x10);
-            z-index: 2000;
-        }
-
-        #imgCerrarFirma {
-            position: absolute;
-            width: var(--x30);
-            top: var(--x10);
-            right: var(--x10);
-            z-index: 2000;
-        }
-
-        #imgCerrarCamara:hover {
-            cursor: pointer;
-        }
-
-        #imgCerrarFirma:hover {
-            cursor: pointer;
-        }
-
-        #photosContainer {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #firmasContainer {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #carpetasContainer {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #firmar {
-            margin-top: var(--x30);
-        }
-
-        .cajaFoto {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            justify-content: center;
-            align-items: center;
-            margin-top: var(--x50);
-        }
-
-        .cajaFirma {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .imgCamara {
-            max-width: 100%;
-            height: auto;
-        }
-
-        .imgComprimido {
-            width: var(--x70);
-            height: auto;
-        }
-
-        .imgFirma {
-            max-width: 100%;
-            height: auto;
-            background-color: white;
-            border: var(--x1) solid black;
-        }
-
-        #tituloFirma {
-            display: flex;
-            width: 100%;
-            margin-top: var(--x20);
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            text-align: center;
-            font-size: var(--x22);
-            font-weight: normal;
-            margin-bottom: var(--x10);
-        }
-
-        #enviar {
-            margin-top: var(--x60);
-        }
-
-        .seccionArchivos {
-            display: Flex;
-            width: 100%;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: var(--x20);
-            border: var(--x1) solid black;
-            padding-left: var(--x10);
-            padding-right: var(--x10);
-            padding-bottom: var(--x50);
-        }
-
-        h2 {
-            margin-top: var(--x50);
-            font-size: var(--x30);
-        }
-
-        .enlaceImg {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .enlaceCarpeta {
-            border: var(--x1) solid gray;
-            display: flex;
-            width: var(--x70);
-            height: var(--x70);
-            border-radius: 20%;
-            background-color: #d31216;
-        }
-
-        .detalleFoto {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            font-size: var(--x30);
-            margin-top: var(--x10);
-        }
-
-        .loader2 {
-            width: var(--x50);
-            height: var(--x50);
-            margin-top: var(--x30);
-            border: 5px solid #FFF;
-            border-bottom-color: #b20b15;
-            border-radius: 50%;
-            box-sizing: border-box;
-            animation: rotation 1s linear infinite;
-        }
-
-        @keyframes rotation {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        .imgTrash {
-            width: var(--x50);
-        }
-
-        .imgTrash:hover {
-            cursor: pointer;
-        }
-
-        .checkVisible {
-            width: var(--x50);
-            margin-left: var(--x30);
-            background-color: #d31216;
-        }
-
-        .checkVisible:hover {
-            cursor: pointer;
-        }
-
-        .checkVisible:checked {
-            background-color: #d31216;
-        }
-
-        .cajaOpcionesFoto {
-            display: flex;
-            width: 100%;
-            justify-content: center;
-            margin-top: var(--x20);
-        }
-
-        #crearCarpeta {
-            margin-top: var(--x50);
-            margin-bottom: var(--x50);
-        }
-
-        #crearUsuario {
-            display: flex;
-            width: 100%;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .cInpunt {
-            display: flex;
-            width: 100%;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #contrasena2 {
-            margin-right: 0;
-        }
-
-        #imagen {
-            border: none;
-        }
-
-        .enlaceBoton {
-            display: flex;
-            width: 100%;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            margin-top: var(--x20);
-        }
-
-        .imagenUsuario {
-            width: var(--x50);
-            height: var(--x50);
-            border-radius: 50%;
-        }
-
-        .overfila:hover {
-            background-color: rgba(128, 128, 128, 0.479);
-            cursor: pointer;
-        }
-
-        .overfila:active {
-            background-color: gray;
-        }
-
-        .contenTabla {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            width: 100%;
-            margin-top: var(--x50);
-            overflow-x: auto;
-        }
-
-        table {
-            font-size: var(--x22);
-        }
-
-        .bolder {
-            font-weight: bolder;
-        }
-
-        #cajaImagenPerfil {
-            margin-top: var(--x50);
-            display: flex;
-            width: var(--x150);
-            height: var(--x150);
-            border-radius: 50%;
-        }
-
-        #imagenPerfil {
-            width: var(--x150);
-            height: var(--x150);
-            border-radius: 50%;
-        }
-
-        .requerido {
-            color: #d31216;
-            font-weight: bolder;
-        }
-
-        .visibilidad {
-            display: flex;
-            width: var(--x50);
-        }
-
-        table.fixedHeader-floating {
-            background-color: rgb(178, 178, 178);
-        }
-
-        table.fixedHeader-floating.no-footer {
-            border-bottom-width: 0;
-        }
-
-        table.fixedHeader-locked {
-            position: absolute !important;
-            background-color: rgb(178, 178, 178);
-        }
-
-        .verde {
-            color: green;
-        }
-
-        .rojo {
-            color: red;
-        }
-
-        .text-center {
-            text-align: center;
-        }
-
-        .flex-center {
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* MOVILES GRANDES */
-        @media screen and (min-width: 412px) and (max-width: 767px) {
-            :root {
-                --x1_7: 1.7px;
-                --x60: 60px;
-                --x10: 10px;
-                --x300: 300px;
-                --x15: 15px;
-                --x5: 5px;
-                --x70: 70px;
-                --x25: 25px;
-                --x3: 3px;
-                --x1: 1px;
-                --x20: 20px;
-                --x250: 250px;
-                --x30: 30px;
-                --x22: 22px;
-                --x28: 28px;
-                --x1_5: 1.5px;
-                --x2: 2px;
-                --x18: 18px;
-                --x2_5: 2.5px;
-                --x220: 220px;
-                --x50: 50px;
-                --x380: 380px;
-                --x150: 150px;
-            }
-        }
-
-        /* TABLETS */
-        @media screen and (min-width: 768px) and (max-width: 1199px) {
-            :root {
-                --x1_7: 0.09vw;
-                --x60: 3vw;
-                --x10: 0.5vw;
-                --x300: 15vw;
-                --x15: 0.75vw;
-                --x5: 0.25vw;
-                --x70: 3.5vw;
-                --x25: 1.25vw;
-                --x3: 0.15vw;
-                --x1: 0.05vw;
-                --x20: 1vw;
-                --x250: 12.5vw;
-                --x30: 1.5vw;
-                --x22: 1.1vw;
-                --x28: 1.4vw;
-                --x1_5: 0.08vw;
-                --x2: 0.1vw;
-                --x18: 0.9vw;
-                --x2_5: 0.13vw;
-                --x220: 11vw;
-                --x50: 2.5vw;
-                --x380: 19vw;
-                --x150: 7.5vw;
-            }
-
-            #menu {
-                justify-content: space-evenly;
-            }
-
-            .imgCamara {
-                max-width: 80%;
-            }
-
-            .imgFirma {
-                max-width: 80%;
-            }
-
-            .seccionArchivos {
-                width: 80%;
-            }
-
-            .enlaceImg {
-                width: 80%;
-            }
-        }
-
-        /* ESCRITORIOS */
-        @media screen and (min-width: 1200px) {
-            :root {
-                --x1_7: 1.02px;
-                --x60: 36px;
-                --x10: 6px;
-                --x300: 180px;
-                --x15: 9px;
-                --x5: 3px;
-                --x70: 42px;
-                --x25: 15px;
-                --x3: 1.8px;
-                --x1: 0.6px;
-                --x20: 12px;
-                --x250: 150px;
-                --x30: 18px;
-                --x22: 13.2px;
-                --x28: 16.8px;
-                --x1_5: 0.9px;
-                --x2: 1.2px;
-                --x18: 10.8px;
-                --x2_5: 1.5px;
-                --x220: 132px;
-                --x50: 30px;
-                --x380: 228px;
-                --x150: 90px;
-            }
-
-            #menu {
-                justify-content: space-evenly;
-            }
-
-            .imgCamara {
-                max-width: 70%;
-            }
-
-            .imgFirma {
-                max-width: 70%;
-            }
-
-            .seccionArchivos {
-                width: 80%;
-            }
-
-            .enlaceImg {
-                width: 70%;
-            }
-        }
-    </style>
     <script src="https://dosxdos.app.iidos.com/js/jquery.js"></script>
     <script src="https://dosxdos.app.iidos.com/js/data_tables.js"></script>
     <script src="https://dosxdos.app.iidos.com/js/cdn_data_tables.js"></script>
     <script src="https://dosxdos.app.iidos.com/js/fixed_header.js"></script>
-    <script src="https://dosxdos.app.iidos.com/js/index_db.js"></script>
 </head>
 
-<body id="body" class="">
-
-    <div id="loader" class="displayOn">
+<body id="body" class="bg-gray-100 overflow-x-hidden min-h-screen">
+    <!-- Loader -->
+    <div id="loader" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center">
         <span class="loader"></span>
     </div>
 
-    <section id="encabezado" class="displayOn">
+    <!-- Navigation -->
+    <section id="encabezado" class="w-full bg-white shadow-md fixed top-0 z-30">
+        <!-- Main header -->
+        <div class="flex items-center justify-between w-full px-6 py-4">
+            <!-- Logo -->
+            <div class="flex items-center">
+                <img src="https://dosxdos.app.iidos.com/img/logo300.png" class="h-16 hidden xl:block"
+                    alt="Logo completo" />
+                <img src="https://dosxdos.app.iidos.com/img/Isotipo-38.png" class="h-16 xl:hidden" alt="Isotipo" />
+            </div>
 
-        <div id="logo">
-            <img src="https://dosxdos.app.iidos.com/img/logo300.png">
+            <!-- Desktop Navigation -->
+            <nav class="hidden xl:flex items-center space-x-8">
+                <!-- Navigation items will be dynamically created by createDesktopNavigation() -->
+
+                <!-- Desktop Menu Notifications Bell -->
+                <a href="https://dosxdos.app.iidos.com/notificaciones.html" class="relative z-10"
+                    id="desktopBellContainer">
+                    <img id="bellDesktop" src="" class="text-gray-900 object-contain" />
+                    <span id="desktopNotificationCount"
+                        class="absolute top-0 -right-2 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] text-center border hidden"></span>
+                </a>
+
+                <!-- Desktop User Menu -->
+                <div class="relative group drop-shadow">
+                    <button id="userMenuButton"
+                        class="group flex items-center gap-3 py-1 pl-1.5 pr-4 rounded-full bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-gray-300 transition-all duration-200"
+                        aria-expanded="false">
+                        <div
+                            class="w-10 h-10 rounded-full overflow-hidden border-2 border-white shadow-sm bg-gray-100 flex items-center justify-center">
+                            <img id="imagenUsuarioDesktop" src="https://dosxdos.app.iidos.com/img/usuario.png"
+                                class="w-full h-full object-cover" alt="Profile"
+                                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+                            <svg class="w-5 h-5 text-gray-400 hidden" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+
+                        <span id="nombreUsuarioDesktop" class="text-gray-700 font-medium text-lg"></span>
+
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                            class="w-6 h-6 text-gray-400 group-hover:text-gray-600 transition-transform duration-200 group-hover:rotate-180"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+
+                    <!-- Desktop Dropdown Menu -->
+                    <div id="userDropdownMenu"
+                        class="hidden absolute right-0 mt-2 w-max bg-white rounded-lg shadow-lg p-4 z-50">
+                        <button id="editarUsuarioDesktop"
+                            class="flex items-center gap-2 w-full mb-4 text-left text-xl text-black hover:bg-red-600/20 rounded-lg transition-colors duration-200">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                            </svg>
+                            Editar Usuario
+                        </button>
+                        <button id="cerrarSesionDesktop"
+                            class="flex items-center gap-2 w-full text-left text-xl text-red-500 hover:bg-red-600/20 rounded-lg transition-colors duration-200">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                                <polyline points="16 17 21 12 16 7" />
+                                <line x1="21" y1="12" x2="9" y2="12" />
+                            </svg>
+                            Cerrar Sesión
+                        </button>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Mobile Navigation -->
+            <div class="xl:hidden flex items-center space-x-2 mx-2">
+                <!-- Mobile Bell -->
+                <a href="https://dosxdos.app.iidos.com/notificaciones.html" class="relative z-10"
+                    id="mobileBellContainer">
+                    <img id="bellMobile" src="https://dosxdos.app.iidos.com/img/bell2.png"
+                        class="w-8 text-gray-900 object-contain mt-2" />
+                    <span id="mobileNotificationCount"
+                        class="absolute top-2 right-0 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] text-center border hidden"></span>
+                </a>
+
+                <!-- Mobile Menu Button -->
+                <button id="menuButton" class="xl:hidden relative z-50 p-2 focus:outline-none">
+                    <div class="relative w-8 h-8">
+                        <span class="absolute h-1 w-8 bg-gray-900 transition-all duration-300 ease-in-out top-1"
+                            id="hamburgerTop"></span>
+                        <span class="absolute h-1 w-8 bg-gray-900 transition-all duration-300 ease-in-out top-4"
+                            id="hamburgerMiddle"></span>
+                        <span class="absolute h-1 w-8 bg-gray-900 transition-all duration-300 ease-in-out top-7"
+                            id="hamburgerBottom"></span>
+                    </div>
+                </button>
+            </div>
         </div>
 
-        <nav id="menu">
+        <!-- Mobile Menu Overlay -->
+        <div id="opcionesMenu"
+            class="xl:hidden fixed inset-0 bg-gradient-to-r from-red-500 to-red-600 bg-opacity-95 transform translate-x-full transition-all duration-500 ease-in-out z-40 overflow-hidden backdrop-blur-sm flex flex-col">
+            <div class="absolute inset-0 z-0"
+                style="background-image: url('https://dosxdos.app.iidos.com/img/texture-red.svg'); background-size: contain; opacity: 0.7;">
+            </div>
 
-            <div id="usuario">
-                <div id="iconoUsuario">
-                    <img src="https://dosxdos.app.iidos.com/img/usuario.png" id="imagenUsuario">
+            <!-- User Profile Section -->
+            <div class="px-8 py-4 mt-16 relative z-10">
+                <div class="relative flex items-center gap-3 py-1 pl-1.5 pr-4 bg-white shadow-lg rounded-full">
+                    <!-- Profile image -->
+                    <div class="absolute left-0 w-28 h-28 rounded-full overflow-hidden border-4 border-white bg-gradient-to-br from-red-50 to-white flex items-center justify-center shadow-xl"
+                        style="transform: translateX(-15%);">
+                        <img id="imagenUsuarioMobile" src="https://dosxdos.app.iidos.com/img/usuario.png"
+                            class="w-full h-full object-cover" alt="Profile"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+                        <svg class="w-12 h-12 text-gray-400 hidden" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </div>
+                    <div class="ml-28 flex items-center py-4">
+                        <!-- User name -->
+                        <span class="text-black font-medium text-xl">¡Hola,&nbsp;</span>
+                        <span id="nombreUsuarioMobile" class="text-black font-medium text-xl"></span>
+                        <span class="text-black font-medium text-xl">!</span>
+                    </div>
                 </div>
-                <p id="nombreUsuario"></p>
-                <div id="flechaUsuario">
-                    <img src="https://dosxdos.app.iidos.com/img/flechaAbajo.png">
+            </div>
+
+            <!-- Mobile Menu Navigation Links -->
+            <nav class="px-8 pt-3 space-y-2 relative z-10 flex-1 overflow-y-auto custom-scrollbar mt-2">
+                <!-- Dynamic menu items will be added here based on user role -->
+            </nav>
+
+            <!-- Mobile Menu Footer -->
+            <div class="relative z-10">
+                <div class="website-divider-container-734167" style="height: 100px; overflow: visible">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="divider-img-734167" viewBox="0 0 1080 137"
+                        preserveAspectRatio="none" style="bottom: -20px">
+                        <path
+                            d="M 0,137 V 59.03716 c 158.97703,52.21241 257.17659,0.48065 375.35967,2.17167 118.18308,1.69101 168.54911,29.1665 243.12679,30.10771 C 693.06415,92.25775 855.93515,29.278599 1080,73.61449 V 137 Z"
+                            style="fill: #ffffff"></path>
+                        <path
+                            d="M 0,10.174557 C 83.419822,8.405668 117.65911,41.78116 204.11379,44.65308 290.56846,47.52499 396.02558,-7.4328 620.04248,94.40134 782.19141,29.627636 825.67279,15.823104 1080,98.55518 V 137 H 0 Z"
+                            style="fill: #ffffff; opacity: 0.5"></path>
+                        <path
+                            d="M 0,45.10182 C 216.27861,-66.146913 327.90348,63.09813 416.42665,63.52904 504.94982,63.95995 530.42054,22.125806 615.37532,25.210412 700.33012,28.295019 790.77619,132.60682 1080,31.125744 V 137 H 0 Z"
+                            style="fill: #ffffff; opacity: 0.25"></path>
+                    </svg>
                 </div>
             </div>
 
-            <button id="casa" class="botonIcono">
-                <img src="https://dosxdos.app.iidos.com/img/casaWhite.png">
-            </button>
-
-        </nav>
-
-        <nav id="opcionesMenu" class="displayOff">
-
-            <div class="opcionMenu displayOff" id="horarios">
-                <button class="botonIcono" type="button" id="horariosBoton">
-                    <img src="https://dosxdos.app.iidos.com/img/relojWhite.png">
+            <!-- User Actions -->
+            <div
+                class="relative z-10 mt-auto px-8 pb-6 bg-white shadow-lg flex justify-center space-x-6 pb-2 rounded-t-xl">
+                <!-- Edit Button -->
+                <button id="editarUsuarioMobile"
+                    class="flex items-center justify-center w-14 h-14 bg-white border-2 border-red-500 rounded-full hover:bg-red-100 transition-all duration-300">
+                    <svg class="w-8 h-8 text-red-600" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                    </svg>
                 </button>
-                <p>Horarios</p>
-            </div>
 
-            <div class="opcionMenu displayOff" id="archivos">
-                <button class="botonIcono" type="button" id="archivosBoton">
-                    <img src="https://dosxdos.app.iidos.com/img/work.png">
+                <!-- Logout Button -->
+                <button id="cerrarSesionMobile"
+                    class="flex items-center justify-center w-14 h-14 bg-red-600 rounded-full transition-all duration-300">
+                    <svg class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                        <polyline points="16 17 21 12 16 7" />
+                        <line x1="21" y1="12" x2="9" y2="12" />
+                    </svg>
                 </button>
-                <p>OT</p>
             </div>
-
-            <div class="opcionMenu displayOff" id="icLineasOt">
-                <button class="botonIcono" type="button" id="icLineasOtBoton">
-                    <img src="https://dosxdos.app.iidos.com/img/task.png">
-                </button>
-                <p>Líneas OT</p>
-            </div>
-
-            <div class="opcionMenu displayOff" id="pv">
-                <button class="botonIcono" type="button" id="pvBoton">
-                    <img src="https://dosxdos.app.iidos.com/img/tienda.png">
-                </button>
-                <p>PV</p>
-            </div>
-
-            <div class="opcionMenu displayOff" id="rutasIcono">
-                <button class="botonIcono" type="button" id="rutasIconoBoton">
-                    <img src="https://dosxdos.app.iidos.com/img/rutasWhite.png">
-                </button>
-                <p>Rutas</p>
-            </div>
-
-            <div class="opcionMenu displayOff" id="lineasIcono">
-                <button class="botonIcono" type="button" id="lineasIconoBoton">
-                    <img src="https://dosxdos.app.iidos.com/img/task.png">
-                </button>
-                <p>Líneas Ruta</p>
-            </div>
-
-            <div class="opcionMenu displayOff" id="usuarios">
-                <button class="botonIcono" type="button" id="usuariosBoton">
-                    <img src="https://dosxdos.app.iidos.com/img/usuarios.png">
-                </button>
-                <p>Usuarios</p>
-            </div>
-
-            <div class="opcionMenu displayOff" id="usuariosOficina">
-                <button class="botonIcono" type="button" id="usuariosOficinaBoton">
-                    <img src="https://dosxdos.app.iidos.com/img/usuarios.png">
-                </button>
-                <p>Usuarios</p>
-            </div>
-
-            <div class="opcionMenu displayOff" id="rutasMontador">
-                <button class="botonIcono" type="button" id="rutasMontadorBoton">
-                    <img src="https://dosxdos.app.iidos.com/img/rutasWhite.png">
-                </button>
-                <p>Rutas</p>
-            </div>
-
-            <div class="opcionMenu displayOff" id="lineasMontador">
-                <button class="botonIcono" type="button" id="lineasMontadorBoton">
-                    <img src="https://dosxdos.app.iidos.com/img/task.png">
-                </button>
-                <p>Líneas</p>
-            </div>
-
-            <div class="opcionMenu displayOff" id="dm">
-                <button class="botonIcono" type="button" id="dmBoton">
-                    <img src="https://dosxdos.app.iidos.com/img/dm.png">
-                </button>
-                <p>DM</p>
-            </div>
-
-            <div class="opcionMenu displayOff" id="reciclar">
-                <button class="botonIcono" type="button" id="reciclarBoton">
-                    <img src="https://dosxdos.app.iidos.com/img/papelera.png">
-                </button>
-                <p>Reciclar</p>
-            </div>
-
-        </nav>
-
-        <nav id="opcionesUsuario" class="displayOff">
-
-            <button type="button" id="editarUsuario" class="boton">Editar usuario</button>
-            <button type="button" id="cerrarSesion" class="boton2">Cerrar sesión</button>
-
-        </nav>
-
-        <div id="mensaje" class="displayOff">
-            <p id="textoMensaje"></p><img id="imgCerrar" src="https://dosxdos.app.iidos.com/img/cerrar.png">
         </div>
+    </section>
 
-        <div id="tituloVisible"></div>
-
-        <h1 id="titulo" class="displayOn titulo">OTS</h1>
-
-        <section id="contenido" class="displayOff">
-            <h2 id="filtrarPorAno">FILTRAR POR AÑO</h2>
-            <div class="contenTabla">
-                <table id="tablaOt">
-                    <thead>
-                        <tr>
-                            <!-- Visibilidad -->
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody id="cuerpoTablaOt"></tbody>
-                </table>
+    <!-- Main Content Container -->
+    <div class="container mx-auto px-4 sm:px-6 pb-12 pt-32">
+        <!-- Header Section -->
+        <section class="mb-8">
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden relative">
+                <div class="absolute inset-0 bg-gradient-to-r from-red-600 to-red-700"
+                    style="background-image: url('https://dosxdos.app.iidos.com/img/texture-red.svg'); background-size: contain; ">
+                </div>
+                <div class="relative p-6 sm:p-8 text-white z-10">
+                    <h1 id="titulo" class="text-2xl sm:text-3xl font-bold mb-2">OTS</h1>
+                    <p class="text-sm sm:text-base opacity-90">Gestiona y visualiza tus Órdenes de Trabajo</p>
+                </div>
             </div>
         </section>
 
-    </section>
+        <!-- Content Section -->
+        <section id="contenido" class="bg-white rounded-xl shadow-md mb-8 p-6">
+            <h2 id="filtrarPorAno" class="text-xl font-semibold mb-4 text-center">FILTRAR POR AÑO</h2>
 
+            <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-md">
+                <table id="tablaOt" class="w-full border-collapse bg-white text-left text-sm text-gray-700">
+                    <thead>
+                        <tr>
+                            <th class="bg-red-600 text-white px-6 py-4 font-medium"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="cuerpoTablaOt" class="divide-y divide-gray-200">
+                        <!-- Dynamic content will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
 </body>
-
+<script src="https://dosxdos.app.iidos.com/js/index_db.js"></script>
+<script src="https://dosxdos.app.iidos.com/js/navigation.js"></script>
 <script>
-
-    document.title = 'OTS';
-    
-    const tituloElement = document.getElementById('titulo');
-    const tituloVisible = document.getElementById('tituloVisible');
-    function checkVisibility() {
-        const tituloVisiblePosition = tituloVisible.getBoundingClientRect();
-        const isVisible = tituloVisiblePosition.top > 0;
-        const tieneClaseTitulo = tituloElement.classList.contains('tituloFijo');
-        if (isVisible && tieneClaseTitulo) {
-            tituloElement.classList.remove('tituloFijo');
-            tituloElement.classList.add('titulo');
-        } else if (!isVisible && !tieneClaseTitulo) {
-            tituloElement.classList.remove('titulo');
-            tituloElement.classList.add('tituloFijo');
-        }
-    }
-    // Llama a checkVisibility al cargar la página y al cambiar el tamaño de la ventana
-    window.addEventListener('load', checkVisibility);
-    window.addEventListener('resize', checkVisibility);
-    // Llama a checkVisibility al hacer scroll, utilizando requestAnimationFrame
-    window.addEventListener('scroll', () => {
-        requestAnimationFrame(checkVisibility);
-    });
-
     /*REENVÍO DE FORMULARIOS */
-
     if (window.history.replaceState) {
         window.history.replaceState(null, null, window.location.href);
     }
-
-    /* LISTENERS */
-    document.addEventListener('DOMContentLoaded', () => {
-
-        const casaButton = document.getElementById('casa');
-        casaButton.addEventListener('click', () => {
-            toggleElemento('opcionesMenu');
-        });
-
-        const usuarioButton = document.getElementById('usuario');
-        usuarioButton.addEventListener('click', () => {
-            toggleElemento('opcionesUsuario');
-        });
-
-        const cerrarSesion = document.getElementById('cerrarSesion');
-        cerrarSesion.addEventListener('click', () => {
-            cerrarSesions();
-        });
-
-        const imgCerrar = document.getElementById('imgCerrar');
-        imgCerrar.addEventListener('click', () => {
-            mensajeOff();
-        });
-
-        const rutasIcono = document.getElementById('rutasIcono');
-        rutasIcono.addEventListener('click', () => {
-            window.location.href = "https://dosxdos.app.iidos.com/rutas.html";
-        });
-
-        const pvBoton = document.getElementById('pv');
-        pvBoton.addEventListener('click', () => {
-            window.location.href = "https://dosxdos.app.iidos.com/pv.html";
-        });
-
-        const lineasIcono = document.getElementById('lineasIcono');
-        lineasIcono.addEventListener('click', () => {
-            window.location.href = "https://dosxdos.app.iidos.com/lineas.html";
-        })
-
-        const usuarios = document.getElementById('usuarios');
-        usuarios.addEventListener('click', () => {
-            window.location.href = "https://dosxdos.app.iidos.com/dosxdos.php?modulo=usuarios";
-        })
-
-        const horariosClick = document.getElementById('horarios');
-        horariosClick.addEventListener('click', () => {
-            window.location.href = "https://dosxdos.app.iidos.com/horarios.html";
-        })
-
-        const icLineasOtClick = document.getElementById('icLineasOt');
-        icLineasOtClick.addEventListener('click', () => {
-            window.location.href = "https://dosxdos.app.iidos.com/lineas_ot.html";
-        })
-
-        const pvClick = document.getElementById('pv');
-        pvClick.addEventListener('click', () => {
-            window.location.href = "https://dosxdos.app.iidos.com/pv.html";
-        })
-
-        const archivosClick = document.getElementById('archivos');
-        archivosClick.addEventListener('click', () => {
-            window.location.href = "https://dosxdos.app.iidos.com/ot.html";
-        })
-
-        const usuariosOficina = document.getElementById('usuariosOficina');
-        usuariosOficina.addEventListener('click', () => {
-            window.location.href = "https://dosxdos.app.iidos.com/usuarios_oficina.html";
-        })
-
-        const rutasMontador = document.getElementById('rutasMontador');
-        rutasMontador.addEventListener('click', () => {
-            window.location.href = "https://dosxdos.app.iidos.com/rutas_montador.html";
-        })
-
-        const lineasMontador = document.getElementById('lineasMontador');
-        lineasMontador.addEventListener('click', () => {
-            window.location.href = "https://dosxdos.app.iidos.com/ruta_montador.html";
-        })
-
-        $dm.addEventListener('click', () => {
-            window.location.href = "https://dosxdos.app.iidos.com/dm.html";
-        })
-
-        $reciclar.addEventListener('click', () => {
-            window.location.href = "https://dosxdos.app.iidos.com/reciclar.html";
-        })
-
-    });
 
     function toggleElemento(elementId) {
         const elemento = document.getElementById(elementId);
@@ -1498,28 +253,14 @@
 
     /* CONSTANTES DEL DOM */
     const $opcionesMenu = document.getElementById('opcionesMenu'),
-        $opcionesUsuario = document.getElementById('opcionesUsuario'),
-        $casa = document.getElementById('casa'),
-        $usuario = document.getElementById('usuario'),
-        $rutas = document.getElementById('rutas'),
         $loader = document.getElementById('loader'),
         $body = document.getElementById('body'),
-        $mensaje = document.getElementById('mensaje'),
-        $imgCerrar = document.getElementById('imgCerrar'),
         $textoMensaje = document.getElementById('textoMensaje'),
-        buscador = document.getElementById('buscador'),
-        $nombreUsuario = document.getElementById('nombreUsuario'),
-        $imagenUsuario = document.getElementById('imagenUsuario'),
-        $horarios = document.getElementById('horarios'),
-        $archivos = document.getElementById('archivos'),
-        $usuarios = document.getElementById('usuarios'),
-        $rutasIcono = document.getElementById('rutasIcono'),
-        $lineasIcono = document.getElementById('lineasIcono'),
-        $pv = document.getElementById('pv'),
-        $icLineasOt = document.getElementById('icLineasOt'),
-        $dm = document.getElementById('dm'),
-        $reciclar = document.getElementById('reciclar');
-    let usuario;
+        $nombreUsuarioMobile = document.getElementById('nombreUsuarioMobile'),
+        $imagenUsuarioMobile = document.getElementById('imagenUsuarioMobile'),
+        $mobileBellContainer = document.getElementById('mobileBellContainer');
+
+    let usuario, notificacionesSinAcpetarNumero = 0;
 
     /* LOADER */
 
@@ -1552,26 +293,91 @@
         }, 1000);
     }
 
-    /* MENSAJE */
+    /* FUNCIÓN DE ALERTA */
+    function alerta(mensaje) {
+        // Remove existing alert if present
+        const existingAlert = document.querySelector("#customAlert");
+        if (existingAlert) {
+            existingAlert.remove();
+        }
 
-    function mensajeOn() {
-        $mensaje.classList.remove('displayOff');
-        $mensaje.classList.add('displayOn');
-    }
+        // Create alert container
+        const alertContainer = document.createElement("div");
+        alertContainer.id = "customAlert";
+        alertContainer.className = "fixed left-1/2 transform -translate-x-1/2 z-50 transition-all duration-300 ease-in-out w-[95%] md:w-[75%] lg:w-[65%]";
+        alertContainer.style.top = "-100px";
 
-    function mensajeOff() {
-        $mensaje.classList.remove('displayOn');
-        $mensaje.classList.add('displayOff');
-    }
+        // Create alert content
+        const alertContent = document.createElement("div");
+        alertContent.className = `
+        relative
+        bg-white
+        border-2 border-red-600
+        rounded-lg
+        shadow-lg
+        p-4 md:p-5
+        flex flex-col md:flex-row md:items-center gap-3 md:gap-4
+      `;
 
-    $imgCerrar.addEventListener('click', e => {
-        mensajeOff();
-    })
+        // Create close button
+        const closeButton = document.createElement("button");
+        closeButton.className = "absolute -right-3 -top-3 hover:bg-red-400 p-1 bg-red-600 rounded-full p-1.5 transition-colors duration-200";
+        closeButton.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      `;
 
-    function alerta(men) {
-        $textoMensaje.innerHTML = men;
-        mensajeOn();
+        // Create main content container
+        const contentContainer = document.createElement("div");
+        contentContainer.className = "flex flex-col md:flex-row items-center gap-3 md:gap-4 flex-1";
+
+        // Create icon with exclamation mark
+        const iconContainer = document.createElement("div");
+        iconContainer.className = "flex-shrink-0 text-red-600";
+        iconContainer.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <path d="M12 7v6" />
+        <path d="M12 16h0.01" />
+      </svg>
+      `;
+
+        // Create message text
+        const messageText = document.createElement("p");
+        messageText.className = "text-gray-900 text-base md:text-lg flex-1";
+        messageText.textContent = mensaje;
+
+        // Assemble the content container
+        contentContainer.appendChild(iconContainer);
+        contentContainer.appendChild(messageText);
+
+        // Assemble the alert
+        alertContent.appendChild(closeButton);
+        alertContent.appendChild(contentContainer);
+        alertContainer.appendChild(alertContent);
+        document.body.appendChild(alertContainer);
+
+        // Slide down animation
+        requestAnimationFrame(() => {
+            alertContainer.style.top = "56px";
+        });
+
+        // Add event listeners
+        closeButton.addEventListener("click", () => {
+            hideAlert(alertContainer);
+        });
+
+        // Hide loader if it exists
         loaderOff();
+    }
+
+    function hideAlert(alertContainer) {
+        alertContainer.style.top = "-100px";
+
+        setTimeout(() => {
+            alertContainer.remove();
+        }, 300);
     }
 
     /* CERRAR SESIÓN */
@@ -1771,152 +577,118 @@
             } else {
                 const Arrayusuario = await leerDatos('dosxdos', 'usuario');
                 usuario = Arrayusuario[0];
-                $nombreUsuario.innerHTML = usuario.nombre;
-                if (usuario.imagen != '0') {
-                    $imagenUsuario.src = usuario.imagen;
+
+                // Handle user roles
+                switch (usuario.clase) {
+                    case 'montador':
+                        window.location.href = "https://dosxdos.app.iidos.com/rutas_montador.html";
+                        return;
+                    case 'admon':
+                    case 'oficina':
+                    case 'diseno':
+                    case 'estudio':
+                        // Dynamically create navigation based on user role
+                        createDesktopNavigation(usuario.clase);
+                        // Setup desktop and mobile navigation
+                        setupMenu(usuario.clase);
+
+                        // Setup menu interactions
+                        setupMenuInteractions();
+                        setupUserActions();
+                        setupGlobalMenuClosing();
+
+                        updateUserDisplay();
+
+                        // Update the user information in the new UI elements
+                        const nombreUsuarioDesktop = document.getElementById(
+                            "nombreUsuarioDesktop"
+                        );
+                        const nombreUsuarioMobile = document.getElementById(
+                            "nombreUsuarioMobile"
+                        );
+                        const imagenUsuarioDesktop = document.getElementById(
+                            "imagenUsuarioDesktop"
+                        );
+                        const imagenUsuarioMobile = document.getElementById(
+                            "imagenUsuarioMobile"
+                        );
+
+                        if (nombreUsuarioDesktop)
+                            nombreUsuarioDesktop.textContent = usuario.nombre;
+                        if (nombreUsuarioMobile)
+                            nombreUsuarioMobile.textContent = usuario.nombre;
+
+                        if (usuario.imagen !== "0") {
+                            if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
+                            if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
+                        }
+                        break;
                 }
-                if (usuario.clase == 'admon') {
-                    $horarios.classList.replace('displayOff', 'displayOn');
-                    $archivos.classList.replace('displayOff', 'displayOn');
-                    $pv.classList.replace('displayOff', 'displayOn');
-                    $usuarios.classList.replace('displayOff', 'displayOn');
-                    $rutasIcono.classList.replace('displayOff', 'displayOn');
-                    $lineasIcono.classList.replace('displayOff', 'displayOn');
-                    $icLineasOt.classList.replace('displayOff', 'displayOn');
-                    $dm.classList.replace('displayOff', 'displayOn');
-                    $reciclar.classList.replace('displayOff', 'displayOn');
-                }
-                if (usuario.clase == 'oficina') {
-                    $horarios.classList.replace('displayOff', 'displayOn');
-                    $pv.classList.replace('displayOff', 'displayOn');
-                    const usuariosOficina = document.getElementById('usuariosOficina');
-                    usuariosOficina.classList.replace('displayOff', 'displayOn');
-                    $archivos.classList.replace('displayOff', 'displayOn');
-                    $rutasIcono.classList.replace('displayOff', 'displayOn');
-                    $lineasIcono.classList.replace('displayOff', 'displayOn');
-                    $icLineasOt.classList.replace('displayOff', 'displayOn');
-                }
-                if (usuario.clase == 'diseno') {
-                    $horarios.classList.replace('displayOff', 'displayOn');
-                    $pv.classList.replace('displayOff', 'displayOn');
-                    const usuariosOficina = document.getElementById('usuariosOficina');
-                    usuariosOficina.classList.replace('displayOff', 'displayOn');
-                    $archivos.classList.replace('displayOff', 'displayOn');
-                    $rutasIcono.classList.replace('displayOff', 'displayOn');
-                    $lineasIcono.classList.replace('displayOff', 'displayOn');
-                    $icLineasOt.classList.replace('displayOff', 'displayOn');
-                }
-                if (usuario.clase == 'estudio') {
-                    $horarios.classList.replace('displayOff', 'displayOn');
-                    $pv.classList.replace('displayOff', 'displayOn');
-                    const usuariosOficina = document.getElementById('usuariosOficina');
-                    usuariosOficina.classList.replace('displayOff', 'displayOn');
-                    $archivos.classList.replace('displayOff', 'displayOn');
-                    $rutasIcono.classList.replace('displayOff', 'displayOn');
-                    $lineasIcono.classList.replace('displayOff', 'displayOn');
-                    $icLineasOt.classList.replace('displayOff', 'displayOn');
-                }
-                if (usuario.clase == 'montador') {
-                    window.location.href = "https://dosxdos.app.iidos.com/rutas_montador.html";
-                }
-                const editarUsuario = document.getElementById('editarUsuario');
-                editarUsuario.addEventListener('click', e => {
-                    if (navigator.onLine) {
-                        window.location.href = "https://dosxdos.app.iidos.com/dosxdos.php?modulo=editarUsuario&id=" + usuario.id;
-                    } else {
-                        mensaje = 'No es posible acceder a las opciones de edición de usuario sin conexión a internet';
-                        alerta(mensaje);
-                        scrollToTop();
-                    }
-                })
+
+                // Fetch and populate years
                 const anos = await fetchAnos();
                 if (anos) {
                     const volcar = await volcarDatos(anos);
                     if (volcar) {
                         const contenido = document.getElementById('contenido');
-                        if (contenido.classList.contains('displayOff')) {
-                            contenido.classList.replace('displayOff', 'displayOn');
+                        if (contenido) {
+                            contenido.classList.remove('hidden');
                         }
-                        fixedHeader = 0;
-                        anchoVentana = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-                        if (anchoVentana > 1199) {
-                            fixedHeader = 28;
-                            $(document).ready(function () {
-                                $('#tablaOt').DataTable({
-                                    "searching": false,
-                                    "ordering": false,
-                                    "select": true,
-                                    "paging": true,
-                                    "lengthMenu": [20, 40, 60],
-                                    "fixedHeader": {
-                                        headerOffset: fixedHeader
-                                    },
-                                    "language": {
-                                        url: "data_tables.json",
-                                    }
-                                });
+
+                        // Initialize DataTable with responsive settings
+                        const anchoVentana = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+                        const fixedHeaderOffset = anchoVentana > 1199 ? 28 : (anchoVentana >= 768 ? 24 : 0);
+
+                        $(document).ready(function () {
+                            $('#tablaOt').DataTable({
+                                "searching": false,
+                                "ordering": false,
+                                "select": true,
+                                "paging": true,
+                                "lengthMenu": [20, 40, 60],
+                                "fixedHeader": fixedHeaderOffset ? { headerOffset: fixedHeaderOffset } : false,
+                                "language": {
+                                    url: "data_tables.json",
+                                },
+                                "drawCallback": function () {
+                                    // Apply Tailwind-like styling to DataTable
+                                    $('.dataTables_wrapper').addClass('bg-white rounded-lg shadow-md');
+                                    $('.dataTables_paginate').addClass('flex justify-center space-x-2 mt-4');
+                                }
                             });
-                        } else if (anchoVentana < 1199 && anchoVentana >= 768) {
-                            fixedHeader = 24;
-                            $(document).ready(function () {
-                                $('#tablaOt').DataTable({
-                                    "searching": false,
-                                    "ordering": false,
-                                    "select": true,
-                                    "paging": true,
-                                    "lengthMenu": [20, 40, 60],
-                                    "fixedHeader": {
-                                        headerOffset: fixedHeader
-                                    },
-                                    "language": {
-                                        url: "data_tables.json",
-                                    }
-                                });
-                            });
-                        } else {
-                            $(document).ready(function () {
-                                $('#tablaOt').DataTable({
-                                    "searching": false,
-                                    "ordering": false,
-                                    "select": true,
-                                    "paging": true,
-                                    "lengthMenu": [20, 40, 60],
-                                    "language": {
-                                        url: "data_tables.json",
-                                    }
-                                });
-                            });
-                        }
-                        /*window.addEventListener('resize', () => {
-                            location.reload();
-                        });*/
+                        });
+
+                        // Add click event to table rows
                         document.getElementById('tablaOt').addEventListener('click', event => {
-                            var target = event.target;
+                            const target = event.target;
                             if (target.classList.contains('tdAno')) {
-                                fila = target.closest('tr');
-                                nombreAno = fila.getAttribute('data-ano');
+                                const fila = target.closest('tr');
+                                const nombreAno = fila.getAttribute('data-ano');
                                 localStorage.setItem('anoDeOts', nombreAno);
                                 window.location.href = "https://dosxdos.app.iidos.com/ot2.html";
                             }
                         });
+
+                        const sincronizacionDeNotificaciones =
+                            await sincronizarNotificaciones();
+                        if (sincronizacionDeNotificaciones) {
+                            await notificar();
+                        }
                         loaderOff();
                     } else {
-                        mensaje = 'Error, la función volcarDatos no ha sido exitosa '
-                        alerta(mensaje);
+                        alerta('Error, la función volcarDatos no ha sido exitosa');
                         scrollToTop();
                         loaderOff();
                     }
                 } else {
-                    mensaje = 'Error, la función fetchAnos no ha sido exitosa '
-                    alerta(mensaje);
+                    alerta('Error, la función fetchAnos no ha sido exitosa');
                     scrollToTop();
                     loaderOff();
                 }
             }
         } catch (error) {
-            mensaje = 'ERROR: ' + error.message;
             console.error(error);
-            alerta(mensaje);
+            alerta(`ERROR: ${error.message}`);
             scrollToTop();
         }
     }
@@ -1929,74 +701,62 @@
             } else {
                 const Arrayusuario = await leerDatos('dosxdos', 'usuario');
                 usuario = Arrayusuario[0];
-                $nombreUsuario.innerHTML = usuario.nombre;
-                if (usuario.clase == 'admon') {
-                    $horarios.classList.replace('displayOff', 'displayOn');
-                    $archivos.classList.replace('displayOff', 'displayOn');
-                    $pv.classList.replace('displayOff', 'displayOn');
-                    $usuarios.classList.replace('displayOff', 'displayOn');
-                    $rutasIcono.classList.replace('displayOff', 'displayOn');
-                    $lineasIcono.classList.replace('displayOff', 'displayOn');
-                    $icLineasOt.classList.replace('displayOff', 'displayOn');
-                    $dm.classList.replace('displayOff', 'displayOn');
-                    $reciclar.classList.replace('displayOff', 'displayOn');
+
+                // Update the user information in the new UI elements
+                const nombreUsuarioDesktop = document.getElementById(
+                    "nombreUsuarioDesktop"
+                );
+                const nombreUsuarioMobile = document.getElementById(
+                    "nombreUsuarioMobile"
+                );
+                const imagenUsuarioDesktop = document.getElementById(
+                    "imagenUsuarioDesktop"
+                );
+                const imagenUsuarioMobile = document.getElementById(
+                    "imagenUsuarioMobile"
+                );
+
+                if (nombreUsuarioDesktop)
+                    nombreUsuarioDesktop.textContent = usuario.nombre;
+                if (nombreUsuarioMobile)
+                    nombreUsuarioMobile.textContent = usuario.nombre;
+
+                if (usuario.imagen !== "0") {
+                    if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
+                    if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
                 }
-                if (usuario.clase == 'oficina') {
-                    $horarios.classList.replace('displayOff', 'displayOn');
-                    $pv.classList.replace('displayOff', 'displayOn');
-                    const usuariosOficina = document.getElementById('usuariosOficina');
-                    usuariosOficina.classList.replace('displayOff', 'displayOn');
-                    $archivos.classList.replace('displayOff', 'displayOn');
-                    $rutasIcono.classList.replace('displayOff', 'displayOn');
-                    $lineasIcono.classList.replace('displayOff', 'displayOn');
-                    $icLineasOt.classList.replace('displayOff', 'displayOn');
-                }
-                if (usuario.clase == 'diseno') {
-                    $horarios.classList.replace('displayOff', 'displayOn');
-                    $pv.classList.replace('displayOff', 'displayOn');
-                    const usuariosOficina = document.getElementById('usuariosOficina');
-                    usuariosOficina.classList.replace('displayOff', 'displayOn');
-                    $archivos.classList.replace('displayOff', 'displayOn');
-                    $rutasIcono.classList.replace('displayOff', 'displayOn');
-                    $lineasIcono.classList.replace('displayOff', 'displayOn');
-                    $icLineasOt.classList.replace('displayOff', 'displayOn');
-                }
-                if (usuario.clase == 'estudio') {
-                    $horarios.classList.replace('displayOff', 'displayOn');
-                    $pv.classList.replace('displayOff', 'displayOn');
-                    const usuariosOficina = document.getElementById('usuariosOficina');
-                    usuariosOficina.classList.replace('displayOff', 'displayOn');
-                    $archivos.classList.replace('displayOff', 'displayOn');
-                    $rutasIcono.classList.replace('displayOff', 'displayOn');
-                    $lineasIcono.classList.replace('displayOff', 'displayOn');
-                    $icLineasOt.classList.replace('displayOff', 'displayOn');
-                }
-                if (usuario.clase == 'montador') {
+
+                // Handle montador redirection
+                if (usuario.clase === 'montador') {
                     window.location.href = "https://dosxdos.app.iidos.com/rutas_montador.html";
+                    return;
                 }
-                const editarUsuario = document.getElementById('editarUsuario');
-                editarUsuario.addEventListener('click', e => {
-                    if (navigator.onLine) {
-                        window.location.href = "https://dosxdos.app.iidos.com/dosxdos.php?modulo=editarUsuario&id=" + usuario.id;
-                    } else {
-                        mensaje = 'No es posible acceder a las opciones de edición de usuario sin conexión a internet';
-                        alerta(mensaje);
-                        scrollToTop();
-                    }
-                })
+
+                // Hide content section
                 const contenido = document.getElementById('contenido');
-                if (contenido.classList.contains('displayOn')) {
-                    contenido.classList.replace('displayOn', 'displayOff');
+                if (contenido) {
+                    contenido.classList.add('hidden');
                 }
-                mensaje = 'No es posible acceder a la información del servidor sin conexión a internet';
-                alerta(mensaje);
+
+                // Dynamically create navigation based on user role
+                createDesktopNavigation(usuario.clase);
+                // Setup desktop and mobile navigation
+                setupMenu(usuario.clase);
+
+                // Setup menu interactions
+                setupMenuInteractions();
+                setupUserActions();
+                setupGlobalMenuClosing();
+
+                notificar();
+                // Show offline message
+                alerta('No es posible acceder a la información del servidor sin conexión a internet');
                 scrollToTop();
                 loaderOff();
             }
         } catch (error) {
-            mensaje = 'ERROR: ' + error.message;
             console.error(error);
-            alerta(mensaje);
+            alerta(`ERROR: ${error.message}`);
             scrollToTop();
         }
     }
@@ -2018,8 +778,7 @@
         }
         let mensaje = localStorage.getItem('mensaje');
         if (mensaje && mensaje !== null) {
-            $textoMensaje.innerHTML = mensaje;
-            mensajeOn();
+            alerta(mensaje)
             localStorage.removeItem('mensaje');
         }
     })
@@ -2035,5 +794,7 @@
         console.log('La conexión a Internet se ha perdido.');
     });
 </script>
+<script src="https://dosxdos.app.iidos.com/js/notificaciones.js"></script>
+<script src="https://dosxdos.app.iidos.com/js/loadFirebase.js"></script>
 
 </html>

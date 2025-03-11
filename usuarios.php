@@ -548,3 +548,5 @@ if (!isset($_COOKIE['login'])) {
         });
     });
 </script>
+<script src="https://dosxdos.app.iidos.com/js/notificaciones.js"></script>
+<script src="https://dosxdos.app.iidos.com/js/loadFirebase.js"></script>

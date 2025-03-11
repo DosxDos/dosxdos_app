@@ -555,3 +555,5 @@ if ($idUsuario == $id && $usuarioEditado) {
                 });
             });
         </script>
+        <script src="https://dosxdos.app.iidos.com/js/notificaciones.js"></script>
+        <script src="https://dosxdos.app.iidos.com/js/loadFirebase.js"></script>
