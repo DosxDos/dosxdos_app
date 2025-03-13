@@ -37,7 +37,7 @@ if (!isset($_COOKIE['login'])) {
 
                     <input type="text" id="customSearch"
                         class="shadow w-full h-12 pl-12 pr-4 bg-white/10 border border-white/20 rounded-lg text-lg focus:outline-none focus:ring-2 focus:ring-red-600 transition-all duration-300 ease-in-out text-black placeholder-white/70"
-                        placeholder="Buscar líneas..." />
+                        placeholder="Buscar Usuarios..." />
                 </div>
 
                 <div class="table-container">

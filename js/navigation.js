@@ -35,7 +35,7 @@ function updateUserDisplay() {
 function setupMenu(userRole) {
   // Create desktop navigation dynamically
   createDesktopNavigation(userRole);
-  
+
   // Populate mobile menu based on user role
   populateMobileMenu(userRole);
 }
@@ -783,10 +783,10 @@ function createDesktopNavigation(userRole) {
   // Get desktop navigation container
   const desktopNav = document.querySelector('.xl\\:flex.items-center.space-x-8');
   if (!desktopNav) return;
-  
+
   // Clear existing items
   desktopNav.innerHTML = '';
-  
+
   // Menu configurations based on user role
   const menuConfigs = {
     admon: [
@@ -976,12 +976,12 @@ function createDesktopNavigation(userRole) {
         <polyline points="14 2 14 8 20 8" />
         <path d="M9 15l2 2 4-4" />
       </svg>`,
-      text: "Líneas OT"
-    },
-    {
-      id: "rutasIcono",
-      href: "https://dosxdos.app.iidos.com/rutas.html",
-      icon: `<svg viewBox="0 0 100 100" class="w-6 h-6 mr-2" fill="none" stroke="currentColor"
+        text: "Líneas OT"
+      },
+      {
+        id: "rutasIcono",
+        href: "https://dosxdos.app.iidos.com/rutas.html",
+        icon: `<svg viewBox="0 0 100 100" class="w-6 h-6 mr-2" fill="none" stroke="currentColor"
         xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
         role="img" preserveAspectRatio="xMidYMid meet">
         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -998,12 +998,12 @@ function createDesktopNavigation(userRole) {
             fill="currentColor" stroke="currentColor" fill-rule="evenodd"></path>
         </g>
       </svg>`,
-      text: "Rutas"
-    },
-    {
-      id: "lineasIcono",
-      href: "https://dosxdos.app.iidos.com/lineas.html",
-      icon: `<svg class="w-6 h-6 mr-2" fill="currentColor" stroke="none" viewBox="-3 0 32 32" version="1.1"
+        text: "Rutas"
+      },
+      {
+        id: "lineasIcono",
+        href: "https://dosxdos.app.iidos.com/lineas.html",
+        icon: `<svg class="w-6 h-6 mr-2" fill="currentColor" stroke="none" viewBox="-3 0 32 32" version="1.1"
         xmlns="http://www.w3.org/2000/svg">
         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
         <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -1013,11 +1013,11 @@ function createDesktopNavigation(userRole) {
           </path>
         </g>
       </svg>`,
-      text: "Líneas Ruta"
-    },
-    {
-      id: "gastos",
-      icon: `<svg viewBox="0 0 24 24" class="w-6 h-6 mr-2" fill="currentColor" stroke="none"
+        text: "Líneas Ruta"
+      },
+      {
+        id: "gastos",
+        icon: `<svg viewBox="0 0 24 24" class="w-6 h-6 mr-2" fill="currentColor" stroke="none"
         xmlns="http://www.w3.org/2000/svg">
         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
         <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -1033,24 +1033,24 @@ function createDesktopNavigation(userRole) {
           </path>
         </g>
       </svg>`,
-      text: "Gastos",
-      submenu: [
-        {
-          href: "https://dosxdos.app.iidos.com/gastos_rutas.html",
-          text: "Gastos Rutas"
-        },
-        {
-          href: "",
-          text: "Reportar Gastos (próximamente)"
-        }
-      ]
-    }
-  ],
-  diseno: [
-    {
-      id: "archivos",
-      href: "https://dosxdos.app.iidos.com/ot.html",
-      icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-6 h-6 mr-2"
+        text: "Gastos",
+        submenu: [
+          {
+            href: "https://dosxdos.app.iidos.com/gastos_rutas.html",
+            text: "Gastos Rutas"
+          },
+          {
+            href: "",
+            text: "Reportar Gastos (próximamente)"
+          }
+        ]
+      }
+    ],
+    diseno: [
+      {
+        id: "archivos",
+        href: "https://dosxdos.app.iidos.com/ot.html",
+        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-6 h-6 mr-2"
         xmlns="http://www.w3.org/2000/svg">
         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
         <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -1065,23 +1065,23 @@ function createDesktopNavigation(userRole) {
             stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
         </g>
       </svg>`,
-      text: "OT"
-    },
-    {
-      id: "icLineasOt",
-      href: "https://dosxdos.app.iidos.com/lineas_ot.html",
-      icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none"
+        text: "OT"
+      },
+      {
+        id: "icLineasOt",
+        href: "https://dosxdos.app.iidos.com/lineas_ot.html",
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none"
         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
         <polyline points="14 2 14 8 20 8" />
         <path d="M9 15l2 2 4-4" />
       </svg>`,
-      text: "Líneas OT"
-    },
-    {
-      id: "rutasIcono",
-      href: "https://dosxdos.app.iidos.com/rutas.html",
-      icon: `<svg viewBox="0 0 100 100" class="w-6 h-6 mr-2" fill="none" stroke="currentColor"
+        text: "Líneas OT"
+      },
+      {
+        id: "rutasIcono",
+        href: "https://dosxdos.app.iidos.com/rutas.html",
+        icon: `<svg viewBox="0 0 100 100" class="w-6 h-6 mr-2" fill="none" stroke="currentColor"
         xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
         role="img" preserveAspectRatio="xMidYMid meet">
         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -1098,12 +1098,12 @@ function createDesktopNavigation(userRole) {
             fill="currentColor" stroke="currentColor" fill-rule="evenodd"></path>
         </g>
       </svg>`,
-      text: "Rutas"
-    },
-    {
-      id: "lineasIcono",
-      href: "https://dosxdos.app.iidos.com/lineas.html",
-      icon: `<svg class="w-6 h-6 mr-2" fill="currentColor" stroke="none" viewBox="-3 0 32 32" version="1.1"
+        text: "Rutas"
+      },
+      {
+        id: "lineasIcono",
+        href: "https://dosxdos.app.iidos.com/lineas.html",
+        icon: `<svg class="w-6 h-6 mr-2" fill="currentColor" stroke="none" viewBox="-3 0 32 32" version="1.1"
         xmlns="http://www.w3.org/2000/svg">
         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
         <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -1250,7 +1250,7 @@ function createDesktopNavigation(userRole) {
       {
         id: "rutasMontador",
         href: "https://dosxdos.app.iidos.com/rutas_montador.html",
-        icon:`<svg viewBox="0 0 100 100" class="w-6 h-6 mr-2" fill="none" stroke="currentColor"
+        icon: `<svg viewBox="0 0 100 100" class="w-6 h-6 mr-2" fill="none" stroke="currentColor"
           xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
           role="img" preserveAspectRatio="xMidYMid meet">
           <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -1272,7 +1272,7 @@ function createDesktopNavigation(userRole) {
       {
         id: "lineasMontador",
         href: "https://dosxdos.app.iidos.com/ruta_montador.html",
-        icon:`
+        icon: `
           <svg class="w-6 h-6 mr-2" fill="currentColor" stroke="none" viewBox="-3 0 32 32" version="1.1"
      xmlns="http://www.w3.org/2000/svg">
      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -1294,31 +1294,31 @@ function createDesktopNavigation(userRole) {
     ]
   };
 
- // Get menu items for the current user role
- const menuItems = menuConfigs[userRole] || [];
+  // Get menu items for the current user role
+  const menuItems = menuConfigs[userRole] || [];
 
- // Notifications bell - common for all user roles
- const desktopBell = document.createElement('a');
- desktopBell.href = "https://dosxdos.app.iidos.com/notificaciones.html";
- desktopBell.className = "relative z-10";
- desktopBell.id = "desktopBellContainer";
- desktopBell.innerHTML = `
+  // Notifications bell - common for all user roles
+  const desktopBell = document.createElement('a');
+  desktopBell.href = "https://dosxdos.app.iidos.com/notificaciones.html";
+  desktopBell.className = "relative z-10";
+  desktopBell.id = "desktopBellContainer";
+  desktopBell.innerHTML = `
    <img id="bellDesktop" src="https://dosxdos.app.iidos.com/img/bell2.png" class="w-7 text-gray-900 object-contain" />
    <span id="desktopNotificationCount" class="absolute top-0 -right-2 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] text-center border hidden"></span>
  `;
- 
- // Create desktop menu items
- menuItems.forEach(item => {
-   let element;
-   
-   if (item.submenu) {
-     // Create dropdown menu item
-     element = document.createElement('div');
-     element.id = item.id;
-     element.className = "displayOff relative";
-     
-     // Create dropdown button
-     element.innerHTML = `
+
+  // Create desktop menu items
+  menuItems.forEach(item => {
+    let element;
+
+    if (item.submenu) {
+      // Create dropdown menu item
+      element = document.createElement('div');
+      element.id = item.id;
+      element.className = "displayOff relative";
+
+      // Create dropdown button
+      element.innerHTML = `
        <button
          class="dropdown-toggle flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200"
          data-dropdown="${item.id}Dropdown">
@@ -1337,32 +1337,32 @@ function createDesktopNavigation(userRole) {
          `).join('')}
        </div>
      `;
-   } else {
-     // Create regular menu item
-     element = document.createElement('div');
-     element.id = item.id;
-     element.className = "displayOff";
-     
-     element.innerHTML = `
+    } else {
+      // Create regular menu item
+      element = document.createElement('div');
+      element.id = item.id;
+      element.className = "displayOff";
+
+      element.innerHTML = `
        <a href="${item.href}"
          class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
          ${item.icon}
          <span>${item.text}</span>
        </a>
      `;
-   }
-   
-   // Add to desktop nav
-   desktopNav.appendChild(element);
- });
- 
- // Add notification bell
- desktopNav.appendChild(desktopBell);
- 
- // Add user menu section - common for all user roles
- const userMenu = document.createElement('div');
- userMenu.className = "relative group drop-shadow";
- userMenu.innerHTML = `
+    }
+
+    // Add to desktop nav
+    desktopNav.appendChild(element);
+  });
+
+  // Add notification bell
+  desktopNav.appendChild(desktopBell);
+
+  // Add user menu section - common for all user roles
+  const userMenu = document.createElement('div');
+  userMenu.className = "relative group drop-shadow";
+  userMenu.innerHTML = `
    <button id="userMenuButton"
      class="group flex items-center gap-3 py-1 pl-1.5 pr-4 rounded-full bg-white border border-gray-200 shadow-sm hover:shadow-md hover:border-gray-300 transition-all duration-200"
      aria-expanded="false">
@@ -1410,15 +1410,15 @@ function createDesktopNavigation(userRole) {
      </button>
    </div>
  `;
- 
- // Add user menu to desktop nav
- desktopNav.appendChild(userMenu);
- 
- // Show menu items based on user role
- menuItems.forEach(item => {
-   const menuItem = document.getElementById(item.id);
-   if (menuItem) {
-     menuItem.classList.remove('displayOff');
-   }
- });
+
+  // Add user menu to desktop nav
+  desktopNav.appendChild(userMenu);
+
+  // Show menu items based on user role
+  menuItems.forEach(item => {
+    const menuItem = document.getElementById(item.id);
+    if (menuItem) {
+      menuItem.classList.remove('displayOff');
+    }
+  });
 }

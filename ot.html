@@ -90,6 +90,7 @@
         padding: 0.25rem 2rem 0.25rem 0.5rem;
         border: 1px solid #d1d5db;
         border-radius: 0.25rem;
+        width: 70px;
         background-position: right 0.5rem center;
     }
 </style>
@@ -472,13 +473,6 @@
         }, 300);
     }
 
-    /* CERRAR SESIÓN */
-
-    function eliminarCookie(nombre) {
-        const tiempoExpiracion = 1; // Segundo 1 de la Época Unix
-        document.cookie = `${nombre}=; expires=${new Date(tiempoExpiracion * 1000).toUTCString()}; path=/;`;
-    }
-
     function convertirFecha(fecha) {
         // Separar la fecha y la hora
         const [fechaParte, horaParte] = fecha.split(' ');
@@ -629,46 +623,46 @@
     }
 
     async function volcarDatos(anos) {
-    return new Promise(async (resolve, reject) => {
-        const fragmento = document.createDocumentFragment();
-        const promises = anos.map(ano => {
-            const fila = document.createElement('tr');
-            fila.className = 'transition-colors duration-200';
-            fila.setAttribute('data-ano', ano);
-            
-            const tdAno = document.createElement('td');
-            // Center the text and add proper padding
-            tdAno.className = 'tdAno text-center py-4';
-            
-            // Sanitize the text
-            const temporalDiv = document.createElement("div");
-            temporalDiv.innerHTML = ano.replace(/\\/g, '');
-            const textoConvertido = temporalDiv.textContent || temporalDiv.innerText;
-            tdAno.textContent = textoConvertido;
-            
-            fila.appendChild(tdAno);
-            fragmento.appendChild(fila);
+        return new Promise(async (resolve, reject) => {
+            const fragmento = document.createDocumentFragment();
+            const promises = anos.map(ano => {
+                const fila = document.createElement('tr');
+                fila.className = 'transition-colors duration-200';
+                fila.setAttribute('data-ano', ano);
+
+                const tdAno = document.createElement('td');
+                // Center the text and add proper padding
+                tdAno.className = 'tdAno text-center py-4';
+
+                // Sanitize the text
+                const temporalDiv = document.createElement("div");
+                temporalDiv.innerHTML = ano.replace(/\\/g, '');
+                const textoConvertido = temporalDiv.textContent || temporalDiv.innerText;
+                tdAno.textContent = textoConvertido;
+
+                fila.appendChild(tdAno);
+                fragmento.appendChild(fila);
+            });
+
+            await Promise.all(promises);
+
+            // Add "TODOS" option
+            const filaTodos = document.createElement('tr');
+            filaTodos.className = 'transition-colors duration-200 font-medium';
+            filaTodos.setAttribute('data-ano', 1);
+
+            const tdTodos = document.createElement('td');
+            tdTodos.className = 'tdAno text-center py-4';
+            tdTodos.textContent = 'TODOS';
+
+            filaTodos.appendChild(tdTodos);
+            fragmento.appendChild(filaTodos);
+
+            const cuerpo = document.getElementById('cuerpoTablaOt');
+            cuerpo.appendChild(fragmento);
+            resolve(true);
         });
-        
-        await Promise.all(promises);
-        
-        // Add "TODOS" option
-        const filaTodos = document.createElement('tr');
-        filaTodos.className = 'transition-colors duration-200 font-medium';
-        filaTodos.setAttribute('data-ano', 1);
-        
-        const tdTodos = document.createElement('td');
-        tdTodos.className = 'tdAno text-center py-4';
-        tdTodos.textContent = 'TODOS';
-        
-        filaTodos.appendChild(tdTodos);
-        fragmento.appendChild(filaTodos);
-        
-        const cuerpo = document.getElementById('cuerpoTablaOt');
-        cuerpo.appendChild(fragmento);
-        resolve(true);
-    });
-}
+    }
 
     // Function to generate page buttons with smart truncation
     function generatePageButtons(currentPage, totalPages) {
