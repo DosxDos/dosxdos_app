@@ -185,16 +185,16 @@ function populateMobileMenu(userRole) {
         <path d="M3 22v-6h6" />
         <path d="M21 12a9 9 0 0 1-15 6.7L3 16" />
       `),
-        submenu: [
-          {
-            href: "#",
-            text: "Sinc. OT Navision"
-          },
-          {
-            href: "https://dosxdos.app.iidos.com/apirest/sincronizador2.php",
-            text: "Sinc. Total OT Navision"
-          }
-        ]
+        // submenu: [
+        //   {
+        //     href: "#",
+        //     text: "Sinc. OT Navision"
+        //   },
+        //   {
+        //     href: "https://dosxdos.app.iidos.com/apirest/sincronizador2.php",
+        //     text: "Sinc. Total OT Navision"
+        //   }
+        // ]
       }
     ],
     oficina: [
@@ -934,16 +934,16 @@ function createDesktopNavigation(userRole) {
           <path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path>
         </svg>`,
         text: "Sincronización",
-        submenu: [
-          {
-            href: "#",
-            text: "Sinc. OT Navision"
-          },
-          {
-            href: "https://dosxdos.app.iidos.com/apirest/sincronizador2.php",
-            text: "Sinc. Total OT Navision"
-          }
-        ]
+      //   submenu: [
+      //     {
+      //       href: "#",
+      //       text: "Sinc. OT Navision"
+      //     },
+      //     {
+      //       href: "https://dosxdos.app.iidos.com/apirest/sincronizador2.php",
+      //       text: "Sinc. Total OT Navision"
+      //     }
+      //   ]
       }
     ],
     oficina: [

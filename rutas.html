@@ -424,56 +424,56 @@
     }
 
     function startBuscador() {
-    const botones = document.querySelectorAll("#rutas button");
-    const valorBusqueda = buscador.value.toLowerCase().trim();
-    
-    // If no search term, show all buttons
-    if (valorBusqueda === '') {
+        const botones = document.querySelectorAll("#rutas button");
+        const valorBusqueda = buscador.value.toLowerCase().trim();
+
+        // If no search term, show all buttons
+        if (valorBusqueda === '') {
+            botones.forEach((boton) => {
+                boton.style.display = "flex"; // Show all buttons
+                // Reset any highlighting
+                const span = boton.querySelector("span");
+                span.textContent = span.textContent; // Reset any HTML
+            });
+            return;
+        }
+
+        // Filter buttons based on search term
+        let hasResults = false;
+
         botones.forEach((boton) => {
-            boton.style.display = "flex"; // Show all buttons
-            // Reset any highlighting
             const span = boton.querySelector("span");
-            span.textContent = span.textContent; // Reset any HTML
+            const textoOriginal = span.textContent;
+            const textoBoton = textoOriginal.toLowerCase();
+
+            if (textoBoton.includes(valorBusqueda)) {
+                // Show buttons that match
+                boton.style.display = "flex";
+                hasResults = true;
+
+                // Add highlighting
+                const regex = new RegExp(`(${valorBusqueda.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi");
+                span.innerHTML = textoOriginal.replace(regex, '<span class="bg-yellow-200 text-red-800 font-bold">$1</span>');
+            } else {
+                // Hide buttons that don't match
+                boton.style.display = "none";
+            }
         });
-        return;
-    }
-    
-    // Filter buttons based on search term
-    let hasResults = false;
-    
-    botones.forEach((boton) => {
-        const span = boton.querySelector("span");
-        const textoOriginal = span.textContent;
-        const textoBoton = textoOriginal.toLowerCase();
-        
-        if (textoBoton.includes(valorBusqueda)) {
-            // Show buttons that match
-            boton.style.display = "flex";
-            hasResults = true;
-            
-            // Add highlighting
-            const regex = new RegExp(`(${valorBusqueda.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi");
-            span.innerHTML = textoOriginal.replace(regex, '<span class="bg-yellow-200 text-red-800 font-bold">$1</span>');
-        } else {
-            // Hide buttons that don't match
-            boton.style.display = "none";
+
+        // Optionally show a "no results" message
+        const noResultsElem = document.getElementById("noResultsMessage");
+        if (!hasResults) {
+            if (!noResultsElem) {
+                const message = document.createElement("p");
+                message.id = "noResultsMessage";
+                message.className = "text-center text-gray-600 mt-4";
+                message.textContent = "No se encontraron rutas que coincidan con su búsqueda.";
+                document.getElementById("rutas").after(message);
+            }
+        } else if (noResultsElem) {
+            noResultsElem.remove();
         }
-    });
-    
-    // Optionally show a "no results" message
-    const noResultsElem = document.getElementById("noResultsMessage");
-    if (!hasResults) {
-        if (!noResultsElem) {
-            const message = document.createElement("p");
-            message.id = "noResultsMessage";
-            message.className = "text-center text-gray-600 mt-4";
-            message.textContent = "No se encontraron rutas que coincidan con su búsqueda.";
-            document.getElementById("rutas").after(message);
-        }
-    } else if (noResultsElem) {
-        noResultsElem.remove();
     }
-}
 
     /* INICIAR APP ONLINE */
 
@@ -528,6 +528,9 @@
                     cod: objeto['No.'],
                     nombre: objeto['Descripcion']
                 }));
+
+                rutas.sort((a, b) => a.nombre.localeCompare(b.nombre));
+
                 const fragmento = document.createDocumentFragment();
                 rutas.forEach((objeto, index) => {
                     const button = document.createElement("button");
@@ -636,7 +639,7 @@
             loaderOff();
         }
     }
-    
+
     /* TAREAS EN LA INTERMITENCIA DE LA CONEXIÓN */
 
     window.addEventListener('online', () => {

@@ -195,6 +195,7 @@ if (!isset($_COOKIE['login'])) {
         </div>
     </div>
 </div>
+<script src="https://dosxdos.app.iidos.com/js/navigation.js"></script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
