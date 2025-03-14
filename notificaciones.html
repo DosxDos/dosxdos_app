@@ -1227,36 +1227,13 @@
 
       updateUserDisplay();
 
-      // Update UI with user details
-      const imagenUsuarioDesktop = document.getElementById(
-        "imagenUsuarioDesktop"
-      );
-      const imagenUsuarioMobile = document.getElementById(
-        "imagenUsuarioMobile"
-      );
+      const nombreUsuarioDesktop = document.getElementById('nombreUsuarioDesktop');
+      const nombreUsuarioMobile = document.getElementById('nombreUsuarioMobile');
+      const imagenUsuarioDesktop = document.getElementById('imagenUsuarioDesktop');
+      const imagenUsuarioMobile = document.getElementById('imagenUsuarioMobile');
 
-      const nombreUsuarioDesktop = document.getElementById(
-        "nombreUsuarioDesktop"
-      );
-      const nombreUsuarioMobile = document.getElementById(
-        "nombreUsuarioMobile"
-      );
-
-      if (usuario && usuario.nombre) {
-        if (nombreUsuarioDesktop) {
-          nombreUsuarioDesktop.textContent = usuario.nombre;
-        } else {
-          console.error("Desktop element not found");
-        }
-
-        if (nombreUsuarioMobile) {
-          nombreUsuarioMobile.textContent = usuario.nombre;
-        } else {
-          console.error("Mobile element not found");
-        }
-      } else {
-        console.error("⚠️ No se pudo cargar el nombre del usuario.");
-      }
+      if (nombreUsuarioDesktop) nombreUsuarioDesktop.textContent = usuario.nombre;
+      if (nombreUsuarioMobile) nombreUsuarioMobile.textContent = usuario.nombre;
 
       if (usuario.imagen !== "0") {
         if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
@@ -1295,8 +1272,13 @@
         const pendientesContainer = document.getElementById("contenidoPendientes");
         const aceptadasContainer = document.getElementById("contenidoAceptadas");
 
-        pendientesContainer.innerHTML = "";
-        aceptadasContainer.innerHTML = "";
+        if (pendientes.length) {
+          pendientesContainer.innerHTML = "";
+        }
+
+        if (aceptadas.length) {
+          aceptadasContainer.innerHTML = "";
+        }
 
         pendientes.forEach(objeto => {
           const element = createNotificationElement(objeto);
