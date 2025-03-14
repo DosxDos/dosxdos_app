@@ -190,6 +190,63 @@
         table.fixedHeader-floating thead th {
             text-align: center !important;
         }
+
+        @keyframes spin-slow {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spin-reverse-fast {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(-720deg);
+            }
+        }
+
+        .animate-spin-slow {
+            animation: spin-slow 5s linear infinite;
+        }
+
+        .animate-spin-reverse-fast {
+            animation: spin-reverse-fast 5s linear infinite;
+        }
+
+        @keyframes dot-flash {
+            0% {
+                opacity: 0;
+            }
+
+            33% {
+                opacity: 1;
+            }
+
+            66% {
+                opacity: 0;
+            }
+        }
+
+        .dot-animation:nth-child(1) {
+            animation: dot-flash 1.5s infinite;
+            animation-delay: 0s;
+        }
+
+        .dot-animation:nth-child(2) {
+            animation: dot-flash 1.5s infinite;
+            animation-delay: 0.2s;
+        }
+
+        .dot-animation:nth-child(3) {
+            animation: dot-flash 1.5s infinite;
+            animation-delay: 0.4s;
+        }
     </style>
 </head>
 
@@ -395,15 +452,30 @@
         </section>
 
         <!-- can be removed later when page is ready to code -->
-        <section class="w-full h-full flex flex-col items-center justify-center">
-            <div class="flex flex-col items-center justify-center space-y-6 p-8">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-32 h-32 text-red-600" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor" stroke-width="1.5">
+        <section class="w-full h-full flex flex-col items-center justify-center bg-gray-100">
+            <div class="relative flex flex-col items-center justify-center space-y-4 p-8">
+                <!-- Large Gear -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-24 h-24 text-red-600 animate-spin-slow" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
-                <h1 class="text-4xl font-bold text-gray-800 tracking-wide">En Desarrollo ...</h1>
+
+                <!-- Small Gear - Positioned Properly and Rotating Opposite -->
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="absolute top-8 left-20 w-12 h-12 text-red-600 animate-spin-reverse-fast" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+
+                <!-- Text with Animated Dots -->
+                <h1 class="text-4xl font-bold text-gray-800 tracking-wide">
+                    En Desarrollo<span class="dot-animation">.</span><span class="dot-animation">.</span><span
+                        class="dot-animation">.</span>
+                </h1>
             </div>
         </section>
 
