@@ -3073,9 +3073,14 @@
 
         function cargarDatoTexto(id, valor) {
             const elemento = document.getElementById(id);
-            temporalDiv = document.createElement("div");
+            if (!elemento) {
+                console.warn(`Element with ID "${id}" not found. Cannot set text.`);
+                return; // Exit the function if the element doesn't exist
+            }
+
+            const temporalDiv = document.createElement("div");
             temporalDiv.innerHTML = valor;
-            textoConvertido = temporalDiv.textContent || temporalDiv.innerText;
+            const textoConvertido = temporalDiv.textContent || temporalDiv.innerText;
             elemento.innerHTML = textoConvertido;
         }
 
@@ -3119,210 +3124,197 @@
         });
 
         function createLineDataModal(objeto) {
-            // Modal backdrop
-            const modalBackdrop = document.createElement('div');
-            modalBackdrop.className = 'fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4';
+    // Modal backdrop
+    const modalBackdrop = document.createElement('div');
+    modalBackdrop.className = 'fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4';
 
-            // Modal container - increase max height and add better overflow handling
-            const modalContainer = document.createElement('div');
-            modalContainer.className = 'bg-white rounded-xl shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] flex flex-col overflow-hidden';
+    // Modal container - increase max height and add better overflow handling
+    const modalContainer = document.createElement('div');
+    modalContainer.className = 'bg-white rounded-xl shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] flex flex-col overflow-hidden';
 
-            // Modal header
-            const modalHeader = document.createElement('div');
-            modalHeader.className = 'text-white p-4 rounded-t-xl flex justify-between items-center sticky top-0 z-10';
-            modalHeader.style.backgroundImage = "url('https://dosxdos.app.iidos.com/img/texture-red.svg')";
-            modalHeader.style.backgroundSize = "contain";
-            modalHeader.style.backgroundPosition = "center";
+    // Modal header
+    const modalHeader = document.createElement('div');
+    modalHeader.className = 'text-white p-4 rounded-t-xl flex justify-between items-center sticky top-0 z-10';
+    modalHeader.style.backgroundImage = "url('https://dosxdos.app.iidos.com/img/texture-red.svg')";
+    modalHeader.style.backgroundSize = "contain";
+    modalHeader.style.backgroundPosition = "center";
 
-            const modalTitle = document.createElement('h2');
-            modalTitle.className = 'text-xl font-bold pr-4';
-            modalTitle.textContent = objeto.NombrePuntoVenta || objeto.pvNombre || "Datos de la Línea";
+    const modalTitle = document.createElement('h2');
+    modalTitle.className = 'text-xl font-bold pr-4';
+    modalTitle.textContent = objeto.NombrePuntoVenta || objeto.pvNombre || "Datos de la Línea";
 
-            const closeButton = document.createElement('button');
-            closeButton.className = 'text-white hover:text-gray-200';
-            closeButton.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-    `;
+    const closeButton = document.createElement('button');
+    closeButton.className = 'text-white hover:text-gray-200';
+    closeButton.innerHTML = `
+<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+</svg>
+`;
 
-            modalHeader.appendChild(modalTitle);
-            modalHeader.appendChild(closeButton);
+    modalHeader.appendChild(modalTitle);
+    modalHeader.appendChild(closeButton);
 
-            // Modal body - better scroll handling
-            const modalBody = document.createElement('div');
-            modalBody.className = 'p-4 space-y-4 overflow-y-auto flex-grow custom-scrollbar';
-            modalBody.style.maxHeight = 'calc(90vh - 130px)'; // Adjusted for more space
+    // Modal body - better scroll handling
+    const modalBody = document.createElement('div');
+    modalBody.className = 'p-4 space-y-4 overflow-y-auto flex-grow custom-scrollbar';
+    modalBody.style.maxHeight = 'calc(90vh - 130px)'; // Adjusted for more space
 
-            // Group properties by category for better organization
-            const categories = {
-                'Información General': ['Cliente', 'NombreCliente', 'nombreCliente', 'LineaActividad', 'lineaOt', 'Estado'],
-                'Detalles OT': ['OT', 'ot', 'TipoOT', 'tipoOt', 'DescripcionOT', 'descripcionOt', 'ObservacionesTecnico', 'observacionesTecnico'],
-                'Ubicación': ['PuntoVenta', 'puntoDeVenta', 'NombrePuntoVenta', 'puntoDeVenta2', 'DireccionPuntoVenta', 'direccion', 'Sector', 'sector', 'Zona', 'zona'],
-                'Especificaciones': ['Poner', 'poner', 'Quitar', 'quitar', 'Alto', 'alto', 'Ancho', 'ancho', 'TipoTrabajo', 'tipoDeTrabajo', 'Firma', 'firma']
-            };
+    // Group properties by category for better organization
+    const categories = {
+        'Información General': ['Cliente', 'NombreCliente', 'nombreCliente', 'LineaActividad', 'lineaOt', 'Estado'],
+        'Detalles OT': ['OT', 'ot', 'TipoOT', 'tipoOt', 'DescripcionOT', 'descripcionOt', 'ObservacionesTecnico', 'observacionesTecnico'],
+        'Ubicación': ['PuntoVenta', 'puntoDeVenta', 'NombrePuntoVenta', 'puntoDeVenta2', 'DireccionPuntoVenta', 'direccion', 'Sector', 'sector', 'Zona', 'zona'],
+        'Especificaciones': ['Poner', 'poner', 'Quitar', 'quitar', 'Alto', 'alto', 'Ancho', 'ancho', 'TipoTrabajo', 'tipoDeTrabajo', 'Firma', 'firma']
+    };
 
-            // Define property name mapping for better display
-            const propertyNames = {
-                'LineaActividad': 'Línea',
-                'lineaOt': 'Línea',
-                'NombreCliente': 'Cliente',
-                'nombreCliente': 'Cliente',
-                'PuntoVenta': 'Punto de Venta',
-                'puntoDeVenta': 'Punto de Venta',
-                'NombrePuntoVenta': 'Nombre del Punto de Venta',
-                'puntoDeVenta2': 'Nombre del Punto de Venta',
-                'DireccionPuntoVenta': 'Dirección',
-                'direccion': 'Dirección',
-                'TipoTrabajo': 'Tipo de Trabajo',
-                'tipoDeTrabajo': 'Tipo de Trabajo',
-                'DescripcionOT': 'Descripción de OT',
-                'descripcionOt': 'Descripción de OT',
-                'ObservacionesTecnico': 'Observaciones del Técnico',
-                'observacionesTecnico': 'Observaciones del Técnico'
-            };
+    // Define property name mapping for better display
+    const propertyNames = {
+        'LineaActividad': 'Línea',
+        'lineaOt': 'Línea',
+        'NombreCliente': 'Cliente',
+        'nombreCliente': 'Cliente',
+        'PuntoVenta': 'Punto de Venta',
+        'puntoDeVenta': 'Punto de Venta',
+        'NombrePuntoVenta': 'Nombre del Punto de Venta',
+        'puntoDeVenta2': 'Nombre del Punto de Venta',
+        'DireccionPuntoVenta': 'Dirección',
+        'direccion': 'Dirección',
+        'TipoTrabajo': 'Tipo de Trabajo',
+        'tipoDeTrabajo': 'Tipo de Trabajo',
+        'DescripcionOT': 'Descripción de OT',
+        'descripcionOt': 'Descripción de OT',
+        'ObservacionesTecnico': 'Observaciones del Técnico',
+        'observacionesTecnico': 'Observaciones del Técnico'
+    };
 
-            // Process each category
-            for (const [category, properties] of Object.entries(categories)) {
-                const categoryContainer = document.createElement('div');
-                categoryContainer.className = 'mb-6';
+    // Process each category - FIXED LOOP STRUCTURE
+    for (const [category, properties] of Object.entries(categories)) {
+        const categoryContainer = document.createElement('div');
+        categoryContainer.className = 'mb-6';
 
-                const categoryTitle = document.createElement('h3');
-                categoryTitle.className = 'text-lg font-bold text-gray-800 mb-3 border-b pb-2 border-gray-300';
-                categoryTitle.textContent = category;
-                categoryContainer.appendChild(categoryTitle);
+        const categoryTitle = document.createElement('h3');
+        categoryTitle.className = 'text-lg font-bold text-gray-800 mb-3 border-b pb-2 border-gray-300';
+        categoryTitle.textContent = category;
+        categoryContainer.appendChild(categoryTitle);
 
-                let hasData = false;
+        let hasData = false;
 
-                // Process properties in this category
-                for (const [category, properties] of Object.entries(categories)) {
-                    const categoryContainer = document.createElement('div');
-                    categoryContainer.className = 'mb-6';
+        // Process properties in this category
+        for (const prop of properties) {
+            const value = objeto[prop];
+            if (value && value !== 'null' && value !== '0') {
+                hasData = true;
 
-                    const categoryTitle = document.createElement('h3');
-                    categoryTitle.className = 'text-lg font-bold text-gray-800 mb-3 border-b pb-2 border-gray-300';
-                    categoryTitle.textContent = category;
-                    categoryContainer.appendChild(categoryTitle);
+                const infoRow = document.createElement('div');
+                infoRow.className = 'flex justify-between items-start gap-4 py-2 px-4 bg-gray-100 border border-gray-200 rounded-lg mb-2';
 
-                    let hasData = false;
+                const label = document.createElement('div');
+                label.className = 'text-gray-700 text-sm font-semibold';
+                label.textContent = propertyNames[prop] || prop.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
 
-                    // Process properties in this category
-                    for (const prop of properties) {
-                        const value = objeto[prop];
-                        if (value && value !== 'null' && value !== '0') {
-                            hasData = true;
+                const valueElement = document.createElement('div');
+                valueElement.className = 'text-gray-900 font-medium text-sm text-right break-words';
+                valueElement.style.maxWidth = '60%';
+                valueElement.textContent = value;
 
-                            const infoRow = document.createElement('div');
-                            infoRow.className = 'flex justify-between items-start gap-4 py-2 px-4 bg-gray-100 border border-gray-200 rounded-lg mb-2';
-
-                            const label = document.createElement('div');
-                            label.className = 'text-gray-700 text-sm font-semibold';
-                            label.textContent = propertyNames[prop] || prop.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
-
-                            const valueElement = document.createElement('div');
-                            valueElement.className = 'text-gray-900 font-medium text-sm text-right break-words';
-                            valueElement.style.maxWidth = '60%';
-                            valueElement.textContent = value;
-
-                            infoRow.appendChild(label);
-                            infoRow.appendChild(valueElement);
-                            categoryContainer.appendChild(infoRow);
-                        }
-                    }
-
-                    // Only add category if it contains data
-                    if (hasData) {
-                        modalBody.appendChild(categoryContainer);
-                    }
-                }
+                infoRow.appendChild(label);
+                infoRow.appendChild(valueElement);
+                categoryContainer.appendChild(infoRow);
             }
-
-            // Special section for any remaining data that wasn't categorized
-            const otherProps = [];
-            for (const key in objeto) {
-                let isCategorized = false;
-                for (const category of Object.values(categories)) {
-                    if (category.includes(key)) {
-                        isCategorized = true;
-                        break;
-                    }
-                }
-
-                if (!isCategorized && objeto[key] && objeto[key] !== 'null' && objeto[key] !== '0') {
-                    otherProps.push(key);
-                }
-            }
-
-            if (otherProps.length > 0) {
-                const otherContainer = document.createElement('div');
-                otherContainer.className = 'mb-6';
-
-                const otherTitle = document.createElement('h3');
-                otherTitle.className = 'text-lg font-bold text-gray-800 mb-3 border-b pb-2 border-gray-300';
-                otherTitle.textContent = 'Otros Datos';
-                otherContainer.appendChild(otherTitle);
-
-                for (const prop of otherProps) {
-                    const infoRow = document.createElement('div');
-                    infoRow.className = 'flex justify-between items-start gap-4 py-2 px-4 bg-gray-100 border border-gray-200 rounded-lg mb-2';
-
-                    const label = document.createElement('div');
-                    label.className = 'text-gray-700 text-sm font-semibold';
-                    label.textContent = prop
-                        .replace(/([A-Z])/g, ' $1')
-                        .replace(/^./, str => str.toUpperCase());
-
-                    const value = document.createElement('div');
-                    value.className = 'text-gray-900 font-medium text-sm text-right break-words';
-                    value.style.maxWidth = '60%';
-                    value.textContent = objeto[prop];
-
-                    infoRow.appendChild(label);
-                    infoRow.appendChild(value);
-                    otherContainer.appendChild(infoRow);
-                }
-
-                modalBody.appendChild(otherContainer);
-            }
-
-            // Modal footer
-            const modalFooter = document.createElement('div');
-            modalFooter.className = 'bg-gray-100 p-4 rounded-b-xl flex justify-end items-center gap-4 sticky bottom-0';
-
-            const closeFooterButton = document.createElement('button');
-            closeFooterButton.className = 'bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-8 rounded-lg';
-            closeFooterButton.textContent = 'Cerrar';
-
-            modalFooter.appendChild(closeFooterButton);
-
-            // Assemble modal
-            modalContainer.appendChild(modalHeader);
-            modalContainer.appendChild(modalBody);
-            modalContainer.appendChild(modalFooter);
-            modalBackdrop.appendChild(modalContainer);
-            document.body.appendChild(modalBackdrop);
-
-            // Close events
-            closeButton.addEventListener('click', () => {
-                document.body.removeChild(modalBackdrop);
-                document.body.style.overflow = '';
-            });
-
-            closeFooterButton.addEventListener('click', () => {
-                document.body.removeChild(modalBackdrop);
-                document.body.style.overflow = '';
-            });
-
-            modalBackdrop.addEventListener('click', (e) => {
-                if (e.target === modalBackdrop) {
-                    document.body.removeChild(modalBackdrop);
-                    document.body.style.overflow = '';
-                }
-            });
-
-            // Prevent page scrolling while modal is open
-            document.body.style.overflow = 'hidden';
         }
+
+        // Only add category if it contains data
+        if (hasData) {
+            modalBody.appendChild(categoryContainer);
+        }
+    }
+
+    // Special section for any remaining data that wasn't categorized
+    const otherProps = [];
+    for (const key in objeto) {
+        let isCategorized = false;
+        for (const category of Object.values(categories)) {
+            if (category.includes(key)) {
+                isCategorized = true;
+                break;
+            }
+        }
+
+        if (!isCategorized && objeto[key] && objeto[key] !== 'null' && objeto[key] !== '0') {
+            otherProps.push(key);
+        }
+    }
+
+    if (otherProps.length > 0) {
+        const otherContainer = document.createElement('div');
+        otherContainer.className = 'mb-6';
+
+        const otherTitle = document.createElement('h3');
+        otherTitle.className = 'text-lg font-bold text-gray-800 mb-3 border-b pb-2 border-gray-300';
+        otherTitle.textContent = 'Otros Datos';
+        otherContainer.appendChild(otherTitle);
+
+        for (const prop of otherProps) {
+            const infoRow = document.createElement('div');
+            infoRow.className = 'flex justify-between items-start gap-4 py-2 px-4 bg-gray-100 border border-gray-200 rounded-lg mb-2';
+
+            const label = document.createElement('div');
+            label.className = 'text-gray-700 text-sm font-semibold';
+            label.textContent = prop
+                .replace(/([A-Z])/g, ' $1')
+                .replace(/^./, str => str.toUpperCase());
+
+            const value = document.createElement('div');
+            value.className = 'text-gray-900 font-medium text-sm text-right break-words';
+            value.style.maxWidth = '60%';
+            value.textContent = objeto[prop];
+
+            infoRow.appendChild(label);
+            infoRow.appendChild(value);
+            otherContainer.appendChild(infoRow);
+        }
+
+        modalBody.appendChild(otherContainer);
+    }
+
+    // Modal footer
+    const modalFooter = document.createElement('div');
+    modalFooter.className = 'bg-gray-100 p-4 rounded-b-xl flex justify-end items-center gap-4 sticky bottom-0';
+
+    const closeFooterButton = document.createElement('button');
+    closeFooterButton.className = 'bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-8 rounded-lg';
+    closeFooterButton.textContent = 'Cerrar';
+
+    modalFooter.appendChild(closeFooterButton);
+
+    // Assemble modal
+    modalContainer.appendChild(modalHeader);
+    modalContainer.appendChild(modalBody);
+    modalContainer.appendChild(modalFooter);
+    modalBackdrop.appendChild(modalContainer);
+    document.body.appendChild(modalBackdrop);
+
+    // Close events
+    closeButton.addEventListener('click', () => {
+        document.body.removeChild(modalBackdrop);
+        document.body.style.overflow = '';
+    });
+
+    closeFooterButton.addEventListener('click', () => {
+        document.body.removeChild(modalBackdrop);
+        document.body.style.overflow = '';
+    });
+
+    modalBackdrop.addEventListener('click', (e) => {
+        if (e.target === modalBackdrop) {
+            document.body.removeChild(modalBackdrop);
+            document.body.style.overflow = '';
+        }
+    });
+
+    // Prevent page scrolling while modal is open
+    document.body.style.overflow = 'hidden';
+} 
 
         function optimizeMediaLoading(containerId) {
             const container = document.getElementById(containerId);
