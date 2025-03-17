@@ -256,7 +256,7 @@ if ((isset($_REQUEST["crearUsuario"]))) {
         </div>
     </div>
 </section>
-
+<script src="https://dosxdos.app.iidos.com/js/navigation.js"></script>
 <script>
     titulo1 = <?php echo ("'" . $nombre . '_' . 'CREAR USUARIO' . "'") ?>;
     titulo2 = 'CREAR USUARIO';

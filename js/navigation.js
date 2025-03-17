@@ -1,5 +1,3 @@
-console.log("reading naviagtion.js -----")
-
 function updateUserDisplay() {
   if (usuario) {
     // Desktop user
@@ -883,7 +881,8 @@ function createDesktopNavigation(userRole) {
             text: "Gastos Rutas"
           },
           {
-            href: "",
+            href: "javascript:void(0)",
+            class: "text-gray-200 cursor-not-allowed hover:text-gray-200",
             text: "Reportar Gastos (próximamente)"
           }
         ]
@@ -908,7 +907,7 @@ function createDesktopNavigation(userRole) {
           },
           {
             href: "https://dosxdos.app.iidos.com/firmas_clientes.html",
-            text: "Restricciones Firmas"
+            text: "Restricciones Firmas",
           }
         ]
       },
@@ -926,7 +925,7 @@ function createDesktopNavigation(userRole) {
       },
       {
         id: "sincronizacion",
-        icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none"
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2 text-gray-400" viewBox="0 0 24 24" fill="none"
           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 2v6h-6"></path>
           <path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path>
@@ -934,16 +933,18 @@ function createDesktopNavigation(userRole) {
           <path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path>
         </svg>`,
         text: "Sincronización",
-      //   submenu: [
-      //     {
-      //       href: "#",
-      //       text: "Sinc. OT Navision"
-      //     },
-      //     {
-      //       href: "https://dosxdos.app.iidos.com/apirest/sincronizador2.php",
-      //       text: "Sinc. Total OT Navision"
-      //     }
-      //   ]
+        href: "javascript:void(0)",
+        class: "text-gray-200 cursor-not-allowed hover:text-gray-200"
+        //   submenu: [
+        //     {
+        //       href: "#",
+        //       text: "Sinc. OT Navision"
+        //     },
+        //     {
+        //       href: "https://dosxdos.app.iidos.com/apirest/sincronizador2.php",
+        //       text: "Sinc. Total OT Navision"
+        //     }
+        //   ]
       }
     ],
     oficina: [
@@ -1320,7 +1321,7 @@ function createDesktopNavigation(userRole) {
       // Create dropdown button
       element.innerHTML = `
        <button
-         class="dropdown-toggle flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200"
+         class="dropdown-toggle flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200 ${item.class}"
          data-dropdown="${item.id}Dropdown">
          ${item.icon}
          <span>${item.text}</span>
@@ -1331,7 +1332,7 @@ function createDesktopNavigation(userRole) {
        </button>
        <div id="${item.id}Dropdown" class="desktop-dropdown w-auto">
          ${item.submenu.map(subItem => `
-           <a href="${subItem.href}" class="text-sm text-gray-700 hover:bg-red-600 hover:text-white">
+           <a href="${subItem.href}" class="text-sm text-gray-700 hover:bg-red-600 hover:text-white ${subItem.class}">
              ${subItem.text}
            </a>
          `).join('')}

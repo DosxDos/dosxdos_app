@@ -495,6 +495,7 @@ if ($idUsuario == $id && $usuarioEditado) {
                 </div>
             </div>
         </div>
+        <script src="https://dosxdos.app.iidos.com/js/navigation.js"></script>
         <script>
             actualizarUsuario = false;
             /* CAMBIO DE IMAGEN */
