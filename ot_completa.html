@@ -1336,45 +1336,45 @@
     }
 
     function obtenerConfirmacion() {
-            return new Promise((resolve, reject) => {
-                const confirmationModal = document.getElementById('confirmationModal');
-                const confirmAction = document.getElementById('confirmAction');
-                const cancelConfirmation = document.getElementById('cancelConfirmation');
-                const closeConfirmationModal = document.getElementById('closeConfirmationModal');
+        return new Promise((resolve, reject) => {
+            const confirmationModal = document.getElementById('confirmationModal');
+            const confirmAction = document.getElementById('confirmAction');
+            const cancelConfirmation = document.getElementById('cancelConfirmation');
+            const closeConfirmationModal = document.getElementById('closeConfirmationModal');
 
-                confirmationModal.classList.remove('hidden');
+            confirmationModal.classList.remove('hidden');
 
-                function onConfirm() {
-                    confirmationModal.classList.add('hidden');
-                    cleanup();
-                    resolve(true);
+            function onConfirm() {
+                confirmationModal.classList.add('hidden');
+                cleanup();
+                resolve(true);
+            }
+
+            function onCancel() {
+                confirmationModal.classList.add('hidden');
+                cleanup();
+                resolve(false);
+            }
+
+            function onBackdropClick(e) {
+                if (e.target === confirmationModal) {
+                    onCancel();
                 }
+            }
 
-                function onCancel() {
-                    confirmationModal.classList.add('hidden');
-                    cleanup();
-                    resolve(false);
-                }
+            function cleanup() {
+                confirmAction.removeEventListener('click', onConfirm);
+                cancelConfirmation.removeEventListener('click', onCancel);
+                closeConfirmationModal.removeEventListener('click', onCancel);
+                confirmationModal.removeEventListener('click', onBackdropClick);
+            }
 
-                function onBackdropClick(e) {
-                    if (e.target === confirmationModal) {
-                        onCancel();
-                    }
-                }
-
-                function cleanup() {
-                    confirmAction.removeEventListener('click', onConfirm);
-                    cancelConfirmation.removeEventListener('click', onCancel);
-                    closeConfirmationModal.removeEventListener('click', onCancel);
-                    confirmationModal.removeEventListener('click', onBackdropClick);
-                }
-
-                confirmAction.addEventListener('click', onConfirm);
-                cancelConfirmation.addEventListener('click', onCancel);
-                closeConfirmationModal.addEventListener('click', onCancel);
-                confirmationModal.addEventListener('click', onBackdropClick);
-            });
-        }
+            confirmAction.addEventListener('click', onConfirm);
+            cancelConfirmation.addEventListener('click', onCancel);
+            closeConfirmationModal.addEventListener('click', onCancel);
+            confirmationModal.addEventListener('click', onBackdropClick);
+        });
+    }
 
     function eliminarFoto(jsonDelete) {
         return new Promise((resolve, reject) => {
@@ -1945,53 +1945,53 @@
 
                                     // Delete button event
                                     deleteBtn.addEventListener('click', async () => {
-                                            const confirmed = await obtenerConfirmacion();
-                                            if (confirmed) {
-                                                // Call API to delete the photo
-                                                const json = {
-                                                    ot: currentObj.ot,
-                                                    id: currentObj.id,
-                                                    usuarioElimina: usuario.id,
-                                                    tipo: 'foto'
-                                                };
+                                        const confirmed = await obtenerConfirmacion();
+                                        if (confirmed) {
+                                            // Call API to delete the photo
+                                            const json = {
+                                                ot: currentObj.ot,
+                                                id: currentObj.id,
+                                                usuarioElimina: usuario.id,
+                                                tipo: 'foto'
+                                            };
 
-                                                fetch("https://dosxdos.app.iidos.com/apirest/fotos.php", {
-                                                    method: "DELETE",
-                                                    headers: {
-                                                        "Content-type": "application/json; charset=utf-8"
-                                                    },
-                                                    body: JSON.stringify(json)
-                                                })
-                                                    .then(res => res.json())
-                                                    .then(result => {
-                                                        if (result[0]) {
-                                                            // Remove from array
-                                                            vectorDeFotos.splice(currentIndex, 1);
+                                            fetch("https://dosxdos.app.iidos.com/apirest/fotos.php", {
+                                                method: "DELETE",
+                                                headers: {
+                                                    "Content-type": "application/json; charset=utf-8"
+                                                },
+                                                body: JSON.stringify(json)
+                                            })
+                                                .then(res => res.json())
+                                                .then(result => {
+                                                    if (result[0]) {
+                                                        // Remove from array
+                                                        vectorDeFotos.splice(currentIndex, 1);
 
-                                                            // If no more photos, show message
-                                                            if (vectorDeFotos.length === 0) {
-                                                                photosContainer.innerHTML = '<p class="text-center p-4">No hay fotos disponibles</p>';
-                                                                return;
-                                                            }
-
-                                                            // Update current index if needed
-                                                            if (currentIndex >= vectorDeFotos.length) {
-                                                                currentIndex = vectorDeFotos.length - 1;
-                                                            }
-
-                                                            // Update gallery
-                                                            createThumbnails();
-                                                            updateMainImage(currentIndex);
-                                                        } else {
-                                                            alerta('Error al eliminar la foto', 'error');
+                                                        // If no more photos, show message
+                                                        if (vectorDeFotos.length === 0) {
+                                                            photosContainer.innerHTML = '<p class="text-center p-4">No hay fotos disponibles</p>';
+                                                            return;
                                                         }
-                                                    })
-                                                    .catch(err => {
-                                                        console.error('Error al eliminar:', err);
-                                                        alerta('Error al eliminar la foto: ' + err.message, 'error');
-                                                    });
-                                            }
-                                        });
+
+                                                        // Update current index if needed
+                                                        if (currentIndex >= vectorDeFotos.length) {
+                                                            currentIndex = vectorDeFotos.length - 1;
+                                                        }
+
+                                                        // Update gallery
+                                                        createThumbnails();
+                                                        updateMainImage(currentIndex);
+                                                    } else {
+                                                        alerta('Error al eliminar la foto', 'error');
+                                                    }
+                                                })
+                                                .catch(err => {
+                                                    console.error('Error al eliminar:', err);
+                                                    alerta('Error al eliminar la foto: ' + err.message, 'error');
+                                                });
+                                        }
+                                    });
 
                                     // Create approve button with improved UI
                                     const approveBtn = document.createElement('button');
@@ -2289,6 +2289,27 @@
                                 // Clear previous content
                                 galleryActionsButtons.innerHTML = '';
 
+                                // Create download button 
+                                const downloadBtn = document.createElement('button');
+                                downloadBtn.className = 'action-btn bg-gray-100 hover:bg-gray-200';
+                                downloadBtn.title = 'Descargar';
+                                downloadBtn.innerHTML = `
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                        <polyline points="7 10 12 15 17 10"></polyline>
+                                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                                    </svg>
+                                `;
+
+                                // Download button event
+                                downloadBtn.addEventListener('click', () => {
+                                    const link = document.createElement('a');
+                                    link.href = currentObj.link;
+                                    link.download = currentObj.nombre;
+                                    link.click();
+                                });
+
+
                                 // Create delete button
                                 const deleteBtn = document.createElement('button');
                                 deleteBtn.className = 'action-btn ml-2 bg-gray-100 hover:bg-gray-200';
@@ -2404,6 +2425,8 @@
                                 });
 
                                 // Add all elements
+                                galleryActionsButtons.appendChild(downloadBtn);
+                                
                                 galleryActionsButtons.appendChild(deleteBtn);
                                 galleryActionsButtons.appendChild(approveBtn);
                                 galleryActionsButtons.appendChild(approvalInfo);

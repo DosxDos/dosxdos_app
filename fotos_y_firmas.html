@@ -844,7 +844,7 @@
                                         <polyline points="10 9 9 9 8 9"></polyline>
                                     </svg>
                                 </button>
-                                <span class="text-xs mt-1">OT</span>
+                                <span class="text-xs mt-1">Ver OT Completa</span>
                             </div>
                         </nav>
                     </div>
@@ -856,7 +856,7 @@
                         <div class="flex items-center space-x-3 hover:scale-110 pt-4 md:pt-0 -ml-6 md:ml-0">
                             <input type="checkbox" id="checkOt"
                                 class="w-5 h-5 text-red-600 border-gray-300 rounded focus:ring-red-500 focus:ring-offset-0">
-                            <label for="checkOt" class="text-base font-medium text-gray-800">Aprobar OT</label>
+                            <label for="checkOt" class="text-base font-medium text-gray-800">Aprobar Línea</label>
                         </div>
                         <div class="flex flex-col items-center">
                             <p id="estadoCheckOt" class="font-medium text-gray-800"></p>
@@ -1693,7 +1693,7 @@
 
         function traerFotos() {
             return new Promise((resolve, reject) => {
-                url = 'https://dosxdos.app.iidos.com/apirest/fotos.php?otCompleta=1&' + 'ot=' + ot;
+                url = 'https://dosxdos.app.iidos.com/apirest/fotos.php?ruta=' + rutaArchivos + '&linea=' + lineaArchivos + '&ot=' + otArchivos + '&lineaOt=' + lineaActividadArchivos;
                 fetch(url)
                     .then((res) => (res.ok ? res.json() : reject(new Error(`Error en el servidor de la api intermedia al intentar consultar las fotos de la línea`))))
                     .then(async (res) => {
@@ -2095,7 +2095,7 @@
 
         function traerFirmas() {
             return new Promise((resolve, reject) => {
-                url = 'https://dosxdos.app.iidos.com/apirest/firmas.php?otCompleta=1&' + 'ot=' + ot;
+                url = 'https://dosxdos.app.iidos.com/apirest/firmas.php?ruta=' + rutaArchivos + '&linea=' + lineaArchivos + '&ot=' + otArchivos + '&lineaOt=' + lineaActividadArchivos;
                 fetch(url)
                     .then((res) => (res.ok ? res.json() : reject(new Error(`Error consultando firmas`))))
                     .then((res) => {
@@ -2469,7 +2469,7 @@
 
         function traerCarpetas() {
             return new Promise((resolve, reject) => {
-                url = 'https://dosxdos.app.iidos.com/apirest/carpetas.php?otCompleta=1&' + 'ot=' + ot;
+                url = 'https://dosxdos.app.iidos.com/apirest/carpetas.php?ruta=' + rutaArchivos + '&linea=' + lineaArchivos + '&ot=' + otArchivos + '&lineaOt=' + lineaActividadArchivos;
                 fetch(url)
                     .then((res) => (res.ok ? res.json() : reject(new Error(`Error en el servidor de la api intermedia al intentar consultar las carpetas de la línea`))))
                     .then((res) => {
@@ -3722,40 +3722,9 @@
                     const crearCarpetaBtn = document.getElementById('crearCarpetaBoton');
                     if (crearCarpetaBtn) {
                         crearCarpetaBtn.addEventListener('click', async e => {
-                            // Use otCompleta behavior to include all approved photos
-                            const json = {};
-                            json.otCompleta = 1;
-                            json.ot = otArchivos;
-                            json.usuario = usuario.id;
-                            const jsonCarpeta = JSON.stringify(json);
-
-                            try {
-                                // Show loading indicator
-                                loaderOn();
-
-                                // Create the folder
-                                const upCarpeta = await subirCarpeta(jsonCarpeta);
-
-                                if (upCarpeta) {
-                                    // Clear the container
-                                    const container = document.getElementById('carpetasContainer');
-                                    container.innerHTML = '';
-
-                                    // Fetch and display the updated carpetas
-                                    const carpetasActuales = await traerCarpetas();
-
-                                    // Show success message
-                                    alerta('Carpeta creada exitosamente con todas las fotos aprobadas', 'success');
-                                } else {
-                                    alerta('Error al crear la carpeta', 'error');
-                                }
-
-                                loaderOff();
-                            } catch (error) {
-                                console.error(error);
-                                alerta('Error: ' + error.message, 'error');
-                                loaderOff();
-                            }
+                            procesarCarpeta(rutaArchivos, lineaArchivos, otArchivos, lineaActividadArchivos, lineaData.Cliente, lineaData.NombreCliente, lineaData.PuntoVenta, lineaData.NombrePuntoVenta, usuario.id);
+                           
+                            
                         });
                     }
 
