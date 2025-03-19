@@ -1337,8 +1337,9 @@
     }
 
     function sanarNombre(nombre) {
-        const escapedText = nombre.replace(/['\\/",]/, '');
-        return escapedText;
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = nombre;
+        return tempDiv.textContent || tempDiv.innerText;
     }
 
     async function procesarCarpeta(otJ, usuarioJ) {
@@ -1923,7 +1924,7 @@
             const imagenUsuarioMobile = document.getElementById('imagenUsuarioMobile');
             const titulo = document.getElementById('titulo');
 
-            if (nombreUsuarioDesktop) nombreUsuarioDesktop.textContent = usuario.nombre;
+            if (nombreUsuarioDesktop) nombreUsuarioDesktop.textContent = sanarNombre(usuario.nombre);
             if (nombreUsuarioMobile) nombreUsuarioMobile.textContent = usuario.nombre;
 
             if (usuario.imagen !== "0") {
@@ -1958,19 +1959,19 @@
                 if (usuarioCliente) {
                     // Update page title and header
                     const pageTitle = usuarioCliente.apellido
-                        ? `${usuarioCliente.nombre} ${usuarioCliente.apellido} - RESTRICCIÓN DE TIPOS DE OT - ${usuarioCliente.nombreCliente}`
-                        : `${usuarioCliente.nombre} - RESTRICCIÓN DE TIPOS DE OT - ${usuarioCliente.nombreCliente}`;
+                        ? `${sanarNombre(usuarioCliente.nombre)} ${sanarNombre(usuarioCliente.apellido)} - RESTRICCIÓN DE TIPOS DE OT - ${sanarNombre(usuarioCliente.nombreCliente)}`
+                        : `${sanarNombre(usuarioCliente.nombre)} - RESTRICCIÓN DE TIPOS DE OT - ${sanarNombre(usuarioCliente.nombreCliente)}`;
 
                     document.title = pageTitle;
                     if (titulo) titulo.textContent = pageTitle;
 
                     // Update user details
                     const elementsToUpdate = {
-                        'tdUsuarioNombre': usuarioCliente.nombre,
-                        'tdUsuarioApellido': usuarioCliente.apellido,
-                        'tdUsuarioNombreCliente': usuarioCliente.nombreCliente,
+                        'tdUsuarioNombre': sanarNombre(usuarioCliente.nombre),
+                        'tdUsuarioApellido': sanarNombre(usuarioCliente.apellido),
+                        'tdUsuarioNombreCliente': sanarNombre(usuarioCliente.nombreCliente),
                         'tdUsuarioCodCliente': usuarioCliente.cod,
-                        'tdUsuario': usuarioCliente.usuario,
+                        'tdUsuario': sanarNombre(usuarioCliente.usuario),
                         'tdCorreo': usuarioCliente.correo,
                         'tdMovil': usuarioCliente.movil
                     };
@@ -2037,12 +2038,12 @@
                 }
 
                 // Setup navigation
-                    createDesktopNavigation(usuario.clase);
-                    setupMenu(usuario.clase);
-                    setupMenuInteractions();
-                    setupUserActions();
-                    setupGlobalMenuClosing();
-                    updateUserDisplay();
+                createDesktopNavigation(usuario.clase);
+                setupMenu(usuario.clase);
+                setupMenuInteractions();
+                setupUserActions();
+                setupGlobalMenuClosing();
+                updateUserDisplay();
 
                 // Setup back button
                 document.getElementById('volverBoton').addEventListener('click', () => {

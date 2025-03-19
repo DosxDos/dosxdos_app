@@ -597,7 +597,7 @@
     </style>
 </head>
 
-<body id="body" class="bg-gray-100 overflow-x-hidden min-h-screen">
+<body id="body" class="relative bg-gray-100 overflow-x-hidden min-h-screen">
     <!-- Loader -->
     <div id="loader" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center">
         <span class="loader"></span>
@@ -963,8 +963,8 @@
     <!-- Image Modal for Zoom -->
     <div id="image-modal" class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden">
         <div class="absolute top-4 right-4">
-            <button id="close-modal" class="p-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-all">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
+            <button id="close-modal" class="p-1 bg-red-600 text-white rounded-full hover:bg-red-700 transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
@@ -972,12 +972,6 @@
         </div>
         <div class="h-full w-full flex items-center justify-center">
             <img id="modal-image" class="max-h-full max-w-full object-contain cursor-zoom-in" src="" alt="Zoomed image">
-        </div>
-
-        <!-- Zoom instructions -->
-        <div
-            class="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-60 text-white px-4 py-2 rounded-full text-sm">
-            Rueda del ratón o doble clic para zoom • Arrastrar para mover
         </div>
     </div>
 
@@ -2426,7 +2420,7 @@
 
                                 // Add all elements
                                 galleryActionsButtons.appendChild(downloadBtn);
-                                
+
                                 galleryActionsButtons.appendChild(deleteBtn);
                                 galleryActionsButtons.appendChild(approveBtn);
                                 galleryActionsButtons.appendChild(approvalInfo);
@@ -3922,6 +3916,319 @@
         }, 5000);
     });
 
+    const imageModal = document.getElementById('image-modal');
+    if (imageModal) {
+        // Remove the existing modal
+        imageModal.remove();
+
+        // Create the new advanced modal
+        const newImageModal = document.createElement('div');
+        newImageModal.id = 'image-modal';
+        newImageModal.className = 'fixed inset-0 bg-black bg-opacity-90 z-50 hidden flex items-center justify-center';
+        newImageModal.innerHTML = `
+        <div class="w-full h-full max-w-6xl mx-auto flex flex-col items-center justify-center p-4">
+            <!-- Close Button -->
+            <button id="close-modal" class="absolute top-6 right-6 z-10 text-white p-1 rounded-full bg-red-600 transition-colors hover:bg-red-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+
+            <!-- Media Container -->
+            <div class="w-full h-full flex items-center justify-center">
+                <img id="modal-image" class="max-h-full max-w-full object-contain cursor-zoom-in" src="" alt="Zoomed image">
+            </div>
+   
+        </div>
+    `;
+
+        // Add to document
+        document.body.appendChild(newImageModal);
+
+        // Add this script to implement advanced zoom functionality
+        const zoomScript = document.createElement('script');
+        zoomScript.textContent = `
+        // Add zoom and pan functionality to the modal image
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('image-modal');
+            const modalImage = document.getElementById('modal-image');
+            const closeModal = document.getElementById('close-modal');
+            
+            if (!modal || !modalImage || !closeModal) return;
+            
+            // Initialize variables for zoom and pan
+            let scale = 1;
+            let translateX = 0;
+            let translateY = 0;
+            let startX = 0;
+            let startY = 0;
+            let isDragging = false;
+            let lastTouchTime = 0;
+            
+            // Reset zoom and position
+            function resetZoom() {
+                scale = 1;
+                translateX = 0;
+                translateY = 0;
+                modalImage.style.transform = \`scale(\${scale}) translate(\${translateX}px, \${translateY}px)\`;
+            }
+            
+            // Apply transform with boundaries
+            function applyTransform() {
+                // Ensure the image stays centered when not zoomed
+                if (scale <= 1) {
+                    scale = 1;
+                    translateX = 0;
+                    translateY = 0;
+                } else {
+                    // Constrain translation to prevent the image from leaving the viewport
+                    const maxTranslateX = (modalImage.offsetWidth * (scale - 1)) / 2;
+                    const maxTranslateY = (modalImage.offsetHeight * (scale - 1)) / 2;
+                    
+                    translateX = Math.max(-maxTranslateX, Math.min(maxTranslateX, translateX));
+                    translateY = Math.max(-maxTranslateY, Math.min(maxTranslateY, translateY));
+                }
+                
+                modalImage.style.transform = \`scale(\${scale}) translate(\${translateX / scale}px, \${translateY / scale}px)\`;
+            }
+            
+            // Mouse wheel zoom
+            modalImage.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                const delta = e.deltaY > 0 ? -0.2 : 0.2;
+                const prevScale = scale;
+                scale = Math.max(1, Math.min(5, scale + delta));
+                
+                // If scale has changed
+                if (prevScale !== scale) {
+                    // Calculate mouse position relative to the center of the image
+                    const rect = modalImage.getBoundingClientRect();
+                    const x = e.clientX - rect.left - rect.width / 2;
+                    const y = e.clientY - rect.top - rect.height / 2;
+                    
+                    // Adjust translation to zoom toward cursor position
+                    if (scale > 1) {
+                        translateX += x * (delta / prevScale);
+                        translateY += y * (delta / prevScale);
+                    }
+                }
+                
+                applyTransform();
+            }, { passive: false });
+            
+            // Mouse drag
+            modalImage.addEventListener('mousedown', (e) => {
+                if (scale > 1) {
+                    e.preventDefault();
+                    startX = e.clientX - translateX;
+                    startY = e.clientY - translateY;
+                    isDragging = true;
+                    modalImage.style.cursor = 'grabbing';
+                }
+            });
+            
+            modalImage.addEventListener('mousemove', (e) => {
+                if (isDragging && scale > 1) {
+                    e.preventDefault();
+                    translateX = e.clientX - startX;
+                    translateY = e.clientY - startY;
+                    applyTransform();
+                }
+            });
+            
+            modalImage.addEventListener('mouseup', () => {
+                isDragging = false;
+                modalImage.style.cursor = 'zoom-in';
+            });
+            
+            modalImage.addEventListener('mouseleave', () => {
+                isDragging = false;
+                modalImage.style.cursor = 'zoom-in';
+            });
+            
+            // Touch pinch zoom and pan
+            let initialTouchDistance = 0;
+            let initialScale = 1;
+            
+            modalImage.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 2) {
+                    // Two-finger pinch zoom
+                    e.preventDefault();
+                    initialTouchDistance = Math.hypot(
+                        e.touches[1].clientX - e.touches[0].clientX,
+                        e.touches[1].clientY - e.touches[0].clientY
+                    );
+                    initialScale = scale;
+                } else if (e.touches.length === 1) {
+                    // Single touch for panning when zoomed
+                    if (scale > 1) {
+                        startX = e.touches[0].clientX - translateX;
+                        startY = e.touches[0].clientY - translateY;
+                        isDragging = true;
+                    }
+                    
+                    // Check for double tap
+                    const now = new Date().getTime();
+                    const timeDiff = now - lastTouchTime;
+                    if (timeDiff < 300) {
+                        // Double tap detected
+                        if (scale === 1) {
+                            scale = 2; // Zoom in to 2x on double tap
+                        } else {
+                            resetZoom(); // Reset zoom on second double tap
+                        }
+                        applyTransform();
+                    }
+                    lastTouchTime = now;
+                }
+            }, { passive: false });
+            
+            modalImage.addEventListener('touchmove', (e) => {
+                if (e.touches.length === 2) {
+                    e.preventDefault(); // Prevents browser zooming
+                    
+                    // Calculate current touch distance
+                    const currentDistance = Math.hypot(
+                        e.touches[1].clientX - e.touches[0].clientX,
+                        e.touches[1].clientY - e.touches[0].clientY
+                    );
+                    
+                    // Calculate new scale based on touch distance ratio
+                    const newScale = initialScale * (currentDistance / initialTouchDistance);
+                    scale = Math.max(1, Math.min(5, newScale));
+                    
+                    applyTransform();
+                } else if (e.touches.length === 1 && isDragging && scale > 1) {
+                    e.preventDefault();
+                    // Pan when zoomed
+                    translateX = e.touches[0].clientX - startX;
+                    translateY = e.touches[0].clientY - startY;
+                    applyTransform();
+                }
+            }, { passive: false });
+            
+            modalImage.addEventListener('touchend', (e) => {
+                // Keep the current scale and translation - just update isDragging
+                if (e.touches.length === 0) {
+                    isDragging = false;
+                }
+            });
+            
+            // Add double-click for desktop reset/zoom
+            modalImage.addEventListener('dblclick', (e) => {
+                e.preventDefault();
+                if (scale === 1) {
+                    // Calculate position to zoom in on
+                    const rect = modalImage.getBoundingClientRect();
+                    const x = e.clientX - rect.left - rect.width / 2;
+                    const y = e.clientY - rect.top - rect.height / 2;
+                    
+                    // Set new scale and position
+                    scale = 2.5;
+                    translateX = -x;
+                    translateY = -y;
+                } else {
+                    resetZoom();
+                }
+                applyTransform();
+            });
+            
+            // Reset transform when modal is opened
+            function imageModalReset() {
+                resetZoom();
+            }
+            
+            // Handle closing the modal
+            function handleCloseModal() {
+                resetZoom();
+                modal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+            
+            // Close button event listener
+            closeModal.addEventListener('click', (e) => {
+                e.stopPropagation();
+                handleCloseModal();
+            });
+            
+            // Close on background click
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    handleCloseModal();
+                }
+            });
+            
+            // Close on escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                    handleCloseModal();
+                }
+            });
+            
+            // Find all gallery images and add click listeners to open the modal
+            document.querySelectorAll('.gallery-image-container img, .gallery-thumbnail img').forEach(img => {
+                img.addEventListener('click', (e) => {
+                    const modal = document.getElementById('image-modal');
+                    const modalImage = document.getElementById('modal-image');
+                    
+                    if (modal && modalImage) {
+                        modalImage.src = e.target.src;
+                        modal.classList.remove('hidden');
+                        document.body.style.overflow = 'hidden';
+                        imageModalReset();
+                    }
+                });
+            });
+        });
+    `;
+
+        document.body.appendChild(zoomScript);
+
+        // Add another script to ensure the modal functionality is initialized whenever new content is added
+        const observerScript = document.createElement('script');
+        observerScript.textContent = `
+        // Function to observe DOM changes and re-attach modal functionality to new images
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create MutationObserver to detect when new gallery items are added
+            const galleryContainers = ['photosContainer', 'firmasContainer', 'carpetasContainer'];
+            
+            galleryContainers.forEach(containerId => {
+                const container = document.getElementById(containerId);
+                if (!container) return;
+                
+                const observer = new MutationObserver(mutations => {
+                    // When gallery content changes, find new images and add modal functionality
+                    const newImages = container.querySelectorAll('.gallery-image-container img:not([data-modal-enabled]), .gallery-thumbnail img:not([data-modal-enabled])');
+                    
+                    newImages.forEach(img => {
+                        img.setAttribute('data-modal-enabled', 'true');
+                        img.addEventListener('click', (e) => {
+                            const modal = document.getElementById('image-modal');
+                            const modalImage = document.getElementById('modal-image');
+                            
+                            if (modal && modalImage) {
+                                modalImage.src = e.target.src;
+                                modal.classList.remove('hidden');
+                                document.body.style.overflow = 'hidden';
+                                
+                                // Reset transform
+                                modalImage.style.transform = 'scale(1) translate(0px, 0px)';
+                            }
+                        });
+                    });
+                });
+                
+                // Start observing
+                observer.observe(container, { 
+                    childList: true,
+                    subtree: true
+                });
+            });
+        });
+    `;
+
+        document.body.appendChild(observerScript);
+    }
 </script>
 <script src="https://dosxdos.app.iidos.com/js/notificaciones.js"></script>
 <script src="https://dosxdos.app.iidos.com/js/loadFirebase.js"></script>

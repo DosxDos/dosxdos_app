@@ -581,7 +581,7 @@
     </style>
 </head>
 
-<body id="body" class="bg-gray-100 overflow-x-hidden min-h-screen">
+<body id="body" class="relative bg-gray-100 overflow-x-hidden min-h-screen">
     <!-- Loader -->
     <div id="loader" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center">
         <span class="loader"></span>
@@ -817,7 +817,7 @@
                                 <span class="text-xs mt-1">Crear Carpeta</span>
                             </div>
 
-                            <div id="subirArchivos" class="displayOff flex flex-col items-center">
+                            <!-- <div id="subirArchivos" class="displayOff flex flex-col items-center">
                                 <button id="subirArchivosBoton"
                                     class="p-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24"
@@ -829,7 +829,7 @@
                                     </svg>
                                 </button>
                                 <span class="text-xs mt-1">Subir</span>
-                            </div>
+                            </div> -->
 
                             <div id="otCompleta" class="flex flex-col items-center">
                                 <button id="otCompletaBoton"
@@ -959,8 +959,8 @@
     <!-- Image Modal for Zoom -->
     <div id="image-modal" class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden">
         <div class="absolute top-4 right-4">
-            <button id="close-modal" class="p-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-all">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
+            <button id="close-modal" class="p-1 bg-red-600 text-white rounded-full hover:bg-red-700 transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
@@ -968,12 +968,6 @@
         </div>
         <div class="h-full w-full flex items-center justify-center">
             <img id="modal-image" class="max-h-full max-w-full object-contain cursor-zoom-in" src="" alt="Zoomed image">
-        </div>
-
-        <!-- Zoom instructions -->
-        <div
-            class="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-60 text-white px-4 py-2 rounded-full text-sm">
-            Rueda del ratón o doble clic para zoom • Arrastrar para mover
         </div>
     </div>
 
@@ -1381,23 +1375,261 @@
             });
         }
 
-
-        document.addEventListener('DOMContentLoaded', function () {
-            const imageModal = document.getElementById('image-modal');
-            const closeModalBtn = document.getElementById('close-modal');
-
-            if (closeModalBtn && imageModal) {
-                closeModalBtn.addEventListener('click', function () {
-                    imageModal.classList.add('hidden');
-                });
-
-                imageModal.addEventListener('click', function (e) {
-                    if (e.target === imageModal) {
-                        imageModal.classList.add('hidden');
-                    }
-                });
+        function resetZoom() {
+            const modalImage = document.getElementById('modal-image');
+            if (modalImage) {
+                modalImage.style.transform = 'scale(1) translate(0px, 0px)';
             }
+        }
+
+
+        // Replace the current image modal HTML with this advanced version
+        const imageModal = document.getElementById('image-modal');
+        if (imageModal) {
+            // Remove the existing modal
+            imageModal.remove();
+
+            // Create the new advanced modal
+            const newImageModal = document.createElement('div');
+            newImageModal.id = 'image-modal';
+            newImageModal.className = 'fixed inset-0 bg-black bg-opacity-90 z-50 hidden flex items-center justify-center';
+            newImageModal.innerHTML = `
+        <div class=" w-full h-full max-w-6xl mx-auto flex flex-col items-center justify-center p-4">
+            <!-- Close Button -->
+            <button id="close-modal" class="absolute top-6 right-6 z-10 text-white p-1 rounded-full bg-red-600 transition-colors hover:bg-red-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+
+            <!-- Media Container -->
+            <div class="w-full h-full flex items-center justify-center">
+                <img id="modal-image" class="max-h-full max-w-full object-contain cursor-zoom-in" src="" alt="Zoomed image">
+            </div>
+        </div>
+    `;
+
+            // Add to document
+            document.body.appendChild(newImageModal);
+
+            // Add the event listener for the close button
+            document.getElementById('close-modal').addEventListener('click', function () {
+                newImageModal.classList.add('hidden');
+                document.body.style.overflow = '';
+                resetZoom();
+            });
+
+            // Close on backdrop click
+            newImageModal.addEventListener('click', function (e) {
+                if (e.target === newImageModal) {
+                    newImageModal.classList.add('hidden');
+                    document.body.style.overflow = '';
+                    resetZoom();
+                }
+            });
+
+            // Add zoom functionality script
+            const zoomScript = document.createElement('script');
+            zoomScript.textContent = `
+        // Add zoom and pan functionality to the modal image
+        document.addEventListener('DOMContentLoaded', function() {
+            const modalImage = document.getElementById('modal-image');
+            if (!modalImage) return;
+            
+            let scale = 1;
+            let translateX = 0;
+            let translateY = 0;
+            let startX = 0;
+            let startY = 0;
+            let isDragging = false;
+            let lastTouchTime = 0;
+            
+            // Reset zoom
+            function resetZoom() {
+                scale = 1;
+                translateX = 0;
+                translateY = 0;
+                modalImage.style.transform = \`scale(\${scale}) translate(\${translateX}px, \${translateY}px)\`;
+            }
+            
+            // Apply transform with boundaries
+            function applyTransform() {
+                // Ensure the image stays centered when not zoomed
+                if (scale <= 1) {
+                    scale = 1;
+                    translateX = 0;
+                    translateY = 0;
+                } else {
+                    // Constrain translation to prevent the image from leaving the viewport
+                    const maxTranslateX = (modalImage.offsetWidth * (scale - 1)) / 2;
+                    const maxTranslateY = (modalImage.offsetHeight * (scale - 1)) / 2;
+                    
+                    translateX = Math.max(-maxTranslateX, Math.min(maxTranslateX, translateX));
+                    translateY = Math.max(-maxTranslateY, Math.min(maxTranslateY, translateY));
+                }
+                
+                modalImage.style.transform = \`scale(\${scale}) translate(\${translateX / scale}px, \${translateY / scale}px)\`;
+            }
+            
+            // Mouse wheel zoom
+            modalImage.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                const delta = e.deltaY > 0 ? -0.2 : 0.2;
+                const prevScale = scale;
+                scale = Math.max(1, Math.min(5, scale + delta));
+                
+                // If scale has changed
+                if (prevScale !== scale) {
+                    // Calculate mouse position relative to the center of the image
+                    const rect = modalImage.getBoundingClientRect();
+                    const x = e.clientX - rect.left - rect.width / 2;
+                    const y = e.clientY - rect.top - rect.height / 2;
+                    
+                    // Adjust translation to zoom toward cursor position
+                    if (scale > 1) {
+                        translateX += x * (delta / prevScale);
+                        translateY += y * (delta / prevScale);
+                    }
+                }
+                
+                applyTransform();
+            }, { passive: false });
+            
+            // Mouse drag
+            modalImage.addEventListener('mousedown', (e) => {
+                if (scale > 1) {
+                    e.preventDefault();
+                    startX = e.clientX - translateX;
+                    startY = e.clientY - translateY;
+                    isDragging = true;
+                    modalImage.style.cursor = 'grabbing';
+                }
+            });
+            
+            modalImage.addEventListener('mousemove', (e) => {
+                if (isDragging && scale > 1) {
+                    e.preventDefault();
+                    translateX = e.clientX - startX;
+                    translateY = e.clientY - startY;
+                    applyTransform();
+                }
+            });
+            
+            modalImage.addEventListener('mouseup', () => {
+                isDragging = false;
+                modalImage.style.cursor = 'zoom-in';
+            });
+            
+            modalImage.addEventListener('mouseleave', () => {
+                isDragging = false;
+                modalImage.style.cursor = 'zoom-in';
+            });
+            
+            // Touch pinch zoom and pan
+            let initialTouchDistance = 0;
+            let initialScale = 1;
+            
+            modalImage.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 2) {
+                    // Two-finger pinch zoom
+                    e.preventDefault();
+                    initialTouchDistance = Math.hypot(
+                        e.touches[1].clientX - e.touches[0].clientX,
+                        e.touches[1].clientY - e.touches[0].clientY
+                    );
+                    initialScale = scale;
+                } else if (e.touches.length === 1) {
+                    // Single touch for panning when zoomed
+                    if (scale > 1) {
+                        startX = e.touches[0].clientX - translateX;
+                        startY = e.touches[0].clientY - translateY;
+                        isDragging = true;
+                    }
+                    
+                    // Check for double tap
+                    const now = new Date().getTime();
+                    const timeDiff = now - lastTouchTime;
+                    if (timeDiff < 300) {
+                        // Double tap detected
+                        if (scale === 1) {
+                            scale = 2; // Zoom in to 2x on double tap
+                        } else {
+                            resetZoom(); // Reset zoom on second double tap
+                        }
+                        applyTransform();
+                    }
+                    lastTouchTime = now;
+                }
+            }, { passive: false });
+            
+            modalImage.addEventListener('touchmove', (e) => {
+                if (e.touches.length === 2) {
+                    e.preventDefault(); // Prevents browser zooming
+                    
+                    // Calculate current touch distance
+                    const currentDistance = Math.hypot(
+                        e.touches[1].clientX - e.touches[0].clientX,
+                        e.touches[1].clientY - e.touches[0].clientY
+                    );
+                    
+                    // Calculate center point between two touches
+                    const centerX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+                    const centerY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+                    
+                    // Calculate new scale based on touch distance ratio
+                    const newScale = initialScale * (currentDistance / initialTouchDistance);
+                    scale = Math.max(1, Math.min(5, newScale));
+                    
+                    applyTransform();
+                } else if (e.touches.length === 1 && isDragging && scale > 1) {
+                    e.preventDefault();
+                    // Pan when zoomed
+                    translateX = e.touches[0].clientX - startX;
+                    translateY = e.touches[0].clientY - startY;
+                    applyTransform();
+                }
+            }, { passive: false });
+            
+            modalImage.addEventListener('touchend', (e) => {
+                // Keep the current scale and translation - just update isDragging
+                if (e.touches.length === 0) {
+                    isDragging = false;
+                }
+            });
+            
+            // Add double-click for desktop reset
+            modalImage.addEventListener('dblclick', (e) => {
+                e.preventDefault();
+                if (scale === 1) {
+                    // Calculate position to zoom in on
+                    const rect = modalImage.getBoundingClientRect();
+                    const x = e.clientX - rect.left - rect.width / 2;
+                    const y = e.clientY - rect.top - rect.height / 2;
+                    
+                    // Set new scale and position
+                    scale = 2.5;
+                    translateX = -x;
+                    translateY = -y;
+                } else {
+                    resetZoom();
+                }
+                applyTransform();
+            });
+            
+            // Reset transform when modal is opened
+            function imageModalReset() {
+                resetZoom();
+            }
+            
+            // Find all image openers and add the reset behavior
+            document.querySelectorAll('.gallery-image-container img, .gallery-thumbnail img').forEach(img => {
+                img.addEventListener('click', imageModalReset);
+            });
         });
+    `;
+
+            document.body.appendChild(zoomScript);
+        }
 
         function eliminarFoto(jsonDelete) {
             return new Promise((resolve, reject) => {
@@ -2234,25 +2466,25 @@
                                     // Clear previous content
                                     galleryActionsButtons.innerHTML = '';
 
-                                    //         // Create download button
-                                    //         const downloadBtn = document.createElement('button');
-                                    //         downloadBtn.className = 'action-btn bg-gray-100 hover:bg-gray-200';
-                                    //         downloadBtn.title = 'Descargar';
-                                    //         downloadBtn.innerHTML = `
-                                    //     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    //         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                    //         <polyline points="7 10 12 15 17 10"></polyline>
-                                    //         <line x1="12" y1="15" x2="12" y2="3"></line>
-                                    //     </svg>
-                                    // `;
+                                    // Create download button
+                                    const downloadBtn = document.createElement('button');
+                                    downloadBtn.className = 'action-btn bg-gray-100 hover:bg-gray-200';
+                                    downloadBtn.title = 'Descargar';
+                                    downloadBtn.innerHTML = `
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                            <polyline points="7 10 12 15 17 10"></polyline>
+                                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                                        </svg>
+                                    `;
 
-                                    //         // Download button event
-                                    //         downloadBtn.addEventListener('click', () => {
-                                    //             const link = document.createElement('a');
-                                    //             link.href = currentObj.link;
-                                    //             link.download = currentObj.nombre;
-                                    //             link.click();
-                                    //         });
+                                    // Download button event
+                                    downloadBtn.addEventListener('click', () => {
+                                        const link = document.createElement('a');
+                                        link.href = currentObj.link;
+                                        link.download = currentObj.nombre;
+                                        link.click();
+                                    });
 
                                     // Create delete button
                                     const deleteBtn = document.createElement('button');
@@ -2389,7 +2621,7 @@
                                     });
 
                                     // Add all elements
-                                    // galleryActionsButtons.appendChild(downloadBtn);
+                                    galleryActionsButtons.appendChild(downloadBtn);
                                     galleryActionsButtons.appendChild(deleteBtn);
                                     galleryActionsButtons.appendChild(approveBtn);
                                     galleryActionsButtons.appendChild(approvalInfo);
@@ -3135,7 +3367,7 @@
             const modalBackdrop = document.createElement('div');
             modalBackdrop.className = 'fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4';
 
-            // Modal container - increase max height and add better overflow handling
+            // Modal container
             const modalContainer = document.createElement('div');
             modalContainer.className = 'bg-white rounded-xl shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] flex flex-col overflow-hidden';
 
@@ -3148,140 +3380,141 @@
 
             const modalTitle = document.createElement('h2');
             modalTitle.className = 'text-xl font-bold pr-4';
-            modalTitle.textContent = objeto.NombrePuntoVenta || objeto.pvNombre || "Datos de la Línea";
+            modalTitle.textContent = objeto.NombrePuntoVenta || "Datos de la Línea";
 
             const closeButton = document.createElement('button');
             closeButton.className = 'text-white hover:text-gray-200';
             closeButton.innerHTML = `
-<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-</svg>
-`;
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+    `;
 
             modalHeader.appendChild(modalTitle);
             modalHeader.appendChild(closeButton);
 
-            // Modal body - better scroll handling
+            // Modal body
             const modalBody = document.createElement('div');
-            modalBody.className = 'p-4 space-y-4 overflow-y-auto flex-grow custom-scrollbar';
-            modalBody.style.maxHeight = 'calc(90vh - 130px)'; // Adjusted for more space
+            modalBody.className = 'p-4 space-y-6 overflow-y-auto flex-grow custom-scrollbar';
+            modalBody.style.maxHeight = 'calc(90vh - 130px)';
 
-            // Group properties by category for better organization
-            const categories = {
-                'Información General': ['Cliente', 'NombreCliente', 'nombreCliente', 'LineaActividad', 'lineaOt', 'Estado'],
-                'Detalles OT': ['OT', 'ot', 'TipoOT', 'tipoOt', 'DescripcionOT', 'descripcionOt', 'ObservacionesTecnico', 'observacionesTecnico'],
-                'Ubicación': ['PuntoVenta', 'puntoDeVenta', 'NombrePuntoVenta', 'puntoDeVenta2', 'DireccionPuntoVenta', 'direccion', 'Sector', 'sector', 'Zona', 'zona'],
-                'Especificaciones': ['Poner', 'poner', 'Quitar', 'quitar', 'Alto', 'alto', 'Ancho', 'ancho', 'TipoTrabajo', 'tipoDeTrabajo', 'Firma', 'firma']
+            // Define sections and their fields - ONLY including the fields specified
+            const sections = {
+                'Línea': [
+                    { key: 'Linea', label: 'Línea' },
+                    { key: 'Proyecto', label: 'Ruta' },
+                    { key: 'Estado', label: 'Estado' },
+                    { key: 'Observaciones', label: 'Observaciones' },
+                    { key: 'ObservacionesTecnico', label: 'Observaciones Técnico' },
+                    { key: 'Incidencia', label: 'Incidencia' },
+                    { key: 'DescripcionIncidencia', label: 'Descripción Incidencia' }
+                ],
+                'Cliente': [
+                    { key: 'NombreCliente', label: 'Nombre Cliente' },
+                ],
+                'Punto de Venta': [
+                    { key: 'PuntoVenta', label: 'Número Punto de Venta' },
+                    { key: 'NombrePuntoVenta', label: 'Nombre del Punto de Venta' },
+                    { key: 'Area', label: 'Área' },
+                    { key: 'Sector', label: 'Sector' },
+                    { key: 'Zona', label: 'Zona' },
+                    { key: 'DireccionPuntoVenta', label: 'Dirección' },
+                ],
+                'Orden de Trabajo (OT)': [
+                    { key: 'OT', label: 'OT' },
+                    { key: 'Navision_OT', label: 'Navision OT' },
+                    { key: 'TipoOT', label: 'Tipo OT' },
+                    { key: 'DescripcionOT', label: 'Descripción OT' },
+                    { key: 'Firma', label: 'Firma' }
+                ],
+                'Datos Técnicos': [
+                    { key: 'Poner', label: 'Poner' },
+                    { key: 'Quitar', label: 'Quitar' },
+                    { key: 'Alto', label: 'Alto' },
+                    { key: 'Ancho', label: 'Ancho' },
+                    { key: 'TipoTrabajo', label: 'Tipo Trabajo' },
+                    { key: 'DescripcionTipoTrabajo', label: 'Descripción Tipo Trabajo' }
+                ],
+                'Actuación': [
+                    { key: 'FechaActuacion', label: 'Fecha Actuación' },
+                    { key: 'DiasActuacion', label: 'Días Actuación' },
+                    { key: 'TiempoActuacion', label: 'Horas' },
+                    { key: 'MinutosActuacion', label: 'Minutos' }
+                ],
             };
 
-            // Define property name mapping for better display
-            const propertyNames = {
-                'LineaActividad': 'Línea',
-                'lineaOt': 'Línea',
-                'NombreCliente': 'Cliente',
-                'nombreCliente': 'Cliente',
-                'PuntoVenta': 'Punto de Venta',
-                'puntoDeVenta': 'Punto de Venta',
-                'NombrePuntoVenta': 'Nombre del Punto de Venta',
-                'puntoDeVenta2': 'Nombre del Punto de Venta',
-                'DireccionPuntoVenta': 'Dirección',
-                'direccion': 'Dirección',
-                'TipoTrabajo': 'Tipo de Trabajo',
-                'tipoDeTrabajo': 'Tipo de Trabajo',
-                'DescripcionOT': 'Descripción de OT',
-                'descripcionOt': 'Descripción de OT',
-                'ObservacionesTecnico': 'Observaciones del Técnico',
-                'observacionesTecnico': 'Observaciones del Técnico'
-            };
+            // Helper function to sanitize and decode HTML entities
+            function sanitizeText(text) {
+                if (!text) return 'No hay datos';
 
-            // Process each category - FIXED LOOP STRUCTURE
-            for (const [category, properties] of Object.entries(categories)) {
-                const categoryContainer = document.createElement('div');
-                categoryContainer.className = 'mb-6';
+                // Create a temporary element
+                const tempElement = document.createElement('div');
 
-                const categoryTitle = document.createElement('h3');
-                categoryTitle.className = 'text-lg font-bold text-gray-800 mb-3 border-b pb-2 border-gray-300';
-                categoryTitle.textContent = category;
-                categoryContainer.appendChild(categoryTitle);
+                // Set the HTML content to the encoded text
+                tempElement.innerHTML = text;
 
-                let hasData = false;
+                // Get the decoded text
+                let sanitized = tempElement.textContent || tempElement.innerText;
 
-                // Process properties in this category
-                for (const prop of properties) {
-                    const value = objeto[prop];
-                    if (value && value !== 'null' && value !== '0') {
-                        hasData = true;
+                // Replace escaped newlines with actual newlines
+                sanitized = sanitized.replace(/\\n/g, '\n');
 
-                        const infoRow = document.createElement('div');
-                        infoRow.className = 'flex justify-between items-start gap-4 py-2 px-4 bg-gray-100 border border-gray-200 rounded-lg mb-2';
-
-                        const label = document.createElement('div');
-                        label.className = 'text-gray-700 text-sm font-semibold';
-                        label.textContent = propertyNames[prop] || prop.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
-
-                        const valueElement = document.createElement('div');
-                        valueElement.className = 'text-gray-900 font-medium text-sm text-right break-words';
-                        valueElement.style.maxWidth = '60%';
-                        valueElement.textContent = value;
-
-                        infoRow.appendChild(label);
-                        infoRow.appendChild(valueElement);
-                        categoryContainer.appendChild(infoRow);
-                    }
-                }
-
-                // Only add category if it contains data
-                if (hasData) {
-                    modalBody.appendChild(categoryContainer);
-                }
+                return sanitized;
             }
 
-            // Special section for any remaining data that wasn't categorized
-            const otherProps = [];
-            for (const key in objeto) {
-                let isCategorized = false;
-                for (const category of Object.values(categories)) {
-                    if (category.includes(key)) {
-                        isCategorized = true;
-                        break;
+            // Create sections
+            for (const [sectionName, fields] of Object.entries(sections)) {
+                const sectionContainer = document.createElement('div');
+                sectionContainer.className = 'mb-6';
+
+                const sectionTitle = document.createElement('h3');
+                sectionTitle.className = 'text-lg font-bold text-gray-800 mb-3 border-b pb-2 border-gray-300';
+                sectionTitle.textContent = sectionName;
+                sectionContainer.appendChild(sectionTitle);
+
+                const fieldsContainer = document.createElement('div');
+                fieldsContainer.className = 'space-y-2';
+
+                fields.forEach(field => {
+                    let value = objeto[field.key];
+
+                    // Format null/empty values
+                    if (value === null || value === undefined || value === '' || value === 'null') {
+                        value = '-';
                     }
-                }
 
-                if (!isCategorized && objeto[key] && objeto[key] !== 'null' && objeto[key] !== '0') {
-                    otherProps.push(key);
-                }
-            }
+                    // Special formatting for certain fields
+                    if (field.key === 'ObservacionesTecnico' || field.key === 'Observaciones') {
+                        value = sanitizeText(value);
+                    }
 
-            if (otherProps.length > 0) {
-                const otherContainer = document.createElement('div');
-                otherContainer.className = 'mb-6';
-
-                const otherTitle = document.createElement('h3');
-                otherTitle.className = 'text-lg font-bold text-gray-800 mb-3 border-b pb-2 border-gray-300';
-                otherTitle.textContent = 'Otros Datos';
-                otherContainer.appendChild(otherTitle);
-
-                for (const prop of otherProps) {
                     const infoRow = document.createElement('div');
-                    infoRow.className = 'flex justify-between items-start gap-4 py-2 px-4 bg-gray-100 border border-gray-200 rounded-lg mb-2';
+                    infoRow.className = 'flex justify-between items-start gap-4 py-2 px-4 bg-gray-100 border border-gray-200 rounded-lg';
 
                     const label = document.createElement('div');
-                    label.className = 'text-gray-700 text-sm font-semibold';
-                    label.textContent = prop
-                        .replace(/([A-Z])/g, ' $1')
-                        .replace(/^./, str => str.toUpperCase());
+                    label.className = 'text-gray-700 font-semibold';
+                    label.textContent = field.label;
 
-                    const value = document.createElement('div');
-                    value.className = 'text-gray-900 font-medium text-sm text-right break-words';
-                    value.style.maxWidth = '60%';
-                    value.textContent = objeto[prop];
+                    const valueElement = document.createElement('div');
+                    valueElement.className = 'text-gray-900 font-medium text-right break-words';
+                    valueElement.style.maxWidth = '60%';
+
+                    // Handle multiline text
+                    if (typeof value === 'string' && value.includes('\n')) {
+                        valueElement.innerHTML = value.split('\n').map(line =>
+                            `<div>${line || '&nbsp;'}</div>`
+                        ).join('');
+                    } else {
+                        valueElement.textContent = value;
+                    }
 
                     infoRow.appendChild(label);
-                    infoRow.appendChild(value);
-                    otherContainer.appendChild(infoRow);
-                }
+                    infoRow.appendChild(valueElement);
+                    fieldsContainer.appendChild(infoRow);
+                });
 
-                modalBody.appendChild(otherContainer);
+                sectionContainer.appendChild(fieldsContainer);
+                modalBody.appendChild(sectionContainer);
             }
 
             // Modal footer
@@ -3305,17 +3538,20 @@
             closeButton.addEventListener('click', () => {
                 document.body.removeChild(modalBackdrop);
                 document.body.style.overflow = '';
+                resetZoom();
             });
 
             closeFooterButton.addEventListener('click', () => {
                 document.body.removeChild(modalBackdrop);
                 document.body.style.overflow = '';
+                resetZoom();
             });
 
             modalBackdrop.addEventListener('click', (e) => {
                 if (e.target === modalBackdrop) {
                     document.body.removeChild(modalBackdrop);
                     document.body.style.overflow = '';
+                    resetZoom();
                 }
             });
 
@@ -3723,8 +3959,8 @@
                     if (crearCarpetaBtn) {
                         crearCarpetaBtn.addEventListener('click', async e => {
                             procesarCarpeta(rutaArchivos, lineaArchivos, otArchivos, lineaActividadArchivos, lineaData.Cliente, lineaData.NombreCliente, lineaData.PuntoVenta, lineaData.NombrePuntoVenta, usuario.id);
-                           
-                            
+
+
                         });
                     }
 
