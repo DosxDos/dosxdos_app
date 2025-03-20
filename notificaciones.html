@@ -626,47 +626,107 @@
         const emptyPendientes = document.getElementById('emptyPendientes');
         const emptyAceptadas = document.getElementById('emptyAceptadas');
         const pestañaPendientes = elements.pestañaPendientes;
-        const mostrarPendientes = pestañaPendientes.classList.contains("border-red-500");
-        const TotalNotificaciones = await leerDatos("dosxdos", "notificaciones");
 
-        // Sort notifications by date in reverse chronological order (newest first)
+        // Add null checks for all elements
+        if (!pendientesContainer || !aceptadasContainer || !pestañaPendientes) {
+          console.error("Critical DOM elements missing for tab functionality");
+          reject(new Error("Required DOM elements not found"));
+          return;
+        }
+
+        const mostrarPendientes = pestañaPendientes.classList.contains("border-red-500");
+
+        // Get all notifications and sort them
+        const TotalNotificaciones = await leerDatos("dosxdos", "notificaciones");
         TotalNotificaciones.sort((a, b) => {
           return new Date(b.fecha_envio) - new Date(a.fecha_envio);
         });
 
+        // Filter notifications by status
         const pendientes = TotalNotificaciones.filter(notif => notif.visto === 0);
         const aceptadas = TotalNotificaciones.filter(notif => notif.visto === 1);
 
-        // Update counters
-        document.getElementById("contadorPendientes").textContent = pendientes.length;
-        document.getElementById("contadorAceptadas").textContent = aceptadas.length;
+        // Update counters - add null checks
+        const contadorPendientes = document.getElementById("contadorPendientes");
+        const contadorAceptadas = document.getElementById("contadorAceptadas");
 
+        if (contadorPendientes) {
+          contadorPendientes.textContent = pendientes.length;
+        }
+
+        if (contadorAceptadas) {
+          contadorAceptadas.textContent = aceptadas.length;
+        }
+
+        // Clear both containers first
+        pendientesContainer.innerHTML = "";
+        aceptadasContainer.innerHTML = "";
+
+        // Show/hide appropriate empty state messages
         if (mostrarPendientes) {
+          // Display pending notifications
           if (pendientes.length === 0) {
-            emptyPendientes.style.display = 'block';
+            // Add null check before modifying style
+            if (emptyPendientes) {
+              emptyPendientes.style.display = 'flex';
+            }
           } else {
-            emptyPendientes.style.display = 'none';
-            pendientes.forEach(notif => {
-              const searchTerm = elements.buscador.value.toLowerCase().trim();
+            // Add null check before modifying style
+            if (emptyPendientes) {
+              emptyPendientes.style.display = 'none';
+            }
+
+            // Apply search filter if there's a search term
+            const searchTerm = elements.buscador ? elements.buscador.value.toLowerCase().trim() : '';
+            const filteredPendientes = searchTerm ?
+              pendientes.filter(notif =>
+                notif.titulo.toLowerCase().includes(searchTerm) ||
+                notif.mensaje.toLowerCase().includes(searchTerm)
+              ) : pendientes;
+
+            // Add notifications to the container
+            filteredPendientes.forEach(notif => {
               const element = createNotificationElement(notif, searchTerm);
               pendientesContainer.appendChild(element);
             });
           }
+
+          // Update visibility
+          pendientesContainer.style.display = "block";
+          aceptadasContainer.style.display = "none";
+
         } else {
+          // Display accepted notifications
           if (aceptadas.length === 0) {
-            emptyAceptadas.style.display = 'block';
+            // Add null check before modifying style
+            if (emptyAceptadas) {
+              emptyAceptadas.style.display = 'flex';
+            }
           } else {
-            emptyAceptadas.style.display = 'none';
-            aceptadas.forEach(notif => {
-              const searchTerm = elements.buscador.value.toLowerCase().trim();
+            // Add null check before modifying style
+            if (emptyAceptadas) {
+              emptyAceptadas.style.display = 'none';
+            }
+
+            // Apply search filter if there's a search term
+            const searchTerm = elements.buscador ? elements.buscador.value.toLowerCase().trim() : '';
+            const filteredAceptadas = searchTerm ?
+              aceptadas.filter(notif =>
+                notif.titulo.toLowerCase().includes(searchTerm) ||
+                notif.mensaje.toLowerCase().includes(searchTerm)
+              ) : aceptadas;
+
+            // Add notifications to the container
+            filteredAceptadas.forEach(notif => {
               const element = createNotificationElement(notif, searchTerm);
               aceptadasContainer.appendChild(element);
             });
           }
-        }
 
-        pendientesContainer.style.display = mostrarPendientes ? "block" : "none";
-        aceptadasContainer.style.display = mostrarPendientes ? "none" : "block";
+          // Update visibility
+          pendientesContainer.style.display = "none";
+          aceptadasContainer.style.display = "block";
+        }
 
         console.log('Finished actualizarVistaNotificaciones');
         resolve();
@@ -676,7 +736,6 @@
       }
     });
   };
-
 
   async function updateCounters() {
     const TotalNotificaciones = await leerDatos("dosxdos", "notificaciones");

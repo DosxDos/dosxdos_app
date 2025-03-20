@@ -3964,10 +3964,20 @@
                         });
                     }
 
+                    const sincronizacionDeNotificaciones =
+                        await sincronizarNotificaciones();
+                    if (sincronizacionDeNotificaciones) {
+                        await notificar();
+                    }
                     scrollToTop();
                     loaderOff();
                 }
             } catch (error) {
+                const sincronizacionDeNotificaciones =
+                    await sincronizarNotificaciones();
+                if (sincronizacionDeNotificaciones) {
+                    await notificar();
+                }
                 mensaje = 'ERROR: ' + error.message;
                 console.error(error);
                 alerta(mensaje);
@@ -4020,6 +4030,7 @@
                         });
                     }
 
+                    await notificar();
                     // Display offline message
                     mensaje = 'Sin conexión a internet no es posible visualizar los archivos del servidor';
                     alerta(mensaje);

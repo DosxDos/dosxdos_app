@@ -1194,8 +1194,18 @@
                                 }
                             });
 
+                            const sincronizacionDeNotificaciones =
+                                await sincronizarNotificaciones();
+                            if (sincronizacionDeNotificaciones) {
+                                await notificar();
+                            }
                             loaderOff();
                         } else {
+                            const sincronizacionDeNotificaciones =
+                                await sincronizarNotificaciones();
+                            if (sincronizacionDeNotificaciones) {
+                                await notificar();
+                            }
                             alerta('Error, la función volcarDatos no ha sido exitosa');
                             scrollToTop();
                             loaderOff();
@@ -1206,6 +1216,11 @@
                         loaderOff();
                     }
                 } else {
+                    const sincronizacionDeNotificaciones =
+                        await sincronizarNotificaciones();
+                    if (sincronizacionDeNotificaciones) {
+                        await notificar();
+                    }
                     alerta('No se ha indicado aún alguna ruta para poder realizar la consulta de las líneas');
                     scrollToTop();
                     loaderOff();
@@ -1266,6 +1281,7 @@
                     contenido.classList.add('hidden');
                 }
 
+                await notificar();
                 // Show offline message
                 alerta('Sin conexión a internet no es posible visualizar los datos y archivos de los servidores');
                 scrollToTop();

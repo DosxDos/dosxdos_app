@@ -3575,6 +3575,8 @@
                         } catch (error) {
                             console.error("Error loading notifications:", error);
                         }
+
+
                         initializeOtApprovalStyles();
                         loaderOff();
                     } else {
@@ -3652,6 +3654,7 @@
                     window.location.href = "https://dosxdos.app.iidos.com/ot2.html";
                 });
 
+                await notificar();
                 mensaje = 'Sin conexión a internet no es posible visualizar los archivos del servidor';
                 alerta(mensaje);
                 scrollToTop();

@@ -1948,13 +1948,28 @@
                             window.location.href = "https://dosxdos.app.iidos.com/ot.html";
                         });
 
+                        const sincronizacionDeNotificaciones =
+                            await sincronizarNotificaciones();
+                        if (sincronizacionDeNotificaciones) {
+                            await notificar();
+                        }
                         loaderOff();
                     } else {
+                        const sincronizacionDeNotificaciones =
+                            await sincronizarNotificaciones();
+                        if (sincronizacionDeNotificaciones) {
+                            await notificar();
+                        }
                         alerta('Error, la función volcarDatos no ha sido exitosa');
                         scrollToTop();
                         loaderOff();
                     }
                 } else {
+                    const sincronizacionDeNotificaciones =
+                        await sincronizarNotificaciones();
+                    if (sincronizacionDeNotificaciones) {
+                        await notificar();
+                    }
                     alerta('Error, la función fetchUsuarios no ha sido exitosa');
                     scrollToTop();
                     loaderOff();
@@ -2012,6 +2027,7 @@
                     window.location.href = "https://dosxdos.app.iidos.com/dm.html";
                 });
 
+                await notificar();
                 // Show offline message
                 alerta('No es posible acceder a la información del servidor sin conexión a internet');
                 scrollToTop();
@@ -2061,4 +2077,5 @@
 </script>
 <script src="https://dosxdos.app.iidos.com/js/notificaciones.js"></script>
 <script src="https://dosxdos.app.iidos.com/js/loadFirebase.js"></script>
+
 </html>

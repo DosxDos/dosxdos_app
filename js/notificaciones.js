@@ -215,3 +215,32 @@ function eliminarTokenNotificaciones() {
     }
   });
 }
+
+// Add this to your DOMContentLoaded function
+document.addEventListener('DOMContentLoaded', function () {
+  // Wait a short moment to let the notification code finish
+  setTimeout(function () {
+    const mobileCount = document.getElementById("mobileNotificationCount");
+    const desktopCount = document.getElementById("desktopNotificationCount");
+    const bellMobile = document.getElementById("bellMobile");
+    const bellDesktop = document.getElementById("bellDesktop");
+
+    // If mobile count is visible, make desktop count visible too
+    if (mobileCount && !mobileCount.classList.contains("hidden") && desktopCount) {
+      desktopCount.classList.remove("hidden");
+      desktopCount.textContent = mobileCount.textContent;
+
+      // Also force the bell images to be consistent
+      if (bellMobile && bellDesktop && bellMobile.src.includes("bell.gif")) {
+        console.log("Syncing desktop bell image with mobile");
+        bellDesktop.src = "https://dosxdos.app.iidos.com/img/bell.gif";
+        bellDesktop.classList.remove("w-7");
+        bellDesktop.classList.add("w-12");
+      }
+    }
+
+    // Log the bell image sources to debug
+    console.log("Bell Mobile src:", bellMobile ? bellMobile.src : "not found");
+    console.log("Bell Desktop src:", bellDesktop ? bellDesktop.src : "not found");
+  }, 1000);
+});

@@ -1293,95 +1293,144 @@ function createDesktopNavigation(userRole) {
   // Clear existing items
   desktopNav.innerHTML = '';
 
+  // Create floating menu container
+  const floatingMenuContainer = document.createElement('div');
+  floatingMenuContainer.id = 'floating-menu-container';
+  floatingMenuContainer.className = `
+    fixed top-16 left-1/2 transform -translate-x-1/2 
+    bg-white shadow-2xl rounded-xl 
+    p-6 z-50 
+    hidden 
+    grid-cols-4 gap-4 
+    max-w-6xl w-full 
+    border border-gray-200
+  `;
+
+  // Create hamburger menu trigger
+  const hamburgerMenuTrigger = document.createElement('div');
+  hamburgerMenuTrigger.className = `
+    relative group cursor-pointer
+    flex items-center justify-center
+    w-12 h-12 
+    hover:bg-gray-100 
+    rounded-full 
+    transition-colors
+  `;
+  hamburgerMenuTrigger.innerHTML = `
+    <div class="space-y-1.5">
+      <div class="w-6 h-0.5 bg-gray-700 group-hover:bg-red-600 transition-colors"></div>
+      <div class="w-6 h-0.5 bg-gray-700 group-hover:bg-red-600 transition-colors"></div>
+    </div>
+  `;
+
   // Get menu items for the current user role
   const menuItems = menuConfigs[userRole] || [];
 
-  // Add CSS for responsive menu behavior
-  if (!document.getElementById('responsive-nav-styles')) {
-    const styleEl = document.createElement('style');
-    styleEl.id = 'responsive-nav-styles';
-    styleEl.textContent = `
-      /* Monitor container width and adjust dynamically */
-      @media (max-width: 1280px) {
-        .menu-item-text {
-          display: none !important;
-        }
-        
-        .nav-dropdown-arrow {
-          display: none !important;
-        }
-        
-        .nav-item svg.mr-2 {
-          margin-right: 0 !important;
-        }
-        
-        .nav-item {
-          padding: 6px !important;
-          display: flex;
-          justify-content: center;
-        }
-        
-        .nav-item[data-tooltip]:hover::after {
-          content: attr(data-tooltip);
-          position: absolute;
-          top: 100%;
-          left: 50%;
-          transform: translateX(-50%);
-          background-color: #1F2937;
-          color: white;
-          font-size: 12px;
-          padding: 4px 8px;
-          border-radius: 4px;
-          z-index: 50;
-          white-space: nowrap;
-        }
-      }
-    `;
-    document.head.appendChild(styleEl);
-  }
-
-  // Create menu items
+  // Populate floating menu
   menuItems.forEach(item => {
-    const element = document.createElement('div');
-    element.id = item.id;
-    element.className = "nav-item relative";
-    element.setAttribute('data-tooltip', item.text);
+    const menuItemEl = document.createElement('div');
+    menuItemEl.className = `
+      relative
+      group
+    `;
 
+    const mainLinkEl = document.createElement('a');
+    mainLinkEl.href = item.href || '#';
+    mainLinkEl.className = `
+      flex items-center 
+      p-3 
+      hover:bg-red-50 
+      rounded-lg 
+      transition-colors 
+      group
+    `;
+
+    // Create icon container
+    const iconContainer = document.createElement('div');
+    iconContainer.className = `
+      w-12 h-12 
+      bg-gray-100 
+      rounded-lg 
+      flex items-center justify-center 
+      mr-4 
+      group-hover:bg-red-100 
+      transition-colors
+    `;
+    
+    // Create icon element
+    const iconEl = document.createElement('div');
+    iconEl.innerHTML = item.icon;
+    iconEl.className = `
+      w-6 h-6 
+      text-gray-600 
+      group-hover:text-red-600 
+      transition-colors
+    `;
+    
+    iconContainer.appendChild(iconEl);
+    mainLinkEl.appendChild(iconContainer);
+
+    // Create text element
+    const textEl = document.createElement('span');
+    textEl.textContent = item.text;
+    textEl.className = `
+      text-gray-800 
+      group-hover:text-red-600 
+      transition-colors
+      font-medium
+    `;
+    mainLinkEl.appendChild(textEl);
+
+    menuItemEl.appendChild(mainLinkEl);
+
+    // Handle submenus if exists
     if (item.submenu) {
-      // Create dropdown menu item
-      element.innerHTML = `
-        <button
-          class="dropdown-toggle flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200 ${item.class || ''}"
-          data-dropdown="${item.id}Dropdown">
-          ${item.icon}
-          <span class="menu-item-text">${item.text}</span>
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-1 transition-transform duration-200 nav-dropdown-arrow"
-            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="6 9 12 15 18 9"></polyline>
-          </svg>
-        </button>
-        <div id="${item.id}Dropdown" class="desktop-dropdown w-auto">
-          ${item.submenu.map(subItem => `
-            <a href="${subItem.href}" class="text-sm text-gray-700 hover:bg-red-600 hover:text-white ${subItem.class || ''}">
-              ${subItem.text}
-            </a>
-          `).join('')}
-        </div>
+      const submenuContainer = document.createElement('div');
+      submenuContainer.className = `
+        absolute 
+        left-0 
+        top-full 
+        ml-4 
+        hidden 
+        group-hover:block 
+        bg-white 
+        shadow-lg 
+        rounded-lg 
+        p-2 
+        min-w-[200px] 
+        z-50
+        border
+        border-gray-200
       `;
-    } else {
-      // Create regular menu item
-      element.innerHTML = `
-        <a href="${item.href}" 
-          class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200 ${item.class || ''}">
-          ${item.icon}
-          <span class="menu-item-text">${item.text}</span>
-        </a>
-      `;
+      
+      item.submenu.forEach(subitem => {
+        const submenuItemEl = document.createElement('a');
+        submenuItemEl.href = subitem.href;
+        submenuItemEl.textContent = subitem.text;
+        submenuItemEl.className = `
+          block 
+          text-sm 
+          text-gray-600 
+          hover:text-red-600 
+          hover:bg-red-50 
+          px-3 py-2 
+          rounded
+          transition-colors
+        `;
+        submenuContainer.appendChild(submenuItemEl);
+      });
+
+      menuItemEl.appendChild(submenuContainer);
     }
 
-    // Add to desktop nav
-    desktopNav.appendChild(element);
+    floatingMenuContainer.appendChild(menuItemEl);
   });
+
+  // Add floating menu to body
+  document.body.appendChild(floatingMenuContainer);
+
+  // Add hamburger menu trigger to navigation
+  desktopNav.appendChild(hamburgerMenuTrigger);
 
   // Add notification bell
   const desktopBell = document.createElement('a');
@@ -1446,4 +1495,42 @@ function createDesktopNavigation(userRole) {
     </div>
   `;
   desktopNav.appendChild(userMenu);
+
+  // Add event listeners for floating menu
+  hamburgerMenuTrigger.addEventListener('mouseenter', () => {
+    floatingMenuContainer.classList.remove('hidden');
+    floatingMenuContainer.classList.add('grid');
+  });
+
+  // Close menu when mouse leaves both hamburger and floating menu
+  const closeMenu = () => {
+    floatingMenuContainer.classList.remove('grid');
+    floatingMenuContainer.classList.add('hidden');
+  };
+
+  hamburgerMenuTrigger.addEventListener('mouseleave', (event) => {
+    // Use a small timeout to prevent accidental closing
+    setTimeout(() => {
+      if (!floatingMenuContainer.matches(':hover')) {
+        closeMenu();
+      }
+    }, 100);
+  });
+
+  floatingMenuContainer.addEventListener('mouseleave', closeMenu);
 }
+
+// Add a small script to ensure the function is called appropriately
+document.addEventListener('DOMContentLoaded', () => {
+  if (window.createDesktopNavigation) {
+    const storedUser = localStorage.getItem('usuario');
+    if (storedUser) {
+      try {
+        const user = JSON.parse(storedUser);
+        createDesktopNavigation(user.clase);
+      } catch (error) {
+        console.error('Error parsing user data:', error);
+      }
+    }
+  }
+});
