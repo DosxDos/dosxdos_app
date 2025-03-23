@@ -6,8 +6,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title></title>
-  <link rel="icon" type="image/png" href="https://dosxdos.app.iidos.com/img/logoPwa256.png" />
+  <link rel="icon" type="image/png" href="https://dosxdos.app.iidos.com/img/logo-red.png" />
   <meta name="description" content="DOS.DOS GRUPO IMAGEN - Aplicación Web Progresiva (PWA)" />
+  <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/tailwindmain.css" />
+  <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/index.css" />
   <style>
     * {
       margin: 0;
@@ -84,12 +86,26 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      background-color: transparent !important;
+    }
+
+    /* Logo container for new animation */
+    .logo-container {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 80%;
+      max-width: 800px;
+      z-index: 1;
     }
 
     .logo {
       width: var(--x20);
       opacity: 0;
       transition: opacity 2s;
+      display: none;
+      /* Hidden initially for GSAP animation */
     }
 
     .puntoFondo {
@@ -103,7 +119,6 @@
       align-items: center;
       z-index: 10;
       opacity: 0;
-      transition: width 1.5s, height 1.5s, opacity 2s;
     }
 
     .puntoFondo2 {
@@ -133,7 +148,7 @@
 
     .logo2 {
       position: absolute;
-      width: var(--x3_5);
+      width: 5rem;
       bottom: var(--x1);
       right: var(--x2);
       opacity: 0;
@@ -142,35 +157,30 @@
 
     .formulario {
       flex-direction: column;
-      width: 70%;
-      margin-top: var(--x4);
+      margin-top: 4vh;
     }
 
     label {
-      font-family: "FuturaMedium";
+      font-family: "FuturaLight";
+      display: flex;
       color: rgb(255, 255, 255);
-      font-size: var(--x1_2);
-      margin-bottom: var(--x0_5);
+      margin-right: auto;
+      margin-left: 4%;
+      font-size: 15px;
     }
 
     input {
-      width: 100%;
-      height: var(--x2_5);
-      border-radius: var(--x0_8);
-      padding: var(--z1);
+      width: 80%;
+      border-radius: 30px;
+      padding: 24px 10px;
       font-family: "FuturaMedium";
-      color: #b1b1b1;
-      font-size: var(--x0_9);
+      color: #000;
+      font-size: 16px;
       border: none;
+      -webkit-appearance: none;
+      appearance: none;
       outline: none;
-    }
-
-    #usuario {
-      margin-bottom: var(--z2);
-    }
-
-    #contrasena {
-      margin-bottom: var(--x0_3);
+      box-shadow: none;
     }
 
     #olvidar {
@@ -178,10 +188,9 @@
       margin-left: auto;
       font-family: "FuturaLight";
       color: rgb(255, 255, 255);
-      margin-bottom: var(--z2);
-      font-size: var(--x0_8);
+      font-size: 12px;
       width: fit-content;
-      margin-top: 20px;
+      margin-block: 5px;
     }
 
     #olvidar:hover {
@@ -192,54 +201,19 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 40%;
-      height: var(--x2_5);
-      border-radius: var(--x0_8);
-      padding: var(--z1);
+      border-radius: 15px;
+      padding: 10px 24px;
       font-family: "FuturaBold";
       background-color: rgb(255, 255, 255);
       color: #db0032;
-      font-size: var(--x0_9);
+      font-size: 15px;
       border: none;
       align-self: center;
+      margin-top: 0;
     }
 
     .accion:hover {
       cursor: pointer;
-    }
-
-    #mensaje {
-      position: absolute;
-      left: 5.5vw;
-      top: 250px;
-      width: 20vw;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-
-    #alerta {
-      width: var(--x3);
-    }
-
-    #mensajeTexto {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: justify;
-      flex-wrap: wrap;
-      font-family: "FuturaMedium";
-      color: rgba(128, 128, 128, 0.945);
-      font-size: 1vw;
-      margin-top: 1.5vw;
-    }
-
-    #email {
-      margin-bottom: var(--z2);
-    }
-
-    #volver {
-      margin-top: var(--z1);
     }
 
     .idiomas {
@@ -247,7 +221,7 @@
       top: 2.15vw;
       right: 6.5vw;
       font-family: "FuturaBold";
-      font-size: var(--x0_7);
+      font-size: 15px;
       opacity: 0;
       transition: opacity 2s;
     }
@@ -268,16 +242,16 @@
 
     .instalar {
       position: absolute;
-      width: var(--x2_3);
       top: 1.5vw;
       right: 2vw;
       flex-direction: column;
       opacity: 0;
+      padding: 5px;
       transition: opacity 2s;
     }
 
     .instalar>img {
-      width: var(--x2_3);
+      width: 40px;
     }
 
     .instalar>img:hover {
@@ -285,16 +259,16 @@
     }
 
     #tipInstalar {
-      width: var(--x10);
-      margin-top: 0.1vw;
+      width: fit-content;
+      margin-top: 10px;
       border-radius: 0.7vw;
       background-color: #e5e5e5;
       color: #999999;
-      padding: 0.5vw;
+      padding: 10px;
       font-family: "FuturaLight";
-      font-size: var(--x0_9);
-      flex-wrap: wrap;
-      align-self: flex-end;
+      font-size: 13px;
+      text-wrap: nowrap;
+      align-self: flex-start;
       justify-content: center;
       text-align: center;
     }
@@ -334,15 +308,6 @@
         top: 2.6vw;
         right: 7.5vw;
       }
-
-      #mensaje {
-        top: 10px;
-        left: 2vw;
-      }
-
-      #mensajeTexto {
-        font-size: 1.3vw;
-      }
     }
 
     /* MOVILES = ROOT + 172% */
@@ -371,15 +336,88 @@
         top: 3.5vw;
         right: 12vw;
       }
+    }
 
-      #mensaje {
-        top: 50px;
-        width: 60vw;
-        left: 20vw;
+    .puntoFondo {
+      position: absolute;
+      border-radius: 50%;
+      width: var(--x0_7);
+      height: var(--x0_7);
+      background-color: #db0032;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+      opacity: 0;
+      transition: width 1.5s, height 1.5s, opacity 2s;
+    }
+
+    /* Override for the punto element when used in animation */
+    #punto.visible {
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: center !important;
+      align-items: center !important;
+      padding: 20px !important;
+      box-sizing: border-box !important;
+    }
+
+    #formularioRecordar {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      align-items: center;
+      padding: 20px;
+    }
+
+    #formularioRecordar input {
+      width: 80%;
+      padding: 8px 20px;
+      border-radius: 30px;
+      background-color: white;
+      color: #333;
+      border: none;
+    }
+
+    #formularioRecordar label {
+      font-family: "FuturaLight";
+      display: flex;
+      color: rgb(255, 255, 255);
+      margin: 0 auto 5px 12%;
+      font-size: 15px;
+    }
+
+    #formularioRecordar #recordar {
+      background-color: white;
+      color: #db0032;
+      padding: 8px 24px;
+      width: 100%;
+      font-family: "FuturaMedium";
+      font-weight: bold;
+    }
+
+    #formularioRecordar #volver {
+      background-color: transparent;
+      color: white;
+      border: 1px solid white;
+      padding: 8px 24px;
+      width: auto;
+      font-family: "FuturaMedium";
+      font-weight: bold;
+    }
+
+    @media screen and (max-width: 539px) {
+      input {
+        width: 100%;
       }
 
-      #mensajeTexto {
-        font-size: 2.5vw;
+      label {
+        margin-left: 4%;
+        font-size: 15px;
+      }
+
+      label:first-child {
+        margin-left: 10%;
       }
     }
   </style>
@@ -398,35 +436,40 @@
   <script src="https://dosxdos.app.iidos.com/serviceworker.js"></script>
   <!-- SERVICEWORKER FIREBASE-->
   <script src="https://dosxdos.app.iidos.com/serviceWorkerFirebase.js"></script>
+  <!-- GSAP Animation Library -->
+  <script src="https://dosxdos.app.iidos.com/gsap.min.js"></script>
 </head>
 
 <body>
-  <div id="mensaje" class="displayOff">
-    <img id="alerta" src="https://dosxdos.app.iidos.com/img/alerta.png" />
-    <p id="mensajeTexto"></p>
+  <!-- Logo container for GSAP animation -->
+  <div class="logo-container">
+    <img src="img/logo-full.svg" alt="Logo" class="logo">
   </div>
 
   <div class="puntoFondo displayOn" id="punto">
     <img src="https://dosxdos.app.iidos.com/img/saludo.png" class="saludo displayOn" id="saludo" />
     <form action="index.html" method="post" id="formularioLogin" class="displayOff formulario noVisible">
-      <label for="usuario" id="labelUsuario"></label>
-      <input type="text" name="usuario" id="usuario" maxlength="8" />
+      <label for="usuario" id="labelUsuario" class="flex mr-auto"></label>
+      <input type="text" name="usuario" id="usuario" maxlength="8" placeholder="usuario (max 8 caracteres)" />
       <label for="contrasena" id="labelContrasena"></label>
-      <input type="password" name="contrasena" id="contrasena" maxlength="12" />
+      <input type="password" name="contrasena" id="contrasena" maxlength="12"
+        placeholder="&lowast;&lowast;&lowast;&lowast;&lowast;&lowast;&lowast;&lowast;" />
       <p class="w-fit" id="olvidar"></p>
       <button type="submit" id="acceder" class="accion"></button>
     </form>
     <form action="index.html" method="post" id="formularioRecordar" class="displayOff formulario">
       <label for="email" id="labelEmail"></label>
-      <input type="mail" name="email" id="email" />
-      <button type="submit" id="recordar" class="accion"></button>
-      <button type="button" id="volver" class="accion"></button>
+      <input type="email" name="email" id="email" placeholder="correo@ejemplo.com" />
+      <div class="flex gap-4 items-center mt-4">
+        <button type="submit" id="recordar" class="accion"></button>
+        <button type="button" id="volver" class="accion"></button>
+      </div>
     </form>
   </div>
 
   <img src="https://dosxdos.app.iidos.com/img/logo2930.png" class="logo displayOn" id="logo" />
 
-  <img src="https://dosxdos.app.iidos.com/img/logo_clientes.png" id="logo2" class="logo2" />
+  <img src="https://dosxdos.app.iidos.com/img/logo-black.png" id="logo2" class="logo2" />
 
   <div id="idiomas" class="idiomas displayOn">
     <p id="espanol">ESP</p>
@@ -443,9 +486,435 @@
 <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-messaging-compat.js"></script>
 
+<!-- GSAP Animation Script -->
 <script>
+  // Replace your animation code with this fully responsive version
+  document.addEventListener("DOMContentLoaded", () => {
+    const svgImage = document.querySelector(".logo");
+    const logoContainer = document.querySelector(".logo-container");
+    const formularioLogin = document.getElementById("formularioLogin");
+    const punto = document.getElementById("punto");
 
-  const versionLocal = "dosxdos110";
+    // Clear any existing styles that might interfere
+    document.body.style.backgroundColor = "transparent";
+
+    // Hide login form initially
+    if (formularioLogin) {
+      formularioLogin.classList.add("displayOff");
+      formularioLogin.classList.remove("displayOn");
+    }
+
+    fetch(svgImage.src)
+      .then((response) => response.text())
+      .then((svgContent) => {
+        logoContainer.innerHTML = svgContent;
+        const svgElement = logoContainer.querySelector("svg");
+        svgElement.id = "main-svg";
+        svgElement.style.width = "100%";
+        svgElement.style.height = "auto";
+        svgElement.style.display = "block";
+
+        createAnimation();
+      })
+      .catch((error) => console.error("Error loading SVG:", error));
+
+    function createAnimation() {
+      const mainTimeline = gsap.timeline();
+
+      const angleLeft = document.querySelector("#angle-left");
+      const angleRight = document.querySelector("#angle-right");
+      const d2 = document.querySelector("#letter-d2");
+
+      const allPaths = document.querySelectorAll("#main-svg path");
+
+      const allExceptX = Array.from(allPaths).filter(
+        (path) => path !== angleLeft && path !== angleRight
+      );
+
+      const allExceptAngleLeftAndD2 = Array.from(allPaths).filter(
+        (path) => path !== angleRight && path !== d2
+      );
+
+      // Group all letters for GRUPO together as one unit
+      const grupoLetters = [
+        document.querySelector("#letter-g"),
+        document.querySelector("#letter-p"),
+        document.querySelector("#letter-a"),
+        document.querySelector("#letter-p2"),
+        document.querySelector("#letter-o3"),
+      ].filter(el => el);
+
+      // Group all letters for IMAGEN together as one unit
+      const imagenLetters = [
+        document.querySelector("#letter-i"),
+        document.querySelector("#letter-m"),
+        document.querySelector("#letter-a2"),
+        document.querySelector("#letter-g2"),
+        document.querySelector("#letter-e"),
+        document.querySelector("#letter-n"),
+      ].filter(el => el);
+
+      // Calculate responsive circle size that works on all devices
+      function getResponsiveSize() {
+        // Get viewport dimensions
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+
+        // For mobile devices, use more screen space
+        if (viewportWidth <= 539) {
+          // Use 95% of viewport width on mobile
+          return viewportWidth * 0.90;
+        } else {
+          // Original logic for larger screens
+          let baseSize = Math.min(viewportWidth, viewportHeight) * 0.7;
+          if (baseSize < 300) baseSize = 300;
+          if (baseSize > viewportWidth * 0.9) baseSize = viewportWidth * 0.9;
+          if (baseSize > viewportHeight * 0.9) baseSize = viewportHeight * 0.9;
+          return baseSize;
+        }
+      }
+
+      const circleSize = getResponsiveSize();
+
+      // Create expanding dot for transition
+      const expandingDot = document.createElement("div");
+      expandingDot.style.position = "fixed";
+      expandingDot.style.top = "50%";
+      expandingDot.style.left = "50%";
+      expandingDot.style.transform = "translate(-50%, -50%)";
+      expandingDot.style.backgroundColor = "#db0032";
+      expandingDot.style.borderRadius = "50%";
+      expandingDot.style.width = "0px";
+      expandingDot.style.height = "0px";
+      expandingDot.style.opacity = "0";
+      expandingDot.style.zIndex = "5";
+      document.body.appendChild(expandingDot);
+
+      // Set initial states for animation
+      gsap.set(allPaths, {
+        opacity: 0,
+        scale: 0,
+        transformOrigin: "center center",
+        rotation: () => gsap.utils.random(-100, 100),
+        y: () => gsap.utils.random(-300, 300),
+      });
+
+      // Pre-position the letters for the separated look
+      gsap.set(grupoLetters, { x: -700 });
+      gsap.set(imagenLetters, { x: 700 });
+
+      // Ensure angleLeft and angleRight are aligned vertically
+      gsap.set([angleLeft, angleRight], {
+        opacity: 0,
+        scale: 0,
+        y: 0,
+      });
+
+      // Animation steps 1-5...
+      mainTimeline.to([angleLeft, angleRight], {
+        opacity: 1,
+        scale: 1,
+        rotation: 0,
+        x: 0,
+        duration: 0.8,
+        ease: "back.out(1.7)",
+        stagger: 0.1
+      });
+
+      mainTimeline.to(
+        allExceptX,
+        {
+          opacity: 1,
+          scale: 1,
+          rotation: 0,
+          y: 0,
+          duration: 1,
+          stagger: 0,
+          ease: "back.out(1.7)",
+        },
+        "-=0.4"
+      );
+
+      mainTimeline.to({}, { duration: 0.5 });
+
+      mainTimeline.to(allExceptAngleLeftAndD2, {
+        scale: 0,
+        opacity: 0,
+        duration: 0.6,
+        ease: "power3.in",
+      });
+
+      mainTimeline.to(d2, {
+        rotation: 720,
+        x: -3500,
+        duration: 0.5,
+        ease: "power4.inOut",
+      });
+
+      mainTimeline.to(
+        angleRight,
+        {
+          scale: 1.6,
+          x: -2300,
+          y: -200,
+          duration: 0.8,
+          ease: "power2.out",
+        },
+        "-=0.2"
+      );
+
+      mainTimeline.to(
+        [angleRight, d2],
+        {
+          duration: 0.6,
+          scale: 1.2,
+          stagger: { each: 0.03, from: "random" },
+          ease: "back.out(1.5)",
+        },
+        "-=0.3"
+      );
+
+      mainTimeline.to([angleRight, d2], {
+        opacity: 1,
+        duration: 0.3,
+        ease: "power2.inOut",
+      });
+
+      mainTimeline.to([angleRight, d2], {
+        scale: 0,
+        opacity: 0,
+        duration: 0.4,
+        ease: "power3.in",
+      });
+
+      // Final step - create the circle and center the form
+      mainTimeline.to(expandingDot, {
+        width: `${circleSize}px`,
+        height: `${circleSize}px`,
+        opacity: 1,
+        duration: 0.7,
+        ease: "back.out(1.7)",
+        onComplete: function () {
+          // Hide animation elements
+          logoContainer.style.display = "none";
+          expandingDot.style.display = "none";
+
+          punto.style = "";
+          punto.className = "";
+
+          punto.style.position = "fixed";
+          punto.style.top = "50%";
+          punto.style.left = "50%";
+          punto.style.transform = "translate(-50%, -50%)";
+          punto.style.width = `${circleSize}px`;
+          punto.style.height = `${circleSize}px`;
+          punto.style.maxWidth = "95vw";
+          punto.style.maxHeight = "95vh";
+          punto.style.backgroundColor = "#db0032";
+          punto.style.borderRadius = "50%";
+          punto.style.display = "flex";
+          punto.style.justifyContent = "center";
+          punto.style.alignItems = "center";
+          punto.style.zIndex = "10";
+          punto.style.overflow = "hidden";
+          punto.style.boxSizing = "border-box";
+
+          // Reset form styling
+          formularioLogin.style = "";
+          formularioLogin.className = "formulario";
+
+          // Make the form visible but with initial animation state
+          formularioLogin.style.display = "flex";
+          formularioLogin.style.flexDirection = "column";
+          formularioLogin.style.width = "80%";
+          formularioLogin.style.gap = "10px";
+          formularioLogin.style.maxWidth = "450px";
+          formularioLogin.style.boxSizing = "border-box";
+          formularioLogin.style.opacity = "0"; // Start invisible for animation
+
+          // Center the form directly in the middle of the circle
+          // Get reference to the recovery form
+          const formularioRecordar = document.getElementById("formularioRecordar");
+          // Clear punto container but preserve both forms
+          punto.innerHTML = "";
+          punto.appendChild(formularioLogin);
+          punto.appendChild(formularioRecordar);
+          formularioRecordar.style.display = "none";
+
+          // Get all form elements for animation
+          const labels = formularioLogin.querySelectorAll("label");
+          const inputs = formularioLogin.querySelectorAll("input");
+          const buttons = formularioLogin.querySelectorAll("button");
+          const paragraphs = formularioLogin.querySelectorAll("p");
+
+          // Set form element styles
+          labels.forEach(label => {
+            label.style.textAlign = "left";
+            label.style.alignSelf = "flex-start";
+            label.style.color = "white";
+            label.style.width = "100%";
+            label.style.fontSize = "15px";
+            label.style.marginBottom = "-5px"
+          });
+
+          inputs.forEach(input => {
+            input.style.width = "100%";
+            input.style.boxSizing = "border-box";
+            input.style.borderRadius = "30px";
+            input.style.border = "none";
+            input.style.padding = "8px 20px";
+          });
+
+          buttons.forEach(button => {
+            button.style.alignSelf = "center";
+            button.style.padding = "8px 20px";
+            button.style.backgroundColor = "white";
+            button.style.color = "#db0032";
+            button.style.borderRadius = "15px";
+            button.style.border = "none";
+            button.style.cursor = "pointer";
+            button.style.marginTop = "5px";
+            button.style.fontFamily = "FuturaMedium";
+            button.style.fontWeight = "bold";
+          });
+
+          // Set initial states for form elements
+          gsap.set(formularioLogin, { opacity: 0, y: 20 });
+          gsap.set([...labels, ...inputs, ...buttons, ...paragraphs], { opacity: 0, y: 15 });
+
+          // Create a new timeline for form animation
+          const formTimeline = gsap.timeline();
+
+          // Animate the form container first
+          formTimeline.to(formularioLogin, {
+            opacity: 1,
+            y: 0,
+            duration: 0.5,
+            ease: "power2.out"
+          });
+
+          // Then animate each form element with staggered timing
+          formTimeline.to([...labels, ...inputs, ...buttons, ...paragraphs], {
+            opacity: 1,
+            y: 0,
+            duration: 0.4,
+            stagger: 0.1, // 0.1 second delay between each element
+            ease: "back.out(1.2)"
+          }, "-=0.3"); // Start a bit before the form animation completes
+
+          // Add this inside the onComplete function of the main timeline
+          const logo2 = document.getElementById("logo2");
+          const idiomas = document.getElementById("idiomas");
+          const instalar = document.getElementById("instalar");
+
+          // Ensure these elements are visible immediately
+          if (logo2) {
+            logo2.style.display = 'block';
+            logo2.style.opacity = '1';
+            logo2.style.position = 'absolute';
+            logo2.style.width = '4rem';
+            logo2.style.bottom = '0.7rem';
+            logo2.style.right = '0.7rem';
+          }
+
+          if (idiomas) {
+            idiomas.style.display = 'flex';
+            idiomas.style.opacity = '1';
+            idiomas.style.position = 'absolute';
+            idiomas.style.top = '0.7rem';
+            idiomas.style.right = '0.7rem';
+          }
+
+          if (instalar) {
+            instalar.style.display = 'flex';
+            instalar.style.opacity = '1';
+            instalar.style.position = 'absolute';
+            instalar.style.width = '4rem';
+            instalar.style.top = '0.7rem';
+            instalar.style.left = '0.7rem';
+          }
+
+          // Re-add event listeners for form switching
+          const olvidarLink = formularioLogin.querySelector("#olvidar");
+          const volverButton = formularioRecordar.querySelector("#volver");
+
+          if (olvidarLink) {
+            olvidarLink.addEventListener("click", function (e) {
+              e.preventDefault();
+              formularioLogin.style.display = "none";
+              formularioRecordar.style.display = "flex";
+            });
+          }
+
+          if (volverButton) {
+            volverButton.addEventListener("click", function (e) {
+              e.preventDefault();
+              formularioRecordar.style.display = "none";
+              formularioLogin.style.display = "flex";
+            });
+          }
+
+          // Add install button functionality
+          const instalarButton = document.getElementById("instalarImg");
+          if (instalarButton) {
+            instalarButton.addEventListener("click", function () {
+              // Check if app can be installed via PWA
+              if (window.deferredPrompt) {
+                window.deferredPrompt.prompt();
+                window.deferredPrompt.userChoice.then((choiceResult) => {
+                  console.log('User choice result:', choiceResult.outcome);
+                  window.deferredPrompt = null;
+                });
+              } else {
+                // Detect device type and open appropriate store or show instructions
+                if (isAndroid) {
+                  window.open('https://play.google.com/store/apps/details?id=com.dosxdos.app', '_blank');
+                } else if (isiOS) {
+                  window.open('https://apps.apple.com/app/dosxdos/id123456789', '_blank');
+                } else {
+                  // Show desktop installation instructions based on language
+                  if (idioma === "es") {
+                    alerta("Para instalar la aplicación, haga clic en el botón de instalación en la barra de direcciones de su navegador.");
+                  } else {
+                    alerta("To install the application, click the installation button in your browser's address bar.");
+                  }
+                }
+              }
+            });
+          }
+
+          // Call appOnline function if it exists
+          if (typeof appOnline === 'function') {
+            appOnline();
+          }
+        }
+      });
+    }
+
+    // Add window resize event to keep circle responsive
+    window.addEventListener("resize", function () {
+      if (punto && punto.style.position === "fixed") {
+        const newSize = getResponsiveSize();
+        punto.style.width = `${newSize}px`;
+        punto.style.height = `${newSize}px`;
+      }
+    });
+
+    // Helper function for responsive sizing
+    function getResponsiveSize() {
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+      let baseSize = Math.min(viewportWidth, viewportHeight) * 0.7;
+      if (baseSize < 300) baseSize = 300;
+      if (baseSize > viewportWidth * 0.9) baseSize = viewportWidth * 0.9;
+      if (baseSize > viewportHeight * 0.9) baseSize = viewportHeight * 0.9;
+      return baseSize;
+    }
+  });
+</script>
+
+<script>
+  const versionLocal = "dosxdos112";
 
   tokenNativo = null;
   tokenFirebase = null;
@@ -462,24 +931,101 @@
   const isAndroid = /android/i.test(userAgent);
   const isiOS = /(iphone|ipad|ipod)/i.test(userAgent);
 
+  function alerta(mensaje) {
+    // Remove existing alert if present
+    const existingAlert = document.querySelector("#customAlert");
+    if (existingAlert) {
+      existingAlert.remove();
+    }
 
-  const $mensaje = document.getElementById("mensaje");
-  const $textoMensaje = document.getElementById("mensajeTexto");
+    // Create alert container
+    const alertContainer = document.createElement("div");
+    alertContainer.id = "customAlert";
+    alertContainer.style.position = 'fixed';
+    alertContainer.style.left = '50%';
+    alertContainer.style.transform = 'translateX(-50%)';
+    alertContainer.style.zIndex = '50';
+    alertContainer.style.transition = 'all 0.3s ease-in-out';
+    alertContainer.style.width = '95%';
+    alertContainer.style.maxWidth = '65%';
+    alertContainer.style.top = '-100px';
 
-  //Alertas
-  function mensajeOn() {
-    $mensaje.classList.remove("displayOff");
-    $mensaje.classList.add("displayOn");
+    // Create alert content
+    const alertContent = document.createElement("div");
+    alertContent.style.position = 'relative';
+    alertContent.style.backgroundColor = 'white';
+    alertContent.style.border = '2px solid #dc2626'; // red-600
+    alertContent.style.borderRadius = '0.5rem';
+    alertContent.style.boxShadow = '0 10px 15px -3px rgba(0, 0, 0, 0.1)';
+    alertContent.style.padding = '1rem';
+    alertContent.style.display = 'flex';
+    alertContent.style.fontFamily = 'FuturaLight';
+    alertContent.style.flexDirection = 'column';
+    alertContent.style.gap = '0.75rem';
+
+    // Create close button
+    const closeButton = document.createElement("button");
+    closeButton.style.cursor = 'pointer';
+    closeButton.style.position = 'absolute';
+    closeButton.style.right = '-0.75rem';
+    closeButton.style.top = '-1rem';
+    closeButton.style.backgroundColor = '#dc2626'; // red-600
+    closeButton.style.borderRadius = '9999px';
+    closeButton.style.padding = '7px';
+    closeButton.style.paddingBottom = '5px';
+    closeButton.style.border = '#dc2626';
+    closeButton.style.transition = 'background-color 0.2s';
+    closeButton.innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" style="width: 1.25rem; height: 1.25rem; color: white;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+  `;
+
+    // Create main content container
+    const contentContainer = document.createElement("div");
+    contentContainer.style.display = 'flex';
+    contentContainer.style.alignItems = 'center';
+    contentContainer.style.gap = '0.75rem';
+    contentContainer.style.flex = '1';
+
+
+    // Create message text
+    const messageText = document.createElement("p");
+    messageText.style.color = '#111827'; // gray-900
+    messageText.style.fontSize = '1rem';
+    messageText.style.flex = '1';
+    messageText.textContent = mensaje;
+
+    // Assemble the content container
+    contentContainer.appendChild(messageText);
+
+    // Assemble the alert
+    alertContent.appendChild(closeButton);
+    alertContent.appendChild(contentContainer);
+    alertContainer.appendChild(alertContent);
+    document.body.appendChild(alertContainer);
+
+    // Slide down animation
+    requestAnimationFrame(() => {
+      alertContainer.style.top = "56px";
+    });
+
+    // Add event listeners
+    closeButton.addEventListener("click", () => {
+      hideAlert(alertContainer);
+    });
+
+    // Hide loader if it exists
+    if (typeof loaderOff === 'function') {
+      loaderOff();
+    }
   }
 
-  function mensajeOff() {
-    $mensaje.classList.remove("displayOn");
-    $mensaje.classList.add("displayOff");
-  }
-
-  function alerta(men) {
-    $textoMensaje.innerHTML = men;
-    mensajeOn();
+  function hideAlert(alertContainer) {
+    alertContainer.style.top = "-100px";
+    setTimeout(() => {
+      alertContainer.remove();
+    }, 300);
   }
 
   //Configuración de Firebase
@@ -623,16 +1169,6 @@
     window.history.replaceState(null, null, window.location.href);
   }
 
-  function mensaje(men) {
-    const $mensaje = document.getElementById("mensaje");
-    const $mensajeTexto = document.getElementById("mensajeTexto");
-    $mensajeTexto.innerHTML = men;
-    $mensaje.classList.remove("displayOff");
-    $mensaje.classList.add("displayOn");
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
-  }
-
   function espanol() {
     return new Promise((resolve, reject) => {
       fetch("https://dosxdos.app.iidos.com/espanol.json")
@@ -717,11 +1253,11 @@
         }
       } else {
         if (idm == "es") {
-          mensaje(
+          alerta(
             "Sin conexión a internet no es posible realizar esta acción"
           );
         } else {
-          mensaje(
+          alerta(
             "Without an internet connection it is not possible to perform this action"
           );
         }
@@ -783,9 +1319,11 @@
     });
     const $instalar = document.getElementById("instalar");
     const $tipInstalar = document.getElementById("tipInstalar");
+
     $instalar.addEventListener("mouseover", () => {
       $tipInstalar.classList.replace("displayOff", "displayOn");
     });
+
     $instalar.addEventListener("mouseout", () => {
       $tipInstalar.classList.replace("displayOn", "displayOff");
     });
@@ -939,8 +1477,7 @@
       }
     } else {
       mensaje = "No es posible cerrar la sesión sin conexión a internet";
-      $textoMensaje.innerHTML = mensaje;
-      mensajeOn();
+      alerta(mensaje);
     }
   }
 
@@ -1007,7 +1544,7 @@
       });
       let mensaj = localStorage.getItem("mensaje");
       if (mensaj && mensaj !== null) {
-        mensaje(mensaj);
+        alerta(mensaj);
         localStorage.removeItem("mensaje");
       }
     } else {
@@ -1035,7 +1572,7 @@
         });
         let mensaj = localStorage.getItem("mensaje");
         if (mensaj && mensaj !== null) {
-          mensaje(mensaj);
+          alerta(mensaj);
           localStorage.removeItem("mensaje");
         }
       } else {
@@ -1048,7 +1585,7 @@
     try {
       const validacionDeCierrePorVersion = await validarCierrePorVersion();
       if (validacionDeCierrePorVersion == true) {
-        inicio();
+        // Removed inicio() call as it's now handled by GSAP animation
         idioma = localStorage.getItem("idioma");
         if (idioma && idioma !== null) {
           await cargarIdioma(idioma);
@@ -1080,7 +1617,7 @@
         const validacionDeVersion = await validarVersion();
         console.log("validacionDeVersion: " + validacionDeVersion);
         if (validacionDeVersion == true) {
-          inicio();
+          // Removed inicio() call as it's now handled by GSAP animation
           idioma = localStorage.getItem("idioma");
           if (idioma && idioma !== null) {
             await cargarIdioma(idioma);
@@ -1122,7 +1659,7 @@
 
   async function appOffline() {
     try {
-      await inicio2();
+      // Removed inicio2() call as it's now handled by GSAP animation
       idioma = localStorage.getItem("idioma");
       if (idioma && idioma !== null) {
         const htmlElement = document.querySelector("html");
@@ -1138,11 +1675,11 @@
         }
       }
       if (idioma == "es") {
-        mensaje(
+        alerta(
           "Sin conexión a internet no es posible iniciar la autenticación"
         );
       } else {
-        mensaje(
+        alerta(
           "Without an internet connection it is not possible to start login"
         );
       }
@@ -1152,13 +1689,14 @@
   }
 
   /* TAREAS AL INICIAR LA PANTALLA CON EL ESTADO DE LA CONEXIÓN */
-  if (navigator.onLine) {
-    console.log("La aplicación está en línea.");
-    appOnline();
-  } else {
-    console.log("La aplicación está fuera de línea.");
-    appOffline();
-  }
+  // These are now handled by the GSAP animation which will call appOnline() on completion
+  // if (navigator.onLine) {
+  //   console.log("La aplicación está en línea.");
+  //   appOnline();
+  // } else {
+  //   console.log("La aplicación está fuera de línea.");
+  //   appOffline();
+  // }
 
   /* TAREAS EN LA INTERMITENCIA DE LA CONEXIÓN */
   window.addEventListener("online", () => {
@@ -1199,7 +1737,7 @@
               "Invalid password format; Only letters, digits and special characters (4 to 12 characters without spaces) are allowed in the password.";
           }
         }
-        mensaje(mensaj);
+        alerta(mensaj);
       }
       if (campos.usuario && campos.contrasena) {
         if (navigator.onLine) {
@@ -1223,7 +1761,7 @@
                   } else {
                     mensaj += "Incorrect access data";
                   }
-                  mensaje(mensaj);
+                  alerta(mensaj);
                 } else if (res.status == 500) {
                   if (idioma == "es") {
                     mensaj += "Error interno del servidor";
@@ -1433,24 +1971,24 @@
                         } else {
                           mensaj =
                             "Tu usuario está inactivo, comunícate por favor con nosotros";
-                          mensaje(mensaj);
+                          alerta(mensaj);
                           window.scrollTo(0, 0);
                         }
                       } else {
                         mensaj =
                           "El usuario ya no existe, ha sido eliminado, comunícate por favor con nosotros";
-                        mensaje(mensaj);
+                        alerta(mensaj);
                         window.scrollTo(0, 0);
                       }
                     } else {
-                      mensaje(
+                      alerta(
                         "Error al intentar agregar los datos al almacén usuario"
                       );
                     }
                   })
                   .catch((err) => {
                     mensaj = "ERROR - " + err.message;
-                    mensaje(mensaj);
+                    alerta(mensaj);
                     console.error(err);
                   });
               } else {
@@ -1460,12 +1998,12 @@
                 } else {
                   men = "INCORRECT DATA";
                 }
-                mensaje(men);
+                alerta(men);
               }
             })
             .catch((err) => {
               mensaj = "ERROR - " + err.message;
-              mensaje(mensaj);
+              alerta(mensaj);
               console.error(err);
             });
         } else {
@@ -1477,7 +2015,7 @@
             mensaj =
               "It is not possible to login without an internet connection";
           }
-          mensaje(mensaj);
+          alerta(mensaj);
         }
       }
     }
@@ -1496,7 +2034,7 @@
         } else {
           mensaj += "Invalid email format";
         }
-        mensaje(mensaj);
+        alerta(mensaj);
       } else {
         const body = {
           funcion: "recordar",
@@ -1519,11 +2057,11 @@
           })
           .then((res) => {
             men = res[1];
-            mensaje(men);
+            alerta(men);
           })
           .catch((err) => {
             mensaj = "ERROR - " + err.message;
-            mensaje(mensaj);
+            alerta(mensaj);
             console.error(err);
           });
       }
@@ -1609,6 +2147,24 @@
     });
   }
 
+  // Set up PWA installation prompt handling
+  window.addEventListener('beforeinstallprompt', (e) => {
+    // Prevent Chrome from automatically showing the prompt
+    e.preventDefault();
+    // Save the event so it can be triggered later
+    window.deferredPrompt = e;
+    console.log('App can be installed, saved prompt event');
+  });
+
+  // Track when the app is successfully installed
+  window.addEventListener('appinstalled', (evt) => {
+    console.log('App was installed');
+    // Hide the install button after successful installation
+    const instalar = document.getElementById("instalar");
+    if (instalar) {
+      instalar.style.display = 'none';
+    }
+  });
 </script>
 
 </html>

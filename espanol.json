@@ -1,15 +1,15 @@
 {
-    "tittle": "Autenticación dos.dos",
-    "usuario": "Usuario:",
-    "contrasena": "Contraseña:",
+    "tittle": "Autenticación dosxdos",
+    "usuario": "Usuario",
+    "contrasena": "Contraseña",
     "olvidar": "¿Te ayudamos a recordar algún dato?",
-    "acceder": "ACCEDER",
+    "acceder": "Acceder",
     "email": "Correo electrónico:",
-    "recordar": "ENVIAR",
-    "volver": "VOLVER",
+    "recordar": "Enviar",
+    "volver": "Volver",
     "instalar": "¡Instala nuestra aplicación!",
-    "reContrasena": "Nueva contraseña:",
-    "reContrasena2": "Repetir nueva contraseña:",
+    "reContrasena": "Nueva contraseña",
+    "reContrasena2": "Repetir nueva contraseña",
     "reestablecer": "RESTABLECER",
-    "tittle2": "Restablecer contraseña dos.dos"
+    "tittle2": "Restablecer contraseña dosxdos"
 }

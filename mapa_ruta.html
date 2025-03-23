@@ -16,10 +16,8 @@
     <span class="loader"></span>
   </div>
 
-
-
   <!-- Navigation -->
-  <section id="encabezado" class="w-full bg-white shadow-md fixed top-0 z-30 ">
+  <section id="encabezado" class="w-full bg-white shadow-md fixed top-0 z-30">
     <!-- Main header -->
     <div class="flex items-center justify-between w-full px-6 py-4">
       <!-- Logo -->
@@ -30,39 +28,7 @@
 
       <!-- Desktop Navigation -->
       <nav class="hidden xl:flex items-center space-x-8">
-        <a href="https://dosxdos.app.iidos.com/rutas_montador.html"
-          class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 5c8 0 8 14 16 14" />
-            <circle cx="4" cy="5" r="2" />
-            <circle cx="12" cy="12" r="2" />
-            <circle cx="20" cy="19" r="2" />
-          </svg>
-          <span>Rutas</span>
-        </a>
-
-        <a href="https://dosxdos.app.iidos.com/ruta_montador.html"
-          class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
-            <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
-            <path d="M9 12h6" />
-            <path d="M9 16h6" />
-          </svg>
-          <span>Líneas</span>
-        </a>
-
-        <!-- History Link -->
-        <a href="https://dosxdos.app.iidos.com/historial_montador.html"
-          class="flex items-center text-gray-700 hover:text-red-600 transition-colors duration-200">
-          <svg class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10" />
-            <polyline points="12 6 12 12 16 14" />
-          </svg>
-          <span>Historial</span>
-        </a>
+        <!-- Navigation items will be dynamically created by createDesktopNavigation() -->
 
         <!-- Desktop Menu Notifications Bell -->
         <a href="https://dosxdos.app.iidos.com/notificaciones.html" class="relative z-10" id="desktopBellContainer">
@@ -126,12 +92,13 @@
       <div class="xl:hidden flex items-center space-x-2 mx-2">
         <!-- Mobile Bell -->
         <a href="https://dosxdos.app.iidos.com/notificaciones.html" class="relative z-10" id="mobileBellContainer">
-          <img id="bellMobile" src="" class="text-gray-900 object-contain mt-2" />
+          <img id="bellMobile" src="https://dosxdos.app.iidos.com/img/bell2.png"
+            class="w-8 text-gray-900 object-contain mt-2" />
           <span id="mobileNotificationCount"
             class="absolute top-2 right-0 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] text-center border hidden"></span>
         </a>
 
-        <!-- Hamburger Button -->
+        <!-- Mobile Menu Button -->
         <button id="menuButton" class="xl:hidden relative z-50 p-2 focus:outline-none">
           <div class="relative w-8 h-8">
             <span class="absolute h-1 w-8 bg-gray-900 transition-all duration-300 ease-in-out top-1"
@@ -144,148 +111,83 @@
         </button>
       </div>
 
-      <div id="mobileMenu"
-        class="xl:hidden fixed inset-0 bg-gradient-to-r from-red-500 to-red-600 bg-opacity-95 transform translate-x-full transition-all duration-500 ease-in-out z-40 overflow-hidden backdrop-blur-sm flex flex-col">
-        <div class="absolute inset-0 z-0" style="
-          background-image: url('https://dosxdos.app.iidos.com/img/texture-red.svg');
-          background-size: contain;
-          opacity: 0.7;
-        "></div>
-        <!-- User Profile Section -->
-        <div class="px-8 py-4 mt-20 relative z-10">
-          <div class="relative flex items-center gap-3 py-1 pl-1.5 pr-4 bg-white shadow-lg rounded-full">
-            <!-- Profile image -->
-            <div
-              class="absolute left-0 w-24 h-24 rounded-full overflow-hidden border-2 border-white bg-gray-100 flex items-center justify-center shadow-lg">
-              <img id="imagenUsuarioMobile" src="https://dosxdos.app.iidos.com/img/usuario.png"
-                class="w-full h-full object-cover" alt="Profile"
-                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
-              <svg class="w-12 h-12 text-gray-400 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                <circle cx="12" cy="7" r="4"></circle>
-              </svg>
-            </div>
-            <div class="ml-28 flex items-center py-4">
-              <!-- User name -->
-              <span class="text-black font-medium text-xl">¡Hola,&nbsp;</span>
-              <span id="nombreUsuarioMobile" class="text-black font-medium text-xl"></span>
-              <span class="text-black font-medium text-xl">!</span>
-            </div>
-          </div>
-        </div>
+    </div>
 
-        <!-- Navigation Links -->
-        <nav class="px-8 py-6 space-y-2 relative z-10 flex-1 overflow-y-auto custom-scrollbar">
-          <a href="https://dosxdos.app.iidos.com/notificaciones.html"
-            class="z-10 flex items-center px-6 py-2 text-white bg-red-600 bg-opacity-60 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-xl group backdrop-blur-lg">
-            <div
-              class="flex items-center justify-center w-14 h-14 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all">
-              <svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M18 8a6 6 0 0 0-12 0v5a6 6 0 0 1-2 4h16a6 6 0 0 1-2-4V8"></path>
-                <line x1="12" y1="22" x2="12" y2="22"></line>
-                <!-- Small bell clapper -->
-              </svg>
-            </div>
-            <span class="text-lg font-semibold tracking-wide">Notificaciones</span>
-          </a>
-
-          <a href="https://dosxdos.app.iidos.com/rutas_montador.html"
-            class="z-10 flex items-center px-6 py-2 text-white bg-red-600 bg-opacity-60 shadow-xl backdrop-blur-lg hover:bg-white/20 rounded-xl transition-all duration-300 group">
-            <div
-              class="z-0 flex items-center justify-center w-14 h-14 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all">
-              <svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2">
-                <path d="M4 5c8 0 8 14 16 14" />
-                <circle cx="4" cy="5" r="2" />
-                <circle cx="12" cy="12" r="2" />
-                <circle cx="20" cy="19" r="2" />
-              </svg>
-            </div>
-            <span class="text-lg font-semibold tracking-wide">Rutas</span>
-          </a>
-
-          <a href="https://dosxdos.app.iidos.com/ruta_montador.html"
-            class="z-10 flex items-center px-6 py-2 text-white bg-red-600 bg-opacity-60 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-xl group backdrop-blur-lg">
-            <div
-              class="flex items-center justify-center w-14 h-14 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all">
-              <svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2">
-                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
-                <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
-                <path d="M9 12h6" />
-                <path d="M9 16h6" />
-              </svg>
-            </div>
-            <span class="text-lg font-semibold tracking-wide">Líneas</span>
-          </a>
-
-          <a href="https://dosxdos.app.iidos.com/historial_montador.html"
-            class="z-10 flex items-center px-6 py-2 text-white bg-red-600 bg-opacity-60 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-xl group backdrop-blur-lg">
-            <div
-              class="flex items-center justify-center w-14 h-14 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all">
-              <svg class="w-7 h-7 text-white group-hover:text-gray-900 transition-all" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10" />
-                <polyline points="12 6 12 12 16 14" />
-              </svg>
-            </div>
-            <span class="text-lg font-semibold tracking-wide">Historial</span>
-          </a>
-        </nav>
-
-        <div class="relative z-10">
-          <div id="divider_id" class="website-divider-container-734167" style="height: 100px; overflow: visible">
-            <svg xmlns="http://www.w3.org/2000/svg" class="divider-img-734167" viewBox="0 0 1080 137"
-              preserveAspectRatio="none" style="bottom: -20px">
-              <path
-                d="M 0,137 V 59.03716 c 158.97703,52.21241 257.17659,0.48065 375.35967,2.17167 118.18308,1.69101 168.54911,29.1665 243.12679,30.10771 C 693.06415,92.25775 855.93515,29.278599 1080,73.61449 V 137 Z"
-                style="fill: #ffffff"></path>
-              <path
-                d="M 0,10.174557 C 83.419822,8.405668 117.65911,41.78116 204.11379,44.65308 290.56846,47.52499 396.02558,-7.4328 620.04248,94.40134 782.19141,29.627636 825.67279,15.823104 1080,98.55518 V 137 H 0 Z"
-                style="fill: #ffffff; opacity: 0.5"></path>
-              <path
-                d="M 0,45.10182 C 216.27861,-66.146913 327.90348,63.09813 416.42665,63.52904 504.94982,63.95995 530.42054,22.125806 615.37532,25.210412 700.33012,28.295019 790.77619,132.60682 1080,31.125744 V 137 H 0 Z"
-                style="fill: #ffffff; opacity: 0.25"></path>
-            </svg>
-          </div>
-        </div>
-
-        <!-- User Actions -->
-        <div class="relative z-10 mt-auto px-8 pb-6 bg-white shadow-lg flex justify-center space-x-6 pb-2 rounded-t-xl">
-          <!-- Edit Button -->
-          <button id="editarUsuarioMobile"
-            class="flex items-center justify-center w-14 h-14 bg-white border-2 border-red-500 rounded-full hover:bg-red-100 transition-all duration-300">
-            <svg class="w-12 h-12 text-red-600 pl-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-              <g id="SVGRepo_iconCarrier">
-                <path
-                  d="M10.56 11.87C9.81832 11.87 9.0933 11.6501 8.47661 11.238C7.85993 10.826 7.37928 10.2403 7.09545 9.55506C6.81162 8.86984 6.73736 8.11584 6.88205 7.38841C7.02675 6.66098 7.3839 5.99279 7.90835 5.46835C8.4328 4.9439 9.10098 4.58675 9.82841 4.44205C10.5558 4.29736 11.3098 4.37162 11.9951 4.65545C12.6803 4.93928 13.266 5.41992 13.678 6.03661C14.0901 6.65329 14.31 7.37832 14.31 8.12C14.3074 9.11375 13.9114 10.066 13.2087 10.7687C12.506 11.4714 11.5538 11.8674 10.56 11.87ZM10.56 5.87C10.115 5.87 9.67998 6.00196 9.30997 6.24919C8.93996 6.49642 8.65157 6.84783 8.48127 7.25896C8.31097 7.67009 8.26642 8.12249 8.35323 8.55895C8.44005 8.99541 8.65434 9.39632 8.96901 9.71099C9.28368 10.0257 9.68459 10.2399 10.121 10.3268C10.5575 10.4136 11.0099 10.369 11.421 10.1987C11.8322 10.0284 12.1836 9.74004 12.4308 9.37003C12.678 9.00002 12.81 8.565 12.81 8.12C12.81 7.52326 12.5729 6.95096 12.151 6.52901C11.729 6.10705 11.1567 5.87 10.56 5.87Z"
-                  fill="#e53935"></path>
-                <path
-                  d="M3.56 18.87C3.36109 18.87 3.17032 18.791 3.02967 18.6503C2.88902 18.5097 2.81 18.3189 2.81 18.12C2.81 13.37 8.24 13.37 10.56 13.37C11.28 13.37 11.92 13.37 12.5 13.44C12.6973 13.4553 12.8805 13.548 13.0098 13.6979C13.139 13.8477 13.2038 14.0426 13.19 14.24C13.1722 14.4381 13.0773 14.6214 12.9259 14.7504C12.7744 14.8794 12.5785 14.9439 12.38 14.93C11.84 14.93 11.24 14.87 10.56 14.87C5.38 14.87 4.31 16.17 4.31 18.12C4.31134 18.2189 4.29286 18.317 4.25565 18.4086C4.21843 18.5002 4.16324 18.5834 4.09333 18.6533C4.02341 18.7232 3.9402 18.7784 3.84859 18.8156C3.75699 18.8529 3.65886 18.8713 3.56 18.87Z"
-                  fill="#e53935"></path>
-                <path
-                  d="M12.67 19.63C12.4711 19.6299 12.2805 19.5507 12.14 19.41C12.061 19.3348 12.0002 19.2426 11.9621 19.1404C11.9239 19.0382 11.9096 18.9286 11.92 18.82L12.08 16.9C12.0923 16.7235 12.1667 16.557 12.29 16.43L17.81 10.91C18.1908 10.5572 18.6908 10.3612 19.21 10.3612C19.7291 10.3612 20.2291 10.5572 20.61 10.91C20.7978 11.0993 20.9458 11.3242 21.0454 11.5715C21.145 11.8188 21.1942 12.0835 21.19 12.35C21.1939 12.5958 21.149 12.8398 21.0581 13.0681C20.9671 13.2964 20.8318 13.5044 20.66 13.68L15.14 19.2C15.0176 19.3256 14.8545 19.4035 14.68 19.42L12.74 19.6L12.67 19.63ZM13.55 17.29L13.49 18.05L14.27 17.98L19.6 12.65C19.6629 12.5746 19.6951 12.4782 19.69 12.38C19.6896 12.2408 19.64 12.1062 19.55 12C19.4517 11.927 19.3325 11.8875 19.21 11.8875C19.0875 11.8875 18.9683 11.927 18.87 12L13.55 17.29Z"
-                  fill="#e53935"></path>
-              </g>
-            </svg>
-          </button>
-
-          <!-- Logout Button -->
-          <button id="cerrarSesionMobile"
-            class="flex items-center justify-center w-14 h-14 bg-red-600 rounded-full  transition-all duration-300">
-            <svg class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-              <polyline points="16 17 21 12 16 7" />
-              <line x1="21" y1="12" x2="9" y2="12" />
-            </svg>
-          </button>
-        </div>
-
+    <div id="opcionesMenu"
+      class="xl:hidden fixed inset-0 bg-gradient-to-r from-red-500 to-red-600 bg-opacity-95 transform translate-x-full transition-all duration-500 ease-in-out z-40 overflow-hidden backdrop-blur-sm flex flex-col">
+      <div class="absolute inset-0 z-0"
+        style="background-image: url('https://dosxdos.app.iidos.com/img/texture-red.svg'); background-size: contain; opacity: 0.7;">
       </div>
+      <!-- User Profile Section -->
+      <div class="px-8 py-4 mt-16 relative z-10">
+        <div class="relative flex items-center gap-3 py-1 pl-1.5 pr-4 bg-white shadow-lg rounded-full">
+          <!-- Profile image -->
+          <div
+            class="absolute left-0 w-28 h-28 rounded-full overflow-hidden border-4 border-white bg-gradient-to-br from-red-50 to-white flex items-center justify-center shadow-xl"
+            style="transform: translateX(-15%);">
+            <img id="imagenUsuarioMobile" src="https://dosxdos.app.iidos.com/img/usuario.png"
+              class="w-full h-full object-cover" alt="Profile"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+            <svg class="w-12 h-12 text-gray-400 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </div>
+          <div class="ml-28 flex items-center py-4">
+            <!-- User name -->
+            <span class="text-black font-medium text-xl">¡Hola,&nbsp;</span>
+            <span id="nombreUsuarioMobile" class="text-black font-medium text-xl"></span>
+            <span class="text-black font-medium text-xl">!</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile Menu Navigation Links -->
+      <nav class="px-8 pt-3 space-y-2 relative z-10 flex-1 overflow-y-auto custom-scrollbar mt-2">
+        <!-- Dynamic menu items will be added here based on user role -->
+      </nav>
+
+      <!-- Mobile Menu Footer -->
+      <div class="relative z-10">
+        <div class="website-divider-container-734167" style="height: 100px; overflow: visible">
+          <svg xmlns="http://www.w3.org/2000/svg" class="divider-img-734167" viewBox="0 0 1080 137"
+            preserveAspectRatio="none" style="bottom: -20px">
+            <path
+              d="M 0,137 V 59.03716 c 158.97703,52.21241 257.17659,0.48065 375.35967,2.17167 118.18308,1.69101 168.54911,29.1665 243.12679,30.10771 C 693.06415,92.25775 855.93515,29.278599 1080,73.61449 V 137 Z"
+              style="fill: #ffffff"></path>
+            <path
+              d="M 0,10.174557 C 83.419822,8.405668 117.65911,41.78116 204.11379,44.65308 290.56846,47.52499 396.02558,-7.4328 620.04248,94.40134 782.19141,29.627636 825.67279,15.823104 1080,98.55518 V 137 H 0 Z"
+              style="fill: #ffffff; opacity: 0.5"></path>
+            <path
+              d="M 0,45.10182 C 216.27861,-66.146913 327.90348,63.09813 416.42665,63.52904 504.94982,63.95995 530.42054,22.125806 615.37532,25.210412 700.33012,28.295019 790.77619,132.60682 1080,31.125744 V 137 H 0 Z"
+              style="fill: #ffffff; opacity: 0.25"></path>
+          </svg>
+        </div>
+      </div>
+
+      <!-- User Actions -->
+      <div class="relative z-10 mt-auto px-8 pb-6 bg-white shadow-lg flex justify-center space-x-6 pb-2 rounded-t-xl">
+        <!-- Edit Button -->
+        <button id="editarUsuarioMobile"
+          class="flex items-center justify-center w-14 h-14 bg-white border-2 border-red-500 rounded-full hover:bg-red-100 transition-all duration-300">
+          <svg class="w-8 h-8 text-red-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+        </button>
+
+        <!-- Logout Button -->
+        <button id="cerrarSesionMobile"
+          class="flex items-center justify-center w-14 h-14 bg-red-600 rounded-full transition-all duration-300">
+          <svg class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+        </button>
+      </div>
+    </div>
     </div>
   </section>
 
@@ -418,291 +320,301 @@
     </div>
   </div>
 </body>
-  <script src="https://dosxdos.app.iidos.com/js/index_db.js"></script>
+<script src="https://dosxdos.app.iidos.com/js/index_db.js"></script>
+<script src="https://dosxdos.app.iidos.com/js/notificaciones.js"></script>
+<script src="https://dosxdos.app.iidos.com/js/navigation.js"></script>
+<script>
+  let montador;
+  const ruta = localStorage.getItem("ruta");
+  const nombreRuta = localStorage.getItem("nombreRuta");
+  const $loader = document.getElementById("loader");
+  const $body = document.getElementById("body");
+  let bounds;
+  let marcadores = [];
+  let notificacionesSinAcpetarNumero = 0;
 
-  <script>
-    let montador;
-    const ruta = localStorage.getItem("ruta");
-    const nombreRuta = localStorage.getItem("nombreRuta");
-    const $loader = document.getElementById("loader");
-    const $body = document.getElementById("body");
-    let bounds;
-    let marcadores = [];
+  function scrollToTop() {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }
 
-    function scrollToTop() {
-      // Para navegadores modernos
-      document.documentElement.scrollTop = 0;
-      // Para navegadores antiguos
-      document.body.scrollTop = 0;
-    }
+  /* LOADER */
+  function loaderOn() {
+    scrollToTop();
+    $loader.classList.remove("displayOff");
+    $loader.classList.add("displayOn");
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
+  }
 
-    /* LOADER */
-    function loaderOn() {
-      scrollToTop();
-      $loader.classList.remove("displayOff");
-      $loader.classList.add("displayOn");
-      document.body.style.overflow = 'hidden';
-      document.documentElement.style.overflow = 'hidden';
-      document.body.style.position = 'fixed';
-      document.body.style.width = '100%';
-    }
+  function loaderOff() {
+    setTimeout(() => {
+      $loader.classList.remove("displayOn");
+      $loader.classList.add("displayOff");
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+    }, 1000);
+  }
 
-    function loaderOff() {
-      setTimeout(() => {
-        $loader.classList.remove("displayOn");
-        $loader.classList.add("displayOff");
-        document.body.style.overflow = '';
-        document.documentElement.style.overflow = '';
-        document.body.style.position = '';
-        document.body.style.width = '';
-      }, 1000);
-    }
+  // Setup route title and back button
+  if (nombreRuta) {
+    document.getElementById("ruta-title").innerText = nombreRuta;
+  } else if (ruta) {
+    document.getElementById("ruta-title").innerText = ruta;
+  } else {
+    document.getElementById("ruta-title").innerText = "MAPA DE RUTA";
+  }
 
-    // Setup route title and back button
-    if (nombreRuta) {
-      document.getElementById("ruta-title").innerText = nombreRuta;
-    } else if (ruta) {
-      document.getElementById("ruta-title").innerText = ruta;
-    } else {
-      document.getElementById("ruta-title").innerText = "MAPA DE RUTA";
-    }
+  document.getElementById("volverBtn").addEventListener("click", () => {
+    window.location.href =
+      "https://dosxdos.app.iidos.com/ruta_montador.html";
+  });
 
-    document.getElementById("volverBtn").addEventListener("click", () => {
-      window.location.href =
-        "https://dosxdos.app.iidos.com/ruta_montador.html";
-    });
+  document.getElementById("modal-close").addEventListener("click", () => {
+    document.getElementById("modal").classList.add("hidden");
+  });
 
-    document.getElementById("modal-close").addEventListener("click", () => {
-      document.getElementById("modal").classList.add("hidden");
-    });
+  let lineasRuta = [];
 
-    let lineasRuta = [];
+  async function lineas() {
+    loaderOn();
+    const Arrayusuario = await leerDatos("dosxdos", "usuario");
+    usuario = Arrayusuario[0];
+    montador = usuario.cod;
+    sinc = await sincronizarDb2();
+    sinc
+      ? console.log("Base de datos sincronizada")
+      : console.error("Error al sincronizar la base de datos");
+    const TotalLineas = await leerDatos("dosxdos", "lineas");
+    if (TotalLineas) {
+      lineasRuta = TotalLineas.filter((objeto) => objeto.Proyecto === ruta);
+      console.log("Lineas: ", lineasRuta);
+      storageLineas = JSON.stringify(lineasRuta);
+      localStorage.setItem("lineasRuta", storageLineas);
+      await initMap(lineasRuta);
+      sincronizador();
 
-    const lineas = async () => {
-      loaderOn();
-      const Arrayusuario = await leerDatos("dosxdos", "usuario");
-      usuario = Arrayusuario[0];
-      montador = usuario.cod;
-      sinc = await sincronizarDb2();
-      sinc
-        ? console.log("Base de datos sincronizada")
-        : console.error("Error al sincronizar la base de datos");
-      const TotalLineas = await leerDatos("dosxdos", "lineas");
-      if (TotalLineas) {
-        lineasRuta = TotalLineas.filter((objeto) => objeto.Proyecto === ruta);
-        console.log("Lineas: ", lineasRuta);
-        storageLineas = JSON.stringify(lineasRuta);
-        localStorage.setItem("lineasRuta", storageLineas);
-        await initMap(lineasRuta);
-        sincronizador();
-
-        // Process notifications
+      try {
+        // Detailed debugging for notifications
+        console.log("Attempting to synchronize notifications");
         const sincronizacionDeNotificaciones = await sincronizarNotificaciones();
+        console.log("Notification synchronization result:", sincronizacionDeNotificaciones);
+
         if (sincronizacionDeNotificaciones) {
+          console.log("Calling notificar() function");
           await notificar();
+        } else {
+          console.warn("Notification synchronization failed");
         }
+      } catch (error) {
+        console.error("Error processing notifications:", error);
       }
-      loaderOff();
-    };
+    }
+    loaderOff();
+  }
 
-    let map;
-    const modal = document.getElementById("modal");
-    const pointName = document.getElementById("point-name");
-    const pointAddress = document.getElementById("point-address");
-    const pointLat = document.getElementById("point-lat");
-    const pointLng = document.getElementById("point-lng");
-    const navigateButton = document.getElementById("navigate-button");
-    const reportButton = document.getElementById("report-button");
-    const closeButton = document.getElementById("close-button");
+  let map;
+  const modal = document.getElementById("modal");
+  const pointName = document.getElementById("point-name");
+  const pointAddress = document.getElementById("point-address");
+  const pointLat = document.getElementById("point-lat");
+  const pointLng = document.getElementById("point-lng");
+  const navigateButton = document.getElementById("navigate-button");
+  const reportButton = document.getElementById("report-button");
+  const closeButton = document.getElementById("close-button");
 
-    function initMap(lineasInicio) {
-      bounds = new google.maps.LatLngBounds();
-      map = new google.maps.Map(document.getElementById("map"), {
-        zoom: 8,
-        gestureHandling: "greedy",
-        fullscreenControl: false,
-      });
+  function initMap(lineasInicio) {
+    bounds = new google.maps.LatLngBounds();
+    map = new google.maps.Map(document.getElementById("map"), {
+      zoom: 8,
+      gestureHandling: "greedy",
+      fullscreenControl: false,
+    });
 
-      // Create legend div with slide animation
-      const legendDiv = document.createElement('div');
-      legendDiv.style.position = 'absolute';
-      legendDiv.style.bottom = '20px';
-      legendDiv.style.left = '0';
-      legendDiv.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
-      legendDiv.style.borderRadius = '0 8px 8px 0';
-      legendDiv.style.boxShadow = '0 2px 6px rgba(0,0,0,0.1)';
-      legendDiv.style.padding = '12px 12px 12px 20px';
-      legendDiv.style.width = '200px';
-      legendDiv.style.zIndex = '1000';
-      legendDiv.style.transition = 'transform 0.25s ease';
-      legendDiv.style.display = 'flex';
-      legendDiv.style.alignItems = 'center';
-      legendDiv.style.justifyContent = 'space-between';
-      legendDiv.style.height = '100px';
-      legendDiv.style.transform = 'translateX(0)';
-      legendDiv.style.boxSizing = 'border-box';
+    // Create legend div with slide animation
+    const legendDiv = document.createElement('div');
+    legendDiv.style.position = 'absolute';
+    legendDiv.style.bottom = '20px';
+    legendDiv.style.left = '0';
+    legendDiv.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+    legendDiv.style.borderRadius = '0 8px 8px 0';
+    legendDiv.style.boxShadow = '0 2px 6px rgba(0,0,0,0.1)';
+    legendDiv.style.padding = '12px 12px 12px 20px';
+    legendDiv.style.width = '200px';
+    legendDiv.style.zIndex = '1000';
+    legendDiv.style.transition = 'transform 0.25s ease';
+    legendDiv.style.display = 'flex';
+    legendDiv.style.alignItems = 'center';
+    legendDiv.style.justifyContent = 'space-between';
+    legendDiv.style.height = '100px';
+    legendDiv.style.transform = 'translateX(0)';
+    legendDiv.style.boxSizing = 'border-box';
 
-      // Content for the legend
-      const legendContent = document.createElement('div');
-      legendContent.style.flex = '1';
+    // Content for the legend
+    const legendContent = document.createElement('div');
+    legendContent.style.flex = '1';
 
-      // Add title
-      const title = document.createElement('div');
-      title.textContent = 'Leyenda de Marcadores';
-      title.style.marginBlock = '10px';
-      title.style.fontWeight = 'bold';
-      title.style.color = '#333';
-      legendContent.appendChild(title);
+    // Add title
+    const title = document.createElement('div');
+    title.textContent = 'Leyenda de Marcadores';
+    title.style.marginBlock = '10px';
+    title.style.fontWeight = 'bold';
+    title.style.color = '#333';
+    legendContent.appendChild(title);
 
-      // Add markers
-      const items = [
-        {
-          svg: `<svg width="24" height="24" viewBox="0 0 24 24">
+    // Add markers
+    const items = [
+      {
+        svg: `<svg width="24" height="24" viewBox="0 0 24 24">
         <circle cx="12" cy="12" r="10" stroke="#4A90E2" stroke-width="1" fill="white"/>
         <path d="M12 4.248l2.136 4.874 5.44.397-4.184 3.538 1.282 5.015L12 15.65l-4.674 3.422 1.282-5.015-4.184-3.538 5.44-.397L12 4.248z" fill="#4A90E2"/>
       </svg>`,
-          text: 'Nueva línea'
-        },
-        {
-          svg: `<svg width="24" height="24" viewBox="0 0 24 24">
+        text: 'Nueva línea'
+      },
+      {
+        svg: `<svg width="24" height="24" viewBox="0 0 24 24">
         <circle cx="12" cy="12" r="10" stroke="#DC2626" stroke-width="1" fill="white"/>
         <line x1="12" y1="7" x2="12" y2="13" stroke="#DC2626" stroke-width="2" stroke-linecap="round"/>
         <circle cx="12" cy="16.5" r="1.5" fill="#DC2626"/>
       </svg>`,
-          text: 'Línea urgente'
-        }
-      ];
+        text: 'Línea urgente'
+      }
+    ];
 
-      items.forEach((item, index) => {
-        const itemDiv = document.createElement('div');
-        itemDiv.style.display = 'flex';
-        itemDiv.style.alignItems = 'center';
-        itemDiv.style.marginBottom = '5px';
+    items.forEach((item, index) => {
+      const itemDiv = document.createElement('div');
+      itemDiv.style.display = 'flex';
+      itemDiv.style.alignItems = 'center';
+      itemDiv.style.marginBottom = '5px';
 
-        const icon = document.createElement('div');
-        icon.innerHTML = item.svg;
-        icon.style.marginRight = '10px';
+      const icon = document.createElement('div');
+      icon.innerHTML = item.svg;
+      icon.style.marginRight = '10px';
 
-        const text = document.createElement('div');
-        text.textContent = item.text;
-        text.style.color = '#666';
+      const text = document.createElement('div');
+      text.textContent = item.text;
+      text.style.color = '#666';
 
-        itemDiv.appendChild(icon);
-        itemDiv.appendChild(text);
-        legendContent.appendChild(itemDiv);
-      });
+      itemDiv.appendChild(icon);
+      itemDiv.appendChild(text);
+      legendContent.appendChild(itemDiv);
+    });
 
-      // Toggle chevron/arrow
-      const toggleArrow = document.createElement('div');
+    // Toggle chevron/arrow
+    const toggleArrow = document.createElement('div');
 
-      toggleArrow.innerHTML = `
+    toggleArrow.innerHTML = `
   <svg width="28" height="32" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
     <polyline points="15 18 9 12 15 6"></polyline>
   </svg>
   `;
-      toggleArrow.style.cursor = 'pointer';
-      toggleArrow.style.display = 'flex';
-      toggleArrow.style.alignItems = 'center';
-      toggleArrow.style.justifyContent = 'center';
-      toggleArrow.style.padding = '5px';
-      toggleArrow.style.width = '28px';
+    toggleArrow.style.cursor = 'pointer';
+    toggleArrow.style.display = 'flex';
+    toggleArrow.style.alignItems = 'center';
+    toggleArrow.style.justifyContent = 'center';
+    toggleArrow.style.padding = '5px';
+    toggleArrow.style.width = '28px';
 
-      // Add components to legend
-      legendDiv.appendChild(legendContent);
-      legendDiv.appendChild(toggleArrow);
+    // Add components to legend
+    legendDiv.appendChild(legendContent);
+    legendDiv.appendChild(toggleArrow);
 
-      // Add to map
-      map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(legendDiv);
+    // Add to map
+    map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(legendDiv);
 
-      // Collapse/expand functionality using translateX
-      let isExpanded = true;
+    // Collapse/expand functionality using translateX
+    let isExpanded = true;
 
-      function toggleLegend() {
-        if (isExpanded) {
-          // Calculate how much to slide based on the legend width minus the space for arrow
-          const slideAmount = legendDiv.offsetWidth - 50; // Leave room for arrow and padding
-          legendDiv.style.transform = `translateX(-${slideAmount}px)`;
-          toggleArrow.innerHTML = `
+    function toggleLegend() {
+      if (isExpanded) {
+        // Calculate how much to slide based on the legend width minus the space for arrow
+        const slideAmount = legendDiv.offsetWidth - 50; // Leave room for arrow and padding
+        legendDiv.style.transform = `translateX(-${slideAmount}px)`;
+        toggleArrow.innerHTML = `
   <svg width="28" height="32" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
     <polyline points="9 18 15 12 9 6"></polyline>
   </svg>
 `;
-        } else {
-          // Slide in
-          legendDiv.style.transform = 'translateX(0)';
-          toggleArrow.innerHTML = `
+      } else {
+        // Slide in
+        legendDiv.style.transform = 'translateX(0)';
+        toggleArrow.innerHTML = `
         <svg width="28" height="32" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="15 18 9 12 15 6"></polyline>
         </svg>
       `;
-        }
-        isExpanded = !isExpanded;
       }
+      isExpanded = !isExpanded;
+    }
 
-      // Click events
-      toggleArrow.addEventListener('click', toggleLegend);
-      toggleArrow.addEventListener('touchend', function (e) {
-        e.preventDefault();
+    // Click events
+    toggleArrow.addEventListener('click', toggleLegend);
+    toggleArrow.addEventListener('touchend', function (e) {
+      e.preventDefault();
+      toggleLegend();
+    });
+
+    // Auto-collapse on map interaction
+    google.maps.event.addListener(map, 'dragstart', function () {
+      if (isExpanded) {
         toggleLegend();
-      });
+      }
+    });
 
-      // Auto-collapse on map interaction
-      google.maps.event.addListener(map, 'dragstart', function () {
+    const mapDiv = document.getElementById('map');
+    if (mapDiv) {
+      mapDiv.addEventListener('touchstart', function () {
         if (isExpanded) {
           toggleLegend();
         }
-      });
-
-      const mapDiv = document.getElementById('map');
-      if (mapDiv) {
-        mapDiv.addEventListener('touchstart', function () {
-          if (isExpanded) {
-            toggleLegend();
-          }
-        }, { passive: true });
-      }
-
-      renderPins(lineasInicio);
+      }, { passive: true });
     }
 
-    function renderPins(lineasRender) {
-      return new Promise((resolve, reject) => {
-        try {
-          const offset = 0.00007;
-          let i = 0;
-          for (const point of lineasRender) {
-            const nameToDisplay =
-              point.NombrePuntoVenta || "Nombre del punto de venta no disponible";
-            const firma = point.Firma || "Sin firma";
-            const observaciones = point.Observaciones || "Sin observaciones";
-            const nombreCliente =
-              point.NombreCliente || "Nombre del cliente no disponible";
-            const concatenatedName = `${point.Linea} - ${nameToDisplay} - ${firma} - ${nombreCliente} - OT CRM: ${point.OT} - OT Navision: ${point.Navision_OT} - ${point.TipoOT} - ${observaciones}`;
-            const lat = point.lat ? parseFloat(point.lat) : null;
-            const lng = point.lng ? parseFloat(point.lng) : null;
+    renderPins(lineasInicio);
+  }
 
-            if (lat !== null && lng !== null) {
-              const adjustedLat = lat + i * offset;
-              const adjustedLng = lng + i * offset;
+  function renderPins(lineasRender) {
+    return new Promise((resolve, reject) => {
+      try {
+        const offset = 0.00007;
+        let i = 0;
+        for (const point of lineasRender) {
+          const nameToDisplay =
+            point.NombrePuntoVenta || "Nombre del punto de venta no disponible";
+          const firma = point.Firma || "Sin firma";
+          const observaciones = point.Observaciones || "Sin observaciones";
+          const nombreCliente =
+            point.NombreCliente || "Nombre del cliente no disponible";
+          const concatenatedName = `${point.Linea} - ${nameToDisplay} - ${firma} - ${nombreCliente} - OT CRM: ${point.OT} - OT Navision: ${point.Navision_OT} - ${point.TipoOT} - ${observaciones}`;
+          const lat = point.lat ? parseFloat(point.lat) : null;
+          const lng = point.lng ? parseFloat(point.lng) : null;
 
-              // Custom marker icon logic
-              let markerIcon = null;
-              if (point.urgente === true || point.urgente === "true") {
-                // Red circular border with alert icon
-                markerIcon = {
-                  url: "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(`
+          if (lat !== null && lng !== null) {
+            const adjustedLat = lat + i * offset;
+            const adjustedLng = lng + i * offset;
+
+            // Custom marker icon logic
+            let markerIcon = null;
+            if (point.urgente === true || point.urgente === "true") {
+              // Red circular border with alert icon
+              markerIcon = {
+                url: "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(`
                 <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='44' height='44' fill='none' stroke='red' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>
                   <circle cx='12' cy='12' r='10' fill='white' stroke='red' stroke-width='2'/>
                   <path d='M12 7v6' stroke='red' stroke-width='2'/>
                   <path d='M12 16h0.01' stroke='red' stroke-width='2'/>
                 </svg>`),
-                  scaledSize: new google.maps.Size(48, 48),
-                  anchor: new google.maps.Point(24, 24)
-                };
-              } else if (point.nueva === true || point.nueva === "true") {
-                // Blue circular border with properly centered star icon
-                markerIcon = {
-                  url: "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(`
+                scaledSize: new google.maps.Size(48, 48),
+                anchor: new google.maps.Point(24, 24)
+              };
+            } else if (point.nueva === true || point.nueva === "true") {
+              // Blue circular border with properly centered star icon
+              markerIcon = {
+                url: "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(`
 <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='44' height='44'>
   <!-- White background circle with gradient and shadow -->
   <circle 
@@ -730,69 +642,69 @@
     stroke-width='0.5'
   />
 </svg>`),
-                  scaledSize: new google.maps.Size(48, 48),
-                  anchor: new google.maps.Point(24, 24)
-                };
-              }
-
-              const marker = new google.maps.Marker({
-                position: { lat: adjustedLat, lng: adjustedLng },
-                map: map,
-                title: concatenatedName,
-                icon: markerIcon
-              });
-              bounds.extend(marker.position);
-              marker.addListener("click", () => {
-                updateModalContent(point, adjustedLat, adjustedLng);
-                modal.classList.remove("hidden");
-                modal.classList.add("flex");
-                map.setZoom(19);
-                map.setCenter(marker.getPosition());
-
-                navigateButton.onclick = () => {
-                  if (lat !== null && lng !== null) {
-                    const url = `https://www.google.com/maps/dir/?api=1&destination=${adjustedLat},${adjustedLng}`;
-                    window.open(url, "_blank");
-                  } else {
-                    alert("Las coordenadas no están disponibles para este punto.");
-                  }
-                };
-                reportButton.onclick = () => {
-                  localStorage.setItem("linea", point.Linea);
-                  localStorage.setItem("lineaActividad", point.Linea);
-                  localStorage.setItem("ot", point.OT);
-                  localStorage.setItem("cliente", point.Cliente);
-                  localStorage.setItem("nombreCliente", point.NombreCliente);
-                  window.location.href = "https://dosxdos.app.iidos.com/linea_montador.html";
-                };
-              });
-
-              marker.customId = point.Linea;
-              marcadores.push(marker);
-            } else {
-              console.log(`Missing coordinates for point: ${JSON.stringify(point)}`);
-              const alertMessage = `Fallo al cargar la ubicación para la línea: `;
-              showAlert(alertMessage, concatenatedName);
-              i++;
-              continue;
+                scaledSize: new google.maps.Size(48, 48),
+                anchor: new google.maps.Point(24, 24)
+              };
             }
-            i++;
-          }
-          map.fitBounds(bounds);
-          resolve(true);
-        } catch (error) {
-          console.error(error);
-          showAlertMessage("Error al renderizar los puntos en el mapa, por favor carga de nuevo el mapa para intentarlo nuevamente");
-          resolve(false);
-        }
-      });
-    }
 
-    function showAlert(message, concatenatedName) {
-      const alertBox = document.createElement("div");
-      alertBox.className =
-        "bg-red-100 border-l-4 border-red-600 text-red-800 p-4 rounded-lg shadow-md relative mb-2 pr-10";
-      alertBox.innerHTML = `
+            const marker = new google.maps.Marker({
+              position: { lat: adjustedLat, lng: adjustedLng },
+              map: map,
+              title: concatenatedName,
+              icon: markerIcon
+            });
+            bounds.extend(marker.position);
+            marker.addListener("click", () => {
+              updateModalContent(point, adjustedLat, adjustedLng);
+              modal.classList.remove("hidden");
+              modal.classList.add("flex");
+              map.setZoom(19);
+              map.setCenter(marker.getPosition());
+
+              navigateButton.onclick = () => {
+                if (lat !== null && lng !== null) {
+                  const url = `https://www.google.com/maps/dir/?api=1&destination=${adjustedLat},${adjustedLng}`;
+                  window.open(url, "_blank");
+                } else {
+                  alert("Las coordenadas no están disponibles para este punto.");
+                }
+              };
+              reportButton.onclick = () => {
+                localStorage.setItem("linea", point.Linea);
+                localStorage.setItem("lineaActividad", point.Linea);
+                localStorage.setItem("ot", point.OT);
+                localStorage.setItem("cliente", point.Cliente);
+                localStorage.setItem("nombreCliente", point.NombreCliente);
+                window.location.href = "https://dosxdos.app.iidos.com/linea_montador.html";
+              };
+            });
+
+            marker.customId = point.Linea;
+            marcadores.push(marker);
+          } else {
+            console.log(`Missing coordinates for point: ${JSON.stringify(point)}`);
+            const alertMessage = `Fallo al cargar la ubicación para la línea: `;
+            showAlert(alertMessage, concatenatedName);
+            i++;
+            continue;
+          }
+          i++;
+        }
+        map.fitBounds(bounds);
+        resolve(true);
+      } catch (error) {
+        console.error(error);
+        showAlertMessage("Error al renderizar los puntos en el mapa, por favor carga de nuevo el mapa para intentarlo nuevamente");
+        resolve(false);
+      }
+    });
+  }
+
+  function showAlert(message, concatenatedName) {
+    const alertBox = document.createElement("div");
+    alertBox.className =
+      "bg-red-100 border-l-4 border-red-600 text-red-800 p-4 rounded-lg shadow-md relative mb-2 pr-10";
+    alertBox.innerHTML = `
           <div class="flex items-start">
             <div class="flex-shrink-0">
               <svg class="h-5 w-5 text-red-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -810,25 +722,25 @@
           </button>
         `;
 
-      alertBox.querySelector("button").addEventListener("click", () => {
+    alertBox.querySelector("button").addEventListener("click", () => {
+      alertBox.remove();
+    });
+
+    document.getElementById("alert-container").appendChild(alertBox);
+
+    // Auto-dismiss after 10 seconds
+    setTimeout(() => {
+      if (alertBox.parentNode) {
         alertBox.remove();
-      });
+      }
+    }, 10000);
+  }
 
-      document.getElementById("alert-container").appendChild(alertBox);
-
-      // Auto-dismiss after 10 seconds
-      setTimeout(() => {
-        if (alertBox.parentNode) {
-          alertBox.remove();
-        }
-      }, 10000);
-    }
-
-    function showAlertMessage(message) {
-      const alertBox = document.createElement("div");
-      alertBox.className =
-        "bg-red-100 border-l-4 border-red-600 text-red-800 p-4 rounded-lg shadow-md relative mb-2 pr-10";
-      alertBox.innerHTML = `
+  function showAlertMessage(message) {
+    const alertBox = document.createElement("div");
+    alertBox.className =
+      "bg-red-100 border-l-4 border-red-600 text-red-800 p-4 rounded-lg shadow-md relative mb-2 pr-10";
+    alertBox.innerHTML = `
           <div class="flex items-start">
             <div class="flex-shrink-0">
               <svg class="h-5 w-5 text-red-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -846,797 +758,663 @@
           </button>
         `;
 
-      alertBox.querySelector("button").addEventListener("click", () => {
-        alertBox.remove();
-      });
-
-      document.getElementById("alert-container").appendChild(alertBox);
-
-      // Auto-dismiss after 10 seconds
-      setTimeout(() => {
-        if (alertBox.parentNode) {
-          alertBox.remove();
-        }
-      }, 10000);
-    }
-
-    // Init the menu after loading the map and other components
-    lineas().then(() => {
-      initializeApplication();
+    alertBox.querySelector("button").addEventListener("click", () => {
+      alertBox.remove();
     });
 
-    function fetchRutas() {
-      return new Promise((resolve, reject) => {
-        url =
-          "https://dosxdos.app.iidos.com/apirest/rutas.php?montador=" +
-          montador;
-        fetch(url)
-          .then((res) => {
-            if (res.ok) {
-              return res.json();
-            } else {
-              mensaje =
-                "Error: no se pudo recibir una respuesta de la api intermedia en la función fetchRutas";
-              showAlertMessage(mensaje);
-            }
-          })
-          .then((res) => {
-            if (res[0]) {
-              const request = indexedDB.open("dosxdos");
-              request.onsuccess = (event) => {
-                const db = event.target.result;
-                const transaction = db.transaction("rutas", "readwrite");
-                const datosStore = transaction.objectStore("rutas");
-                const clearRequest = datosStore.clear();
-                clearRequest.onsuccess = (clearEvent) => {
-                  const datos = res[1];
-                  datos.forEach((item) => {
-                    datosStore.add(item);
-                  });
-                  resolve(true);
-                };
-                clearRequest.onerror = (event) => {
-                  error = event.target.error;
-                  mensaje = `ERROR: ` + error;
-                  console.error(error);
-                  showAlertMessage(mensaje);
-                };
+    document.getElementById("alert-container").appendChild(alertBox);
+
+    // Auto-dismiss after 10 seconds
+    setTimeout(() => {
+      if (alertBox.parentNode) {
+        alertBox.remove();
+      }
+    }, 10000);
+  }
+
+  // Init the menu after loading the map and other components
+  lineas().then(() => {
+    // Dynamically create navigation based on user role
+    createDesktopNavigation(usuario.clase);
+    // Setup desktop and mobile navigation
+    setupMenu(usuario.clase);
+
+    // Setup menu interactions
+    setupMenuInteractions();
+    setupUserActions();
+    setupGlobalMenuClosing();
+
+    updateUserDisplay();
+
+    // Update the user information in the new UI elements
+    const nombreUsuarioDesktop = document.getElementById('nombreUsuarioDesktop');
+    const nombreUsuarioMobile = document.getElementById('nombreUsuarioMobile');
+    const imagenUsuarioDesktop = document.getElementById('imagenUsuarioDesktop');
+    const imagenUsuarioMobile = document.getElementById('imagenUsuarioMobile');
+
+    if (nombreUsuarioDesktop) nombreUsuarioDesktop.textContent = usuario.nombre;
+    if (nombreUsuarioMobile) nombreUsuarioMobile.textContent = usuario.nombre;
+
+    if (usuario.imagen !== "0") {
+      if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
+      if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
+    }
+  });
+
+  function fetchRutas() {
+    return new Promise((resolve, reject) => {
+      url =
+        "https://dosxdos.app.iidos.com/apirest/rutas.php?montador=" +
+        montador;
+      fetch(url)
+        .then((res) => {
+          if (res.ok) {
+            return res.json();
+          } else {
+            mensaje =
+              "Error: no se pudo recibir una respuesta de la api intermedia en la función fetchRutas";
+            showAlertMessage(mensaje);
+          }
+        })
+        .then((res) => {
+          if (res[0]) {
+            const request = indexedDB.open("dosxdos");
+            request.onsuccess = (event) => {
+              const db = event.target.result;
+              const transaction = db.transaction("rutas", "readwrite");
+              const datosStore = transaction.objectStore("rutas");
+              const clearRequest = datosStore.clear();
+              clearRequest.onsuccess = (clearEvent) => {
+                const datos = res[1];
+                datos.forEach((item) => {
+                  datosStore.add(item);
+                });
+                resolve(true);
               };
-              request.onerror = (event) => {
+              clearRequest.onerror = (event) => {
                 error = event.target.error;
                 mensaje = `ERROR: ` + error;
                 console.error(error);
                 showAlertMessage(mensaje);
               };
-            } else {
-              mensaje = res[1];
-              console.error(res);
+            };
+            request.onerror = (event) => {
+              error = event.target.error;
+              mensaje = `ERROR: ` + error;
+              console.error(error);
               showAlertMessage(mensaje);
-            }
-          })
-          .catch((res) => {
-            mensaje = "Sin conexión: " + res.message;
-            localStorage.setItem("error", res);
+            };
+          } else {
+            mensaje = res[1];
             console.error(res);
             showAlertMessage(mensaje);
-          });
-      });
-    }
-
-    function fetchLineas(vectorRutas) {
-      return new Promise(async (resolve, reject) => {
-        try {
-          console.log(vectorRutas);
-          const promises = vectorRutas.map(async (objeto) => {
-            const url =
-              "https://dosxdos.app.iidos.com/apirest/lineas.php?ruta=" +
-              objeto.cod;
-            const res = await fetch(url);
-            if (!res.ok) {
-              throw new Error(
-                `Error en la solicitud de las líneas de la ruta ${objeto.cod}: ${res.status}`
-              );
-            }
-            const resJson = await res.json();
-            if (resJson[0]) {
-              const db = await new Promise((dbResolve, dbReject) => {
-                const request = indexedDB.open("dosxdos");
-                request.onsuccess = (event) => {
-                  const db = event.target.result;
-                  dbResolve(db);
-                };
-                request.onerror = (event) => {
-                  dbReject(
-                    new Error(
-                      `Error al abrir la base de datos para ingresar las líneas de la ruta: ${objeto.cod}`
-                    )
-                  );
-                };
-              });
-              const transaction = db.transaction("lineas", "readwrite");
-              const datosStore = transaction.objectStore("lineas");
-              const datos = resJson[1];
-              if (Array.isArray(datos)) {
-                datos.forEach((item) => {
-                  datosStore.add(item);
-                });
-              } else {
-                datosStore.add(datos);
-              }
-            } else {
-              throw new Error(
-                `Error al solicitar las líneas de la ruta ${objeto.cod}: ${resJson[1]}`
-              );
-            }
-          });
-          await Promise.all(promises);
-          resolve(true);
-        } catch (err) {
-          console.error(err);
-          localStorage.setItem("error", error);
-          resolve(false);
-        }
-      });
-    }
-
-    async function sincronizarDb() {
-      try {
-        if (navigator.onLine) {
-          const fRutas = await fetchRutas();
-          rutas = await leerDatos("dosxdos", "rutas");
-          rutas = rutas.map((objeto) => ({
-            cod: objeto["No."],
-            nombre: objeto["Descripcion"],
-          }));
-          const limpiarLineas = await limpiarDatos("dosxdos", "lineas");
-          if (limpiarLineas) {
-            lineasCrm = await fetchLineas(rutas);
-            if (lineasCrm) {
-              mensaje = true;
-              localStorage.setItem("sinc", mensaje);
-              window.location.href =
-                "https://dosxdos.app.iidos.com/mapa_ruta.html";
-            } else {
-              showAlertMessage(
-                "Error al cargar las líneas de las rutas del servidor, se han sincronizado las rutas pero no las líneas"
-              );
-            }
           }
-        }
-      } catch (error) {
-        const mensaje =
-          "No se ha sincronizado la base de datos: " + error.message;
-        console.error(error);
-        localStorage.setItem("error", error);
-        localStorage.setItem("mensaje", mensaje);
-        window.location.href = "https://dosxdos.app.iidos.com/mapa_ruta.html";
-      }
-    }
-
-    window.addEventListener("pageshow", (e) => {
-      console.log("Carga completa de los elementos de la página no fetch");
-      let mensaje = localStorage.getItem("mensaje");
-      if (mensaje && mensaje !== null) {
-        showAlertMessage(mensaje);
-        localStorage.removeItem("mensaje");
-      }
-      let login = localStorage.getItem("login");
-      if (!login || login === null) {
-        window.location.href = "https://dosxdos.app.iidos.com/index.html";
-      }
+        })
+        .catch((res) => {
+          mensaje = "Sin conexión: " + res.message;
+          localStorage.setItem("error", res);
+          console.error(res);
+          showAlertMessage(mensaje);
+        });
     });
+  }
 
-    async function sincronizarDb2() {
-      return new Promise(async (resolve, reject) => {
-        try {
-          const fRutas = await fetchRutas();
-          rutas = await leerDatos("dosxdos", "rutas");
-          rutas = rutas.map((objeto) => ({
-            cod: objeto["No."],
-            nombre: objeto["Descripcion"],
-          }));
-          const limpiarLineas = await limpiarDatos("dosxdos", "lineas");
-          if (limpiarLineas) {
-            lineasCrm = await fetchLineas(rutas);
-            if (lineasCrm) {
-              resolve(true);
-            } else {
-              resolve(false);
-            }
-          }
-        } catch (error) {
-          console.error(error);
-          resolve(false);
-        }
-      });
-    }
-
-    function fetchLineasRuta(ruta) {
-      return new Promise(async (resolve, reject) => {
-        try {
+  function fetchLineas(vectorRutas) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        console.log(vectorRutas);
+        const promises = vectorRutas.map(async (objeto) => {
           const url =
-            "https://dosxdos.app.iidos.com/apirest/lineas.php?ruta=" + ruta;
+            "https://dosxdos.app.iidos.com/apirest/lineas.php?ruta=" +
+            objeto.cod;
           const res = await fetch(url);
           if (!res.ok) {
-            console.error(res);
             throw new Error(
-              `Error en la función fetchLineasRuta al solicitar las líneas de la ruta`
+              `Error en la solicitud de las líneas de la ruta ${objeto.cod}: ${res.status}`
             );
           }
           const resJson = await res.json();
           if (resJson[0]) {
+            const db = await new Promise((dbResolve, dbReject) => {
+              const request = indexedDB.open("dosxdos");
+              request.onsuccess = (event) => {
+                const db = event.target.result;
+                dbResolve(db);
+              };
+              request.onerror = (event) => {
+                dbReject(
+                  new Error(
+                    `Error al abrir la base de datos para ingresar las líneas de la ruta: ${objeto.cod}`
+                  )
+                );
+              };
+            });
+            const transaction = db.transaction("lineas", "readwrite");
+            const datosStore = transaction.objectStore("lineas");
             const datos = resJson[1];
-            resolve(datos);
+            if (Array.isArray(datos)) {
+              datos.forEach((item) => {
+                datosStore.add(item);
+              });
+            } else {
+              datosStore.add(datos);
+            }
           } else {
-            console.error(resJson);
             throw new Error(
-              `Error en la función fetchLineasRuta al solicitar las líneas de la ruta`
+              `Error al solicitar las líneas de la ruta ${objeto.cod}: ${resJson[1]}`
             );
           }
-        } catch (err) {
-          console.error(err);
-          localStorage.setItem("error", error);
-          resolve(false);
+        });
+        await Promise.all(promises);
+        resolve(true);
+      } catch (err) {
+        console.error(err);
+        localStorage.setItem("error", error);
+        resolve(false);
+      }
+    });
+  }
+
+  async function sincronizarDb() {
+    try {
+      if (navigator.onLine) {
+        const fRutas = await fetchRutas();
+        rutas = await leerDatos("dosxdos", "rutas");
+        rutas = rutas.map((objeto) => ({
+          cod: objeto["No."],
+          nombre: objeto["Descripcion"],
+        }));
+        const limpiarLineas = await limpiarDatos("dosxdos", "lineas");
+        if (limpiarLineas) {
+          lineasCrm = await fetchLineas(rutas);
+          if (lineasCrm) {
+            mensaje = true;
+            localStorage.setItem("sinc", mensaje);
+            window.location.href =
+              "https://dosxdos.app.iidos.com/mapa_ruta.html";
+          } else {
+            showAlertMessage(
+              "Error al cargar las líneas de las rutas del servidor, se han sincronizado las rutas pero no las líneas"
+            );
+          }
         }
-      });
+      }
+    } catch (error) {
+      const mensaje =
+        "No se ha sincronizado la base de datos: " + error.message;
+      console.error(error);
+      localStorage.setItem("error", error);
+      localStorage.setItem("mensaje", mensaje);
+      window.location.href = "https://dosxdos.app.iidos.com/mapa_ruta.html";
     }
+  }
 
-    const compararDatos = () => {
-      return new Promise((resolve, reject) => {
-        try {
-          marcadoresAccion = {};
-          marcadoresAccion.data = [];
-          marcadoresAccion.accion = "none";
-          marcadoresAccion.lineasRuta = lineasRuta.length;
-          marcadoresAccion.marcadores = marcadores.length;
-          if (lineasRuta.length != marcadores.length) {
-            if (lineasRuta.length < marcadores.length) {
-              for (const marcador of marcadores) {
-                let validarMarcador = true;
-                for (const linea of lineasRuta) {
-                  if (linea.Linea == marcador.customId) {
-                    validarMarcador = false;
-                    break;
-                  }
-                }
-                if (validarMarcador) {
-                  showAlertMessage(
-                    `La línea ${marcador.customId} ha sido reportada o eliminada de la ruta`
-                  );
-                  marcadoresAccion.data.push(marcador);
-                }
-              }
-              marcadoresAccion.accion = "delete";
-            } else {
-              for (const linea of lineasRuta) {
-                let validarLinea = true;
-                for (const marcador of marcadores) {
-                  if (linea.Linea == marcador.customId) {
-                    validarLinea = false;
-                    break;
-                  }
-                }
-                if (validarLinea) {
-                  showAlertMessage(
-                    `La línea ${linea.Linea} ha sido agregada __ ${linea.NombrePuntoVenta} __ ${linea.DireccionPuntoVenta}`
-                  );
-                  marcadoresAccion.data.push(linea);
-                }
-              }
-              marcadoresAccion.accion = "add";
-            }
-          }
-          resolve(marcadoresAccion);
-        } catch (error) {
-          console.error(error);
-          showAlertMessage(
-            "Error en el sincronizador al eliminar líneas ya realizadas, por favor vuelve a cargar de nuevo el mapa para verlo actualizado"
-          );
-          resolve(false);
-        }
-      });
-    };
+  window.addEventListener("pageshow", (e) => {
+    console.log("Carga completa de los elementos de la página no fetch");
+    let mensaje = localStorage.getItem("mensaje");
+    if (mensaje && mensaje !== null) {
+      showAlertMessage(mensaje);
+      localStorage.removeItem("mensaje");
+    }
+    let login = localStorage.getItem("login");
+    if (!login || login === null) {
+      window.location.href = "https://dosxdos.app.iidos.com/index.html";
+    }
+  });
 
-    const deleteMarcadores = (marcadoresDelete) => {
-      return new Promise((resolve, reject) => {
-        try {
-          let i = 0;
-          for (const marcador of marcadores) {
-            for (const marcadorDelete of marcadoresDelete) {
-              if (marcadorDelete.customId == marcador.customId) {
-                marcadores.splice(i, 1);
-                marcador.setMap(null);
-                resolve(true);
-                break;
-              }
-            }
-            i++;
-          }
-          resolve(false);
-        } catch (error) {
-          console.error(error);
-          alerta(
-            "Error en el sincronizador al eliminar líneas ya realizadas, por favor vuelve a cargar de nuevo el mapa para verlo actualizado"
-          );
-          resolve(false);
-        }
-      });
-    };
-
-    const deleteAllMarcadores = () => {
-      return new Promise((resolve, reject) => {
-        try {
-          for (const marcador of marcadores) {
-            marcador.setMap(null);
-          }
-          marcadores = [];
-          resolve(true);
-        } catch (error) {
-          console.error(error);
-          alerta(
-            "Error en el sincronizador al eliminar líneas para actualizar el mapa completo, error en deleteAllMarcadores. Por favor vuelve a cargar de nuevo el mapa para verlo actualizado"
-          );
-          resolve(false);
-        }
-      });
-    };
-
-    const sincronizador = async () => {
+  async function sincronizarDb2() {
+    return new Promise(async (resolve, reject) => {
       try {
-        lineasRuta = await fetchLineasRuta(ruta);
-        if (lineasRuta) {
-          const comparacion = await compararDatos();
-          console.log(comparacion);
-          if (comparacion.data.length) {
-            if (comparacion.accion == "delete") {
-              deleteMarcadores(comparacion.data);
-              if (deleteMarcadores) {
-                alerta("El mapa ha sido actualizado");
-              }
-            } else if (comparacion.accion == "add") {
-              const deleteMarcadores = await deleteAllMarcadores();
-              if (deleteMarcadores) {
-                const render = await renderPins(lineasRuta);
-                if (render) {
-                  alerta("El mapa ha sido actualizado");
-                } else {
-                  alerta(
-                    "Error, el mapa no ha sido actualizado, por favor intenta cargar el mapa nuevamente para ver los actuales cambios"
-                  );
+        const fRutas = await fetchRutas();
+        rutas = await leerDatos("dosxdos", "rutas");
+        rutas = rutas.map((objeto) => ({
+          cod: objeto["No."],
+          nombre: objeto["Descripcion"],
+        }));
+        const limpiarLineas = await limpiarDatos("dosxdos", "lineas");
+        if (limpiarLineas) {
+          lineasCrm = await fetchLineas(rutas);
+          if (lineasCrm) {
+            resolve(true);
+          } else {
+            resolve(false);
+          }
+        }
+      } catch (error) {
+        console.error(error);
+        resolve(false);
+      }
+    });
+  }
+
+  function fetchLineasRuta(ruta) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const url =
+          "https://dosxdos.app.iidos.com/apirest/lineas.php?ruta=" + ruta;
+        const res = await fetch(url);
+        if (!res.ok) {
+          console.error(res);
+          throw new Error(
+            `Error en la función fetchLineasRuta al solicitar las líneas de la ruta`
+          );
+        }
+        const resJson = await res.json();
+        if (resJson[0]) {
+          const datos = resJson[1];
+          resolve(datos);
+        } else {
+          console.error(resJson);
+          throw new Error(
+            `Error en la función fetchLineasRuta al solicitar las líneas de la ruta`
+          );
+        }
+      } catch (err) {
+        console.error(err);
+        localStorage.setItem("error", error);
+        resolve(false);
+      }
+    });
+  }
+
+  const compararDatos = () => {
+    return new Promise((resolve, reject) => {
+      try {
+        marcadoresAccion = {};
+        marcadoresAccion.data = [];
+        marcadoresAccion.accion = "none";
+        marcadoresAccion.lineasRuta = lineasRuta.length;
+        marcadoresAccion.marcadores = marcadores.length;
+        if (lineasRuta.length != marcadores.length) {
+          if (lineasRuta.length < marcadores.length) {
+            for (const marcador of marcadores) {
+              let validarMarcador = true;
+              for (const linea of lineasRuta) {
+                if (linea.Linea == marcador.customId) {
+                  validarMarcador = false;
+                  break;
                 }
+              }
+              if (validarMarcador) {
+                showAlertMessage(
+                  `La línea ${marcador.customId} ha sido reportada o eliminada de la ruta`
+                );
+                marcadoresAccion.data.push(marcador);
+              }
+            }
+            marcadoresAccion.accion = "delete";
+          } else {
+            for (const linea of lineasRuta) {
+              let validarLinea = true;
+              for (const marcador of marcadores) {
+                if (linea.Linea == marcador.customId) {
+                  validarLinea = false;
+                  break;
+                }
+              }
+              if (validarLinea) {
+                showAlertMessage(
+                  `La línea ${linea.Linea} ha sido agregada __ ${linea.NombrePuntoVenta} __ ${linea.DireccionPuntoVenta}`
+                );
+                marcadoresAccion.data.push(linea);
+              }
+            }
+            marcadoresAccion.accion = "add";
+          }
+        }
+        resolve(marcadoresAccion);
+      } catch (error) {
+        console.error(error);
+        showAlertMessage(
+          "Error en el sincronizador al eliminar líneas ya realizadas, por favor vuelve a cargar de nuevo el mapa para verlo actualizado"
+        );
+        resolve(false);
+      }
+    });
+  };
+
+  const deleteMarcadores = (marcadoresDelete) => {
+    return new Promise((resolve, reject) => {
+      try {
+        let i = 0;
+        for (const marcador of marcadores) {
+          for (const marcadorDelete of marcadoresDelete) {
+            if (marcadorDelete.customId == marcador.customId) {
+              marcadores.splice(i, 1);
+              marcador.setMap(null);
+              resolve(true);
+              break;
+            }
+          }
+          i++;
+        }
+        resolve(false);
+      } catch (error) {
+        console.error(error);
+        alerta(
+          "Error en el sincronizador al eliminar líneas ya realizadas, por favor vuelve a cargar de nuevo el mapa para verlo actualizado"
+        );
+        resolve(false);
+      }
+    });
+  };
+
+  const deleteAllMarcadores = () => {
+    return new Promise((resolve, reject) => {
+      try {
+        for (const marcador of marcadores) {
+          marcador.setMap(null);
+        }
+        marcadores = [];
+        resolve(true);
+      } catch (error) {
+        console.error(error);
+        alerta(
+          "Error en el sincronizador al eliminar líneas para actualizar el mapa completo, error en deleteAllMarcadores. Por favor vuelve a cargar de nuevo el mapa para verlo actualizado"
+        );
+        resolve(false);
+      }
+    });
+  };
+
+  const sincronizador = async () => {
+    try {
+      lineasRuta = await fetchLineasRuta(ruta);
+      if (lineasRuta) {
+        const comparacion = await compararDatos();
+        console.log(comparacion);
+        if (comparacion.data.length) {
+          if (comparacion.accion == "delete") {
+            deleteMarcadores(comparacion.data);
+            if (deleteMarcadores) {
+              alerta("El mapa ha sido actualizado");
+            }
+          } else if (comparacion.accion == "add") {
+            const deleteMarcadores = await deleteAllMarcadores();
+            if (deleteMarcadores) {
+              const render = await renderPins(lineasRuta);
+              if (render) {
+                alerta("El mapa ha sido actualizado");
               } else {
                 alerta(
                   "Error, el mapa no ha sido actualizado, por favor intenta cargar el mapa nuevamente para ver los actuales cambios"
                 );
               }
+            } else {
+              alerta(
+                "Error, el mapa no ha sido actualizado, por favor intenta cargar el mapa nuevamente para ver los actuales cambios"
+              );
             }
           }
-        } else {
-          alerta(
-            "Error en el sincronizador para actualizar el mapa, error en fetchLineas. Por favor intenta cargar el mapa nuevamente para ver los actuales cambios"
-          );
         }
-        intervaloAleatorio =
-          Math.floor(Math.random() * (6000 - 5000 + 1)) + 5000;
-        setTimeout(sincronizador, intervaloAleatorio);
-      } catch (error) {
-        console.error(error);
+      } else {
         alerta(
-          "Error en el sincronizador del mapa. Por favor intenta cargar el mapa nuevamente para ver los actuales cambios"
+          "Error en el sincronizador para actualizar el mapa, error en fetchLineas. Por favor intenta cargar el mapa nuevamente para ver los actuales cambios"
         );
       }
-    };
+      intervaloAleatorio =
+        Math.floor(Math.random() * (6000 - 5000 + 1)) + 5000;
+      setTimeout(sincronizador, intervaloAleatorio);
+    } catch (error) {
+      console.error(error);
+      alerta(
+        "Error en el sincronizador del mapa. Por favor intenta cargar el mapa nuevamente para ver los actuales cambios"
+      );
+    }
+  };
 
-    // Add event listeners for modal closing
-    document.addEventListener("DOMContentLoaded", function () {
-      // Close modal when clicking outside of it
-      const modal = document.getElementById("modal");
-      modal.addEventListener("click", function (e) {
-        if (e.target === modal) {
-          closeModal();
-        }
-      });
-
-      // Close modal with the X button
-      document
-        .getElementById("modal-close")
-        .addEventListener("click", closeModal);
+  // Add event listeners for modal closing
+  document.addEventListener("DOMContentLoaded", function () {
+    // Close modal when clicking outside of it
+    const modal = document.getElementById("modal");
+    modal.addEventListener("click", function (e) {
+      if (e.target === modal) {
+        closeModal();
+      }
     });
 
-    // Function to close the modal
-    function closeModal() {
-      const modal = document.getElementById("modal");
-      modal.classList.add("hidden");
-      modal.classList.remove("flex");
+    // Close modal with the X button
+    document
+      .getElementById("modal-close")
+      .addEventListener("click", closeModal);
+  });
+
+  // Function to close the modal
+  function closeModal() {
+    const modal = document.getElementById("modal");
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+  }
+
+  // Function to format point data nicely
+  function formatPointData(concatenatedName) {
+    // Split the concatenated string by hyphens and handle each part
+    const parts = concatenatedName.split(" - ");
+
+    // Create a formatted HTML string with line breaks and proper labels
+    let formattedHTML = "";
+
+    if (parts.length >= 1)
+      formattedHTML += `<div class="font-bold">${parts[0]}</div>`;
+    if (parts.length >= 2)
+      formattedHTML += `<div class="mt-1">${parts[1]}</div>`;
+
+    // Add remaining parts with proper labels
+    const labels = [
+      "Estado",
+      "Cliente",
+      "OT CRM",
+      "OT Navision",
+      "Tipo",
+      "Observaciones",
+    ];
+    for (let i = 2; i < parts.length && i - 2 < labels.length; i++) {
+      formattedHTML += `<div class="mt-1 text-sm"><span class="text-gray-500">${labels[i - 2]
+        }:</span> ${parts[i]}</div>`;
     }
 
-    // Function to format point data nicely
-    function formatPointData(concatenatedName) {
-      // Split the concatenated string by hyphens and handle each part
-      const parts = concatenatedName.split(" - ");
+    return formattedHTML;
+  }
 
-      // Create a formatted HTML string with line breaks and proper labels
-      let formattedHTML = "";
+  function updateModalContent(point, adjustedLat, adjustedLng) {
+    // Parse the point ID and name
+    const id = point.Linea || "";
+    document.getElementById("point-id").textContent = id;
+    document.getElementById("point-name").textContent =
+      point.NombrePuntoVenta || "Sin nombre";
 
-      if (parts.length >= 1)
-        formattedHTML += `<div class="font-bold">${parts[0]}</div>`;
-      if (parts.length >= 2)
-        formattedHTML += `<div class="mt-1">${parts[1]}</div>`;
+    // Fill in all the specific fields
+    document.getElementById("point-estado").textContent =
+      point.Estado || "-";
+    document.getElementById("point-cliente").textContent =
+      point.NombreCliente || "-";
+    document.getElementById("point-ot-crm").textContent = point.OT || "-";
+    document.getElementById("point-ot-navision").textContent =
+      point.Navision_OT || "-";
+    document.getElementById("point-tipo").textContent =
+      point.TipoOT || point.TipoTrabajo || "-";
+    document.getElementById("point-observaciones").textContent =
+      point.Observaciones || "-";
 
-      // Add remaining parts with proper labels
-      const labels = [
-        "Estado",
-        "Cliente",
-        "OT CRM",
-        "OT Navision",
-        "Tipo",
-        "Observaciones",
-      ];
-      for (let i = 2; i < parts.length && i - 2 < labels.length; i++) {
-        formattedHTML += `<div class="mt-1 text-sm"><span class="text-gray-500">${labels[i - 2]
-          }:</span> ${parts[i]}</div>`;
-      }
+    // Address and coordinates
+    document.getElementById("point-address").textContent =
+      point.DireccionPuntoVenta || "Dirección no disponible";
+    document.getElementById("point-lat").textContent = adjustedLat;
+    document.getElementById("point-lng").textContent = adjustedLng;
 
-      return formattedHTML;
+    // First, let's make the modal relative for positioning
+    const modalContent = document.querySelector(".modal .bg-red-600");
+    if (modalContent) {
+      modalContent.style.position = "relative";
     }
 
-    function updateModalContent(point, adjustedLat, adjustedLng) {
-      console.log("----> opening modal for line:", point)
-      // Parse the point ID and name
-      const id = point.Linea || "";
-      document.getElementById("point-id").textContent = id;
-      document.getElementById("point-name").textContent =
-        point.NombrePuntoVenta || "Sin nombre";
+    // Find point-id element which we know exists
+    const pointIdElement = document.getElementById("point-id");
 
-      // Fill in all the specific fields
-      document.getElementById("point-estado").textContent =
-        point.Estado || "-";
-      document.getElementById("point-cliente").textContent =
-        point.NombreCliente || "-";
-      document.getElementById("point-ot-crm").textContent = point.OT || "-";
-      document.getElementById("point-ot-navision").textContent =
-        point.Navision_OT || "-";
-      document.getElementById("point-tipo").textContent =
-        point.TipoOT || point.TipoTrabajo || "-";
-      document.getElementById("point-observaciones").textContent =
-        point.Observaciones || "-";
-
-      // Address and coordinates
-      document.getElementById("point-address").textContent =
-        point.DireccionPuntoVenta || "Dirección no disponible";
-      document.getElementById("point-lat").textContent = adjustedLat;
-      document.getElementById("point-lng").textContent = adjustedLng;
-
-      // First, let's make the modal relative for positioning
-      const modalContent = document.querySelector(".modal .bg-red-600");
-      if (modalContent) {
-        modalContent.style.position = "relative";
-      }
-
-      // Find point-id element which we know exists
-      const pointIdElement = document.getElementById("point-id");
-
-      // Always remove any existing badges first
-      const existingBadgeContainer = document.getElementById("badge-container");
-      if (existingBadgeContainer) {
-        existingBadgeContainer.remove();
-      }
-
-      // Only create new badges if the properties are actually true
-      if ((point.urgente === true || point.urgente === "true") ||
-        (point.nueva === true || point.nueva === "true")) {
-
-        // Create container for badges
-        const container = document.createElement("div");
-        container.id = "badge-container";
-        container.style.position = "absolute";
-        container.style.top = "0px";
-        container.style.marginLeft = "25%";
-
-        // Add badges to container based on individual properties
-        if (point.urgente === true || point.urgente === "true") {
-          const urgentBadge = document.createElement("span");
-          urgentBadge.textContent = "URGENTE";
-          urgentBadge.style.backgroundColor = "#FFFFFF";
-          urgentBadge.style.color = "#dc2626";
-          urgentBadge.style.fontSize = "10px";
-          urgentBadge.style.fontWeight = "bold";
-          urgentBadge.style.padding = "3px 6px";
-          urgentBadge.style.marginInline = '5px';
-          urgentBadge.style.borderRadius = "4px";
-          container.appendChild(urgentBadge);
-        }
-
-        if (point.nueva === true || point.nueva === "true") {
-          const newBadge = document.createElement("span");
-          newBadge.textContent = "NUEVA";
-          newBadge.style.backgroundColor = "#3b82f6";
-          newBadge.style.color = "#FFFFFF";
-          newBadge.style.fontSize = "10px";
-          newBadge.style.fontWeight = "bold";
-          newBadge.style.padding = "3px 6px";
-          newBadge.style.borderRadius = "4px";
-          container.appendChild(newBadge);
-        }
-
-        // Insert badges right after point-id (only if we have badges to show)
-        if (container.childNodes.length > 0) {
-          pointIdElement.parentNode.insertBefore(container, pointIdElement.nextSibling);
-        }
-      }
+    // Always remove any existing badges first
+    const existingBadgeContainer = document.getElementById("badge-container");
+    if (existingBadgeContainer) {
+      existingBadgeContainer.remove();
     }
 
-    // Add event listeners for modal closing
-    document.addEventListener("DOMContentLoaded", function () {
-      // Close modal when clicking outside of it
-      const modal = document.getElementById("modal");
-      modal.addEventListener("click", function (e) {
-        if (e.target === modal) {
-          closeModal();
-        }
-      });
+    // Only create new badges if the properties are actually true
+    if ((point.urgente === true || point.urgente === "true") ||
+      (point.nueva === true || point.nueva === "true")) {
 
-      // Close modal with the X button
-      document
-        .getElementById("modal-close")
-        .addEventListener("click", closeModal);
+      // Create container for badges
+      const container = document.createElement("div");
+      container.id = "badge-container";
+      container.style.position = "absolute";
+      container.style.top = "0px";
+      container.style.marginLeft = "25%";
+
+      // Add badges to container based on individual properties
+      if (point.urgente === true || point.urgente === "true") {
+        const urgentBadge = document.createElement("span");
+        urgentBadge.textContent = "URGENTE";
+        urgentBadge.style.backgroundColor = "#FFFFFF";
+        urgentBadge.style.color = "#dc2626";
+        urgentBadge.style.fontSize = "10px";
+        urgentBadge.style.fontWeight = "bold";
+        urgentBadge.style.padding = "3px 6px";
+        urgentBadge.style.marginInline = '5px';
+        urgentBadge.style.borderRadius = "4px";
+        container.appendChild(urgentBadge);
+      }
+
+      if (point.nueva === true || point.nueva === "true") {
+        const newBadge = document.createElement("span");
+        newBadge.textContent = "NUEVA";
+        newBadge.style.backgroundColor = "#3b82f6";
+        newBadge.style.color = "#FFFFFF";
+        newBadge.style.fontSize = "10px";
+        newBadge.style.fontWeight = "bold";
+        newBadge.style.padding = "3px 6px";
+        newBadge.style.borderRadius = "4px";
+        container.appendChild(newBadge);
+      }
+
+      // Insert badges right after point-id (only if we have badges to show)
+      if (container.childNodes.length > 0) {
+        pointIdElement.parentNode.insertBefore(container, pointIdElement.nextSibling);
+      }
+    }
+  }
+
+  // Add event listeners for modal closing
+  document.addEventListener("DOMContentLoaded", function () {
+    // Close modal when clicking outside of it
+    const modal = document.getElementById("modal");
+    modal.addEventListener("click", function (e) {
+      if (e.target === modal) {
+        closeModal();
+      }
     });
 
-    // Function to close the modal
-    function closeModal() {
-      const modal = document.getElementById("modal");
-      modal.classList.add("hidden");
-      modal.classList.remove("flex");
-    }
+    // Close modal with the X button
+    document
+      .getElementById("modal-close")
+      .addEventListener("click", closeModal);
+  });
 
-    // MENU AND USER INTERACTION SETUP
-    function setupMenuInteractions() {
-      // Desktop Menu
-      const userMenuButton = document.getElementById("userMenuButton");
-      const userDropdownMenu = document.getElementById("userDropdownMenu");
+  // Function to close the modal
+  function closeModal() {
+    const modal = document.getElementById("modal");
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+  }
 
-      if (userMenuButton && userDropdownMenu) {
-        userMenuButton.addEventListener("click", (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          userDropdownMenu.classList.toggle("hidden");
-          const isExpanded = !userDropdownMenu.classList.contains("hidden");
-          userMenuButton.setAttribute("aria-expanded", isExpanded.toString());
-        });
-      }
+  // Prevent accidental page navigation on mobile devices
+  function preventUnintendedNavigation() {
+    // Disable default touch actions that might cause page navigation
+    const mapContainer = document.getElementById('map');
 
-      // Mobile Menu Links
-      const mobileMenuLinks = document.querySelectorAll("#mobileMenu nav a");
-      mobileMenuLinks.forEach((link) => {
-        link.addEventListener("click", (e) => {
-          e.stopPropagation();
-          window.location.href = link.href;
-          const menuButton = document.getElementById("menuButton");
-          if (menuButton) menuButton.click(); // Close menu after clicking
-        });
-      });
+    if (mapContainer) {
+      // Disable touch actions
+      mapContainer.style.touchAction = 'none';
 
-      // Mobile Menu Toggle
-      const menuButton = document.getElementById("menuButton");
-      const mobileMenu = document.getElementById("mobileMenu");
-      const hamburgerTop = document.getElementById("hamburgerTop");
-      const hamburgerMiddle = document.getElementById("hamburgerMiddle");
-      const hamburgerBottom = document.getElementById("hamburgerBottom");
-
-      if (menuButton && mobileMenu) {
-        menuButton.addEventListener("click", (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          const isOpen = !mobileMenu.classList.contains("translate-x-full");
-          mobileMenu.classList.toggle("translate-x-full");
-          document.body.classList.toggle("overflow-hidden");
-
-          if (!isOpen) {
-            // Menu is opening
-            hamburgerTop.classList.remove("bg-gray-900");
-            hamburgerMiddle.classList.remove("bg-gray-900");
-            hamburgerBottom.classList.remove("bg-gray-900");
-            hamburgerTop.classList.add("bg-white");
-            hamburgerMiddle.classList.add("bg-white");
-            hamburgerBottom.classList.add("bg-white");
-
-            hamburgerTop.style.transform = "rotate(45deg) translate(10px, 7px)";
-            hamburgerMiddle.style.opacity = "0";
-            hamburgerBottom.style.transform = "rotate(-45deg) translate(10px, -7px)";
-          } else {
-            // Menu is closing
-            hamburgerTop.classList.remove("bg-white");
-            hamburgerMiddle.classList.remove("bg-white");
-            hamburgerBottom.classList.remove("bg-white");
-            hamburgerTop.classList.add("bg-gray-900");
-            hamburgerMiddle.classList.add("bg-gray-900");
-            hamburgerBottom.classList.add("bg-gray-900");
-
-            hamburgerTop.style.transform = "";
-            hamburgerMiddle.style.opacity = "1";
-            hamburgerBottom.style.transform = "";
-          }
-        });
-      }
-    }
-
-    // USER EDIT AND LOGOUT SETUP
-    function setupUserActions() {
-      // Edit User Buttons
-      const editarUsuarioDesktop = document.getElementById("editarUsuarioDesktop");
-      const editarUsuarioMobile = document.getElementById("editarUsuarioMobile");
-
-      [editarUsuarioDesktop, editarUsuarioMobile].forEach((button) => {
-        if (button) {
-          button.addEventListener("click", (e) => {
-            if (navigator.onLine) {
-              window.location.href = `https://dosxdos.app.iidos.com/dosxdos.php?modulo=editarUsuario&id=${usuario.id}`;
-            } else {
-              showAlertMessage("No es posible acceder a las opciones de edición de usuario sin conexión a internet");
-            }
-          });
-        }
-      });
-
-      const cerrarSesionDesktop = document.getElementById("cerrarSesionDesktop");
-      const cerrarSesionMobile = document.getElementById("cerrarSesionMobile");
-
-      [cerrarSesionDesktop, cerrarSesionMobile].forEach((button) => {
-        if (button) {
-          button.addEventListener("click", () => {
-            closeSidebar(); // Close the sidebar first
-            cerrarSesion(); // Then proceed with logout
-          });
-        }
-      });
-    }
-
-    // Function to close the sidebar
-    function closeSidebar() {
-      const mobileMenu = document.getElementById("mobileMenu");
-      const hamburgerTop = document.getElementById("hamburgerTop");
-      const hamburgerMiddle = document.getElementById("hamburgerMiddle");
-      const hamburgerBottom = document.getElementById("hamburgerBottom");
-
-      if (mobileMenu) {
-        mobileMenu.classList.add("translate-x-full");
-
-        // Reset hamburger icon colors and position
-        if (hamburgerTop && hamburgerMiddle && hamburgerBottom) {
-          // Remove white background
-          hamburgerTop.classList.remove("bg-white");
-          hamburgerMiddle.classList.remove("bg-white");
-          hamburgerBottom.classList.remove("bg-white");
-
-          // Add dark background
-          hamburgerTop.classList.add("bg-gray-900");
-          hamburgerMiddle.classList.add("bg-gray-900");
-          hamburgerBottom.classList.add("bg-gray-900");
-
-          // Reset transforms
-          hamburgerTop.style.transform = "";
-          hamburgerMiddle.style.opacity = "1";
-          hamburgerBottom.style.transform = "";
-        }
-      }
-    }
-
-    // Initialize the menu functionality 
-    function initializeApplication() {
-      // Set up menu interactions
-      setupMenuInteractions();
-      setupUserActions();
-
-      // Populate user information if available
-      if (usuario && usuario.nombre) {
-        const nombreUsuarioDesktop = document.getElementById("nombreUsuarioDesktop");
-        const nombreUsuarioMobile = document.getElementById("nombreUsuarioMobile");
-        const imagenUsuarioDesktop = document.getElementById("imagenUsuarioDesktop");
-        const imagenUsuarioMobile = document.getElementById("imagenUsuarioMobile");
-
-        // Update usernames
-        if (nombreUsuarioDesktop) nombreUsuarioDesktop.textContent = usuario.nombre;
-        if (nombreUsuarioMobile) nombreUsuarioMobile.textContent = usuario.nombre;
-
-        // Update profile images
-        if (usuario.imagen !== "0") {
-          if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
-          if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
-        }
-      }
-    }
-
-    // Prevent accidental page navigation on mobile devices
-    function preventUnintendedNavigation() {
-      // Disable default touch actions that might cause page navigation
-      const mapContainer = document.getElementById('map');
-
-      if (mapContainer) {
-        // Disable touch actions
-        mapContainer.style.touchAction = 'none';
-
-        // Prevent default behavior on touch events
-        mapContainer.addEventListener('touchstart', (e) => {
-          // Prevent default touch actions
-          e.preventDefault();
-        }, { passive: false });
-
-        mapContainer.addEventListener('touchmove', (e) => {
-          // Prevent default touch actions
-          e.preventDefault();
-        }, { passive: false });
-
-        // Prevent browser's default swipe navigation
-        document.addEventListener('touchmove', (e) => {
-          // Prevent horizontal swipes
-          if (Math.abs(e.touches[0].clientX - window.startX) > 10) {
-            e.preventDefault();
-          }
-        }, { passive: false });
-
-        // Track touch start position
-        document.addEventListener('touchstart', (e) => {
-          window.startX = e.touches[0].clientX;
-          window.startY = e.touches[0].clientY;
-        }, { passive: true });
-
-        // Prevent pull-to-refresh and back/forward navigation
-        document.body.style.overscrollBehavior = 'none';
-      }
-
-      // Prevent default touch actions on the entire body
-      document.body.addEventListener('touchmove', (e) => {
+      // Prevent default behavior on touch events
+      mapContainer.addEventListener('touchstart', (e) => {
+        // Prevent default touch actions
         e.preventDefault();
       }, { passive: false });
+
+      mapContainer.addEventListener('touchmove', (e) => {
+        // Prevent default touch actions
+        e.preventDefault();
+      }, { passive: false });
+
+      // Prevent browser's default swipe navigation
+      document.addEventListener('touchmove', (e) => {
+        // Prevent horizontal swipes
+        if (Math.abs(e.touches[0].clientX - window.startX) > 10) {
+          e.preventDefault();
+        }
+      }, { passive: false });
+
+      // Track touch start position
+      document.addEventListener('touchstart', (e) => {
+        window.startX = e.touches[0].clientX;
+        window.startY = e.touches[0].clientY;
+      }, { passive: true });
+
+      // Prevent pull-to-refresh and back/forward navigation
+      document.body.style.overscrollBehavior = 'none';
     }
 
-    // Call the prevention function when the page loads
-    document.addEventListener('DOMContentLoaded', preventUnintendedNavigation);
+    // Prevent default touch actions on the entire body
+    document.body.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+    }, { passive: false });
+  }
 
-    // Additional prevention for Google Maps
-    if (window.google && window.google.maps) {
-      google.maps.event.addListenerOnce(map, 'idle', () => {
-        map.setOptions({
-          gestureHandling: 'none'
-        });
+  // Call the prevention function when the page loads
+  document.addEventListener('DOMContentLoaded', preventUnintendedNavigation);
+
+  // Additional prevention for Google Maps
+  if (window.google && window.google.maps) {
+    google.maps.event.addListenerOnce(map, 'idle', () => {
+      map.setOptions({
+        gestureHandling: 'none'
       });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const mapContainer = document.getElementById('map');
+
+    if (mapContainer) {
+      // Prevent default touch behaviors
+      mapContainer.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+      }, { passive: false });
+
+      mapContainer.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+      }, { passive: false });
+
+      // Disable pull-to-refresh
+      document.body.style.overscrollBehavior = 'none';
+    }
+  });
+
+  function alerta(mensaje) {
+    // Remove existing alert if present
+    const existingAlert = document.querySelector("#customAlert");
+    if (existingAlert) {
+      existingAlert.remove();
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
-      const mapContainer = document.getElementById('map');
-
-      if (mapContainer) {
-        // Prevent default touch behaviors
-        mapContainer.addEventListener('touchstart', (e) => {
-          e.preventDefault();
-        }, { passive: false });
-
-        mapContainer.addEventListener('touchmove', (e) => {
-          e.preventDefault();
-        }, { passive: false });
-
-        // Disable pull-to-refresh
-        document.body.style.overscrollBehavior = 'none';
-      }
-    });
-
-    function alerta(mensaje) {
-      // Remove existing alert if present
-      const existingAlert = document.querySelector("#customAlert");
-      if (existingAlert) {
-        existingAlert.remove();
-      }
-
-      // Create alert container
-      const alertContainer = document.createElement("div");
-      alertContainer.id = "customAlert";
-      alertContainer.className =
+    // Create alert container
+    const alertContainer = document.createElement("div");
+    alertContainer.id = "customAlert";
+    alertContainer.className =
       "fixed left-1/2 transform -translate-x-1/2 z-50 transition-all duration-300 ease-in-out w-[85vw] md:w-[80vw] lg:w-[75vw]";
-      alertContainer.style.top = "-100px";
+    alertContainer.style.top = "-100px";
 
-      // Create alert content
-      const alertContent = document.createElement("div");
-      alertContent.className = `
+    // Create alert content
+    const alertContent = document.createElement("div");
+    alertContent.className = `
     relative
     bg-white
     border-2 border-red-600
@@ -1646,25 +1424,25 @@
     flex flex-col md:flex-row md:items-center gap-3 md:gap-4
   `;
 
-      // Create close button
-      const closeButton = document.createElement("button");
-      closeButton.className =
-        "absolute -right-3 -top-3 hover:bg-red-400 p-1 bg-red-600 rounded-full p-1.5 transition-colors duration-200";
-      closeButton.innerHTML = `
+    // Create close button
+    const closeButton = document.createElement("button");
+    closeButton.className =
+      "absolute -right-3 -top-3 hover:bg-red-400 p-1 bg-red-600 rounded-full p-1.5 transition-colors duration-200";
+    closeButton.innerHTML = `
     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
     </svg>
   `;
 
-      // Create main content container for mobile layout
-      const contentContainer = document.createElement("div");
-      contentContainer.className =
-        "flex flex-col md:flex-row items-center gap-3 md:gap-4 flex-1";
+    // Create main content container for mobile layout
+    const contentContainer = document.createElement("div");
+    contentContainer.className =
+      "flex flex-col md:flex-row items-center gap-3 md:gap-4 flex-1";
 
-      // Create icon with exclamation mark
-      const iconContainer = document.createElement("div");
-      iconContainer.className = "flex-shrink-0 text-red-600";
-      iconContainer.innerHTML = `
+    // Create icon with exclamation mark
+    const iconContainer = document.createElement("div");
+    iconContainer.className = "flex-shrink-0 text-red-600";
+    iconContainer.innerHTML = `
 <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
   <circle cx="12" cy="12" r="10" />
   <path d="M12 7v6" />
@@ -1672,45 +1450,44 @@
 </svg>
 `;
 
-      // Create message text
-      const messageText = document.createElement("p");
-      messageText.className = "text-gray-900 text-base md:text-lg flex-1";
-      messageText.textContent = mensaje;
+    // Create message text
+    const messageText = document.createElement("p");
+    messageText.className = "text-gray-900 text-base md:text-lg flex-1";
+    messageText.textContent = mensaje;
 
-      // Assemble the content container
-      contentContainer.appendChild(iconContainer);
-      contentContainer.appendChild(messageText);
+    // Assemble the content container
+    contentContainer.appendChild(iconContainer);
+    contentContainer.appendChild(messageText);
 
-      // Assemble the alert
-      alertContent.appendChild(closeButton);
-      alertContent.appendChild(contentContainer);
-      alertContainer.appendChild(alertContent);
-      $body.appendChild(alertContainer);
+    // Assemble the alert
+    alertContent.appendChild(closeButton);
+    alertContent.appendChild(contentContainer);
+    alertContainer.appendChild(alertContent);
+    $body.appendChild(alertContainer);
 
-      // Slide down animation
-      requestAnimationFrame(() => {
-        alertContainer.style.top = "56px";
-      });
+    // Slide down animation
+    requestAnimationFrame(() => {
+      alertContainer.style.top = "56px";
+    });
 
-      // Add event listeners
-      closeButton.addEventListener("click", () => {
-        hideAlert(alertContainer);
-      });
+    // Add event listeners
+    closeButton.addEventListener("click", () => {
+      hideAlert(alertContainer);
+    });
 
-      // Hide loader if it exists
-      loaderOff();
-    }
+    // Hide loader if it exists
+    loaderOff();
+  }
 
-    function hideAlert(alertContainer) {
-      alertContainer.style.top = "-100px";
+  function hideAlert(alertContainer) {
+    alertContainer.style.top = "-100px";
 
-      setTimeout(() => {
-        alertContainer.remove();
-      }, 300);
-    }
+    setTimeout(() => {
+      alertContainer.remove();
+    }, 300);
+  }
 
-  </script>
-  <script src="https://dosxdos.app.iidos.com/js/notificaciones.js"></script>
-  <script src="https://dosxdos.app.iidos.com/js/loadFirebase.js"></script>
+</script>
+<script src="https://dosxdos.app.iidos.com/js/loadFirebase.js"></script>
 
 </html>

@@ -475,7 +475,11 @@ function populateMobileMenu(userRole) {
       {
         id: "historial",
         href: "https://dosxdos.app.iidos.com/historial_montador.html",
-        icon: renderIcon(`<path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>`),
+        icon: renderIcon(`<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+    <circle cx="12" cy="12" r="9"></circle>
+    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l3 3"></path>
+  </svg>`),
         text: "Historial"
       }
     ]
@@ -1279,7 +1283,11 @@ const menuConfigs = {
     {
       id: "historial",
       href: "https://dosxdos.app.iidos.com/historial_montador.html",
-      icon: `<path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>`,
+      icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        <circle cx="12" cy="12" r="9"></circle>
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l3 3"></path>
+      </svg>`,
       text: "Historial"
     }
   ]
@@ -1356,7 +1364,7 @@ function createDesktopNavigation(userRole) {
       group-hover:bg-red-100 
       transition-colors
     `;
-    
+
     // Create icon element
     const iconEl = document.createElement('div');
     iconEl.innerHTML = item.icon;
@@ -1366,7 +1374,7 @@ function createDesktopNavigation(userRole) {
       group-hover:text-red-600 
       transition-colors
     `;
-    
+
     iconContainer.appendChild(iconEl);
     mainLinkEl.appendChild(iconContainer);
 
@@ -1380,6 +1388,18 @@ function createDesktopNavigation(userRole) {
       font-medium
     `;
     mainLinkEl.appendChild(textEl);
+
+    // Add chevron icon for items with submenu
+    if (item.submenu) {
+      const chevronEl = document.createElement('svg');
+      chevronEl.innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2 text-gray-400 group-hover:text-red-600 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polyline points="6 9 12 15 18 9"></polyline>
+    </svg>
+  `;
+      chevronEl.className = "ml-2 transform group-hover:rotate-180 transition-transform duration-200";
+      mainLinkEl.appendChild(chevronEl);
+    }
 
     menuItemEl.appendChild(mainLinkEl);
 
@@ -1402,7 +1422,7 @@ function createDesktopNavigation(userRole) {
         border
         border-gray-200
       `;
-      
+
       item.submenu.forEach(subitem => {
         const submenuItemEl = document.createElement('a');
         submenuItemEl.href = subitem.href;

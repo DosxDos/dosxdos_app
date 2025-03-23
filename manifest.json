@@ -11,53 +11,43 @@
   "lang": "es",
   "icons": [
     {
-      "src": "https://dosxdos.app.iidos.com/img/logoPwa1024.png",
-      "sizes": "1024x1024",
-      "type": "image/png"
-    },
-    {
-      "src": "https://dosxdos.app.iidos.com/img/logoPwa512.png",
+      "src": "https://dosxdos.app.iidos.com/img/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
     },
     {
-      "src": "https://dosxdos.app.iidos.com/img/logoPwa384.png",
+      "src": "https://dosxdos.app.iidos.com/img/icon-384x384.png",
       "sizes": "384x384",
       "type": "image/png"
     },
     {
-      "src": "https://dosxdos.app.iidos.com/img/logoPwa256.png",
+      "src": "https://dosxdos.app.iidos.com/img/icon-256x256.png",
       "sizes": "256x256",
       "type": "image/png"
     },
     {
-      "src": "https://dosxdos.app.iidos.com/img/logoPwa192.png",
+      "src": "https://dosxdos.app.iidos.com/img/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "https://dosxdos.app.iidos.com/img/logoPwa128.png",
+      "src": "https://dosxdos.app.iidos.com/img/icon-128x128.png",
       "sizes": "128x128",
       "type": "image/png"
     },
     {
-      "src": "https://dosxdos.app.iidos.com/img/logoPwa96.png",
+      "src": "https://dosxdos.app.iidos.com/img/icon-96x96.png",
       "sizes": "96x96",
       "type": "image/png"
     },
     {
-      "src": "https://dosxdos.app.iidos.com/img/logoPwa64.png",
-      "sizes": "64x64",
+      "src": "https://dosxdos.app.iidos.com/img/icon-72x72.png",
+      "sizes": "72x72",
       "type": "image/png"
     },
     {
-      "src": "https://dosxdos.app.iidos.com/img/logoPwa32.png",
-      "sizes": "32x32",
-      "type": "image/png"
-    },
-    {
-      "src": "https://dosxdos.app.iidos.com/img/logoPwa16.png",
-      "sizes": "16x16",
+      "src": "https://dosxdos.app.iidos.com/img/icon-48x48.png",
+      "sizes": "48x48",
       "type": "image/png"
     }
   ]
