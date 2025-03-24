@@ -1516,28 +1516,87 @@ function createDesktopNavigation(userRole) {
   `;
   desktopNav.appendChild(userMenu);
 
-  // Add event listeners for floating menu
-  hamburgerMenuTrigger.addEventListener('mouseenter', () => {
+  // Track if the menu is "locked" open (via click)
+  let menuLocked = false;
+  let hoverPaused = false; // Use to prevent hover trigger immediately after click
+
+  // Function to open menu
+  function openMenu(lock = false) {
     floatingMenuContainer.classList.remove('hidden');
     floatingMenuContainer.classList.add('grid');
-  });
+    
+    if (lock) {
+      menuLocked = true;
+      // Add visual indicator that menu is locked
+      hamburgerMenuTrigger.classList.add('bg-red-100');
+    }
+  }
 
-  // Close menu when mouse leaves both hamburger and floating menu
-  const closeMenu = () => {
+  // Function to close menu
+  function closeMenu() {
     floatingMenuContainer.classList.remove('grid');
     floatingMenuContainer.classList.add('hidden');
-  };
+    // Remove locked visual indicator
+    hamburgerMenuTrigger.classList.remove('bg-red-100');
+  }
 
-  hamburgerMenuTrigger.addEventListener('mouseleave', (event) => {
-    // Use a small timeout to prevent accidental closing
-    setTimeout(() => {
-      if (!floatingMenuContainer.matches(':hover')) {
-        closeMenu();
-      }
-    }, 100);
+  // Improved click event for hamburger trigger
+  hamburgerMenuTrigger.addEventListener('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // Toggle menu state
+    if (menuLocked) {
+      // Menu is locked open, unlock and close it
+      menuLocked = false;
+      closeMenu();
+      
+      // Pause hover behavior briefly to prevent immediate re-opening
+      hoverPaused = true;
+      setTimeout(() => {
+        hoverPaused = false;
+      }, 300);
+    } else {
+      // Menu is closed or hover-open, lock it open
+      openMenu(true);
+    }
   });
 
-  floatingMenuContainer.addEventListener('mouseleave', closeMenu);
+  // Add hover events
+  hamburgerMenuTrigger.addEventListener('mouseenter', function() {
+    // Skip if hover is paused or menu is already locked
+    if (hoverPaused || menuLocked) return;
+    
+    openMenu(false);
+  });
+
+  hamburgerMenuTrigger.addEventListener('mouseleave', function() {
+    // Only close on mouseleave if not locked
+    if (!menuLocked) {
+      setTimeout(() => {
+        if (!floatingMenuContainer.matches(':hover')) {
+          closeMenu();
+        }
+      }, 100);
+    }
+  });
+
+  floatingMenuContainer.addEventListener('mouseleave', function() {
+    // Only close on mouseleave if not locked
+    if (!menuLocked) {
+      closeMenu();
+    }
+  });
+
+  // Add document click handler to close locked menu when clicking outside
+  document.addEventListener('click', function(e) {
+    if (menuLocked && 
+        !hamburgerMenuTrigger.contains(e.target) && 
+        !floatingMenuContainer.contains(e.target)) {
+      menuLocked = false;
+      closeMenu();
+    }
+  });
 }
 
 // Add a small script to ensure the function is called appropriately
