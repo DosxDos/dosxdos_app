@@ -64,7 +64,7 @@ if ($conexion && $idUsuario) {
     <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/cdn_data_tables.css">
     <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/tailwindmain.css" />
     <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/index.css" />
-    <link rel="icon" type="image/png" href="https://dosxdos.app.iidos.com/img/logoPwa256.png">
+    <link rel="icon" type="image/png" href="https://dosxdos.app.iidos.com/img/logo-red.png">
     <script src="https://dosxdos.app.iidos.com/js/jquery.js"></script>
     <script src="https://dosxdos.app.iidos.com/js/data_tables.js"></script>
     <script src="https://dosxdos.app.iidos.com/js/cdn_data_tables.js"></script>
