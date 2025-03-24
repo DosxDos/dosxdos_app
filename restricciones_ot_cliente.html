@@ -2096,7 +2096,77 @@
     window.addEventListener('offline', () => {
         console.log('La conexión a Internet se ha perdido.');
     });
+// Aggressive fix that forces notification display regardless of other scripts
+// Place this at the very end of your file before </body>
 
+// Immediately run an initial check
+fixNotifications();
+
+// Then set a repeating interval to keep checking
+setInterval(fixNotifications, 1000);
+
+function fixNotifications() {
+  // Force set the desktop bell image
+  var bellDesktop = document.getElementById("bellDesktop");
+  if (bellDesktop) {
+    // Always set a valid default image first
+    bellDesktop.src = "https://dosxdos.app.iidos.com/img/bell2.png";
+  }
+  
+  // Now check IndexedDB directly to get the actual notification count
+  var request = indexedDB.open("dosxdos");
+  
+  request.onsuccess = function(event) {
+    var db = event.target.result;
+    try {
+      var transaction = db.transaction(["notificaciones"], "readonly");
+      var store = transaction.objectStore("notificaciones");
+      var countRequest = store.getAll();
+      
+      countRequest.onsuccess = function() {
+        var notifications = countRequest.result;
+        var unreadCount = 0;
+        
+        // Count unread notifications
+        for (var i = 0; i < notifications.length; i++) {
+          if (!notifications[i].visto) {
+            unreadCount++;
+          }
+        }
+        
+        // If we have unread notifications, force display
+        if (unreadCount > 0) {
+          // Update desktop notification
+          if (bellDesktop) {
+            bellDesktop.src = "https://dosxdos.app.iidos.com/img/bell.gif";
+          }
+          
+          // Update desktop counter
+          var desktopCount = document.getElementById("desktopNotificationCount");
+          if (desktopCount) {
+            desktopCount.textContent = unreadCount;
+            desktopCount.classList.remove("hidden");
+          }
+          
+          // Update mobile notification too
+          var bellMobile = document.getElementById("bellMobile");
+          if (bellMobile) {
+            bellMobile.src = "https://dosxdos.app.iidos.com/img/bell.gif";
+          }
+          
+          // Update mobile counter
+          var mobileCount = document.getElementById("mobileNotificationCount");
+          if (mobileCount) {
+            mobileCount.textContent = unreadCount;
+            mobileCount.classList.remove("hidden");
+          }
+        }
+      };
+    } catch (e) {
+      console.error("Error accessing IndexedDB:", e);
+    }
+  };
+}
 </script>
 <script src="https://dosxdos.app.iidos.com/js/notificaciones.js"></script>
 <script src="https://dosxdos.app.iidos.com/js/loadFirebase.js"></script>
