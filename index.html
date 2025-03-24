@@ -858,25 +858,51 @@
           const instalarButton = document.getElementById("instalarImg");
           if (instalarButton) {
             instalarButton.addEventListener("click", function () {
-              // Check if app can be installed via PWA
-              if (window.deferredPrompt) {
-                window.deferredPrompt.prompt();
-                window.deferredPrompt.userChoice.then((choiceResult) => {
-                  console.log('User choice result:', choiceResult.outcome);
-                  window.deferredPrompt = null;
-                });
-              } else {
-                // Detect device type and open appropriate store or show instructions
-                if (isAndroid) {
-                  window.open('https://play.google.com/store/apps/details?id=com.dosxdos.app', '_blank');
-                } else if (isiOS) {
-                  window.open('https://apps.apple.com/app/dosxdos/id123456789', '_blank');
+              if (isAndroid) {
+                //window.open('https://play.google.com/store/apps/details?id=com.dosxdos.app', '_blank');
+                // Ejecutar flujo de PWA
+                if (window.deferredPrompt) {
+                  window.deferredPrompt.prompt();
+                  window.deferredPrompt.userChoice.then((choiceResult) => {
+                    console.log('User choice result:', choiceResult.outcome);
+                    window.deferredPrompt = null;
+                  });
                 } else {
-                  // Show desktop installation instructions based on language
                   if (idioma === "es") {
-                    alerta("Para instalar la aplicación, haga clic en el botón de instalación en la barra de direcciones de su navegador.");
+                    alerta("No es posible instalar la aplicación por algunas de las razones: Aplicación ya instalada, navegador no compatible o se ha denegado la instalación anteriormente por el usuario.");
                   } else {
-                    alerta("To install the application, click the installation button in your browser's address bar.");
+                    alerta("The application cannot be installed for a number of reasons: Application already installed, browser not supported, or installation has been previously denied by the user.");
+                  }
+                }
+              } else if (isiOS) {
+                //window.open('https://apps.apple.com/app/dosxdos/id123456789', '_blank');
+                // Ejecutar flujo de PWA
+                if (window.deferredPrompt) {
+                  window.deferredPrompt.prompt();
+                  window.deferredPrompt.userChoice.then((choiceResult) => {
+                    console.log('User choice result:', choiceResult.outcome);
+                    window.deferredPrompt = null;
+                  });
+                } else {
+                  if (idioma === "es") {
+                    alerta("No es posible instalar la aplicación por algunas de las razones: Aplicación ya instalada, navegador no compatible o se ha denegado la instalación anteriormente por el usuario.");
+                  } else {
+                    alerta("The application cannot be installed for a number of reasons: Application already installed, browser not supported, or installation has been previously denied by the user.");
+                  }
+                }
+              } else {
+                // Ejecutar flujo de PWA
+                if (window.deferredPrompt) {
+                  window.deferredPrompt.prompt();
+                  window.deferredPrompt.userChoice.then((choiceResult) => {
+                    console.log('User choice result:', choiceResult.outcome);
+                    window.deferredPrompt = null;
+                  });
+                } else {
+                  if (idioma === "es") {
+                    alerta("No es posible instalar la aplicación por alguna de las razones: Aplicación ya instalada, navegador no compatible o se ha denegado la instalación anteriormente por el usuario.");
+                  } else {
+                    alerta("The application cannot be installed for one of the following reasons: Application already installed, browser not supported, or installation has been previously denied by the user.");
                   }
                 }
               }
