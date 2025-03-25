@@ -15,44 +15,41 @@ function fetchNotificaciones() {
       const res = await fetch(url);
 
       if (!res.ok) {
-        throw new Error(
-          `Error en la solicitud de las notificaciones de ${usuario.nombre}`
-        );
+        throw new Error(`Error fetching notifications for ${usuario.nombre}`);
       }
 
       const resJson = await res.json();
 
-      if (resJson.message) {
-        const db = await new Promise((dbResolve, dbReject) => {
-          const request = indexedDB.open("dosxdos");
-          request.onsuccess = (event) => {
-            const db = event.target.result;
-            dbResolve(db);
-          };
-          request.onerror = (event) => {
-            dbReject(
-              new Error(
-                `Error al abrir la base de datos para ingresar las notificaciones de ${usuario.nombre}`
-              )
-            );
-          };
-        });
-
-        const transaction = db.transaction("notificaciones", "readwrite");
-        const datosStore = transaction.objectStore("notificaciones");
-        const datos = resJson.message;
-        if (Array.isArray(datos)) {
-          datos.forEach((item) => {
-            datosStore.add(item);
-          });
-        } else {
-          datosStore.add(datos);
-        }
-      } else {
-        throw new Error(
-          `Error al solicitar las notificaciones de ${usuario.nombre}`
-        );
+      if (!resJson.message) {
+        throw new Error(`Empty or invalid notifications for ${usuario.nombre}`);
       }
+
+      const db = await new Promise((dbResolve, dbReject) => {
+        const request = indexedDB.open("dosxdos");
+        request.onsuccess = (event) => dbResolve(event.target.result);
+        request.onerror = (event) =>
+          dbReject(new Error(`Error opening DB: ${event.target.error}`));
+      });
+
+      const transaction = db.transaction("notificaciones", "readwrite");
+      const store = transaction.objectStore("notificaciones");
+      const data = Array.isArray(resJson.message)
+        ? resJson.message
+        : [resJson.message];
+
+      // Wait for all puts to finish
+      await Promise.all(
+        data.map((item) => {
+          return new Promise((res, rej) => {
+            const request = store.put(item);
+            request.onsuccess = () => res(true);
+            request.onerror = () => {
+              console.error("Failed to put item", item, request.error);
+              rej(request.error);
+            };
+          });
+        })
+      );
 
       resolve(true);
     } catch (err) {
@@ -176,7 +173,13 @@ function renderizarSinNotificaciones() {
 
 function renderizarConNotificaciones(numeroDeNotificacionesActuales) {
   // Force the correct number to be used (prevent incorrect values from being passed in)
-  numeroDeNotificacionesActuales = window.correctNotificationCount || numeroDeNotificacionesActuales;
+  if (typeof window.correctNotificationCount === "number") {
+    numeroDeNotificacionesActuales = window.correctNotificationCount;
+  }
+
+  $mobileNotificationCount.textContent = "";
+  $desktopNotificationCount.textContent = "";
+
   //Mobiles
   $bellMobile.src = "https://dosxdos.app.iidos.com/img/bell.gif";
   if ($bellMobile.classList.contains("w-8")) {
@@ -187,8 +190,10 @@ function renderizarConNotificaciones(numeroDeNotificacionesActuales) {
   if ($mobileNotificationCount.classList.contains("hidden")) {
     $mobileNotificationCount.classList.remove("hidden");
     $mobileNotificationCount.textContent = numeroDeNotificacionesActuales;
+    $desktopNotificationCount.textContent = numeroDeNotificacionesActuales;
   } else {
     $mobileNotificationCount.textContent = numeroDeNotificacionesActuales;
+    $desktopNotificationCount.textContent = numeroDeNotificacionesActuales;
   }
   //Desktops
   $bellDesktop.src = "https://dosxdos.app.iidos.com/img/bell.gif";
@@ -200,8 +205,10 @@ function renderizarConNotificaciones(numeroDeNotificacionesActuales) {
   if ($desktopNotificationCount.classList.contains("hidden")) {
     $desktopNotificationCount.classList.remove("hidden");
     $desktopNotificationCount.textContent = numeroDeNotificacionesActuales;
+    $mobileNotificationCount.textContent = numeroDeNotificacionesActuales;
   } else {
     $desktopNotificationCount.textContent = numeroDeNotificacionesActuales;
+    $mobileNotificationCount.textContent = numeroDeNotificacionesActuales;
   }
   console.log('Se ha renderizado la campana con notificaciones');
 }

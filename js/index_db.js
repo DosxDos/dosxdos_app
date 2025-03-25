@@ -433,20 +433,35 @@ async function cerrarSesion() {
 }
 
 async function cerrarSesions() {
-    try {
-        loaderOn();
-        // Only call if the function exists
-        if (typeof eliminarTokenNotificaciones === 'function') {
-            await eliminarTokenNotificaciones();
+    if (navigator.onLine) {
+        try {
+            loaderOn();
+            const eliminarBaseDeDatosCliente = await deleteDB2("dosxdos");
+            if (eliminarBaseDeDatosCliente) {
+                // Add null check before calling eliminarTokenNotificaciones
+                if (typeof eliminarTokenNotificaciones === 'function') {
+                    const eliminarTokenDeLasNotificaciones = await eliminarTokenNotificaciones();
+                    if (eliminarTokenDeLasNotificaciones) {
+                        localStorage.clear();
+                        eliminarCookie("login");
+                        eliminarCookie("usuario");
+                        window.location.href = "https://dosxdos.app.iidos.com/index.html";
+                    }
+                } else {
+                    // If the function doesn't exist, proceed anyway
+                    localStorage.clear();
+                    eliminarCookie("login");
+                    eliminarCookie("usuario");
+                    window.location.href = "https://dosxdos.app.iidos.com/index.html";
+                }
+            }
+        } catch (error) {
+            mensaje = "ERROR: " + error.message;
+            console.error(error);
+            alerta(mensaje);
         }
-        localStorage.removeItem('login');
-        localStorage.removeItem('usuario');
-        eliminarCookie('login');
-        eliminarCookie('usuario');
-        window.location.href = "https://dosxdos.app.iidos.com/index.html";
-    } catch (error) {
-        mensaje = 'ERROR: ' + error.message;
-        console.error(error);
+    } else {
+        mensaje = "No es posible cerrar la sesión sin conexión a internet";
         alerta(mensaje);
     }
 }
