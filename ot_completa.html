@@ -3182,6 +3182,43 @@
         });
     }
 
+     // INITIALIZATION FUNCTION
+     function initializeApplication() {
+      return new Promise(resolve => {
+        try {
+          // Dynamically create navigation based on user role
+          createDesktopNavigation(usuario.clase);
+          // Setup desktop and mobile navigation
+          setupMenu(usuario.clase);
+
+          // Setup menu interactions
+          setupMenuInteractions();
+          setupUserActions();
+          setupGlobalMenuClosing();
+
+          updateUserDisplay();
+
+          // Update the user information in the new UI elements
+          const nombreUsuarioDesktop = document.getElementById('nombreUsuarioDesktop');
+          const nombreUsuarioMobile = document.getElementById('nombreUsuarioMobile');
+          const imagenUsuarioDesktop = document.getElementById('imagenUsuarioDesktop');
+          const imagenUsuarioMobile = document.getElementById('imagenUsuarioMobile');
+
+          if (nombreUsuarioDesktop) nombreUsuarioDesktop.textContent = usuario.nombre;
+          if (nombreUsuarioMobile) nombreUsuarioMobile.textContent = usuario.nombre;
+
+          if (usuario.imagen !== "0") {
+            if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
+            if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
+          }
+          resolve(true);
+        } catch (error) {
+          console.error("Error initializing application:", error);
+          resolve(false);
+        }
+      })
+    }
+
     async function appOnline() {
         try {
             const login = await vLogin();

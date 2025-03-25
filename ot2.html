@@ -218,7 +218,7 @@
                     id="desktopBellContainer">
                     <img id="bellDesktop" src="" class="text-gray-900 object-contain" />
                     <span id="desktopNotificationCount"
-                        class="absolute top-0 -right-2 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] text-center border hidden"></span>
+                        class="absolute top-0 -right-3 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] text-center border hidden"></span>
                 </a>
 
                 <!-- Desktop User Menu -->
@@ -281,7 +281,7 @@
                     <img id="bellMobile" src="https://dosxdos.app.iidos.com/img/bell2.png"
                         class="w-8 text-gray-900 object-contain mt-2" />
                     <span id="mobileNotificationCount"
-                        class="absolute top-2 right-0 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] text-center border hidden"></span>
+                        class="absolute top-2 right-2 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] text-center border hidden"></span>
                 </a>
 
                 <!-- Mobile Menu Button -->
@@ -973,6 +973,43 @@
         });
     }
 
+    // INITIALIZATION FUNCTION
+    function initializeApplication() {
+        return new Promise(resolve => {
+            try {
+                // Dynamically create navigation based on user role
+                createDesktopNavigation(usuario.clase);
+                // Setup desktop and mobile navigation
+                setupMenu(usuario.clase);
+
+                // Setup menu interactions
+                setupMenuInteractions();
+                setupUserActions();
+                setupGlobalMenuClosing();
+
+                updateUserDisplay();
+
+                // Update the user information in the new UI elements
+                const nombreUsuarioDesktop = document.getElementById('nombreUsuarioDesktop');
+                const nombreUsuarioMobile = document.getElementById('nombreUsuarioMobile');
+                const imagenUsuarioDesktop = document.getElementById('imagenUsuarioDesktop');
+                const imagenUsuarioMobile = document.getElementById('imagenUsuarioMobile');
+
+                if (nombreUsuarioDesktop) nombreUsuarioDesktop.textContent = usuario.nombre;
+                if (nombreUsuarioMobile) nombreUsuarioMobile.textContent = usuario.nombre;
+
+                if (usuario.imagen !== "0") {
+                    if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
+                    if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
+                }
+                resolve(true);
+            } catch (error) {
+                console.error("Error initializing application:", error);
+                resolve(false);
+            }
+        })
+    }
+
     async function appOnline() {
         try {
             const login = await vLogin();
@@ -991,32 +1028,8 @@
                     case 'oficina':
                     case 'diseno':
                     case 'estudio':
-                        // Dynamically create navigation based on user role
-                        createDesktopNavigation(usuario.clase);
-                        // Setup desktop and mobile navigation
-                        setupMenu(usuario.clase);
-
-                        // Setup menu interactions
-                        setupMenuInteractions();
-                        setupUserActions();
-                        setupGlobalMenuClosing();
-
-                        updateUserDisplay();
+                        await initializeApplication()
                         break;
-                }
-
-                // Update the user information in the new UI elements
-                const nombreUsuarioDesktop = document.getElementById('nombreUsuarioDesktop');
-                const nombreUsuarioMobile = document.getElementById('nombreUsuarioMobile');
-                const imagenUsuarioDesktop = document.getElementById('imagenUsuarioDesktop');
-                const imagenUsuarioMobile = document.getElementById('imagenUsuarioMobile');
-
-                if (nombreUsuarioDesktop) nombreUsuarioDesktop.textContent = usuario.nombre;
-                if (nombreUsuarioMobile) nombreUsuarioMobile.textContent = usuario.nombre;
-
-                if (usuario.imagen !== "0") {
-                    if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
-                    if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
                 }
 
                 const ano = localStorage.getItem('anoDeOts');
@@ -1205,6 +1218,7 @@
 
                             loaderOff();
                         } else {
+                            initializeApplication()
                             // Check for notifications
                             const sincronizacionDeNotificaciones = await sincronizarNotificaciones();
                             if (sincronizacionDeNotificaciones) {
@@ -1215,6 +1229,7 @@
                             loaderOff();
                         }
                     } else {
+                        initializeApplication()
                         // Check for notifications
                         const sincronizacionDeNotificaciones = await sincronizarNotificaciones();
                         if (sincronizacionDeNotificaciones) {
@@ -1225,12 +1240,14 @@
                         loaderOff();
                     }
                 } else {
+                    initializeApplication()
                     alerta('Error, no se ha recibido la variable del año a buscar');
                     scrollToTop();
                     loaderOff();
                 }
             }
         } catch (error) {
+            initializeApplication()
             console.error(error);
             alerta(`ERROR: ${error.message}`);
             scrollToTop();
@@ -1246,27 +1263,7 @@
                 const Arrayusuario = await leerDatos('dosxdos', 'usuario');
                 usuario = Arrayusuario[0];
 
-                // Setup user interface elements
-                createDesktopNavigation(usuario.clase);
-                setupMenu(usuario.clase);
-                setupMenuInteractions();
-                setupUserActions();
-                setupGlobalMenuClosing();
-                updateUserDisplay();
-
-                // Update the user information in the new UI elements
-                const nombreUsuarioDesktop = document.getElementById('nombreUsuarioDesktop');
-                const nombreUsuarioMobile = document.getElementById('nombreUsuarioMobile');
-                const imagenUsuarioDesktop = document.getElementById('imagenUsuarioDesktop');
-                const imagenUsuarioMobile = document.getElementById('imagenUsuarioMobile');
-
-                if (nombreUsuarioDesktop) nombreUsuarioDesktop.textContent = usuario.nombre;
-                if (nombreUsuarioMobile) nombreUsuarioMobile.textContent = usuario.nombre;
-
-                if (usuario.imagen !== "0") {
-                    if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
-                    if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
-                }
+               await initializeApplication()
 
                 // Handle montador redirection
                 if (usuario.clase === 'montador') {
@@ -1288,12 +1285,15 @@
                     contenido.classList.add('hidden');
                 }
 
+                notificar()
+
                 // Show offline message
                 alerta('No es posible acceder a la información del servidor sin conexión a internet');
                 scrollToTop();
                 loaderOff();
             }
         } catch (error) {
+            initializeApplication()
             console.error(error);
             alerta(`ERROR: ${error.message}`);
             scrollToTop();
@@ -1333,76 +1333,76 @@
         console.log('La conexión a Internet se ha perdido.');
     });
     // Aggressive fix that forces notification display regardless of other scripts
-// Place this at the very end of your file before </body>
+    // Place this at the very end of your file before </body>
 
-// Immediately run an initial check
-fixNotifications();
+    // Immediately run an initial check
+    fixNotifications();
 
-// Then set a repeating interval to keep checking
-setInterval(fixNotifications, 1000);
+    // Then set a repeating interval to keep checking
+    setInterval(fixNotifications, 1000);
 
-function fixNotifications() {
-  // Force set the desktop bell image
-  var bellDesktop = document.getElementById("bellDesktop");
-  if (bellDesktop) {
-    // Always set a valid default image first
-    bellDesktop.src = "https://dosxdos.app.iidos.com/img/bell2.png";
-  }
-  
-  // Now check IndexedDB directly to get the actual notification count
-  var request = indexedDB.open("dosxdos");
-  
-  request.onsuccess = function(event) {
-    var db = event.target.result;
-    try {
-      var transaction = db.transaction(["notificaciones"], "readonly");
-      var store = transaction.objectStore("notificaciones");
-      var countRequest = store.getAll();
-      
-      countRequest.onsuccess = function() {
-        var notifications = countRequest.result;
-        var unreadCount = 0;
-        
-        // Count unread notifications
-        for (var i = 0; i < notifications.length; i++) {
-          if (!notifications[i].visto) {
-            unreadCount++;
-          }
+    function fixNotifications() {
+        // Force set the desktop bell image
+        var bellDesktop = document.getElementById("bellDesktop");
+        if (bellDesktop) {
+            // Always set a valid default image first
+            bellDesktop.src = "https://dosxdos.app.iidos.com/img/bell2.png";
         }
-        
-        // If we have unread notifications, force display
-        if (unreadCount > 0) {
-          // Update desktop notification
-          if (bellDesktop) {
-            bellDesktop.src = "https://dosxdos.app.iidos.com/img/bell.gif";
-          }
-          
-          // Update desktop counter
-          var desktopCount = document.getElementById("desktopNotificationCount");
-          if (desktopCount) {
-            desktopCount.textContent = unreadCount;
-            desktopCount.classList.remove("hidden");
-          }
-          
-          // Update mobile notification too
-          var bellMobile = document.getElementById("bellMobile");
-          if (bellMobile) {
-            bellMobile.src = "https://dosxdos.app.iidos.com/img/bell.gif";
-          }
-          
-          // Update mobile counter
-          var mobileCount = document.getElementById("mobileNotificationCount");
-          if (mobileCount) {
-            mobileCount.textContent = unreadCount;
-            mobileCount.classList.remove("hidden");
-          }
-        }
-      };
-    } catch (e) {
-      console.error("Error accessing IndexedDB:", e);
+
+        // Now check IndexedDB directly to get the actual notification count
+        var request = indexedDB.open("dosxdos");
+
+        request.onsuccess = function (event) {
+            var db = event.target.result;
+            try {
+                var transaction = db.transaction(["notificaciones"], "readonly");
+                var store = transaction.objectStore("notificaciones");
+                var countRequest = store.getAll();
+
+                countRequest.onsuccess = function () {
+                    var notifications = countRequest.result;
+                    var unreadCount = 0;
+
+                    // Count unread notifications
+                    for (var i = 0; i < notifications.length; i++) {
+                        if (!notifications[i].visto) {
+                            unreadCount++;
+                        }
+                    }
+
+                    // If we have unread notifications, force display
+                    if (unreadCount > 0) {
+                        // Update desktop notification
+                        if (bellDesktop) {
+                            bellDesktop.src = "https://dosxdos.app.iidos.com/img/bell.gif";
+                        }
+
+                        // Update desktop counter
+                        var desktopCount = document.getElementById("desktopNotificationCount");
+                        if (desktopCount) {
+                            desktopCount.textContent = unreadCount;
+                            desktopCount.classList.remove("hidden");
+                        }
+
+                        // Update mobile notification too
+                        var bellMobile = document.getElementById("bellMobile");
+                        if (bellMobile) {
+                            bellMobile.src = "https://dosxdos.app.iidos.com/img/bell.gif";
+                        }
+
+                        // Update mobile counter
+                        var mobileCount = document.getElementById("mobileNotificationCount");
+                        if (mobileCount) {
+                            mobileCount.textContent = unreadCount;
+                            mobileCount.classList.remove("hidden");
+                        }
+                    }
+                };
+            } catch (e) {
+                console.error("Error accessing IndexedDB:", e);
+            }
+        };
     }
-  };
-}
 
 </script>
 <script src="https://dosxdos.app.iidos.com/js/loadFirebase.js"></script>

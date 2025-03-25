@@ -2691,34 +2691,43 @@
         }
     });
 
-    // INITIALIZATION FUNCTION
-    function initializeApplication() {
-        // Dynamically create navigation based on user role
-        createDesktopNavigation(usuario.clase);
-        // Setup desktop and mobile navigation
-        setupMenu(usuario.clase);
+  // INITIALIZATION FUNCTION
+  function initializeApplication() {
+      return new Promise(resolve => {
+        try {
+          // Dynamically create navigation based on user role
+          createDesktopNavigation(usuario.clase);
+          // Setup desktop and mobile navigation
+          setupMenu(usuario.clase);
 
-        // Setup menu interactions
-        setupMenuInteractions();
-        setupUserActions();
-        setupGlobalMenuClosing();
+          // Setup menu interactions
+          setupMenuInteractions();
+          setupUserActions();
+          setupGlobalMenuClosing();
 
-        updateUserDisplay();
+          updateUserDisplay();
 
-        // Update the user information in the new UI elements
-        const nombreUsuarioDesktop = document.getElementById('nombreUsuarioDesktop');
-        const nombreUsuarioMobile = document.getElementById('nombreUsuarioMobile');
-        const imagenUsuarioDesktop = document.getElementById('imagenUsuarioDesktop');
-        const imagenUsuarioMobile = document.getElementById('imagenUsuarioMobile');
+          // Update the user information in the new UI elements
+          const nombreUsuarioDesktop = document.getElementById('nombreUsuarioDesktop');
+          const nombreUsuarioMobile = document.getElementById('nombreUsuarioMobile');
+          const imagenUsuarioDesktop = document.getElementById('imagenUsuarioDesktop');
+          const imagenUsuarioMobile = document.getElementById('imagenUsuarioMobile');
 
-        if (nombreUsuarioDesktop) nombreUsuarioDesktop.textContent = usuario.nombre;
-        if (nombreUsuarioMobile) nombreUsuarioMobile.textContent = usuario.nombre;
+          if (nombreUsuarioDesktop) nombreUsuarioDesktop.textContent = usuario.nombre;
+          if (nombreUsuarioMobile) nombreUsuarioMobile.textContent = usuario.nombre;
 
-        if (usuario.imagen !== "0") {
+          if (usuario.imagen !== "0") {
             if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
             if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
+          }
+          resolve(true);
+        } catch (error) {
+          console.error("Error initializing application:", error);
+          resolve(false);
         }
+      })
     }
+
 
     /* INICIAR APP ONLINE */
     async function appOnline() {
@@ -2738,7 +2747,8 @@
                         usuario.clase;
                 }
                 montador = usuario.cod;
-                initializeApplication()
+
+                await initializeApplication()
 
                 try {
                     const sincronizacionDeNotificaciones = await sincronizarNotificaciones();
@@ -2885,6 +2895,7 @@
                     const peticionesCierre = await procesarPeticiones2();
                     loaderOff();
                 } else {
+                    initializeApplication()
                     alerta("Error al leer el almacén de líneas");
                     scrollToTop();
                     const peticionesCierre = await procesarPeticiones2();
@@ -2892,6 +2903,7 @@
                 }
             }
         } catch (error) {
+            initializeApplication()
             mensaje = "ERROR: " + error.message;
             console.error(error);
             alerta(mensaje);
@@ -2908,31 +2920,8 @@
                 const Arrayusuario = await leerDatos("dosxdos", "usuario");
                 usuario = Arrayusuario[0];
                 montador = usuario.cod;
-                // Dynamically create navigation based on user role
-                createDesktopNavigation(usuario.clase);
-                // Setup desktop and mobile navigation
-                setupMenu(usuario.clase);
 
-                // Setup menu interactions
-                setupMenuInteractions();
-                setupUserActions();
-                setupGlobalMenuClosing();
-
-                updateUserDisplay();
-
-                // Update the user information in the new UI elements
-                const nombreUsuarioDesktop = document.getElementById('nombreUsuarioDesktop');
-                const nombreUsuarioMobile = document.getElementById('nombreUsuarioMobile');
-                const imagenUsuarioDesktop = document.getElementById('imagenUsuarioDesktop');
-                const imagenUsuarioMobile = document.getElementById('imagenUsuarioMobile');
-
-                if (nombreUsuarioDesktop) nombreUsuarioDesktop.textContent = usuario.nombre;
-                if (nombreUsuarioMobile) nombreUsuarioMobile.textContent = usuario.nombre;
-
-                if (usuario.imagen !== "0") {
-                    if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
-                    if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
-                }
+               await initializeApplication()
 
                 await notificar();
 
@@ -3025,23 +3014,28 @@
                             }
                             loaderOff();
                         } else {
+                            initializeApplication()
                             alerta("Error al filtrar la línea de las líneas de la ruta");
                             scrollToTop();
                             loaderOff();
                         }
                     } else {
+                        initializeApplication()
                         alerta("Error al filtrar las líneas de la ruta");
                         scrollToTop();
                         loaderOff();
                     }
+                    initializeApplication()
                     loaderOff();
                 } else {
+                    initializeApplication()
                     alerta("Error al leer el almacén de líneas");
                     scrollToTop();
                     loaderOff();
                 }
             }
         } catch (error) {
+            initializeApplication()
             mensaje = "ERROR: " + error.message;
             console.error(error);
             alerta(mensaje);

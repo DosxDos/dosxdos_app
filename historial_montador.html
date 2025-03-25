@@ -359,8 +359,6 @@
                             }
                         });
 
-                        console.log(`✅ Cleaned data: ${uniqueLineas.length} unique items`);
-
                         const limpiarHistorial = await limpiarDatos('dosxdos', 'historial');
                         const actualizarHistorial = await agregarDatos('dosxdos', 'historial', uniqueLineas);
 
@@ -368,7 +366,6 @@
                             $contenido.replaceChildren();
 
                             const TotalLineas = await leerDatos('dosxdos', 'historial');
-                            console.log("📂 IndexedDB Read - Total Items Retrieved:", TotalLineas.length, "Expected: 166");
 
                             if (TotalLineas) {
                                 console.log(TotalLineas);
@@ -822,6 +819,44 @@
         })
     }
 
+    // INITIALIZATION FUNCTION
+    function initializeApplication() {
+      return new Promise(resolve => {
+        try {
+          // Dynamically create navigation based on user role
+          createDesktopNavigation(usuario.clase);
+          // Setup desktop and mobile navigation
+          setupMenu(usuario.clase);
+
+          // Setup menu interactions
+          setupMenuInteractions();
+          setupUserActions();
+          setupGlobalMenuClosing();
+
+          updateUserDisplay();
+
+          // Update the user information in the new UI elements
+          const nombreUsuarioDesktop = document.getElementById('nombreUsuarioDesktop');
+          const nombreUsuarioMobile = document.getElementById('nombreUsuarioMobile');
+          const imagenUsuarioDesktop = document.getElementById('imagenUsuarioDesktop');
+          const imagenUsuarioMobile = document.getElementById('imagenUsuarioMobile');
+
+          if (nombreUsuarioDesktop) nombreUsuarioDesktop.textContent = usuario.nombre;
+          if (nombreUsuarioMobile) nombreUsuarioMobile.textContent = usuario.nombre;
+
+          if (usuario.imagen !== "0") {
+            if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
+            if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
+          }
+          resolve(true);
+        } catch (error) {
+          console.error("Error initializing application:", error);
+          resolve(false);
+        }
+      })
+    }
+
+
     async function appOnline() {
         try {
             const login = await vLogin();
@@ -840,31 +875,7 @@
                 }
                 montador = usuario.cod;
 
-                // Dynamically create navigation based on user role
-                createDesktopNavigation(usuario.clase);
-                // Setup desktop and mobile navigation
-                setupMenu(usuario.clase);
-
-                // Setup menu interactions
-                setupMenuInteractions();
-                setupUserActions();
-                setupGlobalMenuClosing();
-
-                updateUserDisplay();
-
-                // Update the user information in the new UI elements
-                const nombreUsuarioDesktop = document.getElementById('nombreUsuarioDesktop');
-                const nombreUsuarioMobile = document.getElementById('nombreUsuarioMobile');
-                const imagenUsuarioDesktop = document.getElementById('imagenUsuarioDesktop');
-                const imagenUsuarioMobile = document.getElementById('imagenUsuarioMobile');
-
-                if (nombreUsuarioDesktop) nombreUsuarioDesktop.textContent = usuario.nombre;
-                if (nombreUsuarioMobile) nombreUsuarioMobile.textContent = usuario.nombre;
-
-                if (usuario.imagen !== "0") {
-                    if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
-                    if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
-                }
+               await initializeApplication()
 
                 try {
                     const sincronizacionDeNotificaciones = await sincronizarNotificaciones();
@@ -905,6 +916,7 @@
                 initializeSearch()
             }
         } catch (error) {
+            initializeApplication()
             mensaje = 'ERROR: ' + error.message;
             console.error(error);
             alerta(mensaje);
@@ -941,31 +953,7 @@
                 }
                 montador = usuario.cod;
 
-                // Dynamically create navigation based on user role
-                createDesktopNavigation(usuario.clase);
-                // Setup desktop and mobile navigation
-                setupMenu(usuario.clase);
-
-                // Setup menu interactions
-                setupMenuInteractions();
-                setupUserActions();
-                setupGlobalMenuClosing();
-
-                updateUserDisplay();
-
-                // Update the user information in the new UI elements
-                const nombreUsuarioDesktop = document.getElementById('nombreUsuarioDesktop');
-                const nombreUsuarioMobile = document.getElementById('nombreUsuarioMobile');
-                const imagenUsuarioDesktop = document.getElementById('imagenUsuarioDesktop');
-                const imagenUsuarioMobile = document.getElementById('imagenUsuarioMobile');
-
-                if (nombreUsuarioDesktop) nombreUsuarioDesktop.textContent = usuario.nombre;
-                if (nombreUsuarioMobile) nombreUsuarioMobile.textContent = usuario.nombre;
-
-                if (usuario.imagen !== "0") {
-                    if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
-                    if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
-                }
+               await initializeApplication()
 
                 rutas = await leerDatos('dosxdos', 'rutas');
                 rutas = rutas.map(objeto => ({
@@ -995,11 +983,13 @@
                     loaderOff();
                 }
                 else {
+                    initializeApplication()
                     alerta('Error al leer el almacén de historial')
                     loaderOff();
                 }
             }
         } catch (error) {
+            initializeApplication()
             mensaje = 'ERROR: ' + error.message;
             console.error(error);
             alerta(mensaje);
@@ -1337,8 +1327,6 @@
     }
 
     function enhancedHistoryRendering(TotalLineas, searchTerm = '') {
-        console.log(`🖌 Rendering Started with ${TotalLineas.length} items (Expected: 166)`);
-
         // Add a safeguard to prevent duplicate rendering
         if ($contenido.children.length > 0) {
             console.warn("⚠️ Rendering skipped! Content is already filled.");
@@ -1355,7 +1343,6 @@
             $contenido.appendChild(countElement);
 
             TotalLineas.forEach((objeto, index) => {
-                console.log(`📌 Rendering item ${index + 1}:`, objeto);
                 const historyItem = createHistoryItemElement(objeto, searchTerm);
                 $contenido.appendChild(historyItem);
             });

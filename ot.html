@@ -712,6 +712,43 @@
             `;
     }
 
+    // INITIALIZATION FUNCTION
+    function initializeApplication() {
+        return new Promise(resolve => {
+            try {
+                // Dynamically create navigation based on user role
+                createDesktopNavigation(usuario.clase);
+                // Setup desktop and mobile navigation
+                setupMenu(usuario.clase);
+
+                // Setup menu interactions
+                setupMenuInteractions();
+                setupUserActions();
+                setupGlobalMenuClosing();
+
+                updateUserDisplay();
+
+                // Update the user information in the new UI elements
+                const nombreUsuarioDesktop = document.getElementById('nombreUsuarioDesktop');
+                const nombreUsuarioMobile = document.getElementById('nombreUsuarioMobile');
+                const imagenUsuarioDesktop = document.getElementById('imagenUsuarioDesktop');
+                const imagenUsuarioMobile = document.getElementById('imagenUsuarioMobile');
+
+                if (nombreUsuarioDesktop) nombreUsuarioDesktop.textContent = usuario.nombre;
+                if (nombreUsuarioMobile) nombreUsuarioMobile.textContent = usuario.nombre;
+
+                if (usuario.imagen !== "0") {
+                    if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
+                    if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
+                }
+                resolve(true);
+            } catch (error) {
+                console.error("Error initializing application:", error);
+                resolve(false);
+            }
+        })
+    }
+
     async function appOnline() {
         try {
             const login = await vLogin();
@@ -730,41 +767,7 @@
                     case 'oficina':
                     case 'diseno':
                     case 'estudio':
-                        // Dynamically create navigation based on user role
-                        createDesktopNavigation(usuario.clase);
-                        // Setup desktop and mobile navigation
-                        setupMenu(usuario.clase);
-
-                        // Setup menu interactions
-                        setupMenuInteractions();
-                        setupUserActions();
-                        setupGlobalMenuClosing();
-
-                        updateUserDisplay();
-
-                        // Update the user information in the new UI elements
-                        const nombreUsuarioDesktop = document.getElementById(
-                            "nombreUsuarioDesktop"
-                        );
-                        const nombreUsuarioMobile = document.getElementById(
-                            "nombreUsuarioMobile"
-                        );
-                        const imagenUsuarioDesktop = document.getElementById(
-                            "imagenUsuarioDesktop"
-                        );
-                        const imagenUsuarioMobile = document.getElementById(
-                            "imagenUsuarioMobile"
-                        );
-
-                        if (nombreUsuarioDesktop)
-                            nombreUsuarioDesktop.textContent = usuario.nombre;
-                        if (nombreUsuarioMobile)
-                            nombreUsuarioMobile.textContent = usuario.nombre;
-
-                        if (usuario.imagen !== "0") {
-                            if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
-                            if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
-                        }
+                        await initializeApplication()
                         break;
                 }
 
@@ -896,17 +899,20 @@
                         }
                         loaderOff();
                     } else {
+                        initializeApplication()
                         alerta('Error, la función volcarDatos no ha sido exitosa');
                         scrollToTop();
                         loaderOff();
                     }
                 } else {
+                    initializeApplication()
                     alerta('Error, la función fetchAnos no ha sido exitosa');
                     scrollToTop();
                     loaderOff();
                 }
             }
         } catch (error) {
+            initializeApplication()
             console.error(error);
             alerta(`ERROR: ${error.message}`);
             scrollToTop();
@@ -922,30 +928,6 @@
                 const Arrayusuario = await leerDatos('dosxdos', 'usuario');
                 usuario = Arrayusuario[0];
 
-                // Update the user information in the new UI elements
-                const nombreUsuarioDesktop = document.getElementById(
-                    "nombreUsuarioDesktop"
-                );
-                const nombreUsuarioMobile = document.getElementById(
-                    "nombreUsuarioMobile"
-                );
-                const imagenUsuarioDesktop = document.getElementById(
-                    "imagenUsuarioDesktop"
-                );
-                const imagenUsuarioMobile = document.getElementById(
-                    "imagenUsuarioMobile"
-                );
-
-                if (nombreUsuarioDesktop)
-                    nombreUsuarioDesktop.textContent = usuario.nombre;
-                if (nombreUsuarioMobile)
-                    nombreUsuarioMobile.textContent = usuario.nombre;
-
-                if (usuario.imagen !== "0") {
-                    if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
-                    if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
-                }
-
                 // Handle montador redirection
                 if (usuario.clase === 'montador') {
                     window.location.href = "https://dosxdos.app.iidos.com/rutas_montador.html";
@@ -958,15 +940,7 @@
                     contenido.classList.add('hidden');
                 }
 
-                // Dynamically create navigation based on user role
-                createDesktopNavigation(usuario.clase);
-                // Setup desktop and mobile navigation
-                setupMenu(usuario.clase);
-
-                // Setup menu interactions
-                setupMenuInteractions();
-                setupUserActions();
-                setupGlobalMenuClosing();
+                await initializeApplication()
 
                 notificar();
                 // Show offline message

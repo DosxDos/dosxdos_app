@@ -829,31 +829,39 @@
 
     // INITIALIZATION FUNCTION
     function initializeApplication() {
-      // Dynamically create navigation based on user role
-      createDesktopNavigation(usuario.clase);
-      // Setup desktop and mobile navigation
-      setupMenu(usuario.clase);
+      return new Promise(resolve => {
+        try {
+          // Dynamically create navigation based on user role
+          createDesktopNavigation(usuario.clase);
+          // Setup desktop and mobile navigation
+          setupMenu(usuario.clase);
 
-      // Setup menu interactions
-      setupMenuInteractions();
-      setupUserActions();
-      setupGlobalMenuClosing();
+          // Setup menu interactions
+          setupMenuInteractions();
+          setupUserActions();
+          setupGlobalMenuClosing();
 
-      updateUserDisplay();
+          updateUserDisplay();
 
-      // Update the user information in the new UI elements
-      const nombreUsuarioDesktop = document.getElementById('nombreUsuarioDesktop');
-      const nombreUsuarioMobile = document.getElementById('nombreUsuarioMobile');
-      const imagenUsuarioDesktop = document.getElementById('imagenUsuarioDesktop');
-      const imagenUsuarioMobile = document.getElementById('imagenUsuarioMobile');
+          // Update the user information in the new UI elements
+          const nombreUsuarioDesktop = document.getElementById('nombreUsuarioDesktop');
+          const nombreUsuarioMobile = document.getElementById('nombreUsuarioMobile');
+          const imagenUsuarioDesktop = document.getElementById('imagenUsuarioDesktop');
+          const imagenUsuarioMobile = document.getElementById('imagenUsuarioMobile');
 
-      if (nombreUsuarioDesktop) nombreUsuarioDesktop.textContent = usuario.nombre;
-      if (nombreUsuarioMobile) nombreUsuarioMobile.textContent = usuario.nombre;
+          if (nombreUsuarioDesktop) nombreUsuarioDesktop.textContent = usuario.nombre;
+          if (nombreUsuarioMobile) nombreUsuarioMobile.textContent = usuario.nombre;
 
-      if (usuario.imagen !== "0") {
-        if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
-        if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
-      }
+          if (usuario.imagen !== "0") {
+            if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
+            if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
+          }
+          resolve(true);
+        } catch (error) {
+          console.error("Error initializing application:", error);
+          resolve(false);
+        }
+      })
     }
 
     async function appOnline() {
@@ -874,7 +882,7 @@
           }
           montador = usuario.cod;
 
-          initializeApplication()
+          await initializeApplication()
 
           try {
             const sincronizacionDeNotificaciones = await sincronizarNotificaciones();
@@ -1784,12 +1792,14 @@
             loaderOff();
           } else {
             alerta("Error al leer el almacén de líneas");
+            initializeApplication()
             initializeSearch();
             loaderOff();
           }
         }
       } catch (error) {
         const errorMsg = "ERROR: " + error.message;
+        initializeApplication()
         console.error(error);
         alerta(errorMsg);
       }
@@ -2594,12 +2604,14 @@
             });
             loaderOff();
           } else {
+            initializeApplication()
             alerta("Error al leer el almacén de líneas");
             await notificar();
             loaderOff();
           }
         }
       } catch (error) {
+        initializeApplication()
         const mensaje = "ERROR: " + error.message;
         console.error(error);
         alerta(mensaje);

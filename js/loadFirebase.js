@@ -5,13 +5,6 @@ async function loadFirebase() {
         const isAndroid = /android/i.test(userAgent);
         const isiOS = /(iphone|ipad|ipod)/i.test(userAgent);
 
-        /*
-        if (isAndroid) {
-            console.warn("Dispositivo Android, Firebase web push notifications no será cargado.");
-            return;
-        }
-        */
-
         if (isiOS) {
             console.warn("Dispositivo Ios, Firebase web push notifications no será cargado.");
             return;
@@ -44,11 +37,14 @@ async function loadFirebase() {
         // Manejar mensajes en primer plano
         onMessage(messaging, (payload) => {
             console.log('[Firebase web push notifications] Mensaje en primer plano:', payload);
+            notificacionesSinAcpetarNumero = notificacionesSinAcpetarNumero + 1;
+            window.correctNotificationCount = notificacionesSinAcpetarNumero;
+            console.warn('notificacionesSinAcpetarNumero: ' + notificacionesSinAcpetarNumero);
 
             // Extraer datos con valores por defecto si vienen nulos o indefinidos
             const title = payload.data.title || "Nueva Notificación";
             const body = payload.data.body || "Tienes una nueva notificación, por favor revísala en cuanto puedas.";
-            const icon = payload.data.icon || "https://dosxdos.app.iidos.com/img/dosxdoslogoNuevoRojo.png";
+            const icon = payload.data.icon || "https://dosxdos.app.iidos.com/img/logo-red.png";
             const click_action = "https://dosxdos.app.iidos.com/notificaciones.html";
 
             // Crear un string bien formado
@@ -58,8 +54,6 @@ async function loadFirebase() {
 
             //Verificar si la página tiene campana o no, y actuar en consecuencia
             if (document.getElementById('desktopBellContainer') && document.getElementById('mobileBellContainer')) {
-                notificacionesSinAcpetarNumero = notificacionesSinAcpetarNumero + 1;
-                console.warn('notificacionesSinAcpetarNumero: ' + notificacionesSinAcpetarNumero);
                 renderizarConNotificaciones(notificacionesSinAcpetarNumero);
                 scrollToTop();
                 // Mostrar notificación en la UI
@@ -110,6 +104,10 @@ if (navigator.onLine) loadFirebase();
 function notificarWebApp() {
     try {
 
+        notificacionesSinAcpetarNumero = notificacionesSinAcpetarNumero + 1;
+        window.correctNotificationCount = notificacionesSinAcpetarNumero;
+        console.warn('notificacionesSinAcpetarNumero: ' + notificacionesSinAcpetarNumero);
+
         dataNativa = localStorage.getItem('dataNotificacionNativa');
         console.log('[Firebase] Mensaje en primer plano:', dataNativa);
 
@@ -119,7 +117,7 @@ function notificarWebApp() {
             // Extraer datos con valores por defecto si vienen nulos o indefinidos
             const title = data.title || "Nueva Notificación";
             const body = data.body || "Tienes una nueva notificación, por favor revísala en cuanto puedas.";
-            const icon = data.icon || "https://dosxdos.app.iidos.com/img/dosxdoslogoNuevoRojo.png";
+            const icon = data.icon || "https://dosxdos.app.iidos.com/img/logo-red.png";
             const click_action = data.click_action || "https://dosxdos.app.iidos.com/notificaciones.html";
 
             // Crear un string bien formado
@@ -129,8 +127,6 @@ function notificarWebApp() {
 
             //Verificar si la página tiene campana o no, y actuar en consecuencia
             if (document.getElementById('desktopBellContainer') && document.getElementById('mobileBellContainer')) {
-                notificacionesSinAcpetarNumero = notificacionesSinAcpetarNumero + 1;
-                console.warn('notificacionesSinAcpetarNumero: ' + notificacionesSinAcpetarNumero);
                 renderizarConNotificaciones(notificacionesSinAcpetarNumero);
                 scrollToTop();
             } else {

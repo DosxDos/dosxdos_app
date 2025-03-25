@@ -86,10 +86,9 @@ async function sincronizarNotificaciones() {
   }
 }
 
-function notificar() {
+async function notificar() {
   return new Promise(async (resolve) => {
     try {
-      // Reset counter variables
       sinNotificaciones = false;
       notificacionesSinAcpetar = false;
       notificacionesSinAcpetarNumero = 0;
@@ -98,11 +97,8 @@ function notificar() {
         const uniqueNotifications = new Map();
 
         notifications.forEach(notification => {
-          // Create a unique key that considers the most important attributes
           const key = notification.id ||
             `${notification.usuario_id}_${notification.titulo}_${notification.fecha_envio}`;
-
-          // Only keep the first occurrence
           if (!uniqueNotifications.has(key)) {
             uniqueNotifications.set(key, notification);
           }
@@ -111,20 +107,23 @@ function notificar() {
         return Array.from(uniqueNotifications.values());
       };
 
-      // Get notifications from IndexedDB
-      notificationsStore = await leerDatos("dosxdos", "notificaciones");
+      let notificationsStore = await leerDatos("dosxdos", "notificaciones");
+      notificationsStore = notificationsStore.filter(n => n.visto !== undefined && n.usuario_id !== undefined);
 
-      // Deduplicate notifications
-      notificationsStore = dedupNotifications(notificationsStore);
+      console.log("🔍 Raw from IndexedDB:", notificationsStore);
 
-      // Check if we have notifications
-      sinNotificaciones = notificationsStore.length === 0;
+      const deduped = dedupNotifications(notificationsStore);
+      console.log("🧼 After deduplication:", deduped);
+
+      sinNotificaciones = deduped.length === 0;
 
       if (sinNotificaciones) {
+        console.log("✅ No notifications to display");
         renderizarSinNotificaciones();
       } else {
-        // Count ONLY unread notifications
-        notificacionesSinAcpetarNumero = notificationsStore.filter(not => !not.visto).length;
+        notificacionesSinAcpetarNumero = deduped.filter(not => !not.visto).length;
+        console.log("🔢 Unseen count:", notificacionesSinAcpetarNumero);
+
         notificacionesSinAcpetar = notificacionesSinAcpetarNumero > 0;
 
         if (notificacionesSinAcpetar) {
@@ -134,14 +133,17 @@ function notificar() {
         }
       }
 
-      // Store the count in a global variable for the event listener to access
-      window.correctNotificationCount = notificacionesSinAcpetarNumero;
+      console.log("📊 FINAL COUNT DISPLAYED:", notificacionesSinAcpetarNumero);
+      console.log("🔁 DOM values:", {
+        mobile: $mobileNotificationCount.textContent,
+        desktop: $desktopNotificationCount.textContent
+      });
 
+
+      window.correctNotificationCount = notificacionesSinAcpetarNumero;
       resolve(true);
     } catch (err) {
-      console.error(err);
-      const mensaje = "Error en el sistema de notificaciones: " + err.message;
-      alerta(mensaje);
+      console.error("🔥 NOTIFICAR ERROR:", err);
       resolve(false);
     }
   });
@@ -172,11 +174,8 @@ function renderizarSinNotificaciones() {
 }
 
 function renderizarConNotificaciones(numeroDeNotificacionesActuales) {
-  // Force the correct number to be used (prevent incorrect values from being passed in)
-  if (typeof window.correctNotificationCount === "number") {
-    numeroDeNotificacionesActuales = window.correctNotificationCount;
-  }
-
+ 
+  console.log("-------------", numeroDeNotificacionesActuales)
   $mobileNotificationCount.textContent = "";
   $desktopNotificationCount.textContent = "";
 
@@ -205,10 +204,8 @@ function renderizarConNotificaciones(numeroDeNotificacionesActuales) {
   if ($desktopNotificationCount.classList.contains("hidden")) {
     $desktopNotificationCount.classList.remove("hidden");
     $desktopNotificationCount.textContent = numeroDeNotificacionesActuales;
-    $mobileNotificationCount.textContent = numeroDeNotificacionesActuales;
   } else {
     $desktopNotificationCount.textContent = numeroDeNotificacionesActuales;
-    $mobileNotificationCount.textContent = numeroDeNotificacionesActuales;
   }
   console.log('Se ha renderizado la campana con notificaciones');
 }

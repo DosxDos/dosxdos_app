@@ -5,7 +5,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RUTAS</title>
+  <title>Rutas</title>
   <!-- Favicons -->
   <link rel="icon" type="image/png" href="https://dosxdos.app.iidos.com/img/logo-red.png" />
   <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/tailwindmain.css" />
@@ -570,32 +570,41 @@
 
   // INITIALIZATION FUNCTION
   function initializeApplication() {
-    // Dynamically create navigation based on user role
-    createDesktopNavigation(usuario.clase);
-    // Setup desktop and mobile navigation
-    setupMenu(usuario.clase);
+    return new Promise(resolve => {
+      try {
+        // Dynamically create navigation based on user role
+        createDesktopNavigation(usuario.clase);
+        // Setup desktop and mobile navigation
+        setupMenu(usuario.clase);
 
-    // Setup menu interactions
-    setupMenuInteractions();
-    setupUserActions();
-    setupGlobalMenuClosing();
+        // Setup menu interactions
+        setupMenuInteractions();
+        setupUserActions();
+        setupGlobalMenuClosing();
 
-    updateUserDisplay();
+        updateUserDisplay();
 
-    // Update the user information in the new UI elements
-    const nombreUsuarioDesktop = document.getElementById('nombreUsuarioDesktop');
-    const nombreUsuarioMobile = document.getElementById('nombreUsuarioMobile');
-    const imagenUsuarioDesktop = document.getElementById('imagenUsuarioDesktop');
-    const imagenUsuarioMobile = document.getElementById('imagenUsuarioMobile');
+        // Update the user information in the new UI elements
+        const nombreUsuarioDesktop = document.getElementById('nombreUsuarioDesktop');
+        const nombreUsuarioMobile = document.getElementById('nombreUsuarioMobile');
+        const imagenUsuarioDesktop = document.getElementById('imagenUsuarioDesktop');
+        const imagenUsuarioMobile = document.getElementById('imagenUsuarioMobile');
 
-    if (nombreUsuarioDesktop) nombreUsuarioDesktop.textContent = usuario.nombre;
-    if (nombreUsuarioMobile) nombreUsuarioMobile.textContent = usuario.nombre;
+        if (nombreUsuarioDesktop) nombreUsuarioDesktop.textContent = usuario.nombre;
+        if (nombreUsuarioMobile) nombreUsuarioMobile.textContent = usuario.nombre;
 
-    if (usuario.imagen !== "0") {
-      if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
-      if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
-    }
+        if (usuario.imagen !== "0") {
+          if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
+          if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
+        }
+        resolve(true);
+      } catch (error) {
+        console.error("Error initializing application:", error);
+        resolve(false);
+      }
+    })
   }
+
 
   /* INICIAR APP ONLINE */
 
@@ -617,7 +626,7 @@
         }
         montador = usuario.cod;
 
-        initializeApplication()
+        await initializeApplication()
 
         try {
           const sincronizacionDeNotificaciones = await sincronizarNotificaciones();
@@ -696,61 +705,13 @@
           lineas = await fetchLineas(rutas);
           if (lineas) {
             initializeSearch();
-            // Dynamically create navigation based on user role
-            createDesktopNavigation(usuario.clase);
-            // Setup desktop and mobile navigation
-            setupMenu(usuario.clase);
-
-            // Setup menu interactions
-            setupMenuInteractions();
-            setupUserActions();
-            setupGlobalMenuClosing();
-
-            updateUserDisplay();
-
-            // Update the user information in the new UI elements
-            const nombreUsuarioDesktop = document.getElementById('nombreUsuarioDesktop');
-            const nombreUsuarioMobile = document.getElementById('nombreUsuarioMobile');
-            const imagenUsuarioDesktop = document.getElementById('imagenUsuarioDesktop');
-            const imagenUsuarioMobile = document.getElementById('imagenUsuarioMobile');
-
-            if (nombreUsuarioDesktop) nombreUsuarioDesktop.textContent = usuario.nombre;
-            if (nombreUsuarioMobile) nombreUsuarioMobile.textContent = usuario.nombre;
-
-            if (usuario.imagen !== "0") {
-              if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
-              if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
-            }
+            await initializeApplication()
             const peticionesCierre = await procesarPeticiones2();
             loaderOff();
           } else {
             alerta("Error al cargar las líneas de las rutas del servidor");
             initializeSearch();
-            // Dynamically create navigation based on user role
-            createDesktopNavigation(usuario.clase);
-            // Setup desktop and mobile navigation
-            setupMenu(usuario.clase);
-
-            // Setup menu interactions
-            setupMenuInteractions();
-            setupUserActions();
-            setupGlobalMenuClosing();
-
-            updateUserDisplay();
-
-            // Update the user information in the new UI elements
-            const nombreUsuarioDesktop = document.getElementById('nombreUsuarioDesktop');
-            const nombreUsuarioMobile = document.getElementById('nombreUsuarioMobile');
-            const imagenUsuarioDesktop = document.getElementById('imagenUsuarioDesktop');
-            const imagenUsuarioMobile = document.getElementById('imagenUsuarioMobile');
-
-            if (nombreUsuarioDesktop) nombreUsuarioDesktop.textContent = usuario.nombre;
-            if (nombreUsuarioMobile) nombreUsuarioMobile.textContent = usuario.nombre;
-
-            if (usuario.imagen !== "0") {
-              if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
-              if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
-            }
+            await initializeApplication()
             const peticionesCierre = await procesarPeticiones2();
             loaderOff();
           }
@@ -845,6 +806,7 @@
       notificar();
 
     } catch (error) {
+      initializeApplication()
       mensaje = "ERROR: " + error.message;
       alerta(mensaje);
       loaderOff();
