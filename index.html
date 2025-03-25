@@ -914,7 +914,7 @@
             appOnline();
           }
         }
-      });
+      })
     }
 
     // Add window resize event to keep circle responsive
@@ -1837,20 +1837,43 @@
                                 );
                               } else {
                                 if (isAndroid) {
-                                  localStorage.setItem(
-                                    "mensaje",
-                                    "Debes instalar la aplicación nativa para Android en la Playstore o en el botón de descarga del inicio de sesión. Este dispositivo no recibirá notificaciones y la aplicación no podrá ejecutar todas sus funcionalidades."
-                                  );
+                                  console.log("Android");
+                                  // localStorage.setItem(
+                                  //   "mensaje",
+                                  //   "Debes instalar la aplicación nativa para Android en la Playstore o en el botón de descarga del inicio de sesión para recibir notificaciones nativas y ejecutar funcionalidades nativas."
+                                  // );
                                 } else if (isiOS) {
+                                  console.log("Ios");
+                                  // localStorage.setItem(
+                                  //   "mensaje",
+                                  //   "Debes instalar la aplicación nativa para Ios en la Appstore o en el botón de descarga del inicio de sesión para recibir notificaciones nativas y ejecutar funcionalidades nativas."
+                                  // );
+                                }
+                                // localStorage.setItem(
+                                //   "tokenNotificaciones",
+                                //   null
+                                // );
+                                // Uso temporal de Firebase - Inicio
+                                if (tokenFirebase != null) {
+                                  await guardarTokenEnServidor(
+                                    tokenFirebase,
+                                    usuario
+                                  );
+                                  localStorage.setItem(
+                                    "tokenNotificaciones",
+                                    tokenFirebase
+                                  );
+                                } else {
                                   localStorage.setItem(
                                     "mensaje",
-                                    "Debes instalar la aplicación nativa para Ios en la Appstore o en el botón de descarga del inicio de sesión. Este dispositivo no recibirá notificaciones y la aplicación no podrá ejecutar todas sus funcionalidades."
+                                    "Este dispositivo no recibirá notificaciones de la App, ya que no permite las notificaciones Web."
+                                  );
+                                  localStorage.setItem(
+                                    "tokenNotificaciones",
+                                    null
                                   );
                                 }
-                                localStorage.setItem(
-                                  "tokenNotificaciones",
-                                  null
-                                );
+                                // Uso temporal de Firebase - Fin
                               }
                             } else {
                               if (tokenFirebase != null) {
@@ -1896,20 +1919,43 @@
                                 );
                               } else {
                                 if (isAndroid) {
-                                  localStorage.setItem(
-                                    "mensaje",
-                                    "Debes instalar la aplicación nativa para Android en la Playstore o en el botón de descarga del inicio de sesión. Este dispositivo no recibirá notificaciones y la aplicación no podrá ejecutar todas sus funcionalidades."
-                                  );
+                                  console.log("Android");
+                                  // localStorage.setItem(
+                                  //   "mensaje",
+                                  //   "Debes instalar la aplicación nativa para Android en la Playstore o en el botón de descarga del inicio de sesión para recibir notificaciones nativas y ejecutar funcionalidades nativas."
+                                  // );
                                 } else if (isiOS) {
+                                  console.log("Ios");
+                                  // localStorage.setItem(
+                                  //   "mensaje",
+                                  //   "Debes instalar la aplicación nativa para Ios en la Appstore o en el botón de descarga del inicio de sesión para recibir notificaciones nativas y ejecutar funcionalidades nativas."
+                                  // );
+                                }
+                                // localStorage.setItem(
+                                //   "tokenNotificaciones",
+                                //   null
+                                // );
+                                // Uso temporal de Firebase - Inicio
+                                if (tokenFirebase != null) {
+                                  await guardarTokenEnServidor(
+                                    tokenFirebase,
+                                    usuario
+                                  );
+                                  localStorage.setItem(
+                                    "tokenNotificaciones",
+                                    tokenFirebase
+                                  );
+                                } else {
                                   localStorage.setItem(
                                     "mensaje",
-                                    "Debes instalar la aplicación nativa para Ios en la Appstore o en el botón de descarga del inicio de sesión. Este dispositivo no recibirá notificaciones y la aplicación no podrá ejecutar todas sus funcionalidades."
+                                    "Este dispositivo no recibirá notificaciones de la App, ya que no permite las notificaciones Web."
+                                  );
+                                  localStorage.setItem(
+                                    "tokenNotificaciones",
+                                    null
                                   );
                                 }
-                                localStorage.setItem(
-                                  "tokenNotificaciones",
-                                  null
-                                );
+                                // Uso temporal de Firebase - Fin
                               }
                             } else {
                               if (tokenFirebase != null) {
@@ -1955,20 +2001,43 @@
                                 );
                               } else {
                                 if (isAndroid) {
-                                  localStorage.setItem(
-                                    "mensaje",
-                                    "Debes instalar la aplicación nativa para Android en la Playstore o en el botón de descarga del inicio de sesión. Este dispositivo no recibirá notificaciones y la aplicación no podrá ejecutar todas sus funcionalidades."
-                                  );
+                                  console.log("Android");
+                                  // localStorage.setItem(
+                                  //   "mensaje",
+                                  //   "Debes instalar la aplicación nativa para Android en la Playstore o en el botón de descarga del inicio de sesión para recibir notificaciones nativas y ejecutar funcionalidades nativas."
+                                  // );
                                 } else if (isiOS) {
+                                  console.log("Ios");
+                                  // localStorage.setItem(
+                                  //   "mensaje",
+                                  //   "Debes instalar la aplicación nativa para Ios en la Appstore o en el botón de descarga del inicio de sesión para recibir notificaciones nativas y ejecutar funcionalidades nativas."
+                                  // );
+                                }
+                                // localStorage.setItem(
+                                //   "tokenNotificaciones",
+                                //   null
+                                // );
+                                // Uso temporal de Firebase - Inicio
+                                if (tokenFirebase != null) {
+                                  await guardarTokenEnServidor(
+                                    tokenFirebase,
+                                    usuario
+                                  );
+                                  localStorage.setItem(
+                                    "tokenNotificaciones",
+                                    tokenFirebase
+                                  );
+                                } else {
                                   localStorage.setItem(
                                     "mensaje",
-                                    "Debes instalar la aplicación nativa para Ios en la Appstore o en el botón de descarga del inicio de sesión. Este dispositivo no recibirá notificaciones y la aplicación no podrá ejecutar todas sus funcionalidades."
+                                    "Este dispositivo no recibirá notificaciones de la App, ya que no permite las notificaciones Web."
+                                  );
+                                  localStorage.setItem(
+                                    "tokenNotificaciones",
+                                    null
                                   );
                                 }
-                                localStorage.setItem(
-                                  "tokenNotificaciones",
-                                  null
-                                );
+                                // Uso temporal de Firebase - Fin
                               }
                             } else {
                               if (tokenFirebase != null) {

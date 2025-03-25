@@ -228,26 +228,22 @@
   </div>
 
   <section id="contenidoPendientes" class="p-6 bg-gray-100">
+    <div id="listaPendientes"></div>
     <div id="emptyPendientes" class="flex flex-col items-center justify-center p-8 bg-gray-100 rounded-xl text-center">
-      <h3 class="text-2xl font-bold text-gray-800 mb-3">
-        Sin Notificaciones Pendientes
-      </h3>
-      <p class="text-gray-600 mb-6">
-        Parece que no tienes ninguna notificación pendiente en este momento.
-      </p>
+      <h3 class="text-2xl font-bold text-gray-800 mb-3">Sin Notificaciones Pendientes</h3>
+      <p class="text-gray-600 mb-6">Parece que no tienes ninguna notificación pendiente en este momento.</p>
     </div>
   </section>
 
+
   <section id="contenidoAceptadas" class="hidden p-6 bg-gray-100">
+    <div id="listaAceptadas"></div>
     <div id="emptyAceptadas" class="flex flex-col items-center justify-center p-8 bg-gray-100 rounded-xl text-center">
-      <h3 class="text-2xl font-bold text-gray-800 mb-3">
-        No Hay Notificaciones Aceptadas
-      </h3>
-      <p class="text-gray-600 mb-6¡">
-        Aún no has aceptado ninguna notificación.
-      </p>
+      <h3 class="text-2xl font-bold text-gray-800 mb-3">No Hay Notificaciones Aceptadas</h3>
+      <p class="text-gray-600 mb-6">Aún no has aceptado ninguna notificación.</p>
     </div>
   </section>
+
 
   <div id="modalNotificacion"
     class="fixed inset-0 z-50 hidden opacity-0 pointer-events-none transition-all duration-300 ease-in-out">
@@ -627,9 +623,10 @@
         const aceptadasContainer = elements.contenidoAceptadas;
         const emptyPendientes = document.getElementById('emptyPendientes');
         const emptyAceptadas = document.getElementById('emptyAceptadas');
+        const listaPendientes = document.getElementById('listaPendientes');
+        const listaAceptadas = document.getElementById('listaAceptadas');
         const pestañaPendientes = elements.pestañaPendientes;
 
-        // Add null checks for all elements
         if (!pendientesContainer || !aceptadasContainer || !pestañaPendientes) {
           console.error("Critical DOM elements missing for tab functionality");
           reject(new Error("Required DOM elements not found"));
@@ -637,107 +634,96 @@
         }
 
         const mostrarPendientes = pestañaPendientes.classList.contains("border-red-500");
-
-        // Get all notifications and sort them
         const TotalNotificaciones = await leerDatos("dosxdos", "notificaciones");
-        TotalNotificaciones.sort((a, b) => {
-          return new Date(b.fecha_envio) - new Date(a.fecha_envio);
-        });
 
-        // Filter notifications by status
-        const pendientes = TotalNotificaciones.filter(notif => notif.visto === 0);
-        const aceptadas = TotalNotificaciones.filter(notif => notif.visto === 1);
+        if (!TotalNotificaciones || TotalNotificaciones.length === 0) {
+          if (emptyPendientes) emptyPendientes.style.display = 'flex';
+          if (emptyAceptadas) emptyAceptadas.style.display = 'flex';
+          if (listaPendientes) listaPendientes.innerHTML = '';
+          if (listaAceptadas) listaAceptadas.innerHTML = '';
 
-        // Update counters - add null checks
-        const contadorPendientes = document.getElementById("contadorPendientes");
-        const contadorAceptadas = document.getElementById("contadorAceptadas");
+          const contadorPendientes = document.getElementById("contadorPendientes");
+          const contadorAceptadas = document.getElementById("contadorAceptadas");
 
-        if (contadorPendientes) {
-          contadorPendientes.textContent = pendientes.length;
-        }
+          if (contadorPendientes) contadorPendientes.textContent = '0';
+          if (contadorAceptadas) contadorAceptadas.textContent = '0';
 
-        if (contadorAceptadas) {
-          contadorAceptadas.textContent = aceptadas.length;
-        }
-
-        // Clear both containers first
-        pendientesContainer.innerHTML = "";
-        aceptadasContainer.innerHTML = "";
-
-        // Show/hide appropriate empty state messages
-        if (mostrarPendientes) {
-          // Display pending notifications
-          if (pendientes.length === 0) {
-            // Add null check before modifying style
-            if (emptyPendientes) {
-              emptyPendientes.style.display = 'flex';
-            }
-          } else {
-            // Add null check before modifying style
-            if (emptyPendientes) {
-              emptyPendientes.style.display = 'none';
-            }
-
-            // Apply search filter if there's a search term
-            const searchTerm = elements.buscador ? elements.buscador.value.toLowerCase().trim() : '';
-            const filteredPendientes = searchTerm ?
-              pendientes.filter(notif =>
-                notif.titulo.toLowerCase().includes(searchTerm) ||
-                notif.mensaje.toLowerCase().includes(searchTerm)
-              ) : pendientes;
-
-            // Add notifications to the container
-            filteredPendientes.forEach(notif => {
-              const element = createNotificationElement(notif, searchTerm);
-              pendientesContainer.appendChild(element);
-            });
-          }
-
-          // Update visibility
           pendientesContainer.style.display = "block";
           aceptadasContainer.style.display = "none";
 
-        } else {
-          // Display accepted notifications
-          if (aceptadas.length === 0) {
-            // Add null check before modifying style
-            if (emptyAceptadas) {
-              emptyAceptadas.style.display = 'flex';
-            }
-          } else {
-            // Add null check before modifying style
-            if (emptyAceptadas) {
-              emptyAceptadas.style.display = 'none';
-            }
-
-            // Apply search filter if there's a search term
-            const searchTerm = elements.buscador ? elements.buscador.value.toLowerCase().trim() : '';
-            const filteredAceptadas = searchTerm ?
-              aceptadas.filter(notif =>
-                notif.titulo.toLowerCase().includes(searchTerm) ||
-                notif.mensaje.toLowerCase().includes(searchTerm)
-              ) : aceptadas;
-
-            // Add notifications to the container
-            filteredAceptadas.forEach(notif => {
-              const element = createNotificationElement(notif, searchTerm);
-              aceptadasContainer.appendChild(element);
-            });
-          }
-
-          // Update visibility
-          pendientesContainer.style.display = "none";
-          aceptadasContainer.style.display = "block";
+          resolve();
+          return;
         }
 
-        console.log('Finished actualizarVistaNotificaciones');
+        TotalNotificaciones.sort((a, b) => new Date(b.fecha_envio) - new Date(a.fecha_envio));
+
+        const pendientes = TotalNotificaciones.filter(notif => notif.visto === 0);
+        const aceptadas = TotalNotificaciones.filter(notif => notif.visto === 1);
+
+        const contadorPendientes = document.getElementById("contadorPendientes");
+        const contadorAceptadas = document.getElementById("contadorAceptadas");
+
+        if (contadorPendientes) contadorPendientes.textContent = pendientes.length;
+        if (contadorAceptadas) contadorAceptadas.textContent = aceptadas.length;
+
+        const searchTerm = elements.buscador ? elements.buscador.value.toLowerCase().trim() : '';
+
+        // Always reset both empty state visibility
+        if (emptyPendientes) emptyPendientes.style.display = 'none';
+        if (emptyAceptadas) emptyAceptadas.style.display = 'none';
+
+        // Always clear both lists (avoid leftovers showing)
+        if (listaPendientes) listaPendientes.innerHTML = '';
+        if (listaAceptadas) listaAceptadas.innerHTML = '';
+
+        // Now branch to show proper tab
+        if (mostrarPendientes) {
+          pendientesContainer.style.display = "block";
+          aceptadasContainer.style.display = "none";
+
+          if (pendientes.length === 0) {
+            if (emptyPendientes) emptyPendientes.style.display = 'flex';
+          } else {
+            const filtered = searchTerm
+              ? pendientes.filter(notif =>
+                notif.titulo.toLowerCase().includes(searchTerm) ||
+                notif.mensaje.toLowerCase().includes(searchTerm)
+              )
+              : pendientes;
+
+            filtered.forEach(notif => {
+              const el = createNotificationElement(notif, searchTerm);
+              listaPendientes.appendChild(el);
+            });
+          }
+        } else {
+          pendientesContainer.style.display = "none";
+          aceptadasContainer.style.display = "block";
+
+          if (aceptadas.length === 0) {
+            if (emptyAceptadas) emptyAceptadas.style.display = 'flex';
+          } else {
+            const filtered = searchTerm
+              ? aceptadas.filter(notif =>
+                notif.titulo.toLowerCase().includes(searchTerm) ||
+                notif.mensaje.toLowerCase().includes(searchTerm)
+              )
+              : aceptadas;
+
+            filtered.forEach(notif => {
+              const el = createNotificationElement(notif, searchTerm);
+              listaAceptadas.appendChild(el);
+            });
+          }
+        }
+
         resolve();
       } catch (error) {
-        console.error('Error in actualizarVistaNotificaciones:', error);
         reject(error);
       }
     });
   };
+
 
   async function updateCounters() {
     const TotalNotificaciones = await leerDatos("dosxdos", "notificaciones");
@@ -1287,57 +1273,92 @@
 
       console.warn("TotalNotificaciones", TotalNotificaciones);
 
-      if (TotalNotificaciones) {
-        // Sort notifications by date (newest first)
-        TotalNotificaciones.sort((a, b) => {
-          return new Date(b.fecha_envio) - new Date(a.fecha_envio);
-        });
+      if (Array.isArray(TotalNotificaciones) && TotalNotificaciones.length === 0) {
+        // Remove 'hidden' from aceptadas section
+        const aceptadasContainer = document.getElementById("contenidoAceptadas");
+        if (aceptadasContainer) {
+          aceptadasContainer.classList.remove('hidden');
+        }
 
+        // Show empty state for both pending and accepted
+        const emptyPendientes = document.getElementById("emptyPendientes");
+        const emptyAceptadas = document.getElementById("emptyAceptadas");
+        const pendientesContainer = document.getElementById("contenidoPendientes");
+        const aceptadasContainerContent = document.getElementById("contenidoAceptadas");
+        const listaPendientes = document.getElementById("listaPendientes");
+        const listaAceptadas = document.getElementById("listaAceptadas");
+
+        if (emptyPendientes) emptyPendientes.style.display = 'flex';
+        if (emptyAceptadas) emptyAceptadas.style.display = 'flex';
+
+        if (listaPendientes) listaPendientes.innerHTML = '';
+        if (listaAceptadas) listaAceptadas.innerHTML = '';
+
+        // Reset counters
+        const contadorPendientes = document.getElementById("contadorPendientes");
+        const contadorAceptadas = document.getElementById("contadorAceptadas");
+
+        if (contadorPendientes) contadorPendientes.textContent = '0';
+        if (contadorAceptadas) contadorAceptadas.textContent = '0';
+
+        await procesarPeticiones2();
+        loaderOff();
+      } else if (TotalNotificaciones) {
         // Split notifications
         const pendientes = TotalNotificaciones.filter(objeto => objeto.visto == 0);
         const aceptadas = TotalNotificaciones.filter(objeto => objeto.visto == 1);
 
-        console.log("Pendientes:", pendientes);
-        console.log("Aceptadas:", aceptadas);
-
         // Populate notification containers
         const pendientesContainer = document.getElementById("contenidoPendientes");
         const aceptadasContainer = document.getElementById("contenidoAceptadas");
+        const emptyPendientes = document.getElementById("emptyPendientes");
+        const emptyAceptadas = document.getElementById("emptyAceptadas");
 
-        if (pendientes.length) {
-          pendientesContainer.innerHTML = "";
+        // Remove 'hidden' from aceptadas section first
+        if (aceptadasContainer) {
+          aceptadasContainer.classList.remove('hidden');
         }
 
-        if (aceptadas.length) {
-          aceptadasContainer.innerHTML = "";
+        // Handle Pending Notifications
+        if (pendientes.length === 0) {
+          if (emptyPendientes) emptyPendientes.style.display = 'flex';
+          if (listaPendientes) listaPendientes.innerHTML = '';
+        } else {
+          if (emptyPendientes) emptyPendientes.style.display = 'none';
+          if (listaPendientes) {
+            listaPendientes.innerHTML = '';
+            pendientes.forEach((objeto) => {
+              const element = createNotificationElement(objeto);
+              listaPendientes.appendChild(element);
+            });
+          }
         }
 
-        pendientes.forEach(objeto => {
-          const element = createNotificationElement(objeto);
-          pendientesContainer.appendChild(element);
-        });
+        // Handle Accepted Notifications
+        if (aceptadas.length === 0) {
+          if (emptyAceptadas) emptyAceptadas.style.display = 'flex';
+          if (listaAceptadas) listaAceptadas.innerHTML = '';
+        } else {
+          if (emptyAceptadas) emptyAceptadas.style.display = 'none';
+          if (listaAceptadas) {
+            listaAceptadas.innerHTML = '';
+            aceptadas.forEach((objeto) => {
+              const element = createNotificationElement(objeto);
+              listaAceptadas.appendChild(element);
+            });
+          }
+        }
+        // Update counters
+        const contadorPendientes = document.getElementById("contadorPendientes");
+        const contadorAceptadas = document.getElementById("contadorAceptadas");
 
-        aceptadas.forEach((objeto) => {
-          const element = createNotificationElement(objeto);
-          aceptadasContainer.appendChild(element);
-        });
-
-        // Update notification counters
-        const contadorPendientes =
-          document.getElementById("contadorPendientes");
-        const contadorAceptadas =
-          document.getElementById("contadorAceptadas");
-
-        if (contadorPendientes)
-          contadorPendientes.textContent = pendientes.length;
-        if (contadorAceptadas)
-          contadorAceptadas.textContent = aceptadas.length;
+        if (contadorPendientes) contadorPendientes.textContent = pendientes.length;
+        if (contadorAceptadas) contadorAceptadas.textContent = aceptadas.length;
 
         await procesarPeticiones2();
         loaderOff();
       } else {
         await procesarPeticiones2();
-        alerta("Error al leer el almacén de notificaciones");
         loaderOff();
       }
     } catch (error) {
@@ -1357,43 +1378,26 @@
     });
   }
 
-  // APPLICATION OFFLINE STATE HANDLER
   async function appOffline() {
     try {
       const login = await vLogin();
-
       const Arrayusuario = await leerDatos("dosxdos", "usuario");
+
       if (!Arrayusuario || !Arrayusuario.length) {
         window.location.href = "https://dosxdos.app.iidos.com/index.html";
         throw new Error("No se encontraron datos de usuario");
       }
 
-      // Find the actual user object (the one with 'usuario' property)
       usuario = Arrayusuario.find((item) => item.hasOwnProperty("usuario"));
-
-      if (!usuario) {
-        throw new Error("No se encontró el objeto de usuario correcto");
-      }
-
-      let loginMontador = localStorage.getItem("loginMontador");
-
-      // if (!loginMontador) {
-      //   window.location.href = `https://dosxdos.app.iidos.com/dosxdos.php?id=${usuario.id}&rol=${usuario.clase}`;
-      //   return;
-      // }
+      if (!usuario) throw new Error("No se encontró el objeto de usuario correcto");
 
       montador = usuario.cod;
 
-      // Dynamically create navigation based on user role
       createDesktopNavigation(usuario.clase);
-      // Setup desktop and mobile navigation
       setupMenu(usuario.clase);
-
-      // Setup menu interactions
       setupMenuInteractions();
       setupUserActions();
       setupGlobalMenuClosing();
-
       updateUserDisplay();
 
       const nombreUsuarioDesktop = document.getElementById('nombreUsuarioDesktop');
@@ -1403,80 +1407,77 @@
 
       if (nombreUsuarioDesktop) nombreUsuarioDesktop.textContent = usuario.nombre;
       if (nombreUsuarioMobile) nombreUsuarioMobile.textContent = usuario.nombre;
-
       if (usuario.imagen !== "0") {
         if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
         if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
       }
-      // Process pending requests
+
       let TotalNotificaciones = await leerDatos("dosxdos", "notificaciones");
-
-      console.warn(
-        "TotalNotificaciones before deduplication:",
-        TotalNotificaciones
-      );
-
-      // Filter out duplicate items by `id`
       TotalNotificaciones = removeDuplicates(TotalNotificaciones);
 
-      console.warn(
-        "TotalNotificaciones after deduplication:",
-        TotalNotificaciones
-      );
+      const pendientes = TotalNotificaciones.filter(obj => obj.visto == 0);
+      const aceptadas = TotalNotificaciones.filter(obj => obj.visto == 1);
 
-      if (TotalNotificaciones) {
-        // Split notifications
-        const pendientes = TotalNotificaciones.filter(
-          (objeto) => objeto.visto == 0
-        );
-        const aceptadas = TotalNotificaciones.filter(
-          (objeto) => objeto.visto == 1
-        );
+      const pendientesContainer = document.getElementById("contenidoPendientes");
+      const aceptadasContainer = document.getElementById("contenidoAceptadas");
+      const listaPendientes = document.getElementById("listaPendientes");
+      const listaAceptadas = document.getElementById("listaAceptadas");
+      const emptyPendientes = document.getElementById("emptyPendientes");
+      const emptyAceptadas = document.getElementById("emptyAceptadas");
+      const contadorPendientes = document.getElementById("contadorPendientes");
+      const contadorAceptadas = document.getElementById("contadorAceptadas");
 
-        console.log("Pendientes:", pendientes);
-        console.log("Aceptadas:", aceptadas);
-
-        // Populate notification containers
-        const pendientesContainer = document.getElementById(
-          "contenidoPendientes"
-        );
-        const aceptadasContainer =
-          document.getElementById("contenidoAceptadas");
-
-        pendientesContainer.innerHTML = "";
-        aceptadasContainer.innerHTML = "";
-
-        pendientes.forEach((objeto) => {
-          const element = createNotificationElement(objeto);
-          pendientesContainer.appendChild(element);
-        });
-
-        aceptadas.forEach((objeto) => {
-          const element = createNotificationElement(objeto);
-          aceptadasContainer.appendChild(element);
-        });
-
-        // Update notification counters
-        const contadorPendientes =
-          document.getElementById("contadorPendientes");
-        const contadorAceptadas =
-          document.getElementById("contadorAceptadas");
-
-        if (contadorPendientes)
-          contadorPendientes.textContent = pendientes.length;
-        if (contadorAceptadas)
-          contadorAceptadas.textContent = aceptadas.length;
-
+      if (!TotalNotificaciones || TotalNotificaciones.length === 0) {
+        if (emptyPendientes) emptyPendientes.style.display = 'flex';
+        if (emptyAceptadas) emptyAceptadas.style.display = 'flex';
+        if (listaPendientes) listaPendientes.innerHTML = '';
+        if (listaAceptadas) listaAceptadas.innerHTML = '';
+        if (contadorPendientes) contadorPendientes.textContent = '0';
+        if (contadorAceptadas) contadorAceptadas.textContent = '0';
         loaderOff();
-      } else {
-        alerta("Error al leer el almacén de notificaciones");
-        loaderOff();
+        return;
       }
+
+      // PENDIENTES
+      if (pendientes.length === 0) {
+        if (emptyPendientes) emptyPendientes.style.display = 'flex';
+        if (listaPendientes) listaPendientes.innerHTML = '';
+      } else {
+        if (emptyPendientes) emptyPendientes.style.display = 'none';
+        if (listaPendientes) {
+          listaPendientes.innerHTML = '';
+          pendientes.forEach(obj => {
+            const el = createNotificationElement(obj);
+            listaPendientes.appendChild(el);
+          });
+        }
+      }
+
+      // ACEPTADAS
+      if (aceptadas.length === 0) {
+        if (emptyAceptadas) emptyAceptadas.style.display = 'flex';
+        if (listaAceptadas) listaAceptadas.innerHTML = '';
+      } else {
+        if (emptyAceptadas) emptyAceptadas.style.display = 'none';
+        if (listaAceptadas) {
+          listaAceptadas.innerHTML = '';
+          aceptadas.forEach(obj => {
+            const el = createNotificationElement(obj);
+            listaAceptadas.appendChild(el);
+          });
+        }
+      }
+
+      if (contadorPendientes) contadorPendientes.textContent = pendientes.length;
+      if (contadorAceptadas) contadorAceptadas.textContent = aceptadas.length;
+
+      loaderOff();
     } catch (error) {
       console.error("ERROR:", error.message);
       alerta(error.message);
     }
   }
+
 
   /* PETICIONES PENDIENTES */
 

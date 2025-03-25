@@ -92,27 +92,54 @@ async function sincronizarNotificaciones() {
 function notificar() {
   return new Promise(async (resolve) => {
     try {
+      // Reset counter variables
+      sinNotificaciones = false;
+      notificacionesSinAcpetar = false;
+      notificacionesSinAcpetarNumero = 0;
+
+      const dedupNotifications = (notifications) => {
+        const uniqueNotifications = new Map();
+
+        notifications.forEach(notification => {
+          // Create a unique key that considers the most important attributes
+          const key = notification.id ||
+            `${notification.usuario_id}_${notification.titulo}_${notification.fecha_envio}`;
+
+          // Only keep the first occurrence
+          if (!uniqueNotifications.has(key)) {
+            uniqueNotifications.set(key, notification);
+          }
+        });
+
+        return Array.from(uniqueNotifications.values());
+      };
+
+      // Get notifications from IndexedDB
       notificationsStore = await leerDatos("dosxdos", "notificaciones");
-      notificationsStore.length == 0 ? sinNotificaciones = true : sinNotificaciones = false;
+
+      // Deduplicate notifications
+      notificationsStore = dedupNotifications(notificationsStore);
+
+      // Check if we have notifications
+      sinNotificaciones = notificationsStore.length === 0;
+
       if (sinNotificaciones) {
         renderizarSinNotificaciones();
       } else {
-        notificationsStore.map((not) => {
-          if (!not.visto) {
-            notificacionesSinAcpetar = true;
-            notificacionesSinAcpetarNumero++;
-          }
-        });
+        // Count ONLY unread notifications
+        notificacionesSinAcpetarNumero = notificationsStore.filter(not => !not.visto).length;
+        notificacionesSinAcpetar = notificacionesSinAcpetarNumero > 0;
+
         if (notificacionesSinAcpetar) {
           renderizarConNotificaciones(notificacionesSinAcpetarNumero);
         } else {
           renderizarSinNotificaciones();
         }
       }
-      console.warn("notificacionesSinAcpetar: " + notificacionesSinAcpetar);
-      console.warn(
-        "notificacionesSinAcpetarNumero: " + notificacionesSinAcpetarNumero
-      );
+
+      // Store the count in a global variable for the event listener to access
+      window.correctNotificationCount = notificacionesSinAcpetarNumero;
+
       resolve(true);
     } catch (err) {
       console.error(err);
@@ -137,7 +164,7 @@ function renderizarSinNotificaciones() {
   //Desktops
   $bellDesktop.src = "https://dosxdos.app.iidos.com/img/bell2.png";
   if ($bellDesktop.classList.contains("w-12")) {
-    $bellDesktop.classList.replace("w-12", "w-7");
+    $bellDesktop.classList.replace("w-12", "w-7"); ç
   } else {
     $bellDesktop.classList.add("w-7");
   }
@@ -148,6 +175,8 @@ function renderizarSinNotificaciones() {
 }
 
 function renderizarConNotificaciones(numeroDeNotificacionesActuales) {
+  // Force the correct number to be used (prevent incorrect values from being passed in)
+  numeroDeNotificacionesActuales = window.correctNotificationCount || numeroDeNotificacionesActuales;
   //Mobiles
   $bellMobile.src = "https://dosxdos.app.iidos.com/img/bell.gif";
   if ($bellMobile.classList.contains("w-8")) {

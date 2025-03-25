@@ -1455,11 +1455,12 @@ function createDesktopNavigation(userRole) {
   // Add notification bell
   const desktopBell = document.createElement('a');
   desktopBell.href = "https://dosxdos.app.iidos.com/notificaciones.html";
-  desktopBell.className = "relative z-10";
+  desktopBell.className = "relative z-10 inline-flex items-center";
   desktopBell.id = "desktopBellContainer";
   desktopBell.innerHTML = `
-    <img id="bellDesktop" src="https://dosxdos.app.iidos.com/img/bell2.png" class="w-7 text-gray-900 object-contain" />
-    <span id="desktopNotificationCount" class="absolute top-0 -right-2 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] text-center border hidden"></span>
+    <div class="relative">
+      <img id="bellDesktop" src="https://dosxdos.app.iidos.com/img/bell2.png" class="w-7 text-gray-900 object-contain" />
+<span id="desktopNotificationCount" class="absolute -top-0 right-1 bg-red-600 text-white text-xs rounded-full flex items-center justify-center px-1 min-w-[18px] h-[18px] border hidden"></span>    </div>
   `;
   desktopNav.appendChild(desktopBell);
 
@@ -1524,7 +1525,7 @@ function createDesktopNavigation(userRole) {
   function openMenu(lock = false) {
     floatingMenuContainer.classList.remove('hidden');
     floatingMenuContainer.classList.add('grid');
-    
+
     if (lock) {
       menuLocked = true;
       // Add visual indicator that menu is locked
@@ -1541,16 +1542,16 @@ function createDesktopNavigation(userRole) {
   }
 
   // Improved click event for hamburger trigger
-  hamburgerMenuTrigger.addEventListener('click', function(e) {
+  hamburgerMenuTrigger.addEventListener('click', function (e) {
     e.preventDefault();
     e.stopPropagation();
-    
+
     // Toggle menu state
     if (menuLocked) {
       // Menu is locked open, unlock and close it
       menuLocked = false;
       closeMenu();
-      
+
       // Pause hover behavior briefly to prevent immediate re-opening
       hoverPaused = true;
       setTimeout(() => {
@@ -1563,14 +1564,14 @@ function createDesktopNavigation(userRole) {
   });
 
   // Add hover events
-  hamburgerMenuTrigger.addEventListener('mouseenter', function() {
+  hamburgerMenuTrigger.addEventListener('mouseenter', function () {
     // Skip if hover is paused or menu is already locked
     if (hoverPaused || menuLocked) return;
-    
+
     openMenu(false);
   });
 
-  hamburgerMenuTrigger.addEventListener('mouseleave', function() {
+  hamburgerMenuTrigger.addEventListener('mouseleave', function () {
     // Only close on mouseleave if not locked
     if (!menuLocked) {
       setTimeout(() => {
@@ -1581,7 +1582,7 @@ function createDesktopNavigation(userRole) {
     }
   });
 
-  floatingMenuContainer.addEventListener('mouseleave', function() {
+  floatingMenuContainer.addEventListener('mouseleave', function () {
     // Only close on mouseleave if not locked
     if (!menuLocked) {
       closeMenu();
@@ -1589,10 +1590,10 @@ function createDesktopNavigation(userRole) {
   });
 
   // Add document click handler to close locked menu when clicking outside
-  document.addEventListener('click', function(e) {
-    if (menuLocked && 
-        !hamburgerMenuTrigger.contains(e.target) && 
-        !floatingMenuContainer.contains(e.target)) {
+  document.addEventListener('click', function (e) {
+    if (menuLocked &&
+      !hamburgerMenuTrigger.contains(e.target) &&
+      !floatingMenuContainer.contains(e.target)) {
       menuLocked = false;
       closeMenu();
     }

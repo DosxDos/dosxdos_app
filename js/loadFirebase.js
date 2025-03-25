@@ -5,8 +5,15 @@ async function loadFirebase() {
         const isAndroid = /android/i.test(userAgent);
         const isiOS = /(iphone|ipad|ipod)/i.test(userAgent);
 
-        if (isAndroid || isiOS) {
-            console.warn("Dispositivo Android o Ios, Firebase web push notifications no será cargado.");
+        /*
+        if (isAndroid) {
+            console.warn("Dispositivo Android, Firebase web push notifications no será cargado.");
+            return;
+        }
+        */
+
+        if (isiOS) {
+            console.warn("Dispositivo Ios, Firebase web push notifications no será cargado.");
             return;
         }
 

@@ -94,7 +94,7 @@
           <img id="bellMobile" src="https://dosxdos.app.iidos.com/img/bell2.png"
             class="w-8 text-gray-900 object-contain mt-2" />
           <span id="mobileNotificationCount"
-            class="absolute top-2 right-0 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] text-center border hidden"></span>
+            class="absolute top-2 right-1 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] text-center border hidden"></span>
         </a>
 
         <!-- Mobile Menu Button -->
@@ -897,14 +897,33 @@
           }));
 
           const TotalLineas = await leerDatos("dosxdos", "lineas");
+
           if (TotalLineas) {
             const lineas = TotalLineas.filter((objeto) => {
               return objeto.Proyecto == ruta;
             });
-            console.log(lineas);
 
             // Clear the content area
             $contenido.innerHTML = "";
+
+            if (lineas.length === 0) {
+              // Create a no data placeholder
+              const noDataPlaceholder = document.createElement('div');
+              noDataPlaceholder.className = 'flex flex-col items-center justify-center min-h-[calc(100vh-300px)] text-center p-8 bg-gray-100';
+
+              noDataPlaceholder.innerHTML = `
+            <h2 class="text-2xl font-semibold text-gray-600 mb-4">No hay líneas disponibles</h2>
+            <p class="text-gray-500 max-w-md">
+                Parece que no hay líneas asignadas a esta ruta en este momento.
+            </p>
+        `;
+
+              $contenido.appendChild(noDataPlaceholder);
+
+              // Exit the function early since there are no lines
+              loaderOff();
+              return;
+            }
 
             // Extract unique sectors from the lines
             const sectors = [];
@@ -1812,6 +1831,25 @@
 
             // Clear the content area
             $contenido.innerHTML = "";
+
+            if (lineas.length === 0) {
+              // Create a no data placeholder
+              const noDataPlaceholder = document.createElement('div');
+              noDataPlaceholder.className = 'flex flex-col items-center justify-center min-h-[calc(100vh-300px)] text-center p-8 bg-gray-100';
+
+              noDataPlaceholder.innerHTML = `
+            <h2 class="text-2xl font-semibold text-gray-600 mb-4">No hay líneas disponibles</h2>
+            <p class="text-gray-500 max-w-md">
+                Parece que no hay líneas asignadas a esta ruta en este momento.
+            </p>
+        `;
+
+              $contenido.appendChild(noDataPlaceholder);
+
+              // Exit the function early since there are no lines
+              loaderOff();
+              return;
+            }
 
             // Extract unique sectors from the lines
             const sectors = [];
