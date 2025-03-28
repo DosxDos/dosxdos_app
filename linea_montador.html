@@ -924,36 +924,27 @@
     //SUBMIT
     const formulario = document.getElementById("formLinea");
     formulario.addEventListener("submit", (e) => {
-        //console.log('entra al evento submit');
         e.preventDefault();
         loaderOn();
+
         let aviso = "",
             caracteres = true,
             fecha,
             validarFecha,
             vJsonFirmas = true,
             vJsonFotos = true;
-        const estado = document.getElementById("estado").value;
-        //console.log(estado);
-        const incidencia = document.getElementById("incidencia").value;
-        //console.log(incidencia);
-        //console.log(fecha);
-        const dias = document.getElementById("dias").value;
-        //console.log(dias);
-        const horas = document.getElementById("horas").value;
-        //console.log(horas);
-        const minutos = document.getElementById("minutos").value;
-        //console.log(minutos);
-        let observaciones = document.getElementById(
-            "observacionesTecnico"
-        ).value;
-        //observaciones = escaparHTML(observaciones);
 
-        //console.log(observaciones);
+        // Get the CURRENT form values
+        const estado = document.getElementById("estado").value;
+        const incidencia = document.getElementById("incidencia").value;
+        const dias = document.getElementById("dias").value;
+        const horas = document.getElementById("horas").value;
+        const minutos = document.getElementById("minutos").value;
+        let observaciones = document.getElementById("observacionesTecnico").value;
+
+        // Rest of your original validation code
         const numeroFotos = Object.keys(photos).length;
-        //console.log(numeroFotos);
         const numeroFirmas = Object.keys(firmas).length;
-        //console.log(numeroFirmas);
         const caracteresObs = observaciones.length;
 
         if (estado == "Pendiente") {
@@ -976,7 +967,7 @@
         }
 
         let vNota;
-        const nota = $nota.value;
+        const nota = document.getElementById("appNotas").value;
         if (nota) {
             vNota = true;
         } else {
@@ -993,6 +984,7 @@
             aviso = "";
             loaderOff();
         } else {
+            // Create bodyNavision object with the CURRENT values
             const bodyNavision = {
                 CodigoRuta: ruta,
                 LineaRuta: linea,
@@ -1009,9 +1001,10 @@
                 LinkWeb: `https://dosxdos.app.iidos.com/fotos_y_firmas.php?ruta=${ruta}&linea=${linea}&ot=${ot}&lineaActividad=${lineaActividad}`,
             };
 
-            //console.log(bodyNavision);
             const bodyNavisionJson = JSON.stringify(bodyNavision);
-            //console.log(bodyNavisionJson);
+
+            // Add a small debug log to verify the data
+            console.log("Sending form data with observations:", observaciones);
 
             const valoresFotos = Object.values(photos);
             const valoresFirmas = Object.values(firmas);
@@ -1037,7 +1030,8 @@
             totalFotos.pv = lineaObj.PuntoVenta;
             totalFotos.pvNombre = lineaObj.NombrePuntoVenta;
             totalFotos.usuario = usuarioId;
-
+            totalFotos.fotos = [];
+            totalFotos.fotos = valoresFotos;
             totalFirmas.ruta = ruta;
             totalFirmas.linea = linea;
             totalFirmas.ot = ot;
@@ -1048,19 +1042,11 @@
             totalFirmas.pv = lineaObj.PuntoVenta;
             totalFirmas.pvNombre = lineaObj.NombrePuntoVenta;
             totalFirmas.usuario = usuarioId;
-            totalFotos.fotos = [];
-            totalFotos.fotos = valoresFotos;
             totalFirmas.firmas = [];
             totalFirmas.firmas = valoresFirmas;
 
-            //console.log(totalFotos);
-            //console.log(totalFirmas);
-
             const fotosJson = JSON.stringify(totalFotos);
             const firmasJson = JSON.stringify(totalFirmas);
-
-            //console.log(fotosJson);
-            //console.log(firmasJson);
 
             if (navigator.onLine) {
                 procesarFormulario(
@@ -1102,8 +1088,6 @@
         $botonRutas = document.getElementById("rutasIconoBoton"),
         $datosLinea = document.getElementById("datosLinea"),
         $datos = document.getElementById("datos"),
-        photos = {},
-        firmas = {},
         camara = document.getElementById("camara"),
         video = document.getElementById("video"),
         fotos = document.getElementById("fotos"),
@@ -1118,6 +1102,8 @@
         rutas,
         usuario,
         lineas,
+        photos = {},
+        firmas = {},
         notificacionesSinAcpetarNumero = 0;
     const cajaCanvasFirmaModal = document.getElementById("cajaCanvasFirma");
 
@@ -2140,8 +2126,12 @@
     /* MANJEO DEL FORMULARIO */
 
     function actualizarLinea(json) {
-        console.log(json);
+        // Log the data being sent for debugging
+        console.log("JSON data being sent to server:", json);
+
+        // Store for offline access or debugging
         localStorage.setItem("jsonForm", json);
+
         return new Promise((resolve, reject) => {
             fetch("https://dosxdos.app.iidos.com/apirest/lineas.php", {
                 method: "PUT",
@@ -2150,16 +2140,27 @@
                 },
                 body: json,
             })
-                .then((res) => (res.ok ? res.json() : resolve(false)))
                 .then((res) => {
-                    if (res[0]) {
+                    if (!res.ok) {
+                        console.error("Error response from server:", res.status);
+                        return res.json().then(data => {
+                            console.error("Error details:", data);
+                            return false;
+                        }).catch(() => false);
+                    }
+                    return res.json();
+                })
+                .then((res) => {
+                    if (res && res[0]) {
+                        console.log("Server response success:", res);
                         resolve(true);
                     } else {
+                        console.error("Server response error:", res);
                         resolve(false);
                     }
                 })
                 .catch((err) => {
-                    console.log(err);
+                    console.error("Network error in actualizarLinea:", err);
                     resolve(false);
                 });
         });
@@ -2258,6 +2259,7 @@
         });
     }
 
+
     async function procesarFormulario(
         jsonLinea,
         vJsonFotos,
@@ -2268,13 +2270,19 @@
         jsonNota
     ) {
         try {
-            mensaje = "";
+            let mensaje = "";
+
+            // 1. First, send data to server
             const upLinea = await actualizarLinea(jsonLinea);
+            console.log("Data sent to server: ", jsonLinea);
+
             if (upLinea) {
                 mensaje = "-Datos guardados con éxito-";
             } else {
                 mensaje = "-Error al guardar los datos-";
             }
+
+            // 2. Handle photos, signatures, and notes
             if (vJsonFotos) {
                 const upFotos = await subirFotos(jsonFotos);
                 if (upFotos) {
@@ -2283,6 +2291,7 @@
                     mensaje += "-Error al subir las fotos-";
                 }
             }
+
             if (vJsonFirmas) {
                 const upFirmas = await subirFirmas(jsonFirmas);
                 if (upFirmas) {
@@ -2291,6 +2300,7 @@
                     mensaje += "-Error al subir las firmas-";
                 }
             }
+
             if (vNota) {
                 const upNota = await subirNota(jsonNota);
                 if (upNota) {
@@ -2299,20 +2309,35 @@
                     mensaje += "-Error al subir la nota-";
                 }
             }
-            const sincronizacion = await sincronizarDb2();
-            if (sincronizacion) {
-                mensaje += "-Base de datos sincronizada con éxito-";
-            } else {
-                mensaje += "-Error en la sincronización de la base de datos-";
+
+            // 3. CRITICAL STEP: Clear all cached linea data
+            console.log("Clearing cached data...");
+            try {
+                // Clear 'lineas' store to force fresh data load
+                await limpiarDatos("dosxdos", "lineas");
+                console.log("Successfully cleared lines cache");
+
+                // Completely re-sync with the server
+                const sincronizacion = await sincronizarDb2();
+                if (sincronizacion) {
+                    mensaje += "-Base de datos sincronizada con éxito-";
+                    console.log("Database successfully re-synchronized");
+                } else {
+                    mensaje += "-Error en la sincronización de la base de datos-";
+                    console.error("Failed to re-synchronize database");
+                }
+            } catch (err) {
+                console.error("Error clearing cache:", err);
+                mensaje += "-Error al limpiar caché-";
             }
+
+            // 4. Store the message and navigate with cache-busting parameter
             localStorage.setItem("mensaje", mensaje);
-            /*alerta(mensaje);
-                scrollToTop;*/
-            window.location.href =
-                "https://dosxdos.app.iidos.com/ruta_montador.html";
+            window.location.href = "https://dosxdos.app.iidos.com/ruta_montador.html?nocache=" + Date.now();
         } catch (error) {
-            console.log(error);
+            console.error("Error in mejorarProcesarFormulario:", error);
             alerta(error.message);
+            loaderOff();
         }
     }
 
@@ -2691,41 +2716,41 @@
         }
     });
 
-  // INITIALIZATION FUNCTION
-  function initializeApplication() {
-      return new Promise(resolve => {
-        try {
-          // Dynamically create navigation based on user role
-          createDesktopNavigation(usuario.clase);
-          // Setup desktop and mobile navigation
-          setupMenu(usuario.clase);
+    // INITIALIZATION FUNCTION
+    function initializeApplication() {
+        return new Promise(resolve => {
+            try {
+                // Dynamically create navigation based on user role
+                createDesktopNavigation(usuario.clase);
+                // Setup desktop and mobile navigation
+                setupMenu(usuario.clase);
 
-          // Setup menu interactions
-          setupMenuInteractions();
-          setupUserActions();
-          setupGlobalMenuClosing();
+                // Setup menu interactions
+                setupMenuInteractions();
+                setupUserActions();
+                setupGlobalMenuClosing();
 
-          updateUserDisplay();
+                updateUserDisplay();
 
-          // Update the user information in the new UI elements
-          const nombreUsuarioDesktop = document.getElementById('nombreUsuarioDesktop');
-          const nombreUsuarioMobile = document.getElementById('nombreUsuarioMobile');
-          const imagenUsuarioDesktop = document.getElementById('imagenUsuarioDesktop');
-          const imagenUsuarioMobile = document.getElementById('imagenUsuarioMobile');
+                // Update the user information in the new UI elements
+                const nombreUsuarioDesktop = document.getElementById('nombreUsuarioDesktop');
+                const nombreUsuarioMobile = document.getElementById('nombreUsuarioMobile');
+                const imagenUsuarioDesktop = document.getElementById('imagenUsuarioDesktop');
+                const imagenUsuarioMobile = document.getElementById('imagenUsuarioMobile');
 
-          if (nombreUsuarioDesktop) nombreUsuarioDesktop.textContent = usuario.nombre;
-          if (nombreUsuarioMobile) nombreUsuarioMobile.textContent = usuario.nombre;
+                if (nombreUsuarioDesktop) nombreUsuarioDesktop.textContent = usuario.nombre;
+                if (nombreUsuarioMobile) nombreUsuarioMobile.textContent = usuario.nombre;
 
-          if (usuario.imagen !== "0") {
-            if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
-            if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
-          }
-          resolve(true);
-        } catch (error) {
-          console.error("Error initializing application:", error);
-          resolve(false);
-        }
-      })
+                if (usuario.imagen !== "0") {
+                    if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
+                    if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
+                }
+                resolve(true);
+            } catch (error) {
+                console.error("Error initializing application:", error);
+                resolve(false);
+            }
+        })
     }
 
 
@@ -2921,7 +2946,7 @@
                 usuario = Arrayusuario[0];
                 montador = usuario.cod;
 
-               await initializeApplication()
+                await initializeApplication()
 
                 await notificar();
 
@@ -3025,7 +3050,6 @@
                         scrollToTop();
                         loaderOff();
                     }
-                    initializeApplication()
                     loaderOff();
                 } else {
                     initializeApplication()
@@ -3054,6 +3078,12 @@
 
     // Form reset on navigation
     window.addEventListener('beforeunload', function () {
+        const skipReset = localStorage.getItem('noResetForm') === 'true';
+        if (skipReset) {
+            console.log("🔁 Se mantiene el estado del formulario (noResetForm)");
+            localStorage.removeItem('noResetForm'); // 🔚 Borramos la variable
+            return;
+        }
         // Reset the form
         document.getElementById('formLinea').reset();
 

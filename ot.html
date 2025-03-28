@@ -786,12 +786,12 @@
                         const fixedHeaderOffset = anchoVentana > 1199 ? 28 : (anchoVentana >= 768 ? 24 : 0);
                         $(document).ready(function () {
                             table = $('#tablaOt').DataTable({
-                                "paging": true,
+                                "paging": false,          // Disable pagination
                                 "searching": true,
-                                "lengthMenu": [10, 25, 50, 100],
-                                "pageLength": 10,
+                                "lengthChange": false,    // Remove the "Show X entries" dropdown
+                                "info": false,            // Remove the "Showing X to Y of Z entries" info
                                 "responsive": true,
-                                "scrollX": false,
+                                "scrollX": true,          // Enable horizontal scrolling
                                 "autoWidth": false,
                                 "language": {
                                     url: "data_tables.json",

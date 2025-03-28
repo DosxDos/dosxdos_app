@@ -984,12 +984,14 @@
                 }
                 else {
                     initializeApplication()
+                    notificar()
                     alerta('Error al leer el almacén de historial')
                     loaderOff();
                 }
             }
         } catch (error) {
             initializeApplication()
+            notificar()
             mensaje = 'ERROR: ' + error.message;
             console.error(error);
             alerta(mensaje);

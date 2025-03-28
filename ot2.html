@@ -1060,12 +1060,12 @@
 
                             $(document).ready(function () {
                                 const table = $('#tablaOt').DataTable({
-                                    "paging": true,
+                                    "paging": false,          // Disable pagination
                                     "searching": true,
-                                    "lengthMenu": [10, 25, 50, 100],
-                                    "pageLength": 10,
+                                    "lengthChange": false,    // Remove the "Show X entries" dropdown
+                                    "info": false,            // Remove the "Showing X to Y of Z entries" info
                                     "responsive": true,
-                                    "scrollX": true, // Enable horizontal scrolling
+                                    "scrollX": true,          // Enable horizontal scrolling
                                     "autoWidth": false,
                                     "columnDefs": [
                                         { "width": "5%", "targets": 0 }, // Visibility column
@@ -1263,7 +1263,7 @@
                 const Arrayusuario = await leerDatos('dosxdos', 'usuario');
                 usuario = Arrayusuario[0];
 
-               await initializeApplication()
+                await initializeApplication()
 
                 // Handle montador redirection
                 if (usuario.clase === 'montador') {

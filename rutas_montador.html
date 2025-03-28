@@ -626,8 +626,6 @@
         }
         montador = usuario.cod;
 
-        await initializeApplication()
-
         try {
           const sincronizacionDeNotificaciones = await sincronizarNotificaciones();
           if (sincronizacionDeNotificaciones) {
@@ -1304,6 +1302,7 @@
   if (navigator.onLine) {
     console.log("La aplicación está en línea.");
     //cache();
+   initializeApplication()
     appOnline();
   } else {
     console.log("La aplicación está fuera de línea.");
@@ -1315,185 +1314,7 @@
     console.log("DOM fully loaded");
     initializeSearch();
   });
-
-  // Simple fixes to apply after page load
-  window.addEventListener('load', function () {
-    console.log('📢 Fix script loaded and running');
-
-    // ===== NOTIFICATION BELL FIX =====
-    // This directly overwrites the notification.js behavior by forcing the animated bell
-    // to stay if there are notifications
-
-    function fixNotificationBells() {
-      console.log('Checking for notifications status...');
-
-      // Access the global variable set in your notification.js
-      if (typeof notificacionesSinAcpetar !== 'undefined' && notificacionesSinAcpetar) {
-        console.log('Active notifications detected! Setting animated bells...');
-
-        // Get bell elements
-        const bellDesktop = document.getElementById('bellDesktop');
-        const bellMobile = document.getElementById('bellMobile');
-        const desktopCount = document.getElementById('desktopNotificationCount');
-        const mobileCount = document.getElementById('mobileNotificationCount');
-
-        // Force animated bell image
-        if (bellDesktop) {
-          bellDesktop.src = "https://dosxdos.app.iidos.com/img/bell.gif";
-          bellDesktop.classList.remove("w-7");
-          bellDesktop.classList.add("w-12");
-        }
-
-        if (bellMobile) {
-          bellMobile.src = "https://dosxdos.app.iidos.com/img/bell.gif";
-          bellMobile.classList.remove("w-8");
-          bellMobile.classList.add("w-14");
-        }
-
-        // Show notification count
-        if (desktopCount) {
-          desktopCount.classList.remove("hidden");
-          desktopCount.textContent = notificacionesSinAcpetarNumero;
-        }
-
-        if (mobileCount) {
-          mobileCount.classList.remove("hidden");
-          mobileCount.textContent = notificacionesSinAcpetarNumero;
-        }
-      } else {
-        console.log('No active notifications or status not available yet');
-      }
-    }
-
-    // Run immediately and then every second for 5 seconds to ensure it catches
-    // the notification state when it's available
-    fixNotificationBells();
-    for (let i = 1; i <= 5; i++) {
-      setTimeout(fixNotificationBells, i * 1000);
-    }
-
-    // ===== MOBILE MENU FIX =====
-    // This creates a completely new event listener for the menu button
-
-    function fixMobileMenu() {
-      const menuButton = document.getElementById('menuButton');
-      const opcionesMenu = document.getElementById('opcionesMenu');
-
-      if (!menuButton || !opcionesMenu) {
-        console.log('Menu elements not found, cannot fix mobile menu');
-        return;
-      }
-
-      console.log('Setting up mobile menu with direct click handler');
-
-      // Remove existing click listeners by cloning
-      const newMenuButton = menuButton.cloneNode(true);
-      menuButton.parentNode.replaceChild(newMenuButton, menuButton);
-
-      // Add our own direct click listener
-      newMenuButton.addEventListener('click', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        console.log('Menu button clicked');
-
-        // Toggle menu visibility directly by manipulating the transform class
-        if (opcionesMenu.classList.contains('translate-x-full')) {
-          console.log('Opening menu');
-          opcionesMenu.classList.remove('translate-x-full');
-
-          // Transform hamburger to X
-          document.getElementById('hamburgerTop').style.transform = 'rotate(45deg) translate(6px, 6px)';
-          document.getElementById('hamburgerMiddle').style.opacity = '0';
-          document.getElementById('hamburgerBottom').style.transform = 'rotate(-45deg) translate(6px, -6px)';
-        } else {
-          console.log('Closing menu');
-          opcionesMenu.classList.add('translate-x-full');
-
-          // Reset hamburger
-          document.getElementById('hamburgerTop').style.transform = '';
-          document.getElementById('hamburgerMiddle').style.opacity = '1';
-          document.getElementById('hamburgerBottom').style.transform = '';
-        }
-
-        return false;
-      });
-
-      console.log('Mobile menu handler installed');
-    }
-
-    // Fix the mobile menu
-    fixMobileMenu();
-
-  });
-
-  // fix for mobile menu that works offline without breaking online function
-  (function () {
-    // Wait for everything else to initialize
-    setTimeout(function () {
-      // Get the menu button
-      var menuBtn = document.getElementById('menuButton');
-
-      if (menuBtn) {
-        // Add a direct click handler that will run AFTER any other handlers
-        menuBtn.addEventListener('click', function () {
-          // Get the menu
-          var menu = document.getElementById('opcionesMenu');
-
-          if (menu && !navigator.onLine) {
-            // Wait a tiny bit to let other handlers run first
-            setTimeout(function () {
-              // Get hamburger elements
-              var hamburgerTop = document.getElementById('hamburgerTop');
-              var hamburgerMiddle = document.getElementById('hamburgerMiddle');
-              var hamburgerBottom = document.getElementById('hamburgerBottom');
-
-              // Check current state and toggle appropriately
-              var isOpen = !menu.classList.contains('translate-x-full');
-
-              // Toggle menu
-              menu.classList.toggle('translate-x-full');
-              document.body.classList.toggle('overflow-hidden');
-
-              if (isOpen) {
-                // Menu is closing
-                if (hamburgerTop) {
-                  hamburgerTop.style.transform = "";
-                  hamburgerTop.classList.replace("bg-white", "bg-gray-900");
-                }
-                if (hamburgerMiddle) {
-                  hamburgerMiddle.style.opacity = "1";
-                  hamburgerMiddle.classList.replace("bg-white", "bg-gray-900");
-                }
-                if (hamburgerBottom) {
-                  hamburgerBottom.style.transform = "";
-                  hamburgerBottom.classList.replace("bg-white", "bg-gray-900");
-                }
-              } else {
-                // Menu is opening
-                if (hamburgerTop) {
-                  hamburgerTop.style.transform = "rotate(45deg) translate(10px, 7px)";
-                  hamburgerTop.classList.replace("bg-gray-900", "bg-white");
-                }
-                if (hamburgerMiddle) {
-                  hamburgerMiddle.style.opacity = "0";
-                  hamburgerMiddle.classList.replace("bg-gray-900", "bg-white");
-                }
-                if (hamburgerBottom) {
-                  hamburgerBottom.style.transform = "rotate(-45deg) translate(10px, -7px)";
-                  hamburgerBottom.classList.replace("bg-gray-900", "bg-white");
-                }
-              }
-
-              console.log("Emergency menu toggle executed in offline mode");
-            }, 10);
-          }
-        });
-
-        console.log("Emergency menu handler added without replacing existing code");
-      }
-    }, 1000);
-  })();
+  
 </script>
 
 <script src="https://dosxdos.app.iidos.com/js/loadFirebase.js"></script>
