@@ -758,18 +758,24 @@
                 const Arrayusuario = await leerDatos('dosxdos', 'usuario');
                 usuario = Arrayusuario[0];
 
-                // Handle user roles
-                switch (usuario.clase) {
-                    case 'montador':
-                        window.location.href = "https://dosxdos.app.iidos.com/rutas_montador.html";
-                        return;
-                    case 'admon':
-                    case 'oficina':
-                    case 'diseno':
-                    case 'estudio':
-                        await initializeApplication()
-                        break;
+               // Handle user roles
+            if (usuario.clase === 'montador') {
+                window.location.href = "https://dosxdos.app.iidos.com/rutas_montador.html";
+                return;
+            }
+
+            initializeApplication()
+
+            // Load notifications
+            try {
+                const sincronizacionDeNotificaciones = await sincronizarNotificaciones();
+                if (sincronizacionDeNotificaciones) {
+                    await notificar();
                 }
+            } catch (error) {
+                console.error("Error loading notifications:", error);
+            }
+
 
                 // Fetch and populate years
                 const anos = await fetchAnos();
@@ -793,6 +799,7 @@
                                 "responsive": true,
                                 "scrollX": true,          // Enable horizontal scrolling
                                 "autoWidth": false,
+                                order: [[1, 'asc']],
                                 "language": {
                                     url: "data_tables.json",
                                     lengthMenu: '_MENU_ registros por página'
@@ -891,12 +898,7 @@
                                 window.location.href = "https://dosxdos.app.iidos.com/ot2.html";
                             }
                         });
-
-                        const sincronizacionDeNotificaciones =
-                            await sincronizarNotificaciones();
-                        if (sincronizacionDeNotificaciones) {
-                            await notificar();
-                        }
+                        
                         loaderOff();
                     } else {
                         initializeApplication()

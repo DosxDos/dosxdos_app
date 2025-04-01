@@ -971,81 +971,72 @@
     });
 
     //SUBMIT
-    const formulario = document.getElementById('formLinea');
-    formulario.addEventListener('submit', (e) => {
-        //console.log('entra al evento submit');
+    const formulario = document.getElementById("formLinea");
+    formulario.addEventListener("submit", (e) => {
         e.preventDefault();
         loaderOn();
-        let aviso = '',
+
+        let aviso = "",
             caracteres = true,
             fecha,
             validarFecha,
             vJsonFirmas = true,
             vJsonFotos = true;
-        const estado = document.getElementById('estado').value;
-        //console.log(estado);
-        const incidencia = document.getElementById('incidencia').value;
-        //console.log(incidencia);
-        //console.log(fecha);
-        const dias = document.getElementById('dias').value;
-        //console.log(dias);
-        const horas = document.getElementById('horas').value;
-        //console.log(horas);
-        const minutos = document.getElementById('minutos').value;
-        //console.log(minutos);
-        let observaciones = document.getElementById('observacionesTecnico').value;
-        //observaciones = escaparHTML(observaciones);
 
-        //console.log(observaciones);
+        // Get the CURRENT form values
+        const estado = document.getElementById("estado").value;
+        const incidencia = document.getElementById("incidencia").value;
+        const dias = document.getElementById("dias").value;
+        const horas = document.getElementById("horas").value;
+        const minutos = document.getElementById("minutos").value;
+        let observaciones = document.getElementById("observacionesTecnico").value;
+
         const numeroFotos = Object.keys(photos).length;
-        //console.log(numeroFotos);
         const numeroFirmas = Object.keys(firmas).length;
-        //console.log(numeroFirmas);
         const caracteresObs = observaciones.length;
 
-        if (estado == 'Pendiente') {
-            fecha = '';
+        if (estado == "Pendiente") {
+            fecha = "";
             validarFecha = true;
-        }
-        else {
-            fecha = document.getElementById('fecha').value;
+        } else {
+            fecha = document.getElementById("fecha").value;
             if (fecha) {
                 validarFecha = true;
             } else {
                 validarFecha = false;
-                aviso += 'Es necesario ingresar la fecha de actuación'
+                aviso += "Es necesario ingresar la fecha de actuación";
             }
         }
 
         if (caracteresObs > 250) {
-            aviso += 'El campo de observaciones de NAVISION sólo permite un máximo de 250 caracteres - Utiliza mejor el campo de APP NOTAS'
+            aviso +=
+                "El campo de observaciones de NAVISION sólo permite un máximo de 250 caracteres - Utiliza mejor el campo de APP NOTAS";
             caracteres = false;
         }
 
         let vNota;
-        const nota = $nota.value;
+        const nota = document.getElementById("appNotas").value;
         if (nota) {
             vNota = true;
         } else {
             vNota = false;
         }
         const notaObj = {};
-        notaObj.ot = lineaObj.C_digo_de_OT_relacionada;
-        notaObj.linea = linea;
+        notaObj.ot = ot;
+        notaObj.linea = lineaActividad;
         notaObj.nota = nota;
         const notaJson = JSON.stringify(notaObj);
 
         if (!caracteres || !validarFecha) {
             alerta(aviso);
-            aviso = '';
+            aviso = "";
             loaderOff();
-        }
-        else {
-
+        } else {
+            // Create bodyNavision object with the CURRENT values
             const bodyNavision = {
                 CodigoRuta: ruta,
                 LineaRuta: linea,
-                DescripcionIncidencia: '',
+                DescripcionIncidencia: "",
                 DiasActuacion: dias,
                 Estado: estado,
                 FechaActuacion: fecha,
@@ -1055,12 +1046,12 @@
                 Incidencia: incidencia,
                 MinutosActuacion: minutos,
                 ObservacionesTecnico: observaciones,
-                LinkWeb: `https://dosxdos.app.iidos.com/fotos_y_firmas.php?ruta=${ruta}&linea=${linea}&ot=${ot}&lineaActividad=${lineaActividad}`
+                LinkWeb: `https://dosxdos.app.iidos.com/fotos_y_firmas.php?ruta=${ruta}&linea=${linea}&ot=${ot}&lineaActividad=${lineaActividad}`,
             };
 
-            //console.log(bodyNavision);
             const bodyNavisionJson = JSON.stringify(bodyNavision);
-            //console.log(bodyNavisionJson);
+
+            console.log("Sending form data with observations:", observaciones);
 
             const valoresFotos = Object.values(photos);
             const valoresFirmas = Object.values(firmas);
@@ -1076,49 +1067,57 @@
             const totalFotos = {};
             const totalFirmas = {};
 
-            totalFotos.ruta = lineaObj.RutaSelect;
-            totalFotos.linea = lineaObj.Codigo_de_l_nea;
-            totalFotos.ot = lineaObj.C_digo_de_OT_relacionada;
-            totalFotos.lineaActividad = lineaObj.Codigo_de_l_nea;
+            totalFotos.ruta = ruta;
+            totalFotos.linea = linea;
+            totalFotos.ot = ot;
+            totalFotos.lineaActividad = lineaActividad;
             totalFotos.fecha = fecha;
-            totalFotos.cliente = lineaObj.N_mero_del_cliente;
-            totalFotos.nombreCliente = lineaObj.nombreCliente;
-            totalFotos.pv = lineaObj.codPv;
-            totalFotos.pvNombre = lineaObj.nombrePv;
+            totalFotos.cliente = cliente;
+            totalFotos.nombreCliente = lineaObj.NombreCliente;
+            totalFotos.pv = lineaObj.PuntoVenta;
+            totalFotos.pvNombre = lineaObj.NombrePuntoVenta;
             totalFotos.usuario = usuarioId;
-
-            totalFirmas.ruta = lineaObj.RutaSelect;
-            totalFirmas.linea = lineaObj.Codigo_de_l_nea;
-            totalFirmas.ot = lineaObj.C_digo_de_OT_relacionada;
-            totalFirmas.lineaActividad = lineaObj.Codigo_de_l_nea;
-            totalFirmas.fecha = fecha;
-            totalFirmas.cliente = lineaObj.N_mero_del_cliente;
-            totalFirmas.nombreCliente = lineaObj.nombreCliente;
-            totalFirmas.pv = lineaObj.codPv;
-            totalFirmas.pvNombre = lineaObj.nombrePv;
-            totalFirmas.usuario = usuarioId;
-
             totalFotos.fotos = [];
             totalFotos.fotos = valoresFotos;
+            totalFirmas.ruta = ruta;
+            totalFirmas.linea = linea;
+            totalFirmas.ot = ot;
+            totalFirmas.lineaActividad = lineaActividad;
+            totalFirmas.fecha = fecha;
+            totalFirmas.cliente = cliente;
+            totalFirmas.nombreCliente = lineaObj.NombreCliente;
+            totalFirmas.pv = lineaObj.PuntoVenta;
+            totalFirmas.pvNombre = lineaObj.NombrePuntoVenta;
+            totalFirmas.usuario = usuarioId;
             totalFirmas.firmas = [];
             totalFirmas.firmas = valoresFirmas;
-
-            //console.log(totalFotos);
-            //console.log(totalFirmas);
 
             const fotosJson = JSON.stringify(totalFotos);
             const firmasJson = JSON.stringify(totalFirmas);
 
-            //console.log(fotosJson);
-            //console.log(firmasJson);
-
             if (navigator.onLine) {
-                procesarFormulario(bodyNavisionJson, vJsonFotos, fotosJson, vJsonFirmas, firmasJson, vNota, notaJson)
+                procesarFormulario(
+                    bodyNavisionJson,
+                    vJsonFotos,
+                    fotosJson,
+                    vJsonFirmas,
+                    firmasJson,
+                    vNota,
+                    notaJson
+                );
             } else {
-                procesarFormularioOff(bodyNavision, vJsonFotos, totalFotos, vJsonFirmas, totalFirmas, vNota, notaObj)
+                procesarFormularioOff(
+                    bodyNavision,
+                    vJsonFotos,
+                    totalFotos,
+                    vJsonFirmas,
+                    totalFirmas,
+                    vNota,
+                    notaObj
+                );
             }
         }
-    })
+    });
 
     function toggleElemento(elementId) {
         const elemento = document.getElementById(elementId);
@@ -2380,7 +2379,7 @@
             localStorage.setItem('mensaje', mensaje);
             /*alerta(mensaje);
             scrollToTop;*/
-            window.location.href = "https://dosxdos.app.iidos.com/linea_historial_montador.html";
+            window.location.href = "https://dosxdos.app.iidos.com/historial_montador.html";
 
         } catch (error) {
             console.log(error);
@@ -2550,7 +2549,7 @@
                 mensaje += '-Error: No ha sido posible sincronizar la base de datos-'
             }
             localStorage.setItem('mensaje', mensaje);
-            window.location.href = "https://dosxdos.app.iidos.com/linea_historial_montador.html";
+            window.location.href = "https://dosxdos.app.iidos.com/historial_montador.html";
             /*alerta(mensaje);
             scrollToTop();*/
         } catch (error) {
@@ -2736,7 +2735,6 @@
                                 console.warn("⚠️ Titulo or Subtitulo element not found");
                             }
 
-                            console.log(lineaObj);
                             numeroPuntoDeVenta = lineaObj.codPv;
                             const objPdv = await fetchTelefono(numeroPuntoDeVenta);
                             let telPdv;
@@ -2770,7 +2768,6 @@
                             cargarDatoTexto('direccion', lineaObj.Direcci_n);
                             cargarDatoTexto('tipoDeTrabajo', lineaObj.Tipo_de_trabajo);
                             cargarDatoTexto('tipoDeTrabajo2', lineaObj.Descripci_n_Tipo_Trabajo);
-                            cargarDatoTexto('observaciones', lineaObj.Observaciones_internas);
                             cargarDatoTexto('poner', lineaObj.Poner);
                             cargarDatoTexto('quitar', lineaObj.Quitar);
                             cargarDatoTexto('alto', lineaObj.Alto_medida);
@@ -2799,6 +2796,13 @@
                             if (lineaObj.Observaciones_montador) {
                                 cargarDatoTexto('observacionesTecnico', lineaObj.Observaciones_montador);
                             }
+
+                            console.log("Full lineaObj:", lineaObj);
+                            console.log("Observations from server:", {
+                                'Observaciones_montador': lineaObj.Observaciones_montador,
+                                'Observaciones_internas': lineaObj.Observaciones_internas
+                            }); 
+
                             const cargarNota = await traerNota();
                             console.log(cargarNota);
                             if (cargarNota) {

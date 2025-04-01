@@ -3238,40 +3238,20 @@
                 usuario = Arrayusuario[0];
 
                 // Handle user roles
-                switch (usuario.clase) {
-                    case 'montador':
-                        window.location.href = "https://dosxdos.app.iidos.com/rutas_montador.html";
-                        return;
-                    case 'admon':
-                    case 'oficina':
-                    case 'diseno':
-                    case 'estudio':
-                        // Dynamically create navigation based on user role
-                        createDesktopNavigation(usuario.clase);
-                        // Setup desktop and mobile navigation
-                        setupMenu(usuario.clase);
-
-                        // Setup menu interactions
-                        setupMenuInteractions();
-                        setupUserActions();
-                        setupGlobalMenuClosing();
-
-                        updateUserDisplay();
-                        break;
+                if (usuario.clase === 'montador') {
+                    window.location.href = "https://dosxdos.app.iidos.com/rutas_montador.html";
                 }
 
-                // Update the user information in the new UI elements
-                const nombreUsuarioDesktop = document.getElementById('nombreUsuarioDesktop');
-                const nombreUsuarioMobile = document.getElementById('nombreUsuarioMobile');
-                const imagenUsuarioDesktop = document.getElementById('imagenUsuarioDesktop');
-                const imagenUsuarioMobile = document.getElementById('imagenUsuarioMobile');
+                initializeApplication()
 
-                if (nombreUsuarioDesktop) nombreUsuarioDesktop.textContent = usuario.nombre;
-                if (nombreUsuarioMobile) nombreUsuarioMobile.textContent = usuario.nombre;
-
-                if (usuario.imagen !== "0") {
-                    if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
-                    if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
+                // Load notifications
+                try {
+                    const sincronizacionDeNotificaciones = await sincronizarNotificaciones();
+                    if (sincronizacionDeNotificaciones) {
+                        await notificar();
+                    }
+                } catch (error) {
+                    console.error("Error loading notifications:", error);
                 }
 
                 // Show admin buttons if admin or office user
@@ -3414,26 +3394,13 @@
                         }
                         $(document).ready(function () {
                             const table = $('#tablaLineasOt').DataTable({
-                                "paging": false,         
+                                "paging": false,
                                 "searching": true,
-                                "lengthChange": false,   
-                                "info": false,          
+                                "lengthChange": false,
+                                "info": false,
                                 "responsive": true,
-                                "scrollX": true,          
+                                "scrollX": true,
                                 "autoWidth": false,
-                                "columnDefs": [
-                                    { "width": "auto", "targets": 0 }, // Visibility column
-                                    { "width": "auto", "targets": 1 }, // LINEA column
-                                    { "width": "auto", "targets": 2 }, // PV column
-                                    { "width": "auto", "targets": 3 }, // PV-NOMBRE column
-                                    { "width": "auto", "targets": 4 }, // FT column
-                                    { "width": "auto", "targets": 5 }, // FR column
-                                    { "width": "auto", "targets": 6 }, // CT column
-                                    { "width": "auto", "targets": 7 }, // FIRMA column
-                                    { "width": "auto", "targets": 8 }, // USUARIO column
-                                    { "width": "auto", "targets": 9 }, // INICIO column
-                                    { "width": "auto", "targets": 10 }, // APROBÓ column
-                                ],
                                 "language": {
                                     url: "data_tables.json",
                                     lengthMenu: '_MENU_ registros por página'
@@ -3608,16 +3575,6 @@
                             window.location.href = "https://dosxdos.app.iidos.com/ot2.html";
                         });
 
-                        // Load notifications
-                        try {
-                            const sincronizacionDeNotificaciones = await sincronizarNotificaciones();
-                            if (sincronizacionDeNotificaciones) {
-                                await notificar();
-                            }
-                        } catch (error) {
-                            console.error("Error loading notifications:", error);
-                        }
-
 
                         initializeOtApprovalStyles();
                         loaderOff();
@@ -3628,6 +3585,7 @@
                         loaderOff();
                     }
                 } else {
+                    initializeApplication()
                     mensaje = 'Error, la función fetchLineasOt no ha sido exitosa ';
                     alerta(mensaje);
                     scrollToTop();
@@ -3635,6 +3593,7 @@
                 }
             }
         } catch (error) {
+            initializeApplication()
             mensaje = 'ERROR: ' + error.message;
             console.error(error);
             alerta(mensaje);
@@ -3651,27 +3610,7 @@
                 const Arrayusuario = await leerDatos('dosxdos', 'usuario');
                 usuario = Arrayusuario[0];
 
-                // Setup navigation
-                createDesktopNavigation(usuario.clase);
-                setupMenu(usuario.clase);
-                setupMenuInteractions();
-                setupUserActions();
-                setupGlobalMenuClosing();
-                updateUserDisplay();
-
-                // Update UI with user info
-                const nombreUsuarioDesktop = document.getElementById('nombreUsuarioDesktop');
-                const nombreUsuarioMobile = document.getElementById('nombreUsuarioMobile');
-                const imagenUsuarioDesktop = document.getElementById('imagenUsuarioDesktop');
-                const imagenUsuarioMobile = document.getElementById('imagenUsuarioMobile');
-
-                if (nombreUsuarioDesktop) nombreUsuarioDesktop.textContent = usuario.nombre;
-                if (nombreUsuarioMobile) nombreUsuarioMobile.textContent = usuario.nombre;
-
-                if (usuario.imagen !== "0") {
-                    if (imagenUsuarioDesktop) imagenUsuarioDesktop.src = usuario.imagen;
-                    if (imagenUsuarioMobile) imagenUsuarioMobile.src = usuario.imagen;
-                }
+                initializeApplication()
 
                 // Handle montador redirection
                 if (usuario.clase === 'montador') {
@@ -3703,6 +3642,7 @@
                 loaderOff();
             }
         } catch (error) {
+            initializeApplication()
             mensaje = 'ERROR: ' + error.message;
             console.error(error);
             alerta(mensaje);

@@ -35,8 +35,8 @@
             border-bottom: 1px solid #e5e7eb;
             font-size: 1rem;
             white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            /* overflow: hidden;
+            text-overflow: ellipsis; */
         }
 
         #tablaOt th,
@@ -172,7 +172,14 @@
         #tablaOt td {
             white-space: nowrap !important;
             overflow: hidden !important;
-            text-overflow: ellipsis !important;
+        }
+
+        @media only screen and (min-width: 768px) {
+
+            #tablaOt th,
+            #tablaOt td {
+                text-overflow: ellipsis !important;
+            }
         }
 
         /* Direct selector to override DataTables styling */
@@ -1019,17 +1026,21 @@
                 const Arrayusuario = await leerDatos('dosxdos', 'usuario');
                 usuario = Arrayusuario[0];
 
-                // Handle user roles
-                switch (usuario.clase) {
-                    case 'montador':
-                        window.location.href = "https://dosxdos.app.iidos.com/rutas_montador.html";
-                        return;
-                    case 'admon':
-                    case 'oficina':
-                    case 'diseno':
-                    case 'estudio':
-                        await initializeApplication()
-                        break;
+                if (usuario.clase === 'montador') {
+                    window.location.href = "https://dosxdos.app.iidos.com/rutas_montador.html";
+                    return;
+                }
+
+                initializeApplication()
+
+                // Load notifications
+                try {
+                    const sincronizacionDeNotificaciones = await sincronizarNotificaciones();
+                    if (sincronizacionDeNotificaciones) {
+                        await notificar();
+                    }
+                } catch (error) {
+                    console.error("Error loading notifications:", error);
                 }
 
                 const ano = localStorage.getItem('anoDeOts');
@@ -1067,21 +1078,7 @@
                                     "responsive": true,
                                     "scrollX": true,          // Enable horizontal scrolling
                                     "autoWidth": false,
-                                    "columnDefs": [
-                                        { "width": "5%", "targets": 0 }, // Visibility column
-                                        { "width": "8%", "targets": 1 }, // OT column
-                                        { "width": "6%", "targets": 2 }, // AÑO column
-                                        { "width": "10%", "targets": 3 }, // CLIENTE column
-                                        { "width": "8%", "targets": 4 }, // TIPO column
-                                        { "width": "5%", "targets": 5 }, // FT column
-                                        { "width": "5%", "targets": 6 }, // FR column
-                                        { "width": "5%", "targets": 7 }, // CT column
-                                        { "width": "5%", "targets": 8 }, // LIN column
-                                        { "width": "15%", "targets": 9 }, // DESCR column
-                                        { "width": "8%", "targets": 10 }, // FIRMA column
-                                        { "width": "10%", "targets": 11 }, // INICIO column
-                                        { "width": "10%", "targets": 12 }, // APROBÓ column
-                                    ],
+                                    order: [[2, 'desc']],
                                     "language": {
                                         url: "data_tables.json",
                                         lengthMenu: '_MENU_ registros por página'
@@ -1209,12 +1206,6 @@
                             document.getElementById('volverBoton').addEventListener('click', () => {
                                 window.location.href = "https://dosxdos.app.iidos.com/ot.html";
                             });
-
-                            // Check for notifications
-                            const sincronizacionDeNotificaciones = await sincronizarNotificaciones();
-                            if (sincronizacionDeNotificaciones) {
-                                await notificar();
-                            }
 
                             loaderOff();
                         } else {

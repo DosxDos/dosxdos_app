@@ -626,6 +626,7 @@
         }
         montador = usuario.cod;
 
+        await initializeApplication();
         try {
           const sincronizacionDeNotificaciones = await sincronizarNotificaciones();
           if (sincronizacionDeNotificaciones) {
@@ -703,13 +704,11 @@
           lineas = await fetchLineas(rutas);
           if (lineas) {
             initializeSearch();
-            await initializeApplication()
             const peticionesCierre = await procesarPeticiones2();
             loaderOff();
           } else {
             alerta("Error al cargar las líneas de las rutas del servidor");
             initializeSearch();
-            await initializeApplication()
             const peticionesCierre = await procesarPeticiones2();
             loaderOff();
           }
@@ -798,10 +797,10 @@
         rutasContainer.appendChild(fragmento);
 
         initializeSearch();
-        notificar();
+        await notificar();
         loaderOff();
       }
-      notificar();
+      await notificar();
 
     } catch (error) {
       initializeApplication()
@@ -1302,7 +1301,7 @@
   if (navigator.onLine) {
     console.log("La aplicación está en línea.");
     //cache();
-   initializeApplication()
+    initializeApplication()
     appOnline();
   } else {
     console.log("La aplicación está fuera de línea.");
@@ -1314,7 +1313,7 @@
     console.log("DOM fully loaded");
     initializeSearch();
   });
-  
+
 </script>
 
 <script src="https://dosxdos.app.iidos.com/js/loadFirebase.js"></script>

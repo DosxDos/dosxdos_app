@@ -942,7 +942,6 @@
         const minutos = document.getElementById("minutos").value;
         let observaciones = document.getElementById("observacionesTecnico").value;
 
-        // Rest of your original validation code
         const numeroFotos = Object.keys(photos).length;
         const numeroFirmas = Object.keys(firmas).length;
         const caracteresObs = observaciones.length;
@@ -1003,7 +1002,6 @@
 
             const bodyNavisionJson = JSON.stringify(bodyNavision);
 
-            // Add a small debug log to verify the data
             console.log("Sending form data with observations:", observaciones);
 
             const valoresFotos = Object.values(photos);
@@ -2849,6 +2847,8 @@
                             } else {
                                 telefonoBoton.innerHTML = "Sin Teléfono";
                             }
+
+                            console.log("linea object-----", lineaObj)
                             cargarDatoTexto("cliente", lineaObj.NombreCliente);
                             cargarDatoTexto("ot", lineaObj.OT);
                             cargarDatoTexto("tipoOt", lineaObj.TipoOT);
