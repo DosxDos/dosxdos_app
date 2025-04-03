@@ -971,6 +971,30 @@
                 </svg>
             </button>
         </div>
+
+        <!-- Previous Button -->
+        <button id="modal-prev-btn"
+            class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-25 hover:bg-opacity-50 p-2 rounded-full text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+        </button>
+
+        <!-- Next Button -->
+        <button id="modal-next-btn"
+            class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-25 hover:bg-opacity-50 p-2 rounded-full text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </button>
+
+        <!-- Image Counter -->
+        <div id="modal-counter"
+            class="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-50 text-white px-3 py-1 rounded-full">
+        </div>
+
         <div class="h-full w-full flex items-center justify-center">
             <img id="modal-image" class="max-h-full max-w-full object-contain cursor-zoom-in" src="" alt="Zoomed image">
         </div>
@@ -1051,6 +1075,90 @@
             const elemento = document.getElementById(elementId);
             elemento.classList.toggle('displayOn');
             elemento.classList.toggle('displayOff');
+        }
+
+        function updateGalleryClickEvents() {
+            const galleryContainers = document.querySelectorAll('.gallery-container');
+            const modal = document.getElementById('image-modal');
+            const modalImage = document.getElementById('modal-image');
+            const modalCounter = document.getElementById('modal-counter');
+            const prevBtn = document.getElementById('modal-prev-btn');
+            const nextBtn = document.getElementById('modal-next-btn');
+
+            // Global variables to track current gallery and index
+            window.currentGalleryItems = [];
+            window.currentGalleryIndex = 0;
+
+            galleryContainers.forEach(container => {
+                // Get all images in this gallery
+                const mainImage = container.querySelector('.gallery-image-container img, .gallery-image-container video');
+                const thumbnails = container.querySelectorAll('.gallery-thumbnail');
+
+                if (!mainImage || thumbnails.length === 0) return;
+
+                // Create gallery array for modal navigation
+                const galleryItems = Array.from(thumbnails).map(thumb => {
+                    const img = thumb.querySelector('img');
+                    return img ? { link: img.src, element: img } : null;
+                }).filter(item => item !== null);
+
+                // Make main image open modal with current gallery
+                if (mainImage && mainImage.tagName === 'IMG') {
+                    mainImage.addEventListener('click', function () {
+                        // Find the active thumbnail to determine current index
+                        const activeThumb = container.querySelector('.gallery-thumbnail.active');
+                        const index = Array.from(thumbnails).indexOf(activeThumb);
+
+                        // Store current gallery and index globally
+                        window.currentGalleryItems = galleryItems;
+                        window.currentGalleryIndex = index >= 0 ? index : 0;
+
+                        // Update modal
+                        if (modal && modalImage) {
+                            modalImage.src = galleryItems[window.currentGalleryIndex].link;
+                            if (modalCounter) {
+                                modalCounter.textContent = `${window.currentGalleryIndex + 1} / ${galleryItems.length}`;
+                            }
+                            modal.classList.remove('hidden');
+                            document.body.style.overflow = 'hidden';
+                        }
+                    });
+                }
+
+                // Make thumbnails also connect to the modal
+                thumbnails.forEach((thumbnail, thumbnailIndex) => {
+                    thumbnail.addEventListener('click', function () {
+                        // When clicking a thumbnail, update both the main image and prepare modal data
+                        window.currentGalleryItems = galleryItems;
+                        window.currentGalleryIndex = thumbnailIndex;
+                    });
+                });
+            });
+
+            // Connect modal navigation buttons
+            if (prevBtn) {
+                prevBtn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    if (!window.currentGalleryItems || window.currentGalleryItems.length === 0) return;
+
+                    window.currentGalleryIndex = (window.currentGalleryIndex - 1 + window.currentGalleryItems.length) % window.currentGalleryItems.length;
+                    modalImage.src = window.currentGalleryItems[window.currentGalleryIndex].link;
+                    modalCounter.textContent = `${window.currentGalleryIndex + 1} / ${window.currentGalleryItems.length}`;
+                    resetZoom();
+                });
+            }
+
+            if (nextBtn) {
+                nextBtn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    if (!window.currentGalleryItems || window.currentGalleryItems.length === 0) return;
+
+                    window.currentGalleryIndex = (window.currentGalleryIndex + 1) % window.currentGalleryItems.length;
+                    modalImage.src = window.currentGalleryItems[window.currentGalleryIndex].link;
+                    modalCounter.textContent = `${window.currentGalleryIndex + 1} / ${window.currentGalleryItems.length}`;
+                    resetZoom();
+                });
+            }
         }
 
         /* CONSTANTES DEL DOM */
@@ -2053,7 +2161,6 @@
                                         });
                                     }
 
-                                    // Add zoom functionality
                                     mediaElement.addEventListener('click', () => {
                                         const modal = document.getElementById('image-modal');
                                         const modalImage = document.getElementById('modal-image');
@@ -2309,7 +2416,12 @@
                                 // Initialize
                                 createThumbnails();
                                 updateMainImage(0);
-                                resolve(true);
+                                // Delay gallery updates to ensure DOM is ready
+                                setTimeout(() => {
+                                    if (typeof updateGalleryClickEvents === 'function') {
+                                        updateGalleryClickEvents();
+                                    }
+                                }, 500); resolve(true);
                                 lazyLoadImages('photosContainer');
                                 optimizeMediaLoading('photosContainer');
                             } else {
@@ -2687,7 +2799,12 @@
                             // Initialize
                             createThumbnails();
                             updateMainImage(0);
-                            resolve(true);
+                            // Delay gallery updates to ensure DOM is ready
+                            setTimeout(() => {
+                                if (typeof updateGalleryClickEvents === 'function') {
+                                    updateGalleryClickEvents();
+                                }
+                            }, 500); resolve(true);
                             lazyLoadImages('firmasContainer');
                             optimizeMediaLoading('firmasContainer');
                         } else {
@@ -3926,6 +4043,12 @@
                     const fotosServidor = await traerFotos();
                     const firmasServidor = await traerFirmas();
 
+                    // Update modal navigation after all media is loaded
+                    setTimeout(() => {
+                        if (typeof updateGalleryClickEvents === 'function') {
+                            updateGalleryClickEvents();
+                        }
+                    }, 1000);
                     // Setup create folder button
                     const crearCarpetaBtn = document.getElementById('crearCarpetaBoton');
                     if (crearCarpetaBtn) {
@@ -4103,6 +4226,114 @@
                 // Make sure photos container is visible
                 document.getElementById('photosContainer').classList.remove('hidden');
             }, 5000);
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const modal = document.getElementById('image-modal');
+            const modalImage = document.getElementById('modal-image');
+            const closeBtn = document.getElementById('close-modal');
+
+            // Add navigation buttons if they don't exist
+            let prevBtn = document.getElementById('modal-prev-btn');
+            let nextBtn = document.getElementById('modal-next-btn');
+            let modalCounter = document.getElementById('modal-counter');
+
+            if (!prevBtn) {
+                prevBtn = document.createElement('button');
+                prevBtn.id = 'modal-prev-btn';
+                prevBtn.className = 'absolute left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-25 hover:bg-opacity-50 p-2 rounded-full text-white';
+                prevBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>';
+                modal.appendChild(prevBtn);
+            }
+
+            if (!nextBtn) {
+                nextBtn = document.createElement('button');
+                nextBtn.id = 'modal-next-btn';
+                nextBtn.className = 'absolute right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-25 hover:bg-opacity-50 p-2 rounded-full text-white';
+                nextBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>';
+                modal.appendChild(nextBtn);
+            }
+
+            if (!modalCounter) {
+                modalCounter = document.createElement('div');
+                modalCounter.id = 'modal-counter';
+                modalCounter.className = 'absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-50 text-white px-3 py-1 rounded-full';
+                modal.appendChild(modalCounter);
+            }
+
+            let currentGallery = [];
+            let currentIndex = 0;
+
+            // Universal modal opener with fixed logic
+            function openModal(gallery, index) {
+                if (!gallery || !gallery.length) return;
+
+                currentGallery = gallery;
+                currentIndex = index;
+
+                modalImage.src = gallery[index].link || gallery[index].src;
+                modalCounter.textContent = `${index + 1} / ${gallery.length}`;
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+                resetZoom(); // Reset any zoom applied
+            }
+
+            // Navigation and close buttons
+            prevBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (currentGallery.length === 0) return;
+
+                currentIndex = (currentIndex - 1 + currentGallery.length) % currentGallery.length;
+                const src = currentGallery[currentIndex].link || currentGallery[currentIndex].src;
+
+                if (src) {
+                    modalImage.src = src;
+                    resetZoom(); // Reset zoom when changing images
+                    modalCounter.textContent = `${currentIndex + 1} / ${currentGallery.length}`;
+                }
+            });
+
+            nextBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (currentGallery.length === 0) return;
+
+                currentIndex = (currentIndex + 1) % currentGallery.length;
+                const src = currentGallery[currentIndex].link || currentGallery[currentIndex].src;
+
+                if (src) {
+                    modalImage.src = src;
+                    resetZoom(); // Reset zoom when changing images
+                    modalCounter.textContent = `${currentIndex + 1} / ${currentGallery.length}`;
+                }
+            });
+
+            closeBtn.addEventListener('click', () => {
+                modal.classList.add('hidden');
+                document.body.style.overflow = '';
+            });
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                    document.body.style.overflow = '';
+                }
+            });
+
+            // Add keyboard navigation for the modal
+            document.addEventListener('keydown', (e) => {
+                if (!modal.classList.contains('hidden')) {
+                    if (e.key === 'ArrowLeft') {
+                        prevBtn.click();
+                    } else if (e.key === 'ArrowRight') {
+                        nextBtn.click();
+                    } else if (e.key === 'Escape') {
+                        closeBtn.click();
+                    }
+                }
+            });
+
+            // Make sure this function gets called whenever new photos are loaded
+            window.updateModalNavigation = updateGalleryClickEvents;
         });
 
     </script>
