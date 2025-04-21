@@ -4,6 +4,8 @@ apirest/clases/cliente_zoho.json
 apirest/clases/code_zoho.json
 apirest/clases/tokens_zoho.json
 apirest/clases/credenciales.json
+apirest/clases/a3Erp.json
+apirest/clases/jwt.json
 carpetas/
 firmas/
 fotos/

@@ -3,9 +3,11 @@
 <Files "conexion.json">
     Require all denied
 </Files>
+
 <Files "credenciales.json">
     Require all denied
 </Files>
+
 <Files "cliente_zoho.json">
     Require all denied
 </Files>
@@ -15,5 +17,13 @@
 </Files>
 
 <Files "tokens_zoho.json">
+    Require all denied
+</Files>
+
+<Files "a3Erp.json">
+    Require all denied
+</Files>
+
+<Files "jwt.json">
     Require all denied
 </Files>
