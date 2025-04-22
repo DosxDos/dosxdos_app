@@ -7,8 +7,9 @@ set_time_limit(0);
 ini_set('default_socket_timeout', 28800);
 date_default_timezone_set('Atlantic/Canary');
 
-require_once 'clases/crm_clase.php';
 require_once 'middlewares/jwtMiddleware.php';
+require_once 'clases/crm_clase.php';
+require_once 'clases/a3Erp_clase.php';
 
 $jwtMiddleware = new JwtMiddleware;
 $jwtMiddleware->verificar();
@@ -16,6 +17,8 @@ $jwtMiddleware->verificar();
 try {
     $crm = new Crm;
     $lineas;
+    $a3Data = [];
+    $lineasA3 = [];
 
     /*
     $idOt = 707987000001725513;
@@ -51,14 +54,24 @@ try {
         $descPorcRealización;
         $descPorcMontaje;
         $impuesto;
+        $nifCliente;
         /*CLIENTE*/
-        $camposCliente = "Descuento_montaje,Descuento_realizaci_n,Grupo_registro_IVA_neg";
+        $camposCliente = "Descuento_montaje,Descuento_realizaci_n,Grupo_registro_IVA_neg,CIF_NIF1";
         $query = "SELECT $camposCliente FROM Accounts WHERE Account_Name=\"$cliente\"";
         $crm->query($query);
         if ($crm->estado) {
             $descPorcRealización = $crm->respuesta[1]['data'][0]['Descuento_realizaci_n'];
             $descPorcMontaje = $crm->respuesta[1]['data'][0]['Descuento_montaje'];
             $impuesto = $crm->respuesta[1]['data'][0]['Grupo_registro_IVA_neg'];
+            $nifCliente = $crm->respuesta[1]['data'][0]['CIF_NIF1'];
+            if (!$nifCliente) {
+                echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ERROR!!!, EL CLIENTE NO TIENE NIF EN EL CRM, POR FAVOR ACTUALIZA ESTA INFORMACIÓN, LA CUAL ES VITAL PARA LA SINCRONIZACIÓN CON A3ERP, NOTION, DOSXDOS.APP Y OTROS SOFTWARES FUTUROS</p>';
+                scrollUpdate();
+                @ob_flush();
+                flush();
+                die();
+            }
+            echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">nifCliente: ' . $nifCliente . '</p>';
             echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descPorcRealización: ' . $descPorcRealización . '</p>';
             echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descPorcMontaje: ' . $descPorcMontaje . '</p>';
             echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">impuesto: ' . $impuesto . '</p>';

@@ -58,7 +58,8 @@ class a3Erp
             }
 
             $headers = array_merge([
-                'ApiKey: ' . $this->apiKey
+                'ApiKey: ' . $this->apiKey,
+                'Accept: application/json;odata=verbose'
             ], $extraHeaders);
 
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
@@ -100,3 +101,50 @@ class a3Erp
         return $this->execute('DELETE', $endpoint, $data, $headers);
     }
 }
+
+/*
+$a3Erp = new a3Erp();
+if ($a3Erp->error) {
+    var_dump($a3Erp->error);
+} else {
+    $response = $a3Erp->get('cliente?externalFields=true');
+    var_dump($response);
+}
+*/
+
+/*
+$a3Erp = new a3Erp();
+if ($a3Erp->error) {
+    var_dump($a3Erp->error);
+} else {
+    $filter = "NIF eq 'A28050359'";
+    $endpoint = "cliente?externalFields=true&" . urlencode('$filter') . "=" . urlencode($filter);
+    $response = $a3Erp->get($endpoint);
+    var_dump($response);
+}
+*/
+
+/*
+$a3Erp = new a3Erp();
+$a3Erp = new a3Erp();
+if ($a3Erp->error) {
+    var_dump($a3Erp->error);
+} else {
+    $data = [
+        "Fecha" => "2025-04-22T16:11:30",
+        "CodigoCliente" => "8",
+        "Lineas" => [
+            [
+                "CodigoArticulo" => "C000002",
+                "Unidades" => "1"
+            ],
+            [
+                "CodigoArticulo" => "C000003",
+                "Unidades" => "1"
+            ]
+        ]
+    ];
+    $response = $a3Erp->post('pedidoVenta', $data);
+    var_dump($response);
+}
+*/
