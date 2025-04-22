@@ -8,6 +8,10 @@ ini_set('default_socket_timeout', 28800);
 date_default_timezone_set('Atlantic/Canary');
 
 require_once 'clases/crm_clase.php';
+require_once 'middlewares/jwtMiddleware.php';
+
+$jwtMiddleware = new JwtMiddleware;
+$jwtMiddleware->verificar();
 
 try {
     $crm = new Crm;

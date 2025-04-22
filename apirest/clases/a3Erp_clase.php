@@ -9,9 +9,12 @@ class a3Erp
     {
         try {
             $listadatos = $this->datosConstructor();
-            foreach ($listadatos as $key => $value) {
-                $this->baseUrl = $value['urlApi'];
-                $this->apiKey = $value['apiKey'];
+
+            if (isset($listadatos['urlApi']) && isset($listadatos['apiKey'])) {
+                $this->baseUrl = $listadatos['urlApi'];
+                $this->apiKey = $listadatos['apiKey'];
+            } else {
+                throw new Exception("La clave 'urlApi' o la 'apiKey' no está presente en jwt.json");
             }
         } catch (Throwable $e) {
             $this->error = [
