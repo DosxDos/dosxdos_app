@@ -26,6 +26,23 @@
             filter: blur(0);
         }
 
+        #modal-counter {
+            position: absolute;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            width: auto;
+            min-width: 60px;
+            max-width: 120px;
+            text-align: center;
+            white-space: nowrap;
+        }
+
         .download-btn,
         .copy-link-btn,
         .trash-btn {
@@ -1093,8 +1110,8 @@
         const modal = document.getElementById('image-modal');
         const modalImage = document.getElementById('modal-image');
         const modalCounter = document.getElementById('modal-counter');
-        const prevBtn = document.getElementById('modal-prev-btn');
-        const nextBtn = document.getElementById('modal-next-btn');
+        let prevBtn = document.getElementById('modal-prev-btn');
+        let nextBtn = document.getElementById('modal-next-btn');
 
         // Global variables to track current gallery and index
         window.currentGalleryItems = [];
@@ -1171,6 +1188,254 @@
             });
         }
     }
+
+     // Replace the current image modal HTML with this advanced version
+     const imageModal = document.getElementById('image-modal');
+        if (imageModal) {
+            // Remove the existing modal
+            imageModal.remove();
+
+            // Create the new advanced modal
+            const newImageModal = document.createElement('div');
+            newImageModal.id = 'image-modal';
+            newImageModal.className = 'fixed inset-0 bg-black bg-opacity-90 z-50 hidden flex items-center justify-center';
+            newImageModal.innerHTML = `
+        <div class=" w-full h-full max-w-6xl mx-auto flex flex-col items-center justify-center p-4">
+            <!-- Close Button -->
+            <button id="close-modal" class="absolute top-6 right-6 z-10 text-white p-1 rounded-full bg-red-600 transition-colors hover:bg-red-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+
+            <!-- Media Container -->
+            <div class="w-full h-full flex items-center justify-center">
+                <img id="modal-image" class="max-h-full max-w-full object-contain cursor-zoom-in" src="" alt="Zoomed image">
+            </div>
+        </div>
+    `;
+
+            // Add to document
+            document.body.appendChild(newImageModal);
+
+            // Add the event listener for the close button
+            document.getElementById('close-modal').addEventListener('click', function () {
+                newImageModal.classList.add('hidden');
+                document.body.style.overflow = '';
+                resetZoom();
+            });
+
+            // Close on backdrop click
+            newImageModal.addEventListener('click', function (e) {
+                if (e.target === newImageModal) {
+                    newImageModal.classList.add('hidden');
+                    document.body.style.overflow = '';
+                    resetZoom();
+                }
+            });
+
+            // Add zoom functionality script
+            const zoomScript = document.createElement('script');
+            zoomScript.textContent = `
+        // Add zoom and pan functionality to the modal image
+        document.addEventListener('DOMContentLoaded', function() {
+            const modalImage = document.getElementById('modal-image');
+            if (!modalImage) return;
+            
+            let scale = 1;
+            let translateX = 0;
+            let translateY = 0;
+            let startX = 0;
+            let startY = 0;
+            let isDragging = false;
+            let lastTouchTime = 0;
+            
+            // Reset zoom
+            function resetZoom() {
+                scale = 1;
+                translateX = 0;
+                translateY = 0;
+                modalImage.style.transform = \`scale(\${scale}) translate(\${translateX}px, \${translateY}px)\`;
+            }
+            
+            // Apply transform with boundaries
+            function applyTransform() {
+                // Ensure the image stays centered when not zoomed
+                if (scale <= 1) {
+                    scale = 1;
+                    translateX = 0;
+                    translateY = 0;
+                } else {
+                    // Constrain translation to prevent the image from leaving the viewport
+                    const maxTranslateX = (modalImage.offsetWidth * (scale - 1)) / 2;
+                    const maxTranslateY = (modalImage.offsetHeight * (scale - 1)) / 2;
+                    
+                    translateX = Math.max(-maxTranslateX, Math.min(maxTranslateX, translateX));
+                    translateY = Math.max(-maxTranslateY, Math.min(maxTranslateY, translateY));
+                }
+                
+                modalImage.style.transform = \`scale(\${scale}) translate(\${translateX / scale}px, \${translateY / scale}px)\`;
+            }
+            
+            // Mouse wheel zoom
+            modalImage.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                const delta = e.deltaY > 0 ? -0.2 : 0.2;
+                const prevScale = scale;
+                scale = Math.max(1, Math.min(5, scale + delta));
+                
+                // If scale has changed
+                if (prevScale !== scale) {
+                    // Calculate mouse position relative to the center of the image
+                    const rect = modalImage.getBoundingClientRect();
+                    const x = e.clientX - rect.left - rect.width / 2;
+                    const y = e.clientY - rect.top - rect.height / 2;
+                    
+                    // Adjust translation to zoom toward cursor position
+                    if (scale > 1) {
+                        translateX += x * (delta / prevScale);
+                        translateY += y * (delta / prevScale);
+                    }
+                }
+                
+                applyTransform();
+            }, { passive: false });
+            
+            // Mouse drag
+            modalImage.addEventListener('mousedown', (e) => {
+                if (scale > 1) {
+                    e.preventDefault();
+                    startX = e.clientX - translateX;
+                    startY = e.clientY - translateY;
+                    isDragging = true;
+                    modalImage.style.cursor = 'grabbing';
+                }
+            });
+            
+            modalImage.addEventListener('mousemove', (e) => {
+                if (isDragging && scale > 1) {
+                    e.preventDefault();
+                    translateX = e.clientX - startX;
+                    translateY = e.clientY - startY;
+                    applyTransform();
+                }
+            });
+            
+            modalImage.addEventListener('mouseup', () => {
+                isDragging = false;
+                modalImage.style.cursor = 'zoom-in';
+            });
+            
+            modalImage.addEventListener('mouseleave', () => {
+                isDragging = false;
+                modalImage.style.cursor = 'zoom-in';
+            });
+            
+            // Touch pinch zoom and pan
+            let initialTouchDistance = 0;
+            let initialScale = 1;
+            
+            modalImage.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 2) {
+                    // Two-finger pinch zoom
+                    e.preventDefault();
+                    initialTouchDistance = Math.hypot(
+                        e.touches[1].clientX - e.touches[0].clientX,
+                        e.touches[1].clientY - e.touches[0].clientY
+                    );
+                    initialScale = scale;
+                } else if (e.touches.length === 1) {
+                    // Single touch for panning when zoomed
+                    if (scale > 1) {
+                        startX = e.touches[0].clientX - translateX;
+                        startY = e.touches[0].clientY - translateY;
+                        isDragging = true;
+                    }
+                    
+                    // Check for double tap
+                    const now = new Date().getTime();
+                    const timeDiff = now - lastTouchTime;
+                    if (timeDiff < 300) {
+                        // Double tap detected
+                        if (scale === 1) {
+                            scale = 2; // Zoom in to 2x on double tap
+                        } else {
+                            resetZoom(); // Reset zoom on second double tap
+                        }
+                        applyTransform();
+                    }
+                    lastTouchTime = now;
+                }
+            }, { passive: false });
+            
+            modalImage.addEventListener('touchmove', (e) => {
+                if (e.touches.length === 2) {
+                    e.preventDefault(); // Prevents browser zooming
+                    
+                    // Calculate current touch distance
+                    const currentDistance = Math.hypot(
+                        e.touches[1].clientX - e.touches[0].clientX,
+                        e.touches[1].clientY - e.touches[0].clientY
+                    );
+                    
+                    // Calculate center point between two touches
+                    const centerX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+                    const centerY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+                    
+                    // Calculate new scale based on touch distance ratio
+                    const newScale = initialScale * (currentDistance / initialTouchDistance);
+                    scale = Math.max(1, Math.min(5, newScale));
+                    
+                    applyTransform();
+                } else if (e.touches.length === 1 && isDragging && scale > 1) {
+                    e.preventDefault();
+                    // Pan when zoomed
+                    translateX = e.touches[0].clientX - startX;
+                    translateY = e.touches[0].clientY - startY;
+                    applyTransform();
+                }
+            }, { passive: false });
+            
+            modalImage.addEventListener('touchend', (e) => {
+                // Keep the current scale and translation - just update isDragging
+                if (e.touches.length === 0) {
+                    isDragging = false;
+                }
+            });
+            
+            // Add double-click for desktop reset
+            modalImage.addEventListener('dblclick', (e) => {
+                e.preventDefault();
+                if (scale === 1) {
+                    // Calculate position to zoom in on
+                    const rect = modalImage.getBoundingClientRect();
+                    const x = e.clientX - rect.left - rect.width / 2;
+                    const y = e.clientY - rect.top - rect.height / 2;
+                    
+                    // Set new scale and position
+                    scale = 2.5;
+                    translateX = -x;
+                    translateY = -y;
+                } else {
+                    resetZoom();
+                }
+                applyTransform();
+            });
+            
+            // Reset transform when modal is opened
+            function imageModalReset() {
+                resetZoom();
+            }
+            
+            // Find all image openers and add the reset behavior
+            document.querySelectorAll('.gallery-image-container img, .gallery-thumbnail img').forEach(img => {
+                img.addEventListener('click', imageModalReset);
+            });
+        });
+    `;
+
+            document.body.appendChild(zoomScript);
+        }
 
     function alerta(mensaje, type = 'info') {
         // Remove existing alert if present
@@ -1886,7 +2151,7 @@
                             const galleryImageContainer = document.createElement('div');
                             galleryImageContainer.className = 'gallery-image-container';
 
-                            // Navigation buttons
+                            // Navigation buttons - Important: No event listeners yet
                             const prevBtn = document.createElement('button');
                             prevBtn.className = 'gallery-navigation gallery-prev';
                             prevBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>';
@@ -1938,11 +2203,8 @@
 
                             // Function to check if file is video
                             function esVideo(nombreArchivo) {
-                                // Get file extension
                                 const extension = nombreArchivo.split('.').pop().toLowerCase();
-                                // List of valid video extensions
                                 const extensionesVideo = ['mp4', 'mov', 'avi', 'wmv', 'flv', 'mkv', 'mpg'];
-                                // Check if extension is in the list
                                 return extensionesVideo.includes(extension);
                             }
 
@@ -1967,7 +2229,6 @@
 
                                 mediaElement.src = currentObj.link;
                                 mediaElement.className = 'gallery-media';
-
                                 mediaElement.classList.add('lazy-load');
                                 mediaElement.onload = () => {
                                     mediaElement.classList.add('loaded');
@@ -1980,7 +2241,6 @@
                                     });
                                 }
 
-                                // Add zoom functionality
                                 mediaElement.addEventListener('click', () => {
                                     const modal = document.getElementById('image-modal');
                                     const modalImage = document.getElementById('modal-image');
@@ -2008,16 +2268,19 @@
                                 allThumbnails.forEach((thumb, idx) => {
                                     if (idx === currentIndex) {
                                         thumb.classList.add('active');
-                                        // Scroll to active thumbnail
                                         thumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
                                     } else {
                                         thumb.classList.remove('active');
                                     }
                                 });
 
-                                // Update actions for admin and office users
+                                // Update action buttons
+                                updateActionButtons(currentObj);
+                            }
+
+                            // Function to update action buttons
+                            function updateActionButtons(currentObj) {
                                 if (usuario.clase == 'admon' || usuario.clase == 'oficina') {
-                                    // Clear all existing buttons before updating
                                     galleryActionsButtons.innerHTML = "";
 
                                     // Create download button 
@@ -2032,7 +2295,6 @@
                                     </svg>
                                 `;
 
-                                    // Download button event
                                     downloadBtn.addEventListener('click', () => {
                                         const link = document.createElement('a');
                                         link.href = currentObj.link;
@@ -2050,11 +2312,9 @@
                                     </svg>
                                 `;
 
-                                    // Delete button event
                                     deleteBtn.addEventListener('click', async () => {
                                         const confirmed = await obtenerConfirmacion();
                                         if (confirmed) {
-                                            // Call API to delete the photo
                                             const json = {
                                                 ot: currentObj.ot,
                                                 id: currentObj.id,
@@ -2072,21 +2332,17 @@
                                                 .then(res => res.json())
                                                 .then(result => {
                                                     if (result[0]) {
-                                                        // Remove from array
                                                         vectorDeFotos.splice(currentIndex, 1);
 
-                                                        // If no more photos, show message
                                                         if (vectorDeFotos.length === 0) {
                                                             photosContainer.innerHTML = '<p class="text-center p-4">No hay fotos disponibles</p>';
                                                             return;
                                                         }
 
-                                                        // Update current index if needed
                                                         if (currentIndex >= vectorDeFotos.length) {
                                                             currentIndex = vectorDeFotos.length - 1;
                                                         }
 
-                                                        // Update gallery
                                                         createThumbnails();
                                                         updateMainImage(currentIndex);
                                                     } else {
@@ -2100,23 +2356,20 @@
                                         }
                                     });
 
-                                    // Create approve button with improved UI
+                                    // Create approve button
                                     const approveBtn = document.createElement('button');
                                     approveBtn.className = 'action-btn ml-2';
                                     approveBtn.title = 'Aprobar';
 
                                     const approvalInfo = document.createElement('div');
                                     approvalInfo.className = 'flex items-center justify-center ml-auto text-xs text-green-700 bg-green-100 p-2 rounded-full text-center';
-
                                     approvalInfo.style.lineHeight = '1';
                                     approvalInfo.id = `approval-info-${currentObj.id}`;
 
-                                    // Create invisible loader for the API call
                                     const hiddenLoader = document.createElement('span');
                                     hiddenLoader.className = 'loader2 displayOff';
-                                    hiddenLoader.id = `loader-${currentObj.id}`; // Create a unique ID
+                                    hiddenLoader.id = `loader-${currentObj.id}`;
 
-                                    // Set initial state based on visible property
                                     if (currentObj.visible != 0) {
                                         approveBtn.className = 'action-btn ml-2 bg-green-500 text-white p-2 rounded-lg';
                                         approvalInfo.textContent = `Aprobó: ${currentObj.nombreUsuarioVisible} ${currentObj.apellidoUsuarioVisible}`;
@@ -2126,41 +2379,33 @@
                                         approvalInfo.style.display = 'none';
                                     }
 
-                                    // Use SVG with explicit color setting to ensure white when approved
                                     approveBtn.innerHTML = `
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="stroke: ${currentObj.visible != 0 ? 'white' : 'currentColor'};">
-        <path d="M20 6L9 17l-5-5"></path>
-    </svg>
-`;
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="stroke: ${currentObj.visible != 0 ? 'white' : 'currentColor'};">
+                                        <path d="M20 6L9 17l-5-5"></path>
+                                    </svg>
+                                `;
 
-                                    // Add the click handler
                                     approveBtn.addEventListener('click', () => {
-                                        // Get current approval state
                                         const isCurrentlyApproved = currentObj.visible != 0;
-
-                                        // Toggle state
                                         const newState = isCurrentlyApproved ? 0 : 1;
 
-                                        // Call your existing archivoVisible function with the right parameters
                                         archivoVisible(
-                                            hiddenLoader.id,          // loader ID
-                                            'foto',                   // type
-                                            currentObj.id,            // photo ID
-                                            `fotos${currentObj.ano}`, // table
-                                            newState,                 // new approval state
-                                            usuario.id,               // user ID
-                                            usuario.nombre,           // user name
-                                            usuario.apellido,         // user last name
-                                            approvalInfo.id       // info span ID
+                                            hiddenLoader.id,
+                                            'foto',
+                                            currentObj.id,
+                                            `fotos${currentObj.ano}`,
+                                            newState,
+                                            usuario.id,
+                                            usuario.nombre,
+                                            usuario.apellido,
+                                            approvalInfo.id
                                         );
 
-                                        // Update the SVG color explicitly when toggling
                                         const svgElement = approveBtn.querySelector('svg');
                                         if (svgElement) {
                                             svgElement.style.stroke = newState ? 'white' : 'currentColor';
                                         }
 
-                                        // Immediately update the UI without waiting for the API response
                                         if (newState) {
                                             approveBtn.className = 'action-btn ml-2 bg-green-500 text-white p-2 rounded-lg';
                                             approvalInfo.textContent = `Aprobó: ${usuario.nombre} ${usuario.apellido}`;
@@ -2170,21 +2415,20 @@
                                             approvalInfo.style.display = 'none';
                                         }
 
-                                        // Update the object's state to match UI
                                         currentObj.visible = newState;
                                     });
 
-                                    // Add all elements
                                     galleryActionsButtons.appendChild(downloadBtn);
                                     galleryActionsButtons.appendChild(deleteBtn);
                                     galleryActionsButtons.appendChild(approveBtn);
                                     galleryActionsButtons.appendChild(approvalInfo);
-                                    galleryActionsButtons.appendChild(hiddenLoader); // This will be invisible
+                                    galleryActionsButtons.appendChild(hiddenLoader);
                                 }
                             }
 
+                            // Create thumbnails
                             function createThumbnails() {
-                                galleryThumbnails.innerHTML = ''; // Clear existing thumbnails
+                                galleryThumbnails.innerHTML = '';
 
                                 vectorDeFotos.forEach((objeto, index) => {
                                     const thumbnail = document.createElement('div');
@@ -2194,12 +2438,9 @@
                                     const thumbImg = document.createElement('img');
                                     thumbImg.src = objeto.link;
                                     thumbImg.alt = `Thumbnail ${index + 1}`;
-
-                                    // Add lazy loading for thumbnails
                                     thumbImg.classList.add('lazy-load');
-                                    thumbImg.style.opacity = '0.3'; // Initial low opacity
+                                    thumbImg.style.opacity = '0.3';
 
-                                    // Proper loading handler
                                     thumbImg.onload = () => {
                                         thumbImg.classList.add('loaded');
                                         thumbImg.style.opacity = '1';
@@ -2214,33 +2455,37 @@
                                 });
                             }
 
-
-                            // Setup navigation
-                            prevBtn.addEventListener('click', () => {
+                            // Setup navigation - ONLY HERE!
+                            prevBtn.addEventListener('click', (e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
                                 updateMainImage(currentIndex - 1);
                             });
 
-                            nextBtn.addEventListener('click', () => {
+                            nextBtn.addEventListener('click', (e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
                                 updateMainImage(currentIndex + 1);
                             });
 
-                            // Keyboard navigation
-                            document.addEventListener('keydown', (e) => {
-                                if (e.key === 'ArrowLeft') {
-                                    updateMainImage(currentIndex - 1);
-                                } else if (e.key === 'ArrowRight') {
-                                    updateMainImage(currentIndex + 1);
-                                }
-                            });
+                            // Keyboard navigation - Add flag to prevent duplicates
+                            if (!window.keyboardNavigationAdded) {
+                                document.addEventListener('keydown', (e) => {
+                                    if (e.key === 'ArrowLeft') {
+                                        updateMainImage(currentIndex - 1);
+                                    } else if (e.key === 'ArrowRight') {
+                                        updateMainImage(currentIndex + 1);
+                                    }
+                                });
+                                window.keyboardNavigationAdded = true;
+                            }
 
+                            // Initialize
                             createThumbnails();
                             updateMainImage(0);
-                            // Delay gallery updates to ensure DOM is ready
-                            setTimeout(() => {
-                                if (typeof updateGalleryClickEvents === 'function') {
-                                    updateGalleryClickEvents();
-                                }
-                            }, 500); resolve(true);
+
+                            // Do NOT call updateGalleryClickEvents here
+
                             resolve(true);
                             lazyLoadImages('photosContainer');
                             optimizeMediaLoading('photosContainer');
@@ -3689,13 +3934,6 @@
                         const fotosServidor = await traerFotos();
                         const firmasServidor = await traerFirmas();
 
-                        // Update modal navigation after all media is loaded
-                        setTimeout(() => {
-                            if (typeof updateGalleryClickEvents === 'function') {
-                                updateGalleryClickEvents();
-                            }
-                        }, 1000);
-
                         // Setup create folder button
                         const $crearCarpeta = document.getElementById('crearCarpetaBoton');
                         $crearCarpeta.addEventListener('click', e => {
@@ -3820,253 +4058,130 @@
         console.log('La conexión a Internet se ha perdido.');
     });
 
-    function enhanceImageModal() {
-        const modal = document.getElementById('image-modal');
-        const modalImage = document.getElementById('modal-image');
-        const closeBtn = document.getElementById('close-modal');
-        const prevBtn = document.getElementById('modal-prev-btn');
-        const nextBtn = document.getElementById('modal-next-btn');
-        const modalCounter = document.getElementById('modal-counter');
-
-        if (!modal || !modalImage) return;
-
-        // Add zoom functionality
-        let scale = 1;
-        let panning = false;
-        let startX = 0;
-        let startY = 0;
-        let translateX = 0;
-        let translateY = 0;
-
-        function resetZoom() {
-            scale = 1;
-            translateX = 0;
-            translateY = 0;
-            updateTransform();
-        }
-
-        function updateTransform() {
-            modalImage.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
-        }
-
-        // Zoom on double click
-        modalImage.addEventListener('dblclick', function (e) {
-            e.preventDefault();
-
-            if (scale === 1) {
-                // Calculate zoom point relative to image
-                const rect = modalImage.getBoundingClientRect();
-                const offsetX = e.clientX - rect.left;
-                const offsetY = e.clientY - rect.top;
-
-                // Calculate translation to center zoom on click point
-                const scaleMultiplier = 2;
-                translateX = ((rect.width / 2) - offsetX) * (scaleMultiplier - 1);
-                translateY = ((rect.height / 2) - offsetY) * (scaleMultiplier - 1);
-
-                scale = scaleMultiplier;
-            } else {
-                resetZoom();
-            }
-
-            updateTransform();
-        });
-
-        // Zoom on wheel
-        modalImage.addEventListener('wheel', function (e) {
-            e.preventDefault();
-
-            const rect = modalImage.getBoundingClientRect();
-            const offsetX = e.clientX - rect.left;
-            const offsetY = e.clientY - rect.top;
-
-            // Calculate new scale
-            const delta = e.deltaY > 0 ? -0.1 : 0.1;
-            const newScale = Math.min(Math.max(1, scale + delta), 5);
-
-            // Calculate translation to keep zoom point stable
-            translateX += ((rect.width / 2) - offsetX) * (newScale - scale);
-            translateY += ((rect.height / 2) - offsetY) * (newScale - scale);
-
-            scale = newScale;
-            updateTransform();
-        });
-
-        // Pan handling
-        modalImage.addEventListener('mousedown', function (e) {
-            // Prevent panning if clicking on close button or modal background
-            if (e.target !== modalImage) return;
-
-            e.preventDefault();
-            if (scale > 1) {
-                panning = true;
-                startX = e.clientX - translateX;
-                startY = e.clientY - translateY;
-                modalImage.style.cursor = 'grabbing';
-            }
-        });
-
-        document.addEventListener('mousemove', function (e) {
-            if (panning) {
-                translateX = e.clientX - startX;
-                translateY = e.clientY - startY;
-                updateTransform();
-            }
-        });
-
-        document.addEventListener('mouseup', function () {
-            if (panning) {
-                panning = false;
-                modalImage.style.cursor = 'zoom-in';
-            }
-        });
-
-        // Ensure close functionality
-        closeBtn.addEventListener('click', function (e) {
-            e.stopPropagation(); // Prevent event from bubbling
-            resetZoom();
-            modal.classList.add('hidden');
-            document.body.style.overflow = '';
-        });
-
-        // Close modal on background click
-        modal.addEventListener('click', function (e) {
-            // Only close if clicking directly on the modal background
-            if (e.target === modal) {
-                resetZoom();
-                modal.classList.add('hidden');
-                document.body.style.overflow = '';
-            }
-        });
-
-        // Stop propagation on image to prevent closing when interacting
-        modalImage.addEventListener('click', function (e) {
-            e.stopPropagation();
-        });
-
-        // Close on escape key
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
-                resetZoom();
-                modal.classList.add('hidden');
-                document.body.style.overflow = '';
-            } else if (e.key === 'ArrowLeft' && !modal.classList.contains('hidden')) {
-                prevBtn.click();
-            } else if (e.key === 'ArrowRight' && !modal.classList.contains('hidden')) {
-                nextBtn.click();
-            }
-        });
-
-        // Connect prev/next buttons to window.currentGalleryItems
-        prevBtn.addEventListener('click', function (e) {
-            e.stopPropagation();
-            if (!window.currentGalleryItems || window.currentGalleryItems.length === 0) return;
-
-            window.currentGalleryIndex = (window.currentGalleryIndex - 1 + window.currentGalleryItems.length) % window.currentGalleryItems.length;
-            resetZoom();
-            modalImage.src = window.currentGalleryItems[window.currentGalleryIndex].link;
-            modalCounter.textContent = `${window.currentGalleryIndex + 1} / ${window.currentGalleryItems.length}`;
-        });
-
-        nextBtn.addEventListener('click', function (e) {
-            e.stopPropagation();
-            if (!window.currentGalleryItems || window.currentGalleryItems.length === 0) return;
-
-            window.currentGalleryIndex = (window.currentGalleryIndex + 1) % window.currentGalleryItems.length;
-            resetZoom();
-            modalImage.src = window.currentGalleryItems[window.currentGalleryIndex].link;
-            modalCounter.textContent = `${window.currentGalleryIndex + 1} / ${window.currentGalleryItems.length}`;
-        });
-
-        // Set initial cursor
-        modalImage.style.cursor = 'zoom-in';
-    }
-
-    // Call this function after DOM content loaded
-    document.addEventListener('DOMContentLoaded', function () {
-        // Wait for page to fully load
-        setTimeout(() => {
-            enhanceImageModal();
-        }, 500);
-    });
-
-
-    function initializeCarousel(containerId) {
-        const container = document.getElementById(containerId);
-        if (!container) return;
-
-        // Remove hidden class if present
-        container.classList.remove('hidden');
-
-        // Clear existing content and recreate the structure
-        const originalItems = Array.from(container.querySelectorAll('.cajaFoto'));
-        if (originalItems.length === 0) return;
-
-        // Create a new structure
-        container.innerHTML = '';
-
-        // Create wrapper
-        const wrapper = document.createElement('div');
-        wrapper.className = 'carousel-wrapper';
-        container.appendChild(wrapper);
-
-        // Add items as slides
-        originalItems.forEach(item => {
-            const slide = document.createElement('div');
-            slide.className = 'carousel-slide';
-            slide.appendChild(item);
-            wrapper.appendChild(slide);
-        });
-
-        // Add controls
-        const prevBtn = document.createElement('button');
-        prevBtn.className = 'carousel-control prev-btn';
-        prevBtn.innerHTML = '&larr;';
-        container.appendChild(prevBtn);
-
-        const nextBtn = document.createElement('button');
-        nextBtn.className = 'carousel-control next-btn';
-        nextBtn.innerHTML = '&rarr;';
-        container.appendChild(nextBtn);
-
-        // Initialize carousel
-        let currentSlide = 0;
-        const totalSlides = wrapper.children.length;
-
-        function updateCarousel() {
-            wrapper.style.transform = `translateX(${-currentSlide * 100}%)`;
-        }
-
-        prevBtn.addEventListener('click', () => {
-            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
-            updateCarousel();
-        });
-
-        nextBtn.addEventListener('click', () => {
-            currentSlide = (currentSlide + 1) % totalSlides;
-            updateCarousel();
-        });
-
-        updateCarousel();
-    }
 
     document.addEventListener('DOMContentLoaded', () => {
-        // Wait longer for all content to load
-        setTimeout(() => {
-            console.log("Initializing carousels");
-            // Remove any existing carousels first
-            document.querySelectorAll('.carousel-wrapper, .carousel-control').forEach(el => el.remove());
+            // Wait longer for all content to load
+            setTimeout(() => {
+                console.log("Initializing carousels");
+                // Remove any existing carousels first
+                document.querySelectorAll('.carousel-wrapper, .carousel-control').forEach(el => el.remove());
 
-            initializeCarousel('carpetasContainer');
-            initializeCarousel('photosContainer');
-            initializeCarousel('firmasContainer');
+                initializeCarousel('carpetasContainer');
+                initializeCarousel('photosContainer');
+                initializeCarousel('firmasContainer');
 
-            // Make sure photos container is visible
-            document.getElementById('photosContainer').classList.remove('hidden');
-        }, 5000);
-    });
+                // Make sure photos container is visible
+                document.getElementById('photosContainer').classList.remove('hidden');
+            }, 5000);
+        });
 
+        document.addEventListener('DOMContentLoaded', function () {
+            const modal = document.getElementById('image-modal');
+            const modalImage = document.getElementById('modal-image');
+            const closeBtn = document.getElementById('close-modal');
 
+            // Add navigation buttons if they don't exist
+            let prevBtn = document.getElementById('modal-prev-btn');
+            let nextBtn = document.getElementById('modal-next-btn');
+            let modalCounter = document.getElementById('modal-counter');
+
+            if (!prevBtn) {
+                prevBtn = document.createElement('button');
+                prevBtn.id = 'modal-prev-btn';
+                prevBtn.className = 'absolute left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-25 hover:bg-opacity-50 p-2 rounded-full text-white';
+                prevBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>';
+                modal.appendChild(prevBtn);
+            }
+
+            if (!nextBtn) {
+                nextBtn = document.createElement('button');
+                nextBtn.id = 'modal-next-btn';
+                nextBtn.className = 'absolute right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-25 hover:bg-opacity-50 p-2 rounded-full text-white';
+                nextBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>';
+                modal.appendChild(nextBtn);
+            }
+
+            if (!modalCounter) {
+                modalCounter = document.createElement('div');
+                modalCounter.id = 'modal-counter';
+                modalCounter.className = 'absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-50 text-white px-3 py-1 rounded-full';
+                modal.appendChild(modalCounter);
+            }
+
+            let currentGallery = [];
+            let currentIndex = 0;
+
+            // Universal modal opener with fixed logic
+            function openModal(gallery, index) {
+                if (!gallery || !gallery.length) return;
+
+                currentGallery = gallery;
+                currentIndex = index;
+
+                modalImage.src = gallery[index].link || gallery[index].src;
+                modalCounter.textContent = `${index + 1} / ${gallery.length}`;
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+                resetZoom(); // Reset any zoom applied
+            }
+
+            // Navigation and close buttons
+            prevBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (currentGallery.length === 0) return;
+
+                currentIndex = (currentIndex - 1 + currentGallery.length) % currentGallery.length;
+                const src = currentGallery[currentIndex].link || currentGallery[currentIndex].src;
+
+                if (src) {
+                    modalImage.src = src;
+                    resetZoom(); // Reset zoom when changing images
+                    modalCounter.textContent = `${currentIndex + 1} / ${currentGallery.length}`;
+                }
+            });
+
+            nextBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (currentGallery.length === 0) return;
+
+                currentIndex = (currentIndex + 1) % currentGallery.length;
+                const src = currentGallery[currentIndex].link || currentGallery[currentIndex].src;
+
+                if (src) {
+                    modalImage.src = src;
+                    resetZoom(); // Reset zoom when changing images
+                    modalCounter.textContent = `${currentIndex + 1} / ${currentGallery.length}`;
+                }
+            });
+
+            closeBtn.addEventListener('click', () => {
+                modal.classList.add('hidden');
+                document.body.style.overflow = '';
+            });
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                    document.body.style.overflow = '';
+                }
+            });
+
+            // Add keyboard navigation for the modal
+            document.addEventListener('keydown', (e) => {
+                if (!modal.classList.contains('hidden')) {
+                    if (e.key === 'ArrowLeft') {
+                        prevBtn.click();
+                    } else if (e.key === 'ArrowRight') {
+                        nextBtn.click();
+                    } else if (e.key === 'Escape') {
+                        closeBtn.click();
+                    }
+                }
+            });
+
+            // Make sure this function gets called whenever new photos are loaded
+            window.updateModalNavigation = updateGalleryClickEvents;
+        });
 </script>
 <script src="https://dosxdos.app.iidos.com/js/notificaciones.js"></script>
 <script src="https://dosxdos.app.iidos.com/js/loadFirebase.js"></script>

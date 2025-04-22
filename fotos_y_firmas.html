@@ -1082,8 +1082,8 @@
             const modal = document.getElementById('image-modal');
             const modalImage = document.getElementById('modal-image');
             const modalCounter = document.getElementById('modal-counter');
-            const prevBtn = document.getElementById('modal-prev-btn');
-            const nextBtn = document.getElementById('modal-next-btn');
+            let prevBtn = document.getElementById('modal-prev-btn');
+            let nextBtn = document.getElementById('modal-next-btn');
 
             // Global variables to track current gallery and index
             window.currentGalleryItems = [];
@@ -2067,7 +2067,7 @@
                                 const galleryImageContainer = document.createElement('div');
                                 galleryImageContainer.className = 'gallery-image-container';
 
-                                // Navigation buttons
+                                // Navigation buttons - Important: No event listeners yet
                                 const prevBtn = document.createElement('button');
                                 prevBtn.className = 'gallery-navigation gallery-prev';
                                 prevBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>';
@@ -2119,11 +2119,8 @@
 
                                 // Function to check if file is video
                                 function esVideo(nombreArchivo) {
-                                    // Get file extension
                                     const extension = nombreArchivo.split('.').pop().toLowerCase();
-                                    // List of valid video extensions
                                     const extensionesVideo = ['mp4', 'mov', 'avi', 'wmv', 'flv', 'mkv', 'mpg'];
-                                    // Check if extension is in the list
                                     return extensionesVideo.includes(extension);
                                 }
 
@@ -2148,7 +2145,6 @@
 
                                     mediaElement.src = currentObj.link;
                                     mediaElement.className = 'gallery-media';
-
                                     mediaElement.classList.add('lazy-load');
                                     mediaElement.onload = () => {
                                         mediaElement.classList.add('loaded');
@@ -2176,28 +2172,31 @@
 
                                     // Update info
                                     galleryInfo.innerHTML = `
-                        <p><strong>Fecha:</strong> ${convertirFecha(currentObj.fecha)}</p>
-                        <p><strong>Línea:</strong> ${currentObj.lineaActividad}</p>
-                        <p><strong>Cliente:</strong> ${currentObj.nombreCliente}</p>
-                        <p><strong>PV:</strong> ${currentObj.pv} - ${currentObj.pvNombre}</p>
-                        <p><strong>Subió:</strong> ${currentObj.nombreUsuario} ${currentObj.apellidoUsuario}</p>
-                    `;
+                                <p><strong>Fecha:</strong> ${convertirFecha(currentObj.fecha)}</p>
+                                <p><strong>Línea:</strong> ${currentObj.lineaActividad}</p>
+                                <p><strong>Cliente:</strong> ${currentObj.nombreCliente}</p>
+                                <p><strong>PV:</strong> ${currentObj.pv} - ${currentObj.pvNombre}</p>
+                                <p><strong>Subió:</strong> ${currentObj.nombreUsuario} ${currentObj.apellidoUsuario}</p>
+                            `;
 
                                     // Update thumbnails
                                     const allThumbnails = galleryThumbnails.querySelectorAll('.gallery-thumbnail');
                                     allThumbnails.forEach((thumb, idx) => {
                                         if (idx === currentIndex) {
                                             thumb.classList.add('active');
-                                            // Scroll to active thumbnail
                                             thumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
                                         } else {
                                             thumb.classList.remove('active');
                                         }
                                     });
 
-                                    // Update actions for admin and office users
+                                    // Update action buttons
+                                    updateActionButtons(currentObj);
+                                }
+
+                                // Function to update action buttons
+                                function updateActionButtons(currentObj) {
                                     if (usuario.clase == 'admon' || usuario.clase == 'oficina') {
-                                        // Clear all existing buttons before updating
                                         galleryActionsButtons.innerHTML = "";
 
                                         // Create download button 
@@ -2205,14 +2204,13 @@
                                         downloadBtn.className = 'action-btn bg-gray-100 hover:bg-gray-200';
                                         downloadBtn.title = 'Descargar';
                                         downloadBtn.innerHTML = `
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                <polyline points="7 10 12 15 17 10"></polyline>
-                                <line x1="12" y1="15" x2="12" y2="3"></line>
-                            </svg>
-                        `;
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                        <polyline points="7 10 12 15 17 10"></polyline>
+                                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                                    </svg>
+                                `;
 
-                                        // Download button event
                                         downloadBtn.addEventListener('click', () => {
                                             const link = document.createElement('a');
                                             link.href = currentObj.link;
@@ -2225,16 +2223,14 @@
                                         deleteBtn.className = 'action-btn ml-2 bg-gray-100 hover:bg-gray-200';
                                         deleteBtn.title = 'Eliminar';
                                         deleteBtn.innerHTML = `
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="rgb(220 38 38)" stroke-width="2">
-                                <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                            </svg>
-                        `;
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="rgb(220 38 38)" stroke-width="2">
+                                        <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                    </svg>
+                                `;
 
-                                        // Delete button event
                                         deleteBtn.addEventListener('click', async () => {
                                             const confirmed = await obtenerConfirmacion();
                                             if (confirmed) {
-                                                // Call API to delete the photo
                                                 const json = {
                                                     ot: currentObj.ot,
                                                     id: currentObj.id,
@@ -2252,21 +2248,17 @@
                                                     .then(res => res.json())
                                                     .then(result => {
                                                         if (result[0]) {
-                                                            // Remove from array
                                                             vectorDeFotos.splice(currentIndex, 1);
 
-                                                            // If no more photos, show message
                                                             if (vectorDeFotos.length === 0) {
                                                                 photosContainer.innerHTML = '<p class="text-center p-4">No hay fotos disponibles</p>';
                                                                 return;
                                                             }
 
-                                                            // Update current index if needed
                                                             if (currentIndex >= vectorDeFotos.length) {
                                                                 currentIndex = vectorDeFotos.length - 1;
                                                             }
 
-                                                            // Update gallery
                                                             createThumbnails();
                                                             updateMainImage(currentIndex);
                                                         } else {
@@ -2280,23 +2272,20 @@
                                             }
                                         });
 
-                                        // Create approve button with improved UI
+                                        // Create approve button
                                         const approveBtn = document.createElement('button');
                                         approveBtn.className = 'action-btn ml-2';
                                         approveBtn.title = 'Aprobar';
 
                                         const approvalInfo = document.createElement('div');
                                         approvalInfo.className = 'flex items-center justify-center ml-auto text-xs text-green-700 bg-green-100 p-2 rounded-full text-center';
-
                                         approvalInfo.style.lineHeight = '1';
                                         approvalInfo.id = `approval-info-${currentObj.id}`;
 
-                                        // Create invisible loader for the API call
                                         const hiddenLoader = document.createElement('span');
                                         hiddenLoader.className = 'loader2 displayOff';
-                                        hiddenLoader.id = `loader-${currentObj.id}`; // Create a unique ID
+                                        hiddenLoader.id = `loader-${currentObj.id}`;
 
-                                        // Set initial state based on visible property
                                         if (currentObj.visible != 0) {
                                             approveBtn.className = 'action-btn ml-2 bg-green-500 text-white p-2 rounded-lg';
                                             approvalInfo.textContent = `Aprobó: ${currentObj.nombreUsuarioVisible} ${currentObj.apellidoUsuarioVisible}`;
@@ -2306,41 +2295,33 @@
                                             approvalInfo.style.display = 'none';
                                         }
 
-                                        // Use SVG with explicit color setting to ensure white when approved
                                         approveBtn.innerHTML = `
-<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="stroke: ${currentObj.visible != 0 ? 'white' : 'currentColor'};">
-    <path d="M20 6L9 17l-5-5"></path>
-</svg>
-`;
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="stroke: ${currentObj.visible != 0 ? 'white' : 'currentColor'};">
+                                        <path d="M20 6L9 17l-5-5"></path>
+                                    </svg>
+                                `;
 
-                                        // Add the click handler
                                         approveBtn.addEventListener('click', () => {
-                                            // Get current approval state
                                             const isCurrentlyApproved = currentObj.visible != 0;
-
-                                            // Toggle state
                                             const newState = isCurrentlyApproved ? 0 : 1;
 
-                                            // Call your existing archivoVisible function with the right parameters
                                             archivoVisible(
-                                                hiddenLoader.id,          // loader ID
-                                                'foto',                   // type
-                                                currentObj.id,            // photo ID
-                                                `fotos${currentObj.ano}`, // table
-                                                newState,                 // new approval state
-                                                usuario.id,               // user ID
-                                                usuario.nombre,           // user name
-                                                usuario.apellido,         // user last name
-                                                approvalInfo.id       // info span ID
+                                                hiddenLoader.id,
+                                                'foto',
+                                                currentObj.id,
+                                                `fotos${currentObj.ano}`,
+                                                newState,
+                                                usuario.id,
+                                                usuario.nombre,
+                                                usuario.apellido,
+                                                approvalInfo.id
                                             );
 
-                                            // Update the SVG color explicitly when toggling
                                             const svgElement = approveBtn.querySelector('svg');
                                             if (svgElement) {
                                                 svgElement.style.stroke = newState ? 'white' : 'currentColor';
                                             }
 
-                                            // Immediately update the UI without waiting for the API response
                                             if (newState) {
                                                 approveBtn.className = 'action-btn ml-2 bg-green-500 text-white p-2 rounded-lg';
                                                 approvalInfo.textContent = `Aprobó: ${usuario.nombre} ${usuario.apellido}`;
@@ -2350,22 +2331,20 @@
                                                 approvalInfo.style.display = 'none';
                                             }
 
-                                            // Update the object's state to match UI
                                             currentObj.visible = newState;
                                         });
 
-                                        // Add all elements
                                         galleryActionsButtons.appendChild(downloadBtn);
                                         galleryActionsButtons.appendChild(deleteBtn);
                                         galleryActionsButtons.appendChild(approveBtn);
                                         galleryActionsButtons.appendChild(approvalInfo);
-                                        galleryActionsButtons.appendChild(hiddenLoader); // This will be invisible
+                                        galleryActionsButtons.appendChild(hiddenLoader);
                                     }
                                 }
 
                                 // Create thumbnails
                                 function createThumbnails() {
-                                    galleryThumbnails.innerHTML = ''; // Clear existing thumbnails
+                                    galleryThumbnails.innerHTML = '';
 
                                     vectorDeFotos.forEach((objeto, index) => {
                                         const thumbnail = document.createElement('div');
@@ -2375,12 +2354,9 @@
                                         const thumbImg = document.createElement('img');
                                         thumbImg.src = objeto.link;
                                         thumbImg.alt = `Thumbnail ${index + 1}`;
-
-                                        // Add lazy loading for thumbnails
                                         thumbImg.classList.add('lazy-load');
-                                        thumbImg.style.opacity = '0.3'; // Initial low opacity
+                                        thumbImg.style.opacity = '0.3';
 
-                                        // Proper loading handler
                                         thumbImg.onload = () => {
                                             thumbImg.classList.add('loaded');
                                             thumbImg.style.opacity = '1';
@@ -2395,33 +2371,38 @@
                                     });
                                 }
 
-                                // Setup navigation
-                                prevBtn.addEventListener('click', () => {
+                                // Setup navigation - ONLY HERE!
+                                prevBtn.addEventListener('click', (e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
                                     updateMainImage(currentIndex - 1);
                                 });
 
-                                nextBtn.addEventListener('click', () => {
+                                nextBtn.addEventListener('click', (e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
                                     updateMainImage(currentIndex + 1);
                                 });
 
-                                // Keyboard navigation
-                                document.addEventListener('keydown', (e) => {
-                                    if (e.key === 'ArrowLeft') {
-                                        updateMainImage(currentIndex - 1);
-                                    } else if (e.key === 'ArrowRight') {
-                                        updateMainImage(currentIndex + 1);
-                                    }
-                                });
+                                // Keyboard navigation - Add flag to prevent duplicates
+                                if (!window.keyboardNavigationAdded) {
+                                    document.addEventListener('keydown', (e) => {
+                                        if (e.key === 'ArrowLeft') {
+                                            updateMainImage(currentIndex - 1);
+                                        } else if (e.key === 'ArrowRight') {
+                                            updateMainImage(currentIndex + 1);
+                                        }
+                                    });
+                                    window.keyboardNavigationAdded = true;
+                                }
 
                                 // Initialize
                                 createThumbnails();
                                 updateMainImage(0);
-                                // Delay gallery updates to ensure DOM is ready
-                                setTimeout(() => {
-                                    if (typeof updateGalleryClickEvents === 'function') {
-                                        updateGalleryClickEvents();
-                                    }
-                                }, 500); resolve(true);
+
+                                // Do NOT call updateGalleryClickEvents here
+
+                                resolve(true);
                                 lazyLoadImages('photosContainer');
                                 optimizeMediaLoading('photosContainer');
                             } else {
@@ -2440,7 +2421,6 @@
                     });
             });
         }
-
 
         function traerFirmas() {
             return new Promise((resolve, reject) => {
@@ -4181,12 +4161,12 @@
             });
 
             // Add controls
-            const prevBtn = document.createElement('button');
+            let prevBtn = document.createElement('button');
             prevBtn.className = 'carousel-control prev-btn';
             prevBtn.innerHTML = '&larr;';
             container.appendChild(prevBtn);
 
-            const nextBtn = document.createElement('button');
+            let nextBtn = document.createElement('button');
             nextBtn.className = 'carousel-control next-btn';
             nextBtn.innerHTML = '&rarr;';
             container.appendChild(nextBtn);
