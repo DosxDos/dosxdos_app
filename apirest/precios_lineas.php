@@ -275,7 +275,7 @@ try {
                         $lineaA3Erp['Unidades'] = 1;
                         $lineaA3Erp['Precio'] = $precioLinea;
                         $lineaA3Erp['NumeroLinea'] = $codLinea;
-                        $lineaA3Erp['Texto'] = $nombreDeLinea;
+                        $lineaA3Erp['Texto'] = $codLinea . ' - ' . $nombreDeLinea;
                         array_push($lineasA3Erp, $lineaA3Erp);
                     } else {
                         echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ERROR!!! NO SE HA ACTUALIZADO LA LÍNEA: ' . $codLinea . ' EN EL CRM</p>';
@@ -504,16 +504,14 @@ try {
                             $lineaA3Erp = [];
                             $lineaA3Erp['CodigoArticulo'] = $codigoArticuloA3Erp;
                             $lineaA3Erp['Unidades'] = 1;
-                            $lineaA3Erp['Precio'] = $precioLinea + $descuentoMontajeLineaLogo;
-                            $lineaA3Erp['Descuento1'] = 0;
-                            $lineaA3Erp['Descuento2'] = $porcDescuentoMontajeLogo;
+                            $lineaA3Erp['Precio'] = $precioLinea;
                             $lineaA3Erp['NumeroLinea'] = $codLinea;
                             $lineaA3Erp['Param1'] = $m2;
                             $lineaA3Erp['Param2'] = $realizacionLineaLogo;
                             $lineaA3Erp['Param3'] = $precioDelMontaje;
                             $lineaA3Erp['Param4'] = $poner;
                             $lineaA3Erp['Param5'] = $acabado;
-                            $lineaA3Erp['Texto'] = $nombreDeLinea;
+                            $lineaA3Erp['Texto'] = $codLinea . ' - ' . $nombreDeLinea;
                             array_push($lineasA3Erp, $lineaA3Erp);
                         } else {
                             echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ERROR!!! NO SE HA ACTUALIZADO LA LÍNEA: ' . $codLinea . ' EN EL CRM</p>';
@@ -704,16 +702,14 @@ try {
                                 $lineaA3Erp = [];
                                 $lineaA3Erp['CodigoArticulo'] = $codigoArticuloA3Erp;
                                 $lineaA3Erp['Unidades'] = 1;
-                                $lineaA3Erp['Precio'] = $precioLinea + $descuentoRealizacionLinea + $descuentoMontajeLinea;
-                                $lineaA3Erp['Descuento1'] = $descPorcRealización;
-                                $lineaA3Erp['Descuento2'] = $descPorcMontaje;
+                                $lineaA3Erp['Precio'] = $precioLinea;
                                 $lineaA3Erp['NumeroLinea'] = $codLinea;
                                 $lineaA3Erp['Param1'] = $m2;
                                 $lineaA3Erp['Param2'] = $realizacionLinea;
                                 $lineaA3Erp['Param3'] = $precioDelMontaje;
                                 $lineaA3Erp['Param4'] = $poner;
                                 $lineaA3Erp['Param5'] = $acabado;
-                                $lineaA3Erp['Texto'] = $nombreDeLinea;
+                                $lineaA3Erp['Texto'] = $codLinea . ' - ' . $nombreDeLinea;
                                 array_push($lineasA3Erp, $lineaA3Erp);
                             } else {
                                 echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ERROR!!! NO SE HA ACTUALIZADO LA LÍNEA: ' . $codLinea . ' EN EL CRM</p>';
@@ -896,8 +892,13 @@ try {
         @ob_flush();
         flush();
         $responseA3Erp = $a3Erp->post('pedidoVenta', $a3ErpData);
+        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">responseA3Erp: </p>';
+        var_dump($responseA3Erp);
+        scrollUpdate();
+        @ob_flush();
+        flush();
         if ($responseA3Erp) {
-            echo '<p style="color:green;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">PRESUPUESTO CREADO EN A3 ERP</p>';
+            echo '<p style="color:green;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">RESPUESTA DE A3 ERP RECIBIDA!!!</p>';
             scrollUpdate();
             @ob_flush();
             flush();
