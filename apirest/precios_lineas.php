@@ -18,8 +18,8 @@ try {
     $crm = new Crm;
     $a3Erp = new a3Erp;
     $lineas;
-    $a3Data = [];
-    $lineasA3 = [];
+    $a3ErpData = [];
+    $lineasA3Erp = [];
 
     /*
     $idOt = 707987000001725513;
@@ -145,6 +145,7 @@ try {
             print_r($crm->respuestaError);
             die();
         }
+        //VARIABLES PARA LAS LÍNEAS
         $numVisuales = 0;
         $numLogos = 0;
         $numTomasDeMedida = 0;
@@ -167,10 +168,10 @@ try {
         $totalDescMontajeLogos = 0;
         $totalMontajeLogos = 0;
         $tomaDeMedidas = 0;
-        $i = 0;
         $fecha = date('Y-m-d\TH:i:s');
         $referenciaA3Erp = $codOt;
         $centroCosteA3Erp = $codOt;
+        // INFORMACIÓN INICIAL DE A3ERP
         $filterA3Erp = "NIF eq " . "'$nifCliente'";
         $endpointA3Erp = "cliente?externalFields=true&" . urlencode('$filter') . "=" . urlencode($filterA3Erp);
         $responseA3Erp = $a3Erp->get($endpointA3Erp);
@@ -198,6 +199,24 @@ try {
             die();
         }
         $codigoClienteA3Erp = $clienteA3Erp['Codigo'];
+        $dataArticulosA3Erp;
+        try {
+            $direccion = dirname(__FILE__);
+            $jsondataArticulosA3Erp = file_get_contents($direccion . "/clases/articulos_visuales_a3erp.json");
+            $dataArticulosA3Erp = json_decode($jsondataArticulosA3Erp, true);
+            echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">dataArticulosA3Erp:</p>';
+            print_r($dataArticulosA3Erp);
+            scrollUpdate();
+            @ob_flush();
+            flush();
+        } catch (\Throwable $e) {
+            echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ERROR!!! NO SE HA PODIDO CONSULTAR LA INFORMACIÓN DE LOS ARTÍCULOS DE A3ERP</p>';
+            scrollUpdate();
+            @ob_flush();
+            flush();
+            die();
+        }
+        $i = 0;
         foreach ($lineas as $linea) {
             $id = $linea['id'];
             $codLinea = $linea['Codigo_de_l_nea'];
