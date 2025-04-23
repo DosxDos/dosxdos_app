@@ -274,7 +274,6 @@ try {
                         $lineaA3Erp['CodigoArticulo'] = $codigoArticuloA3Erp;
                         $lineaA3Erp['Unidades'] = 1;
                         $lineaA3Erp['Precio'] = $precioLinea;
-                        $lineaA3Erp['NumeroLinea'] = $codLinea;
                         $lineaA3Erp['Texto'] = $codLinea . ' - ' . $nombreDeLinea;
                         array_push($lineasA3Erp, $lineaA3Erp);
                     } else {
@@ -505,7 +504,6 @@ try {
                             $lineaA3Erp['CodigoArticulo'] = $codigoArticuloA3Erp;
                             $lineaA3Erp['Unidades'] = 1;
                             $lineaA3Erp['Precio'] = $precioLinea;
-                            $lineaA3Erp['NumeroLinea'] = $codLinea;
                             $lineaA3Erp['Param1'] = $m2;
                             $lineaA3Erp['Param2'] = $realizacionLineaLogo;
                             $lineaA3Erp['Param3'] = $precioDelMontaje;
@@ -703,7 +701,6 @@ try {
                                 $lineaA3Erp['CodigoArticulo'] = $codigoArticuloA3Erp;
                                 $lineaA3Erp['Unidades'] = 1;
                                 $lineaA3Erp['Precio'] = $precioLinea;
-                                $lineaA3Erp['NumeroLinea'] = $codLinea;
                                 $lineaA3Erp['Param1'] = $m2;
                                 $lineaA3Erp['Param2'] = $realizacionLinea;
                                 $lineaA3Erp['Param3'] = $precioDelMontaje;
