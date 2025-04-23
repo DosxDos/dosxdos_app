@@ -16,9 +16,9 @@ class Crm extends Zoho
     private $urlQuery = "/crm/v5/coql";
     private $camposEmpresas = "Alias,C_d_vendedor,Rating,CIF_NIF1,Shipping_City,Billing_City,Contacto1,Contacto_relacionado,Correo_electr_nico,Created_By,C_d_forma_pago,C_digo_t_rminos_pago,Shipping_Code,Billing_Code,SIC_Code,C_digo_vendedor,Description,Shipping_Street,Billing_Street,Employees,Parent_Account,Shipping_State,Billing_State,Tag,Fax,Grupo_contable_cliente,Grupo_contable,Grupo_registro_IVA_neg,Record_Image,Annual_Revenue,Modified_By,Navision_nr,Account_Name,N1,Account_Number,Shipping_Country,Billing_Country,Ownership,Owner,Industry,Account_Site,Website,Ticker_Symbol,Phone,Phone_2,Tipo_de_empresa,Account_Type";
     private $camposOts = "Comentario,Completo,Created_By,C_digo,Departamentos_relacionados,Description,Empresa,Tag,Stage,Closing_Date,Fecha_de_previsi_n_de_OT,Firma,Fotos_de_la_OT,Lead_Source,Amount,Expected_Revenue,Associated_Products,Modified_By,Reason_For_Loss__s,Motivo_de_p_rdida2,Navision,Necesita_Presupuesto,Contact_Name,Account_Name,Deal_Name,Notion_ID,N_de_l_neas_relacionadas,N_mero_de_operaciones,Observaciones,PDV,PDV_relacionados,Prefijo,Related_quote,Subtipo_de_la_OT,Type,Tipo_de_cliente,Tipo_de_OT,Usuario_creador_Navision";
-    private $camposMontajeImagenes = "Rango1,Rango2,Precio";
-    private $camposPreciosLogos = "Rango1,Rango2,Precio";
-    private $camposPreciosLogosMontaje = "Rango1,Rango2,Precio";
+    private $camposMontajeImagenes = "Rango1,Rango2,Precio,idA3Erp";
+    private $camposPreciosLogos = "Rango1,Rango2,Precio,idA3Erp";
+    private $camposPreciosLogosMontaje = "Rango1,Rango2,Precio,idA3Erp";
     private $camposRutas = "Name";
     private $camposMontadores = "Apellido_del_montador,C_digo_del_montador,idApp,Name,Tel_fono_del_montador";
     public $estado = true;
