@@ -16,6 +16,7 @@ $jwtMiddleware->verificar();
 
 try {
     $crm = new Crm;
+    $a3Erp = new a3Erp;
     $lineas;
     $a3Data = [];
     $lineasA3 = [];
@@ -166,6 +167,37 @@ try {
         $totalDescMontajeLogos = 0;
         $totalMontajeLogos = 0;
         $tomaDeMedidas = 0;
+        $i = 0;
+        $fecha = date('Y-m-d\TH:i:s');
+        $referenciaA3Erp = $codOt;
+        $centroCosteA3Erp = $codOt;
+        $filterA3Erp = "NIF eq " . "'$nifCliente'";
+        $endpointA3Erp = "cliente?externalFields=true&" . urlencode('$filter') . "=" . urlencode($filterA3Erp);
+        $responseA3Erp = $a3Erp->get($endpointA3Erp);
+        $clienteA3Erp;
+        if ($responseA3Erp) {
+            $clienteA3Erp = $responseA3Erp['PageData'][0];
+            if ($clienteA3Erp) {
+                echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">clienteA3Erp:</p>';
+                print_r($clienteA3Erp);
+                scrollUpdate();
+                @ob_flush();
+                flush();
+            } else {
+                echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ERROR!!! NO SE ENCONTRÓ EL CLIENTE EN A3ERP, POR FAVOR VERIFICA QUE EL NIF DEL CLIENTE EN EL CRM CORRESPONDA A EL MISMO NIF DEL CLIENTE EN A3ERP</p>';
+                scrollUpdate();
+                @ob_flush();
+                flush();
+                die();
+            }
+        } else {
+            echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ERROR!!! NO SE HA RECIBIDO UNA RESPUESTA DE LA API DE A3ERP. POR FAVOR VERIFICA QUE EL NIF DEL CLIENTE EN EL CRM CORRESPONDA A EL MISMO NIF DEL CLIENTE EN A3ERP</p>';
+            scrollUpdate();
+            @ob_flush();
+            flush();
+            die();
+        }
+        $codigoClienteA3Erp = $clienteA3Erp['Codigo'];
         foreach ($lineas as $linea) {
             $id = $linea['id'];
             $codLinea = $linea['Codigo_de_l_nea'];

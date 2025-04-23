@@ -120,9 +120,11 @@ if ($a3Erp->error) {
     $filter = "NIF eq 'A28050359'";
     $endpoint = "cliente?externalFields=true&" . urlencode('$filter') . "=" . urlencode($filter);
     $response = $a3Erp->get($endpoint);
-    var_dump($response);
+    $cliente = $response['PageData'][0];
+    print_r($cliente);
 }
 */
+
 
 /*
 $a3Erp = new a3Erp();
