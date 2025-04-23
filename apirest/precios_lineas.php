@@ -303,7 +303,7 @@ try {
                         $lineaA3Erp = [];
                         $lineaA3Erp['CodigoArticulo'] = $codigoArticuloA3Erp;
                         $lineaA3Erp['Unidades'] = 1;
-                        $lineaA3Erp['PrecioLinea'] = $precioLinea;
+                        $lineaA3Erp['Precio'] = $precioLinea;
                         $lineaA3Erp['NumeroLinea'] = $codLinea;
                         $lineaA3Erp['Texto'] = $nombreDeLinea;
                         array_push($lineasA3Erp, $lineaA3Erp);
@@ -534,7 +534,7 @@ try {
                             $lineaA3Erp = [];
                             $lineaA3Erp['CodigoArticulo'] = $codigoArticuloA3Erp;
                             $lineaA3Erp['Unidades'] = 1;
-                            $lineaA3Erp['PrecioLinea'] = $precioLinea + $descuentoMontajeLineaLogo;
+                            $lineaA3Erp['Precio'] = $precioLinea + $descuentoMontajeLineaLogo;
                             $lineaA3Erp['Descuento1'] = 0;
                             $lineaA3Erp['Descuento2'] = $porcDescuentoMontajeLogo;
                             $lineaA3Erp['NumeroLinea'] = $codLinea;
@@ -734,7 +734,7 @@ try {
                                 $lineaA3Erp = [];
                                 $lineaA3Erp['CodigoArticulo'] = $codigoArticuloA3Erp;
                                 $lineaA3Erp['Unidades'] = 1;
-                                $lineaA3Erp['PrecioLinea'] = $precioLinea + $descuentoRealizacionLinea + $descuentoMontajeLinea;
+                                $lineaA3Erp['Precio'] = $precioLinea + $descuentoRealizacionLinea + $descuentoMontajeLinea;
                                 $lineaA3Erp['Descuento1'] = $descPorcRealización;
                                 $lineaA3Erp['Descuento2'] = $descPorcMontaje;
                                 $lineaA3Erp['NumeroLinea'] = $codLinea;
@@ -921,7 +921,7 @@ try {
         //OGANIZAR LA INFORMACIÓN PARA A3ERP Y CREAR EL PRESUPUESTO EN A3ERP
         $a3ErpData['Observaciones'] = $observacionesA3Erp;
         $a3ErpData['Lineas'] = $lineasA3Erp;
-        echo '<p style="color:green;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">CREANDO EL PRESUPUESTO EN A3 ERP</p>';
+        echo '<p style="color:green;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">CREANDO EL PRESUPUESTO EN A3 ERP...</p>';
         scrollUpdate();
         @ob_flush();
         flush();
