@@ -11,8 +11,37 @@ require_once 'middlewares/jwtMiddleware.php';
 require_once 'clases/crm_clase.php';
 require_once 'clases/a3Erp_clase.php';
 
+if (!isset($_GET['idOt']) || !isset($_GET['codOt']) || !isset($_GET['tipoOt']) || !isset($_GET['cliente']) || !isset($_GET['tokenJwt'])) {
+    echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ERROR!!! NO SE HAN RECIBIDO LOS DATOS NECESARIOS</p>';
+    scrollUpdate();
+    @ob_flush();
+    flush();
+    die();
+}
+
 $jwtMiddleware = new JwtMiddleware;
 $jwtMiddleware->verificar();
+
+$idOt = $_GET['idOt'];
+$codOt = $_GET['codOt'];
+$tipoOt = $_GET['tipoOt'];
+$cliente = $_GET['cliente'];
+
+if (!$idOt || !$codOt || !$tipoOt || !$cliente) {
+    echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ERROR!!! NO SE HAN RECIBIDO LOS DATOS NECESARIOS</p>';
+    scrollUpdate();
+    @ob_flush();
+    flush();
+    die();
+}
+
+if ($tipoOt != "VIS") {
+    echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">EL CÁLCULO DEL PRESUPUESTO PARA ESTE TIPO DE OT AÚN NO ESTÁ HABILITADO...</p>';
+    scrollUpdate();
+    @ob_flush();
+    flush();
+    die();
+}
 
 try {
     $crm = new Crm;
@@ -20,10 +49,6 @@ try {
     $lineas;
     $a3ErpData = [];
     $lineasA3Erp = [];
-
-    $idOt = $_GET['idOt'];
-    $codOt = $_GET['codOt'];
-    $cliente = $_GET['cliente'];
 
     $numLineas = 0;
     echo '<p style="color:green;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">CÁLCULO PARA LA OT ' . $codOt . ' INICIADO...</p>';
