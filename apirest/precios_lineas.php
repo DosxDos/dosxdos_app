@@ -1342,8 +1342,14 @@ try {
             scrollUpdate();
             @ob_flush();
             flush();
+            if (isset($responseA3Erp['Error'])) {
+                echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ERROR!!! HA HABIDO UN ERROR EN LA API DE A3 ERP A LA HORA DE CREAR EL PRESUPUESTO, EL PRESUPUESTO NO HA SIDO CREADO EN A3 ERP. VERIFICA POR FAVOR QUE LA OT O EL CENTRO DE COSTE EN A3 ERP EXISTA. SI EL ERROR PERSISTE POR FAVOR REVISA LA RESPUESTA DE A3 ERP QUE SE HA IMPRIMIDO EN PANTALLA, PARA VERIFICAR SI PUEDES ENTENDER EL ERROR ANTES DE CONTACTAR A IT.</p>';
+                scrollUpdate();
+                @ob_flush();
+                flush();
+            }
         } else {
-            echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ERROR!!! AL CREAR EL PRESUPUESTO EN A3 ERP</p>';
+            echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ERROR!!! AL CREAR EL PRESUPUESTO EN A3 ERP, NO SE HA RECIBIDO UNA RESPUESTA DE LA API DE A3 ERP QUE TENGA VALOR</p>';
             print_r($a3Erp->error);
             scrollUpdate();
             @ob_flush();
