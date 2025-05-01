@@ -11,7 +11,7 @@ require_once 'middlewares/jwtMiddleware.php';
 require_once 'clases/crm_clase.php';
 require_once 'clases/a3Erp_clase.php';
 
-if (!isset($_GET['idOt']) || !isset($_GET['codOt']) || !isset($_GET['tipoOt']) || !isset($_GET['cliente']) || !isset($_GET['descuentoOt']) || !isset($_GET['descuentosAutomaticos']) || !isset($_GET['tokenJwt'])) {
+if (!isset($_GET['idOt']) || !isset($_GET['codOt']) || !isset($_GET['tipoOt']) || !isset($_GET['cliente']) || !isset($_GET['tokenJwt'])) {
     echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ERROR!!! NO SE HAN RECIBIDO LOS DATOS NECESARIOS</p>';
     scrollUpdate();
     @ob_flush();
@@ -26,14 +26,6 @@ $idOt = $_GET['idOt'];
 $codOt = $_GET['codOt'];
 $tipoOt = $_GET['tipoOt'];
 $cliente = $_GET['cliente'];
-$descuentoOt;
-$descuentosAutomaticos = $_GET['descuentosAutomaticos'];
-
-if (!$_GET['descuentoOt']) {
-    $descuentoOt = 0;
-} else {
-    $descuentoOt = $_GET['descuentoOt'];
-}
 
 if (!$idOt || !$codOt || !$tipoOt || !$cliente) {
     echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ERROR!!! NO SE HAN RECIBIDO LOS DATOS NECESARIOS</p>';
@@ -79,22 +71,14 @@ try {
         $descPorcMontaje;
         $impuesto;
         $nifCliente;
-        $impuestoPorc;
-        $impuestoCodA3;
 
-        /* CLIENTE - DESCUENTOS E IMPUESTOS */
+        /* CLIENTE */
         $camposCliente = "Descuento_montaje,Descuento_realizaci_n,Grupo_registro_IVA_neg,CIF_NIF1";
         $query = "SELECT $camposCliente FROM Accounts WHERE Account_Name=\"$cliente\"";
         $crm->query($query);
         if ($crm->estado) {
             $descPorcRealización = $crm->respuesta[1]['data'][0]['Descuento_realizaci_n'];
-            if (!$descPorcRealización) {
-                $descPorcRealización = 0;
-            }
             $descPorcMontaje = $crm->respuesta[1]['data'][0]['Descuento_montaje'];
-            if (!$descPorcMontaje) {
-                $descPorcMontaje = 0;
-            }
             $impuesto = $crm->respuesta[1]['data'][0]['Grupo_registro_IVA_neg'];
             $nifCliente = $crm->respuesta[1]['data'][0]['CIF_NIF1'];
             if (!$nifCliente) {
@@ -104,30 +88,13 @@ try {
                 flush();
                 die();
             }
-            $camposImpuesto = "Porcentaje,codA3";
-            $query = "SELECT $camposImpuesto FROM Impuestos WHERE Name=\"$impuesto\"";
-            $crm->query($query);
-            if ($crm->estado) {
-                $impuestoPorc = $crm->respuesta[1]['data'][0]['Porcentaje'];
-                $impuestoCodA3 = $crm->respuesta[1]['data'][0]['codA3'];
-                echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">nifCliente: ' . $nifCliente . '</p>';
-                echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descPorcRealización: ' . $descPorcRealización . '</p>';
-                echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descPorcMontaje: ' . $descPorcMontaje . '</p>';
-                echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descuentosAutomaticos: ' . $descuentosAutomaticos . '</p>';
-                echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descuentoOt: ' . $descuentoOt . '</p>';
-                echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">impuesto: ' . $impuesto . '</p>';
-                echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">impuestoPorc: ' . $impuestoPorc . '</p>';
-                scrollUpdate();
-                @ob_flush();
-                flush();
-            } else {
-                echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ERROR AL CONSULTAR LOS DATOS DEL IMPUESTO QUE TIENE ASOCIADO EL CLIENTE EN EL CRM!!!</p>';
-                print_r($crm->respuestaError);
-                scrollUpdate();
-                @ob_flush();
-                flush();
-                die();
-            }
+            echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">nifCliente: ' . $nifCliente . '</p>';
+            echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descPorcRealización: ' . $descPorcRealización . '</p>';
+            echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descPorcMontaje: ' . $descPorcMontaje . '</p>';
+            echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">impuesto: ' . $impuesto . '</p>';
+            scrollUpdate();
+            @ob_flush();
+            flush();
         } else {
             echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ERROR AL CONSULTAR LOS DATOS DEL CLIENTE!!!</p>';
             print_r($crm->respuestaError);
@@ -296,6 +263,7 @@ try {
             }
             $material = $linea['Material'];
             $acabado = $linea['Acabados1'];
+            $impuestoString = $linea['Impuesto_Cliente'];
             $poner = $linea['Poner'];
             $precioLinea = 0;
             $m2 = 0;
@@ -644,7 +612,7 @@ try {
                                     scrollUpdate();
                                     @ob_flush();
                                     flush();
-                                    if ($descPorcRealización && $descuentosAutomaticos) {
+                                    if ($descPorcRealización) {
                                         $descuentoRealizacionLinea = ($realizacionLinea * $descPorcRealización) / 100;
                                         $descuentoRealizacionLinea = number_format($descuentoRealizacionLinea, 2);
                                         $totalDescRealizacion = $totalDescRealizacion + $descuentoRealizacionLinea;
@@ -709,7 +677,7 @@ try {
                                         scrollUpdate();
                                         @ob_flush();
                                         flush();
-                                        if ($descPorcMontaje && $descuentosAutomaticos) {
+                                        if ($descPorcMontaje) {
                                             $descuentoMontajeLinea = ($precioDelMontaje * $descPorcMontaje) / 100;
                                             $descuentoMontajeLinea = number_format($descuentoMontajeLinea, 2);
                                             $totalDescMontaje = $totalDescMontaje + $descuentoMontajeLinea;
@@ -751,12 +719,12 @@ try {
                                 $LineaVector['data'][0]['id'] = $id;
                                 $LineaVector['data'][0]['Metros_cuadrados'] = $m2;
                                 $LineaVector['data'][0]['Realizaci_n'] = $realizacionLinea;
-                                if ($descPorcRealización && $descuentosAutomaticos) {
+                                if ($descPorcRealización) {
                                     $LineaVector['data'][0]['Porcentaje_Descuento_Realizaci_n'] = $descPorcRealización;
                                     $LineaVector['data'][0]['Descuento_Realizaci_n'] = $descuentoRealizacionLinea;
                                 }
                                 $LineaVector['data'][0]['Montaje'] = $precioDelMontaje;
-                                if ($descPorcMontaje && $descuentosAutomaticos) {
+                                if ($descPorcMontaje) {
                                     $LineaVector['data'][0]['Porcentaje_Descuento_Montaje'] = $descPorcMontaje;
                                     $LineaVector['data'][0]['Descuento_de_Montaje'] = $descuentoMontajeLinea;
                                 }
@@ -1092,7 +1060,7 @@ try {
                                 scrollUpdate();
                                 @ob_flush();
                                 flush();
-                                if ($descPorcMontaje && $descuentosAutomaticos) {
+                                if ($descPorcMontaje) {
                                     $descuentoMontajeLinea = ($precioDelMontaje * $descPorcMontaje) / 100;
                                     $descuentoMontajeLinea = number_format($descuentoMontajeLinea, 2);
                                     $totalDescMontaje = $totalDescMontaje + $descuentoMontajeLinea;
@@ -1126,7 +1094,7 @@ try {
                             $LineaVector['data'][0]['id'] = $id;
                             $LineaVector['data'][0]['Metros_cuadrados'] = $m2;
                             $LineaVector['data'][0]['Montaje'] = $precioDelMontaje;
-                            if ($descPorcMontaje && $descuentosAutomaticos) {
+                            if ($descPorcMontaje) {
                                 $LineaVector['data'][0]['Porcentaje_Descuento_Montaje'] = $descPorcMontaje;
                                 $LineaVector['data'][0]['Descuento_de_Montaje'] = $descuentoMontajeLinea;
                             }
@@ -1201,9 +1169,15 @@ try {
         $totalMontaje = $montaje - $totalDescMontaje;
         $totalMontajeLogos = $montajeLogos - $totalDescMontajeLogos;
         $totalSinImpuesto = $totalRealizacion + $totalMontaje + $acabados + $logos + $totalMontajeLogos + $tomaDeMedidas;
-        //APLICACIÓN DEL IMPUESTO
-        $impuestoAplicado = ($totalSinImpuesto * $impuestoPorc) / 100;
-        $totalConImpuesto = $totalSinImpuesto + $impuestoAplicado;
+        if ($impuesto = "IGIC") {
+            $impuestoAplicado = ($totalSinImpuesto * 7) / 100;
+            $totalConImpuesto = $totalSinImpuesto + $impuestoAplicado;
+        } else if ($impuesto = "IVA") {
+            $impuestoAplicado = ($totalSinImpuesto * 21) / 100;
+            $totalConImpuesto = $totalSinImpuesto + $impuestoAplicado;
+        } else {
+            $totalConImpuesto = $totalSinImpuesto;
+        }
         /* NOTAS */
         $observacionesA3Erp = '';
         if ($numVisuales && $numLogos) {
@@ -1214,7 +1188,7 @@ try {
             echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Realización Visuales: ' . number_format($realizacion, 2) . '€</p>';
             //$observacionesA3Erp .= 'Metros cuadrados: ' . number_format($totalM2, 2) . ' - Realización Visuales: ' . number_format($realizacion, 2) . '€ - ';
             $observacionesA3Erp .= 'Metros cuadrados: ' . number_format($totalM2, 2) . '\nRealización Visuales: ' . number_format($realizacion, 2) . '€\n';
-            if ($descPorcRealización && $descuentosAutomaticos) {
+            if ($descPorcRealización) {
                 echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento pactado en Realización Visuales: ' . $descPorcRealización . '%</p>';
                 echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento aplicado en Realización Visuales: ' . number_format($totalDescRealizacion, 2) . '€</p>';
                 echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total Realización Visuales: ' . number_format($totalRealizacion, 2) . '€</p>';
@@ -1224,7 +1198,7 @@ try {
             echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Montaje Visuales: ' . number_format($montaje, 2) . '€</p>';
             //$observacionesA3Erp .= 'Montaje Visuales: ' . number_format($montaje, 2) . '€ - ';
             $observacionesA3Erp .= 'Montaje Visuales: ' . number_format($montaje, 2) . '€\n';
-            if ($descPorcMontaje && $descuentosAutomaticos) {
+            if ($descPorcMontaje) {
                 echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento pactado en Montaje Visuales: ' . $descPorcMontaje . '%</p>';
                 echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento aplicado en Montaje Visuales: ' . number_format($totalDescMontaje, 2) . '€</p>';
                 echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total Montaje Visuales: ' . number_format($totalMontaje, 2) . '€</p>';
@@ -1268,7 +1242,7 @@ try {
             echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Realización: ' . number_format($realizacion, 2) . '€</p>';
             //$observacionesA3Erp .= 'Metros cuadrados: ' . number_format($totalM2, 2) . ' - Realización: ' . number_format($realizacion, 2) . '€ - ';
             $observacionesA3Erp .= 'Metros cuadrados: ' . number_format($totalM2, 2) . '\nRealización: ' . number_format($realizacion, 2) . '€\n';
-            if ($descPorcRealización && $descuentosAutomaticos) {
+            if ($descPorcRealización) {
                 echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento pactado en Realización: ' . $descPorcRealización . '%</p>';
                 echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento aplicado en Realización: ' . number_format($totalDescRealizacion, 2) . '€</p>';
                 echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total Realización: ' . number_format($totalRealizacion, 2) . '€</p>';
@@ -1278,7 +1252,7 @@ try {
             echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Montaje: ' . number_format($montaje, 2) . '€</p>';
             //$observacionesA3Erp .= 'Montaje: ' . number_format($montaje, 2) . '€ - ';
             $observacionesA3Erp .= 'Montaje: ' . number_format($montaje, 2) . '€\n';
-            if ($descPorcMontaje && $descuentosAutomaticos) {
+            if ($descPorcMontaje) {
                 echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento pactado en Montaje: ' . $descPorcMontaje . '%</p>';
                 echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento aplicado en Montaje: ' . number_format($totalDescMontaje, 2) . '€</p>';
                 echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total Montaje: ' . number_format($totalMontaje, 2) . '€</p>';
