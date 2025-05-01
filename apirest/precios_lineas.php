@@ -28,6 +28,11 @@ $tipoOt = $_GET['tipoOt'];
 $cliente = $_GET['cliente'];
 $descuentoOt;
 $descuentosAutomaticos = $_GET['descuentosAutomaticos'];
+if ($descuentosAutomaticos == "true") {
+    $descuentosAutomaticos = true;
+} else {
+    $descuentosAutomaticos = false;
+}
 
 if (!$_GET['descuentoOt']) {
     $descuentoOt = 0;
@@ -415,6 +420,7 @@ try {
                         scrollUpdate();
                         @ob_flush();
                         flush();
+                        $tomaDeMedidas = $tomaDeMedidas + $precioLinea;
                         if ($descuentoOt) {
                             $descuentoOtEnLinea = ($precioLinea * $descuentoOt) / 100;
                             $descuentoOtEnLinea = number_format($descuentoOtEnLinea, 2);
@@ -427,7 +433,6 @@ try {
                             @ob_flush();
                             flush();
                         }
-                        $tomaDeMedidas = $tomaDeMedidas + $precioLinea;
                         $totalPreciosLineas = $totalPreciosLineas + $precioLinea;
                         /* ACTUALIZAR LÍNEA */
                         echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Actualizando en el CRM la línea: ' . $codLinea . '...</p>';
@@ -1283,7 +1288,8 @@ try {
         $totalMontajeLogos = $montajeLogos - $totalDescMontajeLogos;
         $totalSinImpuesto = $totalRealizacion + $totalMontaje + $acabados + $logos + $totalMontajeLogos + $tomaDeMedidas;
         //DESCUENTO MANUAL DE LA OT
-        $totalSinImpuestoConDescuentoOt = $totalSinImpuesto - $totalDescOt;
+        $descuentoOtValue = ($totalSinImpuesto * $descuentoOt) / 100;
+        $totalSinImpuestoConDescuentoOt = $totalSinImpuesto - $descuentoOtValue;
         //APLICACIÓN DEL IMPUESTO
         $impuestoAplicado = 0;
         $totalConImpuesto = 0;
@@ -1294,6 +1300,22 @@ try {
             $impuestoAplicado = ($totalSinImpuesto * $impuestoPorc) / 100;
             $totalConImpuesto = $totalSinImpuesto + $impuestoAplicado;
         }
+        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">totalRealizacion: ' . number_format($totalRealizacion, 2) . '€</p>';
+        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">totalMontaje: ' . number_format($totalMontaje, 2) . '€</p>';
+        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">acabados: ' . number_format($acabados, 2) . '€</p>';
+        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">logos: ' . number_format($logos, 2) . '€</p>';
+        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">totalMontajeLogos: ' . number_format($totalMontajeLogos, 2) . '€</p>';
+        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">tomaDeMedidas: ' . number_format($tomaDeMedidas, 2) . '€</p>';
+        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">totalSinImpuesto: ' . number_format($totalSinImpuesto, 2) . '€</p>';
+        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descuentoOtValue: ' . number_format($descuentoOtValue, 2) . '€</p>';
+        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">totalSinImpuestoConDescuentoOt: ' . number_format($totalSinImpuestoConDescuentoOt, 2) . '€</p>';
+        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">impuestoAplicado: ' . number_format($impuestoAplicado, 2) . '€</p>';
+        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">totalConImpuesto: ' . number_format($totalConImpuesto, 2) . '€</p>';
+        echo '<p style="color:pink;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total sumatoria bucles de los precios de las líneas: ' . number_format($totalPreciosLineas, 2) . '€</p>';
+        echo '<p style="color:pink;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total sumatoria bucles del descuento general: ' . number_format($totalDescOt, 2) . '€</p>';
+        scrollUpdate();
+        @ob_flush();
+        flush();
         /* NOTAS */
         $observacionesA3Erp = '';
         //SI EXISTEN VISUALES Y LOGOS
@@ -1358,7 +1380,6 @@ try {
             echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto con impuesto: ' . number_format($totalConImpuesto, 2) . '€</p>';
             //$observacionesA3Erp .= 'Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2) . '€ - Impuesto ' . $impuesto . ' - Total presupuesto con impuesto: ' . number_format($totalConImpuesto, 2) . '€ - ';
             $observacionesA3Erp .= 'Impuesto ' . $impuesto . '\nTotal presupuesto con impuesto: ' . number_format($totalConImpuesto, 2) . '€\n';
-            echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total Precios Líneas: ' . number_format($totalPreciosLineas, 2) . '€</p>';
         }
         /* SI SÓLO EXISTEN VISUALES */ else if ($numVisuales) {
             echo '<p style="display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">LAS LÍNEAS SON VISUALES</p>';
@@ -1403,7 +1424,6 @@ try {
             }
             echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Impuesto ' . $impuesto . '</p>';
             echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto con impuesto: ' . number_format($totalConImpuesto, 2) . '€</p>';
-            echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total Precios Líneas: ' . number_format($totalPreciosLineas, 2) . '€</p>';
             //$observacionesA3Erp .= 'Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2) . '€ - Impuesto ' . $impuesto . ' - Total presupuesto con impuesto: ' . number_format($totalConImpuesto, 2) . '€ - ';
             $observacionesA3Erp .= 'Impuesto ' . $impuesto . '\nTotal presupuesto con impuesto: ' . number_format($totalConImpuesto, 2) . '€\n';
         }
@@ -1442,7 +1462,6 @@ try {
             echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto con impuesto: ' . number_format($totalConImpuesto, 2) . '€</p>';
             //$observacionesA3Erp .= 'Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2) . '€ - Impuesto ' . $impuesto . ' - Total presupuesto con impuesto: ' . number_format($totalConImpuesto, 2) . '€ - ';
             $observacionesA3Erp .= 'Impuesto ' . $impuesto . '\nTotal presupuesto con impuesto: ' . number_format($totalConImpuesto, 2) . '€\n';
-            echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total Precios Líneas: ' . number_format($totalPreciosLineas, 2) . '€</p>';
         }
         /* SI SÓLO EXISTEN TOMAS DE MEDIDA */ else if ($numTomasDeMedida) {
             echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Toma de medidas: ' . number_format($tomaDeMedidas, 2) . '€</p>';
@@ -1456,7 +1475,6 @@ try {
             }
             echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Impuesto ' . $impuesto . '</p>';
             echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto con impuesto: ' . number_format($totalConImpuesto, 2) . '€</p>';
-            echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total Precios Líneas: ' . number_format($totalPreciosLineas, 2) . '€</p>';
             //$observacionesA3Erp .= 'Toma de medidas: ' . number_format($tomaDeMedidas, 2) . '€ - Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2) . '€ - Impuesto ' . $impuesto . ' - Total presupuesto con impuesto: ' . number_format($totalConImpuesto, 2) . '€ - ';
             $observacionesA3Erp .= 'Impuesto ' . $impuesto . '\nTotal presupuesto con impuesto: ' . number_format($totalConImpuesto, 2) . '€\n';
         }
