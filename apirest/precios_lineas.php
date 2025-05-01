@@ -194,6 +194,25 @@ try {
             die();
         }
 
+        /* DESCUENTOS MONTAJE LOGOS */
+        $descuentosLogosMontaje = [];
+        $crm->get("descuentosLogosMontaje");
+        if ($crm->estado) {
+            echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descuentosLogosMontaje:</p>';
+            $descuentosLogosMontaje = $crm->respuesta[1]['data'];
+            print_r($descuentosLogosMontaje);
+            scrollUpdate();
+            @ob_flush();
+            flush();
+        } else {
+            echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ERROR!!! AL CONSULTAR EL MÓDULO DE DESCUENTOS DE MONTAJE DE LOGOS EN EL CRM</p>';
+            print_r($crm->respuestaError);
+            scrollUpdate();
+            @ob_flush();
+            flush();
+            die();
+        }
+
         /* PRECIO TOMA DE MEDIDAS */
         $precioTomaDeMedidas;
         $tomaDeMedidasA3Erp;
@@ -243,6 +262,7 @@ try {
         $fecha = date('Y-m-d\TH:i:s');
         $referenciaA3Erp = $codOt;
         $centroCosteA3Erp = $codOt;
+        $totalDescOt;
 
         // INFORMACIÓN INICIAL DE A3ERP Y VARIABLES
         $filterA3Erp = "NIF eq " . "'$nifCliente'";
@@ -322,6 +342,17 @@ try {
                         scrollUpdate();
                         @ob_flush();
                         flush();
+                        if ($descuentoOt) {
+                            $descuentoOtEnLinea = ($precioLinea * $descuentoOt) / 100;
+                            $descuentoOtEnLinea = number_format($descuentoOtEnLinea, 2);
+                            $totalDescOt = $totalDescOt + $descuentoOtEnLinea;
+                            $precioLinea = $precioLinea - $descuentoOtEnLinea;
+                            echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descuentoOtEnLinea: ' . $descuentoOtEnLinea . '</p>';
+                            echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioLinea: ' . $precioLinea . '</p>';
+                            scrollUpdate();
+                            @ob_flush();
+                            flush();
+                        }
                         /* ACTUALIZAR LÍNEA */
                         echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Actualizando en el CRM la línea: ' . $codLinea . '...</p>';
                         scrollUpdate();
@@ -412,27 +443,17 @@ try {
                                     $numPv++;
                                 }
                             }
-                            if (($numPv > 5) && (($areaPv == "GC") || ($areaPv == "LP"))) {
-                                $porcDescuentoMontajeLogo = 25;
-                                echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">numPv: ' . $numPv . '</p>';
-                                echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">porcDescuentoMontajeLogo: ' . $porcDescuentoMontajeLogo . '%</p>';
-                                scrollUpdate();
-                                @ob_flush();
-                                flush();
-                            } else if (($numPv > 7) && ($areaPv == "TF")) {
-                                $porcDescuentoMontajeLogo = 20;
-                                echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">numPv: ' . $numPv . '</p>';
-                                echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">porcDescuentoMontajeLogo: ' . $porcDescuentoMontajeLogo . '%</p>';
-                                scrollUpdate();
-                                @ob_flush();
-                                flush();
-                            } else if (($numPv > 10) && (($areaPv == "FT") || ($areaPv == "LZ"))) {
-                                $porcDescuentoMontajeLogo = 20;
-                                echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">numPv: ' . $numPv . '</p>';
-                                echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">porcDescuentoMontajeLogo: ' . $porcDescuentoMontajeLogo . '%</p>';
-                                scrollUpdate();
-                                @ob_flush();
-                                flush();
+                            if ($descuentosAutomaticos) {
+                                foreach ($descuentosLogosMontaje as $descuento) {
+                                    if (($numPv > ($descuento['PDVS_minimo'] - 1)) && ($areaPv == $descuento['Isla'])) {
+                                        $porcDescuentoMontajeLogo = $descuento['Porcentaje'];
+                                        echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">numPv: ' . $numPv . '</p>';
+                                        echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">porcDescuentoMontajeLogo: ' . $porcDescuentoMontajeLogo . '%</p>';
+                                        scrollUpdate();
+                                        @ob_flush();
+                                        flush();
+                                    }
+                                }
                             }
                             /* REALIZACIÓN LOGO */
                             $validarPrecioLogo = false;
@@ -547,6 +568,17 @@ try {
                             scrollUpdate();
                             @ob_flush();
                             flush();
+                            if ($descuentoOt) {
+                                $descuentoOtEnLinea = ($precioLinea * $descuentoOt) / 100;
+                                $descuentoOtEnLinea = number_format($descuentoOtEnLinea, 2);
+                                $totalDescOt = $totalDescOt + $descuentoOtEnLinea;
+                                $precioLinea = $precioLinea - $descuentoOtEnLinea;
+                                echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descuentoOtEnLinea: ' . $descuentoOtEnLinea . '</p>';
+                                echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioLinea: ' . $precioLinea . '</p>';
+                                scrollUpdate();
+                                @ob_flush();
+                                flush();
+                            }
                             /* ACTUALIZAR LÍNEA */
                             echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Actualizando en el CRM la línea: ' . $codLinea . '...</p>';
                             scrollUpdate();
@@ -861,27 +893,17 @@ try {
                                     $numPv++;
                                 }
                             }
-                            if (($numPv > 5) && (($areaPv == "GC") || ($areaPv == "LP"))) {
-                                $porcDescuentoMontajeLogo = 25;
-                                echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">numPv: ' . $numPv . '</p>';
-                                echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">porcDescuentoMontajeLogo: ' . $porcDescuentoMontajeLogo . '%</p>';
-                                scrollUpdate();
-                                @ob_flush();
-                                flush();
-                            } else if (($numPv > 7) && ($areaPv == "TF")) {
-                                $porcDescuentoMontajeLogo = 20;
-                                echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">numPv: ' . $numPv . '</p>';
-                                echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">porcDescuentoMontajeLogo: ' . $porcDescuentoMontajeLogo . '%</p>';
-                                scrollUpdate();
-                                @ob_flush();
-                                flush();
-                            } else if (($numPv > 10) && (($areaPv == "FT") || ($areaPv == "LZ"))) {
-                                $porcDescuentoMontajeLogo = 20;
-                                echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">numPv: ' . $numPv . '</p>';
-                                echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">porcDescuentoMontajeLogo: ' . $porcDescuentoMontajeLogo . '%</p>';
-                                scrollUpdate();
-                                @ob_flush();
-                                flush();
+                            if ($descuentosAutomaticos) {
+                                foreach ($descuentosLogosMontaje as $descuento) {
+                                    if (($numPv > ($descuento['PDVS_minimo'] - 1)) && ($areaPv == $descuento['Isla'])) {
+                                        $porcDescuentoMontajeLogo = $descuento['Porcentaje'];
+                                        echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">numPv: ' . $numPv . '</p>';
+                                        echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">porcDescuentoMontajeLogo: ' . $porcDescuentoMontajeLogo . '%</p>';
+                                        scrollUpdate();
+                                        @ob_flush();
+                                        flush();
+                                    }
+                                }
                             }
                             $codigoArticuloA3Erp = '2000023';
                             echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">codigoArticuloA3Erp: ' . $codigoArticuloA3Erp . '</p>';
@@ -1236,7 +1258,6 @@ try {
             //$observacionesA3Erp .= 'Logos - Realización: ' . number_format($logos, 2) . '€ - Logos - Montaje: ' . number_format($montajeLogos, 2) . '€ - ';
             $observacionesA3Erp .= 'Logos - Realización: ' . number_format($logos, 2) . '€\nLogos - Montaje: ' . number_format($montajeLogos, 2) . '€\n';
             if ($totalDescMontajeLogos) {
-                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descripción del descuento en montaje de Logos: Gran Canaria – A partir de la Sexta unidad de rótulo se aplica un 25% de descuento; Tenerife – A partir de la Octava unidad de rótulo se aplica un 20% de descuento; Lanzarote y Fuerteventura – A partir de la Décimo Primer unidad de rótulo se aplica un 20% de descuento.</p>';
                 echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento aplicado en Montaje de Logos: ' . number_format($totalDescMontajeLogos, 2) . '€</p>';
                 echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total Montaje de Logos: ' . number_format($totalMontajeLogos, 2) . '€</p>';
                 //$observacionesA3Erp .= 'Descuento aplicado en Montaje de Logos: ' . number_format($totalDescMontajeLogos, 2) . '€ - Total Montaje de Logos: ' . number_format($totalMontajeLogos, 2) . '€ --- ';
@@ -1309,7 +1330,6 @@ try {
             //$observacionesA3Erp .= 'Metros cuadrados: ' . number_format($totalM2, 2) . ' - Realización: ' . number_format($logos, 2) . '€ - Montaje: ' . number_format($montajeLogos, 2) . '€ - ';
             $observacionesA3Erp .= 'Metros cuadrados: ' . number_format($totalM2, 2) . '\nRealización: ' . number_format($logos, 2) . '€\nMontaje: ' . number_format($montajeLogos, 2) . '€\n';
             if ($totalDescMontajeLogos) {
-                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descripción del descuento en montaje de Logos: Gran Canaria – A partir de la Sexta unidad de rótulo se aplica un 25% de descuento; Tenerife – A partir de la Octava unidad de rótulo se aplica un 20% de descuento; Lanzarote y Fuerteventura – A partir de la Décimo Primer unidad de rótulo se aplica un 20% de descuento.</p>';
                 echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento aplicado en Montaje: ' . number_format($totalDescMontajeLogos, 2) . '€</p>';
                 echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total Montaje: ' . number_format($totalMontajeLogos, 2) . '€</p>';
                 //$observacionesA3Erp .= 'Descuento aplicado en Montaje: ' . number_format($totalDescMontajeLogos, 2) . '€ - Total Montaje: ' . number_format($totalMontajeLogos, 2) . '€ --- ';

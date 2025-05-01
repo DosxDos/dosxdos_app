@@ -19,6 +19,7 @@ class Crm extends Zoho
     private $camposMontajeImagenes = "Rango1,Rango2,Precio,idA3Erp";
     private $camposPreciosLogos = "Rango1,Rango2,Precio,idA3Erp";
     private $camposPreciosLogosMontaje = "Rango1,Rango2,Precio,idA3Erp";
+    private $camposDescuentosLogosMontaje = "Isla,PDVS_minimo,Porcentaje";
     private $camposRutas = "Name";
     private $camposMontadores = "Apellido_del_montador,C_digo_del_montador,idApp,Name,Tel_fono_del_montador";
     public $estado = true;
@@ -102,6 +103,10 @@ class Crm extends Zoho
 
                 case 'preciosLogosMontaje':
                     $this->urlGet = "/crm/v5/Precios_Montaje_Logos?fields=" . $this->camposPreciosLogosMontaje;
+                    break;
+
+                case 'descuentosLogosMontaje':
+                    $this->urlGet = "/crm/v5/Descuentos_montaje_logos?fields=" . $this->camposDescuentosLogosMontaje;
                     break;
 
                 case 'rutas':
