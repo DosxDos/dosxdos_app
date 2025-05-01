@@ -213,22 +213,92 @@ try {
             die();
         }
 
-        /* PRECIO TOMA DE MEDIDAS */
-        $precioTomaDeMedidas;
-        $tomaDeMedidasA3Erp;
-        $camposPreciosMedidas = "Precio,idA3Erp";
-        $query = "SELECT $camposPreciosMedidas FROM Precios_Materiales WHERE Material=\"TOMA DE MEDIDAS\"";
-        $crm->query($query);
+        /* MATERIALES Y SERVICIOS (IDS A3 ERP Y PRECIOS) */
+        $materialesServicios = [];
+        $crm->get("materialesServicios");
         if ($crm->estado) {
-            $precioTomaDeMedidas = $crm->respuesta[1]['data'][0]['Precio'];
-            echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioTomaDeMedidas: ' . $precioTomaDeMedidas . '</p>';
-            $tomaDeMedidasA3Erp = $crm->respuesta[1]['data'][0]['idA3Erp'];
-            echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">tomaDeMedidasA3Erp: ' . $tomaDeMedidasA3Erp . '</p>';
+            echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">materialesServicios:</p>';
+            $materialesServicios = $crm->respuesta[1]['data'];
+            print_r($materialesServicios);
             scrollUpdate();
             @ob_flush();
             flush();
         } else {
-            echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ERROR!!! AL CONSULTAR EL PRECIO DE LA TOMA DE MEDIDAS, EN LA LÍNEA: ' . $codLinea . '</p>';
+            echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ERROR!!! AL CONSULTAR EL MÓDULO DE LOS MATERIALES Y LOS SERVICIOS EN EL CRM</p>';
+            print_r($crm->respuestaError);
+            scrollUpdate();
+            @ob_flush();
+            flush();
+            die();
+        }
+
+        // ESTABLECER DATOS CONSTANTES DE LOS MATERIALES Y SERVICIOS
+        $precioTomaDeMedidas;
+        $tomaDeMedidasIdA3Erp;
+        $viniloIdA3Erp;
+        $montajeLogoIdA3Erp;
+        $montajeImagenIdA3Erp;
+        $desmontajeLogoIdA3Erp;
+        $desmontajeImagenIdA3Erp;
+        foreach ($materialesServicios as $materialServicio) {
+            if ($materialServicio['Material'] == "TOMA DE MEDIDAS") {
+                $precioTomaDeMedidas = $materialServicio['Precio'];
+                $tomaDeMedidasIdA3Erp = $materialServicio['idA3Erp'];
+                echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioTomaDeMedidas: ' . $precioTomaDeMedidas . '</p>';
+                echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">tomaDeMedidasIdA3Erp: ' . $tomaDeMedidasIdA3Erp . '</p>';
+                scrollUpdate();
+                @ob_flush();
+                flush();
+            }
+            if ($materialServicio['Material'] == "VINILO") {
+                $viniloIdA3Erp = $materialServicio['idA3Erp'];
+                echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">viniloIdA3Erp: ' . $viniloIdA3Erp . '</p>';
+                scrollUpdate();
+                @ob_flush();
+                flush();
+            }
+            if ($materialServicio['Material'] == "MONTAJE LOGO") {
+                $montajeLogoIdA3Erp = $materialServicio['idA3Erp'];
+                echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">montajeLogoIdA3Erp: ' . $montajeLogoIdA3Erp . '</p>';
+                scrollUpdate();
+                @ob_flush();
+                flush();
+            }
+            if ($materialServicio['Material'] == "MONTAJE IMAGEN") {
+                $montajeImagenIdA3Erp = $materialServicio['idA3Erp'];
+                echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">montajeImagenIdA3Erp: ' . $montajeImagenIdA3Erp . '</p>';
+                scrollUpdate();
+                @ob_flush();
+                flush();
+            }
+            if ($materialServicio['Material'] == "DESMONTAJE LOGO") {
+                $desmontajeLogoIdA3Erp = $materialServicio['idA3Erp'];
+                echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">desmontajeLogoIdA3Erp: ' . $desmontajeLogoIdA3Erp . '</p>';
+                scrollUpdate();
+                @ob_flush();
+                flush();
+            }
+            if ($materialServicio['Material'] == "DESMONTAJE IMAGEN") {
+                $desmontajeImagenIdA3Erp = $materialServicio['idA3Erp'];
+                echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">desmontajeImagenIdA3Erp: ' . $desmontajeImagenIdA3Erp . '</p>';
+                scrollUpdate();
+                @ob_flush();
+                flush();
+            }
+        }
+
+        /* ACABADOS */
+        $acabadosData = [];
+        $crm->get("acabados");
+        if ($crm->estado) {
+            echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">acabadosData:</p>';
+            $acabadosData = $crm->respuesta[1]['data'];
+            print_r($acabadosData);
+            scrollUpdate();
+            @ob_flush();
+            flush();
+        } else {
+            echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ERROR!!! AL CONSULTAR EL MÓDULO DE LOS ACABADOS EN EL CRM</p>';
             print_r($crm->respuestaError);
             scrollUpdate();
             @ob_flush();
@@ -240,6 +310,8 @@ try {
         $numVisuales = 0;
         $numLogos = 0;
         $numTomasDeMedida = 0;
+        $numDesmontajeLogos = 0;
+        $numDesmontajeImagenes = 0;
         $lineasNoIncluidas = [];
         $lineasIncluidas = [];
         $totalM2 = 0;
@@ -262,7 +334,7 @@ try {
         $fecha = date('Y-m-d\TH:i:s');
         $referenciaA3Erp = $codOt;
         $centroCosteA3Erp = $codOt;
-        $totalDescOt;
+        $totalDescOt = 0;
 
         // INFORMACIÓN INICIAL DE A3ERP Y VARIABLES
         $filterA3Erp = "NIF eq " . "'$nifCliente'";
@@ -297,6 +369,7 @@ try {
         $a3ErpData['CentroCoste'] = $centroCosteA3Erp;
         $a3ErpData['CodigoCliente'] = $codigoClienteA3Erp;
         $codigoArticuloA3Erp;
+        $codigoArticuloAcabadoA3Erp;
 
         //BUCLE DE ITERACIÓN POR CADA LÍNEA DE LA OT
         foreach ($lineas as $linea) {
@@ -336,8 +409,6 @@ try {
                         flush();
                         $precioLinea = $precioTomaDeMedidas;
                         $precioLinea = number_format($precioLinea, 2);
-                        $tomaDeMedidas = $tomaDeMedidas + $precioLinea;
-                        $totalPreciosLineas = $totalPreciosLineas + $precioLinea;
                         echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioLinea: ' . $precioLinea . '</p>';
                         scrollUpdate();
                         @ob_flush();
@@ -347,12 +418,15 @@ try {
                             $descuentoOtEnLinea = number_format($descuentoOtEnLinea, 2);
                             $totalDescOt = $totalDescOt + $descuentoOtEnLinea;
                             $precioLinea = $precioLinea - $descuentoOtEnLinea;
-                            echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descuentoOtEnLinea: ' . $descuentoOtEnLinea . '</p>';
-                            echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioLinea: ' . $precioLinea . '</p>';
+                            $precioLinea = number_format($precioLinea, 2);
+                            echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descuentoOtEnLinea: ' . $descuentoOtEnLinea . '</p>';
+                            echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioLinea: ' . $precioLinea . '</p>';
                             scrollUpdate();
                             @ob_flush();
                             flush();
                         }
+                        $tomaDeMedidas = $tomaDeMedidas + $precioLinea;
+                        $totalPreciosLineas = $totalPreciosLineas + $precioLinea;
                         /* ACTUALIZAR LÍNEA */
                         echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Actualizando en el CRM la línea: ' . $codLinea . '...</p>';
                         scrollUpdate();
@@ -368,7 +442,8 @@ try {
                             scrollUpdate();
                             @ob_flush();
                             flush();
-                            $codigoArticuloA3Erp = $tomaDeMedidasA3Erp;
+                            $codigoArticuloA3Erp = $tomaDeMedidasIdA3Erp;
+                            //LÍNEA A3 ERP (TOMA DE MEDIDAS)
                             $lineaA3Erp = [];
                             $lineaA3Erp['CodigoArticulo'] = $codigoArticuloA3Erp;
                             $lineaA3Erp['Unidades'] = 1;
@@ -410,6 +485,7 @@ try {
                             $montajeLineaLogo;
                             $porcDescuentoMontajeLogo = 0;
                             $descuentoMontajeLineaLogo;
+                            $valorAcabado = 0;
                             $camposPv = "N,rea";
                             $query = "SELECT $camposPv FROM Puntos_de_venta WHERE id=\"$pv\"";
                             $crm->query($query);
@@ -463,7 +539,7 @@ try {
                                     $validarPrecioLogo = true;
                                     $precioDelLogo = $precio['Precio'];
                                     echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioDelLogo: ' . $precioDelLogo . '</p>';
-                                    $codigoArticuloA3Erp = '2000025';
+                                    $codigoArticuloA3Erp = $viniloIdA3Erp;
                                     echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">codigoArticuloA3Erp: ' . $codigoArticuloA3Erp . '</p>';
                                     scrollUpdate();
                                     @ob_flush();
@@ -482,39 +558,34 @@ try {
                                 flush();
                                 /* ACABADO */
                                 if ($acabado) {
-                                    $camposPreciosAcabados = "Precio,idA3Erp";
-                                    $query = "SELECT $camposPreciosAcabados FROM Precios_Acabados WHERE Acabado	=\"$acabado\"";
-                                    $crm->query($query);
-                                    if ($crm->estado) {
-                                        $precioAcabado = $crm->respuesta[1]['data'][0]['Precio'];
-                                        echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">acabado: ' . $acabado . '</p>';
-                                        echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioAcabado: ' . $precioAcabado . '</p>';
-                                        scrollUpdate();
-                                        @ob_flush();
-                                        flush();
-                                        $valorAcabado = $m2 * $precioAcabado;
-                                        $valorAcabado = number_format($valorAcabado, 2);
-                                        $acabados = $acabados + $valorAcabado;
-                                        $precioLinea = $precioLinea + $valorAcabado;
-                                        echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">valorAcabado: ' . $valorAcabado . '</p>';
-                                        echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioLinea: ' . $precioLinea . '</p>';
-                                        scrollUpdate();
-                                        @ob_flush();
-                                        flush();
-                                    } else {
-                                        if ($crm->respuestaError[1] == "Error en la API de Zoho: INVALID_QUERY value given seems to be invalid") {
-                                            echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">INFO: Línea ' . $codLinea . ' no tiene acabado...</p>';
+                                    $validarAcabado = false;
+                                    foreach ($acabadoData as $acabadoDataVector) {
+                                        if ($acabadoDataVector['Acabado'] == $acabado) {
+                                            $validarAcabado = true;
+                                            $precioAcabado = $acabadoDataVector['Precio'];
+                                            $codigoArticuloAcabadoA3Erp = $acabadoDataVector['idA3Erp'];
+                                            echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">acabado: ' . $acabado . '</p>';
+                                            echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioAcabado: ' . $precioAcabado . '</p>';
                                             scrollUpdate();
                                             @ob_flush();
                                             flush();
-                                        } else {
-                                            echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ERROR!!! AL CONSULTAR EL ACABADO DE LA LÍNEA ' . $codLinea . '</p>';
-                                            print_r($crm->respuestaError);
+                                            $valorAcabado = $m2 * $precioAcabado;
+                                            $valorAcabado = number_format($valorAcabado, 2);
+                                            $acabados = $acabados + $valorAcabado;
+                                            $precioLinea = $precioLinea + $valorAcabado;
+                                            echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">valorAcabado: ' . $valorAcabado . '</p>';
+                                            echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioLinea: ' . $precioLinea . '</p>';
                                             scrollUpdate();
                                             @ob_flush();
                                             flush();
-                                            die();
                                         }
+                                    }
+                                    if (!$validarAcabado) {
+                                        echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ERROR!!! LA LÍNEA ' . $codLinea . ' SE LE HA ASIGNADO UN ACABADO QUE NO EXISTE EN EL MÓDULO DE ACABADOS EN EL CRM...</p>';
+                                        scrollUpdate();
+                                        @ob_flush();
+                                        flush();
+                                        die();
                                     }
                                 }
                                 /* MONTAJE LOGO */
@@ -563,7 +634,6 @@ try {
                                 die();
                             }
                             $precioLinea = number_format($precioLinea, 2);
-                            $totalPreciosLineas = $totalPreciosLineas + $precioLinea;
                             echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioLinea: ' . $precioLinea . '</p>';
                             scrollUpdate();
                             @ob_flush();
@@ -573,12 +643,14 @@ try {
                                 $descuentoOtEnLinea = number_format($descuentoOtEnLinea, 2);
                                 $totalDescOt = $totalDescOt + $descuentoOtEnLinea;
                                 $precioLinea = $precioLinea - $descuentoOtEnLinea;
-                                echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descuentoOtEnLinea: ' . $descuentoOtEnLinea . '</p>';
-                                echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioLinea: ' . $precioLinea . '</p>';
+                                $precioLinea = number_format($precioLinea, 2);
+                                echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descuentoOtEnLinea: ' . $descuentoOtEnLinea . '</p>';
+                                echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioLinea: ' . $precioLinea . '</p>';
                                 scrollUpdate();
                                 @ob_flush();
                                 flush();
                             }
+                            $totalPreciosLineas = $totalPreciosLineas + $precioLinea;
                             /* ACTUALIZAR LÍNEA */
                             echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Actualizando en el CRM la línea: ' . $codLinea . '...</p>';
                             scrollUpdate();
@@ -601,17 +673,29 @@ try {
                                 scrollUpdate();
                                 @ob_flush();
                                 flush();
+                                // LÍNEA DE A3 ERP DE LA REALIZACIÓN Y EL MONTAJE (REALIZACIÓN Y MONTAJE DE LOGOS)
                                 $lineaA3Erp = [];
                                 $lineaA3Erp['CodigoArticulo'] = $codigoArticuloA3Erp;
-                                $lineaA3Erp['Unidades'] = 1;
-                                $lineaA3Erp['Precio'] = $precioLinea;
+                                $lineaA3Erp['Unidades'] = $m2;
+                                $lineaA3Erp['Precio'] = $precioLinea - $valorAcabado;
                                 $lineaA3Erp['Param1'] = $m2;
                                 $lineaA3Erp['Param2'] = $realizacionLineaLogo;
                                 $lineaA3Erp['Param3'] = $precioDelMontaje;
                                 $lineaA3Erp['Param4'] = $poner;
-                                $lineaA3Erp['Param5'] = $acabado;
-                                $lineaA3Erp['Texto'] = $codLinea . ' - ' . $nombreDeLinea;
+                                $lineaA3Erp['Texto'] = $codLinea . ' - ' . 'LOGO - ' . $nombreDeLinea;
                                 array_push($lineasA3Erp, $lineaA3Erp);
+                                // LÍNEA DE A3 ERP DEL ACABADO (REALIZACIÓN Y MONTAJE DE LOGOS)
+                                if ($acabado) {
+                                    $lineaA3Erp = [];
+                                    $lineaA3Erp['CodigoArticulo'] = $codigoArticuloAcabadoA3Erp;
+                                    $lineaA3Erp['Unidades'] = $m2;
+                                    $lineaA3Erp['Precio'] = $valorAcabado;
+                                    $lineaA3Erp['Param1'] = $m2;
+                                    $lineaA3Erp['Param4'] = $poner;
+                                    $lineaA3Erp['Param5'] = $acabado;
+                                    $lineaA3Erp['Texto'] = $codLinea . ' - ' . 'ACABADO - ' . 'LOGO - ' . $nombreDeLinea;
+                                    array_push($lineasA3Erp, $lineaA3Erp);
+                                }
                             } else {
                                 echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ERROR!!! NO SE HA ACTUALIZADO LA LÍNEA: ' . $codLinea . ' EN EL CRM</p>';
                                 print_r($crm->respuestaError);
@@ -689,39 +773,34 @@ try {
                                     }
                                     /* ACABADO */
                                     if ($acabado) {
-                                        $camposPreciosAcabados = "Precio";
-                                        $query = "SELECT $camposPreciosAcabados FROM Precios_Acabados WHERE Acabado	=\"$acabado\"";
-                                        $crm->query($query);
-                                        if ($crm->estado) {
-                                            $precioAcabado = $crm->respuesta[1]['data'][0]['Precio'];
-                                            echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">acabado: ' . $acabado . '</p>';
-                                            echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioAcabado: ' . $precioAcabado . '</p>';
-                                            scrollUpdate();
-                                            @ob_flush();
-                                            flush();
-                                            $valorAcabado = $m2 * $precioAcabado;
-                                            $valorAcabado = number_format($valorAcabado, 2);
-                                            $acabados = $acabados + $valorAcabado;
-                                            $precioLinea = $precioLinea + $valorAcabado;
-                                            echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">valorAcabado: ' . $valorAcabado . '</p>';
-                                            echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioLinea: ' . $precioLinea . '</p>';
-                                            scrollUpdate();
-                                            @ob_flush();
-                                            flush();
-                                        } else {
-                                            if ($crm->respuestaError[1] == "Error en la API de Zoho: INVALID_QUERY value given seems to be invalid") {
-                                                echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">INFO: Línea ' . $codLinea . ' no tiene acabado...</p>';
+                                        $validarAcabado = false;
+                                        foreach ($acabadoData as $acabadoDataVector) {
+                                            if ($acabadoDataVector['Acabado'] == $acabado) {
+                                                $validarAcabado = true;
+                                                $precioAcabado = $acabadoDataVector['Precio'];
+                                                $codigoArticuloAcabadoA3Erp = $acabadoDataVector['idA3Erp'];
+                                                echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">acabado: ' . $acabado . '</p>';
+                                                echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioAcabado: ' . $precioAcabado . '</p>';
                                                 scrollUpdate();
                                                 @ob_flush();
                                                 flush();
-                                            } else {
-                                                echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ERROR!!! AL CONSULTAR EL ACABADO DE LA LÍNEA ' . $codLinea . '</p>';
-                                                print_r($crm->respuestaError);
+                                                $valorAcabado = $m2 * $precioAcabado;
+                                                $valorAcabado = number_format($valorAcabado, 2);
+                                                $acabados = $acabados + $valorAcabado;
+                                                $precioLinea = $precioLinea + $valorAcabado;
+                                                echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">valorAcabado: ' . $valorAcabado . '</p>';
+                                                echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioLinea: ' . $precioLinea . '</p>';
                                                 scrollUpdate();
                                                 @ob_flush();
                                                 flush();
-                                                die();
                                             }
+                                        }
+                                        if (!$validarAcabado) {
+                                            echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ERROR!!! LA LÍNEA ' . $codLinea . ' SE LE HA ASIGNADO UN ACABADO QUE NO EXISTE EN EL MÓDULO DE ACABADOS EN EL CRM...</p>';
+                                            scrollUpdate();
+                                            @ob_flush();
+                                            flush();
+                                            die();
                                         }
                                     }
                                     /* MONTAJE */
@@ -769,11 +848,23 @@ try {
                                     die();
                                 }
                                 $precioLinea = number_format($precioLinea, 2);
-                                $totalPreciosLineas = $totalPreciosLineas + $precioLinea;
                                 echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioLinea: ' . $precioLinea . '</p>';
                                 scrollUpdate();
                                 @ob_flush();
                                 flush();
+                                if ($descuentoOt) {
+                                    $descuentoOtEnLinea = ($precioLinea * $descuentoOt) / 100;
+                                    $descuentoOtEnLinea = number_format($descuentoOtEnLinea, 2);
+                                    $totalDescOt = $totalDescOt + $descuentoOtEnLinea;
+                                    $precioLinea = $precioLinea - $descuentoOtEnLinea;
+                                    $precioLinea = number_format($precioLinea, 2);
+                                    echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descuentoOtEnLinea: ' . $descuentoOtEnLinea . '</p>';
+                                    echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioLinea: ' . $precioLinea . '</p>';
+                                    scrollUpdate();
+                                    @ob_flush();
+                                    flush();
+                                }
+                                $totalPreciosLineas = $totalPreciosLineas + $precioLinea;
                                 /* ACTUALIZAR LÍNEA */
                                 echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Actualizando en el CRM la línea: ' . $codLinea . '...</p>';
                                 scrollUpdate();
@@ -800,17 +891,29 @@ try {
                                     scrollUpdate();
                                     @ob_flush();
                                     flush();
+                                    // LÍNEA DE A3 ERP DE LA REALIZACIÓN Y EL MONTAJE (REALIZACIÓN Y MONTAJE DE IMÁGENES)
                                     $lineaA3Erp = [];
                                     $lineaA3Erp['CodigoArticulo'] = $codigoArticuloA3Erp;
-                                    $lineaA3Erp['Unidades'] = 1;
-                                    $lineaA3Erp['Precio'] = $precioLinea;
+                                    $lineaA3Erp['Unidades'] = $m2;
+                                    $lineaA3Erp['Precio'] = $precioLinea - $valorAcabado;
                                     $lineaA3Erp['Param1'] = $m2;
                                     $lineaA3Erp['Param2'] = $realizacionLinea;
                                     $lineaA3Erp['Param3'] = $precioDelMontaje;
                                     $lineaA3Erp['Param4'] = $poner;
-                                    $lineaA3Erp['Param5'] = $acabado;
                                     $lineaA3Erp['Texto'] = $codLinea . ' - ' . $nombreDeLinea;
                                     array_push($lineasA3Erp, $lineaA3Erp);
+                                    // LÍNEA DE A3 ERP DEL ACABADO (REALIZACIÓN Y MONTAJE DE IMÁGENES)
+                                    if ($acabado) {
+                                        $lineaA3Erp = [];
+                                        $lineaA3Erp['CodigoArticulo'] = $codigoArticuloAcabadoA3Erp;
+                                        $lineaA3Erp['Unidades'] = $m2;
+                                        $lineaA3Erp['Precio'] = $valorAcabado;
+                                        $lineaA3Erp['Param1'] = $m2;
+                                        $lineaA3Erp['Param4'] = $poner;
+                                        $lineaA3Erp['Param5'] = $acabado;
+                                        $lineaA3Erp['Texto'] = $codLinea . ' - ' . 'ACABADO - ' . $nombreDeLinea;
+                                        array_push($lineasA3Erp, $lineaA3Erp);
+                                    }
                                 } else {
                                     echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ERROR!!! NO SE HA ACTUALIZADO LA LÍNEA: ' . $codLinea . ' EN EL CRM</p>';
                                     print_r($crm->respuestaError);
@@ -840,7 +943,7 @@ try {
                         if ($alto && $ancho) {
                             $numLogos++;
                             echo '<p style="color:green;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">CALCULANDO LÍNEA ' . $codLinea . ' ...</p>';
-                            echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Realizacion y montaje de logos</p>';
+                            echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Montaje de logos</p>';
                             scrollUpdate();
                             @ob_flush();
                             flush();
@@ -905,48 +1008,11 @@ try {
                                     }
                                 }
                             }
-                            $codigoArticuloA3Erp = '2000023';
+                            $codigoArticuloA3Erp = $montajeLogoIdA3Erp;
                             echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">codigoArticuloA3Erp: ' . $codigoArticuloA3Erp . '</p>';
                             scrollUpdate();
                             @ob_flush();
                             flush();
-                            /* ACABADO */
-                            if ($acabado) {
-                                $camposPreciosAcabados = "Precio,idA3Erp";
-                                $query = "SELECT $camposPreciosAcabados FROM Precios_Acabados WHERE Acabado	=\"$acabado\"";
-                                $crm->query($query);
-                                if ($crm->estado) {
-                                    $precioAcabado = $crm->respuesta[1]['data'][0]['Precio'];
-                                    echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">acabado: ' . $acabado . '</p>';
-                                    echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioAcabado: ' . $precioAcabado . '</p>';
-                                    scrollUpdate();
-                                    @ob_flush();
-                                    flush();
-                                    $valorAcabado = $m2 * $precioAcabado;
-                                    $valorAcabado = number_format($valorAcabado, 2);
-                                    $acabados = $acabados + $valorAcabado;
-                                    $precioLinea = $precioLinea + $valorAcabado;
-                                    echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">valorAcabado: ' . $valorAcabado . '</p>';
-                                    echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioLinea: ' . $precioLinea . '</p>';
-                                    scrollUpdate();
-                                    @ob_flush();
-                                    flush();
-                                } else {
-                                    if ($crm->respuestaError[1] == "Error en la API de Zoho: INVALID_QUERY value given seems to be invalid") {
-                                        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">INFO: Línea ' . $codLinea . ' no tiene acabado...</p>';
-                                        scrollUpdate();
-                                        @ob_flush();
-                                        flush();
-                                    } else {
-                                        echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ERROR!!! AL CONSULTAR EL ACABADO DE LA LÍNEA ' . $codLinea . '</p>';
-                                        print_r($crm->respuestaError);
-                                        scrollUpdate();
-                                        @ob_flush();
-                                        flush();
-                                        die();
-                                    }
-                                }
-                            }
                             /* MONTAJE LOGO */
                             $validarPrecioMontajeLogo = false;
                             $precioDelMontaje;
@@ -985,11 +1051,23 @@ try {
                                 die();
                             }
                             $precioLinea = number_format($precioLinea, 2);
-                            $totalPreciosLineas = $totalPreciosLineas + $precioLinea;
                             echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioLinea: ' . $precioLinea . '</p>';
                             scrollUpdate();
                             @ob_flush();
                             flush();
+                            if ($descuentoOt) {
+                                $descuentoOtEnLinea = ($precioLinea * $descuentoOt) / 100;
+                                $descuentoOtEnLinea = number_format($descuentoOtEnLinea, 2);
+                                $totalDescOt = $totalDescOt + $descuentoOtEnLinea;
+                                $precioLinea = $precioLinea - $descuentoOtEnLinea;
+                                $precioLinea = number_format($precioLinea, 2);
+                                echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descuentoOtEnLinea: ' . $descuentoOtEnLinea . '</p>';
+                                echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioLinea: ' . $precioLinea . '</p>';
+                                scrollUpdate();
+                                @ob_flush();
+                                flush();
+                            }
+                            $totalPreciosLineas = $totalPreciosLineas + $precioLinea;
                             /* ACTUALIZAR LÍNEA */
                             echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Actualizando en el CRM la línea: ' . $codLinea . '...</p>';
                             scrollUpdate();
@@ -1009,6 +1087,7 @@ try {
                                 scrollUpdate();
                                 @ob_flush();
                                 flush();
+                                //LÍNEA DE A3 ERP DEL MONTAJE (MONTAJE DE LOGOS)
                                 $lineaA3Erp = [];
                                 $lineaA3Erp['CodigoArticulo'] = $codigoArticuloA3Erp;
                                 $lineaA3Erp['Unidades'] = 1;
@@ -1041,7 +1120,7 @@ try {
                         if ($alto && $ancho) {
                             $numVisuales++;
                             echo '<p style="color:green;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">CALCULANDO LÍNEA ' . $codLinea . ' ...</p>';
-                            echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Realizacion y montaje de imagenes</p>';
+                            echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Montaje de imagenes</p>';
                             scrollUpdate();
                             @ob_flush();
                             flush();
@@ -1055,48 +1134,11 @@ try {
                             scrollUpdate();
                             @ob_flush();
                             flush();
-                            $codigoArticuloA3Erp = '2000024';
+                            $codigoArticuloA3Erp = $montajeImagenIdA3Erp;
                             echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">codigoArticuloA3Erp: ' . $codigoArticuloA3Erp . '</p>';
                             scrollUpdate();
                             @ob_flush();
                             flush();
-                            /* ACABADO */
-                            if ($acabado) {
-                                $camposPreciosAcabados = "Precio";
-                                $query = "SELECT $camposPreciosAcabados FROM Precios_Acabados WHERE Acabado	=\"$acabado\"";
-                                $crm->query($query);
-                                if ($crm->estado) {
-                                    $precioAcabado = $crm->respuesta[1]['data'][0]['Precio'];
-                                    echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">acabado: ' . $acabado . '</p>';
-                                    echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioAcabado: ' . $precioAcabado . '</p>';
-                                    scrollUpdate();
-                                    @ob_flush();
-                                    flush();
-                                    $valorAcabado = $m2 * $precioAcabado;
-                                    $valorAcabado = number_format($valorAcabado, 2);
-                                    $acabados = $acabados + $valorAcabado;
-                                    $precioLinea = $precioLinea + $valorAcabado;
-                                    echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">valorAcabado: ' . $valorAcabado . '</p>';
-                                    echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioLinea: ' . $precioLinea . '</p>';
-                                    scrollUpdate();
-                                    @ob_flush();
-                                    flush();
-                                } else {
-                                    if ($crm->respuestaError[1] == "Error en la API de Zoho: INVALID_QUERY value given seems to be invalid") {
-                                        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">INFO: Línea ' . $codLinea . ' no tiene acabado...</p>';
-                                        scrollUpdate();
-                                        @ob_flush();
-                                        flush();
-                                    } else {
-                                        echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ERROR!!! AL CONSULTAR EL ACABADO DE LA LÍNEA ' . $codLinea . '</p>';
-                                        print_r($crm->respuestaError);
-                                        scrollUpdate();
-                                        @ob_flush();
-                                        flush();
-                                        die();
-                                    }
-                                }
-                            }
                             /* MONTAJE */
                             $validarPrecioMOntaje = false;
                             $precioDelMontaje;
@@ -1134,11 +1176,23 @@ try {
                                 die();
                             }
                             $precioLinea = number_format($precioLinea, 2);
-                            $totalPreciosLineas = $totalPreciosLineas + $precioLinea;
                             echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioLinea: ' . $precioLinea . '</p>';
                             scrollUpdate();
                             @ob_flush();
                             flush();
+                            if ($descuentoOt) {
+                                $descuentoOtEnLinea = ($precioLinea * $descuentoOt) / 100;
+                                $descuentoOtEnLinea = number_format($descuentoOtEnLinea, 2);
+                                $totalDescOt = $totalDescOt + $descuentoOtEnLinea;
+                                $precioLinea = $precioLinea - $descuentoOtEnLinea;
+                                $precioLinea = number_format($precioLinea, 2);
+                                echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descuentoOtEnLinea: ' . $descuentoOtEnLinea . '</p>';
+                                echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioLinea: ' . $precioLinea . '</p>';
+                                scrollUpdate();
+                                @ob_flush();
+                                flush();
+                            }
+                            $totalPreciosLineas = $totalPreciosLineas + $precioLinea;
                             /* ACTUALIZAR LÍNEA */
                             echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Actualizando en el CRM la línea: ' . $codLinea . '...</p>';
                             scrollUpdate();
@@ -1160,6 +1214,7 @@ try {
                                 scrollUpdate();
                                 @ob_flush();
                                 flush();
+                                //LÍNEA DE A3 ERP DEL MONTAJE (MONTAJE DE IMÁGENES)
                                 $lineaA3Erp = [];
                                 $lineaA3Erp['CodigoArticulo'] = $codigoArticuloA3Erp;
                                 $lineaA3Erp['Unidades'] = 1;
@@ -1185,6 +1240,10 @@ try {
                             flush();
                             die();
                         }
+                        break;
+
+                    case 'Desmontaje de logos':
+                        echo 'Desmontaje de logos';
                         break;
 
                     case 'Desmontaje de imagenes':
@@ -1223,11 +1282,21 @@ try {
         $totalMontaje = $montaje - $totalDescMontaje;
         $totalMontajeLogos = $montajeLogos - $totalDescMontajeLogos;
         $totalSinImpuesto = $totalRealizacion + $totalMontaje + $acabados + $logos + $totalMontajeLogos + $tomaDeMedidas;
+        //DESCUENTO MANUAL DE LA OT
+        $totalSinImpuestoConDescuentoOt = $totalSinImpuesto - $totalDescOt;
         //APLICACIÓN DEL IMPUESTO
-        $impuestoAplicado = ($totalSinImpuesto * $impuestoPorc) / 100;
-        $totalConImpuesto = $totalSinImpuesto + $impuestoAplicado;
+        $impuestoAplicado = 0;
+        $totalConImpuesto = 0;
+        if ($descuentoOt) {
+            $impuestoAplicado = ($totalSinImpuestoConDescuentoOt * $impuestoPorc) / 100;
+            $totalConImpuesto = $totalSinImpuestoConDescuentoOt + $impuestoAplicado;
+        } else {
+            $impuestoAplicado = ($totalSinImpuesto * $impuestoPorc) / 100;
+            $totalConImpuesto = $totalSinImpuesto + $impuestoAplicado;
+        }
         /* NOTAS */
         $observacionesA3Erp = '';
+        //SI EXISTEN VISUALES Y LOGOS
         if ($numVisuales && $numLogos) {
             echo '<p style="display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">EXISTE UNA MEZCLA DE VISUALES Y LOGOS EN LAS LÍNEAS</p>';
             $totalRealizacionVL = $totalRealizacion + $acabados + $logos;
@@ -1278,12 +1347,20 @@ try {
                 $observacionesA3Erp .= 'TOMA DE MEDIDAS: ' . number_format($tomaDeMedidas, 2) . '€\n';
             }
             echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">TOTAL PRESUPUESTO SIN IMPUESTO: ' . number_format($totalSinImpuesto, 2) . '€</p>';
+            $observacionesA3Erp .= 'TOTAL PRESUPUESTO SIN IMPUESTO: ' . number_format($totalSinImpuesto, 2) . '€\n';
+            if ($descuentoOt) {
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">DESCUENTO GENERAL: ' . $descuentoOt . '%</p>';
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">DESCUENTO GENERAL: ' . number_format($totalDescOt, 2) . '€</p>';
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">TOTAL PRESUPUESTO SIN IMPUESTO: ' . number_format($totalSinImpuestoConDescuentoOt, 2) . '€</p>';
+                $observacionesA3Erp .= 'DESCUENTO GENERAL: ' . $descuentoOt . '%\nDESCUENTO GENERAL: ' . number_format($totalDescOt, 2) . '€\nTOTAL PRESUPUESTO SIN IMPUESTO: ' . number_format($totalSinImpuestoConDescuentoOt, 2) . '€\n';
+            }
             echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">IMPUESTO: ' . $impuesto . '</p>';
             echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">TOTAL PRESUPUESTO CON IMPUESTO: ' . number_format($totalConImpuesto, 2) . '€</p>';
             //$observacionesA3Erp .= 'TOTAL PRESUPUESTO SIN IMPUESTO: ' . number_format($totalSinImpuesto, 2) . '€ - IMPUESTO: ' . $impuesto . ' - TOTAL PRESUPUESTO CON IMPUESTO: ' . number_format($totalConImpuesto, 2) . '€ - ';
-            $observacionesA3Erp .= 'TOTAL PRESUPUESTO SIN IMPUESTO: ' . number_format($totalSinImpuesto, 2) . '€\nIMPUESTO: ' . $impuesto . '\nTOTAL PRESUPUESTO CON IMPUESTO: ' . number_format($totalConImpuesto, 2) . '€\n';
+            $observacionesA3Erp .= 'IMPUESTO: ' . $impuesto . '\nTOTAL PRESUPUESTO CON IMPUESTO: ' . number_format($totalConImpuesto, 2) . '€\n';
             echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total Precios Líneas: ' . number_format($totalPreciosLineas, 2) . '€</p>';
-        } else if ($numVisuales) {
+        }
+        /* SI SÓLO EXISTEN VISUALES */ else if ($numVisuales) {
             echo '<p style="display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">LAS LÍNEAS SON VISUALES</p>';
             echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Metros cuadrados: ' . number_format($totalM2, 2) . '</p>';
             echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Realización: ' . number_format($realizacion, 2) . '€</p>';
@@ -1317,12 +1394,20 @@ try {
                 $observacionesA3Erp .= 'Toma de medidas: ' . number_format($tomaDeMedidas, 2) . '€\n';
             }
             echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">TOTAL PRESUPUESTO SIN IMPUESTO: ' . number_format($totalSinImpuesto, 2) . '€</p>';
+            $observacionesA3Erp .= 'TOTAL PRESUPUESTO SIN IMPUESTO: ' . number_format($totalSinImpuesto, 2) . '€\n';
+            if ($descuentoOt) {
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">DESCUENTO GENERAL: ' . $descuentoOt . '%</p>';
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">DESCUENTO GENERAL: ' . number_format($totalDescOt, 2) . '€</p>';
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">TOTAL PRESUPUESTO SIN IMPUESTO: ' . number_format($totalSinImpuestoConDescuentoOt, 2) . '€</p>';
+                $observacionesA3Erp .= 'DESCUENTO GENERAL: ' . $descuentoOt . '%\nDESCUENTO GENERAL: ' . number_format($totalDescOt, 2) . '€\nTOTAL PRESUPUESTO SIN IMPUESTO: ' . number_format($totalSinImpuestoConDescuentoOt, 2) . '€\n';
+            }
             echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">IMPUESTO: ' . $impuesto . '</p>';
             echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">TOTAL PRESUPUESTO CON IMPUESTO: ' . number_format($totalConImpuesto, 2) . '€</p>';
             echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total Precios Líneas: ' . number_format($totalPreciosLineas, 2) . '€</p>';
             //$observacionesA3Erp .= 'TOTAL PRESUPUESTO SIN IMPUESTO: ' . number_format($totalSinImpuesto, 2) . '€ - IMPUESTO: ' . $impuesto . ' - TOTAL PRESUPUESTO CON IMPUESTO: ' . number_format($totalConImpuesto, 2) . '€ - ';
-            $observacionesA3Erp .= 'TOTAL PRESUPUESTO SIN IMPUESTO: ' . number_format($totalSinImpuesto, 2) . '€\nIMPUESTO: ' . $impuesto . '\nTOTAL PRESUPUESTO CON IMPUESTO: ' . number_format($totalConImpuesto, 2) . '€\n';
-        } else if ($numLogos) {
+            $observacionesA3Erp .= 'IMPUESTO: ' . $impuesto . '\nTOTAL PRESUPUESTO CON IMPUESTO: ' . number_format($totalConImpuesto, 2) . '€\n';
+        }
+        /* SI SÓLO EXISTEN LOGOS */ else if ($numLogos) {
             echo '<p style="display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">LAS LÍNEAS SON LOGOS</p>';
             echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Metros cuadrados: ' . number_format($totalM2, 2) . '</p>';
             echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Realización: ' . number_format($logos, 2) . '€</p>';
@@ -1346,19 +1431,34 @@ try {
                 $observacionesA3Erp .= 'Toma de medidas: ' . number_format($tomaDeMedidas, 2) . '€\n';
             }
             echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">TOTAL PRESUPUESTO SIN IMPUESTO: ' . number_format($totalSinImpuesto, 2) . '€</p>';
+            $observacionesA3Erp .= 'TOTAL PRESUPUESTO SIN IMPUESTO: ' . number_format($totalSinImpuesto, 2) . '€\n';
+            if ($descuentoOt) {
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">DESCUENTO GENERAL: ' . $descuentoOt . '%</p>';
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">DESCUENTO GENERAL: ' . number_format($totalDescOt, 2) . '€</p>';
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">TOTAL PRESUPUESTO SIN IMPUESTO: ' . number_format($totalSinImpuestoConDescuentoOt, 2) . '€</p>';
+                $observacionesA3Erp .= 'DESCUENTO GENERAL: ' . $descuentoOt . '%\nDESCUENTO GENERAL: ' . number_format($totalDescOt, 2) . '€\nTOTAL PRESUPUESTO SIN IMPUESTO: ' . number_format($totalSinImpuestoConDescuentoOt, 2) . '€\n';
+            }
             echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">IMPUESTO: ' . $impuesto . '</p>';
             echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">TOTAL PRESUPUESTO CON IMPUESTO: ' . number_format($totalConImpuesto, 2) . '€</p>';
             //$observacionesA3Erp .= 'TOTAL PRESUPUESTO SIN IMPUESTO: ' . number_format($totalSinImpuesto, 2) . '€ - IMPUESTO: ' . $impuesto . ' - TOTAL PRESUPUESTO CON IMPUESTO: ' . number_format($totalConImpuesto, 2) . '€ - ';
-            $observacionesA3Erp .= 'TOTAL PRESUPUESTO SIN IMPUESTO: ' . number_format($totalSinImpuesto, 2) . '€\nIMPUESTO: ' . $impuesto . '\nTOTAL PRESUPUESTO CON IMPUESTO: ' . number_format($totalConImpuesto, 2) . '€\n';
+            $observacionesA3Erp .= 'IMPUESTO: ' . $impuesto . '\nTOTAL PRESUPUESTO CON IMPUESTO: ' . number_format($totalConImpuesto, 2) . '€\n';
             echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total Precios Líneas: ' . number_format($totalPreciosLineas, 2) . '€</p>';
-        } else if ($numTomasDeMedida) {
+        }
+        /* SI SÓLO EXISTEN TOMAS DE MEDIDA */ else if ($numTomasDeMedida) {
             echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Toma de medidas: ' . number_format($tomaDeMedidas, 2) . '€</p>';
             echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">TOTAL PRESUPUESTO SIN IMPUESTO: ' . number_format($totalSinImpuesto, 2) . '€</p>';
+            $observacionesA3Erp .= 'Toma de medidas: ' . number_format($tomaDeMedidas, 2) . 'TOTAL PRESUPUESTO SIN IMPUESTO: ' . number_format($totalSinImpuesto, 2) . '€\n';
+            if ($descuentoOt) {
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">DESCUENTO GENERAL: ' . $descuentoOt . '%</p>';
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">DESCUENTO GENERAL: ' . number_format($totalDescOt, 2) . '€</p>';
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">TOTAL PRESUPUESTO SIN IMPUESTO: ' . number_format($totalSinImpuestoConDescuentoOt, 2) . '€</p>';
+                $observacionesA3Erp .= 'DESCUENTO GENERAL: ' . $descuentoOt . '%\nDESCUENTO GENERAL: ' . number_format($totalDescOt, 2) . '€\nTOTAL PRESUPUESTO SIN IMPUESTO: ' . number_format($totalSinImpuestoConDescuentoOt, 2) . '€\n';
+            }
             echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">IMPUESTO: ' . $impuesto . '</p>';
             echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">TOTAL PRESUPUESTO CON IMPUESTO: ' . number_format($totalConImpuesto, 2) . '€</p>';
             echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total Precios Líneas: ' . number_format($totalPreciosLineas, 2) . '€</p>';
             //$observacionesA3Erp .= 'Toma de medidas: ' . number_format($tomaDeMedidas, 2) . '€ - TOTAL PRESUPUESTO SIN IMPUESTO: ' . number_format($totalSinImpuesto, 2) . '€ - IMPUESTO: ' . $impuesto . ' - TOTAL PRESUPUESTO CON IMPUESTO: ' . number_format($totalConImpuesto, 2) . '€ - ';
-            $observacionesA3Erp .= 'Toma de medidas: ' . number_format($tomaDeMedidas, 2) . '€\nTOTAL PRESUPUESTO SIN IMPUESTO: ' . number_format($totalSinImpuesto, 2) . '€\nIMPUESTO: ' . $impuesto . '\nTOTAL PRESUPUESTO CON IMPUESTO: ' . number_format($totalConImpuesto, 2) . '€\n';
+            $observacionesA3Erp .= 'IMPUESTO: ' . $impuesto . '\nTOTAL PRESUPUESTO CON IMPUESTO: ' . number_format($totalConImpuesto, 2) . '€\n';
         }
 
         $observacionesA3Erp = str_replace('\n', "\n", $observacionesA3Erp);
