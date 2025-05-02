@@ -1300,6 +1300,26 @@ try {
             $impuestoAplicado = ($totalSinImpuesto * $impuestoPorc) / 100;
             $totalConImpuesto = $totalSinImpuesto + $impuestoAplicado;
         }
+        /* ACTUALIZAR IMPORTE DE LA OT */
+        $otVector = [];
+        $otVector['data'][0]['id'] = $idOt;
+        $descuentoOt ? $otVector['data'][0]['Amount'] = number_format($totalSinImpuestoConDescuentoOt, 2) : $otVector['data'][0]['Amount'] = number_format($totalSinImpuesto, 2);
+        $otJson = json_encode($otVector);
+        $crm->actualizar("actualizarOt", $otJson);
+        if ($crm->estado) {
+            echo '<p style="color:pink;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">EL IMPORTE DE LA OT HA SIDO ACTUALIZADO EN EL CRM</p>';
+            scrollUpdate();
+            @ob_flush();
+            flush();
+        } else {
+            echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ERROR!!! AL ACTUALIZAR EL IMPORTE DE LA OT EN EL CRM</p>';
+            print_r($crm->respuestaError);
+            scrollUpdate();
+            @ob_flush();
+            flush();
+            die();
+        }
+        // DATOS GENERALES DEL CÁLCULO
         echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">totalRealizacion: ' . number_format($totalRealizacion, 2) . '€</p>';
         echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">totalMontaje: ' . number_format($totalMontaje, 2) . '€</p>';
         echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">acabados: ' . number_format($acabados, 2) . '€</p>';
