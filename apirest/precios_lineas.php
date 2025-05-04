@@ -313,35 +313,60 @@ try {
             die();
         }
 
-        //VARIABLES PARA LAS LÍNEAS
+        //VARIABLES PARA LA ITERACIÓN Y CÁLCULO DE LAS LÍNEAS
+        //CUENTA DE TIPOS DE TRABAJOS (GLOBALES)
+        $numTomasDeMedida = 0;
         $numVisuales = 0;
         $numLogos = 0;
-        $numTomasDeMedida = 0;
+        //CUENTA DE TIPOS DE TRABAJOS (NO GLOBALES)
+        $numMontajeVisuales = 0;
+        $numDesmontajeVisuales = 0;
+        $numMontajeLogos = 0;
         $numDesmontajeLogos = 0;
-        $numDesmontajeImagenes = 0;
+        //INCLUSIÓN DE LÍNEAS
         $lineasNoIncluidas = [];
         $lineasIncluidas = [];
+        //M2
         $totalM2 = 0;
+        //TOMA DE MEDIDAS
+        $tomaDeMedidas = 0;
+        //REALIZACIÓN VISUALES (IMÁGENES)
         $realizacion = 0;
         $totalDescRealizacion = 0;
         $totalRealizacion = 0;
-        $acabados = 0;
+        //MONTAJE VISUALES (IMÁGENES)
         $montaje = 0;
         $totalDescMontaje = 0;
         $totalMontaje = 0;
-        $totalSinImpuesto = 0;
-        $totalConImpuesto = 0;
-        $totalPreciosLineas = 0;
+        //DESMONTAJE VISUALES (IMÁGENES)
+        $desmontaje = 0;
+        $totalDescDesmontaje = 0;
+        $totalDesmontaje = 0;
+        //PUNTOS DE VENTA DE LOS LOGOS
         $pvsLogos = [];
+        //REALIZACIÓN DE LOGOS
         $logos = 0;
+        //MONTAJE DE LOGOS
         $montajeLogos = 0;
         $totalDescMontajeLogos = 0;
         $totalMontajeLogos = 0;
-        $tomaDeMedidas = 0;
+        //DESMONTAJE DE LOGOS
+        $desmontajeLogos = 0;
+        $totalDescDesmontajeLogos = 0;
+        $totalDesmontajeLogos = 0;
+        //ACABADOS
+        $acabados = 0;
+        //DATETIME
         $fecha = date('Y-m-d\TH:i:s');
+        //USO DEL CÓDIGO DE LA OT EN A3 ERP
         $referenciaA3Erp = $codOt;
         $centroCosteA3Erp = $codOt;
+        //DESCUENTO MANUAL DE LA OT
         $totalDescOt = 0;
+        //TOTALES
+        $totalSinImpuesto = 0;
+        $totalConImpuesto = 0;
+        $totalPreciosLineas = 0;
 
         // INFORMACIÓN INICIAL DE A3ERP Y VARIABLES
         $filterA3Erp = "NIF eq " . "'$nifCliente'";
@@ -415,7 +440,7 @@ try {
                         @ob_flush();
                         flush();
                         $precioLinea = $precioTomaDeMedidas;
-                        $precioLinea = number_format($precioLinea, 2);
+                        $precioLinea = number_format($precioLinea, 2, '.', '');
                         echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioLinea: ' . $precioLinea . '</p>';
                         scrollUpdate();
                         @ob_flush();
@@ -423,10 +448,10 @@ try {
                         $tomaDeMedidas = $tomaDeMedidas + $precioLinea;
                         if ($descuentoOt) {
                             $descuentoOtEnLinea = ($precioLinea * $descuentoOt) / 100;
-                            $descuentoOtEnLinea = number_format($descuentoOtEnLinea, 2);
+                            $descuentoOtEnLinea = number_format($descuentoOtEnLinea, 2, '.', '');
                             $totalDescOt = $totalDescOt + $descuentoOtEnLinea;
                             $precioLinea = $precioLinea - $descuentoOtEnLinea;
-                            $precioLinea = number_format($precioLinea, 2);
+                            $precioLinea = number_format($precioLinea, 2, '.', '');
                             echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descuentoOtEnLinea: ' . $descuentoOtEnLinea . '</p>';
                             echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioLinea: ' . $precioLinea . '</p>';
                             scrollUpdate();
@@ -477,7 +502,7 @@ try {
                             flush();
                             array_push($pvsLogos, $pv);
                             $m2 = (($ancho / 100) * ($alto / 100));
-                            $m2 = number_format($m2, 2);
+                            $m2 = number_format($m2, 2, '.', '');
                             if ($m2 == 0.00) {
                                 $m2 = 0.01;
                             }
@@ -555,7 +580,7 @@ try {
                             }
                             if ($validarPrecioLogo) {
                                 $realizacionLineaLogo = $m2 * $precioDelLogo;
-                                $realizacionLineaLogo = number_format($realizacionLineaLogo, 2);
+                                $realizacionLineaLogo = number_format($realizacionLineaLogo, 2, '.', '');
                                 $logos = $logos + $realizacionLineaLogo;
                                 $precioLinea = $realizacionLineaLogo;
                                 echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">realizacionLineaLogo: ' . $realizacionLineaLogo . '</p>';
@@ -577,7 +602,7 @@ try {
                                             @ob_flush();
                                             flush();
                                             $valorAcabado = $m2 * $precioAcabado;
-                                            $valorAcabado = number_format($valorAcabado, 2);
+                                            $valorAcabado = number_format($valorAcabado, 2, '.', '');
                                             $acabados = $acabados + $valorAcabado;
                                             $precioLinea = $precioLinea + $valorAcabado;
                                             echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">valorAcabado: ' . $valorAcabado . '</p>';
@@ -615,7 +640,7 @@ try {
                                     flush();
                                     if ($porcDescuentoMontajeLogo) {
                                         $descuentoMontajeLineaLogo = ($precioDelMontaje * $porcDescuentoMontajeLogo) / 100;
-                                        $descuentoMontajeLineaLogo = number_format($descuentoMontajeLineaLogo, 2);
+                                        $descuentoMontajeLineaLogo = number_format($descuentoMontajeLineaLogo, 2, '.', '');
                                         $totalDescMontajeLogos = $totalDescMontajeLogos + $descuentoMontajeLineaLogo;
                                         $precioLinea = $precioLinea - $descuentoMontajeLineaLogo;
                                         echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descuentoMontajeLineaLogo: ' . $descuentoMontajeLineaLogo . '</p>';
@@ -640,17 +665,17 @@ try {
                                 flush();
                                 die();
                             }
-                            $precioLinea = number_format($precioLinea, 2);
+                            $precioLinea = number_format($precioLinea, 2, '.', '');
                             echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioLinea: ' . $precioLinea . '</p>';
                             scrollUpdate();
                             @ob_flush();
                             flush();
                             if ($descuentoOt) {
                                 $descuentoOtEnLinea = ($precioLinea * $descuentoOt) / 100;
-                                $descuentoOtEnLinea = number_format($descuentoOtEnLinea, 2);
+                                $descuentoOtEnLinea = number_format($descuentoOtEnLinea, 2, '.', '');
                                 $totalDescOt = $totalDescOt + $descuentoOtEnLinea;
                                 $precioLinea = $precioLinea - $descuentoOtEnLinea;
-                                $precioLinea = number_format($precioLinea, 2);
+                                $precioLinea = number_format($precioLinea, 2, '.', '');
                                 echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descuentoOtEnLinea: ' . $descuentoOtEnLinea . '</p>';
                                 echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioLinea: ' . $precioLinea . '</p>';
                                 scrollUpdate();
@@ -731,7 +756,7 @@ try {
                             @ob_flush();
                             flush();
                             $m2 = (($ancho / 100) * ($alto / 100));
-                            $m2 = number_format($m2, 2);
+                            $m2 = number_format($m2, 2, '.', '');
                             if ($m2 == 0.00) {
                                 $m2 = 0.01;
                             }
@@ -759,7 +784,7 @@ try {
                                         @ob_flush();
                                         flush();
                                         $realizacionLinea = $m2 * $precioMaterial;
-                                        $realizacionLinea = number_format($realizacionLinea, 2);
+                                        $realizacionLinea = number_format($realizacionLinea, 2, '.', '');
                                         $realizacion = $realizacion + $realizacionLinea;
                                         $precioLinea = $realizacionLinea;
                                         echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">realizacionLinea: ' . $realizacionLinea . '</p>';
@@ -769,7 +794,7 @@ try {
                                         flush();
                                         if ($descPorcRealización && $descuentosAutomaticos) {
                                             $descuentoRealizacionLinea = ($realizacionLinea * $descPorcRealización) / 100;
-                                            $descuentoRealizacionLinea = number_format($descuentoRealizacionLinea, 2);
+                                            $descuentoRealizacionLinea = number_format($descuentoRealizacionLinea, 2, '.', '');
                                             $totalDescRealizacion = $totalDescRealizacion + $descuentoRealizacionLinea;
                                             $precioLinea = $precioLinea - $descuentoRealizacionLinea;
                                             echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descuentoRealizacionLinea: ' . $descuentoRealizacionLinea . '</p>';
@@ -802,7 +827,7 @@ try {
                                             @ob_flush();
                                             flush();
                                             $valorAcabado = $m2 * $precioAcabado;
-                                            $valorAcabado = number_format($valorAcabado, 2);
+                                            $valorAcabado = number_format($valorAcabado, 2, '.', '');
                                             $acabados = $acabados + $valorAcabado;
                                             $precioLinea = $precioLinea + $valorAcabado;
                                             echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">valorAcabado: ' . $valorAcabado . '</p>';
@@ -839,7 +864,7 @@ try {
                                     flush();
                                     if ($descPorcMontaje && $descuentosAutomaticos) {
                                         $descuentoMontajeLinea = ($precioDelMontaje * $descPorcMontaje) / 100;
-                                        $descuentoMontajeLinea = number_format($descuentoMontajeLinea, 2);
+                                        $descuentoMontajeLinea = number_format($descuentoMontajeLinea, 2, '.', '');
                                         $totalDescMontaje = $totalDescMontaje + $descuentoMontajeLinea;
                                         $precioLinea = $precioLinea - $descuentoMontajeLinea;
                                         echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descuentoMontajeLinea: ' . $descuentoMontajeLinea . '</p>';
@@ -857,17 +882,17 @@ try {
                                     die();
                                 }
 
-                                $precioLinea = number_format($precioLinea, 2);
+                                $precioLinea = number_format($precioLinea, 2, '.', '');
                                 echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioLinea: ' . $precioLinea . '</p>';
                                 scrollUpdate();
                                 @ob_flush();
                                 flush();
                                 if ($descuentoOt) {
                                     $descuentoOtEnLinea = ($precioLinea * $descuentoOt) / 100;
-                                    $descuentoOtEnLinea = number_format($descuentoOtEnLinea, 2);
+                                    $descuentoOtEnLinea = number_format($descuentoOtEnLinea, 2, '.', '');
                                     $totalDescOt = $totalDescOt + $descuentoOtEnLinea;
                                     $precioLinea = $precioLinea - $descuentoOtEnLinea;
-                                    $precioLinea = number_format($precioLinea, 2);
+                                    $precioLinea = number_format($precioLinea, 2, '.', '');
                                     echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descuentoOtEnLinea: ' . $descuentoOtEnLinea . '</p>';
                                     echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioLinea: ' . $precioLinea . '</p>';
                                     scrollUpdate();
@@ -952,6 +977,7 @@ try {
                     case 'Montaje de logos':
                         if ($alto && $ancho) {
                             $numLogos++;
+                            $numMontajeLogos++;
                             echo '<p style="color:green;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">CALCULANDO LÍNEA ' . $codLinea . ' ...</p>';
                             echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Montaje de logos</p>';
                             scrollUpdate();
@@ -959,7 +985,7 @@ try {
                             flush();
                             array_push($pvsLogos, $pv);
                             $m2 = (($ancho / 100) * ($alto / 100));
-                            $m2 = number_format($m2, 2);
+                            $m2 = number_format($m2, 2, '.', '');
                             if ($m2 == 0.00) {
                                 $m2 = 0.01;
                             }
@@ -1043,7 +1069,7 @@ try {
                                 flush();
                                 if ($porcDescuentoMontajeLogo) {
                                     $descuentoMontajeLineaLogo = ($precioDelMontaje * $porcDescuentoMontajeLogo) / 100;
-                                    $descuentoMontajeLineaLogo = number_format($descuentoMontajeLineaLogo, 2);
+                                    $descuentoMontajeLineaLogo = number_format($descuentoMontajeLineaLogo, 2, '.', '');
                                     $totalDescMontajeLogos = $totalDescMontajeLogos + $descuentoMontajeLineaLogo;
                                     $precioLinea = $precioLinea - $descuentoMontajeLineaLogo;
                                     echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descuentoMontajeLineaLogo: ' . $descuentoMontajeLineaLogo . '</p>';
@@ -1060,17 +1086,17 @@ try {
                                 flush();
                                 die();
                             }
-                            $precioLinea = number_format($precioLinea, 2);
+                            $precioLinea = number_format($precioLinea, 2, '.', '');
                             echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioLinea: ' . $precioLinea . '</p>';
                             scrollUpdate();
                             @ob_flush();
                             flush();
                             if ($descuentoOt) {
                                 $descuentoOtEnLinea = ($precioLinea * $descuentoOt) / 100;
-                                $descuentoOtEnLinea = number_format($descuentoOtEnLinea, 2);
+                                $descuentoOtEnLinea = number_format($descuentoOtEnLinea, 2, '.', '');
                                 $totalDescOt = $totalDescOt + $descuentoOtEnLinea;
                                 $precioLinea = $precioLinea - $descuentoOtEnLinea;
-                                $precioLinea = number_format($precioLinea, 2);
+                                $precioLinea = number_format($precioLinea, 2, '.', '');
                                 echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descuentoOtEnLinea: ' . $descuentoOtEnLinea . '</p>';
                                 echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioLinea: ' . $precioLinea . '</p>';
                                 scrollUpdate();
@@ -1100,8 +1126,8 @@ try {
                                 //LÍNEA DE A3 ERP DEL MONTAJE (MONTAJE DE LOGOS)
                                 $lineaA3Erp = [];
                                 $lineaA3Erp['CodigoArticulo'] = $codigoArticuloA3Erp;
-                                $lineaA3Erp['Unidades'] = $m2;
-                                $lineaA3Erp['Precio'] = $precioLinea / $m2;
+                                $lineaA3Erp['Unidades'] = 1;
+                                $lineaA3Erp['Precio'] = $precioLinea;
                                 $lineaA3Erp['Param1'] = $m2;
                                 $lineaA3Erp['Param3'] = $precioDelMontaje;
                                 $lineaA3Erp['Param4'] = $poner;
@@ -1128,13 +1154,14 @@ try {
                     case 'Montaje de imagenes':
                         if ($alto && $ancho) {
                             $numVisuales++;
+                            $numMontajeVisuales++;
                             echo '<p style="color:green;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">CALCULANDO LÍNEA ' . $codLinea . ' ...</p>';
                             echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Montaje de imagenes</p>';
                             scrollUpdate();
                             @ob_flush();
                             flush();
                             $m2 = (($ancho / 100) * ($alto / 100));
-                            $m2 = number_format($m2, 2);
+                            $m2 = number_format($m2, 2, '.', '');
                             if ($m2 == 0.00) {
                                 $m2 = 0.01;
                             }
@@ -1167,7 +1194,7 @@ try {
                                 flush();
                                 if ($descPorcMontaje && $descuentosAutomaticos) {
                                     $descuentoMontajeLinea = ($precioDelMontaje * $descPorcMontaje) / 100;
-                                    $descuentoMontajeLinea = number_format($descuentoMontajeLinea, 2);
+                                    $descuentoMontajeLinea = number_format($descuentoMontajeLinea, 2, '.', '');
                                     $totalDescMontaje = $totalDescMontaje + $descuentoMontajeLinea;
                                     $precioLinea = $precioLinea - $descuentoMontajeLinea;
                                     echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descuentoMontajeLinea: ' . $descuentoMontajeLinea . '</p>';
@@ -1184,17 +1211,17 @@ try {
                                 flush();
                                 die();
                             }
-                            $precioLinea = number_format($precioLinea, 2);
+                            $precioLinea = number_format($precioLinea, 2, '.', '');
                             echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioLinea: ' . $precioLinea . '</p>';
                             scrollUpdate();
                             @ob_flush();
                             flush();
                             if ($descuentoOt) {
                                 $descuentoOtEnLinea = ($precioLinea * $descuentoOt) / 100;
-                                $descuentoOtEnLinea = number_format($descuentoOtEnLinea, 2);
+                                $descuentoOtEnLinea = number_format($descuentoOtEnLinea, 2, '.', '');
                                 $totalDescOt = $totalDescOt + $descuentoOtEnLinea;
                                 $precioLinea = $precioLinea - $descuentoOtEnLinea;
-                                $precioLinea = number_format($precioLinea, 2);
+                                $precioLinea = number_format($precioLinea, 2, '.', '');
                                 echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descuentoOtEnLinea: ' . $descuentoOtEnLinea . '</p>';
                                 echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioLinea: ' . $precioLinea . '</p>';
                                 scrollUpdate();
@@ -1226,8 +1253,8 @@ try {
                                 //LÍNEA DE A3 ERP DEL MONTAJE (MONTAJE DE IMÁGENES)
                                 $lineaA3Erp = [];
                                 $lineaA3Erp['CodigoArticulo'] = $codigoArticuloA3Erp;
-                                $lineaA3Erp['Unidades'] = $m2;
-                                $lineaA3Erp['Precio'] = $precioLinea / $m2;
+                                $lineaA3Erp['Unidades'] = 1;
+                                $lineaA3Erp['Precio'] = $precioLinea;
                                 $lineaA3Erp['Param1'] = $m2;
                                 $lineaA3Erp['Param3'] = $precioDelMontaje;
                                 $lineaA3Erp['Param4'] = $poner;
@@ -1251,11 +1278,305 @@ try {
                         break;
 
                     case 'Desmontaje de logos':
-                        echo 'Desmontaje de logos';
+                        if ($alto && $ancho) {
+                            $numLogos++;
+                            $numDesmontajeLogos++;
+                            echo '<p style="color:green;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">CALCULANDO LÍNEA ' . $codLinea . ' ...</p>';
+                            echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Desmontaje de logos</p>';
+                            scrollUpdate();
+                            @ob_flush();
+                            flush();
+                            array_push($pvsLogos, $pv);
+                            $m2 = (($ancho / 100) * ($alto / 100));
+                            $m2 = number_format($m2, 2, '.', '');
+                            if ($m2 == 0.00) {
+                                $m2 = 0.01;
+                            }
+                            $totalM2 = $totalM2 + $m2;
+                            echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">m2: ' . $m2 . '</p>';
+                            scrollUpdate();
+                            @ob_flush();
+                            flush();
+                            $nPv;
+                            $areaPv;
+                            $montajeLineaLogo;
+                            $porcDescuentoMontajeLogo = 0;
+                            $descuentoMontajeLineaLogo;
+                            $camposPv = "N,rea";
+                            $query = "SELECT $camposPv FROM Puntos_de_venta WHERE id=\"$pv\"";
+                            $crm->query($query);
+                            if ($crm->estado) {
+                                $nPv = $crm->respuesta[1]['data'][0]['N'];
+                                $areaPv = $crm->respuesta[1]['data'][0]['rea'];
+                                echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">nPv: ' . $nPv . '</p>';
+                                echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">areaPv: ' . $areaPv . '</p>';
+                                scrollUpdate();
+                                @ob_flush();
+                                flush();
+                                if (!$areaPv) {
+                                    echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ERROR!!! EL PUNTO DE VENTA ' . $nPv . ' NO TIENE EL CAMPO DE ÁREA DEFINIDO. POR FAVOR ACTUALIZA LOS DATOS DE UBICACIÓN DEL PUNTO DE VENTA, ACTUALIZA POR FAVOR TODOS LOS CAMPOS: ÁREA, SÉCTOR, ZONA, DIRECCIÓN</p>';
+                                    scrollUpdate();
+                                    @ob_flush();
+                                    flush();
+                                    die();
+                                }
+                            } else {
+                                echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ERROR!!! AL CONSULTAR LOS DATOS DEL PUNTO DE VENTA CON ID ' . $pv . ' EN EL CRM!!!</p>';
+                                print_r($crm->respuestaError);
+                                scrollUpdate();
+                                @ob_flush();
+                                flush();
+                                die();
+                            }
+                            //CÁLCULO DEL DESCUENTO EN EL MONTAJE DE LOGOS POR ISLAS Y CANTIDAD DE LOGOS EN PUNTO DE VENTA
+                            $numPv = 0;
+                            foreach ($pvsLogos as $pvLogo) {
+                                if ($pvLogo == $pv) {
+                                    $numPv++;
+                                }
+                            }
+                            if ($descuentosAutomaticos) {
+                                foreach ($descuentosLogosMontaje as $descuento) {
+                                    if (($numPv > ($descuento['PDVS_minimo'] - 1)) && ($areaPv == $descuento['Isla'])) {
+                                        $porcDescuentoMontajeLogo = $descuento['Porcentaje'];
+                                        echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">numPv: ' . $numPv . '</p>';
+                                        echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">porcDescuentoMontajeLogo: ' . $porcDescuentoMontajeLogo . '%</p>';
+                                        scrollUpdate();
+                                        @ob_flush();
+                                        flush();
+                                    }
+                                }
+                            }
+                            $codigoArticuloA3Erp = $desmontajeLogoIdA3Erp;
+                            echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">codigoArticuloA3Erp: ' . $codigoArticuloA3Erp . '</p>';
+                            scrollUpdate();
+                            @ob_flush();
+                            flush();
+                            /* MONTAJE LOGO */
+                            $validarPrecioMontajeLogo = false;
+                            $precioDelMontaje;
+                            foreach ($preciosLogosMontaje as $precio) {
+                                if (($m2 >= $precio['Rango1']) && ($m2 <= $precio['Rango2'])) {
+                                    $validarPrecioMontajeLogo = true;
+                                    $precioDelMontaje = $precio['Precio'];
+                                }
+                            }
+                            if ($validarPrecioMontajeLogo) {
+                                $desmontajeLogos = $desmontajeLogos + $precioDelMontaje;
+                                $descuentoMontajeLineaLogo = 0;
+                                $precioLinea = $precioLinea + $precioDelMontaje;
+                                echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioDelMontaje: ' . $precioDelMontaje . '</p>';
+                                echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioLinea: ' . $precioLinea . '</p>';
+                                scrollUpdate();
+                                @ob_flush();
+                                flush();
+                                if ($porcDescuentoMontajeLogo) {
+                                    $descuentoMontajeLineaLogo = ($precioDelMontaje * $porcDescuentoMontajeLogo) / 100;
+                                    $descuentoMontajeLineaLogo = number_format($descuentoMontajeLineaLogo, 2, '.', '');
+                                    $totalDescDesmontajeLogos = $totalDescDesmontajeLogos + $descuentoMontajeLineaLogo;
+                                    $precioLinea = $precioLinea - $descuentoMontajeLineaLogo;
+                                    echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descuentoMontajeLineaLogo: ' . $descuentoMontajeLineaLogo . '</p>';
+                                    echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioLinea: ' . $precioLinea . '</p>';
+                                    scrollUpdate();
+                                    @ob_flush();
+                                    flush();
+                                }
+                            } else {
+                                echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ERROR!!! LOS METROS CUADRADOS SON MAYORES O MENORES A LOS RANGOS ESTABLECIDOS EN LOS PRECIOS DE MONTAJE DE LOGOS, EN LA LÍNEA: ' . $codLinea . '</p>';
+                                print_r($crm->respuestaError);
+                                scrollUpdate();
+                                @ob_flush();
+                                flush();
+                                die();
+                            }
+                            $precioLinea = number_format($precioLinea, 2, '.', '');
+                            echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioLinea: ' . $precioLinea . '</p>';
+                            scrollUpdate();
+                            @ob_flush();
+                            flush();
+                            if ($descuentoOt) {
+                                $descuentoOtEnLinea = ($precioLinea * $descuentoOt) / 100;
+                                $descuentoOtEnLinea = number_format($descuentoOtEnLinea, 2, '.', '');
+                                $totalDescOt = $totalDescOt + $descuentoOtEnLinea;
+                                $precioLinea = $precioLinea - $descuentoOtEnLinea;
+                                $precioLinea = number_format($precioLinea, 2, '.', '');
+                                echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descuentoOtEnLinea: ' . $descuentoOtEnLinea . '</p>';
+                                echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioLinea: ' . $precioLinea . '</p>';
+                                scrollUpdate();
+                                @ob_flush();
+                                flush();
+                            }
+                            $totalPreciosLineas = $totalPreciosLineas + $precioLinea;
+                            /* ACTUALIZAR LÍNEA */
+                            echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Actualizando en el CRM la línea: ' . $codLinea . '...</p>';
+                            scrollUpdate();
+                            @ob_flush();
+                            flush();
+                            $LineaVector = [];
+                            $LineaVector['data'][0]['id'] = $id;
+                            $LineaVector['data'][0]['Metros_cuadrados'] = $m2;
+                            $LineaVector['data'][0]['Montaje'] = $precioDelMontaje;
+                            $LineaVector['data'][0]['Porcentaje_Descuento_Montaje'] = $porcDescuentoMontajeLogo;
+                            $LineaVector['data'][0]['Descuento_de_Montaje'] = $descuentoMontajeLineaLogo;
+                            $LineaVector['data'][0]['Unit_Price'] = $precioLinea;
+                            $LineaJson = json_encode($LineaVector);
+                            $crm->actualizar("actualizarLinea", $LineaJson);
+                            if ($crm->estado) {
+                                echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Línea actualizada en el CRM: ' . $codLinea . '</p>';
+                                scrollUpdate();
+                                @ob_flush();
+                                flush();
+                                //LÍNEA DE A3 ERP DEL MONTAJE (MONTAJE DE LOGOS)
+                                $lineaA3Erp = [];
+                                $lineaA3Erp['CodigoArticulo'] = $codigoArticuloA3Erp;
+                                $lineaA3Erp['Unidades'] = 1;
+                                $lineaA3Erp['Precio'] = $precioLinea;
+                                $lineaA3Erp['Param1'] = $m2;
+                                $lineaA3Erp['Param3'] = $precioDelMontaje;
+                                $lineaA3Erp['Param4'] = $poner;
+                                $lineaA3Erp['Texto'] = $codLinea . ' - ' . $nombreDeLinea;
+                                array_push($lineasA3Erp, $lineaA3Erp);
+                            } else {
+                                echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ERROR!!! NO SE HA ACTUALIZADO LA LÍNEA: ' . $codLinea . ' EN EL CRM</p>';
+                                print_r($crm->respuestaError);
+                                scrollUpdate();
+                                @ob_flush();
+                                flush();
+                                die();
+                            }
+                        } else {
+                            echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ERROR!!! LA LÍNEA DE LOGO ' . $codLinea . ' NO TIENE DEFINIDO EL ALTO O EL ANCHO</p>';
+                            scrollUpdate();
+                            @ob_flush();
+                            flush();
+                            die();
+                        }
                         break;
 
                     case 'Desmontaje de imagenes':
-                        echo 'Desmontaje de imagenes';
+                        if ($alto && $ancho) {
+                            $numVisuales++;
+                            $numDesmontajeVisuales++;
+                            echo '<p style="color:green;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">CALCULANDO LÍNEA ' . $codLinea . ' ...</p>';
+                            echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Desmontaje de imagenes</p>';
+                            scrollUpdate();
+                            @ob_flush();
+                            flush();
+                            $m2 = (($ancho / 100) * ($alto / 100));
+                            $m2 = number_format($m2, 2, '.', '');
+                            if ($m2 == 0.00) {
+                                $m2 = 0.01;
+                            }
+                            $totalM2 = $totalM2 + $m2;
+                            echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">m2: ' . $m2 . '</p>';
+                            scrollUpdate();
+                            @ob_flush();
+                            flush();
+                            $codigoArticuloA3Erp = $desmontajeImagenIdA3Erp;
+                            echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">codigoArticuloA3Erp: ' . $codigoArticuloA3Erp . '</p>';
+                            scrollUpdate();
+                            @ob_flush();
+                            flush();
+                            /* MONTAJE */
+                            $validarPrecioMOntaje = false;
+                            $precioDelMontaje;
+                            foreach ($preciosMontajeImagenes as $precio) {
+                                if (($m2 >= $precio['Rango1']) && ($m2 <= $precio['Rango2'])) {
+                                    $validarPrecioMOntaje = true;
+                                    $precioDelMontaje = $precio['Precio'];
+                                }
+                            }
+                            if ($validarPrecioMOntaje) {
+                                $desmontaje = $desmontaje + $precioDelMontaje;
+                                $precioLinea = $precioLinea + $precioDelMontaje;
+                                echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioDelMontaje: ' . $precioDelMontaje . '</p>';
+                                echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioLinea: ' . $precioLinea . '</p>';
+                                scrollUpdate();
+                                @ob_flush();
+                                flush();
+                                if ($descPorcMontaje && $descuentosAutomaticos) {
+                                    $descuentoMontajeLinea = ($precioDelMontaje * $descPorcMontaje) / 100;
+                                    $descuentoMontajeLinea = number_format($descuentoMontajeLinea, 2, '.', '');
+                                    $totalDescDesmontaje = $totalDescDesmontaje + $descuentoMontajeLinea;
+                                    $precioLinea = $precioLinea - $descuentoMontajeLinea;
+                                    echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descuentoMontajeLinea: ' . $descuentoMontajeLinea . '</p>';
+                                    echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioLinea: ' . $precioLinea . '</p>';
+                                    scrollUpdate();
+                                    @ob_flush();
+                                    flush();
+                                }
+                            } else {
+                                echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ERROR!!! LOS METROS CUADRADOS SON MAYORES O MENORES A LOS RANGOS ESTABLECIDOS EN LOS PRECIOS DE MONTAJE DE IMÁGENES, EN LA LÍNEA: ' . $codLinea . '</p>';
+                                print_r($crm->respuestaError);
+                                scrollUpdate();
+                                @ob_flush();
+                                flush();
+                                die();
+                            }
+                            $precioLinea = number_format($precioLinea, 2, '.', '');
+                            echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioLinea: ' . $precioLinea . '</p>';
+                            scrollUpdate();
+                            @ob_flush();
+                            flush();
+                            if ($descuentoOt) {
+                                $descuentoOtEnLinea = ($precioLinea * $descuentoOt) / 100;
+                                $descuentoOtEnLinea = number_format($descuentoOtEnLinea, 2, '.', '');
+                                $totalDescOt = $totalDescOt + $descuentoOtEnLinea;
+                                $precioLinea = $precioLinea - $descuentoOtEnLinea;
+                                $precioLinea = number_format($precioLinea, 2, '.', '');
+                                echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descuentoOtEnLinea: ' . $descuentoOtEnLinea . '</p>';
+                                echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">precioLinea: ' . $precioLinea . '</p>';
+                                scrollUpdate();
+                                @ob_flush();
+                                flush();
+                            }
+                            $totalPreciosLineas = $totalPreciosLineas + $precioLinea;
+                            /* ACTUALIZAR LÍNEA */
+                            echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Actualizando en el CRM la línea: ' . $codLinea . '...</p>';
+                            scrollUpdate();
+                            @ob_flush();
+                            flush();
+                            $LineaVector = [];
+                            $LineaVector['data'][0]['id'] = $id;
+                            $LineaVector['data'][0]['Metros_cuadrados'] = $m2;
+                            $LineaVector['data'][0]['Montaje'] = $precioDelMontaje;
+                            if ($descPorcMontaje && $descuentosAutomaticos) {
+                                $LineaVector['data'][0]['Porcentaje_Descuento_Montaje'] = $descPorcMontaje;
+                                $LineaVector['data'][0]['Descuento_de_Montaje'] = $descuentoMontajeLinea;
+                            }
+                            $LineaVector['data'][0]['Unit_Price'] = $precioLinea;
+                            $LineaJson = json_encode($LineaVector);
+                            $crm->actualizar("actualizarLinea", $LineaJson);
+                            if ($crm->estado) {
+                                echo '<p style="color:gray;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Línea actualizada en el CRM: ' . $codLinea . '</p>';
+                                scrollUpdate();
+                                @ob_flush();
+                                flush();
+                                //LÍNEA DE A3 ERP DEL MONTAJE (MONTAJE DE IMÁGENES)
+                                $lineaA3Erp = [];
+                                $lineaA3Erp['CodigoArticulo'] = $codigoArticuloA3Erp;
+                                $lineaA3Erp['Unidades'] = 1;
+                                $lineaA3Erp['Precio'] = $precioLinea;
+                                $lineaA3Erp['Param1'] = $m2;
+                                $lineaA3Erp['Param3'] = $precioDelMontaje;
+                                $lineaA3Erp['Param4'] = $poner;
+                                $lineaA3Erp['Texto'] = $codLinea . ' - ' . $nombreDeLinea;
+                                array_push($lineasA3Erp, $lineaA3Erp);
+                            } else {
+                                echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ERROR!!! NO SE HA ACTUALIZADO LA LÍNEA: ' . $codLinea . ' EN EL CRM</p>';
+                                print_r($crm->respuestaError);
+                                scrollUpdate();
+                                @ob_flush();
+                                flush();
+                                die();
+                            }
+                        } else {
+                            echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ERROR!!! LA LÍNEA ' . $codLinea . ' NO TIENE DEFINIDO EL ALTO O EL ANCHO</p>';
+                            scrollUpdate();
+                            @ob_flush();
+                            flush();
+                            die();
+                        }
                         break;
 
                     default:
@@ -1286,7 +1607,9 @@ try {
         $totalRealizacion = $realizacion - $totalDescRealizacion;
         $totalMontaje = $montaje - $totalDescMontaje;
         $totalMontajeLogos = $montajeLogos - $totalDescMontajeLogos;
-        $totalSinImpuesto = $totalRealizacion + $totalMontaje + $acabados + $logos + $totalMontajeLogos + $tomaDeMedidas;
+        $totalDesmontaje = $desmontaje - $totalDescDesmontaje;
+        $totalDesmontajeLogos = $desmontajeLogos - $totalDescDesmontajeLogos;
+        $totalSinImpuesto = $totalRealizacion + $totalMontaje + $acabados + $logos + $totalMontajeLogos + $tomaDeMedidas + $totalDesmontaje + $totalDesmontajeLogos;
         //DESCUENTO MANUAL DE LA OT
         $descuentoOtValue = ($totalSinImpuesto * $descuentoOt) / 100;
         $totalSinImpuestoConDescuentoOt = $totalSinImpuesto - $descuentoOtValue;
@@ -1301,9 +1624,15 @@ try {
             $totalConImpuesto = $totalSinImpuesto + $impuestoAplicado;
         }
         /* ACTUALIZAR IMPORTE DE LA OT */
+        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">totalSinImpuesto: ' . number_format($totalSinImpuesto, 2, '.', '') . '€</p>';
+        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">totalSinImpuestoConDescuentoOt: ' . number_format($totalSinImpuestoConDescuentoOt, 2, '.', '') . '€</p>';
+        echo '<p style="color:green;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ACTUALIZANDO EL IMPORTE DE LA OT EN EL CRM...</p>';
+        scrollUpdate();
+        @ob_flush();
+        flush();
         $otVector = [];
         $otVector['data'][0]['id'] = $idOt;
-        $descuentoOt ? $otVector['data'][0]['Amount'] = number_format($totalSinImpuestoConDescuentoOt, 2) : $otVector['data'][0]['Amount'] = number_format($totalSinImpuesto, 2);
+        $descuentoOt ? $otVector['data'][0]['Amount'] = number_format($totalSinImpuestoConDescuentoOt, 2, '.', '') : $otVector['data'][0]['Amount'] = number_format($totalSinImpuesto, 2, '.', '');
         $otJson = json_encode($otVector);
         $crm->actualizar("actualizarOt", $otJson);
         if ($crm->estado) {
@@ -1320,19 +1649,21 @@ try {
             die();
         }
         // DATOS GENERALES DEL CÁLCULO
-        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">totalRealizacion: ' . number_format($totalRealizacion, 2) . '€</p>';
-        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">totalMontaje: ' . number_format($totalMontaje, 2) . '€</p>';
-        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">acabados: ' . number_format($acabados, 2) . '€</p>';
-        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">logos: ' . number_format($logos, 2) . '€</p>';
-        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">totalMontajeLogos: ' . number_format($totalMontajeLogos, 2) . '€</p>';
-        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">tomaDeMedidas: ' . number_format($tomaDeMedidas, 2) . '€</p>';
-        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">totalSinImpuesto: ' . number_format($totalSinImpuesto, 2) . '€</p>';
-        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descuentoOtValue: ' . number_format($descuentoOtValue, 2) . '€</p>';
-        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">totalSinImpuestoConDescuentoOt: ' . number_format($totalSinImpuestoConDescuentoOt, 2) . '€</p>';
-        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">impuestoAplicado: ' . number_format($impuestoAplicado, 2) . '€</p>';
-        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">totalConImpuesto: ' . number_format($totalConImpuesto, 2) . '€</p>';
-        echo '<p style="color:pink;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total sumatoria bucles de los precios de las líneas: ' . number_format($totalPreciosLineas, 2) . '€</p>';
-        echo '<p style="color:pink;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total sumatoria bucles del descuento general: ' . number_format($totalDescOt, 2) . '€</p>';
+        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">totalRealizacion: ' . number_format($totalRealizacion, 2, '.', '') . '€</p>';
+        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">totalMontaje: ' . number_format($totalMontaje, 2, '.', '') . '€</p>';
+        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">acabados: ' . number_format($acabados, 2, '.', '') . '€</p>';
+        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">logos: ' . number_format($logos, 2, '.', '') . '€</p>';
+        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">totalMontajeLogos: ' . number_format($totalMontajeLogos, 2, '.', '') . '€</p>';
+        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">tomaDeMedidas: ' . number_format($tomaDeMedidas, 2, '.', '') . '€</p>';
+        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">totalDesmontaje: ' . number_format($totalDesmontaje, 2, '.', '') . '€</p>';
+        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">totalDesmontajeLogos: ' . number_format($totalDesmontajeLogos, 2, '.', '') . '€</p>';
+        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">totalSinImpuesto: ' . number_format($totalSinImpuesto, 2, '.', '') . '€</p>';
+        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descuentoOtValue: ' . number_format($descuentoOtValue, 2, '.', '') . '€</p>';
+        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">totalSinImpuestoConDescuentoOt: ' . number_format($totalSinImpuestoConDescuentoOt, 2, '.', '') . '€</p>';
+        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">impuestoAplicado: ' . number_format($impuestoAplicado, 2, '.', '') . '€</p>';
+        echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">totalConImpuesto: ' . number_format($totalConImpuesto, 2, '.', '') . '€</p>';
+        echo '<p style="color:pink;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total sumatoria bucles de los precios de las líneas: ' . number_format($totalPreciosLineas, 2, '.', '') . '€</p>';
+        echo '<p style="color:pink;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total sumatoria bucles del descuento general: ' . number_format($totalDescOt, 2, '.', '') . '€</p>';
         scrollUpdate();
         @ob_flush();
         flush();
@@ -1342,161 +1673,211 @@ try {
         if ($numVisuales && $numLogos) {
             echo '<p style="display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">EXISTE UNA MEZCLA DE VISUALES Y LOGOS EN LAS LÍNEAS</p>';
             $totalRealizacionVL = $totalRealizacion + $acabados + $logos;
-            $totalMontajeVL = $totalMontaje + $totalMontajeLogos;
-            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Metros cuadrados: ' . number_format($totalM2, 2) . '</p>';
-            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Realización visuales: ' . number_format($realizacion, 2) . '€</p>';
-            //$observacionesA3Erp .= 'Metros cuadrados: ' . number_format($totalM2, 2) . ' - Realización visuales: ' . number_format($realizacion, 2) . '€ - ';
-            $observacionesA3Erp .= 'Metros cuadrados: ' . number_format($totalM2, 2) . '\nRealización visuales: ' . number_format($realizacion, 2) . '€\n';
+            $totalMontajeVL = $totalMontaje + $totalMontajeLogos + $totalDesmontaje + $totalDesmontajeLogos;
+            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Metros cuadrados: ' . number_format($totalM2, 2, '.', '') . '</p>';
+            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Realización visuales: ' . number_format($realizacion, 2, '.', '') . '€</p>';
+            //$observacionesA3Erp .= 'Metros cuadrados: ' . number_format($totalM2, 2, '.', '') . ' - Realización visuales: ' . number_format($realizacion, 2, '.', '') . '€ - ';
+            $observacionesA3Erp .= 'Metros cuadrados: ' . number_format($totalM2, 2, '.', '') . '\nRealización visuales: ' . number_format($realizacion, 2, '.', '') . '€\n';
             if ($descPorcRealización && $descuentosAutomaticos) {
                 echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento pactado en realización visuales: ' . $descPorcRealización . '%</p>';
-                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento aplicado en realización visuales: ' . number_format($totalDescRealizacion, 2) . '€</p>';
-                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total realización visuales: ' . number_format($totalRealizacion, 2) . '€</p>';
-                //$observacionesA3Erp .= 'Descuento pactado en realización visuales: ' . $descPorcRealización . '% - Descuento aplicado en realización visuales: ' . number_format($totalDescRealizacion, 2) . '€ - Total realización visuales: ' . number_format($totalRealizacion, 2) . '€ --- ';
-                $observacionesA3Erp .= 'Descuento pactado en realización visuales: ' . $descPorcRealización . '%\nDescuento aplicado en realización visuales: ' . number_format($totalDescRealizacion, 2) . '€\nTotal realización visuales: ' . number_format($totalRealizacion, 2) . '€\n';
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento aplicado en realización visuales: ' . number_format($totalDescRealizacion, 2, '.', '') . '€</p>';
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total realización visuales: ' . number_format($totalRealizacion, 2, '.', '') . '€</p>';
+                //$observacionesA3Erp .= 'Descuento pactado en realización visuales: ' . $descPorcRealización . '% - Descuento aplicado en realización visuales: ' . number_format($totalDescRealizacion, 2, '.', '') . '€ - Total realización visuales: ' . number_format($totalRealizacion, 2, '.', '') . '€ --- ';
+                $observacionesA3Erp .= 'Descuento pactado en realización visuales: ' . $descPorcRealización . '%\nDescuento aplicado en realización visuales: ' . number_format($totalDescRealizacion, 2, '.', '') . '€\nTotal realización visuales: ' . number_format($totalRealizacion, 2, '.', '') . '€\n';
             }
-            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Montaje visuales: ' . number_format($montaje, 2) . '€</p>';
-            //$observacionesA3Erp .= 'Montaje visuales: ' . number_format($montaje, 2) . '€ - ';
-            $observacionesA3Erp .= 'Montaje visuales: ' . number_format($montaje, 2) . '€\n';
+            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Montaje visuales: ' . number_format($montaje, 2, '.', '') . '€</p>';
+            //$observacionesA3Erp .= 'Montaje visuales: ' . number_format($montaje, 2, '.', '') . '€ - ';
+            $observacionesA3Erp .= 'Montaje visuales: ' . number_format($montaje, 2, '.', '') . '€\n';
             if ($descPorcMontaje && $descuentosAutomaticos) {
                 echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento pactado en montaje visuales: ' . $descPorcMontaje . '%</p>';
-                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento aplicado en montaje visuales: ' . number_format($totalDescMontaje, 2) . '€</p>';
-                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total montaje visuales: ' . number_format($totalMontaje, 2) . '€</p>';
-                //$observacionesA3Erp .= 'Descuento pactado en montaje visuales: ' . $descPorcMontaje . '% - Descuento aplicado en montaje visuales: ' . number_format($totalDescMontaje, 2) . '€ - Total montaje visuales: ' . number_format($totalMontaje, 2) . '€ --- ';
-                $observacionesA3Erp .= 'Descuento pactado en montaje visuales: ' . $descPorcMontaje . '%\nDescuento aplicado en montaje visuales: ' . number_format($totalDescMontaje, 2) . '€\nTotal montaje visuales: ' . number_format($totalMontaje, 2) . '€\n';
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento aplicado en montaje visuales: ' . number_format($totalDescMontaje, 2, '.', '') . '€</p>';
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total montaje visuales: ' . number_format($totalMontaje, 2, '.', '') . '€</p>';
+                //$observacionesA3Erp .= 'Descuento pactado en montaje visuales: ' . $descPorcMontaje . '% - Descuento aplicado en montaje visuales: ' . number_format($totalDescMontaje, 2, '.', '') . '€ - Total montaje visuales: ' . number_format($totalMontaje, 2, '.', '') . '€ --- ';
+                $observacionesA3Erp .= 'Descuento pactado en montaje visuales: ' . $descPorcMontaje . '%\nDescuento aplicado en montaje visuales: ' . number_format($totalDescMontaje, 2, '.', '') . '€\nTotal montaje visuales: ' . number_format($totalMontaje, 2, '.', '') . '€\n';
             }
-            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Realización logos: ' . number_format($logos, 2) . '€</p>';
-            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Montaje logos: ' . number_format($montajeLogos, 2) . '€</p>';
-            //$observacionesA3Erp .= 'Realización logos: ' . number_format($logos, 2) . '€ - Montaje logos: ' . number_format($montajeLogos, 2) . '€ - ';
-            $observacionesA3Erp .= 'Realización logos: ' . number_format($logos, 2) . '€\nMontaje logos: ' . number_format($montajeLogos, 2) . '€\n';
+            if ($numDesmontajeVisuales) {
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Desmontaje visuales: ' . number_format($desmontaje, 2, '.', '') . '€</p>';
+                //$observacionesA3Erp .= 'Desmontaje visuales: ' . number_format($desmontaje, 2, '.', '') . '€ - ';
+                $observacionesA3Erp .= 'Desmontaje visuales: ' . number_format($desmontaje, 2, '.', '') . '€\n';
+                if ($descPorcMontaje && $descuentosAutomaticos) {
+                    echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento pactado en desmontaje visuales: ' . $descPorcMontaje . '%</p>';
+                    echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento aplicado en desmontaje visuales: ' . number_format($totalDescDesmontaje, 2, '.', '') . '€</p>';
+                    $observacionesA3Erp .= 'Descuento pactado en desmontaje visuales: ' . $descPorcMontaje . '%\nDescuento aplicado en desmontaje visuales: ' . number_format($totalDescDesmontaje, 2, '.', '') . '€\n';
+                    echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total desmontaje visuales: ' . number_format($totalDesmontaje, 2, '.', '') . '€</p>';
+                    //$observacionesA3Erp .= 'Total desmontaje visuales: ' . number_format($totalDesmontaje, 2, '.', '') . '€ - ';
+                    $observacionesA3Erp .= 'Total desmontaje visuales: ' . number_format($totalDesmontaje, 2, '.', '') . '€\n';
+                }
+            }
+            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Realización logos: ' . number_format($logos, 2, '.', '') . '€</p>';
+            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Montaje logos: ' . number_format($montajeLogos, 2, '.', '') . '€</p>';
+            //$observacionesA3Erp .= 'Realización logos: ' . number_format($logos, 2, '.', '') . '€ - Montaje logos: ' . number_format($montajeLogos, 2, '.', '') . '€ - ';
+            $observacionesA3Erp .= 'Realización logos: ' . number_format($logos, 2, '.', '') . '€\nMontaje logos: ' . number_format($montajeLogos, 2, '.', '') . '€\n';
             if ($totalDescMontajeLogos) {
-                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento aplicado en Montaje de Logos: ' . number_format($totalDescMontajeLogos, 2) . '€</p>';
-                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total Montaje de Logos: ' . number_format($totalMontajeLogos, 2) . '€</p>';
-                //$observacionesA3Erp .= 'Descuento aplicado en Montaje de Logos: ' . number_format($totalDescMontajeLogos, 2) . '€ - Total Montaje de Logos: ' . number_format($totalMontajeLogos, 2) . '€ --- ';
-                $observacionesA3Erp .= 'Descuento aplicado en Montaje de Logos: ' . number_format($totalDescMontajeLogos, 2) . '€\nTotal Montaje de Logos: ' . number_format($totalMontajeLogos, 2) . '€\n';
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento aplicado en Montaje de Logos: ' . number_format($totalDescMontajeLogos, 2, '.', '') . '€</p>';
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total Montaje de Logos: ' . number_format($totalMontajeLogos, 2, '.', '') . '€</p>';
+                //$observacionesA3Erp .= 'Descuento aplicado en Montaje de Logos: ' . number_format($totalDescMontajeLogos, 2, '.', '') . '€ - Total Montaje de Logos: ' . number_format($totalMontajeLogos, 2, '.', '') . '€ --- ';
+                $observacionesA3Erp .= 'Descuento aplicado en Montaje de Logos: ' . number_format($totalDescMontajeLogos, 2, '.', '') . '€\nTotal Montaje de Logos: ' . number_format($totalMontajeLogos, 2, '.', '') . '€\n';
+            }
+            if ($numDesmontajeLogos) {
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Desmontaje logos: ' . number_format($desmontajeLogos, 2, '.', '') . '€</p>';
+                //$observacionesA3Erp .= 'Desmontaje logos: ' . number_format($desmontajeLogos, 2, '.', '') . '€ - ';
+                $observacionesA3Erp .= 'Desmontaje logos: ' . number_format($desmontajeLogos, 2, '.', '') . '€\n';
+                if ($totalDescDesmontajeLogos) {
+                    echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento aplicado en desmontaje logos: ' . number_format($totalDescDesmontajeLogos, 2, '.', '') . '€</p>';
+                    $observacionesA3Erp .= 'Descuento aplicado en desmontaje logos: ' . number_format($totalDescDesmontajeLogos, 2, '.', '') . '€\n';
+                    echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total desmontaje logos: ' . number_format($totalDesmontajeLogos, 2, '.', '') . '€</p>';
+                    //$observacionesA3Erp .= 'Total desmontaje logos: ' . number_format($totalDesmontajeLogos, 2, '.', '') . '€ - ';
+                    $observacionesA3Erp .= 'Total desmontaje logos: ' . number_format($totalDesmontajeLogos, 2, '.', '') . '€\n';
+                }
             }
             if ($acabados) {
-                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Acabados: ' . number_format($acabados, 2) . '€</p>';
-                //$observacionesA3Erp .= 'Acabados: ' . number_format($acabados, 2) . '€ - ';
-                $observacionesA3Erp .= 'Acabados: ' . number_format($acabados, 2) . '€\n';
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Acabados: ' . number_format($acabados, 2, '.', '') . '€</p>';
+                //$observacionesA3Erp .= 'Acabados: ' . number_format($acabados, 2, '.', '') . '€ - ';
+                $observacionesA3Erp .= 'Acabados: ' . number_format($acabados, 2, '.', '') . '€\n';
             }
-            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total realización (Visuales + Logos + Acabados): ' . number_format($totalRealizacionVL, 2) . '€</p>';
-            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total montaje (Visuales + Logos): ' . number_format($totalMontajeVL, 2) . '€</p>';
-            //$observacionesA3Erp .= 'Total realización (Visuales + Logos + Acabados): ' . number_format($totalRealizacionVL, 2) . '€ - Total montaje (Visuales + Logos): ' . number_format($totalMontajeVL, 2) . '€ - ';
-            $observacionesA3Erp .= 'Total realización (Visuales + Logos + Acabados): ' . number_format($totalRealizacionVL, 2) . '€\nTotal montaje (Visuales + Logos): ' . number_format($totalMontajeVL, 2) . '€\n';
+            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total realización (Visuales + Logos + Acabados): ' . number_format($totalRealizacionVL, 2, '.', '') . '€</p>';
+            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total montaje (Visuales + Logos + Desmontajes): ' . number_format($totalMontajeVL, 2, '.', '') . '€</p>';
+            //$observacionesA3Erp .= 'Total realización (Visuales + Logos + Acabados): ' . number_format($totalRealizacionVL, 2, '.', '') . '€ - Total montaje (Visuales + Logos + Desmontajes): ' . number_format($totalMontajeVL, 2, '.', '') . '€ - ';
+            $observacionesA3Erp .= 'Total realización (Visuales + Logos + Acabados): ' . number_format($totalRealizacionVL, 2, '.', '') . '€\nTotal montaje (Visuales + Logos + Desmontajes): ' . number_format($totalMontajeVL, 2, '.', '') . '€\n';
             if ($tomaDeMedidas) {
-                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Toma de medidas: ' . number_format($tomaDeMedidas, 2) . '€</p>';
-                //$observacionesA3Erp .= 'Toma de medidas: ' . number_format($tomaDeMedidas, 2) . '€ - ';
-                $observacionesA3Erp .= 'Toma de medidas: ' . number_format($tomaDeMedidas, 2) . '€\n';
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Toma de medidas: ' . number_format($tomaDeMedidas, 2, '.', '') . '€</p>';
+                //$observacionesA3Erp .= 'Toma de medidas: ' . number_format($tomaDeMedidas, 2, '.', '') . '€ - ';
+                $observacionesA3Erp .= 'Toma de medidas: ' . number_format($tomaDeMedidas, 2, '.', '') . '€\n';
             }
-            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2) . '€</p>';
-            $observacionesA3Erp .= 'Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2) . '€\n';
+            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2, '.', '') . '€</p>';
+            $observacionesA3Erp .= 'Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2, '.', '') . '€\n';
             if ($descuentoOt) {
                 echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento general: ' . $descuentoOt . '%</p>';
-                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento general: ' . number_format($totalDescOt, 2) . '€</p>';
-                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto sin impuesto: ' . number_format($totalSinImpuestoConDescuentoOt, 2) . '€</p>';
-                $observacionesA3Erp .= 'Descuento general: ' . $descuentoOt . '%\nDescuento general: ' . number_format($totalDescOt, 2) . '€\nTotal presupuesto sin impuesto: ' . number_format($totalSinImpuestoConDescuentoOt, 2) . '€\n';
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento general: ' . number_format($totalDescOt, 2, '.', '') . '€</p>';
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto sin impuesto: ' . number_format($totalSinImpuestoConDescuentoOt, 2, '.', '') . '€</p>';
+                $observacionesA3Erp .= 'Descuento general: ' . $descuentoOt . '%\nDescuento general: ' . number_format($totalDescOt, 2, '.', '') . '€\nTotal presupuesto sin impuesto: ' . number_format($totalSinImpuestoConDescuentoOt, 2, '.', '') . '€\n';
             }
             echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Impuesto ' . $impuesto . '</p>';
-            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto con impuesto: ' . number_format($totalConImpuesto, 2) . '€</p>';
-            //$observacionesA3Erp .= 'Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2) . '€ - Impuesto ' . $impuesto . ' - Total presupuesto con impuesto: ' . number_format($totalConImpuesto, 2) . '€ - ';
-            $observacionesA3Erp .= 'Impuesto ' . $impuesto . '\nTotal presupuesto con impuesto: ' . number_format($totalConImpuesto, 2) . '€\n';
+            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto con impuesto: ' . number_format($totalConImpuesto, 2, '.', '') . '€</p>';
+            //$observacionesA3Erp .= 'Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2, '.', '') . '€ - Impuesto ' . $impuesto . ' - Total presupuesto con impuesto: ' . number_format($totalConImpuesto, 2, '.', '') . '€ - ';
+            $observacionesA3Erp .= 'Impuesto ' . $impuesto . '\nTotal presupuesto con impuesto: ' . number_format($totalConImpuesto, 2, '.', '') . '€\n';
         }
         /* SI SÓLO EXISTEN VISUALES */ else if ($numVisuales) {
             echo '<p style="display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">LAS LÍNEAS SON VISUALES</p>';
-            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Metros cuadrados: ' . number_format($totalM2, 2) . '</p>';
-            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Realización: ' . number_format($realizacion, 2) . '€</p>';
-            //$observacionesA3Erp .= 'Metros cuadrados: ' . number_format($totalM2, 2) . ' - Realización: ' . number_format($realizacion, 2) . '€ - ';
-            $observacionesA3Erp .= 'Metros cuadrados: ' . number_format($totalM2, 2) . '\nRealización: ' . number_format($realizacion, 2) . '€\n';
+            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Metros cuadrados: ' . number_format($totalM2, 2, '.', '') . '</p>';
+            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Realización: ' . number_format($realizacion, 2, '.', '') . '€</p>';
+            //$observacionesA3Erp .= 'Metros cuadrados: ' . number_format($totalM2, 2, '.', '') . ' - Realización: ' . number_format($realizacion, 2, '.', '') . '€ - ';
+            $observacionesA3Erp .= 'Metros cuadrados: ' . number_format($totalM2, 2, '.', '') . '\nRealización: ' . number_format($realizacion, 2, '.', '') . '€\n';
             if ($descPorcRealización && $descuentosAutomaticos) {
                 echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento pactado en Realización: ' . $descPorcRealización . '%</p>';
-                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento aplicado en Realización: ' . number_format($totalDescRealizacion, 2) . '€</p>';
-                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total Realización: ' . number_format($totalRealizacion, 2) . '€</p>';
-                //$observacionesA3Erp .= 'Descuento pactado en Realización: ' . $descPorcRealización . '% - Descuento aplicado en Realización: ' . number_format($totalDescRealizacion, 2) . '€ - Total Realización: ' . number_format($totalRealizacion, 2) . '€ --- ';
-                $observacionesA3Erp .= 'Descuento pactado en Realización: ' . $descPorcRealización . '%\nDescuento aplicado en Realización: ' . number_format($totalDescRealizacion, 2) . '€\nTotal Realización: ' . number_format($totalRealizacion, 2) . '€\n';
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento aplicado en Realización: ' . number_format($totalDescRealizacion, 2, '.', '') . '€</p>';
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total Realización: ' . number_format($totalRealizacion, 2, '.', '') . '€</p>';
+                //$observacionesA3Erp .= 'Descuento pactado en Realización: ' . $descPorcRealización . '% - Descuento aplicado en Realización: ' . number_format($totalDescRealizacion, 2, '.', '') . '€ - Total Realización: ' . number_format($totalRealizacion, 2, '.', '') . '€ --- ';
+                $observacionesA3Erp .= 'Descuento pactado en Realización: ' . $descPorcRealización . '%\nDescuento aplicado en Realización: ' . number_format($totalDescRealizacion, 2, '.', '') . '€\nTotal Realización: ' . number_format($totalRealizacion, 2, '.', '') . '€\n';
             }
-            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Montaje: ' . number_format($montaje, 2) . '€</p>';
-            //$observacionesA3Erp .= 'Montaje: ' . number_format($montaje, 2) . '€ - ';
-            $observacionesA3Erp .= 'Montaje: ' . number_format($montaje, 2) . '€\n';
+            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Montaje: ' . number_format($montaje, 2, '.', '') . '€</p>';
+            //$observacionesA3Erp .= 'Montaje: ' . number_format($montaje, 2, '.', '') . '€ - ';
+            $observacionesA3Erp .= 'Montaje: ' . number_format($montaje, 2, '.', '') . '€\n';
             if ($descPorcMontaje && $descuentosAutomaticos) {
                 echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento pactado en Montaje: ' . $descPorcMontaje . '%</p>';
-                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento aplicado en Montaje: ' . number_format($totalDescMontaje, 2) . '€</p>';
-                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total Montaje: ' . number_format($totalMontaje, 2) . '€</p>';
-                //$observacionesA3Erp .= 'Descuento pactado en Montaje: ' . $descPorcMontaje . '% - Descuento aplicado en Montaje: ' . number_format($totalDescMontaje, 2) . '€ - Total Montaje: ' . number_format($totalMontaje, 2) . '€ --- ';
-                $observacionesA3Erp .= 'Descuento pactado en Montaje: ' . $descPorcMontaje . '%\nDescuento aplicado en Montaje: ' . number_format($totalDescMontaje, 2) . '€\nTotal Montaje: ' . number_format($totalMontaje, 2) . '€\n';
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento aplicado en Montaje: ' . number_format($totalDescMontaje, 2, '.', '') . '€</p>';
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total Montaje: ' . number_format($totalMontaje, 2, '.', '') . '€</p>';
+                //$observacionesA3Erp .= 'Descuento pactado en Montaje: ' . $descPorcMontaje . '% - Descuento aplicado en Montaje: ' . number_format($totalDescMontaje, 2, '.', '') . '€ - Total Montaje: ' . number_format($totalMontaje, 2, '.', '') . '€ --- ';
+                $observacionesA3Erp .= 'Descuento pactado en Montaje: ' . $descPorcMontaje . '%\nDescuento aplicado en Montaje: ' . number_format($totalDescMontaje, 2, '.', '') . '€\nTotal Montaje: ' . number_format($totalMontaje, 2, '.', '') . '€\n';
+            }
+            if ($numDesmontajeVisuales) {
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Desmontaje visuales: ' . number_format($desmontaje, 2, '.', '') . '€</p>';
+                //$observacionesA3Erp .= 'Desmontaje visuales: ' . number_format($desmontaje, 2, '.', '') . '€ - ';
+                $observacionesA3Erp .= 'Desmontaje visuales: ' . number_format($desmontaje, 2, '.', '') . '€\n';
+                if ($descPorcMontaje && $descuentosAutomaticos) {
+                    echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento pactado en desmontaje visuales: ' . $descPorcMontaje . '%</p>';
+                    echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento aplicado en desmontaje visuales: ' . number_format($totalDescDesmontaje, 2, '.', '') . '€</p>';
+                    $observacionesA3Erp .= 'Descuento pactado en desmontaje visuales: ' . $descPorcMontaje . '%\nDescuento aplicado en desmontaje visuales: ' . number_format($totalDescDesmontaje, 2, '.', '') . '€\n';
+                    echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total desmontaje visuales: ' . number_format($totalDesmontaje, 2, '.', '') . '€</p>';
+                    //$observacionesA3Erp .= 'Total desmontaje visuales: ' . number_format($totalDesmontaje, 2, '.', '') . '€ - ';
+                    $observacionesA3Erp .= 'Total desmontaje visuales: ' . number_format($totalDesmontaje, 2, '.', '') . '€\n';
+                }
             }
             if ($acabados) {
-                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Acabados: ' . number_format($acabados, 2) . '€</p>';
-                //$observacionesA3Erp .= 'Acabados: ' . number_format($acabados, 2) . '€ - ';
-                $observacionesA3Erp .= 'Acabados: ' . number_format($acabados, 2) . '€\n';
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Acabados: ' . number_format($acabados, 2, '.', '') . '€</p>';
+                //$observacionesA3Erp .= 'Acabados: ' . number_format($acabados, 2, '.', '') . '€ - ';
+                $observacionesA3Erp .= 'Acabados: ' . number_format($acabados, 2, '.', '') . '€\n';
             }
             if ($tomaDeMedidas) {
-                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Toma de medidas: ' . number_format($tomaDeMedidas, 2) . '€</p>';
-                //$observacionesA3Erp .= 'Toma de medidas: ' . number_format($tomaDeMedidas, 2) . '€ - ';
-                $observacionesA3Erp .= 'Toma de medidas: ' . number_format($tomaDeMedidas, 2) . '€\n';
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Toma de medidas: ' . number_format($tomaDeMedidas, 2, '.', '') . '€</p>';
+                //$observacionesA3Erp .= 'Toma de medidas: ' . number_format($tomaDeMedidas, 2, '.', '') . '€ - ';
+                $observacionesA3Erp .= 'Toma de medidas: ' . number_format($tomaDeMedidas, 2, '.', '') . '€\n';
             }
-            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2) . '€</p>';
-            $observacionesA3Erp .= 'Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2) . '€\n';
+            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2, '.', '') . '€</p>';
+            $observacionesA3Erp .= 'Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2, '.', '') . '€\n';
             if ($descuentoOt) {
                 echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento general: ' . $descuentoOt . '%</p>';
-                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento general: ' . number_format($totalDescOt, 2) . '€</p>';
-                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto sin impuesto: ' . number_format($totalSinImpuestoConDescuentoOt, 2) . '€</p>';
-                $observacionesA3Erp .= 'Descuento general: ' . $descuentoOt . '%\nDescuento general: ' . number_format($totalDescOt, 2) . '€\nTotal presupuesto sin impuesto: ' . number_format($totalSinImpuestoConDescuentoOt, 2) . '€\n';
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento general: ' . number_format($totalDescOt, 2, '.', '') . '€</p>';
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto sin impuesto: ' . number_format($totalSinImpuestoConDescuentoOt, 2, '.', '') . '€</p>';
+                $observacionesA3Erp .= 'Descuento general: ' . $descuentoOt . '%\nDescuento general: ' . number_format($totalDescOt, 2, '.', '') . '€\nTotal presupuesto sin impuesto: ' . number_format($totalSinImpuestoConDescuentoOt, 2, '.', '') . '€\n';
             }
             echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Impuesto ' . $impuesto . '</p>';
-            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto con impuesto: ' . number_format($totalConImpuesto, 2) . '€</p>';
-            //$observacionesA3Erp .= 'Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2) . '€ - Impuesto ' . $impuesto . ' - Total presupuesto con impuesto: ' . number_format($totalConImpuesto, 2) . '€ - ';
-            $observacionesA3Erp .= 'Impuesto ' . $impuesto . '\nTotal presupuesto con impuesto: ' . number_format($totalConImpuesto, 2) . '€\n';
+            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto con impuesto: ' . number_format($totalConImpuesto, 2, '.', '') . '€</p>';
+            //$observacionesA3Erp .= 'Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2, '.', '') . '€ - Impuesto ' . $impuesto . ' - Total presupuesto con impuesto: ' . number_format($totalConImpuesto, 2, '.', '') . '€ - ';
+            $observacionesA3Erp .= 'Impuesto ' . $impuesto . '\nTotal presupuesto con impuesto: ' . number_format($totalConImpuesto, 2, '.', '') . '€\n';
         }
         /* SI SÓLO EXISTEN LOGOS */ else if ($numLogos) {
             echo '<p style="display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">LAS LÍNEAS SON LOGOS</p>';
-            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Metros cuadrados: ' . number_format($totalM2, 2) . '</p>';
-            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Realización: ' . number_format($logos, 2) . '€</p>';
-            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Montaje: ' . number_format($montajeLogos, 2) . '€</p>';
-            //$observacionesA3Erp .= 'Metros cuadrados: ' . number_format($totalM2, 2) . ' - Realización: ' . number_format($logos, 2) . '€ - Montaje: ' . number_format($montajeLogos, 2) . '€ - ';
-            $observacionesA3Erp .= 'Metros cuadrados: ' . number_format($totalM2, 2) . '\nRealización: ' . number_format($logos, 2) . '€\nMontaje: ' . number_format($montajeLogos, 2) . '€\n';
+            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Metros cuadrados: ' . number_format($totalM2, 2, '.', '') . '</p>';
+            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Realización: ' . number_format($logos, 2, '.', '') . '€</p>';
+            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Montaje: ' . number_format($montajeLogos, 2, '.', '') . '€</p>';
+            //$observacionesA3Erp .= 'Metros cuadrados: ' . number_format($totalM2, 2, '.', '') . ' - Realización: ' . number_format($logos, 2, '.', '') . '€ - Montaje: ' . number_format($montajeLogos, 2, '.', '') . '€ - ';
+            $observacionesA3Erp .= 'Metros cuadrados: ' . number_format($totalM2, 2, '.', '') . '\nRealización: ' . number_format($logos, 2, '.', '') . '€\nMontaje: ' . number_format($montajeLogos, 2, '.', '') . '€\n';
             if ($totalDescMontajeLogos) {
-                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento aplicado en Montaje: ' . number_format($totalDescMontajeLogos, 2) . '€</p>';
-                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total Montaje: ' . number_format($totalMontajeLogos, 2) . '€</p>';
-                //$observacionesA3Erp .= 'Descuento aplicado en Montaje: ' . number_format($totalDescMontajeLogos, 2) . '€ - Total Montaje: ' . number_format($totalMontajeLogos, 2) . '€ --- ';
-                $observacionesA3Erp .= 'Descuento aplicado en Montaje: ' . number_format($totalDescMontajeLogos, 2) . '€\nTotal Montaje: ' . number_format($totalMontajeLogos, 2) . '€\n';
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento aplicado en Montaje: ' . number_format($totalDescMontajeLogos, 2, '.', '') . '€</p>';
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total Montaje: ' . number_format($totalMontajeLogos, 2, '.', '') . '€</p>';
+                //$observacionesA3Erp .= 'Descuento aplicado en Montaje: ' . number_format($totalDescMontajeLogos, 2, '.', '') . '€ - Total Montaje: ' . number_format($totalMontajeLogos, 2, '.', '') . '€ --- ';
+                $observacionesA3Erp .= 'Descuento aplicado en Montaje: ' . number_format($totalDescMontajeLogos, 2, '.', '') . '€\nTotal Montaje: ' . number_format($totalMontajeLogos, 2, '.', '') . '€\n';
+            }
+            if ($numDesmontajeLogos) {
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Desmontaje logos: ' . number_format($desmontajeLogos, 2, '.', '') . '€</p>';
+                //$observacionesA3Erp .= 'Desmontaje logos: ' . number_format($desmontajeLogos, 2, '.', '') . '€ - ';
+                $observacionesA3Erp .= 'Desmontaje logos: ' . number_format($desmontajeLogos, 2, '.', '') . '€\n';
+                if ($totalDescDesmontajeLogos) {
+                    echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento aplicado en desmontaje logos: ' . number_format($totalDescDesmontajeLogos, 2, '.', '') . '€</p>';
+                    $observacionesA3Erp .= 'Descuento aplicado en desmontaje logos: ' . number_format($totalDescDesmontajeLogos, 2, '.', '') . '€\n';
+                    echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total desmontaje logos: ' . number_format($totalDesmontajeLogos, 2, '.', '') . '€</p>';
+                    //$observacionesA3Erp .= 'Total desmontaje logos: ' . number_format($totalDesmontajeLogos, 2, '.', '') . '€ - ';
+                    $observacionesA3Erp .= 'Total desmontaje logos: ' . number_format($totalDesmontajeLogos, 2, '.', '') . '€\n';
+                }
             }
             if ($acabados) {
-                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Acabados: ' . number_format($acabados, 2) . '€</p>';
-                //$observacionesA3Erp .= 'Acabados: ' . number_format($acabados, 2) . '€ - ';
-                $observacionesA3Erp .= 'Acabados: ' . number_format($acabados, 2) . '€\n';
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Acabados: ' . number_format($acabados, 2, '.', '') . '€</p>';
+                //$observacionesA3Erp .= 'Acabados: ' . number_format($acabados, 2, '.', '') . '€ - ';
+                $observacionesA3Erp .= 'Acabados: ' . number_format($acabados, 2, '.', '') . '€\n';
             }
             if ($tomaDeMedidas) {
-                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Toma de medidas: ' . number_format($tomaDeMedidas, 2) . '€</p>';
-                //$observacionesA3Erp .= 'Toma de medidas: ' . number_format($tomaDeMedidas, 2) . '€ - ';
-                $observacionesA3Erp .= 'Toma de medidas: ' . number_format($tomaDeMedidas, 2) . '€\n';
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Toma de medidas: ' . number_format($tomaDeMedidas, 2, '.', '') . '€</p>';
+                //$observacionesA3Erp .= 'Toma de medidas: ' . number_format($tomaDeMedidas, 2, '.', '') . '€ - ';
+                $observacionesA3Erp .= 'Toma de medidas: ' . number_format($tomaDeMedidas, 2, '.', '') . '€\n';
             }
-            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2) . '€</p>';
-            $observacionesA3Erp .= 'Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2) . '€\n';
+            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2, '.', '') . '€</p>';
+            $observacionesA3Erp .= 'Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2, '.', '') . '€\n';
             if ($descuentoOt) {
                 echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento general: ' . $descuentoOt . '%</p>';
-                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento general: ' . number_format($totalDescOt, 2) . '€</p>';
-                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto sin impuesto: ' . number_format($totalSinImpuestoConDescuentoOt, 2) . '€</p>';
-                $observacionesA3Erp .= 'Descuento general: ' . $descuentoOt . '%\nDescuento general: ' . number_format($totalDescOt, 2) . '€\nTotal presupuesto sin impuesto: ' . number_format($totalSinImpuestoConDescuentoOt, 2) . '€\n';
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento general: ' . number_format($totalDescOt, 2, '.', '') . '€</p>';
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto sin impuesto: ' . number_format($totalSinImpuestoConDescuentoOt, 2, '.', '') . '€</p>';
+                $observacionesA3Erp .= 'Descuento general: ' . $descuentoOt . '%\nDescuento general: ' . number_format($totalDescOt, 2, '.', '') . '€\nTotal presupuesto sin impuesto: ' . number_format($totalSinImpuestoConDescuentoOt, 2, '.', '') . '€\n';
             }
             echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Impuesto ' . $impuesto . '</p>';
-            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto con impuesto: ' . number_format($totalConImpuesto, 2) . '€</p>';
-            //$observacionesA3Erp .= 'Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2) . '€ - Impuesto ' . $impuesto . ' - Total presupuesto con impuesto: ' . number_format($totalConImpuesto, 2) . '€ - ';
-            $observacionesA3Erp .= 'Impuesto ' . $impuesto . '\nTotal presupuesto con impuesto: ' . number_format($totalConImpuesto, 2) . '€\n';
+            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto con impuesto: ' . number_format($totalConImpuesto, 2, '.', '') . '€</p>';
+            //$observacionesA3Erp .= 'Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2, '.', '') . '€ - Impuesto ' . $impuesto . ' - Total presupuesto con impuesto: ' . number_format($totalConImpuesto, 2, '.', '') . '€ - ';
+            $observacionesA3Erp .= 'Impuesto ' . $impuesto . '\nTotal presupuesto con impuesto: ' . number_format($totalConImpuesto, 2, '.', '') . '€\n';
         }
         /* SI SÓLO EXISTEN TOMAS DE MEDIDA */ else if ($numTomasDeMedida) {
-            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Toma de medidas: ' . number_format($tomaDeMedidas, 2) . '€</p>';
-            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2) . '€</p>';
-            $observacionesA3Erp .= 'Toma de medidas: ' . number_format($tomaDeMedidas, 2) . 'Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2) . '€\n';
+            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Toma de medidas: ' . number_format($tomaDeMedidas, 2, '.', '') . '€</p>';
+            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2, '.', '') . '€</p>';
+            $observacionesA3Erp .= 'Toma de medidas: ' . number_format($tomaDeMedidas, 2, '.', '') . 'Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2, '.', '') . '€\n';
             if ($descuentoOt) {
                 echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento general: ' . $descuentoOt . '%</p>';
-                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento general: ' . number_format($totalDescOt, 2) . '€</p>';
-                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto sin impuesto: ' . number_format($totalSinImpuestoConDescuentoOt, 2) . '€</p>';
-                $observacionesA3Erp .= 'Descuento general: ' . $descuentoOt . '%\nDescuento general: ' . number_format($totalDescOt, 2) . '€\nTotal presupuesto sin impuesto: ' . number_format($totalSinImpuestoConDescuentoOt, 2) . '€\n';
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento general: ' . number_format($totalDescOt, 2, '.', '') . '€</p>';
+                echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto sin impuesto: ' . number_format($totalSinImpuestoConDescuentoOt, 2, '.', '') . '€</p>';
+                $observacionesA3Erp .= 'Descuento general: ' . $descuentoOt . '%\nDescuento general: ' . number_format($totalDescOt, 2, '.', '') . '€\nTotal presupuesto sin impuesto: ' . number_format($totalSinImpuestoConDescuentoOt, 2, '.', '') . '€\n';
             }
             echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Impuesto ' . $impuesto . '</p>';
-            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto con impuesto: ' . number_format($totalConImpuesto, 2) . '€</p>';
-            //$observacionesA3Erp .= 'Toma de medidas: ' . number_format($tomaDeMedidas, 2) . '€ - Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2) . '€ - Impuesto ' . $impuesto . ' - Total presupuesto con impuesto: ' . number_format($totalConImpuesto, 2) . '€ - ';
-            $observacionesA3Erp .= 'Impuesto ' . $impuesto . '\nTotal presupuesto con impuesto: ' . number_format($totalConImpuesto, 2) . '€\n';
+            echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto con impuesto: ' . number_format($totalConImpuesto, 2, '.', '') . '€</p>';
+            //$observacionesA3Erp .= 'Toma de medidas: ' . number_format($tomaDeMedidas, 2, '.', '') . '€ - Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2, '.', '') . '€ - Impuesto ' . $impuesto . ' - Total presupuesto con impuesto: ' . number_format($totalConImpuesto, 2, '.', '') . '€ - ';
+            $observacionesA3Erp .= 'Impuesto ' . $impuesto . '\nTotal presupuesto con impuesto: ' . number_format($totalConImpuesto, 2, '.', '') . '€\n';
         }
 
         $observacionesA3Erp = str_replace('\n', "\n", $observacionesA3Erp);
