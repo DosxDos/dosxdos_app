@@ -20,7 +20,7 @@ class Crm extends Zoho
     private $camposPreciosLogos = "Rango1,Rango2,Precio,idA3Erp";
     private $camposPreciosLogosMontaje = "Rango1,Rango2,Precio,idA3Erp";
     private $camposDescuentosLogosMontaje = "Isla,PDVS_minimo,Porcentaje";
-    private $camposMaterialesServicios = "Precio,idA3Erp,Material";
+    private $camposMaterialesServicios = "Precio,idA3Erp,Material,Abreviatura";
     private $camposAcabados = "Precio,idA3Erp,Acabado";
     private $camposRutas = "Name";
     private $camposMontadores = "Apellido_del_montador,C_digo_del_montador,idApp,Name,Tel_fono_del_montador";
