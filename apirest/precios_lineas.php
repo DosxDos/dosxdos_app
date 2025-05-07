@@ -64,7 +64,7 @@ try {
     flush();
 
     /* LINEAS */
-    $camposLineas = "Product_Name,Codigo_de_l_nea,Punto_de_venta,Tipo_de_trabajo,Incluir,Ancho_medida,Alto_medida,Material,Acabados1,Impuesto_Cliente,Alto_total,Ancho_total,Poner,Unit_Price";
+    $camposLineas = "Product_Name,Codigo_de_l_nea,Punto_de_venta,Tipo_de_trabajo,Incluir,Ancho_medida,Alto_medida,Material,Acabados1,Impuesto_Cliente,Alto_total,Ancho_total,Poner,Unit_Price,Realizaci_n,Montaje";
     $query = "SELECT $camposLineas FROM Products WHERE OT_relacionada=$idOt";
     $crm->query($query);
     if ($crm->estado) {
@@ -1951,6 +1951,9 @@ try {
 
             //VARIABLES DEL CÁLCULO
             $realizacion = 0;
+            $montaje = 0;
+            $precioLinea = 0;
+            $totalPreciosLineas = 0;
 
             if ($codigoArticuloA3Erp) {
                 if ($lineas) {
@@ -1959,17 +1962,29 @@ try {
                         $incluir = $linea['Incluir'];
                         $nombreDeLinea = $linea['Product_Name'];
                         $codLinea = $linea['Codigo_de_l_nea'];
-                        $precioLinea = $linea['Unit_Price'];
+                        $realizacionLinea = $linea['Realizaci_n'];
+                        $montajeLinea = $linea['Montaje'];
                         if ($incluir) {
                             array_push($lineasIncluidas, $codLinea);
-                            if (!$precioLinea) {
-                                echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">LA LÍNEA' . $codLinea . ' NO TIENE ESTABLECIDO UN PRECIO.</p>';
-                                scrollUpdate();
-                                @ob_flush();
-                                flush();
-                                $precioLinea = 0.00;
+                            if (!$realizacionLinea || !$montajeLinea) {
+                                if (!$realizacionLinea) {
+                                    $realizacionLinea = 0.00;
+                                    echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">LA LÍNEA' . $codLinea . ' NO TIENE ESTABLECIDO LA REALIZACIÓN.</p>';
+                                    scrollUpdate();
+                                    @ob_flush();
+                                    flush();
+                                }
+                                if (!$montajeLinea) {
+                                    $montajeLinea = 0.00;
+                                    echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">LA LÍNEA' . $codLinea . ' NO TIENE ESTABLECIDO EL MONTAJE.</p>';
+                                    scrollUpdate();
+                                    @ob_flush();
+                                    flush();
+                                }
                             }
-                            $realizacion = $realizacion + $precioLinea;
+                            $realizacion = $realizacion + $realizacionLinea;
+                            $montaje = $montaje + $montajeLinea;
+                            $precioLinea = $realizacionLinea + $montajeLinea;
                             if ($descuentoOt) {
                                 $descuentoOtEnLinea = ($precioLinea * $descuentoOt) / 100;
                                 $descuentoOtEnLinea = number_format($descuentoOtEnLinea, 2, '.', '');
@@ -1982,10 +1997,13 @@ try {
                                 @ob_flush();
                                 flush();
                             }
+                            $totalPreciosLineas = $totalPreciosLineas + $precioLinea;
                             //LÍNEA DE A3 ERP
                             $lineaA3Erp = [];
                             $lineaA3Erp['CodigoArticulo'] = $codigoArticuloA3Erp;
                             $lineaA3Erp['Unidades'] = 1;
+                            $lineaA3Erp['Param2'] = $realizacionLinea;
+                            $lineaA3Erp['Param3'] = $montajeLinea;
                             $lineaA3Erp['Precio'] = $precioLinea;
                             $lineaA3Erp['Texto'] = $codLinea . ' - ' . $nombreDeLinea;
                             array_push($lineasA3Erp, $lineaA3Erp);
@@ -2011,7 +2029,8 @@ try {
                     print_r($lineasIncluidas);
                     /* TOTALES */
                     $totalRealizacion = $realizacion;
-                    $totalSinImpuesto = $totalRealizacion;
+                    $totalMontaje = $montaje;
+                    $totalSinImpuesto = $totalRealizacion + $totalMontaje;
                     //DESCUENTO MANUAL DE LA OT
                     $descuentoOtValue = ($totalSinImpuesto * $descuentoOt) / 100;
                     $totalSinImpuestoConDescuentoOt = $totalSinImpuesto - $totalDescOt;
@@ -2026,8 +2045,6 @@ try {
                         $totalConImpuesto = $totalSinImpuesto + $impuestoAplicado;
                     }
                     /* ACTUALIZAR IMPORTE DE LA OT */
-                    echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">totalSinImpuesto: ' . number_format($totalSinImpuesto, 2, '.', '') . '€</p>';
-                    echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">totalSinImpuestoConDescuentoOt: ' . number_format($totalSinImpuestoConDescuentoOt, 2, '.', '') . '€</p>';
                     echo '<p style="color:green;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ACTUALIZANDO EL IMPORTE DE LA OT EN EL CRM...</p>';
                     scrollUpdate();
                     @ob_flush();
@@ -2051,8 +2068,9 @@ try {
                         die();
                     }
                     echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">totalRealizacion: ' . number_format($totalRealizacion, 2, '.', '') . '€</p>';
+                    echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">totalMontaje: ' . number_format($totalMontaje, 2, '.', '') . '€</p>';
                     echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2, '.', '') . '€</p>';
-                    $observacionesA3Erp .= 'Total realización: ' . number_format($totalRealizacion, 2, '.', '') . '€\n' . 'Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2, '.', '') . '€\n';
+                    $observacionesA3Erp .= 'Total realización: ' . number_format($totalRealizacion, 2, '.', '') . '€\n' . 'Total montaje: ' . number_format($totalMontaje, 2, '.', '') . '€\n' . 'Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2, '.', '') . '€\n';
                     if ($descuentoOt) {
                         echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento general: ' . $descuentoOt . '%</p>';
                         echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento general aplicado: ' . number_format($descuentoOtValue, 2, '.', '') . '€</p>';
@@ -2061,6 +2079,7 @@ try {
                     }
                     echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Impuesto ' . $impuesto . '</p>';
                     echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto con impuesto: ' . number_format($totalConImpuesto, 2, '.', '') . '€</p>';
+                    echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">totalPreciosLineas: ' . number_format($totalPreciosLineas, 2, '.', '') . '€</p>';
                     //$observacionesA3Erp .= 'Toma de medidas: ' . number_format($tomaDeMedidas, 2, '.', '') . '€ - Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2, '.', '') . '€ - Impuesto ' . $impuesto . ' - Total presupuesto con impuesto: ' . number_format($totalConImpuesto, 2, '.', '') . '€ - ';
                     $observacionesA3Erp .= 'Impuesto ' . $impuesto . '\nTotal presupuesto con impuesto: ' . number_format($totalConImpuesto, 2, '.', '') . '€\n';
                     $observacionesA3Erp = str_replace('\n', "\n", $observacionesA3Erp);
