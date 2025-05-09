@@ -94,7 +94,7 @@ function eliminarTokenNotificaciones() {
         tokenEliminar = localStorage.getItem("tokenNotificaciones");
         if (tokenEliminar != null) {
             urlTokenEliminar =
-                "https://dosxdos.app.iidos.com/apirest/rutas_notificaciones.php/notificaciones/token/" +
+                "http://localhost/dosxdos_app/apirest/rutas_notificaciones.php/notificaciones/token/" +
                 tokenEliminar;
             fetch(urlTokenEliminar, {
                 method: "DELETE",
@@ -411,14 +411,14 @@ async function cerrarSesion() {
                         localStorage.clear();
                         eliminarCookie("login");
                         eliminarCookie("usuario");
-                        window.location.href = "https://dosxdos.app.iidos.com/index.html";
+                        window.location.href = "http://localhost/dosxdos_app/index.html";
                     }
                 } else {
                     // If the function doesn't exist, proceed anyway
                     localStorage.clear();
                     eliminarCookie("login");
                     eliminarCookie("usuario");
-                    window.location.href = "https://dosxdos.app.iidos.com/index.html";
+                    window.location.href = "http://localhost/dosxdos_app/index.html";
                 }
             }
         } catch (error) {
@@ -445,14 +445,14 @@ async function cerrarSesions() {
                         localStorage.clear();
                         eliminarCookie("login");
                         eliminarCookie("usuario");
-                        window.location.href = "https://dosxdos.app.iidos.com/index.html";
+                        window.location.href = "http://localhost/dosxdos_app/index.html";
                     }
                 } else {
                     // If the function doesn't exist, proceed anyway
                     localStorage.clear();
                     eliminarCookie("login");
                     eliminarCookie("usuario");
-                    window.location.href = "https://dosxdos.app.iidos.com/index.html";
+                    window.location.href = "http://localhost/dosxdos_app/index.html";
                 }
             }
         } catch (error) {

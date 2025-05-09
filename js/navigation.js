@@ -57,7 +57,7 @@ function populateMobileMenu(userRole) {
     admon: [
       {
         id: "archivos",
-        href: "https://dosxdos.app.iidos.com/ot.html",
+        href: "http://localhost/dosxdos_app/ot.html",
         icon: renderIcon(`
         <path d="M12.37 8.87988H17.62" stroke-linecap="round" stroke-linejoin="round"></path>
         <path d="M6.38 8.87988L7.13 9.62988L9.38 7.37988" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -69,7 +69,7 @@ function populateMobileMenu(userRole) {
       },
       {
         id: "icLineasOt",
-        href: "https://dosxdos.app.iidos.com/lineas_ot.html",
+        href: "http://localhost/dosxdos_app/lineas_ot.html",
         icon: renderIcon(`
         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
         <polyline points="14 2 14 8 20 8" />
@@ -79,7 +79,7 @@ function populateMobileMenu(userRole) {
       },
       {
         id: "rutasIcono",
-        href: "https://dosxdos.app.iidos.com/rutas.html",
+        href: "http://localhost/dosxdos_app/rutas.html",
         icon: renderIcon(`
             <svg viewBox="0 0 100 100" class="w-6 h-6 mr-2" fill="none" stroke="currentColor"
             xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
@@ -103,7 +103,7 @@ function populateMobileMenu(userRole) {
       },
       {
         id: "lineasIcono",
-        href: "https://dosxdos.app.iidos.com/lineas.html",
+        href: "http://localhost/dosxdos_app/lineas.html",
         icon: renderIcon(`
                  <svg class="w-6 h-6 mr-2" fill="currentColor" stroke="none" viewBox="-3 0 32 32" version="1.1"
             xmlns="http://www.w3.org/2000/svg">
@@ -128,7 +128,7 @@ function populateMobileMenu(userRole) {
       `),
         submenu: [
           {
-            href: "https://dosxdos.app.iidos.com/gastos_rutas.html",
+            href: "http://localhost/dosxdos_app/gastos_rutas.html",
             text: "Gastos Rutas"
           },
           {
@@ -154,18 +154,18 @@ function populateMobileMenu(userRole) {
       `),
         submenu: [
           {
-            href: "https://dosxdos.app.iidos.com/ots_clientes.html",
+            href: "http://localhost/dosxdos_app/ots_clientes.html",
             text: "Restricciones Tipos de OT"
           },
           {
-            href: "https://dosxdos.app.iidos.com/firmas_clientes.html",
+            href: "http://localhost/dosxdos_app/firmas_clientes.html",
             text: "Restricciones Firmas"
           }
         ]
       },
       {
         id: "usuarios",
-        href: "https://dosxdos.app.iidos.com/dosxdos.php?modulo=usuarios",
+        href: "http://localhost/dosxdos_app/dosxdos.php?modulo=usuarios",
         icon: renderIcon(`
         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
         <circle cx="9" cy="7" r="4" />
@@ -189,13 +189,13 @@ function populateMobileMenu(userRole) {
         //     text: "Sinc. OT Navision"
         //   },
         //   {
-        //     href: "https://dosxdos.app.iidos.com/apirest/sincronizador2.php",
+        //     href: "http://localhost/dosxdos_app/apirest/sincronizador2.php",
         //     text: "Sinc. Total OT Navision"
         //   }
         // ]
       }, {
         id: "cursos",
-        href: "https://dosxdos.app.iidos.com/cursos.html",
+        href: "http://localhost/dosxdos_app/cursos.html",
         icon: renderIcon(`
           <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
           <polyline points="14 2 14 8 20 8" />
@@ -209,7 +209,7 @@ function populateMobileMenu(userRole) {
     oficina: [
       {
         id: "archivos",
-        href: "https://dosxdos.app.iidos.com/ot.html",
+        href: "http://localhost/dosxdos_app/ot.html",
         icon: renderIcon(`
           <path d="M12.37 8.87988H17.62" stroke-linecap="round" stroke-linejoin="round"></path>
           <path d="M6.38 8.87988L7.13 9.62988L9.38 7.37988" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -220,7 +220,7 @@ function populateMobileMenu(userRole) {
       },
       {
         id: "icLineasOt",
-        href: "https://dosxdos.app.iidos.com/lineas_ot.html",
+        href: "http://localhost/dosxdos_app/lineas_ot.html",
         icon: renderIcon(`
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
             <polyline points="14 2 14 8 20 8" />
@@ -230,7 +230,7 @@ function populateMobileMenu(userRole) {
       },
       {
         id: "rutasIcono",
-        href: "https://dosxdos.app.iidos.com/rutas.html",
+        href: "http://localhost/dosxdos_app/rutas.html",
         icon: renderIcon(`
           <svg viewBox="0 0 100 100" class="w-6 h-6 mr-2" fill="none" stroke="currentColor"
           xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
@@ -253,7 +253,7 @@ function populateMobileMenu(userRole) {
       },
       {
         id: "lineasIcono",
-        href: "https://dosxdos.app.iidos.com/lineas.html",
+        href: "http://localhost/dosxdos_app/lineas.html",
         icon: renderIcon(`<svg class="w-6 h-6 mr-2" fill="currentColor" stroke="none" viewBox="-3 0 32 32" version="1.1"
             xmlns="http://www.w3.org/2000/svg">
             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -275,7 +275,7 @@ function populateMobileMenu(userRole) {
           <rect x="2" y="4" width="20" height="16" rx="2" />
         `), submenu: [
           {
-            href: "https://dosxdos.app.iidos.com/gastos_rutas.html",
+            href: "http://localhost/dosxdos_app/gastos_rutas.html",
             text: "Gastos Rutas"
           },
           {
@@ -285,7 +285,7 @@ function populateMobileMenu(userRole) {
         ]
       }, {
         id: "cursos",
-        href: "https://dosxdos.app.iidos.com/cursos.html",
+        href: "http://localhost/dosxdos_app/cursos.html",
         icon: renderIcon(`
           <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
           <polyline points="14 2 14 8 20 8" />
@@ -299,7 +299,7 @@ function populateMobileMenu(userRole) {
     diseno: [
       {
         id: "archivos",
-        href: "https://dosxdos.app.iidos.com/ot.html",
+        href: "http://localhost/dosxdos_app/ot.html",
         icon: renderIcon(`
           <path d="M12.37 8.87988H17.62" stroke-linecap="round" stroke-linejoin="round"></path>
           <path d="M6.38 8.87988L7.13 9.62988L9.38 7.37988" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -310,7 +310,7 @@ function populateMobileMenu(userRole) {
       },
       {
         id: "icLineasOt",
-        href: "https://dosxdos.app.iidos.com/lineas_ot.html",
+        href: "http://localhost/dosxdos_app/lineas_ot.html",
         icon: renderIcon(`
           <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
           <polyline points="14 2 14 8 20 8" />
@@ -319,7 +319,7 @@ function populateMobileMenu(userRole) {
       },
       {
         id: "rutasIcono",
-        href: "https://dosxdos.app.iidos.com/rutas.html",
+        href: "http://localhost/dosxdos_app/rutas.html",
         icon: renderIcon(`
           <svg viewBox="0 0 100 100" class="w-6 h-6 mr-2" fill="none" stroke="currentColor"
           xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
@@ -342,7 +342,7 @@ function populateMobileMenu(userRole) {
       },
       {
         id: "lineasIcono",
-        href: "https://dosxdos.app.iidos.com/lineas.html",
+        href: "http://localhost/dosxdos_app/lineas.html",
         icon: renderIcon(`
           <svg class="w-6 h-6 mr-2" fill="currentColor" stroke="none" viewBox="-3 0 32 32" version="1.1"
      xmlns="http://www.w3.org/2000/svg">
@@ -365,7 +365,7 @@ function populateMobileMenu(userRole) {
           <rect x="2" y="4" width="20" height="16" rx="2" />
         `), submenu: [
           {
-            href: "https://dosxdos.app.iidos.com/gastos_rutas.html",
+            href: "http://localhost/dosxdos_app/gastos_rutas.html",
             text: "Gastos Rutas"
           },
           {
@@ -375,7 +375,7 @@ function populateMobileMenu(userRole) {
         ]
       }, {
         id: "cursos",
-        href: "https://dosxdos.app.iidos.com/cursos.html",
+        href: "http://localhost/dosxdos_app/cursos.html",
         icon: renderIcon(`
           <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
           <polyline points="14 2 14 8 20 8" />
@@ -389,7 +389,7 @@ function populateMobileMenu(userRole) {
     estudio: [
       {
         id: "archivos",
-        href: "https://dosxdos.app.iidos.com/ot.html",
+        href: "http://localhost/dosxdos_app/ot.html",
         icon: renderIcon(`
           <path d="M12.37 8.87988H17.62" stroke-linecap="round" stroke-linejoin="round"></path>
           <path d="M6.38 8.87988L7.13 9.62988L9.38 7.37988" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -400,7 +400,7 @@ function populateMobileMenu(userRole) {
       },
       {
         id: "icLineasOt",
-        href: "https://dosxdos.app.iidos.com/lineas_ot.html",
+        href: "http://localhost/dosxdos_app/lineas_ot.html",
         icon: renderIcon(`
           <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
           <polyline points="14 2 14 8 20 8" />
@@ -409,7 +409,7 @@ function populateMobileMenu(userRole) {
       },
       {
         id: "rutasIcono",
-        href: "https://dosxdos.app.iidos.com/rutas.html",
+        href: "http://localhost/dosxdos_app/rutas.html",
         icon: renderIcon(`
           <svg viewBox="0 0 100 100" class="w-6 h-6 mr-2" fill="none" stroke="currentColor"
           xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
@@ -432,7 +432,7 @@ function populateMobileMenu(userRole) {
       },
       {
         id: "lineasIcono",
-        href: "https://dosxdos.app.iidos.com/lineas.html",
+        href: "http://localhost/dosxdos_app/lineas.html",
         icon: renderIcon(`
           <svg class="w-6 h-6 mr-2" fill="currentColor" stroke="none" viewBox="-3 0 32 32" version="1.1"
      xmlns="http://www.w3.org/2000/svg">
@@ -455,7 +455,7 @@ function populateMobileMenu(userRole) {
           <rect x="2" y="4" width="20" height="16" rx="2" />
         `), submenu: [
           {
-            href: "https://dosxdos.app.iidos.com/gastos_rutas.html",
+            href: "http://localhost/dosxdos_app/gastos_rutas.html",
             text: "Gastos Rutas"
           },
           {
@@ -465,7 +465,7 @@ function populateMobileMenu(userRole) {
         ]
       }, {
         id: "cursos",
-        href: "https://dosxdos.app.iidos.com/cursos.html",
+        href: "http://localhost/dosxdos_app/cursos.html",
         icon: renderIcon(`
           <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
           <polyline points="14 2 14 8 20 8" />
@@ -479,7 +479,7 @@ function populateMobileMenu(userRole) {
     montador: [
       {
         id: "rutasMontador",
-        href: "https://dosxdos.app.iidos.com/rutas_montador.html",
+        href: "http://localhost/dosxdos_app/rutas_montador.html",
         icon: renderIcon(`
           <svg viewBox="0 0 100 100" class="w-6 h-6 mr-2" fill="none" stroke="currentColor"
           xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
@@ -502,7 +502,7 @@ function populateMobileMenu(userRole) {
       },
       {
         id: "lineasMontador",
-        href: "https://dosxdos.app.iidos.com/ruta_montador.html",
+        href: "http://localhost/dosxdos_app/ruta_montador.html",
         icon: renderIcon(`
           <svg class="w-6 h-6 mr-2" fill="currentColor" stroke="none" viewBox="-3 0 32 32" version="1.1"
      xmlns="http://www.w3.org/2000/svg">
@@ -518,7 +518,7 @@ function populateMobileMenu(userRole) {
       },
       {
         id: "historial",
-        href: "https://dosxdos.app.iidos.com/historial_montador.html",
+        href: "http://localhost/dosxdos_app/historial_montador.html",
         icon: renderIcon(`<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
     <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
     <circle cx="12" cy="12" r="9"></circle>
@@ -590,7 +590,7 @@ function populateMobileMenu(userRole) {
 
   // Create notification link with the same styling as menu items
   const notificationLink = document.createElement('a');
-  notificationLink.href = "https://dosxdos.app.iidos.com/notificaciones.html";
+  notificationLink.href = "http://localhost/dosxdos_app/notificaciones.html";
   notificationLink.className = "z-10 flex items-center px-6 py-4 text-white bg-red-600 bg-opacity-60 hover:bg-white/20 rounded-xl transition-all duration-300 shadow-xl group backdrop-blur-lg";
   notificationLink.innerHTML = `
   <div class="flex items-center justify-center w-12 h-12 bg-white/20 rounded-xl mr-4 group-hover:bg-white/30 transition-all">
@@ -704,7 +704,7 @@ function setupUserActions() {
   if (editarUsuario) {
     editarUsuario.addEventListener("click", e => {
       if (navigator.onLine) {
-        window.location.href = "https://dosxdos.app.iidos.com/dosxdos.php?modulo=editarUsuario&id=" + usuario.id;
+        window.location.href = "http://localhost/dosxdos_app/dosxdos.php?modulo=editarUsuario&id=" + usuario.id;
       } else {
         alerta('No es posible acceder a las opciones de edición de usuario sin conexión a internet');
         scrollToTop();
@@ -715,7 +715,7 @@ function setupUserActions() {
   if (editarUsuarioMobile) {
     editarUsuarioMobile.addEventListener("click", e => {
       if (navigator.onLine) {
-        window.location.href = "https://dosxdos.app.iidos.com/dosxdos.php?modulo=editarUsuario&id=" + usuario.id;
+        window.location.href = "http://localhost/dosxdos_app/dosxdos.php?modulo=editarUsuario&id=" + usuario.id;
       } else {
         alerta('No es posible acceder a las opciones de edición de usuario sin conexión a internet');
         scrollToTop();
@@ -816,7 +816,7 @@ function cerrarSesion() {
     document.cookie = "usuario=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 
     // Redirect to login page
-    window.location.href = "https://dosxdos.app.iidos.com/index.html";
+    window.location.href = "http://localhost/dosxdos_app/index.html";
   } catch (error) {
     console.error("Error during logout:", error);
     loaderOff();
@@ -828,7 +828,7 @@ const menuConfigs = {
   admon: [
     {
       id: "archivos",
-      href: "https://dosxdos.app.iidos.com/ot.html",
+      href: "http://localhost/dosxdos_app/ot.html",
       icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-6 h-6 mr-2"
         xmlns="http://www.w3.org/2000/svg">
         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -848,7 +848,7 @@ const menuConfigs = {
     },
     {
       id: "icLineasOt",
-      href: "https://dosxdos.app.iidos.com/lineas_ot.html",
+      href: "http://localhost/dosxdos_app/lineas_ot.html",
       icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none"
         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
@@ -859,7 +859,7 @@ const menuConfigs = {
     },
     {
       id: "rutasIcono",
-      href: "https://dosxdos.app.iidos.com/rutas.html",
+      href: "http://localhost/dosxdos_app/rutas.html",
       icon: `<svg viewBox="0 0 100 100" class="w-6 h-6 mr-2" fill="none" stroke="currentColor"
         xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
         role="img" preserveAspectRatio="xMidYMid meet">
@@ -881,7 +881,7 @@ const menuConfigs = {
     },
     {
       id: "lineasIcono",
-      href: "https://dosxdos.app.iidos.com/lineas.html",
+      href: "http://localhost/dosxdos_app/lineas.html",
       icon: `<svg class="w-6 h-6 mr-2" fill="currentColor" stroke="none" viewBox="-3 0 32 32" version="1.1"
         xmlns="http://www.w3.org/2000/svg">
         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -915,7 +915,7 @@ const menuConfigs = {
       text: "Gastos",
       submenu: [
         {
-          href: "https://dosxdos.app.iidos.com/gastos_rutas.html",
+          href: "http://localhost/dosxdos_app/gastos_rutas.html",
           text: "Gastos Rutas"
         },
         {
@@ -940,18 +940,18 @@ const menuConfigs = {
       text: "Clientes",
       submenu: [
         {
-          href: "https://dosxdos.app.iidos.com/ots_clientes.html",
+          href: "http://localhost/dosxdos_app/ots_clientes.html",
           text: "Restricciones Tipos de OT"
         },
         {
-          href: "https://dosxdos.app.iidos.com/firmas_clientes.html",
+          href: "http://localhost/dosxdos_app/firmas_clientes.html",
           text: "Restricciones Firmas",
         }
       ]
     },
     {
       id: "usuarios",
-      href: "https://dosxdos.app.iidos.com/dosxdos.php?modulo=usuarios",
+      href: "http://localhost/dosxdos_app/dosxdos.php?modulo=usuarios",
       icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none"
         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
@@ -979,13 +979,13 @@ const menuConfigs = {
       //       text: "Sinc. OT Navision"
       //     },
       //     {
-      //       href: "https://dosxdos.app.iidos.com/apirest/sincronizador2.php",
+      //       href: "http://localhost/dosxdos_app/apirest/sincronizador2.php",
       //       text: "Sinc. Total OT Navision"
       //     }
       //   ]
     }, {
       id: "cursos",
-      href: "https://dosxdos.app.iidos.com/cursos.html",
+      href: "http://localhost/dosxdos_app/cursos.html",
       icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
         <polyline points="14 2 14 8 20 8" />
@@ -999,7 +999,7 @@ const menuConfigs = {
   oficina: [
     {
       id: "archivos",
-      href: "https://dosxdos.app.iidos.com/ot.html",
+      href: "http://localhost/dosxdos_app/ot.html",
       icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-6 h-6 mr-2"
         xmlns="http://www.w3.org/2000/svg">
         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -1019,7 +1019,7 @@ const menuConfigs = {
     },
     {
       id: "icLineasOt",
-      href: "https://dosxdos.app.iidos.com/lineas_ot.html",
+      href: "http://localhost/dosxdos_app/lineas_ot.html",
       icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none"
       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
@@ -1030,7 +1030,7 @@ const menuConfigs = {
     },
     {
       id: "rutasIcono",
-      href: "https://dosxdos.app.iidos.com/rutas.html",
+      href: "http://localhost/dosxdos_app/rutas.html",
       icon: `<svg viewBox="0 0 100 100" class="w-6 h-6 mr-2" fill="none" stroke="currentColor"
       xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
       role="img" preserveAspectRatio="xMidYMid meet">
@@ -1052,7 +1052,7 @@ const menuConfigs = {
     },
     {
       id: "lineasIcono",
-      href: "https://dosxdos.app.iidos.com/lineas.html",
+      href: "http://localhost/dosxdos_app/lineas.html",
       icon: `<svg class="w-6 h-6 mr-2" fill="currentColor" stroke="none" viewBox="-3 0 32 32" version="1.1"
       xmlns="http://www.w3.org/2000/svg">
       <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -1086,7 +1086,7 @@ const menuConfigs = {
       text: "Gastos",
       submenu: [
         {
-          href: "https://dosxdos.app.iidos.com/gastos_rutas.html",
+          href: "http://localhost/dosxdos_app/gastos_rutas.html",
           text: "Gastos Rutas"
         },
         {
@@ -1096,7 +1096,7 @@ const menuConfigs = {
       ]
     }, {
       id: "cursos",
-      href: "https://dosxdos.app.iidos.com/cursos.html",
+      href: "http://localhost/dosxdos_app/cursos.html",
       icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
         <polyline points="14 2 14 8 20 8" />
@@ -1110,7 +1110,7 @@ const menuConfigs = {
   diseno: [
     {
       id: "archivos",
-      href: "https://dosxdos.app.iidos.com/ot.html",
+      href: "http://localhost/dosxdos_app/ot.html",
       icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-6 h-6 mr-2"
       xmlns="http://www.w3.org/2000/svg">
       <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -1130,7 +1130,7 @@ const menuConfigs = {
     },
     {
       id: "icLineasOt",
-      href: "https://dosxdos.app.iidos.com/lineas_ot.html",
+      href: "http://localhost/dosxdos_app/lineas_ot.html",
       icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none"
       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
@@ -1141,7 +1141,7 @@ const menuConfigs = {
     },
     {
       id: "rutasIcono",
-      href: "https://dosxdos.app.iidos.com/rutas.html",
+      href: "http://localhost/dosxdos_app/rutas.html",
       icon: `<svg viewBox="0 0 100 100" class="w-6 h-6 mr-2" fill="none" stroke="currentColor"
       xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
       role="img" preserveAspectRatio="xMidYMid meet">
@@ -1163,7 +1163,7 @@ const menuConfigs = {
     },
     {
       id: "lineasIcono",
-      href: "https://dosxdos.app.iidos.com/lineas.html",
+      href: "http://localhost/dosxdos_app/lineas.html",
       icon: `<svg class="w-6 h-6 mr-2" fill="currentColor" stroke="none" viewBox="-3 0 32 32" version="1.1"
       xmlns="http://www.w3.org/2000/svg">
       <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -1197,7 +1197,7 @@ const menuConfigs = {
       text: "Gastos",
       submenu: [
         {
-          href: "https://dosxdos.app.iidos.com/gastos_rutas.html",
+          href: "http://localhost/dosxdos_app/gastos_rutas.html",
           text: "Gastos Rutas"
         },
         {
@@ -1207,7 +1207,7 @@ const menuConfigs = {
       ]
     }, {
       id: "cursos",
-      href: "https://dosxdos.app.iidos.com/cursos.html",
+      href: "http://localhost/dosxdos_app/cursos.html",
       icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
         <polyline points="14 2 14 8 20 8" />
@@ -1221,7 +1221,7 @@ const menuConfigs = {
   estudio: [
     {
       id: "archivos",
-      href: "https://dosxdos.app.iidos.com/ot.html",
+      href: "http://localhost/dosxdos_app/ot.html",
       icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-6 h-6 mr-2"
         xmlns="http://www.w3.org/2000/svg">
         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -1241,7 +1241,7 @@ const menuConfigs = {
     },
     {
       id: "icLineasOt",
-      href: "https://dosxdos.app.iidos.com/lineas_ot.html",
+      href: "http://localhost/dosxdos_app/lineas_ot.html",
       icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none"
         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
@@ -1252,7 +1252,7 @@ const menuConfigs = {
     },
     {
       id: "rutasIcono",
-      href: "https://dosxdos.app.iidos.com/rutas.html",
+      href: "http://localhost/dosxdos_app/rutas.html",
       icon: `<svg viewBox="0 0 100 100" class="w-6 h-6 mr-2" fill="none" stroke="currentColor"
         xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
         role="img" preserveAspectRatio="xMidYMid meet">
@@ -1274,7 +1274,7 @@ const menuConfigs = {
     },
     {
       id: "lineasIcono",
-      href: "https://dosxdos.app.iidos.com/lineas.html",
+      href: "http://localhost/dosxdos_app/lineas.html",
       icon: `<svg class="w-6 h-6 mr-2" fill="currentColor" stroke="none" viewBox="-3 0 32 32" version="1.1"
         xmlns="http://www.w3.org/2000/svg">
         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -1308,7 +1308,7 @@ const menuConfigs = {
       text: "Gastos",
       submenu: [
         {
-          href: "https://dosxdos.app.iidos.com/gastos_rutas.html",
+          href: "http://localhost/dosxdos_app/gastos_rutas.html",
           text: "Gastos Rutas"
         },
         {
@@ -1318,7 +1318,7 @@ const menuConfigs = {
       ]
     }, {
       id: "cursos",
-      href: "https://dosxdos.app.iidos.com/cursos.html",
+      href: "http://localhost/dosxdos_app/cursos.html",
       icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
         <polyline points="14 2 14 8 20 8" />
@@ -1332,7 +1332,7 @@ const menuConfigs = {
   montador: [
     {
       id: "rutasMontador",
-      href: "https://dosxdos.app.iidos.com/rutas_montador.html",
+      href: "http://localhost/dosxdos_app/rutas_montador.html",
       icon: `<svg viewBox="0 0 100 100" class="w-6 h-6 mr-2" fill="none" stroke="currentColor"
         xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
         role="img" preserveAspectRatio="xMidYMid meet">
@@ -1354,7 +1354,7 @@ const menuConfigs = {
     },
     {
       id: "lineasMontador",
-      href: "https://dosxdos.app.iidos.com/ruta_montador.html",
+      href: "http://localhost/dosxdos_app/ruta_montador.html",
       icon: `
         <svg class="w-6 h-6 mr-2" fill="currentColor" stroke="none" viewBox="-3 0 32 32" version="1.1"
    xmlns="http://www.w3.org/2000/svg">
@@ -1370,7 +1370,7 @@ const menuConfigs = {
     },
     {
       id: "historial",
-      href: "https://dosxdos.app.iidos.com/historial_montador.html",
+      href: "http://localhost/dosxdos_app/historial_montador.html",
       icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
         <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
         <circle cx="12" cy="12" r="9"></circle>
@@ -1542,12 +1542,12 @@ function createDesktopNavigation(userRole) {
 
   // Add notification bell
   const desktopBell = document.createElement('a');
-  desktopBell.href = "https://dosxdos.app.iidos.com/notificaciones.html";
+  desktopBell.href = "http://localhost/dosxdos_app/notificaciones.html";
   desktopBell.className = "relative z-10 inline-flex items-center";
   desktopBell.id = "desktopBellContainer";
   desktopBell.innerHTML = `
     <div class="relative">
-      <img id="bellDesktop" src="https://dosxdos.app.iidos.com/img/bell2.png" class="w-7 text-gray-900 object-contain" />
+      <img id="bellDesktop" src="http://localhost/dosxdos_app/img/bell2.png" class="w-7 text-gray-900 object-contain" />
 <span id="desktopNotificationCount" class="absolute -top-0 right-1 bg-red-600 text-white text-xs rounded-full flex items-center justify-center px-1 min-w-[18px] h-[18px] border hidden"></span>    </div>
   `;
   desktopNav.appendChild(desktopBell);
@@ -1561,7 +1561,7 @@ function createDesktopNavigation(userRole) {
       aria-expanded="false">
       <div
         class="w-10 h-10 rounded-full overflow-hidden border-2 border-white shadow-sm bg-gray-100 flex items-center justify-center">
-        <img id="imagenUsuario" src="https://dosxdos.app.iidos.com/img/usuario.png"
+        <img id="imagenUsuario" src="http://localhost/dosxdos_app/img/usuario.png"
           class="w-full h-full object-cover" alt="Profile"
           onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
         <svg class="w-5 h-5 text-gray-400 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor"

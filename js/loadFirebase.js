@@ -44,8 +44,8 @@ async function loadFirebase() {
             // Extraer datos con valores por defecto si vienen nulos o indefinidos
             const title = payload.data.title || "Nueva Notificación";
             const body = payload.data.body || "Tienes una nueva notificación, por favor revísala en cuanto puedas.";
-            const icon = payload.data.icon || "https://dosxdos.app.iidos.com/img/logo-red.png";
-            const click_action = "https://dosxdos.app.iidos.com/notificaciones.html";
+            const icon = payload.data.icon || "http://localhost/dosxdos_app/img/logo-red.png";
+            const click_action = "http://localhost/dosxdos_app/notificaciones.html";
 
             // Crear un string bien formado
             const mensaje = "Tienes una nueva notificación: " + title + ": " + body;
@@ -117,8 +117,8 @@ function notificarWebApp() {
             // Extraer datos con valores por defecto si vienen nulos o indefinidos
             const title = data.title || "Nueva Notificación";
             const body = data.body || "Tienes una nueva notificación, por favor revísala en cuanto puedas.";
-            const icon = data.icon || "https://dosxdos.app.iidos.com/img/logo-red.png";
-            const click_action = data.click_action || "https://dosxdos.app.iidos.com/notificaciones.html";
+            const icon = data.icon || "http://localhost/dosxdos_app/img/logo-red.png";
+            const click_action = data.click_action || "http://localhost/dosxdos_app/notificaciones.html";
 
             // Crear un string bien formado
             const mensaje = "Tienes una nueva notificación: " + title + ": " + body;
