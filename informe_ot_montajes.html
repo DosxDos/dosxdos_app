@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <title>Informe de Montaje</title>
+  <link rel="stylesheet" href="css/informe_ot_montaje.css">
 </head>
 <body>
-    
+  <div id="contenedor-informes"></div>
+
+  <button onclick="generarPDF()">Descargar PDF</button>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="js/informe_ot_montaje.js" defer></script>
 </body>
 </html>

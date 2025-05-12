@@ -1,0 +1,89 @@
+body {
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  background-color: white;
+  color: #000;
+  font-size: 13px;
+  padding: 40px;
+}
+
+.informe {
+  border: 1px solid #aaa;
+  padding: 25px;
+  margin-bottom: 60px;
+  page-break-after: always;
+}
+
+.cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 30px;
+}
+
+.logo img {
+  height: 50px;
+}
+
+.titulo {
+  text-align: right;
+}
+
+.titulo h1 {
+  font-size: 18px;
+  margin: 0;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.info-header {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.info-header p {
+  margin: 4px 0;
+}
+
+.info-header p strong {
+  display: inline-block;
+  width: 140px;
+  font-weight: bold;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 13px;
+}
+
+table thead {
+  background-color: #f2f2f2;
+  border-bottom: 2px solid #000;
+}
+
+th, td {
+  padding: 6px 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  vertical-align: top;
+}
+
+.firmas {
+  margin-top: 40px;
+}
+
+.firmas p {
+  margin: 16px 0;
+  font-size: 12px;
+}
+
+.firmas p span {
+  display: inline-block;
+  border-bottom: 1px solid #000;
+  width: 240px;
+  height: 18px;
+  vertical-align: middle;
+  margin-left: 10px;
+}
