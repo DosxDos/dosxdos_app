@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const informes = [
     {
       ot: "V-17725 L'OREAL ESPAÑA, S.A.",
-      puntoVenta: "Arkay Luis Morote 928 27.04.19",
+      puntoVenta: "Arkay Luis Morote 928 270 419",
       direccion: "C. Luis Morote, 17, 35007 Las Palmas de Gran Canaria",
       detalles: [
         {
@@ -79,19 +79,27 @@ function renderInformes(data) {
 }
 
 function generarPDF() {
+    console.log("🟡 Botón presionado - iniciando generación PDF");
   const element = document.getElementById("contenedor-informes"); //Seleccionamos el contenedor que queremos convertir a PDF
-  if (!element) return; //Si no existe el contenedor, no hacemos nada
+  if (!element) {console.error("❌ No se encontró el contenedor de informes");return;} //Si no existe el contenedor, no hacemos nada
 
   html2pdf()
     .set({
       margin: 10, // Margen del PDF en milímetros
       filename: "informe_ot_montajes.pdf", // Nombre del archivo PDF
       image: { type: "jpeg", quality: 0.98 }, // Tipo de imagen y calidad al renderizar
-      html2canvas: { scale: 2 }, // Escala de la imagen al renderizar
+      html2canvas: { scale: 2,
+        useCORS: true
+       }, // Escala de la imagen al renderizar
       jsPDF: { unit: "mm", format: "a4", orientation: "portrait" } // Formato y orientación del PDF
     })
     .from(element)
-    .save();
+    .save() // Guardamos el PDF
+    .then(() => {
+      console.log("🟢 PDF generado y descargado");
+    })
+    .catch((error) => {
+      console.error("❌ Error al generar el PDF:", error);
+    });
 }
-
 window.generarPDF = generarPDF; // Hacemos la función accesible desde el HTML para que esté disponible al hacer clic en el botón

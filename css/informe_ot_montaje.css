@@ -9,7 +9,6 @@ body {
 .informe {
   border: 1px solid #aaa;
   padding: 25px;
-  margin-bottom: 60px;
   page-break-after: always; /* Cada informe comienza en una nueva página */
 }
 
