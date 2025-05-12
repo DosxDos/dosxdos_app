@@ -13,21 +13,22 @@ document.addEventListener("DOMContentLoaded", () => {
           dimensiones: "45 x 45"
         }
       ]
+      
     }
-  ];
+  ]; //Datos mockeados
 
-  renderInformes(informes);
+  renderInformes(informes); //Convertimos los datos mockeados a HTML
 });
 
 function renderInformes(data) {
-  const container = document.getElementById("contenedor-informes");
-  if (!container) return;
+  const container = document.getElementById("contenedor-informes"); //Buscamos el contenedor en el HTML
+  if (!container) return; //Si no existe el contenedor, no hacemos nada
 
   data.forEach(info => {
     const div = document.createElement("div");
-    div.className = "informe";
+    div.className = "informe"; //Creamos un div para cada informe
 
-    div.innerHTML = `
+    div.innerHTML = ` 
       <div class="cabecera">
         <div class="logo">
           <img src="elementos_diseno/DOS POR DOS LOGO.png" alt="Logo Empresa">
@@ -62,7 +63,7 @@ function renderInformes(data) {
               <td>${item.poner}</td>
               <td>${item.dimensiones}</td>
             </tr>
-          `).join('')}
+          `).join('')} 
         </tbody>
       </table>
 
@@ -71,25 +72,26 @@ function renderInformes(data) {
         <p><strong>Firma del Instalador:</strong> <span></span></p>
         <p><strong>Fecha:</strong> <span></span></p>
       </div>
-    `;
+    `;/* Construimos el HTML dinámnico con los datos */
 
-    container.appendChild(div);
+    container.appendChild(div); //agregamos el div al contenedor
   });
 }
 
 function generarPDF() {
-  const element = document.getElementById("contenedor-informes");
+  const element = document.getElementById("contenedor-informes"); //Seleccionamos el contenedor que queremos convertir a PDF
+  if (!element) return; //Si no existe el contenedor, no hacemos nada
 
   html2pdf()
     .set({
-      margin: 10,
-      filename: "informe_ot_montajes.pdf",
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+      margin: 10, // Margen del PDF en milímetros
+      filename: "informe_ot_montajes.pdf", // Nombre del archivo PDF
+      image: { type: "jpeg", quality: 0.98 }, // Tipo de imagen y calidad al renderizar
+      html2canvas: { scale: 2 }, // Escala de la imagen al renderizar
+      jsPDF: { unit: "mm", format: "a4", orientation: "portrait" } // Formato y orientación del PDF
     })
     .from(element)
     .save();
 }
 
-window.generarPDF = generarPDF;
+window.generarPDF = generarPDF; // Hacemos la función accesible desde el HTML para que esté disponible al hacer clic en el botón

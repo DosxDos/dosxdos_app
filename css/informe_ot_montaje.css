@@ -10,7 +10,7 @@ body {
   border: 1px solid #aaa;
   padding: 25px;
   margin-bottom: 60px;
-  page-break-after: always;
+  page-break-after: always; /* Cada informe comienza en una nueva página */
 }
 
 .cabecera {
@@ -32,7 +32,7 @@ body {
   font-size: 18px;
   margin: 0;
   font-weight: bold;
-  text-transform: uppercase;
+  text-transform: uppercase; /* Todo a mayúsculas */
 }
 
 .info-header {
@@ -53,7 +53,7 @@ body {
 
 table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: collapse; /* Colapsar bordes */
   margin-top: 10px;
   font-size: 13px;
 }
@@ -81,7 +81,7 @@ th, td {
 
 .firmas p span {
   display: inline-block;
-  border-bottom: 1px solid #000;
+  border-bottom: 1px solid #000; /* Línea para escribir */
   width: 240px;
   height: 18px;
   vertical-align: middle;
