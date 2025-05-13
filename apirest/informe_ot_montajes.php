@@ -86,15 +86,15 @@ function ordenarArrayPorCampo(array $array, string $campo, string $orden = 'asc'
     if (!isset($informes[$clave])) {
         $informes[$clave] = [
             'ot' => $codOt,
-            'puntoVenta' => $clave,
-            'direccion' => 'Dirección no disponible', // Puedes sustituir si tienes ese dato
+            'puntoVenta' => $linea['NombrePuntoVenta'] ?? '',
+            'direccion' => $linea['Direcci_n'] ?? '', // Puedes sustituir si tienes ese dato
             'detalles' => []
         ];
     }
 
     $informes[$clave]['detalles'][] = [
         'tipo' => $linea['Tipo_de_trabajo'] ?? '',
-        'firma' => $linea['Impuesto_Cliente'] ?? '',
+        'firma' => $linea['firma'] ?? '',
         'quitar' => $linea['Realizaci_n'] ?? '',
         'poner' => $linea['Montaje'] ?? '',
         'dimensiones' => trim(($linea['Alto_total'] ?? '') . ' x ' . ($linea['Ancho_total'] ?? ''))
