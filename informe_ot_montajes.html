@@ -8,7 +8,8 @@
 <body>
   <div id="contenedor-informes"></div>
 
-  <button onclick="generarPDF()">Descargar PDF</button>
+  <!-- Agregamos un id al botón para controlarlo desde JS -->
+  <button id="btnGenerarPDF" onclick="generarPDF()">Descargar PDF</button>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="js/informe_ot_montaje.js" defer></script>

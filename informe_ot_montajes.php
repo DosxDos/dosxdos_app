@@ -1,5 +1,7 @@
 <?php
 
+echo 'Soy el fichero informe_ot_montajes.php';
+
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 ini_set('curl.cainfo', '/dev/null');
@@ -74,3 +76,48 @@ function ordenarArrayPorCampo(array $array, string $campo, string $orden = 'asc'
     });
     return $array;
 }
+
+// FUNCIÓN PARA OBTENER LA INFORMACION DE LAS OTS Y MANDARLA AL LOCALSTORAGE
+
+
+/* $conexion = new mysqli("localhost", "usuario", "contraseña", "base_datos");  */
+
+/* if ($conexion->connect_error) {
+    die("Conexión fallida: " . $conexion->connect_error);
+} */
+
+// Consulta a la tabla donde están tus órdenes de trabajo (OTs)
+/* $sql = "SELECT ot, punto_venta, direccion, tipo, firma, quitar, poner, dimensiones FROM informes ORDER BY ot";
+$resultado = $conexion->query($sql);
+
+$informes = [];
+
+while ($fila = $resultado->fetch_assoc()) {
+    $otKey = $fila['ot']; */
+
+    // Agrupa las OT y sus detalles
+    /* if (!isset($informes[$otKey])) {
+        $informes[$otKey] = [
+            'ot' => $fila['ot'],
+            'puntoVenta' => $fila['punto_venta'],
+            'direccion' => $fila['direccion'],
+            'detalles' => []
+        ];
+    }
+
+    $informes[$otKey]['detalles'][] = [
+        'tipo' => $fila['tipo'],
+        'firma' => $fila['firma'],
+        'quitar' => $fila['quitar'],
+        'poner' => $fila['poner'],
+        'dimensiones' => $fila['dimensiones']
+    ];
+}
+ */
+// Convierte a array indexado
+/* $datos = array_values($informes); */
+
+// Devuelve JSON
+/* header('Content-Type: application/json');
+echo json_encode($datos);
+ */
