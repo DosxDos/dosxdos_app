@@ -1,9 +1,9 @@
-// ✅ Función para pintar los informes en el HTML
+// Función para mostrar los informes en el HTML
 function renderInformes(data) {
   const container = document.getElementById("contenedor-informes"); // Buscamos el contenedor
   if (!container) return;
 
-  container.innerHTML = ""; // Limpiamos el contenido anterior
+  container.innerHTML = ""; // Limpiamos el contenido anterior para evitar duplicidades
 
   data.forEach(info => {
     const div = document.createElement("div");
@@ -59,18 +59,18 @@ function renderInformes(data) {
     container.appendChild(div); // Insertamos el informe en el DOM
   });
 
-  // ✅ Activamos el botón para generar PDF una vez renderizado
+  // Activamos el botón para generar PDF una vez renderizado
   const botonPDF = document.getElementById("btnGenerarPDF");
   if (botonPDF) {
     botonPDF.disabled = false;
     botonPDF.style.display = "inline-block";
   }
 
-  // ✅ Verificamos visualmente los datos por consola
+  // Verificamos visualmente los datos por consola
   console.log("🔍 Informes renderizados:", data);
 }
 
-// ✅ Función para generar el PDF del contenido HTML
+// Función para generar el PDF del contenido HTML
 function generarPDF() {
   console.log("🟡 Botón presionado - iniciando generación PDF");
   const element = document.getElementById("contenedor-informes"); // Seleccionamos el contenedor
@@ -80,7 +80,7 @@ function generarPDF() {
     return;
   }
 
-  // ⏳ Pequeño retraso para asegurarnos de que todo está visible/renderizado
+  // Pequeño retraso para asegurarnos de que todo está visible/renderizado
   setTimeout(() => {
     html2pdf()
       .set({
@@ -98,17 +98,16 @@ function generarPDF() {
       .catch((error) => {
         console.error("❌ Error al generar el PDF:", error);
       });
-  }, 300); // Esperamos 300ms
+  }, 300);
 }
 
 window.generarPDF = generarPDF; // Registramos la función globalmente
 
-// ✅ Al cargar la página, hacemos fetch al PHP y guardamos en localStorage
+// Al cargar la página, hacemos fetch al PHP y guardamos en localStorage
 document.addEventListener("DOMContentLoaded", () => {
   const botonPDF = document.getElementById("btnGenerarPDF");
   if (botonPDF) {
-    botonPDF.disabled = true;          // 🔒 Desactivamos al inicio
-    botonPDF.style.display = "none";   // Ocultamos hasta que se carguen los datos
+    botonPDF.disabled = true;          // Desactivamos al inicio para doble capa de seguridad aunque el botón esté oculto
   }
 
   // Obtenemos los parámetros desde la URL (necesarios para el fetch)
@@ -137,7 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(data => {
       localStorage.setItem("informesOT", JSON.stringify(data)); // Guardamos para uso futuro
       console.log("🟢 Datos guardados en localStorage:", data);
-      renderInformes(data); // Pintamos en pantalla
+      renderInformes(data); // Imprimimos en pantalla
     })
     .catch(err => {
       console.error("❌ Error al cargar los datos:", err);

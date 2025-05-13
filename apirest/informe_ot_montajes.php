@@ -86,7 +86,7 @@ function ordenarArrayPorCampo(array $array, string $campo, string $orden = 'asc'
     if (!isset($informes[$clave])) {
         $informes[$clave] = [
             'ot' => "V-" . " " . $codOt,
-            'puntoVenta' => $linea['nombrePv'] ?? '',
+            'puntoVenta' => $linea['nombrePv'] ?? '', //Matcheamos cada dato con su tag correspondiente en carpetas_clase.php
             'direccion' => $linea['Direcci_n'] ?? '',
             'detalles' => []
         ];
