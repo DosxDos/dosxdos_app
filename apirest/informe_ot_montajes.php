@@ -39,7 +39,7 @@ $numLineas = 0;
 $lineas;
 
 /* LINEAS */
-$camposLineas = "Product_Name,Codigo_de_l_nea,Punto_de_venta,Tipo_de_trabajo,Incluir,Ancho_medida,Alto_medida,Material,Acabados1,Impuesto_Cliente,Alto_total,Ancho_total,Poner,Unit_Price,Realizaci_n,Montaje";
+$camposLineas = "Codigo_de_l_nea,C_digo_de_OT_relacionada,Punto_de_venta,rea,Tipo_de_OT,Tipo_de_trabajo,Descripci_n_Tipo_Trabajo,Zona,Sector,Direcci_n,Nombre_de_Empresa,Fecha_actuaci_n,Fase,Motivo_de_incidencia,Observaciones_internas,Observaciones_montador,Horas_actuaci_n,D_as_actuaci_n,Minutos_actuaci_n,Poner,Quitar,Alto_medida,Ancho_medida,Fotos,Firma_de_la_OT_relacionada,Estado_de_Actuaci_n,nombreCliente,nombreOt,nombrePv,codPv";
 $query = "SELECT $camposLineas FROM Products WHERE OT_relacionada=$idOt";
 $crm->query($query);
 if ($crm->estado) {
@@ -86,17 +86,17 @@ function ordenarArrayPorCampo(array $array, string $campo, string $orden = 'asc'
     if (!isset($informes[$clave])) {
         $informes[$clave] = [
             'ot' => "V-" . " " . $codOt,
-            'puntoVenta' => $linea['Product_Name'] ?? '',
+            'puntoVenta' => $linea['nombrePv'] ?? '',
             'direccion' => $linea['Direcci_n'] ?? '',
             'detalles' => []
         ];
     }
 
     $informes[$clave]['detalles'][] = [
-        'tipo' => $linea['Tipo_de_trabajo'] ?? '',
-        'firma' => $linea['firma'] ?? '',
-        'quitar' => $linea['Realizaci_n'] ?? '',
-        'poner' => $linea['Montaje'] ?? '',
+        'tipo' => $linea['Tipo_de_OT'] ?? '',
+        'firma' => $linea['Firma_de_la_OT_relacionada'] ?? '',
+        'quitar' => $linea['Quitar'] ?? '',
+        'poner' => $linea['Poner'] ?? '',
         'dimensiones' => trim(($linea['Alto_medida'] ?? '') . ' x ' . ($linea['Ancho_medida'] ?? ''))
     ];
 }
