@@ -1,7 +1,5 @@
 <?php
 
-echo 'Soy el fichero informe_ot_montajes.php';
-
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 ini_set('curl.cainfo', '/dev/null');
@@ -48,7 +46,7 @@ if ($crm->estado) {
     $lineas = $crm->respuesta[1]['data'];
     $lineas = ordenarArrayPorCampo($lineas, 'Codigo_de_l_nea');
     $numLineas = count($lineas);
-    print_r($lineas);
+    /* print_r($lineas); */
 } else {
     echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ERROR!!! AL CONSULTAR LAS LÍNEAS DE LA OT ' . $codOt . ' EN LA API DEL CRM</p>';
     print_r($crm->respuestaError);
@@ -77,47 +75,32 @@ function ordenarArrayPorCampo(array $array, string $campo, string $orden = 'asc'
     return $array;
 }
 
-// FUNCIÓN PARA OBTENER LA INFORMACION DE LAS OTS Y MANDARLA AL LOCALSTORAGE
+ // Agrupamos los datos por punto de venta
+ $lineas = $crm->respuesta[1]['data'] ?? [];
+ $informes = [];
+ foreach ($lineas as $linea) {
+    $clave = isset($linea['Punto_de_venta']) && is_scalar($linea['Punto_de_venta']) 
+        ? (string)$linea['Punto_de_venta'] 
+        : 'Desconocido';
 
-
-/* $conexion = new mysqli("localhost", "usuario", "contraseña", "base_datos");  */
-
-/* if ($conexion->connect_error) {
-    die("Conexión fallida: " . $conexion->connect_error);
-} */
-
-// Consulta a la tabla donde están tus órdenes de trabajo (OTs)
-/* $sql = "SELECT ot, punto_venta, direccion, tipo, firma, quitar, poner, dimensiones FROM informes ORDER BY ot";
-$resultado = $conexion->query($sql);
-
-$informes = [];
-
-while ($fila = $resultado->fetch_assoc()) {
-    $otKey = $fila['ot']; */
-
-    // Agrupa las OT y sus detalles
-    /* if (!isset($informes[$otKey])) {
-        $informes[$otKey] = [
-            'ot' => $fila['ot'],
-            'puntoVenta' => $fila['punto_venta'],
-            'direccion' => $fila['direccion'],
+    if (!isset($informes[$clave])) {
+        $informes[$clave] = [
+            'ot' => $codOt,
+            'puntoVenta' => $clave,
+            'direccion' => 'Dirección no disponible', // Puedes sustituir si tienes ese dato
             'detalles' => []
         ];
     }
 
-    $informes[$otKey]['detalles'][] = [
-        'tipo' => $fila['tipo'],
-        'firma' => $fila['firma'],
-        'quitar' => $fila['quitar'],
-        'poner' => $fila['poner'],
-        'dimensiones' => $fila['dimensiones']
+    $informes[$clave]['detalles'][] = [
+        'tipo' => $linea['Tipo_de_trabajo'] ?? '',
+        'firma' => $linea['Impuesto_Cliente'] ?? '',
+        'quitar' => $linea['Realizaci_n'] ?? '',
+        'poner' => $linea['Montaje'] ?? '',
+        'dimensiones' => trim(($linea['Alto_total'] ?? '') . ' x ' . ($linea['Ancho_total'] ?? ''))
     ];
 }
- */
-// Convierte a array indexado
-/* $datos = array_values($informes); */
 
-// Devuelve JSON
-/* header('Content-Type: application/json');
-echo json_encode($datos);
- */
+// Enviamos el array como JSON indexado
+header('Content-Type: application/json');
+echo json_encode(array_values($informes));

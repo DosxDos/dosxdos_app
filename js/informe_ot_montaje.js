@@ -1,14 +1,15 @@
-// Función para pintar los informes en el HTML
+// ✅ Función para pintar los informes en el HTML
 function renderInformes(data) {
-  const container = document.getElementById("contenedor-informes"); // Buscamos el contenedor en el HTML
-  if (!container) return; // Si no existe el contenedor, no hacemos nada
+  const container = document.getElementById("contenedor-informes"); // Buscamos el contenedor
+  if (!container) return;
 
-  container.innerHTML = ""; // Limpiamos el contenido anterior para evitar duplicaciones
+  container.innerHTML = ""; // Limpiamos el contenido anterior
 
   data.forEach(info => {
     const div = document.createElement("div");
-    div.className = "informe"; // Creamos un div para cada informe
+    div.className = "informe"; // Creamos un bloque por informe
 
+    // Construimos el HTML dinámico con los datos de cada informe
     div.innerHTML = ` 
       <div class="cabecera">
         <div class="logo">
@@ -36,7 +37,7 @@ function renderInformes(data) {
           </tr>
         </thead>
         <tbody>
-          ${info.detalles.map(item => ` 
+          ${info.detalles.map(item => `
             <tr>
               <td>${item.tipo}</td>
               <td>${item.firma}</td>
@@ -44,7 +45,7 @@ function renderInformes(data) {
               <td>${item.poner}</td>
               <td>${item.dimensiones}</td>
             </tr>
-          `).join('')} 
+          `).join('')}
         </tbody>
       </table>
 
@@ -53,23 +54,23 @@ function renderInformes(data) {
         <p><strong>Firma del Instalador:</strong> <span></span></p>
         <p><strong>Fecha:</strong> <span></span></p>
       </div>
-    `; // Construimos el HTML dinámico con los datos
+    `;
 
-    container.appendChild(div); // Agregamos el div al contenedor
+    container.appendChild(div); // Insertamos el informe en el DOM
   });
 
-  // Activamos el botón para generar PDF una vez que todo está renderizado
+  // ✅ Activamos el botón para generar PDF una vez renderizado
   const botonPDF = document.getElementById("btnGenerarPDF");
   if (botonPDF) {
     botonPDF.disabled = false;
-    botonPDF.style.display = "inline-block"; // Mostramos el botón una vez que los informes están listos
+    botonPDF.style.display = "inline-block";
   }
 }
 
-// Función para generar el PDF del contenedor
+// ✅ Función para generar el PDF del contenido HTML
 function generarPDF() {
   console.log("🟡 Botón presionado - iniciando generación PDF");
-  const element = document.getElementById("contenedor-informes"); // Seleccionamos el contenedor que queremos convertir a PDF
+  const element = document.getElementById("contenedor-informes"); // Seleccionamos el contenedor
 
   if (!element) {
     console.error("❌ No se encontró el contenedor de informes");
@@ -78,14 +79,14 @@ function generarPDF() {
 
   html2pdf()
     .set({
-      margin: 10, // Margen del PDF en milímetros
-      filename: "informe_ot_montajes.pdf", // Nombre del archivo PDF
-      image: { type: "jpeg", quality: 0.98 }, // Tipo de imagen y calidad al renderizar
-      html2canvas: { scale: 2, useCORS: true }, // Escala de la imagen al renderizar, el cors no hace nada en este caso pero lo dejo
-      jsPDF: { unit: "mm", format: "a4", orientation: "portrait" } // Formato y orientación del PDF
+      margin: 10,
+      filename: "informe_ot_montajes.pdf",
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true },
+      jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
     })
     .from(element)
-    .save() // Guardamos el PDF
+    .save()
     .then(() => {
       console.log("🟢 PDF generado y descargado");
     })
@@ -93,32 +94,45 @@ function generarPDF() {
       console.error("❌ Error al generar el PDF:", error);
     });
 }
-window.generarPDF = generarPDF; // Hacemos la función accesible desde el HTML para que esté disponible al hacer clic en el botón
+window.generarPDF = generarPDF; // Registramos la función globalmente
 
-// Esperamos a que el DOM esté completamente cargado para ejecutar el script
+// ✅ Al cargar la página, hacemos fetch al PHP y guardamos en localStorage
 document.addEventListener("DOMContentLoaded", () => {
   const botonPDF = document.getElementById("btnGenerarPDF");
   if (botonPDF) {
-    botonPDF.disabled = true; // Desactivamos el botón hasta que esté listo, doble capa de seguridad
+    botonPDF.disabled = true;          // 🔒 Desactivamos al inicio
+    botonPDF.style.display = "none";   // Ocultamos hasta que se carguen los datos
   }
 
-  const datosLocal = localStorage.getItem("informesOT"); // Buscamos en localStorage si ya hay datos guardados
+  // Obtenemos los parámetros desde la URL (necesarios para el fetch)
+  const params = new URLSearchParams(window.location.search);
+  const idOt = params.get("idOt");
+  const codOt = params.get("codOt");
+  const tipoOt = params.get("tipoOt");
+  const cliente = params.get("cliente");
+  const tokenJwt = params.get("tokenJwt");
 
-  if (datosLocal) {
-    console.log("🟡 Cargando datos desde localStorage");
-    const datos = JSON.parse(datosLocal); // Convertimos a objeto JS
-    renderInformes(datos); // Renderizamos los datos
-  } else {
-    console.log("🟡 Cargando datos desde PHP");
-    fetch('informe_ot_montajes.php') // Si no hay datos en el localStorage, llamamos al backend
-      .then(response => response.json()) // Convertimos la respuesta en JSON
-      .then(data => {
-        localStorage.setItem('informesOT', JSON.stringify(data)); // Guardamos en localStorage
-        console.log('🟢 Datos guardados en localStorage:', data);
-        renderInformes(data); // Imprimimos los datos en pantalla
-      })
-      .catch(error => {
-        console.error('❌ Error al cargar datos:', error);
-      });
+  // Validamos que existan los parámetros obligatorios
+  if (!idOt || !codOt || !tipoOt || !cliente || !tokenJwt) {
+    console.warn("⚠️ Faltan parámetros en la URL (idOt, codOt, tipoOt, cliente o tokenJwt)");
+    return;
   }
+
+  // Construimos la URL para el fetch
+  const url = `apirest/informe_ot_montajes.php?idOt=${idOt}&codOt=${encodeURIComponent(codOt)}&tipoOt=${encodeURIComponent(tipoOt)}&cliente=${encodeURIComponent(cliente)}&tokenJwt=${encodeURIComponent(tokenJwt)}`;
+
+  // Hacemos la petición al backend
+  fetch(url)
+    .then(res => {
+      if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+      return res.json(); // Esperamos respuesta en JSON
+    })
+    .then(data => {
+      localStorage.setItem("informesOT", JSON.stringify(data)); // Guardamos para uso futuro
+      console.log("🟢 Datos guardados en localStorage:", data);
+      renderInformes(data); // Pintamos en pantalla
+    })
+    .catch(err => {
+      console.error("❌ Error al cargar los datos:", err);
+    });
 });
