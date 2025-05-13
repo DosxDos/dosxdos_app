@@ -65,6 +65,9 @@ function renderInformes(data) {
     botonPDF.disabled = false;
     botonPDF.style.display = "inline-block";
   }
+
+  // ✅ Verificamos visualmente los datos por consola
+  console.log("🔍 Informes renderizados:", data);
 }
 
 // ✅ Función para generar el PDF del contenido HTML
@@ -77,23 +80,27 @@ function generarPDF() {
     return;
   }
 
-  html2pdf()
-    .set({
-      margin: 10,
-      filename: "informe_ot_montajes.pdf",
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true },
-      jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
-    })
-    .from(element)
-    .save()
-    .then(() => {
-      console.log("🟢 PDF generado y descargado");
-    })
-    .catch((error) => {
-      console.error("❌ Error al generar el PDF:", error);
-    });
+  // ⏳ Pequeño retraso para asegurarnos de que todo está visible/renderizado
+  setTimeout(() => {
+    html2pdf()
+      .set({
+        margin: 10,
+        filename: "informe_ot_montajes.pdf",
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+      })
+      .from(element)
+      .save()
+      .then(() => {
+        console.log("🟢 PDF generado y descargado");
+      })
+      .catch((error) => {
+        console.error("❌ Error al generar el PDF:", error);
+      });
+  }, 300); // Esperamos 300ms
 }
+
 window.generarPDF = generarPDF; // Registramos la función globalmente
 
 // ✅ Al cargar la página, hacemos fetch al PHP y guardamos en localStorage
