@@ -1,0 +1,1143 @@
+{
+    "ot": {
+        "codOt": "V-17725",
+        "cliente": "L'OREAL ESPAÑA, S.A.",
+        "fecha": "2024-05-13"
+    },
+    "pvs": [
+        {
+            "nombre": "El Corte Inglés Triana",
+            "direccion": "Calle Mayor de Triana 75, Las Palmas",
+            "lineas": [
+                {
+                    "codigo": "580100",
+                    "alto": 45,
+                    "ancho": 45,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580101",
+                    "alto": 160,
+                    "ancho": 300,
+                    "poner": true,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580101",
+                    "alto": 160,
+                    "ancho": 300,
+                    "poner": true,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580101",
+                    "alto": 160,
+                    "ancho": 300,
+                    "poner": true,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580101",
+                    "alto": 160,
+                    "ancho": 300,
+                    "poner": true,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580101",
+                    "alto": 160,
+                    "ancho": 300,
+                    "poner": true,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580101",
+                    "alto": 160,
+                    "ancho": 300,
+                    "poner": true,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580101",
+                    "alto": 160,
+                    "ancho": 300,
+                    "poner": true,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580101",
+                    "alto": 160,
+                    "ancho": 300,
+                    "poner": true,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580101",
+                    "alto": 160,
+                    "ancho": 300,
+                    "poner": true,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580101",
+                    "alto": 160,
+                    "ancho": 300,
+                    "poner": true,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580101",
+                    "alto": 160,
+                    "ancho": 300,
+                    "poner": true,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580101",
+                    "alto": 160,
+                    "ancho": 300,
+                    "poner": true,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580101",
+                    "alto": 160,
+                    "ancho": 300,
+                    "poner": true,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580101",
+                    "alto": 160,
+                    "ancho": 300,
+                    "poner": true,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580101",
+                    "alto": 160,
+                    "ancho": 300,
+                    "poner": true,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580101",
+                    "alto": 160,
+                    "ancho": 300,
+                    "poner": true,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580101",
+                    "alto": 160,
+                    "ancho": 300,
+                    "poner": true,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580101",
+                    "alto": 160,
+                    "ancho": 300,
+                    "poner": true,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580101",
+                    "alto": 160,
+                    "ancho": 300,
+                    "poner": true,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580101",
+                    "alto": 160,
+                    "ancho": 300,
+                    "poner": true,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580101",
+                    "alto": 160,
+                    "ancho": 300,
+                    "poner": true,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580101",
+                    "alto": 160,
+                    "ancho": 300,
+                    "poner": true,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580101",
+                    "alto": 160,
+                    "ancho": 300,
+                    "poner": true,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580101",
+                    "alto": 160,
+                    "ancho": 300,
+                    "poner": true,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580101",
+                    "alto": 160,
+                    "ancho": 300,
+                    "poner": true,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580101",
+                    "alto": 160,
+                    "ancho": 300,
+                    "poner": true,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580101",
+                    "alto": 160,
+                    "ancho": 300,
+                    "poner": true,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580101",
+                    "alto": 160,
+                    "ancho": 300,
+                    "poner": true,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580101",
+                    "alto": 160,
+                    "ancho": 300,
+                    "poner": true,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580101",
+                    "alto": 160,
+                    "ancho": 300,
+                    "poner": true,
+                    "quitar": true
+                }
+            ]
+        },
+        {
+            "nombre": "Centro Comercial Las Arenas",
+            "direccion": "Calle Manuel de Falla s/n, Las Palmas",
+            "lineas": [
+                {
+                    "codigo": "580200",
+                    "alto": 300,
+                    "ancho": 160,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580201",
+                    "alto": 150,
+                    "ancho": 80,
+                    "poner": true,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                },
+                {
+                    "codigo": "580202",
+                    "alto": 200,
+                    "ancho": 100,
+                    "poner": false,
+                    "quitar": true
+                }
+            ]
+        },
+        {
+            "nombre": "Perfumería Julia Las Canteras",
+            "direccion": "Paseo de las Canteras 210, Las Palmas",
+            "lineas": [
+                {
+                    "codigo": "580300",
+                    "alto": 180,
+                    "ancho": 80,
+                    "poner": true,
+                    "quitar": false
+                }
+            ]
+        },
+        {
+            "nombre": "Centro Comercial El Muelle",
+            "direccion": "Muelle Santa Catalina s/n, Las Palmas",
+            "lineas": [
+                {
+                    "codigo": "580400",
+                    "alto": 200,
+                    "ancho": 120,
+                    "poner": true,
+                    "quitar": true
+                }
+            ]
+        },
+        {
+            "nombre": "Hiperdino Siete Palmas",
+            "direccion": "Av. Pintor Felo Monzón 34, Las Palmas",
+            "lineas": [
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580500",
+                    "alto": 90,
+                    "ancho": 180,
+                    "poner": true,
+                    "quitar": false
+                }
+            ]
+        },
+        {
+            "nombre": "Carrefour Telde",
+            "direccion": "Parque Comercial La Mareta, Telde",
+            "lineas": [
+                {
+                    "codigo": "580600",
+                    "alto": 50,
+                    "ancho": 50,
+                    "poner": true,
+                    "quitar": true
+                }
+            ]
+        },
+        {
+            "nombre": "Centro Comercial Los Alisios",
+            "direccion": "GC-308, Km 1.5, Las Palmas",
+            "lineas": [
+                {
+                    "codigo": "580700",
+                    "alto": 40,
+                    "ancho": 40,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580700",
+                    "alto": 40,
+                    "ancho": 40,
+                    "poner": true,
+                    "quitar": false
+                },
+                {
+                    "codigo": "580700",
+                    "alto": 40,
+                    "ancho": 40,
+                    "poner": true,
+                    "quitar": false
+                }
+            ]
+        }
+    ]
+}

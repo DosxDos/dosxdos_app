@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Informe de montaje</title>
+    <script src="https://dosxdos.app.iidos.com/js/pdfmake.min.js"></script>
+    <script src="https://dosxdos.app.iidos.com/js/vfs_fonts.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            font-size: 18px;
+            color: #b00020;
+            z-index: 9999;
+        }
+
+        .dots span {
+            animation: blink 1.4s infinite both;
+            font-size: 32px;
+            color: #b00020;
+        }
+
+        .dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes blink {
+
+            0%,
+            80%,
+            100% {
+                opacity: 0;
+            }
+
+            40% {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="loader">
+        <div id="loader-text">Generando PDF</div>
+        <div class="dots" id="loader-dots"><span>.</span><span>.</span><span>.</span></div>
+    </div>
+
+    <script>
+        //pdfMake
+        //anchoTotal = 520
+        //anchoUtil = 480 (he puesto márgenes de 20 en cada lado)
+        // pageMargins: [left, top, right, bottom]
+        window.addEventListener('load', async () => {
+            const logoBase64 = await getImageBase64('https://dosxdos.app.iidos.com/img/logo_black.png');
+
+            const response = await fetch('https://dosxdos.app.iidos.com/js/pdf.json');
+            const data = await response.json();
+
+            const contenido = [];
+
+            data.pvs.forEach((pv, index) => {
+                const encabezado = {
+                    stack: [
+                        {
+                            table: {
+                                widths: [120, '*'],
+                                body: [[
+                                    {
+                                        image: logoBase64,
+                                        width: 120,
+                                        height: 50,
+                                        margin: [0, 0, 0, 0]
+                                    },
+                                    {
+                                        text: data.ot.codOt + ' - INFORME DE MONTAJE',
+                                        style: 'titulo',
+                                        alignment: 'right',
+                                        margin: [0, 15, 0, 0]  // ajusta para centrar vertical con el logo
+                                    }
+                                ]]
+                            },
+                            layout: 'noBorders',
+                            margin: [0, 0, 0, 5]
+                        },
+                        {
+                            alignment: 'center',
+                            table: {
+                                widths: ['auto', 10, '*'],
+                                body: [
+                                    [
+                                        { text: 'Cliente:', bold: true, alignment: 'right' },
+                                        '',
+                                        { text: data.ot.cliente, alignment: 'left' }
+                                    ],
+                                    [
+                                        { text: 'Punto de Venta:', bold: true, alignment: 'right' },
+                                        '',
+                                        { text: pv.nombre, alignment: 'left' }
+                                    ],
+                                    [
+                                        { text: 'Teléfono:', bold: true, alignment: 'right' },
+                                        '',
+                                        { text: '691 66 70 81', alignment: 'left' }
+                                    ],
+                                    [
+                                        { text: 'Dirección:', bold: true, alignment: 'right' },
+                                        '',
+                                        { text: pv.direccion, alignment: 'left' }
+                                    ],
+                                    [
+                                        { text: 'Área:', bold: true, alignment: 'right' },
+                                        '',
+                                        { text: 'FT', alignment: 'left' }
+                                    ],
+                                    [
+                                        { text: 'Zona:', bold: true, alignment: 'right' },
+                                        '',
+                                        { text: 'CORRALEJO', alignment: 'left' }
+                                    ]
+                                ]
+                            },
+                            layout: 'noBorders',
+                            margin: [0, 15, 0, 15],
+                            fontSize: 12
+                        }
+                    ]
+                };
+
+                const tabla = {
+                    width: 520, // fuerza un contenedor de ancho fijo
+                    alignment: 'center', // centra el contenedor
+                    table: {
+                        headerRows: 1,
+                        widths: calcularAnchosProporcionales([1.3, 2.3, 2, 2, 3, 3, 1.5]),
+                        body: [
+                            [
+                                { text: 'Línea', bold: true },
+                                { text: 'Ubicación', bold: true },
+                                { text: 'Tipo', bold: true },
+                                { text: 'Firma', bold: true },
+                                { text: 'Quitar', bold: true },
+                                { text: 'Poner', bold: true },
+                                { text: 'An. X Al.', bold: true }
+                            ],
+                            ...pv.lineas.map(linea => [
+                                { text: linea.codigo, noWrap: false },
+                                { text: 'UBICACION xxxx xxxx xxxx xxxxxxx xx', noWrap: false },
+                                { text: 'MATERIAL Y TIPO TRABAJO xxx xxxx xxx xxxx xxxxx', noWrap: false },
+                                { text: 'FIRMA xxxxxx', noWrap: false },
+                                { text: 'QUITAR xxxxx xxxx xxx xxxxx xxxxx xxxx xxxxxxxx xx xxxx xxxx', noWrap: false },
+                                { text: 'PONER xxxxx xxxx xxx xxxxx xxxxx xxxx xxxxxxxx xx xxxx xxxx', noWrap: false },
+                                { text: `${linea.ancho} x ${linea.alto}`, noWrap: false }
+                            ])
+                        ]
+                    },
+                    layout: {
+                        hLineWidth: () => 0.8,
+                        vLineWidth: () => 0.8,
+                        hLineColor: () => '#aaa',
+                        vLineColor: () => '#aaa',
+                        paddingLeft: () => 5,
+                        paddingRight: () => 5,
+                        paddingTop: () => 4,
+                        paddingBottom: () => 4
+                    },
+                    margin: [0, 20, 0, 20]
+                };
+
+                const firma = {
+                    width: 555,
+                    alignment: 'center',
+                    unbreakable: true,
+                    columns: [
+                        {
+                            width: '*',
+                            table: {
+                                widths: ['*'],
+                                body: [[
+                                    {
+                                        stack: [
+                                            { text: 'Sello del Cliente:', bold: true },
+                                            { text: '\n\n\n\n\n\n\n' }
+                                        ],
+                                        margin: [5, 5, 5, 5],
+                                        fontSize: 11
+                                    }
+                                ]]
+                            },
+                            layout: {
+                                hLineWidth: () => 1,
+                                vLineWidth: () => 1,
+                                hLineColor: () => '#aaa',
+                                vLineColor: () => '#aaa'
+                            }
+                        },
+                        {
+                            width: '*',
+                            table: {
+                                widths: ['*'],
+                                body: [[
+                                    {
+                                        stack: [
+                                            { text: 'Firma del Instalador:', bold: true },
+                                            { text: '\n\n\n\n\n\n\n' }
+                                        ],
+                                        margin: [5, 5, 5, 5],
+                                        fontSize: 11
+                                    }
+                                ]]
+                            },
+                            layout: {
+                                hLineWidth: () => 1,
+                                vLineWidth: () => 1,
+                                hLineColor: () => '#aaa',
+                                vLineColor: () => '#aaa'
+                            }
+                        },
+                        {
+                            width: '*',
+                            table: {
+                                widths: ['*'],
+                                body: [[
+                                    {
+                                        stack: [
+                                            { text: 'Fecha:', bold: true },
+                                            { text: '\n\n\n\n\n\n\n' }
+                                        ],
+                                        margin: [5, 5, 5, 5],
+                                        fontSize: 11
+                                    }
+                                ]]
+                            },
+                            layout: {
+                                hLineWidth: () => 1,
+                                vLineWidth: () => 1,
+                                hLineColor: () => '#aaa',
+                                vLineColor: () => '#aaa'
+                            }
+                        }
+                    ],
+                    columnGap: 20,
+                    margin: [0, 30, 0, 0]
+                };
+
+                const stackCompleto = {
+                    stack: [encabezado, tabla, firma]
+                };
+
+                // Solo añadir salto de página si NO es el último punto de venta
+                if (index < data.pvs.length - 1) {
+                    stackCompleto.pageBreak = 'after';
+                }
+
+                contenido.push(stackCompleto);
+            });
+
+            const docDefinition = {
+                pageSize: 'A4',
+                pageMargins: [20, 30, 20, 20],
+                content: contenido,
+                styles: {
+                    titulo: { fontSize: 14, bold: true },
+                    datos: { fontSize: 12, margin: [0, 2, 0, 0] }
+                },
+                defaultStyle: { fontSize: 10 },
+                footer: (currentPage, pageCount) => ({
+                    text: `Página ${currentPage} de ${pageCount}`,
+                    alignment: 'right',
+                    margin: [0, 0, 40, 20],
+                    fontSize: 11
+                })
+            };
+
+            pdfMake.createPdf(docDefinition).getBlob(blob => {
+                const url = URL.createObjectURL(blob);
+                document.getElementById('loader-text').textContent = 'PDF Generado';
+                document.getElementById('loader-dots').innerHTML = '<span style="font-size: 36px; color: green;">✔</span>';
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${data.ot.codOt}.pdf`;
+                a.click();
+            });
+        });
+
+        function getImageBase64(url) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.crossOrigin = 'anonymous';
+                img.onload = function () {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    canvas.getContext('2d').drawImage(img, 0, 0);
+                    resolve(canvas.toDataURL('image/png'));
+                };
+                img.onerror = reject;
+                img.src = url;
+            });
+        }
+
+        function calcularAnchosProporcionales(pesos, anchoDisponible = 480) {
+            sumaPesos = 0;
+            proporcion = 0;
+            pesos.map(peso => {
+                sumaPesos += peso;
+            });
+            //console.log('sumaPesos: ' + sumaPesos);
+            proporcion = anchoDisponible / sumaPesos;
+            //console.log('proporcion: ' + proporcion);
+            anchosProporcionales = [];
+            pesos.map(peso => {
+                anchosProporcionales.push(peso * proporcion);
+            });
+            //console.log('anchosProporcionales' + anchosProporcionales);
+            return anchosProporcionales;
+        }
+
+    </script>
+</body>
+
+</html>
