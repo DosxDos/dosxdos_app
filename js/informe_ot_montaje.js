@@ -10,7 +10,10 @@ function renderInformes(data) {
     div.className = "informe"; // Creamos un bloque por informe
 
     // Construimos el HTML dinámico con los datos de cada informe
-    div.innerHTML = ` 
+    const contenido = document.createElement("div");
+    contenido.className = "contenido-informe";
+
+    contenido.innerHTML = `
       <div class="cabecera">
         <div class="logo">
           <img src="elementos_diseno/DOS POR DOS LOGO.png" alt="Logo Empresa">
@@ -20,8 +23,11 @@ function renderInformes(data) {
         </div>
       </div>
 
-      <div class="info-header">
-        <p><strong>OT:</strong> ${info.ot}</p>
+       <div class="info-recuadro">
+  <p class="ot"><strong>OT:</strong> ${info.ot}</p>
+  <p class="empresa">${info.nombreEmpresa}</p>
+</div>
+   <div class="info-header">
         <p><strong>Punto de Venta:</strong> ${info.puntoVenta}</p>
         <p><strong>Dirección:</strong> ${info.direccion}</p>
       </div>
@@ -48,17 +54,31 @@ function renderInformes(data) {
           `).join('')}
         </tbody>
       </table>
+    `;
 
-      <div class="firmas">
-        <p><strong>Sello del Cliente:</strong> <span></span></p>
-        <p><strong>Firma del Instalador:</strong> <span></span></p>
-        <p><strong>Fecha:</strong> <span></span></p>
+    // Creamos el footer de firmas (estático)
+    const footer = document.createElement("div");
+    footer.className = "firmas-recuadro";
+    footer.innerHTML = `
+      <div class="firma-fecha">
+        <p><strong>Firma del Instalador:</strong></p>
+        <div class="linea-firma"></div>
+
+        <p><strong>Fecha:</strong></p>
+        <div class="linea-firma"></div>
+      </div>
+      <div class="sello-cliente">
+        <p><strong>Sello del Cliente:</strong></p>
+        <div class="cuadro-sello"></div>
       </div>
     `;
 
-    container.appendChild(div); // Insertamos el informe en el DOM
-  });
+    // Insertamos contenido y footer dentro del informe
+    div.appendChild(contenido);
+    div.appendChild(footer);
 
+    container.appendChild(div);
+  });
   // Activamos el botón para generar PDF una vez renderizado
   const botonPDF = document.getElementById("btnGenerarPDF");
   if (botonPDF) {

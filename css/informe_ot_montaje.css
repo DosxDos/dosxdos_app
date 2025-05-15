@@ -1,17 +1,20 @@
 body {
+  position: relative;
   font-family: 'Segoe UI', Tahoma, sans-serif;
   background-color: white;
   color: #000;
   font-size: 13px;
   padding: 40px;
+  margin: 0;
 }
 
 .informe {
-  border: 1px solid #aaa;
-  padding: 25px;
-  page-break-after: always; /* Cada informe comienza en una nueva página */
+  display: flex;
+  flex-direction: column;
+  page-break-after: always;
 }
 
+/* Cabecera con logo y título */
 .cabecera {
   display: flex;
   justify-content: space-between;
@@ -34,6 +37,7 @@ body {
   text-transform: uppercase; /* Todo a mayúsculas */
 }
 
+/* Información general */
 .info-header {
   border: 1px solid #ccc;
   padding: 10px;
@@ -50,6 +54,7 @@ body {
   font-weight: bold;
 }
 
+/* Tabla de detalles */
 table {
   width: 100%;
   border-collapse: collapse; /* Colapsar bordes */
@@ -69,23 +74,82 @@ th, td {
   vertical-align: top;
 }
 
-.firmas {
-  margin-top: 40px;
+/* Contenido principal dentro del informe (antes del bloque de firmas) */
+.contenido-informe {
+  display: flex;
+  flex-grow: 1; /* Permite crecer según contenido */
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-bottom: 20px; /* Da espacio visual debajo de la tabla */
 }
 
-.firmas p {
-  margin: 16px 0;
+/* Recuadro de firmas fuera del informe */
+.firmas-recuadro {
+  display: flex;
+  border: 2px solid #000;
+  width: 440px;
+  height: 120px;
+  margin-left: auto;
+  page-break-inside: avoid;
+}
+
+
+/* Estructura interna del recuadro de firmas */
+.firma-fecha,
+.sello-cliente {
+  flex: 1;
+  padding: 10px;
   font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  border-right: 2px solid #000;
 }
 
-.firmas p span {
-  display: inline-block;
-  border-bottom: 1px solid #000; /* Línea para escribir */
-  width: 240px;
-  height: 18px;
-  vertical-align: middle;
-  margin-left: 10px;
+
+/* Línea de firma estilo campo escrito */
+.linea-firma {
+  margin-bottom: 16px;
 }
+
+/* Botón para generar PDF (oculto por defecto) */
 #btnGenerarPDF {
   display: none; /* Ocultamos el botón por defecto, así evitamos que se use cuando aún no se han cargado los datos */
+}
+.info-recuadro {
+  border: 2px solid #000;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  background-color: #f9f9f9;
+}
+
+.info-recuadro p {
+  margin: 6px 0;
+  font-size: 14px;
+}
+
+.info-recuadro p strong {
+  display: inline-block;
+  width: 160px;
+  font-weight: bold;
+}
+.info-recuadro {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 2px solid #000;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  background-color: #f9f9f9;
+}
+
+.info-recuadro .ot {
+  margin: 0;
+  font-size: 14px;
+}
+
+.info-recuadro .empresa {
+  margin: 0;
+  font-size: 14px;
+  font-weight: bold;
 }
