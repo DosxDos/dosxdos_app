@@ -1,6 +1,6 @@
 <?php
 
-//FUNCIÓN PARA ORDENAR RESPUESTAS (ARRAY INDEXADOS) POR CAMPOS
+//FUNCIÓN PARA ORDENAR ARRAY INDEXADOS POR CAMPOS
 function ordenarArrayPorCampo(array $array, string $campo, string $orden = 'asc'): array
 {
     usort($array, function ($a, $b) use ($campo, $orden) {
