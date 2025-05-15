@@ -35,7 +35,7 @@
     require_once 'clases/crm_clase.php';
     require_once 'utils/funciones_data.php';
 
-    if (isset($_GET['idOt']) && isset($_GET['codOt']) && isset($_GET['nombreOt']) && isset($_GET['tipoOt']) && isset($_GET['cliente']) && isset($_GET['firma']) && isset($_GET['tokenJwt'])) {
+    if (isset($_GET['idOt']) && isset($_GET['codOt']) && isset($_GET['nombreOt']) && isset($_GET['tipoOt']) && isset($_GET['cliente']) && isset($_GET['tokenJwt'])) {
 
         $jwtMiddleware = new JwtMiddleware;
         $jwtMiddleware->verificar();
@@ -45,92 +45,62 @@
         $nombreOt = $_GET['nombreOt'];
         $tipoOt = $_GET['tipoOt'];
         $cliente = $_GET['cliente'];
-        $firma = $_GET['firma'];
+        $firma = '';
+        if (isset($_GET['nombreOt'])) {
+            $firma = $_GET['firma'];
+        }
 
-        if ($idOt && $codOt && $nombreOt && $tipoOt && $cliente && $firma) {
-            $crm = new Crm;
-            $numLineas = 0;
-            $lineas;
+        if ($idOt && $codOt && $nombreOt && $tipoOt && $cliente) {
 
-            /* LINEAS */
-            $camposLineas = "Punto_de_venta,Fecha_entrada,Codigo_de_l_nea,Ubicaci_n,Material,Tipo_de_trabajo,Quitar,Poner,Ancho_medida,Alto_medida,Ancho_total,Alto_total";
-            $query = "SELECT $camposLineas FROM Products WHERE OT_relacionada=$idOt";
-            $crm->query($query);
-            if ($crm->estado) {
-                $lineas = $crm->respuesta[1]['data'];
-                $lineas = ordenarArrayPorCampo($lineas, 'Codigo_de_l_nea');
-                $numLineas = count($lineas);
-                $pvs = [];
-                $validarPv = [];
-                $fechasEntrada = [];
-                // BUCLE DE ITERACIÓN POR CADA LÍNEA
-                foreach ($lineas as $linea) {
-                    $fechaEntrada = $linea['Fecha_entrada'];
-                    if ($fechaEntrada) {
-                        array_push($fechasEntrada, $fechaEntrada);
-                        $idPv = $linea['Punto_de_venta']['id'];
-                        if (!isset($validarPv[$idPv])) {
-                            $validarPv[$idPv] = true;
-                            $camposPv = "Name,N_tel_fono,Direcci_n,rea,Zona";
-                            $query = "SELECT $camposPv FROM Puntos_de_venta WHERE id=\"$idPv\"";
-                            $crm->query($query);
-                            if ($crm->estado) {
-                                $nombrePv = $crm->respuesta[1]['data'][0]['Name'];
-                                $telefonoPv = $crm->respuesta[1]['data'][0]['N_tel_fono'];
-                                $direccionPv = $crm->respuesta[1]['data'][0]['Direcci_n'];
-                                $areaPv = $crm->respuesta[1]['data'][0]['rea'];
-                                $zonaPv = $crm->respuesta[1]['data'][0]['Zona'];
-                                $pv = [];
-                                $pv['id'] = $idPv;
-                                $pv['nombre'] = $nombrePv;
-                                $pv['telefono'] = $telefonoPv;
-                                $pv['direccion'] = $direccionPv;
-                                $pv['area'] = $areaPv;
-                                $pv['zona'] = $zonaPv;
-                                $pv['lineas'] = [];
-                                $lineaVector = [];
-                                $lineaPv = $idPv;
-                                $lineaFechaEntrada = $fechaEntrada;
-                                $lineaCod = $linea['Codigo_de_l_nea'];
-                                $lineaUbicacion = $linea['Ubicaci_n'];
-                                $lineaMaterial = $linea['Material'];
-                                $lineaTipo = $linea['Tipo_de_trabajo'];
-                                $lineaQuitar = $linea['Quitar'];
-                                $lineaPoner = $linea['Poner'];
-                                $lineaAncho = 0;
-                                $lineaAlto = 0;
-                                if ($linea['Ancho_total'] && $linea['Alto_total']) {
-                                    $lineaAncho = $linea['Ancho_total'];
-                                    $lineaAlto = $linea['Alto_total'];
-                                } else {
-                                    $lineaAncho = $linea['Ancho_medida'];
-                                    $lineaAlto = $linea['Alto_medida'];
-                                }
-                                $lineaVector['pv'] = $lineaPv;
-                                $lineaVector['fechaEntrada'] = $lineaFechaEntrada;
-                                $lineaVector['codigo'] = $lineaCod;
-                                $lineaVector['ubicacion'] = $lineaUbicacion;
-                                $lineaVector['material'] = $lineaMaterial;
-                                $lineaVector['tipo'] = $lineaTipo;
-                                $lineaVector['quitar'] = $lineaQuitar;
-                                $lineaVector['poner'] = $lineaPoner;
-                                $lineaVector['ancho'] = $lineaAncho;
-                                $lineaVector['alto'] = $lineaAlto;
-                                array_push($pv['lineas'], $lineaVector);
-                                array_push($pvs, $pv);
-                            } else {
+            if ($tipoOt != "VIS") {
     ?>
-                                <script>
-                                    document.getElementById('loader-text').textContent = 'Error! Al consultar las líneas de la OT con fecha de entrada en el CRM';
-                                    document.getElementById('loader-dots').innerHTML = '<span class="error">✘</span>';
-                                </script>
+                <script>
+                    document.getElementById('loader-text').textContent = 'Error! El tipo de OT no pertenece a VISUALES';
+                    document.getElementById('loader-dots').innerHTML = '<span class="error">✘</span>';
+                    errorApp = true;
+                </script>
                 <?php
-                                break;
-                            }
-                        } else {
-                            $i = 0;
-                            foreach ($pvs as $pv) {
-                                if ($pv['id'] == $idPv) {
+            } else {
+                $crm = new Crm;
+                $numLineas = 0;
+                $lineas;
+
+                /* LINEAS */
+                $camposLineas = "Punto_de_venta,Fecha_entrada,Codigo_de_l_nea,Ubicaci_n,Material,Tipo_de_trabajo,Quitar,Poner,Ancho_medida,Alto_medida,Ancho_total,Alto_total";
+                $query = "SELECT $camposLineas FROM Products WHERE OT_relacionada=$idOt";
+                $crm->query($query);
+                if ($crm->estado) {
+                    $lineas = $crm->respuesta[1]['data'];
+                    $lineas = ordenarArrayPorCampo($lineas, 'Codigo_de_l_nea');
+                    $numLineas = count($lineas);
+                    $pvs = [];
+                    $validarPv = [];
+                    $fechasEntrada = [];
+                    // BUCLE DE ITERACIÓN POR CADA LÍNEA
+                    foreach ($lineas as $linea) {
+                        $fechaEntrada = $linea['Fecha_entrada'];
+                        if ($fechaEntrada) {
+                            array_push($fechasEntrada, $fechaEntrada);
+                            $idPv = $linea['Punto_de_venta']['id'];
+                            if (!isset($validarPv[$idPv])) {
+                                $validarPv[$idPv] = true;
+                                $camposPv = "Name,N_tel_fono,Direcci_n,rea,Zona";
+                                $query = "SELECT $camposPv FROM Puntos_de_venta WHERE id=\"$idPv\"";
+                                $crm->query($query);
+                                if ($crm->estado) {
+                                    $nombrePv = $crm->respuesta[1]['data'][0]['Name'];
+                                    $telefonoPv = $crm->respuesta[1]['data'][0]['N_tel_fono'];
+                                    $direccionPv = $crm->respuesta[1]['data'][0]['Direcci_n'];
+                                    $areaPv = $crm->respuesta[1]['data'][0]['rea'];
+                                    $zonaPv = $crm->respuesta[1]['data'][0]['Zona'];
+                                    $pv = [];
+                                    $pv['id'] = $idPv;
+                                    $pv['nombre'] = $nombrePv;
+                                    $pv['telefono'] = $telefonoPv;
+                                    $pv['direccion'] = $direccionPv;
+                                    $pv['area'] = $areaPv;
+                                    $pv['zona'] = $zonaPv;
+                                    $pv['lineas'] = [];
                                     $lineaVector = [];
                                     $lineaPv = $idPv;
                                     $lineaFechaEntrada = $fechaEntrada;
@@ -159,44 +129,100 @@
                                     $lineaVector['poner'] = $lineaPoner;
                                     $lineaVector['ancho'] = $lineaAncho;
                                     $lineaVector['alto'] = $lineaAlto;
-                                    array_push($pvs[$i]['lineas'], $lineaVector);
+                                    array_push($pv['lineas'], $lineaVector);
+                                    array_push($pvs, $pv);
+                                } else {
+                ?>
+                                    <script>
+                                        document.getElementById('loader-text').textContent = 'Error! Al consultar las líneas de la OT con fecha de entrada en el CRM';
+                                        document.getElementById('loader-dots').innerHTML = '<span class="error">✘</span>';
+                                        errorApp = true;
+                                    </script>
+                        <?php
+                                    break;
                                 }
-                                $i++;
+                            } else {
+                                $i = 0;
+                                foreach ($pvs as $pv) {
+                                    if ($pv['id'] == $idPv) {
+                                        $lineaVector = [];
+                                        $lineaPv = $idPv;
+                                        $lineaFechaEntrada = $fechaEntrada;
+                                        $lineaCod = $linea['Codigo_de_l_nea'];
+                                        $lineaUbicacion = $linea['Ubicaci_n'];
+                                        $lineaMaterial = $linea['Material'];
+                                        $lineaTipo = $linea['Tipo_de_trabajo'];
+                                        $lineaQuitar = $linea['Quitar'];
+                                        $lineaPoner = $linea['Poner'];
+                                        $lineaAncho = 0;
+                                        $lineaAlto = 0;
+                                        if ($linea['Ancho_total'] && $linea['Alto_total']) {
+                                            $lineaAncho = $linea['Ancho_total'];
+                                            $lineaAlto = $linea['Alto_total'];
+                                        } else {
+                                            $lineaAncho = $linea['Ancho_medida'];
+                                            $lineaAlto = $linea['Alto_medida'];
+                                        }
+                                        $lineaVector['pv'] = $lineaPv;
+                                        $lineaVector['fechaEntrada'] = $lineaFechaEntrada;
+                                        $lineaVector['codigo'] = $lineaCod;
+                                        $lineaVector['ubicacion'] = $lineaUbicacion;
+                                        $lineaVector['material'] = $lineaMaterial;
+                                        $lineaVector['tipo'] = $lineaTipo;
+                                        $lineaVector['quitar'] = $lineaQuitar;
+                                        $lineaVector['poner'] = $lineaPoner;
+                                        $lineaVector['ancho'] = $lineaAncho;
+                                        $lineaVector['alto'] = $lineaAlto;
+                                        array_push($pvs[$i]['lineas'], $lineaVector);
+                                    }
+                                    $i++;
+                                }
                             }
                         }
                     }
+                    if ($fechasEntrada) {
+                        $fechasEntrada = array_unique($fechasEntrada);
+                        rsort($fechasEntrada);
+                        $otVector = [];
+                        $otVector['ot'] = [];
+                        $otVector['pvs'] = $pvs;
+                        $otVector['ot']['id'] = $idOt;
+                        $otVector['ot']['codOt'] = $codOt;
+                        $otVector['ot']['nombreOt'] = $nombreOt;
+                        $otVector['ot']['cliente'] = $cliente;
+                        $otVector['ot']['firma'] = $firma;
+                        $otVector['ot']['fechasEntrada'] = $fechasEntrada;
+                        ?>
+                        <script>
+                            const data = <?php echo json_encode($otVector, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>;
+                            //console.log(data);
+                        </script>
+                    <?php
+                    } else {
+                    ?>
+                        <script>
+                            document.getElementById('loader-text').textContent = 'Error! No existen líneas con fecha de entrada';
+                            document.getElementById('loader-dots').innerHTML = '<span class="error">✘</span>';
+                            errorApp = true;
+                        </script>
+                    <?php
+                    }
+                } else {
+                    ?>
+                    <script>
+                        document.getElementById('loader-text').textContent = 'Error! Al consultar las líneas de la OT con fecha de entrada en el CRM';
+                        document.getElementById('loader-dots').innerHTML = '<span class="error">✘</span>';
+                        errorApp = true;
+                    </script>
+            <?php
                 }
-                $fechasEntrada = array_unique($fechasEntrada);
-                rsort($fechasEntrada);
-                $otVector = [];
-                $otVector['ot'] = [];
-                $otVector['pvs'] = $pvs;
-                $otVector['ot']['id'] = $idOt;
-                $otVector['ot']['codOt'] = $codOt;
-                $otVector['ot']['nombreOt'] = $nombreOt;
-                $otVector['ot']['cliente'] = $cliente;
-                $otVector['ot']['firma'] = $firma;
-                $otVector['ot']['fechasEntrada'] = $fechasEntrada;
-                ?>
-                <script>
-                    const data = <?php echo json_encode($otVector, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>;
-                    //console.log(data);
-                </script>
-            <?php
-
-            } else {
-            ?>
-                <script>
-                    document.getElementById('loader-text').textContent = 'Error! Al consultar las líneas de la OT con fecha de entrada en el CRM';
-                    document.getElementById('loader-dots').innerHTML = '<span class="error">✘</span>';
-                </script>
-            <?php
             }
         } else {
             ?>
             <script>
                 document.getElementById('loader-text').textContent = 'Error! No se han recibido los datos necesarios';
                 document.getElementById('loader-dots').innerHTML = '<span class="error">✘</span>';
+                errorApp = true;
             </script>
         <?php
         }
@@ -205,6 +231,7 @@
         <script>
             document.getElementById('loader-text').textContent = 'Error! No se han recibido los datos necesarios';
             document.getElementById('loader-dots').innerHTML = '<span class="error">✘</span>';
+            errorApp = true;
         </script>
     <?php
     }
