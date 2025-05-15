@@ -195,7 +195,7 @@
                         ?>
                         <script>
                             const data = <?php echo json_encode($otVector, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>;
-                            //console.log(data);
+                            console.log(data);
                         </script>
                     <?php
                     } else {
