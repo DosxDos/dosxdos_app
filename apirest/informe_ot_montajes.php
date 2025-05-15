@@ -75,33 +75,44 @@ function ordenarArrayPorCampo(array $array, string $campo, string $orden = 'asc'
     return $array;
 }
 
- // Agrupamos los datos por punto de venta
- $lineas = $crm->respuesta[1]['data'] ?? [];
- $informes = [];
- foreach ($lineas as $linea) {
-    $clave = isset($linea['Punto_de_venta']) && is_scalar($linea['Punto_de_venta']) 
-        ? (string)$linea['Punto_de_venta'] 
-        : 'Desconocido';
+// Agrupamos los datos por punto de venta
+$lineas = $crm->respuesta[1]['data'] ?? [];
 
-    if (!isset($informes[$clave])) {
-        $informes[$clave] = [
-            'ot' => "V-" . " " . $codOt,
-            'nombreEmpresa' => $linea['nombreCliente'] ?? '',
-            'puntoVenta' => $linea['nombrePv'] ?? '', //Matcheamos cada dato con su tag correspondiente en carpetas_clase.php
+$estructuraFinal = [
+    'ot' => [
+        'codOt' => "V- " . $codOt,
+        'firma' => $lineas[0]['Firma_de_la_OT_relacionada'] ?? '', // suponemos que todas las líneas comparten la misma firma
+    ],
+    'pvs' => []
+];
+
+$pvsAgrupados = [];
+
+foreach ($lineas as $linea) {
+    $clavePv = $linea['Punto_de_venta'] ?? 'Desconocido';
+
+    if (!isset($pvsAgrupados[$clavePv])) {
+        $pvsAgrupados[$clavePv] = [
+            'nombre' => $linea['nombrePv'] ?? '',
             'direccion' => $linea['Direcci_n'] ?? '',
-            'detalles' => []
+            'lineas' => []
         ];
     }
 
-    $informes[$clave]['detalles'][] = [
+    $pvsAgrupados[$clavePv]['lineas'][] = [
         'tipo' => $linea['Tipo_de_OT'] ?? '',
-        'firma' => $linea['Firma_de_la_OT_relacionada'] ?? '',
+        'fechaEntrada' => $linea['Fecha_actuaci_n'] ?? '',
         'quitar' => $linea['Quitar'] ?? '',
         'poner' => $linea['Poner'] ?? '',
-        'dimensiones' => trim(($linea['Alto_medida'] ?? '') . ' x ' . ($linea['Ancho_medida'] ?? ''))
+        'alto' => $linea['Alto_medida'] ?? '',
+        'ancho' => $linea['Ancho_medida'] ?? ''
+        // Agrega más campos si los necesitas
     ];
 }
 
-// Enviamos el array como JSON indexado
+// Convertimos a array numérico
+$estructuraFinal['pvs'] = array_values($pvsAgrupados);
+
+// Devolvemos como JSON
 header('Content-Type: application/json');
-echo json_encode(array_values($informes));
+echo json_encode($estructuraFinal);

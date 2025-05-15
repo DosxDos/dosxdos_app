@@ -1,0 +1,12 @@
+[15-May-2025 15:50:57 Atlantic/Canary] PHP Fatal error:  Uncaught TypeError: Illegal offset type in isset or empty in C:\xampp\htdocs\dosxdos_app\apirest\informe_ot_montajes.php:96
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\dosxdos_app\apirest\informe_ot_montajes.php on line 96
+[15-May-2025 15:50:59 Atlantic/Canary] PHP Fatal error:  Uncaught TypeError: Illegal offset type in isset or empty in C:\xampp\htdocs\dosxdos_app\apirest\informe_ot_montajes.php:96
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\dosxdos_app\apirest\informe_ot_montajes.php on line 96
+[15-May-2025 15:51:06 Atlantic/Canary] PHP Fatal error:  Uncaught TypeError: Illegal offset type in isset or empty in C:\xampp\htdocs\dosxdos_app\apirest\informe_ot_montajes.php:96
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\dosxdos_app\apirest\informe_ot_montajes.php on line 96

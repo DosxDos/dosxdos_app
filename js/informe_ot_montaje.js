@@ -1,4 +1,4 @@
-// Función para mostrar los informes en el HTML
+// Función para renderizar los informes filtrados en el HTML
 function renderInformes(data) {
   const container = document.getElementById("contenedor-informes"); // Buscamos el contenedor
   if (!container) return;
@@ -23,11 +23,12 @@ function renderInformes(data) {
         </div>
       </div>
 
-       <div class="info-recuadro">
-  <p class="ot"><strong>OT:</strong> ${info.ot}</p>
-  <p class="empresa">${info.nombreEmpresa}</p>
-</div>
-   <div class="info-header">
+      <div class="info-recuadro">
+        <p class="ot"><strong>OT:</strong> ${info.ot}</p>
+        <p class="empresa">${info.nombreEmpresa}</p>
+      </div>
+
+      <div class="info-header">
         <p><strong>Punto de Venta:</strong> ${info.puntoVenta}</p>
         <p><strong>Dirección:</strong> ${info.direccion}</p>
       </div>
@@ -79,6 +80,7 @@ function renderInformes(data) {
 
     container.appendChild(div);
   });
+
   // Activamos el botón para generar PDF una vez renderizado
   const botonPDF = document.getElementById("btnGenerarPDF");
   if (botonPDF) {
@@ -123,11 +125,39 @@ function generarPDF() {
 
 window.generarPDF = generarPDF; // Registramos la función globalmente
 
+// Función para filtrar los datos por fecha seleccionada
+function filtrarDataPorFecha(dataOriginal, fecha) {
+  const ot = dataOriginal.ot;
+  const resultado = [];
+
+  dataOriginal.pvs.forEach(pv => {
+    const lineasFiltradas = (pv.lineas || []).filter(linea => linea.fechaEntrada === fecha);
+    if (lineasFiltradas.length === 0) return;
+
+    resultado.push({
+      ot: ot.codOt,
+      nombreEmpresa: ot.firma,
+      puntoVenta: pv.nombre,
+      direccion: pv.direccion,
+      detalles: lineasFiltradas.map(linea => ({
+        tipo: linea.tipo || "",
+        firma: ot.firma || "",
+        quitar: linea.quitar || "",
+        poner: linea.poner || "",
+        dimensiones: `${linea.alto || '-'} x ${linea.ancho || '-'}`
+      }))
+    });
+  });
+
+  return resultado;
+}
+
 // Al cargar la página, hacemos fetch al PHP y guardamos en localStorage
 document.addEventListener("DOMContentLoaded", () => {
   const botonPDF = document.getElementById("btnGenerarPDF");
   if (botonPDF) {
-    botonPDF.disabled = true;          // Desactivamos al inicio para doble capa de seguridad aunque el botón esté oculto
+    botonPDF.disabled = true; // Desactivamos al inicio como capa de seguridad
+    botonPDF.style.display = "none";
   }
 
   // Obtenemos los parámetros desde la URL (necesarios para el fetch)
@@ -154,9 +184,50 @@ document.addEventListener("DOMContentLoaded", () => {
       return res.json(); // Esperamos respuesta en JSON
     })
     .then(data => {
-      localStorage.setItem("informesOT", JSON.stringify(data)); // Guardamos para uso futuro
-      console.log("🟢 Datos guardados en localStorage:", data);
-      renderInformes(data); // Imprimimos en pantalla
+      // Comprobamos que data.pvs exista y sea un array
+      if (!data.pvs || !Array.isArray(data.pvs)) {
+        console.error("❌ data.pvs no es un array o está vacío", data.pvs);
+        return;
+      }
+
+      // Guardamos datos originales para uso posterior
+      localStorage.setItem("informesOTRaw", JSON.stringify(data));
+      console.log("🟢 Datos crudos guardados:", data);
+
+      // Obtenemos todas las fechas únicas de las líneas
+      const fechas = new Set();
+      data.pvs.forEach(pv => {
+        if (!pv.lineas || !Array.isArray(pv.lineas)) {
+          console.warn("⚠️ pv.lineas no es array o no existe", pv.lineas);
+          return;
+        }
+        pv.lineas.forEach(linea => {
+          if (linea.fechaEntrada) fechas.add(linea.fechaEntrada);
+        });
+      });
+
+      const selector = document.getElementById("selector-fecha");
+      if (!selector) {
+        console.error("❌ No se encontró el elemento select con id 'selector-fecha'");
+        return;
+      }
+
+      selector.innerHTML = `<option value="">Selecciona una fecha</option>`;
+      [...fechas].sort().forEach(f => {
+        const opt = document.createElement("option");
+        opt.value = f;
+        opt.textContent = f;
+        selector.appendChild(opt);
+      });
+
+      // Evento: al seleccionar una fecha, renderizar los informes
+      selector.addEventListener("change", () => {
+        const fechaSeleccionada = selector.value;
+        if (!fechaSeleccionada) return;
+
+        const dataFiltrada = filtrarDataPorFecha(data, fechaSeleccionada);
+        renderInformes(dataFiltrada);
+      });
     })
     .catch(err => {
       console.error("❌ Error al cargar los datos:", err);

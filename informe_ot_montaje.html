@@ -7,11 +7,19 @@
 </head>
 <body>
 
+  <!-- Selector de fechas -->
+  <div id="selector-fecha-contenedor" style="margin: 20px;">
+    <label for="selector-fecha"><strong>Selecciona una fecha:</strong></label>
+    <select id="selector-fecha">
+      <option value="">Cargando fechas...</option>
+    </select>
+  </div>
+
   <!-- Contenedor donde JS genera informes completos -->
   <div id="contenedor-informes"></div>
 
   <!-- Botón para generar el PDF -->
-  <button id="btnGenerarPDF" onclick="generarPDF()">Descargar PDF</button>
+  <button id="btnGenerarPDF" onclick="generarPDF()" style="display: none;">Descargar PDF</button>
 
   <!-- Librerías necesarias -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -19,3 +27,4 @@
 
 </body>
 </html>
+
