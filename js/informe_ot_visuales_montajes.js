@@ -9,7 +9,7 @@ function loaderOff() {
     setTimeout(() => {
         document.getElementById('loader').classList.remove("displayOn");
         document.getElementById('loader').classList.add("displayOff");
-    }, 2000);
+    }, 3000);
 }
 
 function scrollToTop() {

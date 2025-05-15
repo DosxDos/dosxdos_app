@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loaderOff();
 
     const fechasEntrada = data.ot.fechasEntrada;
-    console.log(fechasEntrada);
+    //console.log(fechasEntrada);
 
     document.getElementById('tituloPrincipal').innerHTML = data.ot.codOt + ' - ' + 'INFORME VISUALES - MONTAJES';
     document.getElementById('tituloSecundario').innerHTML = data.ot.nombreOt;
@@ -70,18 +70,48 @@ document.addEventListener("DOMContentLoaded", () => {
         btnPdf.disabled = !activo;
     }
 
+    //GENERACIÓN DEL PDF
     btnPdf.addEventListener("click", () => {
-        console.log("Fechas seleccionadas:", Object.keys(fechasObjeto));
-        // generarPdf(); ← tu lógica real
+        loaderOn();
+        const fechasFiltradas = Object.keys(fechasObjeto);
+        //console.log("Fechas seleccionadas:", fechasFiltradas);
+
+        const datos = {
+            ot: data.ot,
+            pvs: []
+        };
+
+        for (const pv of data.pvs) {
+            const nuevoPv = {
+                area: pv.area,
+                direccion: pv.direccion,
+                id: pv.id,
+                nombre: pv.nombre,
+                telefono: pv.telefono,
+                zona: pv.zona,
+                lineas: []
+            };
+
+            for (const linea of pv.lineas) {
+                for (const fechaFiltrada of fechasFiltradas) {
+                    if (linea.fechaEntrada == fechaFiltrada) {
+                        nuevoPv.lineas.push(linea);
+                    }
+                }
+            }
+
+            if (nuevoPv.lineas.length > 0) {
+                datos.pvs.push(nuevoPv);
+            }
+        }
+
+        generarPdf(datos);
     });
 
     actualizarBoton();
 });
 
-
 async function generarPdf(datos) {
-
-    loaderOn();
 
     const logoBase64 = await getImageBase64('https://dosxdos.app.iidos.com/img/logo_black.png');
     const contenido = [];
@@ -118,27 +148,27 @@ async function generarPdf(datos) {
                             [
                                 { text: 'Punto de Venta:', bold: true, alignment: 'right' },
                                 '',
-                                { text: datos.ot.nombre, alignment: 'left' }
+                                { text: dato.nombre, alignment: 'left' }
                             ],
                             [
                                 { text: 'Teléfono:', bold: true, alignment: 'right' },
                                 '',
-                                { text: datos.ot.telefono, alignment: 'left' }
+                                { text: dato.telefono, alignment: 'left' }
                             ],
                             [
                                 { text: 'Dirección:', bold: true, alignment: 'right' },
                                 '',
-                                { text: datos.ot.direccion, alignment: 'left' }
+                                { text: dato.direccion, alignment: 'left' }
                             ],
                             [
                                 { text: 'Área:', bold: true, alignment: 'right' },
                                 '',
-                                { text: datos.ot.area, alignment: 'left' }
+                                { text: dato.area, alignment: 'left' }
                             ],
                             [
                                 { text: 'Zona:', bold: true, alignment: 'right' },
                                 '',
-                                { text: datos.ot.zona, alignment: 'left' }
+                                { text: dato.zona, alignment: 'left' }
                             ],
                             [
                                 { text: 'Nombre OT:', bold: true, alignment: 'right' },
