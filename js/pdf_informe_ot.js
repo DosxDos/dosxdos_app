@@ -1,128 +1,14 @@
-//pdfMake
-//anchoTotal = 520
-//anchoUtil = 480 (he puesto márgenes de 20 en cada lado)
-// pageMargins: [left, top, right, bottom]
-loaderOff();
-/*
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
     if (!errorApp) {
-        loaderOff();
 
-        const fechasEntrada = data.ot.fechasEntrada;
-        //console.log(fechasEntrada);
+        document.title = data.ot.codOt + ' - ' + 'INFORME';
+        document.getElementById('loader-text').textContent = 'Generando PDF';
 
-        document.getElementById('tituloPrincipal').innerHTML = data.ot.codOt + ' - ' + 'INFORME';
-        document.getElementById('tituloSecundario').innerHTML = data.ot.nombreOt;
-
-        const fechasObjeto = {};
-        const contenedor = document.getElementById("fechas-container");
-        const btnPdf = document.getElementById("btn-pdf");
-        const checkTodas = document.getElementById("check-todas");
-
-        checkTodas.checked = false; // ← asegúrate que arranca desmarcado
-        btnPdf.disabled = true;
-
-        function formatearFecha(fechaISO) {
-            const [a, m, d] = fechaISO.split("-");
-            return `${d}/${m}/${a}`;
-        }
-
-        // Crear checkboxes individuales
-        fechasEntrada.forEach(fecha => {
-            const label = document.createElement("label");
-            label.className = "flex items-center space-x-2";
-
-            const checkbox = document.createElement("input");
-            checkbox.type = "checkbox";
-            checkbox.value = fecha;
-            checkbox.className = "form-checkbox text-red-600";
-            checkbox.addEventListener("change", () => {
-                if (checkbox.checked) {
-                    fechasObjeto[fecha] = true;
-                } else {
-                    delete fechasObjeto[fecha];
-                    checkTodas.checked = false;
-                }
-                actualizarBoton();
-            });
-
-            const span = document.createElement("span");
-            span.textContent = formatearFecha(fecha);
-            span.className = "text-gray-700";
-
-            label.appendChild(checkbox);
-            label.appendChild(span);
-            contenedor.appendChild(label);
-        });
-
-        checkTodas.addEventListener("change", () => {
-            const checkboxes = contenedor.querySelectorAll("input[type=checkbox]");
-            if (checkTodas.checked) {
-                fechasEntrada.forEach(fecha => fechasObjeto[fecha] = true);
-                checkboxes.forEach(cb => cb.checked = true);
-            } else {
-                fechasEntrada.forEach(fecha => delete fechasObjeto[fecha]);
-                checkboxes.forEach(cb => cb.checked = false);
-            }
-            actualizarBoton();
-        });
-
-        function actualizarBoton() {
-            const activo = Object.keys(fechasObjeto).length > 0;
-            activo ? btnPdf.classList.replace('bg-gray-600', 'bg-red-600') : btnPdf.classList.replace('bg-red-600', 'bg-gray-600');
-            btnPdf.disabled = !activo;
-        }
-
-        //GENERACIÓN DEL PDF
-        btnPdf.addEventListener("click", () => {
-            loaderOn();
-            const fechasFiltradas = Object.keys(fechasObjeto);
-            //console.log("Fechas seleccionadas:", fechasFiltradas);
-
-            const datos = {
-                ot: data.ot,
-                pvs: []
-            };
-
-            for (const pv of data.pvs) {
-                const nuevoPv = {
-                    area: pv.area,
-                    direccion: pv.direccion,
-                    id: pv.id,
-                    nombre: pv.nombre,
-                    telefono: pv.telefono,
-                    zona: pv.zona,
-                    lineas: []
-                };
-
-                for (const linea of pv.lineas) {
-                    for (const fechaFiltrada of fechasFiltradas) {
-                        if (linea.fechaEntrada == fechaFiltrada) {
-                            nuevoPv.lineas.push(linea);
-                        }
-                    }
-                }
-
-                if (nuevoPv.lineas.length > 0) {
-                    datos.pvs.push(nuevoPv);
-                }
-            }
-
-            generarPdf(datos);
-        });
-
-        actualizarBoton();
-    }
-
-});
-
-async function generarPdf(datos) {
-
-    try {
-        const logoBase64 = await getImageBase64('https://dosxdos.app.iidos.com/img/logo_black.png');
-        const contenido = [];
-
-        datos.pvs.forEach((dato, index) => {
+        try {
+            const areasKeys = Object.keys(data.lineas);
+            const areasString = areasKeys.join(', ');
+            const logoBase64 = await getImageBase64('https://dosxdos.app.iidos.com/img/logo_black.png');
+            const contenido = [];
             const encabezado = {
                 stack: [
                     {
@@ -136,7 +22,7 @@ async function generarPdf(datos) {
                                     margin: [0, 0, 0, 0]
                                 },
                                 {
-                                    text: datos.ot.codOt + ' - INFORME DE MONTAJE',
+                                    text: data.ot.codOt + ' - INFORME',
                                     style: 'titulo',
                                     alignment: 'right',
                                     margin: [0, 15, 0, 0]  // ajusta para centrar vertical con el logo
@@ -152,40 +38,50 @@ async function generarPdf(datos) {
                             widths: ['auto', 10, '*'],
                             body: [
                                 [
-                                    { text: 'Punto de Venta:', bold: true, alignment: 'right' },
+                                    { text: 'Nombre:', bold: true, alignment: 'right' },
                                     '',
-                                    { text: dato.nombre, alignment: 'left' }
+                                    { text: data.ot.nombreOt, alignment: 'left' }
                                 ],
                                 [
-                                    { text: 'Teléfono:', bold: true, alignment: 'right' },
+                                    { text: 'Tipo:', bold: true, alignment: 'right' },
                                     '',
-                                    { text: dato.telefono, alignment: 'left' }
+                                    { text: data.ot.tipo, alignment: 'left' }
                                 ],
                                 [
-                                    { text: 'Dirección:', bold: true, alignment: 'right' },
+                                    { text: 'Subtipo:', bold: true, alignment: 'right' },
                                     '',
-                                    { text: dato.direccion, alignment: 'left' }
-                                ],
-                                [
-                                    { text: 'Área:', bold: true, alignment: 'right' },
-                                    '',
-                                    { text: dato.area, alignment: 'left' }
-                                ],
-                                [
-                                    { text: 'Zona:', bold: true, alignment: 'right' },
-                                    '',
-                                    { text: dato.zona, alignment: 'left' }
-                                ],
-                                [
-                                    { text: 'Nombre OT:', bold: true, alignment: 'right' },
-                                    '',
-                                    { text: datos.ot.nombreOt, alignment: 'left' }
+                                    { text: data.ot.subtipo, alignment: 'left' }
                                 ],
                                 [
                                     { text: 'Cliente:', bold: true, alignment: 'right' },
                                     '',
-                                    { text: datos.ot.cliente, alignment: 'left' }
-                                ]
+                                    { text: data.ot.cliente, alignment: 'left' }
+                                ],
+                                [
+                                    { text: 'Firma:', bold: true, alignment: 'right' },
+                                    '',
+                                    { text: data.ot.firma, alignment: 'left' }
+                                ],
+                                [
+                                    { text: 'Contacto:', bold: true, alignment: 'right' },
+                                    '',
+                                    { text: data.ot.contacto, alignment: 'left' }
+                                ],
+                                [
+                                    { text: 'Creada:', bold: true, alignment: 'right' },
+                                    '',
+                                    { text: data.ot.creacion, alignment: 'left' }
+                                ],
+                                [
+                                    { text: 'Creada por:', bold: true, alignment: 'right' },
+                                    '',
+                                    { text: data.ot.creadaPor, alignment: 'left' }
+                                ],
+                                [
+                                    { text: 'Áreas:', bold: true, alignment: 'right' },
+                                    '',
+                                    { text: areasString, alignment: 'left' }
+                                ],
                             ]
                         },
                         layout: 'noBorders',
@@ -195,177 +91,113 @@ async function generarPdf(datos) {
                 ]
             };
 
-            const tabla = {
-                width: 520, // fuerza un contenedor de ancho fijo
-                alignment: 'center', // centra el contenedor
-                table: {
-                    headerRows: 1,
-                    widths: calcularAnchosProporcionales([1.3, 2.3, 2, 2, 3, 3, 1.5, 1.5]),
-                    body: [
-                        [
-                            { text: 'Línea', bold: true },
-                            { text: 'Ubicación', bold: true },
-                            { text: 'Tipo', bold: true },
-                            { text: 'Firma', bold: true },
-                            { text: 'Quitar', bold: true },
-                            { text: 'Poner', bold: true },
-                            { text: 'Ancho', bold: true },
-                            { text: 'Alto', bold: true }
-                        ],
-                        ...dato.lineas.map(linea => [
-                            { text: linea.codigo, noWrap: false },
-                            { text: linea.ubicacion, noWrap: false },
-                            linea.material ? { text: linea.material + ' - ' + linea.tipo, noWrap: false } : { text: linea.tipo, noWrap: false },
-                            { text: datos.ot.firma, noWrap: false },
-                            { text: linea.quitar, noWrap: false },
-                            { text: linea.poner, noWrap: false },
-                            linea.ancho ? { text: linea.ancho, noWrap: false } : '',
-                            linea.alto ? { text: linea.alto, noWrap: false } : '',
-                        ])
-                    ]
-                },
-                layout: {
-                    hLineWidth: () => 0.8,
-                    vLineWidth: () => 0.8,
-                    hLineColor: () => '#aaa',
-                    vLineColor: () => '#aaa',
-                    paddingLeft: () => 5,
-                    paddingRight: () => 5,
-                    paddingTop: () => 4,
-                    paddingBottom: () => 4
-                },
-                margin: [0, 20, 0, 20]
-            };
+            const informesAreas = {};
+            informesAreas.stack = [];
 
-            const firma = {
-                width: 555,
-                alignment: 'center',
-                unbreakable: true,
-                columns: [
+            Object.entries(data.lineas).map(([areaString, area]) => {
+                informesAreas.stack.push(
                     {
-                        width: '*',
-                        table: {
-                            widths: ['*'],
-                            body: [[
-                                {
-                                    stack: [
-                                        { text: 'Sello del Cliente:', bold: true },
-                                        { text: '\n\n\n\n\n\n\n' }
-                                    ],
-                                    margin: [5, 5, 5, 5],
-                                    fontSize: 10
-                                }
-                            ]]
-                        },
-                        layout: {
-                            hLineWidth: () => 1,
-                            vLineWidth: () => 1,
-                            hLineColor: () => '#aaa',
-                            vLineColor: () => '#aaa'
-                        }
+                        text: areaString,
+                        bold: true,
+                        margin: [0, 15, 0, 5],
+                        fontSize: 14
                     },
-                    {
-                        width: '*',
-                        table: {
-                            widths: ['*'],
-                            body: [[
-                                {
-                                    stack: [
-                                        { text: 'Firma del Instalador:', bold: true },
-                                        { text: '\n\n\n\n\n\n\n' }
-                                    ],
-                                    margin: [5, 5, 5, 5],
-                                    fontSize: 10
-                                }
-                            ]]
+                )
+                Object.entries(area).map(([sector, lineas]) => {
+                    informesAreas.stack.push(
+                        {
+                            text: sector,
+                            bold: true,
+                            margin: [0, 10, 0, 0]
                         },
-                        layout: {
-                            hLineWidth: () => 1,
-                            vLineWidth: () => 1,
-                            hLineColor: () => '#aaa',
-                            vLineColor: () => '#aaa'
-                        }
-                    },
-                    {
-                        width: '*',
-                        table: {
-                            widths: ['*'],
-                            body: [[
-                                {
-                                    stack: [
-                                        { text: 'Fecha:', bold: true },
-                                        { text: '\n\n\n\n\n\n\n' }
+                        {
+                            width: 520, // fuerza un contenedor de ancho fijo
+                            alignment: 'center', // centra el contenedor
+                            table: {
+                                headerRows: 1,
+                                widths: calcularAnchosProporcionales([2.5, 3.5, 5.5, 7, 4, 8]),
+                                body: [
+                                    [
+                                        { text: 'Línea', bold: true },
+                                        { text: 'Previsión', bold: true },
+                                        { text: 'Punto de venta', bold: true },
+                                        { text: 'Dirección', bold: true },
+                                        { text: 'Zona', bold: true },
+                                        { text: 'Observaciones', bold: true }
                                     ],
-                                    margin: [5, 5, 5, 5],
-                                    fontSize: 10
-                                }
-                            ]]
-                        },
-                        layout: {
-                            hLineWidth: () => 1,
-                            vLineWidth: () => 1,
-                            hLineColor: () => '#aaa',
-                            vLineColor: () => '#aaa'
+                                    ...lineas.map(linea => [
+                                        { text: linea.codigo, noWrap: false },
+                                        { text: linea.prevision, noWrap: false },
+                                        { text: linea.pv, noWrap: false },
+                                        { text: linea.direccion, noWrap: false },
+                                        { text: linea.zona, noWrap: false },
+                                        linea.observaciones ? { text: linea.observaciones, noWrap: false } : { text: '', noWrap: false },
+                                    ])
+                                ]
+                            },
+                            layout: {
+                                hLineWidth: () => 0.8,
+                                vLineWidth: () => 0.8,
+                                hLineColor: () => '#aaa',
+                                vLineColor: () => '#aaa',
+                                paddingLeft: () => 5,
+                                paddingRight: () => 5,
+                                paddingTop: () => 4,
+                                paddingBottom: () => 4
+                            },
+                            margin: [0, 10, 0, 20]
                         }
-                    }
-                ],
-                columnGap: 20,
-                margin: [0, 30, 0, 0]
+                    );
+                })
+            });
+
+            contenido.push(encabezado);
+            contenido.push(informesAreas);
+            console.log(contenido);
+
+            const docDefinition = {
+                pageSize: 'A4',
+                pageMargins: [30, 40, 30, 25],
+                content: contenido,
+                styles: {
+                    titulo: { fontSize: 13, bold: true },
+                    datos: { fontSize: 11, margin: [0, 2, 0, 0] }
+                },
+                defaultStyle: { fontSize: 10 },
+                footer: (currentPage, pageCount) => ({
+                    text: `Página ${currentPage} de ${pageCount}`,
+                    alignment: 'right',
+                    margin: [0, 0, 40, 20],
+                    fontSize: 10
+                })
             };
 
-            const stackCompleto = {
-                stack: [encabezado, tabla, firma]
-            };
-
-            // Solo añadir salto de página si NO es el último punto de venta
-            if (index < datos.pvs.length - 1) {
-                stackCompleto.pageBreak = 'after';
-            }
-
-            contenido.push(stackCompleto);
-        });
-
-        const docDefinition = {
-            pageSize: 'A4',
-            pageMargins: [20, 30, 20, 20],
-            content: contenido,
-            styles: {
-                titulo: { fontSize: 13, bold: true },
-                datos: { fontSize: 11, margin: [0, 2, 0, 0] }
-            },
-            defaultStyle: { fontSize: 10 },
-            footer: (currentPage, pageCount) => ({
-                text: `Página ${currentPage} de ${pageCount}`,
-                alignment: 'right',
-                margin: [0, 0, 40, 20],
-                fontSize: 10
-            })
-        };
-
-        pdfMake.createPdf(docDefinition).getBlob(blob => {
-            const url = URL.createObjectURL(blob);
-            document.getElementById('loader-text').textContent = 'PDF Generado';
-            document.getElementById('loader-dots').innerHTML = '<span style="font-size: 36px; color: green;">✔</span>';
-            loaderOff();
-            setTimeout(() => {
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `${datos.ot.codOt}.pdf`;
-                a.click();
-            }, 3000);
-            // const a2 = document.createElement('a');
-            // a2.href = url;
-            // a2.target = '_blank';
-            // a2.rel = 'noopener';
-            // a2.click();
-        });
+            pdfMake.createPdf(docDefinition).getBlob(blob => {
+                const url = URL.createObjectURL(blob);
+                document.getElementById('loader-text').textContent = 'PDF Generado';
+                document.getElementById('loader-dots').innerHTML = '<span style="font-size: 36px; color: green;">✔</span>';
+                setTimeout(() => {
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `${data.ot.codOt}.pdf`;
+                    a.click();
+                }, 3000);
+                // const a2 = document.createElement('a');
+                // a2.href = url;
+                // a2.target = '_blank';
+                // a2.rel = 'noopener';
+                // a2.click();
+            });
 
 
-    } catch (error) {
-        document.getElementById('loader-text').textContent = 'Error! Al generar el PDF: ' + error.message;
-        document.getElementById('loader-dots').innerHTML = '<span class="error">✘</span>';
+        } catch (error) {
+            document.getElementById('loader-text').textContent = 'Error! Al generar el PDF: ' + error.message;
+            document.getElementById('loader-dots').innerHTML = '<span class="error">✘</span>';
+        }
+
     }
-}
+
+});
 
 function getImageBase64(url) {
     return new Promise((resolve, reject) => {
@@ -399,4 +231,8 @@ function calcularAnchosProporcionales(pesos, anchoDisponible = 468) {
     //console.log('anchosProporcionales' + anchosProporcionales);
     return anchosProporcionales;
 }
-*/
+
+function formatearFecha(fechaISO) {
+    const [a, m, d] = fechaISO.split("-");
+    return `${d}/${m}/${a}`;
+}
