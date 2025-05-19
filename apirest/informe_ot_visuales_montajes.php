@@ -46,7 +46,7 @@
         $tipoOt = $_GET['tipoOt'];
         $cliente = $_GET['cliente'];
         $firma = '';
-        if (isset($_GET['nombreOt'])) {
+        if (isset($_GET['firma'])) {
             $firma = $_GET['firma'];
         }
 

@@ -437,13 +437,17 @@
                     button.appendChild(textSpan);
 
                     button.addEventListener('click', () => {
-                        // Placeholder for course-specific page navigation
-                        // In the future, replace with actual course page URLs
                         localStorage.setItem('curso', button.id);
                         localStorage.setItem('nombreCurso', button.textContent);
-                        // Uncomment and modify when course pages are ready
-                        // window.location.href = `https://dosxdos.app.iidos.com/curso-${button.id}.html`;
-                        alerta(`Curso ${curso.nombre} seleccionado (página próximamente)`);
+
+                        // Using a mapping for cleaner URLs
+                        const cursoURLMap = {
+                            'a3rep': 'a3rep',
+                            'crmzoho': 'crm-zoho',
+                            'notion': 'notion'
+                        };
+
+                        window.location.href = `https://dosxdos.app.iidos.com/cursos/formacion.php?curso=${cursoURLMap[button.id]}`;
                     });
 
                     fragmento.appendChild(button);
