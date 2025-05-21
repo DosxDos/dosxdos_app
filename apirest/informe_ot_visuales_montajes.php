@@ -6,11 +6,11 @@
     <title>Informe visuales - montajes</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/png" href="https://dosxdos.app.iidos.com/img/logo-red.png" />
-    <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/informe_ot_visuales_montajes.css" />
+    <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/informe_ot_visuales_montajes.css?v=1" />
     <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/tailwindmain.css" />
     <script src="https://dosxdos.app.iidos.com/js/pdfmake.min.js"></script>
     <script src="https://dosxdos.app.iidos.com/js/vfs_fonts.js"></script>
-    <script src="https://dosxdos.app.iidos.com/js/informe_ot_visuales_montajes.js"></script>
+    <script src="https://dosxdos.app.iidos.com/js/informe_ot_visuales_montajes.js?v=1"></script>
 </head>
 
 <body class="bg-gray-50 min-h-screen p-4 flex flex-col items-center justify-start">
@@ -20,6 +20,10 @@
     </div>
 
     <?php
+
+    header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+    header("Cache-Control: post-check=0, pre-check=0", false);
+    header("Pragma: no-cache");
 
     @ob_flush();
     flush();
@@ -263,7 +267,7 @@
     </div>
 
 
-    <script src="https://dosxdos.app.iidos.com/js/pdf_informe_ot_visuales_montajes.js"></script>
+    <script src="https://dosxdos.app.iidos.com/js/pdf_informe_ot_visuales_montajes.js?v=1"></script>
 
 </body>
 
