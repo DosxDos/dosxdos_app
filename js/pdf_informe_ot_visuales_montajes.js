@@ -130,63 +130,77 @@ async function generarPdf(datos) {
                                 {
                                     image: logoBase64,
                                     width: 120,
-                                    height: 50,
-                                    margin: [0, 0, 0, 0]
+                                    height: 50
                                 },
                                 {
                                     text: datos.ot.codOt + ' - INFORME DE MONTAJE',
                                     style: 'titulo',
                                     alignment: 'right',
-                                    margin: [0, 15, 0, 0]  // ajusta para centrar vertical con el logo
+                                    valign: 'middle'
                                 }
                             ]]
                         },
                         layout: 'noBorders',
                         margin: [0, 0, 0, 5]
                     },
+
                     {
-                        alignment: 'center',
-                        table: {
-                            widths: ['auto', 10, '*'],
-                            body: [
-                                [
-                                    { text: 'Punto de Venta:', bold: true, alignment: 'right' },
-                                    '',
-                                    { text: dato.nombre, alignment: 'left' }
-                                ],
-                                [
-                                    { text: 'Teléfono:', bold: true, alignment: 'right' },
-                                    '',
-                                    { text: dato.telefono, alignment: 'left' }
-                                ],
-                                [
-                                    { text: 'Dirección:', bold: true, alignment: 'right' },
-                                    '',
-                                    { text: dato.direccion, alignment: 'left' }
-                                ],
-                                [
-                                    { text: 'Área:', bold: true, alignment: 'right' },
-                                    '',
-                                    { text: dato.area, alignment: 'left' }
-                                ],
-                                [
-                                    { text: 'Zona:', bold: true, alignment: 'right' },
-                                    '',
-                                    { text: dato.zona, alignment: 'left' }
-                                ],
-                                [
-                                    { text: 'Nombre OT:', bold: true, alignment: 'right' },
-                                    '',
-                                    { text: datos.ot.nombreOt, alignment: 'left' }
-                                ],
-                                [
-                                    { text: 'Cliente:', bold: true, alignment: 'right' },
-                                    '',
-                                    { text: datos.ot.cliente, alignment: 'left' }
-                                ]
-                            ]
-                        },
-                        layout: 'noBorders',
+                        columns: [
+                            {
+                                width: '50%',
+                                table: {
+                                    widths: ['auto', 10, '*'],
+                                    body: [
+                                        [
+                                            { text: 'Punto de Venta:', bold: true, alignment: 'right' },
+                                            '',
+                                            { text: dato.nombre, alignment: 'left' }
+                                        ],
+                                        [
+                                            { text: 'Teléfono:', bold: true, alignment: 'right' },
+                                            '',
+                                            { text: dato.telefono, alignment: 'left' }
+                                        ],
+                                        [
+                                            { text: 'Dirección:', bold: true, alignment: 'right' },
+                                            '',
+                                            { text: dato.direccion, alignment: 'left' }
+                                        ],
+                                        [
+                                            { text: 'Área:', bold: true, alignment: 'right' },
+                                            '',
+                                            { text: dato.area, alignment: 'left' }
+                                        ]
+                                    ]
+                                },
+                                layout: 'noBorders'
+                            },
+                            {
+                                width: '50%',
+                                table: {
+                                    widths: ['auto', 10, '*'],
+                                    body: [
+                                        [
+                                            { text: 'Zona:', bold: true, alignment: 'right' },
+                                            '',
+                                            { text: dato.zona, alignment: 'left' }
+                                        ],
+                                        [
+                                            { text: 'Nombre OT:', bold: true, alignment: 'right' },
+                                            '',
+                                            { text: datos.ot.nombreOt, alignment: 'left' }
+                                        ],
+                                        [
+                                            { text: 'Cliente:', bold: true, alignment: 'right' },
+                                            '',
+                                            { text: datos.ot.cliente, alignment: 'left' }
+                                        ]
+                                    ]
+                                },
+                                layout: 'noBorders'
+                            }
+                        ],
+                        columnGap: 30,
                         margin: [0, 15, 0, 15],
                         fontSize: 10
                     }

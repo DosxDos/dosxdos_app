@@ -17,76 +17,90 @@ document.addEventListener("DOMContentLoaded", async () => {
                             body: [[
                                 {
                                     image: logoBase64,
-                                    width: 120,
-                                    height: 50,
+                                    width: 100,
+                                    height: 40,
                                     margin: [0, 0, 0, 0]
                                 },
                                 {
                                     text: data.ot.codOt + ' - INFORME',
                                     style: 'titulo',
                                     alignment: 'right',
-                                    margin: [0, 15, 0, 0]  // ajusta para centrar vertical con el logo
+                                    margin: [0, 10, 0, 0]  // ajusta para centrar vertical con el logo
                                 }
                             ]]
                         },
                         layout: 'noBorders',
-                        margin: [0, 0, 0, 5]
+                        margin: [0, 0, 0, 2]
                     },
                     {
-                        alignment: 'center',
-                        table: {
-                            widths: ['auto', 10, '*'],
-                            body: [
-                                [
-                                    { text: 'Nombre:', bold: true, alignment: 'right' },
-                                    '',
-                                    { text: data.ot.nombreOt, alignment: 'left' }
-                                ],
-                                [
-                                    { text: 'Tipo:', bold: true, alignment: 'right' },
-                                    '',
-                                    { text: data.ot.tipo, alignment: 'left' }
-                                ],
-                                [
-                                    { text: 'Subtipo:', bold: true, alignment: 'right' },
-                                    '',
-                                    { text: data.ot.subtipo, alignment: 'left' }
-                                ],
-                                [
-                                    { text: 'Cliente:', bold: true, alignment: 'right' },
-                                    '',
-                                    { text: data.ot.cliente, alignment: 'left' }
-                                ],
-                                [
-                                    { text: 'Firma:', bold: true, alignment: 'right' },
-                                    '',
-                                    { text: data.ot.firma, alignment: 'left' }
-                                ],
-                                [
-                                    { text: 'Contacto:', bold: true, alignment: 'right' },
-                                    '',
-                                    { text: data.ot.contacto, alignment: 'left' }
-                                ],
-                                [
-                                    { text: 'Creada:', bold: true, alignment: 'right' },
-                                    '',
-                                    { text: data.ot.creacion, alignment: 'left' }
-                                ],
-                                [
-                                    { text: 'Creada por:', bold: true, alignment: 'right' },
-                                    '',
-                                    { text: data.ot.creadaPor, alignment: 'left' }
-                                ],
-                                [
-                                    { text: 'Áreas:', bold: true, alignment: 'right' },
-                                    '',
-                                    { text: areasString, alignment: 'left' }
-                                ],
-                            ]
-                        },
-                        layout: 'noBorders',
-                        margin: [0, 15, 0, 15],
-                        fontSize: 10
+                        columns: [
+                            {
+                                width: '50%',
+                                table: {
+                                    widths: ['auto', 10, '*'],
+                                    body: [
+                                        [
+                                            { text: 'Nombre:', bold: true, alignment: 'right' },
+                                            '',
+                                            { text: data.ot.nombreOt, alignment: 'left' }
+                                        ],
+                                        [
+                                            { text: 'Tipo:', bold: true, alignment: 'right' },
+                                            '',
+                                            { text: data.ot.tipo, alignment: 'left' }
+                                        ],
+                                        [
+                                            { text: 'Subtipo:', bold: true, alignment: 'right' },
+                                            '',
+                                            { text: data.ot.subtipo, alignment: 'left' }
+                                        ],
+                                        [
+                                            { text: 'Cliente:', bold: true, alignment: 'right' },
+                                            '',
+                                            { text: data.ot.cliente, alignment: 'left' }
+                                        ],
+                                        [
+                                            { text: 'Firma:', bold: true, alignment: 'right' },
+                                            '',
+                                            { text: data.ot.firma, alignment: 'left' }
+                                        ]
+                                    ]
+                                },
+                                layout: 'noBorders'
+                            },
+                            {
+                                width: '50%',
+                                table: {
+                                    widths: ['auto', 10, '*'],
+                                    body: [
+                                        [
+                                            { text: 'Contacto:', bold: true, alignment: 'right' },
+                                            '',
+                                            { text: data.ot.contacto, alignment: 'left' }
+                                        ],
+                                        [
+                                            { text: 'Creada:', bold: true, alignment: 'right' },
+                                            '',
+                                            { text: data.ot.creacion, alignment: 'left' }
+                                        ],
+                                        [
+                                            { text: 'Creada por:', bold: true, alignment: 'right' },
+                                            '',
+                                            { text: data.ot.creadaPor, alignment: 'left' }
+                                        ],
+                                        [
+                                            { text: 'Áreas:', bold: true, alignment: 'right' },
+                                            '',
+                                            { text: areasString, alignment: 'left' }
+                                        ]
+                                    ]
+                                },
+                                layout: 'noBorders'
+                            }
+                        ],
+                        columnGap: 30,
+                        margin: [0, 10, 0, 10],
+                        fontSize: 9
                     }
                 ]
             };
@@ -94,81 +108,147 @@ document.addEventListener("DOMContentLoaded", async () => {
             const informesAreas = {};
             informesAreas.stack = [];
 
-            Object.entries(data.lineas).map(([areaString, area]) => {
-                informesAreas.stack.push(
-                    {
-                        text: areaString,
-                        bold: true,
-                        margin: [0, 15, 0, 5],
-                        fontSize: 14
-                    },
-                )
-                Object.entries(area).map(([sector, lineas]) => {
+            if (data.ot.tipo != "VIS") {
+                Object.entries(data.lineas).map(([areaString, area]) => {
                     informesAreas.stack.push(
                         {
-                            text: sector,
+                            text: areaString,
                             bold: true,
-                            margin: [0, 10, 0, 0]
+                            margin: [0, 5, 0, 0],
+                            fontSize: 8
                         },
+                    )
+                    Object.entries(area).map(([sector, lineas]) => {
+                        informesAreas.stack.push(
+                            {
+                                text: sector,
+                                bold: true,
+                                margin: [0, 5, 0, 0]
+                            },
+                            {
+                                width: 520, // fuerza un contenedor de ancho fijo
+                                alignment: 'center', // centra el contenedor
+                                table: {
+                                    headerRows: 1,
+                                    widths: calcularAnchosProporcionales([2.5, 3.5, 5.5, 7, 4, 8]),
+                                    body: [
+                                        [
+                                            { text: 'Línea', bold: true },
+                                            { text: 'Previsión', bold: true },
+                                            { text: 'Punto de venta', bold: true },
+                                            { text: 'Dirección', bold: true },
+                                            { text: 'Zona', bold: true },
+                                            { text: 'Observaciones', bold: true }
+                                        ],
+                                        ...lineas.map(linea => [
+                                            { text: linea.codigo, noWrap: false },
+                                            { text: linea.prevision, noWrap: false },
+                                            { text: linea.pv, noWrap: false },
+                                            { text: linea.direccion, noWrap: false },
+                                            { text: linea.zona, noWrap: false },
+                                            linea.observaciones ? { text: linea.observaciones, noWrap: false } : { text: '', noWrap: false },
+                                        ])
+                                    ]
+                                },
+                                layout: {
+                                    hLineWidth: () => 0.8,
+                                    vLineWidth: () => 0.8,
+                                    hLineColor: () => '#aaa',
+                                    vLineColor: () => '#aaa',
+                                    paddingLeft: () => 5,
+                                    paddingRight: () => 5,
+                                    paddingTop: () => 4,
+                                    paddingBottom: () => 4
+                                },
+                                margin: [0, 5, 0, 15]
+                            }
+                        );
+                    })
+                });
+            } else {
+                Object.entries(data.lineas).map(([areaString, area]) => {
+                    informesAreas.stack.push(
                         {
-                            width: 520, // fuerza un contenedor de ancho fijo
-                            alignment: 'center', // centra el contenedor
-                            table: {
-                                headerRows: 1,
-                                widths: calcularAnchosProporcionales([2.5, 3.5, 5.5, 7, 4, 8]),
-                                body: [
-                                    [
-                                        { text: 'Línea', bold: true },
-                                        { text: 'Previsión', bold: true },
-                                        { text: 'Punto de venta', bold: true },
-                                        { text: 'Dirección', bold: true },
-                                        { text: 'Zona', bold: true },
-                                        { text: 'Observaciones', bold: true }
-                                    ],
-                                    ...lineas.map(linea => [
-                                        { text: linea.codigo, noWrap: false },
-                                        { text: linea.prevision, noWrap: false },
-                                        { text: linea.pv, noWrap: false },
-                                        { text: linea.direccion, noWrap: false },
-                                        { text: linea.zona, noWrap: false },
-                                        linea.observaciones ? { text: linea.observaciones, noWrap: false } : { text: '', noWrap: false },
-                                    ])
-                                ]
+                            text: areaString,
+                            bold: true,
+                            margin: [0, 5, 0, 0],
+                            fontSize: 8
+                        },
+                    )
+                    Object.entries(area).map(([sector, lineas]) => {
+                        informesAreas.stack.push(
+                            {
+                                text: sector,
+                                bold: true,
+                                margin: [0, 5, 0, 0]
                             },
-                            layout: {
-                                hLineWidth: () => 0.8,
-                                vLineWidth: () => 0.8,
-                                hLineColor: () => '#aaa',
-                                vLineColor: () => '#aaa',
-                                paddingLeft: () => 5,
-                                paddingRight: () => 5,
-                                paddingTop: () => 4,
-                                paddingBottom: () => 4
-                            },
-                            margin: [0, 10, 0, 20]
-                        }
-                    );
-                })
-            });
+                            {
+                                width: 520, // fuerza un contenedor de ancho fijo
+                                alignment: 'center', // centra el contenedor
+                                table: {
+                                    headerRows: 1,
+                                    widths: calcularAnchosProporcionales([3, 4.7, 5.5, 5.5, 5.5, 6.8, 4, 8]),
+                                    body: [
+                                        [
+                                            { text: 'Línea', bold: true },
+                                            { text: 'Previsión', bold: true },
+                                            { text: 'Punto de venta', bold: true },
+                                            { text: 'Quitar', bold: true },
+                                            { text: 'Poner', bold: true },
+                                            { text: 'Dirección', bold: true },
+                                            { text: 'Zona', bold: true },
+                                            { text: 'Observaciones', bold: true }
+                                        ],
+                                        ...lineas.map(linea => [
+                                            { text: linea.codigo, noWrap: false },
+                                            { text: linea.prevision, noWrap: false },
+                                            { text: linea.pv, noWrap: false },
+                                            { text: linea.quitar, noWrap: false },
+                                            { text: linea.poner, noWrap: false },
+                                            { text: linea.direccion, noWrap: false },
+                                            { text: linea.zona, noWrap: false },
+                                            linea.observaciones ? { text: linea.observaciones, noWrap: false } : { text: '', noWrap: false },
+                                        ])
+                                    ]
+                                },
+                                layout: {
+                                    hLineWidth: () => 0.8,
+                                    vLineWidth: () => 0.8,
+                                    hLineColor: () => '#aaa',
+                                    vLineColor: () => '#aaa',
+                                    paddingLeft: () => 5,
+                                    paddingRight: () => 5,
+                                    paddingTop: () => 4,
+                                    paddingBottom: () => 4
+                                },
+                                margin: [0, 5, 0, 15]
+                            }
+                        );
+                    })
+                });
+            }
 
             contenido.push(encabezado);
             contenido.push(informesAreas);
             console.log(contenido);
 
+            pageMargins = [];
+            data.ot.tipo != "VIS" ? pageMargins = [30, 30, 30, 20] : pageMargins = [20, 30, 20, 20];
+
             const docDefinition = {
                 pageSize: 'A4',
-                pageMargins: [30, 40, 30, 25],
+                pageMargins,
                 content: contenido,
                 styles: {
-                    titulo: { fontSize: 13, bold: true },
-                    datos: { fontSize: 11, margin: [0, 2, 0, 0] }
+                    titulo: { fontSize: 9, bold: true },
+                    datos: { fontSize: 8, margin: [0, 2, 0, 0] }
                 },
-                defaultStyle: { fontSize: 10 },
+                defaultStyle: { fontSize: 8 },
                 footer: (currentPage, pageCount) => ({
                     text: `Página ${currentPage} de ${pageCount}`,
                     alignment: 'right',
-                    margin: [0, 0, 40, 20],
-                    fontSize: 10
+                    margin: [0, 0, 20, 5],
+                    fontSize: 6
                 })
             };
 

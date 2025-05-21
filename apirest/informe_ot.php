@@ -74,7 +74,7 @@
             $lineas;
 
             /* LINEAS */
-            $camposLineas = "Punto_de_venta,Incluir,Codigo_de_l_nea,Fecha_de_Previsi_n_de_L_nea,Observaciones_internas";
+            $camposLineas = "Punto_de_venta,Incluir,Codigo_de_l_nea,Fecha_de_Previsi_n_de_L_nea,Observaciones_internas,Quitar,Poner";
             $query = "SELECT $camposLineas FROM Products WHERE OT_relacionada=$idOt";
             $crm->query($query);
             if ($crm->estado) {
@@ -93,6 +93,8 @@
                         $previsionLinea = $linea['Fecha_de_Previsi_n_de_L_nea'];
                         $observacionesLinea = $linea['Observaciones_internas'];
                         $idPv = $linea['Punto_de_venta']['id'];
+                        $quitar = $linea['Quitar'];
+                        $poner = $linea['Poner'];
                         if (!isset($pvs[$idPv])) {
                             $pvs[$idPv] = [];
                             $camposPv = "Name,rea,Sector,Zona,Direcci_n";
@@ -126,6 +128,8 @@
                                 $lineaVector['sector'] = $sectorPv;
                                 $lineaVector['zona'] = $zonaPv;
                                 $lineaVector['observaciones'] = $observacionesLinea;
+                                $lineaVector['quitar'] = $quitar;
+                                $lineaVector['poner'] = $poner;
                                 array_push($lineasOrdenadas[$areaPv][$sectorPv], $lineaVector);
                             } else {
     ?>
@@ -159,6 +163,8 @@
                             $lineaVector['sector'] = $sectorPv;
                             $lineaVector['zona'] = $zonaPv;
                             $lineaVector['observaciones'] = $observacionesLinea;
+                            $lineaVector['quitar'] = $quitar;
+                            $lineaVector['poner'] = $poner;
                             array_push($lineasOrdenadas[$areaPv][$sectorPv], $lineaVector);
                         }
                     }
