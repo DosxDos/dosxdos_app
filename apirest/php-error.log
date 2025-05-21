@@ -1,0 +1,28 @@
+[21-May-2025 09:34:45 Atlantic/Canary] PHP Fatal error:  Uncaught TypeError: Illegal offset type in isset or empty in C:\xampp\htdocs\dosxdos_app\apirest\informe_ot_montajes.php:134
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\dosxdos_app\apirest\informe_ot_montajes.php on line 134
+[21-May-2025 09:35:58 Atlantic/Canary] PHP Fatal error:  Uncaught TypeError: Illegal offset type in isset or empty in C:\xampp\htdocs\dosxdos_app\apirest\informe_ot_montajes.php:87
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\dosxdos_app\apirest\informe_ot_montajes.php on line 87
+[21-May-2025 09:37:22 Atlantic/Canary] PHP Fatal error:  Uncaught TypeError: Illegal offset type in isset or empty in C:\xampp\htdocs\dosxdos_app\apirest\informe_ot_montajes.php:90
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\dosxdos_app\apirest\informe_ot_montajes.php on line 90
+[21-May-2025 09:44:20 Atlantic/Canary] PHP Fatal error:  Uncaught TypeError: Illegal offset type in isset or empty in C:\xampp\htdocs\dosxdos_app\apirest\informe_ot_montajes.php:91
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\dosxdos_app\apirest\informe_ot_montajes.php on line 91
+[21-May-2025 10:46:02 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method JwtMiddleware::validateToken() in C:\xampp\htdocs\dosxdos_app\apirest\informe_ot_montajes.php:44
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\dosxdos_app\apirest\informe_ot_montajes.php on line 44
+[21-May-2025 10:46:03 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method JwtMiddleware::validateToken() in C:\xampp\htdocs\dosxdos_app\apirest\informe_ot_montajes.php:44
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\dosxdos_app\apirest\informe_ot_montajes.php on line 44
+[21-May-2025 10:46:04 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method JwtMiddleware::validateToken() in C:\xampp\htdocs\dosxdos_app\apirest\informe_ot_montajes.php:44
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\dosxdos_app\apirest\informe_ot_montajes.php on line 44

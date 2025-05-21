@@ -18,8 +18,6 @@ body {
 .cabecera {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 30px;
 }
 
 .logo img {
@@ -87,7 +85,6 @@ th, td {
 .firmas-recuadro {
   display: flex;
   border: 2px solid #000;
-  width: 440px;
   height: 120px;
   margin-left: auto;
   page-break-inside: avoid;
