@@ -105,7 +105,13 @@ const CACHE_NAME = 'dosxdos113',
     'https://dosxdos.app.iidos.com/img/texture-red.svg',
     'https://dosxdos.app.iidos.com/img/texture-white.svg',
     'https://dosxdos.app.iidos.com/css/index.css',
-    'https://dosxdos.app.iidos.com/gsap.min.js'
+    'https://dosxdos.app.iidos.com/gsap.min.js',
+    'https://dosxdos.app.iidos.com/js/informe_ot.js',
+    'https://dosxdos.app.iidos.com/css/informe_ot.css',
+    'https://dosxdos.app.iidos.com/js/pdf_informe_ot.js',
+    'https://dosxdos.app.iidos.com/js/informe_ot_visuales_montajes.js',
+    'https://dosxdos.app.iidos.com/css/informe_ot_visuales_montajes.css',
+    'https://dosxdos.app.iidos.com/js/pdf_informe_ot_visuales_montajes.js'
   ],
 
   urlsToUpdate = [
@@ -149,7 +155,13 @@ const CACHE_NAME = 'dosxdos113',
     'https://dosxdos.app.iidos.com/notificaciones.html',
     'https://dosxdos.app.iidos.com/js/notificaciones.js',
     'https://dosxdos.app.iidos.com/js/loadFirebase.js',
-    'https://dosxdos.app.iidos.com/css/index.css'
+    'https://dosxdos.app.iidos.com/css/index.css',
+    'https://dosxdos.app.iidos.com/js/informe_ot.js',
+    'https://dosxdos.app.iidos.com/css/informe_ot.css',
+    'https://dosxdos.app.iidos.com/js/pdf_informe_ot.js',
+    'https://dosxdos.app.iidos.com/js/informe_ot_visuales_montajes.js',
+    'https://dosxdos.app.iidos.com/css/informe_ot_visuales_montajes.css',
+    'https://dosxdos.app.iidos.com/js/pdf_informe_ot_visuales_montajes.js'
   ];
 
 //durante la fase de instalación, generalmente se almacena en caché los activos estáticos
