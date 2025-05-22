@@ -1,31 +1,32 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta charset="UTF-8">
   <title>Informe de Montaje</title>
   <link rel="stylesheet" href="css/informe_ot_montaje.css">
 </head>
-
 <body>
-  <!-- Selector de fechas -->
-  <div id="selector-fecha-contenedor">
-    <label for="selector-fecha"><strong>Selecciona una fecha:</strong></label>
-    <select id="selector-fecha">
-      <option value="">Cargando fechas...</option>
-    </select>
+  <!-- Contenedor para selector y botón, centrado -->
+  <div id="control-panel">
+    <div id="selector-fecha-contenedor">
+      <p><strong>Selecciona una o más fechas:</strong></p>
+      <label>
+        <input type="checkbox" id="check-todas" />
+        <strong>Seleccionar todas las fechas</strong>
+      </label>
+      <div id="fechas-checkboxes"></div>
+    </div>
+
+    <!-- Botón para generar el PDF -->
+    <button id="btnGenerarPDF" onclick="generarPDF()">Descargar PDF</button>
   </div>
 
   <!-- Contenedor donde JS genera informes completos -->
   <div id="contenedor-informes"></div>
 
-  <!-- Botón para generar el PDF -->
-  <button id="btnGenerarPDF" onclick="generarPDF()" style="display: none;">Descargar PDF</button>
-
-  <!-- Librerías necesarias -->
+  <!-- Librerías y scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="js/informe_ot_montaje.js" defer></script>
-
 </body>
 
 </html>

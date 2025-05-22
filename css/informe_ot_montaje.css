@@ -4,12 +4,14 @@
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   height: 100%;
   width: 100%;
-  overflow-x: hidden; /* evitar scroll horizontal */
+  overflow-x: hidden;
+  /* evitar scroll horizontal */
 }
 
 body {
@@ -24,9 +26,14 @@ body {
   display: flex;
   flex-direction: column;
   page-break-after: always;
-  overflow: hidden; /* 👇 Soluciona el colapso de márgenes */
-}
+  overflow: hidden;
+  margin: 0 auto 20px auto; /* Soluciona el problema pero me deja una hoja en blanco al final */
 
+}
+.informe:last-child {
+  margin-bottom: 0;
+  page-break-after: auto;
+}
 /* Cabecera con logo y título */
 .cabecera {
   display: flex;
@@ -45,7 +52,8 @@ body {
   font-size: 18px;
   margin: 0;
   font-weight: bold;
-  text-transform: uppercase; /* Todo a mayúsculas */
+  text-transform: uppercase;
+  /* Todo a mayúsculas */
 }
 
 /* Información general */
@@ -67,7 +75,8 @@ body {
 
 /* Tabla de detalles */
 table {
-  border-collapse: collapse; /* Colapsar bordes */
+  border-collapse: collapse;
+  /* Colapsar bordes */
   margin-top: 10px;
   font-size: 13px;
 }
@@ -77,7 +86,8 @@ table thead {
   border-bottom: 2px solid #000;
 }
 
-th, td {
+th,
+td {
   padding: 6px 8px;
   text-align: left;
   border-bottom: 1px solid #ddd;
@@ -111,7 +121,11 @@ th, td {
 
 /* Botón para generar PDF (oculto por defecto) */
 #btnGenerarPDF {
-  display: none; /* Ocultamos el botón por defecto, así evitamos que se use cuando aún no se han cargado los datos */
+  display: none;
+  /* Ocultamos el botón por defecto, así evitamos que se use cuando aún no se han cargado los datos */
+  margin-top: 15px;
+  padding: 10px 20px;
+  cursor: pointer;
 }
 
 /* Recuadro de info adicional (OT, empresa, etc.) */
@@ -156,3 +170,39 @@ th, td {
   margin-bottom: 20px;  Da espacio visual debajo de la tabla 
 }
 */
+#control-panel {
+  display: flex;
+  flex-direction: column;
+  /* apila verticalmente */
+  align-items: center;
+  /* centra horizontalmente */
+  gap: 20px;
+  /* espacio entre selector y botón */
+  margin: 20px 0;
+  /* margen arriba y abajo para separar de otros elementos */
+  color: rgb(218, 50, 62);
+}
+
+#selector-fecha-contenedor {
+  text-align: center;
+  /* centra el texto dentro del selector */
+  max-width: 400px;
+  /* limita ancho para que no sea demasiado ancho */
+  width: 100%;
+}
+
+#fechas-checkboxes label {
+  display: inline-block;
+  /* para que los checkboxes queden uno al lado de otro en línea */
+  margin: 5px 10px;
+  /* espacio entre cada fecha */
+  cursor: pointer;
+}
+
+#btnGenerarPDF {
+  /* ya debe tener estilos para botón, solo aseguramos centrado */
+  display: inline-block;
+  background-color: white;
+  border: 1px solid rgb(218, 50, 62)
+    /* otros estilos que tengas para el botón */
+}
