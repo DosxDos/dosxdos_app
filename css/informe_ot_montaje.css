@@ -1,17 +1,30 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden; /* evitar scroll horizontal */
+}
+
 body {
   position: relative;
   font-family: 'Segoe UI', Tahoma, sans-serif;
   background-color: white;
   color: #000;
   font-size: 13px;
-  padding: 40px;
-  margin: 0;
 }
 
 .informe {
   display: flex;
   flex-direction: column;
   page-break-after: always;
+  overflow: hidden; /* 👇 Soluciona el colapso de márgenes */
 }
 
 /* Cabecera con logo y título */
@@ -54,7 +67,6 @@ body {
 
 /* Tabla de detalles */
 table {
-  width: 100%;
   border-collapse: collapse; /* Colapsar bordes */
   margin-top: 10px;
   font-size: 13px;
@@ -69,16 +81,6 @@ th, td {
   padding: 6px 8px;
   text-align: left;
   border-bottom: 1px solid #ddd;
-  vertical-align: top;
-}
-
-/* Contenido principal dentro del informe (antes del bloque de firmas) */
-.contenido-informe {
-  display: flex;
-  flex-grow: 1; /* Permite crecer según contenido */
-  flex-direction: column;
-  justify-content: flex-start;
-  margin-bottom: 20px; /* Da espacio visual debajo de la tabla */
 }
 
 /* Recuadro de firmas fuera del informe */
@@ -89,7 +91,6 @@ th, td {
   margin-left: auto;
   page-break-inside: avoid;
 }
-
 
 /* Estructura interna del recuadro de firmas */
 .firma-fecha,
@@ -103,7 +104,6 @@ th, td {
   border-right: 2px solid #000;
 }
 
-
 /* Línea de firma estilo campo escrito */
 .linea-firma {
   margin-bottom: 16px;
@@ -113,23 +113,8 @@ th, td {
 #btnGenerarPDF {
   display: none; /* Ocultamos el botón por defecto, así evitamos que se use cuando aún no se han cargado los datos */
 }
-.info-recuadro {
-  border: 2px solid #000;
-  padding: 12px 16px;
-  margin-bottom: 20px;
-  background-color: #f9f9f9;
-}
 
-.info-recuadro p {
-  margin: 6px 0;
-  font-size: 14px;
-}
-
-.info-recuadro p strong {
-  display: inline-block;
-  width: 160px;
-  font-weight: bold;
-}
+/* Recuadro de info adicional (OT, empresa, etc.) */
 .info-recuadro {
   display: flex;
   justify-content: space-between;
@@ -140,13 +125,34 @@ th, td {
   background-color: #f9f9f9;
 }
 
-.info-recuadro .ot {
+.info-recuadro p,
+.info-recuadro .ot,
+.info-recuadro .empresa {
   margin: 0;
   font-size: 14px;
 }
 
-.info-recuadro .empresa {
-  margin: 0;
-  font-size: 14px;
+.info-recuadro p {
+  margin: 6px 0;
+}
+
+.info-recuadro p strong {
+  display: inline-block;
+  width: 160px;
   font-weight: bold;
 }
+
+.info-recuadro .empresa {
+  font-weight: bold;
+}
+
+/* Contenido principal (comentado actualmente, dejar como referencia) */
+/*
+.contenido-informe {
+  display: flex;
+  flex-grow: 1;  Permite crecer según contenido 
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-bottom: 20px;  Da espacio visual debajo de la tabla 
+}
+*/
