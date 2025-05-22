@@ -181,6 +181,7 @@ td {
   margin: 20px 0;
   /* margen arriba y abajo para separar de otros elementos */
   color: rgb(218, 50, 62);
+  font-size: 20px;
 }
 
 #selector-fecha-contenedor {
