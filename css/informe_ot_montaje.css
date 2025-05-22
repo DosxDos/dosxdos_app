@@ -97,9 +97,9 @@ td {
 .firmas-recuadro {
   display: flex;
   border: 2px solid #000;
-  height: 120px;
   margin-left: auto;
-  page-break-inside: avoid;
+  break-inside: avoid; /* Evitar que se rompa en varias páginas */
+  width: 100%;
 }
 
 /* Estructura interna del recuadro de firmas */
@@ -117,7 +117,7 @@ td {
 /* Línea de firma estilo campo escrito */
 .linea-firma {
   margin-bottom: 16px;
-}
+  }
 
 /* Botón para generar PDF (oculto por defecto) */
 #btnGenerarPDF {
