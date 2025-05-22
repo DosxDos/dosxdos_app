@@ -30,39 +30,48 @@ function renderInformes(data) {
       <div class="info-header">
         <p><strong>Punto de Venta:</strong> ${info.puntoVenta}</p>
         <p><strong>Dirección:</strong> ${info.direccion}</p>
+        <p><strong>Teléfono:</strong> ${info.telefono}</p>
+        <p><strong>Área:</strong> ${info.area}</p>
+        <p><strong>Zona:</strong> ${info.zona}</p>
+        <p><strong>Nombre OT:</strong> ${info.nombreOt}</p>
       </div>
 
       <table>
-        <thead>
-          <tr>
-            <th>Tipo</th>
-            <th>Firma</th>
-            <th>Quitar</th>
-            <th>Poner</th>
-            <th>Alto x Ancho</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${info.detalles.map(item => `
-            <tr>
-              <td>${item.tipo}</td>
-              <td>${item.firma}</td>
-              <td>${item.quitar}</td>
-              <td>${item.poner}</td>
-              <td>${item.dimensiones}</td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    `;
+  <thead>
+    <tr>
+      <th>Línea</th>
+      <th>Ubicación</th>
+      <th>Tipo</th>
+      <th>Firma</th>
+      <th>Quitar</th>
+      <th>Poner</th>
+      <th>Alto x Ancho</th>
+    </tr>
+  </thead>
+  <tbody>
+    ${info.detalles.map(item => `
+      <tr>
+        <td>${item.linea || '-'}</td>
+        <td>${item.ubicacion || '-'}</td>
+        <td>${item.tipo}</td>
+        <td>${item.firma}</td>
+        <td>${item.quitar}</td>
+        <td>${item.poner}</td>
+        <td>${item.dimensiones}</td>
+      </tr>
+    `).join('')}
+  </tbody>
+</table>
+`;
 
     const footer = document.createElement("div");
     footer.className = "firmas-recuadro";
     footer.innerHTML = `
       <div class="firma-fecha">
-        <p><strong>Firma del Instalador:</strong></p>
+      <p><strong>Fecha:</strong></p>
+        
         <div class="linea-firma"></div>
-        <p><strong>Fecha:</strong></p>
+        <p><strong>Firma del Instalador:</strong></p>
         <div class="linea-firma"></div>
       </div>
       <div class="sello-cliente">
@@ -131,17 +140,25 @@ function filtrarDataPorFechas(dataOriginal, fechasSeleccionadas) {
 
     resultado.push({
       ot: ot.codOt,
-      nombreEmpresa: ot.firma,
+      cliente: ot.cliente,
+      nombreEmpresa: ot.cliente, // reemplazamos firma por cliente
       puntoVenta: pv.nombre,
       direccion: pv.direccion,
+      telefono: pv.telefono,
+      area: pv.area,
+      zona: pv.zona,
+      nombreOt: pv.nombreOt,
       detalles: lineasFiltradas.map(linea => ({
         tipo: linea.tipo || "",
-        firma: ot.firma || "",
+        firma: ot.firma || "", // se mantiene solo en la tabla inferior
         quitar: linea.quitar || "",
         poner: linea.poner || "",
-        dimensiones: `${linea.alto || '-'} x ${linea.ancho || '-'}`
+        dimensiones: `${linea.alto || '-'} x ${linea.ancho || '-'}`,
+        linea: linea.linea || "", // si tienes este dato
+        ubicacion: linea.ubicacion || "" // si tienes este dato
       }))
     });
+
   });
 
   return resultado;

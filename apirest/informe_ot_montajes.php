@@ -83,7 +83,8 @@ $lineas = ordenarArrayPorCampo($lineas, 'Codigo_de_l_nea');
 $estructuraFinal = [
     'ot' => [
         'codOt' => "V- " . $codOt,
-        'firma' => $lineas[0]['Firma_de_la_OT_relacionada'] ?? '', // suponemos que todas las líneas comparten la misma firma
+        'firma' => $lineas[0]['Firma_de_la_OT_relacionada'] ?? '',
+        'cliente' => $lineas[0]['nombreCliente'] ?? '',
     ],
     'pvs' => []
 ];
@@ -106,11 +107,17 @@ foreach ($lineas as $linea) {
         $pvsAgrupados[$clavePv] = [
             'nombre' => $linea['nombrePv'] ?? '',
             'direccion' => $linea['Direcci_n'] ?? '',
+            'telefono' => $linea['Tel_fono'] ?? '',      // ← agrega esto (si está disponible en CRM)
+            'area' => $linea['rea'] ?? '',
+            'zona' => $linea['Zona'] ?? '',
+            'nombreOt' => $linea['nombreOt'] ?? '',
             'lineas' => []
         ];
     }
 
     $pvsAgrupados[$clavePv]['lineas'][] = [
+        'Línea' => $linea['Tipo_de_OT'] ?? '',
+        'Ubicación' => $linea[''] ?? '',
         'tipo' => $linea['Tipo_de_OT'] ?? '',
         'fechaEntrada' => $linea['Fecha_entrada'] ?? '',
         'quitar' => $linea['Quitar'] ?? '',
