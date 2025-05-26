@@ -118,50 +118,50 @@ async function generarPDF() {
           pagebreak: { mode: ['css', 'legacy'] }
         })
         .from(informe)
-        .outputPdf('blob');
+        .outputPdf('blob'); //lo devolvemos como un Blob (Binary Large Object)
 
-      const pdfBytes = await pdfBlob.arrayBuffer();
-      const pdfDoc = await PDFDocument.load(pdfBytes);
+      const pdfBytes = await pdfBlob.arrayBuffer(); // Convertimos el Blob a ArrayBuffer para PDFLib (necesario para cargarlo)
+      const pdfDoc = await PDFDocument.load(pdfBytes); // Cargamos el PDF generado por html2pdf
 
-      const paginas = await pdfLote.copyPages(pdfDoc, pdfDoc.getPageIndices());
-      paginas.forEach(page => pdfLote.addPage(page));
+      const paginas = await pdfLote.copyPages(pdfDoc, pdfDoc.getPageIndices()); // Copiamos las páginas del PDF generado al nuevo PDF de lote
+      paginas.forEach(page => pdfLote.addPage(page)); // Añadimos las páginas copiadas al PDF del lote
     }
-    return pdfLote;
+    return pdfLote; // Devolvemos el PDF del lote con todas las páginas procesadas
   }
 
   try {
     const pdfFinal = await PDFDocument.create();
 
-    // Procesar lotes de 10 informes
+    // Procesar lotes de la cantidad de informes que quiera manejar a la vez
     const batchSize = 20;
     for (let i = 0; i < informes.length; i += batchSize) {
       const lote = informes.slice(i, i + batchSize);
       console.log(`Procesando lote ${Math.floor(i / batchSize) + 1} de ${Math.ceil(informes.length / batchSize)}`);
 
-      const pdfLote = await procesarLote(lote);
+      const pdfLote = await procesarLote(lote); // Generamos PDF con los informes de este Lote
 
       // Copiar páginas del lote al PDF final
-      const pdfLoteBytes = await pdfLote.save();
-      const pdfLoteDoc = await PDFDocument.load(pdfLoteBytes);
-      const paginas = await pdfFinal.copyPages(pdfLoteDoc, pdfLoteDoc.getPageIndices());
-      paginas.forEach(page => pdfFinal.addPage(page));
+      const pdfLoteBytes = await pdfLote.save(); // Guardamos el PDF del lote como ArrayBuffer (bytes)
+      const pdfLoteDoc = await PDFDocument.load(pdfLoteBytes); // Cargamos el PDF del lote en un PDFDocument
+      const paginas = await pdfFinal.copyPages(pdfLoteDoc, pdfLoteDoc.getPageIndices()); // Copiamos las páginas del PDF del lote al PDF final
+      paginas.forEach(page => pdfFinal.addPage(page)); // Añadimos las páginas copiadas al PDF final
     }
 
-    const pdfFinalBytes = await pdfFinal.save();
-    const blobFinal = new Blob([pdfFinalBytes], { type: "application/pdf" });
-    const url = URL.createObjectURL(blobFinal);
+    const pdfFinalBytes = await pdfFinal.save(); // Guardamos el PDF final como ArrayBuffer (bytes)
+    const blobFinal = new Blob([pdfFinalBytes], { type: "application/pdf" });   // Creamos un Blob con los bytes para permitir la descarga
+    const url = URL.createObjectURL(blobFinal); // Generamos URL temporal para el Blob
 
-    const a = document.createElement('a');
+    const a = document.createElement('a'); // Creamos un enlace temporal para descargar el PDF
     a.href = url;
-    a.download = "informe_ot_montajes_completo.pdf";
+    a.download = "informe_ot_montajes_completo.pdf"; // Configuramos nombre predeterminado para la descarga
     document.body.appendChild(a);
     a.click();
     a.remove();
-    URL.revokeObjectURL(url);
+    URL.revokeObjectURL(url); // Con esto al hacer click se descarga el PDF y eliminamos la URL temporal y liberamos memoria
 
-    console.log("🟢 PDF combinado generado y descargado");
+    console.log("🟢 PDF combinado generado y descargado"); // Notificamos que salió bien
   } catch (error) {
-    console.error("❌ Error al generar PDF combinado:", error);
+    console.error("❌ Error al generar PDF combinado:", error); // Notificamos si salió mal
   }
 }
 
