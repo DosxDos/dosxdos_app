@@ -112,8 +112,7 @@ function generarPDF() {
         filename: "informe_ot_montajes.pdf",
         image: { type: "jpeg", quality: 0.98 },
         html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
-        pagebreak: { mode: ['css', 'legacy'] }  // importante para respetar page-break
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
       })
       .from(element)
       .save()

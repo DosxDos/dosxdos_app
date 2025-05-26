@@ -1,4 +1,3 @@
-/* Reset básico */
 * {
   margin: 0;
   padding: 0;
@@ -7,6 +6,8 @@
 
 html,
 body {
+  width: 100%;
+  height: 100%;
   margin: 0;
   padding: 0;
   /* overflow-x: hidden;  /* evitar scroll horizontal */
@@ -24,12 +25,20 @@ body {
 .informe {
   display: block;
   /* Mejor soporte para impresión y saltos de página */
-  margin: 0;
+  margin: 25px;
   padding: 0;
+
+  /* SALTOS DE PÁGINA EXPLÍCITOS */
+  page-break-after: always !important; /* Para navegadores antiguos */
+  break-after: page !important;        /* Para navegadores modernos */
 }
 
 .informe:last-child {
   margin-bottom: 0;
+  
+  /* Para evitar página extra vacía al final */
+  page-break-after: auto !important;
+  break-after: auto !important;
 }
 
 /* Cabecera con logo y título */
@@ -47,8 +56,7 @@ body {
   font-size: 18px;
   margin: 0;
   font-weight: bold;
-  text-transform: uppercase;
-  /* Todo a mayúsculas */
+  text-transform: uppercase; /* Todo a mayúsculas */
 }
 
 /* Información general */
@@ -70,8 +78,7 @@ body {
 
 /* Tabla de detalles */
 table {
-  border-collapse: collapse;
-  /* Colapsar bordes */
+  border-collapse: collapse; /* Colapsar bordes */
   margin-top: 10px;
   font-size: 13px;
 }
@@ -95,6 +102,8 @@ td {
   margin-top: 10px;
   width: 100%;
   padding: 1px;
+  page-break-inside: avoid !important;  /* Evita que se corte en salto */
+  break-inside: avoid !important;
 }
 
 /* Estructura interna del recuadro de firmas */
@@ -121,8 +130,7 @@ td {
 
 /* Botón para generar PDF (oculto por defecto) */
 #btnGenerarPDF {
-  display: none;
-  /* Ocultamos el botón por defecto */
+  display: none; /* Ocultamos el botón por defecto */
   margin-top: 15px;
   padding: 10px;
   cursor: pointer;
@@ -165,30 +173,22 @@ p {
 /* Panel de control */
 #control-panel {
   display: flex;
-  flex-direction: column;
-  /* apila verticalmente */
-  align-items: center;
-  /* centra horizontalmente */
-  gap: 20px;
-  /* espacio entre selector y botón */
-  margin: 20px 0;
-  /* margen arriba y abajo para separar de otros elementos */
+  flex-direction: column; /* apila verticalmente */
+  align-items: center; /* centra horizontalmente */
+  gap: 20px; /* espacio entre selector y botón */
+  margin: 20px 0; /* margen arriba y abajo para separar de otros elementos */
   color: rgb(218, 50, 62);
   font-size: 20px;
 }
 
 #selector-fecha-contenedor {
-  text-align: center;
-  /* centra el texto dentro del selector */
-  max-width: 400px;
-  /* limita ancho para que no sea demasiado ancho */
+  text-align: center; /* centra el texto dentro del selector */
+  max-width: 400px; /* limita ancho para que no sea demasiado ancho */
   width: 100%;
 }
 
 #fechas-checkboxes label {
-  display: inline-block;
-  /* para que los checkboxes queden uno al lado de otro en línea */
-  margin: 5px 10px;
-  /* espacio entre cada fecha */
+  display: inline-block; /* para que los checkboxes queden uno al lado de otro en línea */
+  margin: 5px 10px; /* espacio entre cada fecha */
   cursor: pointer;
 }
