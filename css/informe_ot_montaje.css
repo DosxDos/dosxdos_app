@@ -4,18 +4,12 @@
   padding: 0;
   box-sizing: border-box !important;
 }
-body, #contenedor-principal {
-  overflow: visible !important;
-  break-inside: avoid !important;
-  page-break-inside: avoid !important;
-}
+
 html,
 body {
   margin: 0;
   padding: 0;
-  height: 100%;
-  width: 100%;
-  overflow-x: hidden; /* evitar scroll horizontal */
+  /* overflow-x: hidden;  /* evitar scroll horizontal */
 }
 
 body {
@@ -28,25 +22,14 @@ body {
 
 /* Cada informe en su propia página */
 .informe {
-  display: block; /* Mejor soporte para impresión y saltos de página */
-  width: 100%;
-  margin: 0 auto; /* separa informes para evitar acumulación */
+  display: block;
+  /* Mejor soporte para impresión y saltos de página */
+  margin: 0;
   padding: 0;
-  box-sizing: border-box !important;
-  /* Evitar que el informe se corte o divida entre páginas */
-  page-break-inside: avoid !important;
-  break-inside: avoid !important;
-  overflow: visible !important;
-}
-
-/* No forzar salto antes ni después, solo margen inferior para separación */
-.informe:first-child {
-  page-break-before: auto !important;
 }
 
 .informe:last-child {
-  margin-bottom: 0 !important;
-  page-break-after: auto !important;
+  margin-bottom: 0;
 }
 
 /* Cabecera con logo y título */
@@ -64,7 +47,8 @@ body {
   font-size: 18px;
   margin: 0;
   font-weight: bold;
-  text-transform: uppercase; /* Todo a mayúsculas */
+  text-transform: uppercase;
+  /* Todo a mayúsculas */
 }
 
 /* Información general */
@@ -72,12 +56,10 @@ body {
   border: 1px solid #ccc;
   padding: 0;
   margin-bottom: 15px;
-  page-break-inside: avoid !important;
-  break-inside: avoid !important;
 }
 
 .info-header p {
-  margin: 4px 0;
+  margin: 4px;
 }
 
 .info-header p strong {
@@ -88,13 +70,10 @@ body {
 
 /* Tabla de detalles */
 table {
-  border-collapse: collapse; /* Colapsar bordes */
+  border-collapse: collapse;
+  /* Colapsar bordes */
   margin-top: 10px;
-  margin-bottom: 10px !important;
   font-size: 13px;
-  width: 100%;
-  page-break-inside: avoid !important;
-  break-inside: avoid !important;
 }
 
 table thead {
@@ -116,9 +95,6 @@ td {
   margin-top: 10px;
   width: 100%;
   padding: 1px;
-  page-break-inside: avoid !important;
-  break-inside: avoid !important;
-  overflow: visible !important;
 }
 
 /* Estructura interna del recuadro de firmas */
@@ -145,9 +121,10 @@ td {
 
 /* Botón para generar PDF (oculto por defecto) */
 #btnGenerarPDF {
-  display: none; /* Ocultamos el botón por defecto */
+  display: none;
+  /* Ocultamos el botón por defecto */
   margin-top: 15px;
-  padding: 10px 20px;
+  padding: 10px;
   cursor: pointer;
   background-color: white;
   border: 1px solid rgb(218, 50, 62);
@@ -165,8 +142,6 @@ td {
   padding: 12px 16px;
   margin-bottom: 20px;
   background-color: #f9f9f9;
-  page-break-inside: avoid !important;
-  break-inside: avoid !important;
 }
 
 .info-recuadro p,
@@ -176,18 +151,13 @@ td {
   font-size: 14px;
 }
 
-.info-recuadro p strong {
-  display: inline-block;
-  width: 160px;
-  font-weight: bold;
-}
-
 .info-recuadro .empresa {
   font-weight: bold;
 }
 
 /* Evitar margen/padding en tablas y párrafos para no acumular */
-table, p {
+table,
+p {
   margin-bottom: 0 !important;
   padding-bottom: 0 !important;
 }
@@ -195,22 +165,30 @@ table, p {
 /* Panel de control */
 #control-panel {
   display: flex;
-  flex-direction: column; /* apila verticalmente */
-  align-items: center; /* centra horizontalmente */
-  gap: 20px; /* espacio entre selector y botón */
-  margin: 20px 0; /* margen arriba y abajo para separar de otros elementos */
+  flex-direction: column;
+  /* apila verticalmente */
+  align-items: center;
+  /* centra horizontalmente */
+  gap: 20px;
+  /* espacio entre selector y botón */
+  margin: 20px 0;
+  /* margen arriba y abajo para separar de otros elementos */
   color: rgb(218, 50, 62);
   font-size: 20px;
 }
 
 #selector-fecha-contenedor {
-  text-align: center; /* centra el texto dentro del selector */
-  max-width: 400px; /* limita ancho para que no sea demasiado ancho */
+  text-align: center;
+  /* centra el texto dentro del selector */
+  max-width: 400px;
+  /* limita ancho para que no sea demasiado ancho */
   width: 100%;
 }
 
 #fechas-checkboxes label {
-  display: inline-block; /* para que los checkboxes queden uno al lado de otro en línea */
-  margin: 5px 10px; /* espacio entre cada fecha */
+  display: inline-block;
+  /* para que los checkboxes queden uno al lado de otro en línea */
+  margin: 5px 10px;
+  /* espacio entre cada fecha */
   cursor: pointer;
 }
