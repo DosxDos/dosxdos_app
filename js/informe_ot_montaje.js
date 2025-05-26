@@ -96,36 +96,79 @@ function renderInformes(data) {
 }
 
 // Función para generar el PDF del contenido HTML
-function generarPDF() {
-  console.log("🟡 Botón presionado - iniciando generación PDF");
-  const element = document.getElementById("contenedor-informes");
-
-  if (!element) {
-    console.error("❌ No se encontró el contenedor de informes");
+async function generarPDF() {
+  const { PDFDocument } = PDFLib;
+  const informes = Array.from(document.querySelectorAll("#contenedor-informes .informe"));
+  if (informes.length === 0) {
+    console.warn("No hay informes para generar PDF");
     return;
   }
 
-  setTimeout(() => {
-    html2pdf()
-      .set({
-        margin: [10, 10, 0, 10],
-        filename: "informe_ot_montajes.pdf",
-        image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-      })
-      .from(element)
-      .save()
-      .then(() => {
-        console.log("🟢 PDF generado y descargado");
-      })
-      .catch((error) => {
-        console.error("❌ Error al generar el PDF:", error);
-      });
-  }, 300);
+  // Función para procesar un lote (batch) de informes y devolver un PDFDocument con sus páginas
+  async function procesarLote(loteInformes) {
+    const pdfLote = await PDFDocument.create();
+
+    for (const informe of loteInformes) {
+      const pdfBlob = await html2pdf()
+        .set({
+          margin: [10, 10, 0, 10],
+          image: { type: "jpeg", quality: 0.98 },
+          html2canvas: { scale: 2, useCORS: true, dpi: 48, letterRendering: true },
+          jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+          pagebreak: { mode: ['css', 'legacy'] }
+        })
+        .from(informe)
+        .outputPdf('blob');
+
+      const pdfBytes = await pdfBlob.arrayBuffer();
+      const pdfDoc = await PDFDocument.load(pdfBytes);
+
+      const paginas = await pdfLote.copyPages(pdfDoc, pdfDoc.getPageIndices());
+      paginas.forEach(page => pdfLote.addPage(page));
+    }
+    return pdfLote;
+  }
+
+  try {
+    const pdfFinal = await PDFDocument.create();
+
+    // Procesar lotes de 10 informes
+    const batchSize = 20;
+    for (let i = 0; i < informes.length; i += batchSize) {
+      const lote = informes.slice(i, i + batchSize);
+      console.log(`Procesando lote ${Math.floor(i / batchSize) + 1} de ${Math.ceil(informes.length / batchSize)}`);
+
+      const pdfLote = await procesarLote(lote);
+
+      // Copiar páginas del lote al PDF final
+      const pdfLoteBytes = await pdfLote.save();
+      const pdfLoteDoc = await PDFDocument.load(pdfLoteBytes);
+      const paginas = await pdfFinal.copyPages(pdfLoteDoc, pdfLoteDoc.getPageIndices());
+      paginas.forEach(page => pdfFinal.addPage(page));
+    }
+
+    const pdfFinalBytes = await pdfFinal.save();
+    const blobFinal = new Blob([pdfFinalBytes], { type: "application/pdf" });
+    const url = URL.createObjectURL(blobFinal);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = "informe_ot_montajes_completo.pdf";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+
+    console.log("🟢 PDF combinado generado y descargado");
+  } catch (error) {
+    console.error("❌ Error al generar PDF combinado:", error);
+  }
 }
 
 window.generarPDF = generarPDF;
+
+
+
 
 // Función para filtrar los datos por múltiples fechas seleccionadas
 function filtrarDataPorFechas(dataOriginal, fechasSeleccionadas) {

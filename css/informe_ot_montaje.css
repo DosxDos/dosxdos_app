@@ -23,7 +23,7 @@ body {
 
 /* Cada informe en su propia página */
 .informe {
-  display: block;
+  display: block !important;
   /* Mejor soporte para impresión y saltos de página */
   margin: 25px;
   padding: 0;
@@ -31,6 +31,8 @@ body {
   /* SALTOS DE PÁGINA EXPLÍCITOS */
   page-break-after: always !important; /* Para navegadores antiguos */
   break-after: page !important;        /* Para navegadores modernos */
+  page-break-inside: avoid;
+  break-inside: avoid;
 }
 
 .informe:last-child {
