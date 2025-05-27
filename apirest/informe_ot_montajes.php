@@ -107,7 +107,7 @@ foreach ($lineas as $linea) {
         $pvsAgrupados[$clavePv] = [
             'nombre' => $linea['nombrePv'] ?? '',
             'direccion' => $linea['Direcci_n'] ?? '',
-            'telefono' => $linea['Tel_fono'] ?? '',      // ← agrega esto (si está disponible en CRM)
+            'telefono' => $linea['N_tel_fono'] ?? '',
             'area' => $linea['rea'] ?? '',
             'zona' => $linea['Zona'] ?? '',
             'nombreOt' => $linea['nombreOt'] ?? '',

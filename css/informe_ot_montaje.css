@@ -1,3 +1,10 @@
+/* ¡No me toque los márgenes y los paddings! 😒🔪 pueden causar problemas de salto de página al imprimir.
+   Usamos box-sizing: border-box para que el padding y el borde se incluyan en el ancho/alto total del elemento.
+   Además, usamos page-break y break para controlar los saltos de página en navegadores modernos y antiguos.
+   Hay elementos que necesitan el !important para que se apliquen correctamente.
+   Si se te desplazan los informes en el PDF a lo largo de las páginas es que has tocado los márgenes o paddings 😡
+*/
+
 * {
   margin: 0;
   padding: 0;
@@ -23,8 +30,7 @@ body {
 
 /* Cada informe en su propia página */
 .informe {
-  display: block !important;
-  /* Mejor soporte para impresión y saltos de página */
+  display: block !important; /* Mejor soporte para impresión y saltos de página */
   margin: 25px;
   padding: 0;
 
@@ -52,7 +58,7 @@ body {
 
 .logo img {
   height: 50px;
-  width: auto;
+  width: auto; /* Lo necesita para que se visualice completo */
 }
 
 .titulo h1 {
@@ -123,7 +129,7 @@ td {
 }
 
 .sello-cliente {
-  border-right: none; /* Evita doble borde en último bloque */
+  border-right: none; /* Evita doble borde en último bloque, ¿por qué se genera? 🤷‍♂️ */
 }
 
 /* Línea de firma estilo campo escrito */
@@ -170,15 +176,15 @@ td {
 /* Evitar margen/padding en tablas y párrafos para no acumular */
 table,
 p {
-  margin-bottom: 0 !important;
+  margin-bottom: 0 !important; /* Sin el !important ambos estilos no se aplican */
   padding-bottom: 0 !important;
 }
 
 /* Panel de control */
 #control-panel {
   display: flex;
-  flex-direction: column; /* apila verticalmente */
-  align-items: center; /* centra horizontalmente */
+  flex-direction: column;
+  align-items: center;
   gap: 20px; /* espacio entre selector y botón */
   margin: 20px 0; /* margen arriba y abajo para separar de otros elementos */
   color: rgb(218, 50, 62);
