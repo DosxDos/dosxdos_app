@@ -5,12 +5,12 @@
     <meta charset="UTF-8">
     <title>Informe Ot</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/png" href="https://dosxdos.app.iidos.com/img/logo-red.png" />
-    <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/informe_ot.css?v=1" />
-    <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/tailwindmain.css" />
-    <script src="https://dosxdos.app.iidos.com/js/pdfmake.min.js"></script>
-    <script src="https://dosxdos.app.iidos.com/js/vfs_fonts.js"></script>
-    <script src="https://dosxdos.app.iidos.com/js/informe_ot.js?v=1"></script>
+    <link rel="icon" type="image/png" href="http://localhost/dosxdos_app/img/logo-red.png" />
+    <link rel="stylesheet" href="http://localhost/dosxdos_app/css/informe_ot.css?v=1" />
+    <link rel="stylesheet" href="http://localhost/dosxdos_app/css/tailwindmain.css" />
+    <script src="http://localhost/dosxdos_app/js/pdfmake.min.js"></script>
+    <script src="http://localhost/dosxdos_app/js/vfs_fonts.js"></script>
+    <script src="http://localhost/dosxdos_app/js/informe_ot.js?v=1"></script>
 </head>
 
 <body class="bg-gray-50 min-h-screen p-4 flex flex-col items-center justify-start">
@@ -232,7 +232,7 @@
     }
     ?>
 
-    <script src="https://dosxdos.app.iidos.com/js/pdf_informe_ot.js?v=1"></script>
+    <script src="http://localhost/dosxdos_app/js/pdf_informe_ot.js?v=1"></script>
 
 </body>
 

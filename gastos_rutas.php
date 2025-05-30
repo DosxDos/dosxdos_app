@@ -3,7 +3,7 @@
 header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
 header('Access-Control-Allow-Methods: GET, POST');
 header('Content-Type: application/json; charset=utf-8');
-header('Access-Control-Allow-Origin: https://dosxdos.app.iidos.com');
+header('Access-Control-Allow-Origin: http://localhost/dosxdos_app');
 
 ini_set('curl.cainfo', '/dev/null');
 set_time_limit(0);
@@ -27,7 +27,7 @@ try {
         $montadores = $body['montadores'];
         $rutas = $body['rutas'];
 
-        $json = '{ "callback": {"url": "https://dosxdos.app.iidos.com/callBackBulkCrm.php", "method": "post"}, "query": {"module": {"api_name": "Products"},"criteria": {"comparator": "between","field": {"api_name": "Fecha_actuaci_n"}, "value": [' . '"' . $fecha1 . '"' . ',' . '"' . $fecha2 . '"' . ']}}}';
+        $json = '{ "callback": {"url": "http://localhost/dosxdos_app/callBackBulkCrm.php", "method": "post"}, "query": {"module": {"api_name": "Products"},"criteria": {"comparator": "between","field": {"api_name": "Fecha_actuaci_n"}, "value": [' . '"' . $fecha1 . '"' . ',' . '"' . $fecha2 . '"' . ']}}}';
 
         $response = $crm->agregar('bulkRead', $json);
 

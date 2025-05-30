@@ -117,7 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
 async function generarPdf(datos) {
 
     try {
-        const logoBase64 = await getImageBase64('https://dosxdos.app.iidos.com/img/logo_black.png');
+        const logoBase64 = await getImageBase64('http://localhost/dosxdos_app/img/logo_black.png');
         const contenido = [];
 
         datos.pvs.forEach((dato, index) => {

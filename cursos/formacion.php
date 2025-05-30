@@ -15,7 +15,7 @@ $imagen = null;
 $mensaje = '';
 
 if (!isset($_COOKIE['login'])) {
-    header("location: https://dosxdos.app.iidos.com/index.html");
+    header("location: http://localhost/dosxdos_app/index.html");
     exit;
 }
 
@@ -42,14 +42,14 @@ if ($curso && file_exists("$curso/config.php")) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Formación - <?php echo $curso ? ucfirst($curso) : 'Cursos'; ?></title>
-    <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/cdn_data_tables.css">
-    <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/tailwindmain.css" />
-    <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/index.css" />
-    <link rel="icon" type="image/png" href="https://dosxdos.app.iidos.com/img/logo-red.png">
-    <script src="https://dosxdos.app.iidos.com/js/jquery.js"></script>
-    <script src="https://dosxdos.app.iidos.com/js/data_tables.js"></script>
-    <script src="https://dosxdos.app.iidos.com/js/cdn_data_tables.js"></script>
-    <script src="https://dosxdos.app.iidos.com/js/index_db.js"></script>
+    <link rel="stylesheet" href="http://localhost/dosxdos_app/css/cdn_data_tables.css">
+    <link rel="stylesheet" href="http://localhost/dosxdos_app/css/tailwindmain.css" />
+    <link rel="stylesheet" href="http://localhost/dosxdos_app/css/index.css" />
+    <link rel="icon" type="image/png" href="http://localhost/dosxdos_app/img/logo-red.png">
+    <script src="http://localhost/dosxdos_app/js/jquery.js"></script>
+    <script src="http://localhost/dosxdos_app/js/data_tables.js"></script>
+    <script src="http://localhost/dosxdos_app/js/cdn_data_tables.js"></script>
+    <script src="http://localhost/dosxdos_app/js/index_db.js"></script>
     <script>
         let mensajePhp;
         <?php if ($mensaje) {
@@ -69,8 +69,8 @@ if ($curso && file_exists("$curso/config.php")) {
         <div class="flex items-center justify-between w-full px-6 py-4">
             <!-- Logo -->
             <div class="flex items-center">
-                <img src="https://dosxdos.app.iidos.com/img/logo300.png" class="h-16 hidden xl:block" alt="Logo completo" />
-                <img src="https://dosxdos.app.iidos.com/img/Isotipo-38.png" class="h-16 xl:hidden" alt="Isotipo" />
+                <img src="http://localhost/dosxdos_app/img/logo300.png" class="h-16 hidden xl:block" alt="Logo completo" />
+                <img src="http://localhost/dosxdos_app/img/Isotipo-38.png" class="h-16 xl:hidden" alt="Isotipo" />
             </div>
 
             <!-- Desktop Navigation -->
@@ -78,8 +78,8 @@ if ($curso && file_exists("$curso/config.php")) {
                 <!-- Navigation items will be dynamically created by createDesktopNavigation() -->
 
                 <!-- Desktop Menu Notifications Bell -->
-                <a href="https://dosxdos.app.iidos.com/notificaciones.html" class="relative z-10" id="desktopBellContainer">
-                    <img id="bellDesktop" src="https://dosxdos.app.iidos.com/img/bell2.png" class="text-gray-900 object-contain" />
+                <a href="http://localhost/dosxdos_app/notificaciones.html" class="relative z-10" id="desktopBellContainer">
+                    <img id="bellDesktop" src="http://localhost/dosxdos_app/img/bell2.png" class="text-gray-900 object-contain" />
                     <span id="desktopNotificationCount"
                         class="absolute top-0 -right-2 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] text-center border hidden"></span>
                 </a>
@@ -91,7 +91,7 @@ if ($curso && file_exists("$curso/config.php")) {
                         aria-expanded="false">
                         <div
                             class="w-10 h-10 rounded-full overflow-hidden border-2 border-white shadow-sm bg-gray-100 flex items-center justify-center">
-                            <img id="imagenUsuarioDesktop" src="https://dosxdos.app.iidos.com/img/usuario.png"
+                            <img id="imagenUsuarioDesktop" src="http://localhost/dosxdos_app/img/usuario.png"
                                 class="w-full h-full object-cover" alt="Profile"
                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
                             <svg class="w-5 h-5 text-gray-400 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -138,8 +138,8 @@ if ($curso && file_exists("$curso/config.php")) {
             <!-- Mobile Navigation -->
             <div class="xl:hidden flex items-center space-x-2 mx-2">
                 <!-- Mobile Bell -->
-                <a href="https://dosxdos.app.iidos.com/notificaciones.html" class="relative z-10" id="mobileBellContainer">
-                    <img id="bellMobile" src="https://dosxdos.app.iidos.com/img/bell2.png"
+                <a href="http://localhost/dosxdos_app/notificaciones.html" class="relative z-10" id="mobileBellContainer">
+                    <img id="bellMobile" src="http://localhost/dosxdos_app/img/bell2.png"
                         class="w-8 text-gray-900 object-contain mt-2" />
                     <span id="mobileNotificationCount"
                         class="absolute top-2 right-0 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] text-center border hidden"></span>
@@ -163,7 +163,7 @@ if ($curso && file_exists("$curso/config.php")) {
         <div id="opcionesMenu"
             class="xl:hidden fixed inset-0 bg-gradient-to-r from-red-500 to-red-600 bg-opacity-95 transform translate-x-full transition-all duration-500 ease-in-out z-40 overflow-hidden backdrop-blur-sm flex flex-col">
             <div class="absolute inset-0 z-0"
-                style="background-image: url('https://dosxdos.app.iidos.com/img/texture-red.svg'); background-size: contain; opacity: 0.7;">
+                style="background-image: url('http://localhost/dosxdos_app/img/texture-red.svg'); background-size: contain; opacity: 0.7;">
             </div>
             <!-- User Profile Section -->
             <div class="px-8 py-4 mt-16 relative z-10">
@@ -172,7 +172,7 @@ if ($curso && file_exists("$curso/config.php")) {
                     <div
                         class="absolute left-0 w-28 h-28 rounded-full overflow-hidden border-4 border-white bg-gradient-to-br from-red-50 to-white flex items-center justify-center shadow-xl"
                         style="transform: translateX(-15%);">
-                        <img id="imagenUsuarioMobile" src="https://dosxdos.app.iidos.com/img/usuario.png"
+                        <img id="imagenUsuarioMobile" src="http://localhost/dosxdos_app/img/usuario.png"
                             class="w-full h-full object-cover" alt="Profile"
                             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
                         <svg class="w-12 h-12 text-gray-400 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -242,7 +242,7 @@ if ($curso && file_exists("$curso/config.php")) {
         <?php
         if (!$curso) {
             // No course selected, redirect back to courses
-            echo "<script>window.location.href = 'https://dosxdos.app.iidos.com/cursos.html';</script>";
+            echo "<script>window.location.href = 'http://localhost/dosxdos_app/cursos.html';</script>";
         } else {
             if (!$modulo) {
                 // Show module selection
@@ -371,7 +371,7 @@ if ($curso && file_exists("$curso/config.php")) {
 
 
     function overfila(id) {
-        window.location.href = `https://dosxdos.app.iidos.com/dosxdos.php?modulo=editarUsuario&id=${id}`;
+        window.location.href = `http://localhost/dosxdos_app/dosxdos.php?modulo=editarUsuario&id=${id}`;
     }
 
     /*REENVÍO DE FORMULARIOS */

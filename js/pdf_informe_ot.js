@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         try {
             const areasKeys = Object.keys(data.lineas);
             const areasString = areasKeys.join(', ');
-            const logoBase64 = await getImageBase64('https://dosxdos.app.iidos.com/img/logo_black.png');
+            const logoBase64 = await getImageBase64('http://localhost/dosxdos_app/img/logo_black.png');
             const contenido = [];
             const encabezado = {
                 stack: [
