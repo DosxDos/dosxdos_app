@@ -200,6 +200,10 @@ class Crm extends Zoho
                 case 'actualizarPdvs':
                     $this->urlGet = "/crm/v5/Puntos_de_venta";
                     break;
+
+                case 'actualizarCaso':
+                    $this->urlGet = "/crm/v5/Cases";
+                    break;
             }
             $datos = $zoho->put($this->urlGet, $json);
             if (isset($datos[1]['data'][0]['status']) && isset($datos[1]['data'][0]['code']) && $datos[1]['data'][0]['status'] == 'error' && $datos[1]['data'][0]['code'] == 'RECORD_IN_BLUEPRINT') {
@@ -279,7 +283,8 @@ class Crm extends Zoho
         }
     }
 
-    public function bulkFile($link) {
+    public function bulkFile($link)
+    {
         $zoho = new Zoho;
         return $zoho->getBulkFile($link);
     }
