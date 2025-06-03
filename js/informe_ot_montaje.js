@@ -45,7 +45,7 @@ function renderInformes(data) {
       <th>Firma</th>
       <th>Quitar</th>
       <th>Poner</th>
-      <th>Alto x Ancho</th>
+      <th>Ancho x Alto</th>
     </tr>
   </thead>
   <tbody>
@@ -184,7 +184,7 @@ function filtrarDataPorFechas(dataOriginal, fechasSeleccionadas) {
     resultado.push({
       ot: ot.codOt,
       cliente: ot.cliente,
-      nombreEmpresa: ot.cliente, // reemplazamos firma por cliente
+      nombreEmpresa: ot.cliente,
       puntoVenta: pv.nombre,
       direccion: pv.direccion,
       telefono: pv.telefono,
@@ -196,9 +196,9 @@ function filtrarDataPorFechas(dataOriginal, fechasSeleccionadas) {
         firma: ot.firma || "", // se mantiene solo en la tabla inferior
         quitar: linea.quitar || "",
         poner: linea.poner || "",
-        dimensiones: `${linea.alto || '-'} x ${linea.ancho || '-'}`,
-        linea: linea.linea || "", // si tienes este dato
-        ubicacion: linea.ubicacion || "" // si tienes este dato
+        dimensiones: `${linea.ancho || '-'} x ${linea.alto || '-'}`,
+        linea: linea.linea || "",
+        ubicacion: linea.ubicacion || ""
       }))
     });
 
@@ -239,7 +239,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      localStorage.setItem("informesOTRaw", JSON.stringify(data));
+      localStorage.setItem("informesOTRaw", JSON.stringify(data)); // Guardamos los datos en el LocalStorage
       console.log("🟢 Datos crudos guardados:", data);
 
       const fechas = new Set();
@@ -249,6 +249,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       });
 
+      // Convertimos el Set a un Array y lo ordenamos
       const fechasOrdenadas = [...fechas].sort();
       const container = document.getElementById("fechas-checkboxes");
       const checkTodas = document.getElementById("check-todas");
