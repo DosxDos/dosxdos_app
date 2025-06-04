@@ -24,11 +24,12 @@ class Crm extends Zoho
     private $camposAcabados = "Precio,idA3Erp,Acabado";
     private $camposRutas = "Name";
     private $camposMontadores = "Apellido_del_montador,C_digo_del_montador,idApp,Name,Tel_fono_del_montador";
-    public $estado = true;
-    public $respuesta;
-    public $respuestaError;
-    public $mensajeError;
+    public $estado = true; // Determina si hubo éxito en la operación
+    public $respuesta;  // Almacena la respuesta si todo sale bien
+    public $respuestaError; // Almacena la respuesta de error si algo falla
+    public $mensajeError; // Almacena el mensaje de error si algo falla
 
+    // Si falla, cambia el estado a false y guarda los detalles del error
     function __construct()
     {
         try {
@@ -42,7 +43,7 @@ class Crm extends Zoho
             $this->respuestaError[2] = 500;
         }
     }
-
+    //Getters y Setters para la Query
     public function getUrlQuery()
     {
         return $this->urlQuery;
@@ -52,15 +53,16 @@ class Crm extends Zoho
     {
         $this->urlQuery = $urlQuery;
     }
-
+ // Ejecuta una consulta en Zoho CRM usando la API de CoQL
+ // CoQL significa "Zoho CRM Query Language" y permite realizar consultas complejas en los datos de Zoho CRM.
     public function query($query)
     {
         try {
-            $zoho = new Zoho;
-            $datosJson = [];
-            $datosJson['select_query'] = $query;
-            $json = json_encode($datosJson, JSON_FORCE_OBJECT);
-            $datos = $zoho->post($this->urlQuery, $json);
+            $zoho = new Zoho; // Crea una instancia de la clase Zoho para manejar las solicitudes a la API de Zoho CRM
+            $datosJson = []; // Inicializa un array para almacenar los datos de la consulta
+            $datosJson['select_query'] = $query; // Asigna la consulta SQL al array de datos
+            $json = json_encode($datosJson, JSON_FORCE_OBJECT); // Convierte el array a formato JSON, asegurando que se trate como un objeto JSON
+            $datos = $zoho->post($this->urlQuery, $json); // Realiza una solicitud POST a la API de Zoho
             if ($datos[0]) {
                 $this->respuesta = $datos;
             } else {
@@ -77,7 +79,8 @@ class Crm extends Zoho
             $this->respuestaError[2] = 500;
         }
     }
-
+    // Asigna un valor a la propiedad $urlGet según el tipo de variable solicitada
+    // Luego, realiza una solicitud GET a la API de Zoho CRM para obtener datos específicos
     public function get($variable, $link = "")
     {
         try {
@@ -148,7 +151,7 @@ class Crm extends Zoho
             $this->respuestaError[2] = 500;
         }
     }
-
+    // Asigna un endpoint variable y luego realiza una solicitud GET a la API de Zoho CRM para eliminar registros específicos
     public function eliminar($variable, $ids)
     {
         try {
@@ -183,7 +186,7 @@ class Crm extends Zoho
             $this->respuestaError[2] = 500;
         }
     }
-
+    // Asigna un endpoint variable y luego realiza una solicitud PUT a la API de Zoho CRM para actualizar registros específicos
     public function actualizar($variable, $json)
     {
         try {
@@ -227,7 +230,7 @@ class Crm extends Zoho
             $this->respuestaError[2] = 500;
         }
     }
-
+    // Asigna un endpoint variable y luego realiza una solicitud PUT a la API de Zoho CRM para crear nuevos registros
     public function agregar($variable, $json)
     {
         try {
@@ -278,9 +281,36 @@ class Crm extends Zoho
             $this->respuestaError[2] = 500;
         }
     }
-
+    // Realiza una solicitud a la API de Zoho para descargas masivas de datos
     public function bulkFile($link) {
         $zoho = new Zoho;
         return $zoho->getBulkFile($link);
     }
+    public function getRelacionados($modulo, $id, $modulorelacionado)
+{
+    try {
+        $zoho = new Zoho;
+
+        // Armamos la URL de la lista relacionada
+        $url = "/crm/v5/{$modulo}/{$id}/{$modulorelacionado}";
+
+        // Usamos el método get() de la clase base
+        $datos = $zoho->get($url);
+
+        // Verificamos si hubo error
+        if (!$datos || isset($datos['code'])) {
+            $this->estado = false;
+            $this->respuestaError = $datos;
+            $this->mensajeError = isset($datos['message']) ? $datos['message'] : "Error al consultar lista relacionada";
+        } else {
+            $this->estado = true;
+            $this->respuesta = $datos;
+        }
+    } catch (\Throwable $th) {
+        $this->estado = false;
+        $this->respuestaError = [];
+        $this->mensajeError = "Error interno: " . $th->getMessage();
+    }
+}
+
 }
