@@ -66,6 +66,7 @@ function renderInformes(data) {
 
     const footer = document.createElement("div");
     footer.className = "firmas-recuadro";
+    footer.style = "page-break-inside: avoid;"
     footer.innerHTML = `
       <div class="firma-fecha">
       <p><strong>Fecha:</strong></p>

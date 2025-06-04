@@ -2,15 +2,23 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-   <meta http-equiv="Pragma" content="no-cache">
+
+  <!-- Evitar caché del HTML -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
+
   <title>Informe de Montaje</title>
-  <link rel="stylesheet" href="css/informe_ot_montaje.css?v=203">
+
+  <!-- Versionado dinámico para forzar recarga CSS -->
+  <link rel="stylesheet" href="css/informe_ot_montaje.css?v=<?php echo time(); ?>">
+
+  <!-- Librería para manipular PDFs -->
   <script src="https://cdn.jsdelivr.net/npm/pdf-lib/dist/pdf-lib.min.js"></script>
 
 </head>
 <body>
+
   <!-- Contenedor para selector y botón, centrado -->
   <div id="control-panel">
     <div id="selector-fecha-contenedor">
@@ -29,9 +37,11 @@
   <!-- Contenedor donde JS genera informes completos -->
   <div id="contenedor-informes"></div>
 
-  <!-- Librerías y scripts -->
+  <!-- Librería para convertir HTML a PDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <script src="js/informe_ot_montaje.js?v=203" defer></script>
-</body>
 
+  <!-- Versionado dinámico para forzar recarga JS -->
+  <script src="js/informe_ot_montaje.js?v=<?php echo time(); ?>" defer></script>
+
+</body>
 </html>
