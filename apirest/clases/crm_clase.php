@@ -312,5 +312,78 @@ class Crm extends Zoho
         $this->mensajeError = "Error interno: " . $th->getMessage();
     }
 }
+public function getRegistroPorId($modulo, $id, $campos = [])
+{
+    try {
+        $zoho = new Zoho;
+
+        $url = "/crm/v5/{$modulo}/{$id}";
+        $datos = $zoho->get($url);
+
+        error_log("getRegistroPorId - datos recibidos: " . print_r($datos, true));
+
+        if (!$datos || isset($datos['code'])) {
+            $this->estado = false;
+            $this->respuestaError = $datos;
+            $this->mensajeError = isset($datos['message']) ? $datos['message'] : "Error al obtener registro";
+            error_log("getRegistroPorId - error: " . $this->mensajeError);
+        } else {
+            $this->estado = true;
+
+            if (!empty($campos) && isset($datos['data'][0])) {
+                $registroCompleto = $datos['data'][0];
+                error_log("getRegistroPorId - registro completo: " . print_r($registroCompleto, true));
+
+                $registroFiltrado = [];
+
+                foreach ($campos as $campo) {
+                    if ($campo === 'OT_relacionada' && isset($registroCompleto[$campo]['name'])) {
+                        $registroFiltrado[$campo] = $registroCompleto[$campo]['name'];
+                    } elseif (array_key_exists($campo, $registroCompleto)) {
+                        $registroFiltrado[$campo] = $registroCompleto[$campo];
+                    }
+                }
+
+                error_log("getRegistroPorId - registro filtrado: " . print_r($registroFiltrado, true));
+                $this->respuesta = ['data' => $registroFiltrado];
+            } else {
+                $this->respuesta = $datos;
+            }
+        }
+    } catch (\Throwable $th) {
+        $this->estado = false;
+        $this->respuestaError = [];
+        $this->mensajeError = "Error interno: " . $th->getMessage();
+        error_log("getRegistroPorId - excepción: " . $this->mensajeError);
+    }
+}
+
+
+
+public function getPuntosVentaDeOT($idOt)
+{
+    $this->getRelacionados("OTs", $idOt, "Puntos_de_venta");
+
+    if (!$this->estado) {
+        return null;
+    }
+
+    $relacionados = $this->respuesta['data'] ?? [];
+    $puntosVentaCompletos = [];
+
+    $campos = ["id", "Nombre", "Direcci_n", "Tel_fono", "rea", "Zona", "OT_relacionada"];
+
+    foreach ($relacionados as $relacion) {
+        $idPuntoVenta = $relacion['id'];
+        $this->getRegistroPorId("Puntos_de_venta", $idPuntoVenta, $campos);
+
+        if ($this->estado && isset($this->respuesta['data'])) {
+            $puntosVentaCompletos[] = $this->respuesta['data'];
+        }
+    }
+
+    return $puntosVentaCompletos;
+}
+
 
 }
