@@ -6,85 +6,112 @@ function renderInformes(data) {
   container.innerHTML = ""; // Limpiamos el contenido anterior
 
   data.forEach(info => {
-    const div = document.createElement("div");
-    div.className = "informe";
+    const detalles = info.detalles;
+    const lotes = [];
+    let index = 0;
 
-    const contenido = document.createElement("div");
-    contenido.className = "contenido-informe";
+    // Dividimos los detalles en lotes para paginación
+    if (detalles.length <= 11) {
+      lotes.push(detalles); // Todo entra en una sola página
+    } else {
+      lotes.push(detalles.slice(0, 11)); // Primera página con 11 líneas
+      index = 11; // Iniciamos el índice en 11 para las siguientes páginas
+      while (index < detalles.length) {
+        lotes.push(detalles.slice(index, index + 15)); // Páginas siguientes con 15 líneas
+        index += 15; // Avanzamos 15 líneas para la siguiente página
+      }
+    }
+    //Generador de informes, un bloque por cada lote 
+    lotes.forEach((lote, index) => {
+      const div = document.createElement("div");
+      div.className = "informe";
 
-    contenido.innerHTML = `
-      <div class="cabecera">
-        <div class="logo">
-          <img src="elementos_diseno/DOS POR DOS LOGO.png" alt="Logo Empresa">
-        </div>
-        <div class="titulo">
-          <h1>Informe de Montaje</h1>
-        </div>
-      </div>
+      const contenido = document.createElement("div");
+      contenido.className = "contenido-informe";
 
-      <div class="info-recuadro">
-        <p class="ot"><strong>OT:</strong> ${info.ot}</p>
-        <p class="empresa">${info.nombreEmpresa}</p>
-      </div>
+      // Cabecera solo en la primera página
+      let cabeceraHTML = "";
+      if (index === 0) {
+        cabeceraHTML = `
+          <div class="cabecera">
+            <div class="logo">
+              <img src="elementos_diseno/DOS POR DOS LOGO.png" alt="Logo Empresa">
+            </div>
+            <div class="titulo">
+              <h1>Informe de Montaje</h1>
+            </div>
+          </div>
 
-      <div class="info-header">
-        <p><strong>Punto de Venta:</strong> ${info.puntoVenta}</p>
-        <p><strong>Dirección:</strong> ${info.direccion}</p>
-        <p><strong>Teléfono:</strong> ${info.telefono}</p>
-        <p><strong>Área:</strong> ${info.area}</p>
-        <p><strong>Zona:</strong> ${info.zona}</p>
-        <p><strong>Nombre OT:</strong> ${info.nombreOt}</p>
-      </div>
+          <div class="info-recuadro">
+            <p class="ot"><strong>OT:</strong> ${info.ot}</p>
+            <p class="empresa">${info.nombreEmpresa}</p>
+          </div>
 
-      <table>
-  <thead>
-    <tr>
-      <th>Línea</th>
-      <th>Ubicación</th>
-      <th>Tipo</th>
-      <th>Firma</th>
-      <th>Quitar</th>
-      <th>Poner</th>
-      <th>Ancho x Alto</th>
-    </tr>
-  </thead>
-  <tbody>
-    ${info.detalles.map(item => `
-      <tr>
-        <td>${item.linea || '-'}</td>
-        <td>${item.ubicacion || '-'}</td>
-        <td>${item.tipo}</td>
-        <td>${item.firma}</td>
-        <td>${item.quitar}</td>
-        <td>${item.poner}</td>
-        <td>${item.dimensiones}</td>
-      </tr>
-    `).join('')}
-  </tbody>
-</table>
-`;
+          <div class="info-header">
+            <p><strong>Punto de Venta:</strong> ${info.puntoVenta}</p>
+            <p><strong>Dirección:</strong> ${info.direccion}</p>
+            <p><strong>Teléfono:</strong> ${info.telefono}</p>
+            <p><strong>Área:</strong> ${info.area}</p>
+            <p><strong>Zona:</strong> ${info.zona}</p>
+            <p><strong>Nombre OT:</strong> ${info.nombreOt}</p>
+          </div>
+        `;
+      }
 
-    const footer = document.createElement("div");
-    footer.className = "firmas-recuadro";
-    footer.style = "page-break-inside: avoid;"
-    footer.innerHTML = `
-      <div class="firma-fecha">
-      <p><strong>Fecha:</strong></p>
-        
-        <div class="linea-firma"></div>
-        <p><strong>Firma del Instalador:</strong></p>
-        <div class="linea-firma"></div>
-      </div>
-      <div class="sello-cliente">
-        <p><strong>Sello del Cliente:</strong></p>
-        <div class="cuadro-sello"></div>
-      </div>
-    `;
+      const tablaHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Línea</th>
+              <th>Ubicación</th>
+              <th>Tipo</th>
+              <th>Firma</th>
+              <th>Quitar</th>
+              <th>Poner</th>
+              <th>Ancho x Alto</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${lote.map(item => `
+              <tr>
+                <td>${item.linea || '-'}</td>
+                <td>${item.ubicacion || '-'}</td>
+                <td>${item.tipo}</td>
+                <td>${item.firma}</td>
+                <td>${item.quitar}</td>
+                <td>${item.poner}</td>
+                <td>${item.dimensiones}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
 
-    div.appendChild(contenido);
-    div.appendChild(footer);
+      contenido.innerHTML = cabeceraHTML + tablaHTML;
+      div.appendChild(contenido);
 
-    container.appendChild(div);
+      // Footer solo en el último bloque
+      if (index === lotes.length - 1) {
+        const footer = document.createElement("div");
+        footer.className = "firmas-recuadro";
+        footer.style = "page-break-inside: avoid;";
+        footer.innerHTML = `
+          <div class="firma-fecha">
+            <p><strong>Fecha:</strong></p>
+            <div class="linea-firma"></div>
+            <p><strong>Firma del Instalador:</strong></p>
+            <div class="linea-firma"></div>
+          </div>
+          <div class="sello-cliente">
+            <p><strong>Sello del Cliente:</strong></p>
+            <div class="cuadro-sello"></div>
+          </div>
+        `;
+        div.appendChild(footer);
+      }
+
+      container.appendChild(div);
+    });
   });
 
   const botonPDF = document.getElementById("btnGenerarPDF");
@@ -95,6 +122,9 @@ function renderInformes(data) {
 
   console.log("🔍 Informes renderizados:", data);
 }
+
+
+
 
 // Función para generar el PDF del contenido HTML
 async function generarPDF() {

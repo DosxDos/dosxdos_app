@@ -68,12 +68,12 @@ class Clientes extends Conexion
     {
         try {
             $_respuestas = new respuestas;
-            $datos = json_decode($json, true);
-            if (isset($datos['idCliente']) && isset($datos['cod']) && isset($datos['agregarRest'])) {
+            $datos = json_decode($json, true); // Decodifica el JSON a un array asociativo
+            if (isset($datos['idCliente']) && isset($datos['cod']) && isset($datos['agregarRest'])) { // Verifica si se envió el idCliente, cod y agregarRest
                 $this->idCliente = parent::sanitizar($datos['idCliente']);
                 $this->cod = parent::sanitizar($datos['cod']);
-                $query = "INSERT INTO restotclientes (idCliente, tipoOt) VALUES ('$this->idCliente', '$this->cod')";
-                $result = parent::datosPost($query);
+                $query = "INSERT INTO restotclientes (idCliente, tipoOt) VALUES ('$this->idCliente', '$this->cod')"; // Inserta la restricción en la tabla restotclientes para evitar inyecciones SQL
+                $result = parent::datosPost($query); // Ejecuta la consulta para insertar la restricción heredada
                 if ($result) {
                     $respuestas = new Respuestas;
                     $answer = $respuestas->ok('Restricción agregada exitosamente');
@@ -83,11 +83,11 @@ class Clientes extends Conexion
                     $answer = $respuestas->error_500('Error: la restricción no pudo ser agregada en la base de datos');
                     $this->error = $answer;
                 }
-            } else if (isset($datos['idCliente']) && isset($datos['cod']) && isset($datos['eliminarRest'])) {
+            } else if (isset($datos['idCliente']) && isset($datos['cod']) && isset($datos['eliminarRest'])) { // Verifica si se envió el idCliente, cod y eliminarRest
                 $this->idCliente = parent::sanitizar($datos['idCliente']);
                 $this->cod = parent::sanitizar($datos['cod']);
-                $query = "DELETE FROM restotclientes WHERE idCliente = $this->idCliente AND tipoOt = '$this->cod'";
-                $result = parent::datos($query);
+                $query = "DELETE FROM restotclientes WHERE idCliente = $this->idCliente AND tipoOt = '$this->cod'"; // Genera la consulta de borrado de la tabla restotclientes
+                $result = parent::datos($query); // Ejecuta la consulta para eliminar la restricción heredada
                 if ($result) {
                     $respuestas = new Respuestas;
                     $answer = $respuestas->ok('Restricción eliminada exitosamente');
@@ -100,8 +100,8 @@ class Clientes extends Conexion
             } else if (isset($datos['idCliente']) && isset($datos['firma']) && isset($datos['agregarRest'])) {
                 $this->idCliente = parent::sanitizar($datos['idCliente']);
                 $this->firma = parent::sanitizar($datos['firma']);
-                $query = "INSERT INTO restfirmasclientes (idCliente, firma) VALUES ('$this->idCliente', '$this->firma')";
-                $result = parent::datosPost($query);
+                $query = "INSERT INTO restfirmasclientes (idCliente, firma) VALUES ('$this->idCliente', '$this->firma')"; // Inserta la restricción basada en firma
+                $result = parent::datosPost($query);                
                 if ($result) {
                     $respuestas = new Respuestas;
                     $answer = $respuestas->ok('Restricción agregada exitosamente');

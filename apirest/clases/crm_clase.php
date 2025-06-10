@@ -286,6 +286,10 @@ class Crm extends Zoho
         $zoho = new Zoho;
         return $zoho->getBulkFile($link);
     }
+
+// 🔴 Pruebas sobre el objeto CRM y funcionalidades futuras 🔴
+
+// Esta función obtiene registros relacionados de un módulo específico en Zoho CRM
     public function getRelacionados($modulo, $id, $modulorelacionado)
 {
     try {
@@ -311,7 +315,9 @@ class Crm extends Zoho
         $this->respuestaError = [];
         $this->mensajeError = "Error interno: " . $th->getMessage();
     }
+    return $this->estado ? $this->respuesta : null;
 }
+// Obtiene un registro específico por su ID de un módulo en Zoho CRM
 public function getRegistroPorId($modulo, $id, $campos = [])
 {
     try {
@@ -356,10 +362,9 @@ public function getRegistroPorId($modulo, $id, $campos = [])
         $this->mensajeError = "Error interno: " . $th->getMessage();
         error_log("getRegistroPorId - excepción: " . $this->mensajeError);
     }
+    return $this->estado ? $this->respuesta : null;
 }
-
-
-
+// Obtiene los puntos de venta relacionados con una OT específica
 public function getPuntosVentaDeOT($idOt)
 {
     $this->getRelacionados("OTs", $idOt, "Puntos_de_venta");
