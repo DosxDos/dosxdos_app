@@ -18,17 +18,18 @@
 
   <!-- Script que inyecta versión para evitar caché en CSS y JS -->
   <script>
-    const timestamp = new Date().getTime();
+    const timestamp = new Date().getTime(); //Tomamos una marca de tiempo en milisegundos
 
     // Forzar recarga del CSS
-    const cssLink = document.getElementById("css-link");
-    cssLink.href = `css/informe_ot_montaje.css?v=${timestamp}`;
+    const cssLink = document.getElementById("css-link"); // Guardamos el CSS en una variable
+    cssLink.href = `css/informe_ot_montaje.css?v=${timestamp}`; // modificamos el href del CSS con la marca de tiempo
+    // Esto asegura que el navegador no use una versión en caché del CSS
 
     // Crear e inyectar el script JS con versión
-    const jsScript = document.createElement("script");
-    jsScript.src = `js/informe_ot_montaje.js?v=${timestamp}`;
-    jsScript.defer = true;
-    document.head.appendChild(jsScript);
+    const jsScript = document.createElement("script"); // Creamos un nuevo elemento script
+    jsScript.src = `js/informe_ot_montaje.js?v=${timestamp}`; // Asignamos el src del script con la marca de tiempo evitando el caché
+    jsScript.defer = true; // Aseguramos que se ejecute después de que el DOM esté completamente cargado, así evitamos que haga referencia a elementos que aún no existen
+    document.head.appendChild(jsScript); // Inyectamos el script en el head del documento evitando el caché
   </script>
 </head>
 <body>
