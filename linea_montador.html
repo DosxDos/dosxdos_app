@@ -991,13 +991,13 @@
                 DiasActuacion: dias,
                 Estado: estado,
                 FechaActuacion: fecha,
-                FirmaCliente: `http://localhost/dosxdos_app/fotos_y_firmas.php?ruta=${ruta}&linea=${linea}&ot=${ot}&lineaActividad=${lineaActividad}`,
+                FirmaCliente: `https://dosxdos.app.iidos.com/fotos_y_firmas.php?ruta=${ruta}&linea=${linea}&ot=${ot}&lineaActividad=${lineaActividad}`,
                 FotosSubidas: numeroFotos,
                 HorasActuacion: horas,
                 Incidencia: incidencia,
                 MinutosActuacion: minutos,
                 ObservacionesTecnico: observaciones,
-                LinkWeb: `http://localhost/dosxdos_app/fotos_y_firmas.php?ruta=${ruta}&linea=${linea}&ot=${ot}&lineaActividad=${lineaActividad}`,
+                LinkWeb: `https://dosxdos.app.iidos.com/fotos_y_firmas.php?ruta=${ruta}&linea=${linea}&ot=${ot}&lineaActividad=${lineaActividad}`,
             };
 
             const bodyNavisionJson = JSON.stringify(bodyNavision);
@@ -2166,6 +2166,7 @@
 
     function subirFotos(json) {
         return new Promise((resolve, reject) => {
+            console.log("JSON data being sent to server for photos:", json);
             fetch("http://localhost/dosxdos_app/apirest/fotos.php", {
                 method: "POST",
                 headers: {

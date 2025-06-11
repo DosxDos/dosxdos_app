@@ -362,3 +362,12 @@ class Rutas extends Conexion
         }
     }
 }
+
+/*
+$rutas = new Rutas;
+$rutas->rutas();
+echo "Respuesta de Rutas Activas:\n";
+var_dump($rutas->respuesta);
+echo "Error de Rutas Activas:\n";
+var_dump($rutas->error);
+*/

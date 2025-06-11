@@ -260,6 +260,7 @@ class Fotos extends conexion
                     $nombre = $this->ot . "_" . $this->lineaActividad . "_" . $this->pvNombre . "_" . $idNombre . "." . $extension;
                     $file = $filePath . "/" . $nombre;
                     $query = "INSERT INTO $this->table (nombre, ruta, linea, ot, lineaActividad, ext, cliente, nombreCliente, pv, pvNombre, usuario, ano, fecha) VALUES ('$nombre', '$this->ruta', '$this->linea', '$this->ot', '$this->lineaActividad', '$extension', '$this->cliente', '$this->nombreCliente', '$this->pv', '$this->pvNombre', '$this->usuario', '$this->anoOt', '$fechaActual')";
+                    //print $query;
                     $result = parent::datosPost($query);
                     file_put_contents($file, $file_base64);
                 }
@@ -268,6 +269,7 @@ class Fotos extends conexion
                 $this->respuesta = $answer;
             }
         } catch (Exception $e) {
+            //var_dump($e);
             $respuestas = new Respuestas;
             $answer = $respuestas->error_500('500 - Error al guardar las imágenes: ' . $e->getMessage());
             $this->error = $answer;
@@ -634,11 +636,22 @@ $_fotos->delete($json);
 echo $_fotos->respuesta;
 echo $_fotos->error;*/
 
-/*$_fotos = new Fotos;
-$json = file_get_contents('fotos.json');
-$_fotos->post($json);
-echo $_fotos->respuesta;
-echo $_fotos->error;*/
+/*
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+try {
+    $_fotos = new Fotos;
+    $json = file_get_contents('fotos.json');
+    //echo $json;
+    $_fotos->post($json);
+    var_dump($_fotos->respuesta);
+    var_dump($_fotos->error);
+} catch (\Throwable $th) {
+    var_dump($th);
+}
+*/
+
 
 /*$_fotos = new Fotos;
 //$json = file_get_contents('fotos.json');
