@@ -22,8 +22,8 @@ function renderInformes(data) {
       lotes.push(detalles.slice(0, 16)); // Primera página con 11 líneas
       index = 16; // Iniciamos el índice en 11 para las siguientes páginas
       while (index < detalles.length) {
-        lotes.push(detalles.slice(index, index + 20)); // Páginas siguientes con 15 líneas
-        index += 20; // Avanzamos 15 líneas para la siguiente página
+        lotes.push(detalles.slice(index, index + 21)); // Páginas siguientes con 15 líneas
+        index += 21; // Avanzamos 15 líneas para la siguiente página
       }
     }
     //Generador de informes, un bloque por cada lote 

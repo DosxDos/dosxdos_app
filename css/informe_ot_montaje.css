@@ -105,7 +105,8 @@ td {
   border-bottom: 1px solid #ddd;
 }
 table:not(.tabla-firmas) td {
-  max-height: 10px !important; /* Limita la altura de las celdas */
+  white-space: normal !important; /* Permite saltos de línea en celdas */
+  max-height: 20px; /* Limita la altura de las celdas */
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 130px;
