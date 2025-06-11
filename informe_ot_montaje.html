@@ -10,12 +10,26 @@
 
   <title>Informe de Montaje</title>
 
-  <!-- Versionado dinámico para forzar recarga CSS -->
-  <link rel="stylesheet" href="css/informe_ot_montaje.css?v=<?php echo time(); ?>">
+  <!-- Enlace al CSS sin versión (se modificará dinámicamente) -->
+  <link id="css-link" rel="stylesheet" href="css/informe_ot_montaje.css">
 
   <!-- Librería para manipular PDFs -->
   <script src="https://cdn.jsdelivr.net/npm/pdf-lib/dist/pdf-lib.min.js"></script>
 
+  <!-- Script que inyecta versión para evitar caché en CSS y JS -->
+  <script>
+    const timestamp = new Date().getTime();
+
+    // Forzar recarga del CSS
+    const cssLink = document.getElementById("css-link");
+    cssLink.href = `css/informe_ot_montaje.css?v=${timestamp}`;
+
+    // Crear e inyectar el script JS con versión
+    const jsScript = document.createElement("script");
+    jsScript.src = `js/informe_ot_montaje.js?v=${timestamp}`;
+    jsScript.defer = true;
+    document.head.appendChild(jsScript);
+  </script>
 </head>
 <body>
 
@@ -39,9 +53,6 @@
 
   <!-- Librería para convertir HTML a PDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
-  <!-- Versionado dinámico para forzar recarga JS -->
-  <script src="js/informe_ot_montaje.js?v=<?php echo time(); ?>" defer></script>
 
 </body>
 </html>

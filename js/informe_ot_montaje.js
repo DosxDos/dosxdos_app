@@ -1,3 +1,8 @@
+// Función para truncar texto si excede el número máximo de caracteres elegidos luego en la tabla
+function truncarTexto(texto, maxCaracteres) {
+  if (!texto) return '-';
+  return texto.length > maxCaracteres ? texto.slice(0, maxCaracteres - 1) + "…" : texto;
+}
 // Función para renderizar los informes filtrados en el HTML
 function renderInformes(data) {
   const container = document.getElementById("contenedor-informes");
@@ -11,14 +16,14 @@ function renderInformes(data) {
     let index = 0;
 
     // Dividimos los detalles en lotes para paginación
-    if (detalles.length <= 11) {
+    if (detalles.length <= 16) {
       lotes.push(detalles); // Todo entra en una sola página
     } else {
-      lotes.push(detalles.slice(0, 11)); // Primera página con 11 líneas
-      index = 11; // Iniciamos el índice en 11 para las siguientes páginas
+      lotes.push(detalles.slice(0, 16)); // Primera página con 11 líneas
+      index = 16; // Iniciamos el índice en 11 para las siguientes páginas
       while (index < detalles.length) {
-        lotes.push(detalles.slice(index, index + 15)); // Páginas siguientes con 15 líneas
-        index += 15; // Avanzamos 15 líneas para la siguiente página
+        lotes.push(detalles.slice(index, index + 20)); // Páginas siguientes con 15 líneas
+        index += 20; // Avanzamos 15 líneas para la siguiente página
       }
     }
     //Generador de informes, un bloque por cada lote 
@@ -72,17 +77,18 @@ function renderInformes(data) {
             </tr>
           </thead>
           <tbody>
-            ${lote.map(item => `
-              <tr>
-                <td>${item.linea || '-'}</td>
-                <td>${item.ubicacion || '-'}</td>
-                <td>${item.tipo}</td>
-                <td>${item.firma}</td>
-                <td>${item.quitar}</td>
-                <td>${item.poner}</td>
-                <td>${item.dimensiones}</td>
-              </tr>
-            `).join('')}
+            ${lote.map(item =>
+        `<tr>
+    <td>${truncarTexto(item.linea, 20)}</td>
+    <td>${truncarTexto(item.ubicacion, 30)}</td>
+    <td>${truncarTexto(item.tipo, 30)}</td>
+    <td>${truncarTexto(item.firma, 20)}</td>
+    <td>${truncarTexto(item.quitar, 15)}</td>
+    <td>${truncarTexto(item.poner, 15)}</td>
+    <td>${item.dimensiones}</td>
+  </tr>`
+      ).join('')}
+
           </tbody>
         </table>
       `;
@@ -94,7 +100,7 @@ function renderInformes(data) {
       if (index === lotes.length - 1) {
         const footer = document.createElement("div");
         footer.className = "firmas-recuadro";
-        footer.style = "page-break-inside: avoid;";
+        footer.style = "page-break-inside: avoid; page-break-before: auto;";
         footer.innerHTML = `
           <div class="firma-fecha">
             <p><strong>Fecha:</strong></p>

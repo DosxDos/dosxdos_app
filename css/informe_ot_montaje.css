@@ -104,7 +104,13 @@ td {
   text-align: left;
   border-bottom: 1px solid #ddd;
 }
-
+table:not(.tabla-firmas) td {
+  white-space: normal !important; /* Permite saltos de línea en celdas */
+  max-height: 20px; /* Limita la altura de las celdas */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 130px;
+}
 /* Recuadro de firmas dentro de informe para evitar que se corte */
 .firmas-recuadro {
   display: flex;
