@@ -79,12 +79,12 @@ function renderInformes(data) {
           <tbody>
             ${lote.map(item =>
         `<tr>
-    <td>${truncarTexto(item.linea, 20)}</td>
-    <td>${truncarTexto(item.ubicacion, 30)}</td>
-    <td>${truncarTexto(item.tipo, 30)}</td>
-    <td>${truncarTexto(item.firma, 20)}</td>
-    <td>${truncarTexto(item.quitar, 15)}</td>
-    <td>${truncarTexto(item.poner, 15)}</td>
+    <td>${truncarTexto(item.linea, 7)}</td> 
+    <td>${truncarTexto(item.ubicacion, 31)}</td>
+    <td>${truncarTexto(item.tipo, 61)}</td>
+    <td>${truncarTexto(item.firma, 31)}</td>
+    <td>${truncarTexto(item.quitar, 61)}</td>
+    <td>${truncarTexto(item.poner, 61)}</td>
     <td>${item.dimensiones}</td>
   </tr>`
       ).join('')}
@@ -93,7 +93,7 @@ function renderInformes(data) {
         </table>
       `;
 
-      contenido.innerHTML = cabeceraHTML + tablaHTML;
+      contenido.innerHTML = cabeceraHTML + tablaHTML; //55-80
       div.appendChild(contenido);
 
       // Footer solo en el último bloque
