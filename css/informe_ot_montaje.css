@@ -106,7 +106,7 @@ td {
 }
 table:not(.tabla-firmas) td {
   white-space: normal !important; /* Permite saltos de línea en celdas */
-  max-height: 20px; /* Limita la altura de las celdas */
+  max-height: 10px; /* Limita la altura de las celdas */
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 130px;
@@ -208,3 +208,4 @@ p {
   margin: 5px 10px; /* espacio entre cada fecha */
   cursor: pointer;
 }
+
