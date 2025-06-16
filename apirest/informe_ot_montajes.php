@@ -3,7 +3,7 @@
 error_reporting(E_ALL); // Muestra los errores
 ini_set('display_errors', 1); // Muestra los errores
 ini_set('curl.cainfo', '/dev/null'); // Permite hacer cURRl con certificados
-set_time_limit(0); // Elimina el límite de ejecucción
+set_time_limit(0); // Elimina el límite de ejecución
 ini_set('default_socket_timeout', 28800); // Tiempo de espera de conexión 8h
 date_default_timezone_set('Atlantic/Canary');  // Zona horaria Canarias
 
@@ -22,21 +22,22 @@ function responderError($mensaje, $detalle = null) {
     exit;
 }
 
-// Mostramos si falta algún parámetro
+// Validamos que recibimos todos los parámetros necesarios
 if (!isset($_GET['idOt'], $_GET['codOt'], $_GET['tipoOt'], $_GET['cliente'], $_GET['tokenJwt'])) {
     responderError('ERROR!!! NO SE HAN RECIBIDO LOS DATOS NECESARIOS');
 }
 
+// Descomentar para usar JWT si lo deseas
 /* $jwtMiddleware = new JwtMiddleware;
 $jwtMiddleware->verificar(); */
 
-// Asignamos variables
-$idOt = $_GET['idOt'];
-$codOt = $_GET['codOt'];
-$tipoOt = $_GET['tipoOt'];
-$cliente = $_GET['cliente'];
+// Asignamos variables sanitizadas
+$idOt = trim($_GET['idOt']);
+$codOt = trim($_GET['codOt']);
+$tipoOt = trim($_GET['tipoOt']);
+$cliente = trim($_GET['cliente']);
 
-// Sacamos error si falta alguna variable
+// Sacamos error si falta alguna variable o está vacía
 if (!$idOt || !$codOt || !$tipoOt || !$cliente) {
     responderError('ERROR!!! NO SE HAN RECIBIDO LOS DATOS NECESARIOS');
 }
@@ -44,12 +45,14 @@ if (!$idOt || !$codOt || !$tipoOt || !$cliente) {
 $crm = new Crm; // Creamos una instancia para la clase crm
 
 /* LINEAS */
-$camposLineas = "Codigo_de_l_nea,C_digo_de_OT_relacionada,Punto_de_venta,rea,Tipo_de_OT,Tipo_de_trabajo,Descripci_n_Tipo_Trabajo,Zona,Sector,Direcci_n,Nombre_de_Empresa,Fecha_actuaci_n,Fase,Motivo_de_incidencia,Observaciones_internas,Observaciones_montador,Horas_actuaci_n,D_as_actuaci_n,Minutos_actuaci_n,Poner,Quitar,Alto_medida,Ancho_medida,Fotos,Firma_de_la_OT_relacionada,Estado_de_Actuaci_n,nombreCliente,nombreOt,nombrePv,codPv,Fecha_entrada,Alto_total,Ancho_total,Material,Ubicaci_n,Punto_de_venta.N_tel_fono";
+// Campos necesarios, eliminados los que no se usan para reducir datos transferidos
+$camposLineas = "Codigo_de_l_nea,Punto_de_venta,rea,Tipo_de_trabajo,Zona,Direcci_n,Poner,Quitar,Alto_medida,Ancho_medida,Firma_de_la_OT_relacionada,nombreCliente,nombreOt,nombrePv,Fecha_entrada,Alto_total,Ancho_total,Material,Ubicaci_n,Punto_de_venta.N_tel_fono";
+
 // Descubrimiento importante, el N_tel_fono no se encuentra en la info de la línea, por lo que tenemos que buscarlo en el punto de venta
 // Simplemente usando Punto_de_venta.N_tel_fono se soluciona el problema aunque estemos buscando un campo que no existe en la tabla de líneas, ya que el CRM lo interpreta como una búsqueda de campo relacionado.
-$query = "SELECT $camposLineas FROM Products WHERE OT_relacionada=$idOt"; //Definimos la lista de campos a recuperar
+$query = "SELECT $camposLineas FROM Products WHERE OT_relacionada=$idOt";
 
-$crm->query($query); //Consulta SQL al CRM para obtener todas las líneas asociadas a idOt
+$crm->query($query); // Consulta SQL al CRM para obtener todas las líneas asociadas a idOt
 
 if (!$crm->estado) {
     responderError("ERROR!!! AL CONSULTAR LAS LÍNEAS DE LA OT $codOt EN LA API DEL CRM", $crm->respuestaError);
@@ -57,6 +60,7 @@ if (!$crm->estado) {
 
 // Extraemos las líneas y ordenamos
 $lineas = $crm->respuesta[1]['data'] ?? [];
+
 if (empty($lineas)) {
     // Respuesta vacía (sin líneas), se podría devolver estructura vacía o mensaje
     echo json_encode([
@@ -73,15 +77,26 @@ if (empty($lineas)) {
 function ordenarArrayPorCampo(array $array, string $campo, string $orden = 'asc'): array
 {
     usort($array, function ($a, $b) use ($campo, $orden) {
-        $valA = isset($a[$campo]) ? (int)$a[$campo] : 0;
-        $valB = isset($b[$campo]) ? (int)$b[$campo] : 0;
-        return $orden === 'asc' ? $valA <=> $valB : $valB <=> $valA;
+        // Convertimos a string para evitar warnings si el campo no existe o no es numérico
+        $valA = isset($a[$campo]) ? $a[$campo] : '';
+        $valB = isset($b[$campo]) ? $b[$campo] : '';
+        if (is_numeric($valA) && is_numeric($valB)) {
+            $valA = (int)$valA;
+            $valB = (int)$valB;
+        }
+        if ($orden === 'asc') {
+            return $valA <=> $valB;
+        } else {
+            return $valB <=> $valA;
+        }
     });
     return $array;
 }
 
+// Ordenamos líneas por Código_de_l_nea ascendente
 $lineas = ordenarArrayPorCampo($lineas, 'Codigo_de_l_nea');
 
+// Estructura base de la respuesta
 $estructuraFinal = [
     'ot' => [
         'codOt' => "V- " . $codOt,
@@ -93,14 +108,12 @@ $estructuraFinal = [
 
 $pvsAgrupados = [];
 
+// Agrupamos líneas por punto de venta
 foreach ($lineas as $linea) {
-    // Aseguramos que la clave del array sea un string (no array u objeto)
+    // Aseguramos que la clave del array sea un string
     $valorBruto = $linea['Punto_de_venta'] ?? 'Desconocido';
     if (is_array($valorBruto) || is_object($valorBruto)) {
-        $clavePv = json_encode($valorBruto);
-        if ($clavePv === false) {
-            $clavePv = 'Desconocido';
-        }
+        $clavePv = json_encode($valorBruto) ?: 'Desconocido';
     } else {
         $clavePv = (string)$valorBruto;
     }
@@ -117,23 +130,24 @@ foreach ($lineas as $linea) {
         ];
     }
 
+    // Construimos línea con valores claros y fallback en dimensiones
+    $ancho = (!empty($linea['Alto_total']) && !empty($linea['Ancho_total'])) ? $linea['Ancho_total'] : $linea['Ancho_medida'];
+    $alto = (!empty($linea['Alto_total']) && !empty($linea['Ancho_total'])) ? $linea['Alto_total'] : $linea['Alto_medida'];
+
     $pvsAgrupados[$clavePv]['lineas'][] = [
         'linea' => $linea['Codigo_de_l_nea'] ?? '',
         'ubicacion' => $linea['Ubicaci_n'] ?? '',
-        'tipo' => $linea['Material'] . " - " . $linea['Tipo_de_trabajo'] ?? '',
+        'tipo' => trim(($linea['Material'] ?? '') . " - " . ($linea['Tipo_de_trabajo'] ?? '')),
         'fechaEntrada' => $linea['Fecha_entrada'] ?? '',
         'quitar' => $linea['Quitar'] ?? '',
         'poner' => $linea['Poner'] ?? '',
-        'ancho'=> ($linea['Alto_total'] && $linea['Ancho_total']) ? $linea['Ancho_total'] : $linea['Ancho_medida'],
-        'alto'=> ($linea['Alto_total'] && $linea['Ancho_total']) ? $linea['Alto_total'] : $linea['Alto_medida']
-        
-        
-        // Agrega más campos si los necesitas
+        'ancho'=> $ancho,
+        'alto'=> $alto
     ];
 }
 
-// Convertimos a array numérico
+// Convertimos a array numérico para JSON limpio
 $estructuraFinal['pvs'] = array_values($pvsAgrupados);
 
-// Devolvemos como JSON
-echo json_encode($estructuraFinal);
+// Devolvemos como JSON con JSON_UNESCAPED_UNICODE para mejor legibilidad
+echo json_encode($estructuraFinal, JSON_UNESCAPED_UNICODE);
