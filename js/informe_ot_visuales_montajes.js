@@ -40,7 +40,7 @@ function renderInformes(data) {
         cabeceraHTML = `
           <div class="cabecera">
             <div class="logo">
-              <img src="elementos_diseno/DOS POR DOS LOGO.png" alt="Logo Empresa">
+              <img src="elementos_diseno/LOGO.png" alt="Logo Empresa">
             </div>
             <div class="titulo">
               <h1>Informe de Montaje</h1>
