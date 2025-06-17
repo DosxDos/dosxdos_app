@@ -28,8 +28,8 @@ if (!isset($_GET['idOt'], $_GET['codOt'], $_GET['tipoOt'], $_GET['cliente'], $_G
 }
 
 // Descomentar para usar JWT si lo deseas
-/* $jwtMiddleware = new JwtMiddleware;
-$jwtMiddleware->verificar(); */
+$jwtMiddleware = new JwtMiddleware;
+$jwtMiddleware->verificar();
 
 // Asignamos variables sanitizadas
 $idOt = trim($_GET['idOt']);
