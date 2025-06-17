@@ -82,9 +82,9 @@ function renderInformes(data) {
     <td>${truncarTexto(item.linea, 20)}</td>
     <td>${truncarTexto(item.ubicacion, 30)}</td>
     <td>${truncarTexto(item.tipo, 30)}</td>
-    <td>${truncarTexto(item.firma, 20)}</td>
-    <td>${truncarTexto(item.quitar, 15)}</td>
-    <td>${truncarTexto(item.poner, 15)}</td>
+    <td>${truncarTexto(item.firma, 30)}</td>
+    <td>${truncarTexto(item.quitar, 30)}</td>
+    <td>${truncarTexto(item.poner, 30)}</td>
     <td>${item.dimensiones}</td>
   </tr>`
       ).join('')}

@@ -64,6 +64,7 @@ class Clientes extends Conexion
     public $respuesta = '';
     public $error = '';
 
+    // Función que maneja las solicitudes POST para agregar o eliminar restricciones de tipo de OT o firma de cliente
     public function post($json)
     {
         try {
@@ -163,6 +164,7 @@ class Clientes extends Conexion
         }
     }
 
+    // Función que consulta y devuelve las restriccion es de una OT
     public function restGet($idCliente)
     {
         try {
@@ -197,27 +199,28 @@ class Clientes extends Conexion
         }
     }
 
+    // Función que obtiene una lista de OT válidos para un cliente, excluyendo las restringidas y devuelve los nombres descriptivos de esos tipos disponibles.
     public function tiposOt($idCliente)
     {
         try {
             $_respuestas = new respuestas;
             $this->idCliente = parent::sanitizar($idCliente);
-            $queryRest = "SELECT tipoOt FROM restotclientes WHERE idCliente = $this->idCliente ORDER BY tipoOt";
+            $queryRest = "SELECT tipoOt FROM restotclientes WHERE idCliente = $this->idCliente ORDER BY tipoOt"; // Consulta los tipos de OT restringuidos
             $resultRest = parent::datos($queryRest);
             if ($resultRest) {
                 if ($resultRest->num_rows) {
                     $i = 0;
                     while ($row = $resultRest->fetch_assoc()) {
-                        $this->restricciones[$i] = $row['tipoOt'];
+                        $this->restricciones[$i] = $row['tipoOt']; // Guardar los tipos restringidos
                         $i++;
                     }
-                    $queryCliente = "SELECT cod FROM usuarios WHERE id = '$this->idCliente'";
+                    $queryCliente = "SELECT cod FROM usuarios WHERE id = '$this->idCliente'"; // Obtener el código interno del cliente
                     $resultCliente = parent::datos($queryCliente);
                     if ($resultCliente) {
                         $rowCliente = $resultCliente->fetch_assoc();
                         $this->cliente = $rowCliente['cod'];
-                        $queryTiposOt = "SELECT tipo FROM ot WHERE cliente = $this->cliente ORDER BY tipo";
-                        $resultTiposOt = parent::datos($queryTiposOt);
+                        $queryTiposOt = "SELECT tipo FROM ot WHERE cliente = $this->cliente ORDER BY tipo"; // Obtener todos los tipos de OT del cliente
+                        $resultTiposOt = parent::datos($queryTiposOt); // Limpiar duplicados y resetear índices
                         if ($resultTiposOt) {
                             if ($resultTiposOt->num_rows) {
                                 $i = 0;
@@ -225,17 +228,17 @@ class Clientes extends Conexion
                                     $this->tipos[$i] = $row['tipo'];
                                     $i++;
                                 }
-                                $this->tipos = array_unique($this->tipos);
-                                $this->tipos = array_values($this->tipos);
+                                $this->tipos = array_unique($this->tipos); // Eliminar duplicados
+                                $this->tipos = array_values($this->tipos); // Resetear índices
                                 $this->tiposOtCliente = $this->tipos;
-                                foreach ($this->restricciones as $restriccion) {
+                                foreach ($this->restricciones as $restriccion) { // Eliminar los tipos de OT restringidos
                                     $clave = array_search($restriccion, $this->tiposOtCliente);
                                     if ($clave !== false) {
                                         unset($this->tiposOtCliente[$clave]);
                                     }
                                 }
                                 $this->tiposOtCliente = array_values($this->tiposOtCliente);
-                                foreach ($this->tiposOtCliente as $cod) {
+                                foreach ($this->tiposOtCliente as $cod) { //Buscar descripciones de los tipos permitidos
                                     $queryNombre = "SELECT cod, descripcion FROM tiposot WHERE cod = '$cod'";
                                     $resultNombre = parent::datos($queryNombre);
                                     if ($resultNombre) {
@@ -252,7 +255,7 @@ class Clientes extends Conexion
                                 }
                                 if (!$this->errorBucle) {
                                     $respuestas = new Respuestas;
-                                    $answer = $respuestas->ok($this->nombresOtCliente);
+                                    $answer = $respuestas->ok($this->nombresOtCliente); // Respuesta con los nombres de los tipos de OT disponibles
                                     $this->respuesta = $answer;
                                 } else {
                                     $respuestas = new Respuestas;
@@ -344,6 +347,7 @@ class Clientes extends Conexion
         }
     }
 
+    // Función que consulta las firmas de un cliente
     public function firmasCliente($codCliente)
     {
         try {
@@ -382,6 +386,7 @@ class Clientes extends Conexion
         }
     }
 
+    // Función que consulta las firmas restringidas de un cliente
     public function restGetFirmas($idCliente)
     {
         try {
@@ -416,6 +421,9 @@ class Clientes extends Conexion
         }
     }
 
+    // Función que consulta las OTs de un cliente, excluyendo las restringidas por firma
+    // y devuelve una lista de OTs con sus detalles, incluyendo fotos, firmas, carpetas y líneas asociadas.
+    // También incluye información del usuario que hizo visible la OT.
     public function clientesOts($idCliente, $codCliente, $codOt)
     {
         try {
@@ -614,6 +622,8 @@ class Clientes extends Conexion
         }
     }
 
+    // Función que consulta las líneas de una OT específica y devuelve sus detalles, incluyendo fotos, firmas y usuarios asociados.
+    // También incluye información del usuario que hizo visible la línea.
     public function lineasApp($ot)
     {
         try {
@@ -761,6 +771,8 @@ class Clientes extends Conexion
         }
     }
 
+    // Función para obtener todas las fotos visibles asociadas a una línea de una OT específica.
+    // Devuelve un array con los detalles de cada foto, incluyendo su nombre, enlace.
     public function fotos($ot, $lineaOt)
     {
         try {
@@ -851,6 +863,9 @@ class Clientes extends Conexion
         }
     }
 
+    // FUnción para obtener todas las firmas visibles asociadas a una OT y línea especifica.
+    // Devuelve un array con los detalles de cada firma, incluyendo su nombre, enlace y detalles del usuario que la subió.
+    // También incluye información del usuario que hizo visible la firma.
     public function firmas($ot, $lineaOt)
     {
         try {
@@ -941,6 +956,9 @@ class Clientes extends Conexion
         }
     }
 
+    // Función paa obtener los archivos visibles asociados a una OT y línea específica.
+    // Devuelve un array con los detalles de cada archivo, incluyendo su nombre, enlace y detalles del usuario que lo subió.
+    // También incluye información del usuario que hizo visible el archivo.
     public function carpetas($ot, $lineaOt)
     {
         try {
@@ -1031,6 +1049,9 @@ class Clientes extends Conexion
         }
     }
 
+    // Función que recupera archivos asociados a una OT, pero solo aquellos que no están vinculados a una línea de actividad específica.
+    // Devuelve un array con los detalles de cada archivo, incluyendo su nombre, enlace y detalles del usuario que lo subió.
+    // También incluye información del usuario que hizo visible el archivo.
     public function carpetasOt($ot)
     {
         try {

@@ -39,6 +39,8 @@ class Carpetas extends conexion
     public $respuesta = '';
     public $error = '';
 
+    // Función que crea un archivo ZIP con los archivos especificados
+    // Esta función se usa para crear un archivo ZIP con los archivos de fotos y firmas de una OT
     public function crearZip($archivos, $nombreZip)
     {
         try {
@@ -82,6 +84,8 @@ class Carpetas extends conexion
         }
     }
 
+    // Función que obtiene las carpetas de una OT
+    // Esta función se usa para obtener las carpetas de una OT y sus archivos
     public function post($json)
     {
         try {
@@ -93,7 +97,7 @@ class Carpetas extends conexion
                 } else {
                     $this->error = $_respuestas->error_400("Error en el formato de los datos que has enviado - O no has especificado un dato obligatorio");
                 }
-            } else {
+            } else { //Sanitizamos los valores recibidos para prevenir inyecciones SQL
                 $this->ruta = parent::sanitizar($datos['ruta']);;
                 $this->linea = parent::sanitizar($datos['linea']);
                 $this->ot = parent::sanitizar($datos['ot']);
@@ -107,14 +111,14 @@ class Carpetas extends conexion
                 $ano_actual = date('Y');
                 $fechaActual = date('Y-m-d H:i:s');
                 $this->fecha = $fechaActual;
-                $lineaNavision = $this->linea2($this->ruta, $this->linea);
+                $lineaNavision = $this->linea2($this->ruta, $this->linea); //Obtenemos datos de Navision
                 $this->lineaNavision = $lineaNavision[0];
                 if (!$this->lineaNavision) {
                     $respuestas = new Respuestas;
                     $answer = $respuestas->error_500('500 - No fue posible consultar la línea en la API Navision desde la API intermedia');
                     $this->error = $answer;
                     return;
-                }
+                } //Sanitizamos datos de Navision
                 $ot = $this->lineaNavision['OT'];
                 $ot = addslashes($ot);
                 $ot = parent::sanitizar($ot);
@@ -147,9 +151,9 @@ class Carpetas extends conexion
                 $tablaCarpetas = '';
                 $tablaLineas = '';
 
-                $query = "SELECT * FROM ot WHERE nombre = '$this->ot'";
-                $result = parent::datos($query);
-                if (!$result->num_rows) {
+                $query = "SELECT * FROM ot WHERE nombre = '$this->ot'"; //Consultamos si la OT ya existe
+                $result = parent::datos($query); 
+                if (!$result->num_rows) { // Si no existe, la creamos
                     $query = "INSERT INTO ot (nombre, ano, cliente, nombreCliente, tipo, descripcion, fechaIn) VALUES ('$ot', '$ano_actual', '$cliente', '$nombreCliente', '$tipo', '$descripcion', '$this->fecha')";
                     $result = parent::datos($query);
                     if ($result) {
@@ -278,8 +282,8 @@ class Carpetas extends conexion
                     $this->anoOt = $row['ano'];
                 }
 
-                $query = "SELECT * FROM $this->tablaLineas WHERE ot = '$this->ot' AND lineaOt = '$this->lineaActividad'";
-                if (!$result->num_rows) {
+                $query = "SELECT * FROM $this->tablaLineas WHERE ot = '$this->ot' AND lineaOt = '$this->lineaActividad'"; // Consultamos si existe línea asociada a la OT y actividad
+                if (!$result->num_rows) { // Si no existe, la creamos
                     $query = "INSERT INTO $this->tablaLineas (ruta, linea, ot, lineaOt, cliente, nombreCliente, pv, firma, usuario, fecha) VALUES ('$this->ruta', '$this->linea', '$ot', '$lineaOt', '$cliente', '$nombreCliente', '$puntoVenta', '$firma', '$this->usuario', '$this->fecha')";
                     $result = parent::datos($query);
                     if (!$result) {
@@ -367,7 +371,8 @@ class Carpetas extends conexion
             $this->error = $answer;
         }
     }
-
+    // Función que obtiene las carpetas de una OT completa
+    // Esta función se usa para crear una carpeta de OT completa con todas las fotos y firmas
     public function postOt($json)
     {
         try {
@@ -375,7 +380,7 @@ class Carpetas extends conexion
             $datos = json_decode($json, true);
             if (!isset($datos['otCompleta']) || !isset($datos['ot']) || !isset($datos['usuario'])) {
                 $this->error = $_respuestas->error_400("Error en el formato de los datos que has enviado - O no has especificado un dato obligatorio");
-            } else {
+            } else { //Sanitizamos los valores recibidos para prevenir inyecciones SQL y agregamos valores inciiales
                 $this->ruta = 0;
                 $this->linea = 0;
                 $this->ot = parent::sanitizar($datos['ot']);
@@ -482,24 +487,26 @@ class Carpetas extends conexion
         }
     }
 
+    // Función que obtiene las carpetas de una OT completa
+    // Esta función consulta y devuelve una lista de carpetas asociadas a una OT específica
     public function carpetas($ruta, $linea, $ot, $lineaOt)
     {
         try {
             $this->ot = $ot;
-            $query = "SELECT * FROM ot WHERE nombre = '$this->ot'";
+            $query = "SELECT * FROM ot WHERE nombre = '$this->ot'"; // Consultamos si la OT existe
             $result = parent::datos($query);
-            if (!$result->num_rows) {
+            if (!$result->num_rows) { // Si no existe, devolvemos un error
                 $respuestas = new Respuestas;
                 $answer = $respuestas->ok($this->carpetas);
                 $this->respuesta = $answer;
-            } else {
+            } else { // Si existe, obtenemos el año de la OT y lo usamos para darle nombre dinámico a la tabla
                 $row = mysqli_fetch_assoc($result);
                 $this->table = 'carpetas' . $row['ano'];
                 $query = "SELECT * FROM $this->table WHERE ot = '$this->ot' AND lineaActividad = '$lineaOt'";
                 $result = parent::datos($query);
                 if ($result) {
                     $i = 0;
-                    while ($row = mysqli_fetch_assoc($result)) {
+                    while ($row = mysqli_fetch_assoc($result)) { // Recorremos los resultados y construimos el array de carpetas
                         $pathArchivo = __DIR__ . "/../../carpetas/" . $row['ano'] . '/' . $row['ot'] . '/' . $row['nombre'];
                         if (file_exists($pathArchivo)) {
                             $carpeta = [];
@@ -552,7 +559,7 @@ class Carpetas extends conexion
                             $this->carpetas[$i] = $carpeta;
                             $i++;
                         }
-                    }
+                    } // Devuelve todas las carpetas encontradas en formato JSON
                     $respuestas = new Respuestas;
                     $answer = $respuestas->ok($this->carpetas);
                     $this->respuesta = $answer;
@@ -568,7 +575,7 @@ class Carpetas extends conexion
             $this->error = $answer;
         }
     }
-
+    // Función que elimina una carpeta
     public function delete($json)
     {
         try {
@@ -581,18 +588,18 @@ class Carpetas extends conexion
                 $this->id = $datos['id'];
                 $this->usuarioElimina = $datos['usuarioElimina'];
                 $this->tipo = $datos['tipo'];
-                $query = "SELECT * FROM ot WHERE nombre = '$this->ot'";
+                $query = "SELECT * FROM ot WHERE nombre = '$this->ot'"; // Buscamos la OT para obtener el año y el nombre
                 $result = parent::datos($query);
                 if (!$result->num_rows) {
                     $respuestas = new Respuestas;
                     $answer = $respuestas->error_400('Error 400: La carpeta no puede ser eliminada ya que las carpetas de la OT no existen en la base de datos');
                     $this->error = $answer;
                 } else {
-                    $row = mysqli_fetch_assoc($result);
-                    $this->table = 'carpetas' . $row['ano'];
-                    $query = "SELECT * FROM $this->table WHERE id = '$this->id'";
-                    $result = parent::datos($query);
-                    if ($result) {
+                    $row = mysqli_fetch_assoc($result); // Si la OT existe, obtenemos el año
+                    $this->table = 'carpetas' . $row['ano']; // Asignamos el nombre de la tabla de carpetas según el año de la OT
+                    $query = "SELECT * FROM $this->table WHERE id = '$this->id'"; // Consultamos si la carpeta existe
+                    $result = parent::datos($query); // Si existe, obtenemos los datos de la carpeta
+                    if ($result) { // Si la consulta fue exitosa extraemos los datos de la carpeta
                         $row = mysqli_fetch_assoc($result);
                         $this->nombre = $row['nombre'];
                         $this->ruta = $row['ruta'];
@@ -611,8 +618,8 @@ class Carpetas extends conexion
                         $query = "INSERT INTO reciclaje (nombre, ruta, linea, ot, lineaActividad, ext, cliente, nombreCliente, pv, pvNombre, usuario, usuarioElimina, ano, fecha, fechaElimina, tipo) VALUES ('$this->nombre', '$this->ruta', '$this->linea', '$this->ot', '$this->lineaActividad', '$this->ext', '$this->cliente','$this->nombreCliente', '$this->pv', '$this->pvNombre', '$this->usuario', '$this->usuarioElimina', '$this->ano', '$this->fecha', '$this->fechaElimina', '$this->tipo')";
                         $result = parent::datosPost($query);
                         if ($result) {
-                            $query = "DELETE FROM $this->table WHERE id = '$this->id'";
-                            $result = parent::datos($query);
+                            $query = "DELETE FROM $this->table WHERE id = '$this->id'"; // Eliminamos todos los datos de la carpeta en la tabla carpetas
+                            $result = parent::datos($query); // Si la consulta fue exitosa, eliminamos los datos de la carpeta en la tabla carpetas
                             if ($result) {
                                 $archivo = __DIR__ . "/../../carpetas/" . $row['ano'] . '/' . $row['ot'] . '/' . $row['nombre'];
                                 $nuevaRuta = __DIR__ . "/../../reciclaje/" . $row['nombre'];
@@ -650,6 +657,7 @@ class Carpetas extends conexion
         }
     }
 
+    // Función que actualiza la visibilidad de una carpeta
     public function visible($json)
     {
         try {
@@ -662,8 +670,8 @@ class Carpetas extends conexion
                 $this->id = $datos['id'];
                 $this->accion = $datos['accion'];
                 $this->usuario = $datos['usuario'];
-                $query = "UPDATE $this->table SET visible = '$this->accion', usuarioVisible = '$this->usuario' WHERE id = $this->id";
-                $result = parent::datos($query);
+                $query = "UPDATE $this->table SET visible = '$this->accion', usuarioVisible = '$this->usuario' WHERE id = $this->id"; // Actualizamos la visibilidad de la carpeta
+                $result = parent::datos($query); // Ejecutamos la consulta
                 if ($result) {
                     $respuestas = new Respuestas;
                     $answer = $respuestas->ok('La carpeta ahora es visible para el cliente');
@@ -681,11 +689,12 @@ class Carpetas extends conexion
         }
     }
 
+    // Función que busca todas las carpetas asociadas a una OT específica
     public function carpetasOt($ot)
     {
         try {
             $this->ot = $ot;
-            $query = "SELECT * FROM ot WHERE nombre = '$this->ot'";
+            $query = "SELECT * FROM ot WHERE nombre = '$this->ot'"; // Buscamos por nombre de OT
             $result = parent::datos($query);
             if (!$result->num_rows) {
                 $respuestas = new Respuestas;
@@ -693,12 +702,12 @@ class Carpetas extends conexion
                 $this->respuesta = $answer;
             } else {
                 $row = mysqli_fetch_assoc($result);
-                $this->table = 'carpetas' . $row['ano'];
-                $query = "SELECT * FROM $this->table WHERE ot = '$this->ot'";
+                $this->table = 'carpetas' . $row['ano']; // Si encuentra la OT, extrae el año
+                $query = "SELECT * FROM $this->table WHERE ot = '$this->ot'"; //Buscamos todas las carpetas asociadas a la OT
                 $result = parent::datos($query);
                 if ($result) {
                     $i = 0;
-                    while ($row = mysqli_fetch_assoc($result)) {
+                    while ($row = mysqli_fetch_assoc($result)) { //Verificamos si el archivo existe en la ruta esperada, si existe, contunúa llenando la información de la carpeta
                         $pathArchivo = __DIR__ . "/../../carpetas/" . $row['ano'] . '/' . $row['ot'] . '/' . $row['nombre'];
                         if (file_exists($pathArchivo)) {
                             $carpeta = [];
@@ -716,7 +725,7 @@ class Carpetas extends conexion
                             $carpeta['pv'] = $row['pv'];
                             $carpeta['pvNombre'] = $row['pvNombre'];
                             $carpeta['usuario'] = $row['usuario'];
-                            if ($row['usuario']) {
+                            if ($row['usuario']) { // Consulta los datos del usuario que subió el archivo
                                 $usuariocarpeta = $row['usuario'];
                                 $query2 = "SELECT * FROM usuarios WHERE id = '$usuariocarpeta'";
                                 $result2 = parent::datos($query2);
@@ -732,7 +741,7 @@ class Carpetas extends conexion
                             }
                             $carpeta['visible'] = $row['visible'];
                             $carpeta['usuarioVisible'] = $row['usuarioVisible'];
-                            if ($row['usuarioVisible']) {
+                            if ($row['usuarioVisible']) { //Si usuarioVisible tiene un ID, busca todos los datos del usuario que marcó el archivo como visible
                                 $usuarioVisible = $row['usuarioVisible'];
                                 $query2 = "SELECT * FROM usuarios WHERE id = '$usuarioVisible'";
                                 $result2 = parent::datos($query2);
@@ -748,7 +757,7 @@ class Carpetas extends conexion
                             }
                             $carpeta['ano'] = $row['ano'];
                             $carpeta['fecha'] = $row['fecha'];
-                            $this->carpetas[$i] = $carpeta;
+                            $this->carpetas[$i] = $carpeta; //Agrega la carpeta al array principal
                             $i++;
                         }
                     }
@@ -768,10 +777,11 @@ class Carpetas extends conexion
         }
     }
 
+    // Función que consulta una línea específica y devuelve la información formateada en un array asociativo
     public function linea2($ruta, $lineaBuscar)
     {
         try {
-            $crm = new Crm;
+            $crm = new Crm; // Creamos una instancia del CRM para consultar la base de datos
             $camposLineas = "Codigo_de_l_nea,C_digo_de_OT_relacionada,Punto_de_venta,rea,Tipo_de_OT,Tipo_de_trabajo,Descripci_n_Tipo_Trabajo,Zona,Sector,Direcci_n,Nombre_de_Empresa,Fecha_actuaci_n,Fase,Motivo_de_incidencia,Observaciones_internas,Observaciones_montador,Horas_actuaci_n,D_as_actuaci_n,Minutos_actuaci_n,Poner,Quitar,Alto_medida,Ancho_medida,Fotos,Firma_de_la_OT_relacionada,Estado_de_Actuaci_n,nombreCliente,nombreOt,nombrePv,codPv";
             $query = "SELECT $camposLineas FROM Products WHERE Codigo_de_l_nea = $lineaBuscar";
             $crm->query($query);
