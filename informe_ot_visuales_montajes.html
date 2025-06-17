@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+
+  <!-- Evitar caché del HTML -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
+  <title>Informe de Montaje</title>
+
+  <!-- Enlace al CSS sin versión (se modificará dinámicamente) -->
+  <link id="css-link" rel="stylesheet" href="css/informe_ot_visuales_montajes.css">
+
+  <!-- Librería para manipular PDFs -->
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib/dist/pdf-lib.min.js"></script>
+
+  <!-- Script que inyecta versión para evitar caché solo en CSS -->
+  <script>
+    const timestamp = new Date().getTime(); // Tomamos una marca de tiempo en milisegundos
+
+    // Forzar recarga del CSS
+    const cssLink = document.getElementById("css-link"); // Guardamos el CSS en una variable
+    cssLink.href = `css/informe_ot_visuales_montajes.css?v=${timestamp}`; // Modificamos el href del CSS con la marca de tiempo
+    // Esto asegura que el navegador no use una versión en caché del CSS
+  </script>
+</head>
+<body>
+
+  <!-- Contenedor para selector y botón, centrado -->
+  <div id="control-panel">
+    <div id="selector-fecha-contenedor">
+      <p><strong>Selecciona una o más fechas:</strong></p>
+      <label>
+        <input type="checkbox" id="check-todas" />
+        <strong>Todas las fechas</strong>
+      </label>
+      <div id="fechas-checkboxes"></div>
+    </div>
+
+    <!-- Botón para generar el PDF -->
+    <button id="btnGenerarPDF" onclick="generarPDF()">Descargar PDF</button>
+  </div>
+
+  <!-- Contenedor donde JS genera informes completos -->
+  <div id="contenedor-informes"></div>
+
+  <!-- Librería para convertir HTML a PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <!-- Carga normal del script JS sin versión para evitar problemas -->
+  <script src="js/informe_ot_visuales_montajes.js?v=209" defer></script>
+
+</body>
+</html>
