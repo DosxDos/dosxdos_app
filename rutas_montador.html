@@ -209,11 +209,18 @@
     <div class="flex-grow p-6 bg-gray-100">
       <div id="rutas" class="h-full w-full mx-auto grid grid-cols-1 md:grid-cols-3 gap-4"></div>
     </div>
+
+    <!-- Test button - add this somewhere visible -->
+    <button onclick="redirectToNextJS('/gastos-ruta')"
+      style="background-color: #d31216; color: white; padding: 10px 20px; border: none; border-radius: 5px; margin: 20px;">
+      Prueba Desarollo App gastos - Ignorar
+    </button>
   </section>
 </body>
 <script src="https://dosxdos.app.iidos.com/js/index_db.js"></script>
 <script src="https://dosxdos.app.iidos.com/js/notificaciones.js"></script>
 <script src="https://dosxdos.app.iidos.com/js/navigation.js"></script>
+<script src="https://dosxdos.app.iidos.com/js/bridge-redirect.js"></script>
 <script>
   const $rutas = document.getElementById("rutas"),
     $loader = document.getElementById("loader"),

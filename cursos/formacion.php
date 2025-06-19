@@ -552,5 +552,3 @@ if ($curso && file_exists("$curso/config.php")) {
         alertContainer.appendChild(alertContent);
         document.body.appendChild(alertContainer);
 
-        // Slide down animation
-        requestAnimationFrame(() => {
