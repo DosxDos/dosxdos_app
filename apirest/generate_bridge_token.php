@@ -2,7 +2,6 @@
 // Turn off error display to prevent HTML in JSON response
 error_reporting(0);
 ini_set('display_errors', 0);
-
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
@@ -24,6 +23,31 @@ try {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $input = json_decode(file_get_contents('php://input'), true);
         
+        // NEW: Handle token decode requests (for returning from NextJS to old app)
+        if (isset($input['action']) && $input['action'] === 'decode_token') {
+            if (!isset($input['token'])) {
+                http_response_code(400);
+                echo json_encode(['success' => false, 'error' => 'No token provided for decoding']);
+                exit;
+            }
+            
+            $jwt = new SimpleJWT($secret_key);
+            $decoded = $jwt->decode($input['token']);
+            
+            if ($decoded === false || $decoded === null) {
+                http_response_code(400);
+                echo json_encode(['success' => false, 'error' => 'Invalid or expired token']);
+                exit;
+            }
+            
+            echo json_encode([
+                'success' => true,
+                'user_data' => $decoded['user_data'] ?? null
+            ]);
+            exit;
+        }
+        
+        // EXISTING: Original token generation for going to NextJS
         if (!isset($input['user_data'])) {
             http_response_code(400);
             echo json_encode(['success' => false, 'error' => 'User data required']);
