@@ -12,7 +12,7 @@ try {
     require_once 'clases/crm_clase.php';
     require_once 'clases/a3Erp_clase.php';
 
-    if (!isset($_GET['idOt']) || !isset($_GET['codOt']) || !isset($_GET['tipoOt']) || !isset($_GET['cliente']) || !isset($_GET['descuentoOt']) || !isset($_GET['descuentosAutomaticos']) || !isset($_GET['tokenJwt'])) {
+    if (!isset($_GET['idOt']) || !isset($_GET['codOt']) || !isset($_GET['tipoOt']) || !isset($_GET['cliente']) || !isset($_GET['descuentoOt']) || !isset($_GET['descuentosAutomaticos']) || !isset($_GET['margenGanancia']) || !isset($_GET['tokenJwt'])) {
         echo '<p style="color:red;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ERROR!!! NO SE HAN RECIBIDO LOS DATOS NECESARIOS</p>';
         scrollUpdate();
         @ob_flush();
@@ -41,6 +41,14 @@ try {
         $descuentoOt = $_GET['descuentoOt'];
         $descuentoOt = (float) str_replace(',', '.', $descuentoOt);
         $descuentoOt = number_format($descuentoOt, 2, '.', '');
+    }
+
+    if (!$_GET['margenGanancia']) {
+        $margenGanancia = 0;
+    } else {
+        $margenGanancia = $_GET['margenGanancia'];
+        $margenGanancia = (float) str_replace(',', '.', $margenGanancia);
+        $margenGanancia = number_format($margenGanancia, 2, '.', '');
     }
 
     if (!$idOt || !$codOt || !$tipoOt || !$cliente) {
@@ -124,6 +132,7 @@ try {
             echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descPorcMontaje: ' . $descPorcMontaje . '</p>';
             echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descuentosAutomaticos: ' . $descuentosAutomaticos . '</p>';
             echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descuentoOt: ' . $descuentoOt . '</p>';
+            echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">margenGanancia: ' . $margenGanancia . '</p>';
             echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Impuesto ' . $impuesto . '</p>';
             echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">impuestoPorc: ' . $impuestoPorc . '</p>';
             scrollUpdate();
@@ -1621,6 +1630,27 @@ try {
             $totalDesmontaje = $desmontaje - $totalDescDesmontaje;
             $totalDesmontajeLogos = $desmontajeLogos - $totalDescDesmontajeLogos;
             $totalSinImpuesto = $totalRealizacion + $totalMontaje + $acabados + $logos + $totalMontajeLogos + $tomaDeMedidas + $totalDesmontaje + $totalDesmontajeLogos;
+            //MARGEN DE GANANCIA
+            $margenGananciaValue = ($totalSinImpuesto * $margenGanancia) / 100;
+            $totalSinImpuesto = $totalSinImpuesto + $margenGananciaValue;
+            //AÑADIR MARGEN DE GANANCIA A LA DATA DE A3 ERP COMO UNA ARTÍCULO MÁS (ESTO SE RESUELVE ASÍ DEBIDO A QUE EL MARGEN DE GANANCIA LO PONE JULIO PERSONALMENTE SEGÚN EL CASO, LO CUAL SUMA UNA GRAN VARIABILIDAD EN LOS PRECIOS DE LAS LÍNEAS A LA VARIABILIDAD ACTUAL DEL DESCUENTO DE LA OT, LO RESUELVO ASÍ PARA QUE EL CLIENTE NO PERCIBA GRAN VARIABILIDAD QUE AUMENTE LOS PRECIOS MÁS ESTABLES DE LOS PRESUPUESTOS, ESTA RESOLUCIÓN TAMBIÉN BRINDA LA ENORME POSIBILIDAD DE HACER ESTADÍSTICAS DE ESTA VARIABILIDAD)
+            foreach ($materialesServicios as $materialServicio) {
+                if ($materialServicio['Material'] == "MARGEN DE GANANCIA") {
+                    $codigoArticuloA3Erp = $materialServicio['idA3Erp'];
+                }
+            }
+            //LÍNEA DE A3 ERP DEL MARGEN DE GANANCIA
+            $precioMargenDeGanancia = $margenGananciaValue;
+            if ($descuentoOt) {
+                $descuentoEnMargenDeGanancia = ($precioMargenDeGanancia * $descuentoOt) / 100;
+                $precioMargenDeGanancia = $precioMargenDeGanancia - $descuentoEnMargenDeGanancia;
+            }
+            $lineaA3Erp = [];
+            $lineaA3Erp['CodigoArticulo'] = $codigoArticuloA3Erp;
+            $lineaA3Erp['Unidades'] = 1;
+            $lineaA3Erp['Precio'] = $precioMargenDeGanancia;
+            $lineaA3Erp['Texto'] = $codigoArticuloA3Erp . ' - ' . 'MARGEN DE GANANCIA (VER NOTAS)';
+            array_push($lineasA3Erp, $lineaA3Erp);
             //DESCUENTO MANUAL DE LA OT
             $descuentoOtValue = ($totalSinImpuesto * $descuentoOt) / 100;
             $totalSinImpuestoConDescuentoOt = $totalSinImpuesto - $descuentoOtValue;
@@ -1635,6 +1665,7 @@ try {
                 $totalConImpuesto = $totalSinImpuesto + $impuestoAplicado;
             }
             /* ACTUALIZAR IMPORTE DE LA OT */
+            echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">margenGananciaValue: ' . number_format($margenGananciaValue, 2, '.', '') . '€</p>';
             echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">totalSinImpuesto: ' . number_format($totalSinImpuesto, 2, '.', '') . '€</p>';
             echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">totalSinImpuestoConDescuentoOt: ' . number_format($totalSinImpuestoConDescuentoOt, 2, '.', '') . '€</p>';
             echo '<p style="color:green;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">ACTUALIZANDO EL IMPORTE DE LA OT EN EL CRM...</p>';
@@ -1668,9 +1699,13 @@ try {
             echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">tomaDeMedidas: ' . number_format($tomaDeMedidas, 2, '.', '') . '€</p>';
             echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">totalDesmontaje: ' . number_format($totalDesmontaje, 2, '.', '') . '€</p>';
             echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">totalDesmontajeLogos: ' . number_format($totalDesmontajeLogos, 2, '.', '') . '€</p>';
+            echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">margenGanancia: ' . $margenGanancia . '%</p>';
+            echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">margenGananciaValue: ' . number_format($margenGananciaValue, 2, '.', '') . '€</p>';
             echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">totalSinImpuesto: ' . number_format($totalSinImpuesto, 2, '.', '') . '€</p>';
-            echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descuentoOtValue: ' . number_format($descuentoOtValue, 2, '.', '') . '€</p>';
+            echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">descuentoOt: ' . $descuentoOt . '%</p>';
             echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">totalSinImpuestoConDescuentoOt: ' . number_format($totalSinImpuestoConDescuentoOt, 2, '.', '') . '€</p>';
+            echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Impuesto ' . $impuesto . '</p>';
+            echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">impuestoPorc: ' . $impuestoPorc . '</p>';
             echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">impuestoAplicado: ' . number_format($impuestoAplicado, 2, '.', '') . '€</p>';
             echo '<p style="color:orange;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">totalConImpuesto: ' . number_format($totalConImpuesto, 2, '.', '') . '€</p>';
             echo '<p style="color:pink;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total sumatoria bucles de los precios de las líneas: ' . number_format($totalPreciosLineas, 2, '.', '') . '€</p>';
@@ -1753,13 +1788,19 @@ try {
                     //$observacionesA3Erp .= 'Toma de medidas: ' . number_format($tomaDeMedidas, 2, '.', '') . '€ - ';
                     $observacionesA3Erp .= 'Toma de medidas: ' . number_format($tomaDeMedidas, 2, '.', '') . '€\n';
                 }
+                if ($margenGanancia) {
+                    echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Margen de ganancia: ' . $margenGanancia . '%</p>';
+                    echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Valor margen de ganancia: ' . number_format($margenGananciaValue, 2, '.', '') . '€</p>';
+                    $observacionesA3Erp .= 'Margen de ganancia: ' . $margenGanancia . '%\n';
+                    $observacionesA3Erp .= 'Valor margen de ganancia: ' . number_format($margenGananciaValue, 2, '.', '') . '€\n';
+                }
                 echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2, '.', '') . '€</p>';
                 $observacionesA3Erp .= 'Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2, '.', '') . '€\n';
                 if ($descuentoOt) {
                     echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento general: ' . $descuentoOt . '%</p>';
-                    echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento general: ' . number_format($totalDescOt, 2, '.', '') . '€</p>';
+                    echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento general: ' . number_format($descuentoOtValue, 2, '.', '') . '€</p>';
                     echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto sin impuesto: ' . number_format($totalSinImpuestoConDescuentoOt, 2, '.', '') . '€</p>';
-                    $observacionesA3Erp .= 'Descuento general: ' . $descuentoOt . '%\nDescuento general: ' . number_format($totalDescOt, 2, '.', '') . '€\nTotal presupuesto sin impuesto: ' . number_format($totalSinImpuestoConDescuentoOt, 2, '.', '') . '€\n';
+                    $observacionesA3Erp .= 'Descuento general: ' . $descuentoOt . '%\nDescuento general: ' . number_format($descuentoOtValue, 2, '.', '') . '€\nTotal presupuesto sin impuesto: ' . number_format($totalSinImpuestoConDescuentoOt, 2, '.', '') . '€\n';
                 }
                 echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Impuesto ' . $impuesto . '</p>';
                 echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto con impuesto: ' . number_format($totalConImpuesto, 2, '.', '') . '€</p>';
@@ -1812,13 +1853,19 @@ try {
                     //$observacionesA3Erp .= 'Toma de medidas: ' . number_format($tomaDeMedidas, 2, '.', '') . '€ - ';
                     $observacionesA3Erp .= 'Toma de medidas: ' . number_format($tomaDeMedidas, 2, '.', '') . '€\n';
                 }
+                if ($margenGanancia) {
+                    echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Margen de ganancia: ' . $margenGanancia . '%</p>';
+                    echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Valor margen de ganancia: ' . number_format($margenGananciaValue, 2, '.', '') . '€</p>';
+                    $observacionesA3Erp .= 'Margen de ganancia: ' . $margenGanancia . '%\n';
+                    $observacionesA3Erp .= 'Valor margen de ganancia: ' . number_format($margenGananciaValue, 2, '.', '') . '€\n';
+                }
                 echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2, '.', '') . '€</p>';
                 $observacionesA3Erp .= 'Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2, '.', '') . '€\n';
                 if ($descuentoOt) {
                     echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento general: ' . $descuentoOt . '%</p>';
-                    echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento general: ' . number_format($totalDescOt, 2, '.', '') . '€</p>';
+                    echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento general: ' . number_format($descuentoOtValue, 2, '.', '') . '€</p>';
                     echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto sin impuesto: ' . number_format($totalSinImpuestoConDescuentoOt, 2, '.', '') . '€</p>';
-                    $observacionesA3Erp .= 'Descuento general: ' . $descuentoOt . '%\nDescuento general: ' . number_format($totalDescOt, 2, '.', '') . '€\nTotal presupuesto sin impuesto: ' . number_format($totalSinImpuestoConDescuentoOt, 2, '.', '') . '€\n';
+                    $observacionesA3Erp .= 'Descuento general: ' . $descuentoOt . '%\nDescuento general: ' . number_format($descuentoOtValue, 2, '.', '') . '€\nTotal presupuesto sin impuesto: ' . number_format($totalSinImpuestoConDescuentoOt, 2, '.', '') . '€\n';
                 }
                 echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Impuesto ' . $impuesto . '</p>';
                 echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto con impuesto: ' . number_format($totalConImpuesto, 2, '.', '') . '€</p>';
@@ -1860,13 +1907,19 @@ try {
                     //$observacionesA3Erp .= 'Toma de medidas: ' . number_format($tomaDeMedidas, 2, '.', '') . '€ - ';
                     $observacionesA3Erp .= 'Toma de medidas: ' . number_format($tomaDeMedidas, 2, '.', '') . '€\n';
                 }
+                if ($margenGanancia) {
+                    echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Margen de ganancia: ' . $margenGanancia . '%</p>';
+                    echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Valor margen de ganancia: ' . number_format($margenGananciaValue, 2, '.', '') . '€</p>';
+                    $observacionesA3Erp .= 'Margen de ganancia: ' . $margenGanancia . '%\n';
+                    $observacionesA3Erp .= 'Valor margen de ganancia: ' . number_format($margenGananciaValue, 2, '.', '') . '€\n';
+                }
                 echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2, '.', '') . '€</p>';
                 $observacionesA3Erp .= 'Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2, '.', '') . '€\n';
                 if ($descuentoOt) {
                     echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento general: ' . $descuentoOt . '%</p>';
-                    echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento general: ' . number_format($totalDescOt, 2, '.', '') . '€</p>';
+                    echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento general: ' . number_format($descuentoOtValue, 2, '.', '') . '€</p>';
                     echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto sin impuesto: ' . number_format($totalSinImpuestoConDescuentoOt, 2, '.', '') . '€</p>';
-                    $observacionesA3Erp .= 'Descuento general: ' . $descuentoOt . '%\nDescuento general: ' . number_format($totalDescOt, 2, '.', '') . '€\nTotal presupuesto sin impuesto: ' . number_format($totalSinImpuestoConDescuentoOt, 2, '.', '') . '€\n';
+                    $observacionesA3Erp .= 'Descuento general: ' . $descuentoOt . '%\nDescuento general: ' . number_format($descuentoOtValue, 2, '.', '') . '€\nTotal presupuesto sin impuesto: ' . number_format($totalSinImpuestoConDescuentoOt, 2, '.', '') . '€\n';
                 }
                 echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Impuesto ' . $impuesto . '</p>';
                 echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto con impuesto: ' . number_format($totalConImpuesto, 2, '.', '') . '€</p>';
@@ -1875,13 +1928,19 @@ try {
             }
             /* SI SÓLO EXISTEN TOMAS DE MEDIDA */ else if ($numTomasDeMedida) {
                 echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Toma de medidas: ' . number_format($tomaDeMedidas, 2, '.', '') . '€</p>';
+                if ($margenGanancia) {
+                    echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Margen de ganancia: ' . $margenGanancia . '%</p>';
+                    echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Valor margen de ganancia: ' . number_format($margenGananciaValue, 2, '.', '') . '€</p>';
+                    $observacionesA3Erp .= 'Margen de ganancia: ' . $margenGanancia . '%\n';
+                    $observacionesA3Erp .= 'Valor margen de ganancia: ' . number_format($margenGananciaValue, 2, '.', '') . '€\n';
+                }
                 echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2, '.', '') . '€</p>';
                 $observacionesA3Erp .= 'Toma de medidas: ' . number_format($tomaDeMedidas, 2, '.', '') . 'Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2, '.', '') . '€\n';
                 if ($descuentoOt) {
                     echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento general: ' . $descuentoOt . '%</p>';
-                    echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento general: ' . number_format($totalDescOt, 2, '.', '') . '€</p>';
+                    echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento general: ' . number_format($descuentoOtValue, 2, '.', '') . '€</p>';
                     echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto sin impuesto: ' . number_format($totalSinImpuestoConDescuentoOt, 2, '.', '') . '€</p>';
-                    $observacionesA3Erp .= 'Descuento general: ' . $descuentoOt . '%\nDescuento general: ' . number_format($totalDescOt, 2, '.', '') . '€\nTotal presupuesto sin impuesto: ' . number_format($totalSinImpuestoConDescuentoOt, 2, '.', '') . '€\n';
+                    $observacionesA3Erp .= 'Descuento general: ' . $descuentoOt . '%\nDescuento general: ' . number_format($descuentoOtValue, 2, '.', '') . '€\nTotal presupuesto sin impuesto: ' . number_format($totalSinImpuestoConDescuentoOt, 2, '.', '') . '€\n';
                 }
                 echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Impuesto ' . $impuesto . '</p>';
                 echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto con impuesto: ' . number_format($totalConImpuesto, 2, '.', '') . '€</p>';
@@ -2031,9 +2090,30 @@ try {
                     $totalRealizacion = $realizacion;
                     $totalMontaje = $montaje;
                     $totalSinImpuesto = $totalRealizacion + $totalMontaje;
+                    //MARGEN DE GANANCIA
+                    $margenGananciaValue = ($totalSinImpuesto * $margenGanancia) / 100;
+                    $totalSinImpuesto = $totalSinImpuesto + $margenGananciaValue;
+                    //AÑADIR MARGEN DE GANANCIA A LA DATA DE A3 ERP COMO UNA ARTÍCULO MÁS (ESTO SE RESUELVE ASÍ DEBIDO A QUE EL MARGEN DE GANANCIA LO PONE JULIO PERSONALMENTE SEGÚN EL CASO, LO CUAL SUMA UNA GRAN VARIABILIDAD EN LOS PRECIOS DE LAS LÍNEAS A LA VARIABILIDAD ACTUAL DEL DESCUENTO DE LA OT, LO RESUELVO ASÍ PARA QUE EL CLIENTE NO PERCIBA GRAN VARIABILIDAD QUE AUMENTE LOS PRECIOS MÁS ESTABLES DE LOS PRESUPUESTOS, ESTA RESOLUCIÓN TAMBIÉN BRINDA LA ENORME POSIBILIDAD DE HACER ESTADÍSTICAS DE ESTA VARIABILIDAD)
+                    foreach ($materialesServicios as $materialServicio) {
+                        if ($materialServicio['Material'] == "MARGEN DE GANANCIA") {
+                            $codigoArticuloA3Erp = $materialServicio['idA3Erp'];
+                        }
+                    }
+                    //LÍNEA DE A3 ERP DEL MARGEN DE GANANCIA
+                    $precioMargenDeGanancia = $margenGananciaValue;
+                    if ($descuentoOt) {
+                        $descuentoEnMargenDeGanancia = ($precioMargenDeGanancia * $descuentoOt) / 100;
+                        $precioMargenDeGanancia = $precioMargenDeGanancia - $descuentoEnMargenDeGanancia;
+                    }
+                    $lineaA3Erp = [];
+                    $lineaA3Erp['CodigoArticulo'] = $codigoArticuloA3Erp;
+                    $lineaA3Erp['Unidades'] = 1;
+                    $lineaA3Erp['Precio'] = $precioMargenDeGanancia;
+                    $lineaA3Erp['Texto'] = $codigoArticuloA3Erp . ' - ' . 'MARGEN DE GANANCIA (VER NOTAS)';
+                    array_push($lineasA3Erp, $lineaA3Erp);
                     //DESCUENTO MANUAL DE LA OT
                     $descuentoOtValue = ($totalSinImpuesto * $descuentoOt) / 100;
-                    $totalSinImpuestoConDescuentoOt = $totalSinImpuesto - $totalDescOt;
+                    $totalSinImpuestoConDescuentoOt = $totalSinImpuesto - $descuentoOtValue;
                     //APLICACIÓN DEL IMPUESTO
                     $impuestoAplicado = 0;
                     $totalConImpuesto = 0;
@@ -2068,9 +2148,17 @@ try {
                         die();
                     }
                     echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">totalRealizacion: ' . number_format($totalRealizacion, 2, '.', '') . '€</p>';
+                    $observacionesA3Erp .= 'Total realización: ' . number_format($totalRealizacion, 2, '.', '') . '€\n';
                     echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">totalMontaje: ' . number_format($totalMontaje, 2, '.', '') . '€</p>';
+                    $observacionesA3Erp .= 'Total montaje: ' . number_format($totalMontaje, 2, '.', '') . '€\n';
+                    if ($margenGanancia) {
+                        echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Margen de ganancia: ' . $margenGanancia . '%</p>';
+                        echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Valor margen de ganancia: ' . number_format($margenGananciaValue, 2, '.', '') . '€</p>';
+                        $observacionesA3Erp .= 'Margen de ganancia: ' . $margenGanancia . '%\n';
+                        $observacionesA3Erp .= 'Valor margen de ganancia: ' . number_format($margenGananciaValue, 2, '.', '') . '€\n';
+                    }
                     echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2, '.', '') . '€</p>';
-                    $observacionesA3Erp .= 'Total realización: ' . number_format($totalRealizacion, 2, '.', '') . '€\n' . 'Total montaje: ' . number_format($totalMontaje, 2, '.', '') . '€\n' . 'Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2, '.', '') . '€\n';
+                    $observacionesA3Erp .= 'Total presupuesto sin impuesto: ' . number_format($totalSinImpuesto, 2, '.', '') . '€\n';
                     if ($descuentoOt) {
                         echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento general: ' . $descuentoOt . '%</p>';
                         echo '<p style="color:blue;display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%">Descuento general aplicado: ' . number_format($descuentoOtValue, 2, '.', '') . '€</p>';
