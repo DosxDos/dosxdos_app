@@ -590,7 +590,7 @@ try {
                                     }
                                 }
                                 if ($validarPrecioLogo) {
-                                    $realizacionLineaLogo = $m2 * $precioDelLogo;
+                                    $realizacionLineaLogo = $precioDelLogo;
                                     $realizacionLineaLogo = number_format($realizacionLineaLogo, 2, '.', '');
                                     $logos = $logos + $realizacionLineaLogo;
                                     $precioLinea = $realizacionLineaLogo;
