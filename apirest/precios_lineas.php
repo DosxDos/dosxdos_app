@@ -45,10 +45,12 @@ try {
 
     if (!$_GET['margenGanancia']) {
         $margenGanancia = 0;
+        $margenGananciaValue = 0;
     } else {
         $margenGanancia = $_GET['margenGanancia'];
         $margenGanancia = (float) str_replace(',', '.', $margenGanancia);
         $margenGanancia = number_format($margenGanancia, 2, '.', '');
+        $margenGananciaValue = 0;
     }
 
     if (!$idOt || !$codOt || !$tipoOt || !$cliente) {
@@ -1630,27 +1632,29 @@ try {
             $totalDesmontaje = $desmontaje - $totalDescDesmontaje;
             $totalDesmontajeLogos = $desmontajeLogos - $totalDescDesmontajeLogos;
             $totalSinImpuesto = $totalRealizacion + $totalMontaje + $acabados + $logos + $totalMontajeLogos + $tomaDeMedidas + $totalDesmontaje + $totalDesmontajeLogos;
-            //MARGEN DE GANANCIA
-            $margenGananciaValue = ($totalSinImpuesto * $margenGanancia) / 100;
-            $totalSinImpuesto = $totalSinImpuesto + $margenGananciaValue;
-            //AÑADIR MARGEN DE GANANCIA A LA DATA DE A3 ERP COMO UNA ARTÍCULO MÁS (ESTO SE RESUELVE ASÍ DEBIDO A QUE EL MARGEN DE GANANCIA LO PONE JULIO PERSONALMENTE SEGÚN EL CASO, LO CUAL SUMA UNA GRAN VARIABILIDAD EN LOS PRECIOS DE LAS LÍNEAS A LA VARIABILIDAD ACTUAL DEL DESCUENTO DE LA OT, LO RESUELVO ASÍ PARA QUE EL CLIENTE NO PERCIBA GRAN VARIABILIDAD QUE AUMENTE LOS PRECIOS MÁS ESTABLES DE LOS PRESUPUESTOS, ESTA RESOLUCIÓN TAMBIÉN BRINDA LA ENORME POSIBILIDAD DE HACER ESTADÍSTICAS DE ESTA VARIABILIDAD)
-            foreach ($materialesServicios as $materialServicio) {
-                if ($materialServicio['Material'] == "MARGEN DE GANANCIA") {
-                    $codigoArticuloA3Erp = $materialServicio['idA3Erp'];
+            if ($margenGanancia) {
+                //MARGEN DE GANANCIA
+                $margenGananciaValue = ($totalSinImpuesto * $margenGanancia) / 100;
+                $totalSinImpuesto = $totalSinImpuesto + $margenGananciaValue;
+                //AÑADIR MARGEN DE GANANCIA A LA DATA DE A3 ERP COMO UNA ARTÍCULO MÁS (ESTO SE RESUELVE ASÍ DEBIDO A QUE EL MARGEN DE GANANCIA LO PONE JULIO PERSONALMENTE SEGÚN EL CASO, LO CUAL SUMA UNA GRAN VARIABILIDAD EN LOS PRECIOS DE LAS LÍNEAS A LA VARIABILIDAD ACTUAL DEL DESCUENTO DE LA OT, LO RESUELVO ASÍ PARA QUE EL CLIENTE NO PERCIBA GRAN VARIABILIDAD QUE AUMENTE LOS PRECIOS MÁS ESTABLES DE LOS PRESUPUESTOS, ESTA RESOLUCIÓN TAMBIÉN BRINDA LA ENORME POSIBILIDAD DE HACER ESTADÍSTICAS DE ESTA VARIABILIDAD)
+                foreach ($materialesServicios as $materialServicio) {
+                    if ($materialServicio['Material'] == "MARGEN DE GANANCIA") {
+                        $codigoArticuloA3Erp = $materialServicio['idA3Erp'];
+                    }
                 }
+                //LÍNEA DE A3 ERP DEL MARGEN DE GANANCIA
+                $precioMargenDeGanancia = $margenGananciaValue;
+                if ($descuentoOt) {
+                    $descuentoEnMargenDeGanancia = ($precioMargenDeGanancia * $descuentoOt) / 100;
+                    $precioMargenDeGanancia = $precioMargenDeGanancia - $descuentoEnMargenDeGanancia;
+                }
+                $lineaA3Erp = [];
+                $lineaA3Erp['CodigoArticulo'] = $codigoArticuloA3Erp;
+                $lineaA3Erp['Unidades'] = 1;
+                $lineaA3Erp['Precio'] = $precioMargenDeGanancia;
+                $lineaA3Erp['Texto'] = $codigoArticuloA3Erp . ' - ' . 'MARGEN DE GANANCIA (VER NOTAS)';
+                array_push($lineasA3Erp, $lineaA3Erp);
             }
-            //LÍNEA DE A3 ERP DEL MARGEN DE GANANCIA
-            $precioMargenDeGanancia = $margenGananciaValue;
-            if ($descuentoOt) {
-                $descuentoEnMargenDeGanancia = ($precioMargenDeGanancia * $descuentoOt) / 100;
-                $precioMargenDeGanancia = $precioMargenDeGanancia - $descuentoEnMargenDeGanancia;
-            }
-            $lineaA3Erp = [];
-            $lineaA3Erp['CodigoArticulo'] = $codigoArticuloA3Erp;
-            $lineaA3Erp['Unidades'] = 1;
-            $lineaA3Erp['Precio'] = $precioMargenDeGanancia;
-            $lineaA3Erp['Texto'] = $codigoArticuloA3Erp . ' - ' . 'MARGEN DE GANANCIA (VER NOTAS)';
-            array_push($lineasA3Erp, $lineaA3Erp);
             //DESCUENTO MANUAL DE LA OT
             $descuentoOtValue = ($totalSinImpuesto * $descuentoOt) / 100;
             $totalSinImpuestoConDescuentoOt = $totalSinImpuesto - $descuentoOtValue;
@@ -2091,26 +2095,28 @@ try {
                     $totalMontaje = $montaje;
                     $totalSinImpuesto = $totalRealizacion + $totalMontaje;
                     //MARGEN DE GANANCIA
-                    $margenGananciaValue = ($totalSinImpuesto * $margenGanancia) / 100;
-                    $totalSinImpuesto = $totalSinImpuesto + $margenGananciaValue;
-                    //AÑADIR MARGEN DE GANANCIA A LA DATA DE A3 ERP COMO UNA ARTÍCULO MÁS (ESTO SE RESUELVE ASÍ DEBIDO A QUE EL MARGEN DE GANANCIA LO PONE JULIO PERSONALMENTE SEGÚN EL CASO, LO CUAL SUMA UNA GRAN VARIABILIDAD EN LOS PRECIOS DE LAS LÍNEAS A LA VARIABILIDAD ACTUAL DEL DESCUENTO DE LA OT, LO RESUELVO ASÍ PARA QUE EL CLIENTE NO PERCIBA GRAN VARIABILIDAD QUE AUMENTE LOS PRECIOS MÁS ESTABLES DE LOS PRESUPUESTOS, ESTA RESOLUCIÓN TAMBIÉN BRINDA LA ENORME POSIBILIDAD DE HACER ESTADÍSTICAS DE ESTA VARIABILIDAD)
-                    foreach ($materialesServicios as $materialServicio) {
-                        if ($materialServicio['Material'] == "MARGEN DE GANANCIA") {
-                            $codigoArticuloA3Erp = $materialServicio['idA3Erp'];
+                    if ($margenGanancia) {
+                        $margenGananciaValue = ($totalSinImpuesto * $margenGanancia) / 100;
+                        $totalSinImpuesto = $totalSinImpuesto + $margenGananciaValue;
+                        //AÑADIR MARGEN DE GANANCIA A LA DATA DE A3 ERP COMO UNA ARTÍCULO MÁS (ESTO SE RESUELVE ASÍ DEBIDO A QUE EL MARGEN DE GANANCIA LO PONE JULIO PERSONALMENTE SEGÚN EL CASO, LO CUAL SUMA UNA GRAN VARIABILIDAD EN LOS PRECIOS DE LAS LÍNEAS A LA VARIABILIDAD ACTUAL DEL DESCUENTO DE LA OT, LO RESUELVO ASÍ PARA QUE EL CLIENTE NO PERCIBA GRAN VARIABILIDAD QUE AUMENTE LOS PRECIOS MÁS ESTABLES DE LOS PRESUPUESTOS, ESTA RESOLUCIÓN TAMBIÉN BRINDA LA ENORME POSIBILIDAD DE HACER ESTADÍSTICAS DE ESTA VARIABILIDAD)
+                        foreach ($materialesServicios as $materialServicio) {
+                            if ($materialServicio['Material'] == "MARGEN DE GANANCIA") {
+                                $codigoArticuloA3Erp = $materialServicio['idA3Erp'];
+                            }
                         }
+                        //LÍNEA DE A3 ERP DEL MARGEN DE GANANCIA
+                        $precioMargenDeGanancia = $margenGananciaValue;
+                        if ($descuentoOt) {
+                            $descuentoEnMargenDeGanancia = ($precioMargenDeGanancia * $descuentoOt) / 100;
+                            $precioMargenDeGanancia = $precioMargenDeGanancia - $descuentoEnMargenDeGanancia;
+                        }
+                        $lineaA3Erp = [];
+                        $lineaA3Erp['CodigoArticulo'] = $codigoArticuloA3Erp;
+                        $lineaA3Erp['Unidades'] = 1;
+                        $lineaA3Erp['Precio'] = $precioMargenDeGanancia;
+                        $lineaA3Erp['Texto'] = $codigoArticuloA3Erp . ' - ' . 'MARGEN DE GANANCIA (VER NOTAS)';
+                        array_push($lineasA3Erp, $lineaA3Erp);
                     }
-                    //LÍNEA DE A3 ERP DEL MARGEN DE GANANCIA
-                    $precioMargenDeGanancia = $margenGananciaValue;
-                    if ($descuentoOt) {
-                        $descuentoEnMargenDeGanancia = ($precioMargenDeGanancia * $descuentoOt) / 100;
-                        $precioMargenDeGanancia = $precioMargenDeGanancia - $descuentoEnMargenDeGanancia;
-                    }
-                    $lineaA3Erp = [];
-                    $lineaA3Erp['CodigoArticulo'] = $codigoArticuloA3Erp;
-                    $lineaA3Erp['Unidades'] = 1;
-                    $lineaA3Erp['Precio'] = $precioMargenDeGanancia;
-                    $lineaA3Erp['Texto'] = $codigoArticuloA3Erp . ' - ' . 'MARGEN DE GANANCIA (VER NOTAS)';
-                    array_push($lineasA3Erp, $lineaA3Erp);
                     //DESCUENTO MANUAL DE LA OT
                     $descuentoOtValue = ($totalSinImpuesto * $descuentoOt) / 100;
                     $totalSinImpuestoConDescuentoOt = $totalSinImpuesto - $descuentoOtValue;
