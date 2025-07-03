@@ -17,6 +17,14 @@ $rutas = explode('/', trim($_SERVER['PATH_INFO'], '/'));
 //convertir la ruta de un objeto a un string que concatene los objetos
 $ruta = implode('/', $rutas);
 
+/*
+if (isset($_REQUEST['ruta'])) {
+    $ruta = $_REQUEST['ruta'];
+}
+*/
+
+file_put_contents('logs/rutas_notificaciones.txt', $ruta . PHP_EOL, FILE_APPEND | LOCK_EX);
+
 //Aquí obtenemos los datos de la petición en formato JSON utf-8
 $datos = json_decode(mb_convert_encoding(file_get_contents('php://input'), 'UTF-8', 'auto'), true);
 switch ($metodo) {
