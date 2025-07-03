@@ -27,6 +27,9 @@ file_put_contents('logs/rutas_notificaciones.txt', $ruta . PHP_EOL, FILE_APPEND 
 
 //Aquí obtenemos los datos de la petición en formato JSON utf-8
 $datos = json_decode(mb_convert_encoding(file_get_contents('php://input'), 'UTF-8', 'auto'), true);
+
+file_put_contents('logs/rutas_notificaciones.txt', file_get_contents('php://input') . PHP_EOL, FILE_APPEND | LOCK_EX);
+
 switch ($metodo) {
     case 'GET':
         switch ($ruta) {
