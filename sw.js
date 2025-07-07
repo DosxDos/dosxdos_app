@@ -1,5 +1,5 @@
 //asignar un nombre y versión al cache
-const CACHE_NAME = 'dosxdos113',
+const CACHE_NAME = 'dosxdos114',
   urlsToCache = [
     'https://dosxdos.app.iidos.com/index.html?utm_source=web_app_manifest',
     'https://dosxdos.app.iidos.com/index.html',
@@ -110,6 +110,7 @@ const CACHE_NAME = 'dosxdos113',
     'https://dosxdos.app.iidos.com/css/informe_ot.css',
     'https://dosxdos.app.iidos.com/js/pdf_informe_ot.js',
     'https://dosxdos.app.iidos.com/js/informe_ot_visuales_montajes.js',
+    'https://dosxdos.app.iidos.com/informe_ot_visuales_montajes.html',
     'https://dosxdos.app.iidos.com/css/informe_ot_visuales_montajes.css',
     'https://dosxdos.app.iidos.com/js/pdf_informe_ot_visuales_montajes.js'
   ],
@@ -159,6 +160,7 @@ const CACHE_NAME = 'dosxdos113',
     'https://dosxdos.app.iidos.com/js/informe_ot.js',
     'https://dosxdos.app.iidos.com/css/informe_ot.css',
     'https://dosxdos.app.iidos.com/js/pdf_informe_ot.js',
+    'https://dosxdos.app.iidos.com/informe_ot_visuales_montajes.html',
     'https://dosxdos.app.iidos.com/js/informe_ot_visuales_montajes.js',
     'https://dosxdos.app.iidos.com/css/informe_ot_visuales_montajes.css',
     'https://dosxdos.app.iidos.com/js/pdf_informe_ot_visuales_montajes.js'
