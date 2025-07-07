@@ -8,6 +8,7 @@ function renderInformes(data) {
   const container = document.getElementById("contenedor-informes");
   if (!container) return;
 
+  console.log("🔍 Prueba de service worker", data);
   container.innerHTML = ""; // Limpiamos el contenido anterior
 
   data.forEach(info => {
