@@ -15,6 +15,129 @@
     <script src="https://dosxdos.app.iidos.com/js/cdn_data_tables.js"></script>
     <script src="https://dosxdos.app.iidos.com/js/fixed_header.js"></script>
     <style>
+        /* Print button styling */
+        .print-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background-color: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-left: 1rem;
+        }
+
+        .print-button:hover {
+            background-color: #dc2626;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .print-button svg {
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+
+        /* Print styles */
+        @media print {
+            @page {
+                size: A4;
+                margin: 15mm;
+            }
+
+            body * {
+                visibility: hidden;
+            }
+
+            #printableTable,
+            #printableTable * {
+                visibility: visible;
+            }
+
+            #printableTable {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+        }
+
+        /* Print table styles */
+        #printableTable {
+            display: none;
+            font-family: Arial, sans-serif;
+            width: 100%;
+            max-width: 210mm;
+            margin: 0 auto;
+        }
+
+        #printableTable .header-section {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            align-items: flex-start;
+        }
+
+        #printableTable .company-logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        #printableTable .header-box {
+            border: 2px solid #000;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        #printableTable .header-box table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        #printableTable .header-box td {
+            border: 1px solid #000;
+            padding: 8px;
+            font-size: 12px;
+        }
+
+        #printableTable .header-box td:first-child {
+            background-color: #f0f0f0;
+            font-weight: bold;
+            width: 40%;
+        }
+
+        #printableTable .main-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        #printableTable .main-table th,
+        #printableTable .main-table td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
+            font-size: 11px;
+        }
+
+        #printableTable .main-table th {
+            background-color: #f0f0f0;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        #printableTable .main-table td.center {
+            text-align: center;
+        }
+
         #tablaOt thead th {
             background-color: #f3f4f6;
             color: #374151;
@@ -395,6 +518,61 @@
             </div>
         </section>
 
+        <!-- Hidden printable table structure -->
+        <div id="printableTable">
+            <div class="company-logo">dos·dos<br><span style="font-size: 14px;">GRUPO IMAGÉN</span></div>
+
+            <div class="header-section">
+                <div class="header-box" style="width: 48%;">
+                    <table>
+                        <tr>
+                            <td>RUTA</td>
+                            <td id="printRuta"></td>
+                        </tr>
+                        <tr>
+                            <td>FECHA</td>
+                            <td id="printFecha"></td>
+                        </tr>
+                        <tr>
+                            <td>MENSAJERÍA</td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="header-box" style="width: 48%;">
+                    <table>
+                        <tr>
+                            <td>ENVIADO POR</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>MONTADORES</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>ISLA</td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <table class="main-table">
+                <thead>
+                    <tr>
+                        <th style="width: 10%;">OT</th>
+                        <th style="width: 10%;">CLIENTE</th>
+                        <th style="width: 20%;">PV</th>
+                        <th style="width: 60%;">OBSERVACIONES</th>
+                    </tr>
+                </thead>
+                <tbody id="printTableBody">
+                    <!-- Dynamic rows will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+
         <section id="contenido" class="bg-white rounded-xl shadow-lg overflow-hidden">
             <div class="p-6">
                 <!-- Back Button -->
@@ -449,7 +627,7 @@
 <script src="https://dosxdos.app.iidos.com/js/index_db.js"></script>
 <script src="https://dosxdos.app.iidos.com/js/notificaciones.js"></script>
 <script src="https://dosxdos.app.iidos.com/js/navigation.js"></script>
-<script src="https://dosxdos.app.iidos.com/js/bridge-redirect.js"></script> 
+<script src="https://dosxdos.app.iidos.com/js/bridge-redirect.js"></script>
 <script>
 
     /* REENVÍO DE FORMULARIOS */
@@ -971,6 +1149,126 @@
         `;
     }
 
+    async function getLineDetails(ruta, linea) {
+        try {
+            const url = `https://dosxdos.app.iidos.com/apirest/lineas.php?ruta=${ruta}&linea=${linea}`;
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (data[0] && data[1]) {
+                // Handle both array and single object response
+                const lineData = Array.isArray(data[1]) ? data[1][0] : data[1];
+                console.log('lineData -----', lineData);
+
+                return {
+                    ot: lineData.OT || "",
+                    cliente: lineData.NombreCliente || "",
+                    pv: lineData.NombrePuntoVenta || "",
+                    tipoTrabajo: lineData.TipoOT || '',
+                    descripcionTrabajo: lineData.DescripcionTipoTrabajo || '',
+                    observaciones: lineData.ObservacionesTecnico || ''
+                };
+            }
+            return null;
+        } catch (error) {
+            console.error('Error fetching line details:', error);
+            return null;
+        }
+    }
+
+async function printTable() {
+    const loader = document.getElementById('loader');
+    if (loader) {
+        loader.classList.remove('displayOff');
+        loader.classList.add('displayOn');
+    }
+
+    try {
+        const rutaName = document.getElementById('titulo').textContent;
+
+        const today = new Date();
+        const day = String(today.getDate()).padStart(2, '0');
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const year = today.getFullYear();
+        const fechaEspanol = `${day}/${month}/${year}`;
+
+        document.getElementById('printRuta').textContent = rutaName;
+        document.getElementById('printFecha').textContent = fechaEspanol;
+
+        const table = $('#tablaLineasRuta').DataTable();
+        const indexes = table.rows({ order: 'applied', search: 'applied' }).indexes();  // ✅ FIXED
+
+        const printTableBody = document.getElementById('printTableBody');
+        printTableBody.innerHTML = '';
+
+        for (let i = 0; i < indexes.length; i++) {
+            const row = table.row(indexes[i]).node();
+            const ot = row.getAttribute('data-ot');
+            const lineaRow = row.getAttribute('data-linea');
+            const ruta = localStorage.getItem('ruta');
+            const details = await getLineDetails(ruta, lineaRow);
+            const cliente = row.getAttribute('data-nombreCliente');
+            const pv = details?.pv || '';
+
+            const printRow = document.createElement('tr');
+
+            const otCell = document.createElement('td');
+            otCell.className = 'center';
+            otCell.textContent = ot;
+
+            const clienteCell = document.createElement('td');
+            clienteCell.className = 'center';
+            clienteCell.textContent = cliente;
+
+            const pvCell = document.createElement('td');
+            pvCell.className = 'center';
+            pvCell.textContent = pv;
+
+            const descCell = document.createElement('td');
+            if (details) {
+                let description = '';
+                if (details.tipoTrabajo) {
+                    description += `TIPO: ${details.tipoTrabajo}\n`;
+                }
+                if (details.observaciones) {
+                    description += `OBS: ${details.observaciones}`;
+                }
+                descCell.innerHTML = description.trim().replace(/\n/g, '<br>');
+            } else {
+                descCell.innerHTML = `${cliente}<br>Sin detalles disponibles`;
+            }
+
+            printRow.appendChild(otCell);
+            printRow.appendChild(clienteCell);
+            printRow.appendChild(pvCell);
+            printRow.appendChild(descCell);
+            printTableBody.appendChild(printRow);
+        }
+
+        document.getElementById('printableTable').style.display = 'block';
+
+        if (loader) {
+            loader.classList.remove('displayOn');
+            loader.classList.add('displayOff');
+        }
+
+        setTimeout(() => {
+            window.print();
+            setTimeout(() => {
+                document.getElementById('printableTable').style.display = 'none';
+            }, 100);
+        }, 500);
+
+    } catch (error) {
+        console.error('Error preparing print:', error);
+        if (loader) {
+            loader.classList.remove('displayOn');
+            loader.classList.add('displayOff');
+        }
+        alert('Error al preparar la impresión. Por favor, intente de nuevo.');
+    }
+}
+
     async function appOnline() {
         try {
             const login = await vLogin();
@@ -1071,12 +1369,26 @@
                                     "pagingType": "full_numbers",
                                     "dom": "<'flex flex-col md:flex-row justify-between items-center mb-4'" +
                                         "<'w-full md:w-auto flex items-center space-x-3'l>" +
+                                        "<'print-button-container'>" + // for the print button
                                         ">" +
                                         "'<'overflow-x-auto't>" +
                                         "'<'flex flex-col-reverse md:flex-row justify-between items-center mt-4'i<'ml-auto'p>>",
                                     "initComplete": function () {
                                         // Hide DataTables' default search
                                         $('.dataTables_filter').hide();
+
+                                        // Add print button next to length menu
+                                        const printButtonHTML = `
+            <button onclick="printTable()" class="print-button">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                </svg>
+                Imprimir
+            </button>
+        `;
+
+                                        // Insert the print button into the container
+                                        $('.print-button-container').html(printButtonHTML);
 
                                         // Connect custom search input to DataTable
                                         const customSearch = document.getElementById('customSearch');
