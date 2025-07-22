@@ -10,6 +10,12 @@ $logFile = 'logs/emails_transportes_y_grupajes.txt';
 $logMessage = [];
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
+    // Guardar el token de la solicitud
+    if (isset($_REQUEST['tokenJwt'])) {
+        $token = $_REQUEST['tokenJwt'];
+    } else {
+        $token = null;
+    }
     // Respuesta inmediata debido a las limitantes de Notion de tiempos de respuesta en las automatizaciones (las pausa si supera tiempo límite establecido por ellos);
     $response = new Respuestas;
     $respuestaFinal = $response->ok("Solicitud al servidor iniciada");
@@ -42,8 +48,16 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $logMessageFinal = json_encode($logMessage);
         file_put_contents($logFile, $logMessageFinal . PHP_EOL, FILE_APPEND | LOCK_EX);
         // Autenticación JWT
-        $jwtMiddleware = new JwtMiddleware;
-        $jwtMiddleware->verificar();
+        require_once 'clases/JwtHandler.php';
+        $jwt = new JwtHandler;
+        $middleware = $jwt->validarToken($token);
+        if (!$middleware) {
+            // Guardar log de error de autenticación
+            $logMessage['error'] = $jwt->error;
+            $logMessageFinal = json_encode($logMessage);
+            file_put_contents($logFile, $logMessageFinal . PHP_EOL, FILE_APPEND | LOCK_EX);
+            exit;
+        }
         // Guardar log de autenticación
         $fecha = date('Y-m-d H:i:s');
         $logMessage['timestamp'] = $fecha;
