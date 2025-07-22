@@ -50,7 +50,7 @@ $camposLineas = "Codigo_de_l_nea,Punto_de_venta,rea,Tipo_de_trabajo,Zona,Direcci
 
 // Descubrimiento importante, el N_tel_fono no se encuentra en la info de la línea, por lo que tenemos que buscarlo en el punto de venta
 // Simplemente usando Punto_de_venta.N_tel_fono se soluciona el problema aunque estemos buscando un campo que no existe en la tabla de líneas, ya que el CRM lo interpreta como una búsqueda de campo relacionado.
-$query = "SELECT $camposLineas FROM Products WHERE OT_relacionada=$idOt";
+$query = "SELECT $camposLineas FROM Products WHERE OT_relacionada=$idOt AND Fase!='Perdidas'";
 
 $crm->query($query); // Consulta SQL al CRM para obtener todas las líneas asociadas a idOt
 
