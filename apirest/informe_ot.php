@@ -80,7 +80,7 @@
 
             /* LINEAS */
             $camposLineas = "Punto_de_venta,Incluir,Codigo_de_l_nea,Fecha_de_Previsi_n_de_L_nea,Observaciones_internas,Quitar,Poner";
-            $query = "SELECT $camposLineas FROM Products WHERE OT_relacionada=$idOt";
+            $query = "SELECT $camposLineas FROM Products WHERE OT_relacionada=$idOt AND Fase!='Perdidas'";
             $crm->query($query);
             if ($crm->estado) {
                 $lineas = $crm->respuesta[1]['data'];

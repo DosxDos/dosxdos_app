@@ -3,7 +3,8 @@ class UserBridge {
         this.dbName = 'dosxdos';
         this.storeName = 'usuario';
         this.backendUrl = 'https://dosxdos.app.iidos.com/apirest/generate_bridge_token.php';
-        this.nextjsUrl = 'http://nextjs.dosxdos.app/nextjs';
+        // FIXED: Add the /nextjs prefix to match your deployment
+        this.nextjsUrl = 'https://nextjs.dosxdos.app/nextjs';
     }
 
     // Get user data from IndexedDB
@@ -60,7 +61,7 @@ class UserBridge {
         });
     }
 
-    // NEW: Clear user data from IndexedDB (for logout)
+    // Clear user data from IndexedDB (for logout)
     async clearUserFromIndexedDB() {
         return new Promise((resolve, reject) => {
             const request = indexedDB.open(this.dbName);
@@ -180,7 +181,7 @@ class UserBridge {
             const token = await this.generateBridgeToken(userData);
             console.log('Bridge token generated successfully');
 
-            // Construct the URL with token
+            // FIXED: Construct the URL properly with /nextjs prefix
             const url = new URL(this.nextjsUrl + (targetPage.startsWith('/') ? '' : '/') + targetPage); 
             
             url.searchParams.set('token', token);
@@ -239,7 +240,7 @@ class UserBridge {
         }
     }
 
-    // NEW: Handle logout request from NextJS
+    // Handle logout request from NextJS
     async handleLogoutFromNextJS() {
         try {
             const urlParams = new URLSearchParams(window.location.search);
