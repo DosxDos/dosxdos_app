@@ -1,5 +1,9 @@
 #ARCHIVOS PROHIBIDOS
 
+<Files ".env">
+    Require all denied
+</Files>
+
 <Files "conexion.json">
     Require all denied
 </Files>

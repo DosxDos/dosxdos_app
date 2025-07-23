@@ -24,3 +24,4 @@ dosxdos.app.iidos.com-key.pem
 storage/
 apirest/logs/
 apirest/datosActualizarCaso.json
+.env
