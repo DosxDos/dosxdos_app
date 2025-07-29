@@ -11,7 +11,6 @@
   <link id="css-link" rel="stylesheet" href="css/informe_ot_visuales_produccion.css">
 
   <script src="https://cdn.jsdelivr.net/npm/pdf-lib/dist/pdf-lib.min.js"></script>
-
   <script>
     const timestamp = new Date().getTime();
     const cssLink = document.getElementById("css-link");
@@ -22,6 +21,16 @@
 
   <div id="control-panel">
     <button id="btnGenerarPDF" onclick="generarPDF()">Descargar PDF</button>
+  </div>
+
+  <!-- Loader para carga inicial -->
+  <div id="loader">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Loader exclusivo para la descarga PDF -->
+  <div id="loader-pdf">
+    <div class="spinner"></div>
   </div>
 
   <div id="contenedor-informes"></div>

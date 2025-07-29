@@ -94,9 +94,6 @@ function renderInformes(data) {
 
       contenido.innerHTML = cabeceraHTML + tablaHTML;
       div.appendChild(contenido);
-
-      // Footer eliminado
-
       container.appendChild(div);
     });
   });
@@ -114,10 +111,14 @@ function renderInformes(data) {
 async function generarPDF() {
   const { PDFDocument } = PDFLib;
   const informes = Array.from(document.querySelectorAll("#contenedor-informes .informe"));
+  const loaderPDF = document.getElementById("loader-pdf");
+
   if (informes.length === 0) {
     console.warn("No hay informes para generar PDF");
     return;
   }
+
+  if (loaderPDF) loaderPDF.style.display = "flex";
 
   async function procesarLote(loteInformes) {
     const pdfLote = await PDFDocument.create();
@@ -173,18 +174,24 @@ async function generarPDF() {
     console.log("✅ PDF descargado");
   } catch (error) {
     console.error("❌ Error al generar PDF:", error);
+  } finally {
+    if (loaderPDF) loaderPDF.style.display = "none";
   }
 }
 
 window.generarPDF = generarPDF;
 
-// Lógica de carga y render sin filtros
+// Lógica de carga inicial
 document.addEventListener("DOMContentLoaded", () => {
   const botonPDF = document.getElementById("btnGenerarPDF");
+  const loader = document.getElementById("loader");
+
   if (botonPDF) {
     botonPDF.disabled = true;
     botonPDF.style.display = "none";
   }
+
+  if (loader) loader.style.display = "flex";
 
   const params = new URLSearchParams(window.location.search);
   const idOt = params.get("idOt");
@@ -195,6 +202,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!idOt || !codOt || !tipoOt || !cliente || !tokenJwt) {
     console.warn("⚠️ Faltan parámetros en la URL");
+    if (loader) loader.style.display = "none";
     return;
   }
 
@@ -237,5 +245,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       renderInformes(informesListos);
     })
-    .catch(err => console.error("❌ Error cargando datos:", err));
+    .catch(err => console.error("❌ Error cargando datos:", err))
+    .finally(() => {
+      if (loader) loader.style.display = "none";
+    });
 });
