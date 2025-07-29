@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
+  <title>Informe de Producción</title>
+
+  <link id="css-link" rel="stylesheet" href="css/informe_ot_visuales_produccion.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib/dist/pdf-lib.min.js"></script>
+
+  <script>
+    const timestamp = new Date().getTime();
+    const cssLink = document.getElementById("css-link");
+    cssLink.href = `css/informe_ot_visuales_produccion.css?v=${timestamp}`;
+  </script>
+</head>
+<body>
+
+  <div id="control-panel">
+    <button id="btnGenerarPDF" onclick="generarPDF()">Descargar PDF</button>
+  </div>
+
+  <div id="contenedor-informes"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="js/informe_ot_visuales_produccion.js" defer></script>
+
+</body>
+</html>

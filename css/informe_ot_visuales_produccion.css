@@ -1,0 +1,211 @@
+/* ¡No me toque los márgenes y los paddings! 😒🔪 pueden causar problemas de salto de página al imprimir.
+   Usamos box-sizing: border-box para que el padding y el borde se incluyan en el ancho/alto total del elemento.
+   Además, usamos page-break y break para controlar los saltos de página en navegadores modernos y antiguos.
+   Hay elementos que necesitan el !important para que se apliquen correctamente.
+   Si se te desplazan los informes en el PDF a lo largo de las páginas es que has tocado los márgenes o paddings 😡
+*/
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box !important;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  /* overflow-x: hidden;  /* evitar scroll horizontal */
+}
+
+body {
+  position: relative;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  background-color: white;
+  color: #000;
+  font-size: 13px;
+}
+
+/* Cada informe en su propia página */
+.informe {
+  display: block !important; /* Mejor soporte para impresión y saltos de página */
+  margin: 25px;
+  padding: 0;
+
+  /* SALTOS DE PÁGINA EXPLÍCITOS */
+  page-break-after: always !important; /* Para navegadores antiguos */
+  break-after: page !important;        /* Para navegadores modernos */
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.informe:last-child {
+  margin-bottom: 0;
+  
+  /* Para evitar página extra vacía al final */
+  page-break-after: auto !important;
+  break-after: auto !important;
+}
+
+/* Cabecera con logo y título */
+.cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo img {
+  height: 50px;
+  width: auto; /* Lo necesita para que se visualice completo */
+}
+
+.titulo h1 {
+  font-size: 18px;
+  margin: 0;
+  font-weight: bold;
+  text-transform: uppercase; /* Todo a mayúsculas */
+}
+
+/* Información general */
+.info-header {
+  border: 1px solid #ccc;
+  padding: 0;
+  margin-bottom: 15px;
+}
+
+.info-header p {
+  margin: 4px;
+}
+
+.info-header p strong {
+  display: inline-block;
+  width: 140px;
+  font-weight: bold;
+}
+
+/* Tabla de detalles */
+table {
+  border-collapse: collapse; /* Colapsar bordes */
+  margin-top: 10px;
+  font-size: 13px;
+  width: 100%;
+}
+
+table thead {
+    background-color: rgb(228, 228, 228);
+  border-bottom: 2px solid #000;
+}
+
+th,
+td {
+  padding: 6px 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+table:not(.tabla-firmas) td {
+  white-space: normal !important; /* Permite saltos de línea en celdas */
+  max-height: 10px; /* Limita la altura de las celdas */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 130px;
+}
+/* Recuadro de firmas dentro de informe para evitar que se corte */
+.firmas-recuadro {
+  display: flex;
+  border: 2px solid #000;
+  margin-top: 10px;
+  width: 100%;
+  padding: 1px;
+  page-break-inside: avoid !important;  /* Evita que se corte en salto */
+  break-inside: avoid !important;
+}
+
+/* Estructura interna del recuadro de firmas */
+.firma-fecha,
+.sello-cliente {
+  flex: 1;
+  padding: 10px;
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  border-right: 2px solid #000;
+}
+
+.sello-cliente {
+  border-right: none; /* Evita doble borde en último bloque, ¿por qué se genera? 🤷‍♂️ */
+}
+
+/* Línea de firma estilo campo escrito */
+.linea-firma {
+  margin-bottom: 16px;
+  height: 20px;
+}
+
+/* Botón para generar PDF (oculto por defecto) */
+#btnGenerarPDF {
+  display: none; /* Ocultamos el botón por defecto */
+  margin-top: 15px;
+  padding: 10px;
+  cursor: pointer;
+  background-color: white;
+  border: 1px solid rgb(218, 50, 62);
+  color: rgb(218, 50, 62);
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* Recuadro de info adicional (OT, empresa, etc.) */
+.info-recuadro {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 2px solid #000;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  background-color: rgb(228, 228, 228);
+}
+
+.info-recuadro p,
+.info-recuadro .ot,
+.info-recuadro .empresa {
+  margin: 0;
+  font-size: 14px;
+}
+
+.info-recuadro .empresa {
+  font-weight: bold;
+}
+
+/* Evitar margen/padding en tablas y párrafos para no acumular */
+table,
+p {
+  margin-bottom: 0 !important; /* Sin el !important ambos estilos no se aplican */
+  padding-bottom: 0 !important;
+}
+
+/* Panel de control */
+#control-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px; /* espacio entre selector y botón */
+  margin: 20px 0; /* margen arriba y abajo para separar de otros elementos */
+  color: rgb(218, 50, 62);
+  font-size: 20px;
+}
+
+#selector-fecha-contenedor {
+  text-align: center; /* centra el texto dentro del selector */
+  max-width: 400px; /* limita ancho para que no sea demasiado ancho */
+  width: 100%;
+}
+
+#fechas-checkboxes label {
+  display: inline-block; /* para que los checkboxes queden uno al lado de otro en línea */
+  margin: 5px 10px; /* espacio entre cada fecha */
+  cursor: pointer;
+}
+
