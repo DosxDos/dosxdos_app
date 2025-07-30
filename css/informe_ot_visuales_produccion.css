@@ -1,0 +1,198 @@
+/* Reset + control de saltos de página */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box !important;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  background-color: white;
+  color: #000;
+  font-size: 13px;
+}
+
+/* Cada informe en su propia página */
+.informe {
+  display: block !important;
+  margin: 25px;
+  page-break-after: always !important;
+  break-after: page !important;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.informe:last-child {
+  page-break-after: auto !important;
+  break-after: auto !important;
+}
+
+/* Cabecera con logo y título */
+.cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo img {
+  height: 50px;
+  width: auto;
+}
+
+.titulo h1 {
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+/* Recuadro de información adicional */
+.info-recuadro {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 2px solid #000;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  background-color: rgb(228, 228, 228);
+}
+
+.info-recuadro p,
+.info-recuadro .ot,
+.info-recuadro .empresa {
+  margin: 0;
+  font-size: 14px;
+}
+
+.info-recuadro .empresa {
+  font-weight: bold;
+}
+
+/* Información general */
+.info-header {
+  border: 1px solid #ccc;
+  margin-bottom: 15px;
+}
+
+.info-header p {
+  margin: 4px;
+}
+
+.info-header p strong {
+  display: inline-block;
+  width: 140px;
+  font-weight: bold;
+}
+
+/* Tabla de detalles */
+table {
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 13px;
+  width: 100%;
+}
+
+table thead {
+  background-color: rgb(228, 228, 228);
+  border-bottom: 2px solid #000;
+}
+
+th, td {
+  padding: 6px 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+table:not(.tabla-firmas) td {
+  white-space: normal !important;
+  max-height: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 130px;
+}
+
+/* Recuadro de firmas */
+.firmas-recuadro {
+  display: flex;
+  border: 2px solid #000;
+  margin-top: 10px;
+  width: 100%;
+  padding: 1px;
+  page-break-inside: avoid !important;
+  break-inside: avoid !important;
+}
+
+.firma-fecha,
+.sello-cliente {
+  flex: 1;
+  padding: 10px;
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  border-right: 2px solid #000;
+}
+
+.sello-cliente {
+  border-right: none;
+}
+
+.linea-firma {
+  margin-bottom: 16px;
+  height: 20px;
+}
+
+/* Botón de PDF */
+#btnGenerarPDF {
+  display: none;
+  margin-top: 15px;
+  padding: 10px;
+  cursor: pointer;
+  background-color: white;
+  border: 1px solid rgb(218, 50, 62);
+  color: rgb(218, 50, 62);
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* Panel de control */
+#control-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  margin: 20px 0;
+  color: rgb(218, 50, 62);
+  font-size: 20px;
+}
+
+/* Spinners */
+.spinner {
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #333;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Loader general y PDF */
+#loader,
+#loader-pdf {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.7);
+  justify-content: center;
+  align-items: center;
+}
