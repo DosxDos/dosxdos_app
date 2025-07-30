@@ -222,26 +222,31 @@ document.addEventListener("DOMContentLoaded", () => {
       localStorage.setItem("informesOTRaw", JSON.stringify(data));
       console.log("🟢 Datos cargados");
 
-      const informesListos = data.pvs.map(pv => ({
-        ot: data.ot.codOt,
-        cliente: data.ot.cliente,
-        nombreEmpresa: data.ot.cliente,
-        puntoVenta: pv.nombre,
-        direccion: pv.direccion,
-        telefono: pv.telefono,
-        area: pv.area,
-        zona: pv.zona,
-        nombreOt: pv.nombreOt,
-        detalles: (pv.lineas || []).map(linea => ({
-          tipo: linea.tipo || "",
-          firma: data.ot.firma || "",
-          quitar: linea.quitar || "",
-          poner: linea.poner || "",
-          dimensiones: `${linea.ancho || '-'} x ${linea.alto || '-'}`,
-          linea: linea.linea || "",
-          ubicacion: linea.ubicacion || ""
-        }))
-      }));
+      const informesListos = data.pvs.map(pv => {
+        return {
+            ot: data.ot.codOt,
+            cliente: data.ot.cliente,
+            nombreEmpresa: data.ot.cliente,
+            puntoVenta: pv.nombre,
+            direccion: pv.direccion,
+            telefono: pv.telefono,
+            area: pv.area,
+            zona: pv.zona,
+            nombreOt: pv.nombreOt,
+            detalles: (pv.lineas || []).map(linea => ({
+                tipo: linea.tipo || "",
+                firma: data.ot.firma || "",
+                quitar: linea.quitar || "",
+                poner: linea.poner || "",
+                dimensiones: `${linea.ancho || '-'} x ${linea.alto || '-'}`,
+                linea: linea.linea || "",
+                ubicacion: linea.ubicacion || ""
+            }))
+        };
+    });
+    
+      
+      
 
       renderInformes(informesListos);
     })

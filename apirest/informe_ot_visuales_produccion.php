@@ -45,7 +45,7 @@ try {
     $camposLineas = "Codigo_de_l_nea,Punto_de_venta,rea,Tipo_de_trabajo,Zona,Direcci_n,Poner,Quitar,Alto_medida,Ancho_medida,Firma_de_la_OT_relacionada,nombreCliente,nombreOt,nombrePv,Alto_total,Ancho_total,Material,Ubicaci_n,Punto_de_venta.N_tel_fono";
 
     // Construcción de la consulta
-    $query = "SELECT $camposLineas FROM Products WHERE OT_relacionada=$idOt AND Fase!='Perdidas'";
+    $query = "SELECT $camposLineas FROM Products WHERE OT_relacionada=$idOt AND Fase='Nuevas'";
 
     // Log para depuración
     file_put_contents('debug.log', date('c') . " - Query: $query\n", FILE_APPEND);
