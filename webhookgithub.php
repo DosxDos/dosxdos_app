@@ -1,6 +1,6 @@
 <?php
 // Ruta del proyecto en Windows Server
-$projectDir = 'P:\\xampp\\htdocs\\dosxdosiidos';
+$projectDir = 'P:\\apache\\htdocs\\dosxdosiidos';
 
 /*
 // Lee el payload de GitHub
