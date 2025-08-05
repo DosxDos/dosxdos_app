@@ -112,7 +112,9 @@ const CACHE_NAME = 'dosxdos114',
     'https://dosxdos.app.iidos.com/js/informe_ot_visuales_montajes.js',
     'https://dosxdos.app.iidos.com/informe_ot_visuales_montajes.html',
     'https://dosxdos.app.iidos.com/css/informe_ot_visuales_montajes.css',
-    'https://dosxdos.app.iidos.com/js/pdf_informe_ot_visuales_montajes.js'
+    'https://dosxdos.app.iidos.com/js/pdf_informe_ot_visuales_montajes.js',
+    'https://dosxdos.app.iidos.com/js/bridge-redirect.js'
+
   ],
 
   urlsToUpdate = [
@@ -163,7 +165,8 @@ const CACHE_NAME = 'dosxdos114',
     'https://dosxdos.app.iidos.com/informe_ot_visuales_montajes.html',
     'https://dosxdos.app.iidos.com/js/informe_ot_visuales_montajes.js',
     'https://dosxdos.app.iidos.com/css/informe_ot_visuales_montajes.css',
-    'https://dosxdos.app.iidos.com/js/pdf_informe_ot_visuales_montajes.js'
+    'https://dosxdos.app.iidos.com/js/pdf_informe_ot_visuales_montajes.js',
+    'https://dosxdos.app.iidos.com/js/bridge-redirect.js'
   ];
 
 //durante la fase de instalación, generalmente se almacena en caché los activos estáticos

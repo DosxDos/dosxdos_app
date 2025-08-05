@@ -3,8 +3,7 @@ class UserBridge {
         this.dbName = 'dosxdos';
         this.storeName = 'usuario';
         this.backendUrl = 'https://dosxdos.app.iidos.com/apirest/generate_bridge_token.php';
-        // FIXED: Add the /nextjs prefix to match your deployment
-        this.nextjsUrl = 'https://nextjs.dosxdos.app/nextjs';
+        this.nextjsUrl = 'https://nextjs.dosxdos.app';
     }
 
     // Get user data from IndexedDB
