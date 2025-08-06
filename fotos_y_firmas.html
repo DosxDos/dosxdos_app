@@ -1057,7 +1057,7 @@
     </div>
     <script src="https://dosxdos.app.iidos.com/js/index_db.js"></script>
     <script src="https://dosxdos.app.iidos.com/js/navigation.js"></script>
-    <script src="https://dosxdos.app.iidos.com/js/bridge-redirect.js"></script> 
+    <script src="https://dosxdos.app.iidos.com/js/bridge-redirect.js"></script>
     <script>
         /* LOADER */
 
@@ -1310,6 +1310,11 @@
 
         const ot = otArchivos;
 
+        function reemplazarEspaciosPorEncoding(url) {
+            return url.replace(/ /g, "%20");
+        }
+
+
         function alerta(mensaje, type = 'info') {
             // Remove existing alert if present
             const existingAlert = document.querySelector("#customAlert");
@@ -1436,6 +1441,7 @@
                 alertContainer.remove();
             }, 300);
         }
+
 
         function convertirFecha(fecha) {
             // Separar la fecha y la hora
@@ -2070,6 +2076,13 @@
                                     return;
                                 }
 
+
+                                vectorDeFotos.forEach(foto => {
+                                    foto.link = reemplazarEspaciosPorEncoding(foto.link);
+                                    console.log("hello soy una foto --->", foto.link)
+                                });
+
+
                                 const photosContainer = document.getElementById('photosContainer');
                                 photosContainer.innerHTML = ''; // Clear existing content
                                 photosContainer.classList.remove('hidden');
@@ -2455,6 +2468,11 @@
                                 return;
                             }
 
+                            firmas.forEach(firma => {
+                                firma.link = reemplazarEspaciosPorEncoding(firma.link);
+                                console.log("hello soy una firma --->", firma.link)
+                            });
+
                             const firmasContainer = document.getElementById('firmasContainer');
                             firmasContainer.innerHTML = ''; // Clear existing content
 
@@ -2835,6 +2853,11 @@
                                     return;
                                 }
 
+                                carpetas.forEach(carpeta => {
+                                    carpeta.link = reemplazarEspaciosPorEncoding(carpeta.link);
+                                    console.log("hello soy una carpeta --->", carpeta.link)
+                                });
+
                                 const carpetasContainer = document.getElementById('carpetasContainer');
                                 carpetasContainer.innerHTML = ''; // Clear existing content
 
@@ -3004,7 +3027,7 @@
   `;
                                         // Setup copy link button event
                                         copyLinkBtn.addEventListener('click', () => {
-                                            navigator.clipboard.writeText(encodeURI(currentObj.link)).then(() => {
+                                            navigator.clipboard.writeText(currentObj.link).then(() => {
                                                 alerta('Enlace copiado al portapapeles');
                                             });
                                         });
