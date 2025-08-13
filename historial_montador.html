@@ -5,9 +5,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Historial Montador</title>
-    <link rel="icon" type="image/png" href="https://dosxdos.app.iidos.com/img/logo-red.png" />
-    <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/tailwindmain.css" />
-    <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/index.css" />
+    <link rel="icon" type="image/png" href="http://localhost:8080/img/logo-red.png" />
+    <link rel="stylesheet" href="http://localhost:8080/css/tailwindmain.css" />
+    <link rel="stylesheet" href="http://localhost:8080/css/index.css" />
 </head>
 
 <body id="body" class="bg-gray-100 overflow-x-hidden min-h-screen">
@@ -22,9 +22,9 @@
         <div class="flex items-center justify-between w-full px-6 py-4">
             <!-- Logo -->
             <div class="flex items-center">
-                <img src="https://dosxdos.app.iidos.com/img/logo300.png" class="h-16 hidden xl:block"
+                <img src="http://localhost:8080/img/logo300.png" class="h-16 hidden xl:block"
                     alt="Logo completo" />
-                <img src="https://dosxdos.app.iidos.com/img/Isotipo-38.png" class="h-16 xl:hidden" alt="Isotipo" />
+                <img src="http://localhost:8080/img/Isotipo-38.png" class="h-16 xl:hidden" alt="Isotipo" />
             </div>
 
             <!-- Desktop Navigation -->
@@ -32,7 +32,7 @@
                 <!-- Navigation items will be dynamically created by createDesktopNavigation() -->
 
                 <!-- Desktop Menu Notifications Bell -->
-                <a href="https://dosxdos.app.iidos.com/notificaciones.html" class="relative z-10"
+                <a href="http://localhost:8080/notificaciones.html" class="relative z-10"
                     id="desktopBellContainer">
                     <img id="bellDesktop" src="" class="text-gray-900 object-contain" />
                     <span id="desktopNotificationCount"
@@ -46,7 +46,7 @@
                         aria-expanded="false">
                         <div
                             class="w-10 h-10 rounded-full overflow-hidden border-2 border-white shadow-sm bg-gray-100 flex items-center justify-center">
-                            <img id="imagenUsuarioDesktop" src="https://dosxdos.app.iidos.com/img/usuario.png"
+                            <img id="imagenUsuarioDesktop" src="http://localhost:8080/img/usuario.png"
                                 class="w-full h-full object-cover" alt="Profile"
                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
                             <svg class="w-5 h-5 text-gray-400 hidden" viewBox="0 0 24 24" fill="none"
@@ -94,9 +94,9 @@
             <!-- Mobile Navigation -->
             <div class="xl:hidden flex items-center space-x-2 mx-2">
                 <!-- Mobile Bell -->
-                <a href="https://dosxdos.app.iidos.com/notificaciones.html" class="relative z-10"
+                <a href="http://localhost:8080/notificaciones.html" class="relative z-10"
                     id="mobileBellContainer">
-                    <img id="bellMobile" src="https://dosxdos.app.iidos.com/img/bell2.png"
+                    <img id="bellMobile" src="http://localhost:8080/img/bell2.png"
                         class="w-8 text-gray-900 object-contain mt-2" />
                     <span id="mobileNotificationCount"
                         class="absolute top-2 right-1 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] text-center border hidden"></span>
@@ -120,7 +120,7 @@
         <div id="opcionesMenu"
             class="xl:hidden fixed inset-0 bg-gradient-to-r from-red-500 to-red-600 bg-opacity-95 transform translate-x-full transition-all duration-500 ease-in-out z-40 overflow-hidden backdrop-blur-sm flex flex-col">
             <div class="absolute inset-0 z-0"
-                style="background-image: url('https://dosxdos.app.iidos.com/img/texture-red.svg'); background-size: contain; opacity: 0.7;">
+                style="background-image: url('http://localhost:8080/img/texture-red.svg'); background-size: contain; opacity: 0.7;">
             </div>
             <!-- User Profile Section -->
             <div class="px-8 py-4 mt-16 relative z-10">
@@ -128,7 +128,7 @@
                     <!-- Profile image -->
                     <div class="absolute left-0 w-28 h-28 rounded-full overflow-hidden border-4 border-white bg-gradient-to-br from-red-50 to-white flex items-center justify-center shadow-xl"
                         style="transform: translateX(-15%);">
-                        <img id="imagenUsuarioMobile" src="https://dosxdos.app.iidos.com/img/usuario.png"
+                        <img id="imagenUsuarioMobile" src="http://localhost:8080/img/usuario.png"
                             class="w-full h-full object-cover" alt="Profile"
                             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
                         <svg class="w-12 h-12 text-gray-400 hidden" viewBox="0 0 24 24" fill="none"
@@ -203,7 +203,7 @@
         <section class="mb-8">
             <div class="rounded-xl shadow-lg overflow-hidden relative">
                 <div class="absolute inset-0"
-                    style="background-image: url('https://dosxdos.app.iidos.com/img/texture-red.svg'); background-size: contain;">
+                    style="background-image: url('http://localhost:8080/img/texture-red.svg'); background-size: contain;">
                 </div>
                 <div class="relative p-6 sm:p-8 text-white z-10">
                     <h1 id="titulo" class="text-2xl sm:text-3xl font-bold mb-2">Historial de Montador</h1>
@@ -281,10 +281,10 @@
     </div>
 
 </body>
-<script src="https://dosxdos.app.iidos.com/js/index_db.js"></script>
-<script src="https://dosxdos.app.iidos.com/js/notificaciones.js"></script>
-<script src="https://dosxdos.app.iidos.com/js/navigation.js"></script>
-<script src="https://dosxdos.app.iidos.com/js/bridge-redirect.js"></script> 
+<script src="http://localhost:8080/js/index_db.js"></script>
+<script src="http://localhost:8080/js/notificaciones.js"></script>
+<script src="http://localhost:8080/js/navigation.js"></script>
+<script src="http://localhost:8080/js/bridge-redirect.js"></script> 
 <script>
     //ESTA FUNCION REVISA EL HISTORIAL DE MONTADORES//
     const fechaInicio = document.getElementById('fecha-inicio');
@@ -328,7 +328,7 @@
             console.log(bodyData);
 
             // Realizar la petición fetch (POST) al PHP
-            fetch('https://dosxdos.app.iidos.com/apirest/historial_montador.php', {
+            fetch('http://localhost:8080/apirest/historial_montador.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -416,7 +416,7 @@
         if (navigator.onLine) {
             leerDatos('dosxdos', 'historial').then((datos) => {
                 if (datos && datos.length > 0) {
-                    window.location.href = "https://dosxdos.app.iidos.com/mapa_ruta_historial.html";
+                    window.location.href = "http://localhost:8080/mapa_ruta_historial.html";
                 } else {
                     alerta("Necesitas hacer 1 historial de fechas primero antes de entrar a la navegación con el mapa");
                 }
@@ -431,56 +431,56 @@
     /* MANEJO DE RECURSOS ESTÁTICOS */
 
     const urls = [
-        'https://dosxdos.app.iidos.com/index.html?utm_source=web_app_manifest',
-        'https://dosxdos.app.iidos.com/index.html',
-        'https://dosxdos.app.iidos.com/manifest.json',
-        'https://dosxdos.app.iidos.com/serviceworker.js',
-        'https://dosxdos.app.iidos.com/sw.js',
-        'https://dosxdos.app.iidos.com/css/index.css',
-        'https://dosxdos.app.iidos.com/rutas_montador.html',
-        'https://dosxdos.app.iidos.com/css/rutas_montador.css',
-        'https://dosxdos.app.iidos.com/ruta_montador.html',
-        'https://dosxdos.app.iidos.com/css/ruta_montador.css',
-        'https://dosxdos.app.iidos.com/linea_montador.html',
-        'https://dosxdos.app.iidos.com/css/linea_montador.css',
-        'https://dosxdos.app.iidos.com/fotos_y_firmas.html',
-        'https://dosxdos.app.iidos.com/css/fotos_y_firmas.css',
-        'https://dosxdos.app.iidos.com/css/fuentes/Roboto/Roboto-Light.ttf',
-        'https://dosxdos.app.iidos.com/css/fuentes/Merriweather/Merriweather-Light.ttf',
-        'https://dosxdos.app.iidos.com/css/fuentes/Merriweather/Merriweather-Bold.ttf',
-        'https://dosxdos.app.iidos.com/css/fuentes/Lora/Lora-Regular.ttf',
-        'https://dosxdos.app.iidos.com/css/fuentes/Lora/Lora-Medium.ttf',
-        'https://dosxdos.app.iidos.com/css/fuentes/Lora/Lora-Bold.ttf',
-        'https://dosxdos.app.iidos.com/img/candado.png',
-        'https://dosxdos.app.iidos.com/img/casa.png',
-        'https://dosxdos.app.iidos.com/img/casaWhite.png',
-        'https://dosxdos.app.iidos.com/img/dosxdos.png',
-        'https://dosxdos.app.iidos.com/img/email.png',
-        'https://dosxdos.app.iidos.com/img/flechaAbajo.png',
-        'https://dosxdos.app.iidos.com/img/fondo.jpg',
-        'https://dosxdos.app.iidos.com/img/logoPwa1024.png',
-        'https://dosxdos.app.iidos.com/img/logoPwa512.png',
-        'https://dosxdos.app.iidos.com/img/logoPwa384.png',
-        'https://dosxdos.app.iidos.com/img/logoPwa256.png',
-        'https://dosxdos.app.iidos.com/img/logoPwa192.png',
-        'https://dosxdos.app.iidos.com/img/logoPwa128.png',
-        'https://dosxdos.app.iidos.com/img/logoPwa96.png',
-        'https://dosxdos.app.iidos.com/img/logoPwa64.png',
-        'https://dosxdos.app.iidos.com/img/logoPwa32.png',
-        'https://dosxdos.app.iidos.com/img/logoPwa16.png',
-        'https://dosxdos.app.iidos.com/img/logo300.png',
-        'https://dosxdos.app.iidos.com/img/lupa.png',
-        'https://dosxdos.app.iidos.com/img/reloj.png',
-        'https://dosxdos.app.iidos.com/img/relojWhite.png',
-        'https://dosxdos.app.iidos.com/img/usuario.png',
-        'https://dosxdos.app.iidos.com/img/rutasWhite.png',
-        'https://dosxdos.app.iidos.com/img/cerrar.png',
-        'https://dosxdos.app.iidos.com/img/usuarios.png',
-        'https://dosxdos.app.iidos.com/img/trash.png',
-        'https://dosxdos.app.iidos.com/img/folder.png',
-        'https://dosxdos.app.iidos.com/img/comprimido.png',
-        'https://dosxdos.app.iidos.com/img/task.png',
-        'https://dosxdos.app.iidos.com/css/dosxdos.css',
+        'http://localhost:8080/index.html?utm_source=web_app_manifest',
+        'http://localhost:8080/index.html',
+        'http://localhost:8080/manifest.json',
+        'http://localhost:8080/serviceworker.js',
+        'http://localhost:8080/sw.js',
+        'http://localhost:8080/css/index.css',
+        'http://localhost:8080/rutas_montador.html',
+        'http://localhost:8080/css/rutas_montador.css',
+        'http://localhost:8080/ruta_montador.html',
+        'http://localhost:8080/css/ruta_montador.css',
+        'http://localhost:8080/linea_montador.html',
+        'http://localhost:8080/css/linea_montador.css',
+        'http://localhost:8080/fotos_y_firmas.html',
+        'http://localhost:8080/css/fotos_y_firmas.css',
+        'http://localhost:8080/css/fuentes/Roboto/Roboto-Light.ttf',
+        'http://localhost:8080/css/fuentes/Merriweather/Merriweather-Light.ttf',
+        'http://localhost:8080/css/fuentes/Merriweather/Merriweather-Bold.ttf',
+        'http://localhost:8080/css/fuentes/Lora/Lora-Regular.ttf',
+        'http://localhost:8080/css/fuentes/Lora/Lora-Medium.ttf',
+        'http://localhost:8080/css/fuentes/Lora/Lora-Bold.ttf',
+        'http://localhost:8080/img/candado.png',
+        'http://localhost:8080/img/casa.png',
+        'http://localhost:8080/img/casaWhite.png',
+        'http://localhost:8080/img/dosxdos.png',
+        'http://localhost:8080/img/email.png',
+        'http://localhost:8080/img/flechaAbajo.png',
+        'http://localhost:8080/img/fondo.jpg',
+        'http://localhost:8080/img/logoPwa1024.png',
+        'http://localhost:8080/img/logoPwa512.png',
+        'http://localhost:8080/img/logoPwa384.png',
+        'http://localhost:8080/img/logoPwa256.png',
+        'http://localhost:8080/img/logoPwa192.png',
+        'http://localhost:8080/img/logoPwa128.png',
+        'http://localhost:8080/img/logoPwa96.png',
+        'http://localhost:8080/img/logoPwa64.png',
+        'http://localhost:8080/img/logoPwa32.png',
+        'http://localhost:8080/img/logoPwa16.png',
+        'http://localhost:8080/img/logo300.png',
+        'http://localhost:8080/img/lupa.png',
+        'http://localhost:8080/img/reloj.png',
+        'http://localhost:8080/img/relojWhite.png',
+        'http://localhost:8080/img/usuario.png',
+        'http://localhost:8080/img/rutasWhite.png',
+        'http://localhost:8080/img/cerrar.png',
+        'http://localhost:8080/img/usuarios.png',
+        'http://localhost:8080/img/trash.png',
+        'http://localhost:8080/img/folder.png',
+        'http://localhost:8080/img/comprimido.png',
+        'http://localhost:8080/img/task.png',
+        'http://localhost:8080/css/dosxdos.css',
 
     ]
 
@@ -635,7 +635,7 @@
 
     function fetchRutas() {
         return new Promise((resolve, reject) => {
-            url = 'https://dosxdos.app.iidos.com/apirest/rutas.php?montador=' + montador;
+            url = 'http://localhost:8080/apirest/rutas.php?montador=' + montador;
             fetch(url)
                 .then((res) => {
                     if (res.ok) {
@@ -693,7 +693,7 @@
         return new Promise(async (resolve, reject) => {
             try {
                 const promises = vectorRutas.map(async (objeto) => {
-                    const url = 'https://dosxdos.app.iidos.com/apirest/lineas.php?ruta=' + objeto.cod;
+                    const url = 'http://localhost:8080/apirest/lineas.php?ruta=' + objeto.cod;
                     const res = await fetch(url);
 
                     if (!res.ok) {
@@ -757,7 +757,7 @@
                     if (lineas) {
                         const mensaje = 'Se ha sincronizado la base de datos exitosamente';
                         localStorage.setItem('mensaje', mensaje);
-                        window.location.href = "https://dosxdos.app.iidos.com/historial_montador.html";
+                        window.location.href = "http://localhost:8080/historial_montador.html";
                     }
                     else {
                         alerta('Error al cargar las líneas de las rutas del servidor, se han sincronizado las rutas pero no las líneas')
@@ -768,7 +768,7 @@
         } catch (error) {
             const mensaje = 'No se ha sincronizado la base de datos: ' + error.message;
             localStorage.setItem('mensaje', mensaje);
-            window.location.href = "https://dosxdos.app.iidos.com/historial_montador.html";
+            window.location.href = "http://localhost:8080/historial_montador.html";
         }
     }
 
@@ -862,14 +862,14 @@
         try {
             const login = await vLogin();
             if (!login) {
-                window.location.href = "https://dosxdos.app.iidos.com/index.html";
+                window.location.href = "http://localhost:8080/index.html";
             } else {
                 const Arrayusuario = await leerDatos("dosxdos", "usuario");
                 usuario = Arrayusuario[0];
                 let loginMontador = localStorage.getItem("loginMontador");
                 if (!loginMontador || loginMontador === null) {
                     window.location.href =
-                        "https://dosxdos.app.iidos.com/dosxdos.php?id=" +
+                        "http://localhost:8080/dosxdos.php?id=" +
                         usuario.id +
                         "&rol=" +
                         usuario.clase;
@@ -939,7 +939,7 @@
         try {
             const login = await vLogin();
             if (!login) {
-                window.location.href = "https://dosxdos.app.iidos.com/index.html";
+                window.location.href = "http://localhost:8080/index.html";
             }
             else {
                 const Arrayusuario = await leerDatos("dosxdos", "usuario");
@@ -947,7 +947,7 @@
                 let loginMontador = localStorage.getItem("loginMontador");
                 if (!loginMontador || loginMontador === null) {
                     window.location.href =
-                        "https://dosxdos.app.iidos.com/dosxdos.php?id=" +
+                        "http://localhost:8080/dosxdos.php?id=" +
                         usuario.id +
                         "&rol=" +
                         usuario.clase;
@@ -1053,7 +1053,7 @@
       <div
         class="absolute inset-0 -z-10 rounded-xl"
         style="
-          background-image: url('https://dosxdos.app.iidos.com/img/texture-red.svg');
+          background-image: url('http://localhost:8080/img/texture-red.svg');
           background-size: contain;
           opacity: 0.7;
         "
@@ -1094,7 +1094,7 @@
 <div class="bg-white rounded-xl shadow-xl max-w-xl w-full mx-4 max-h-[85vh] flex flex-col overflow-hidden">
     <!-- Modal Header -->
     <div class="text-white p-4 rounded-t-xl flex justify-between items-center sticky top-0 z-10"
-        style="background-image: url('https://dosxdos.app.iidos.com/img/texture-red.svg'); background-size: contain;">
+        style="background-image: url('http://localhost:8080/img/texture-red.svg'); background-size: contain;">
         <h2 class="text-xl font-bold pr-4">Detalles de la OT</h2>
         <button class="text-white hover:text-gray-100" id="closeModal">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
@@ -1313,7 +1313,7 @@
             localStorage.setItem('id', objeto.Id);
 
             // Navigate to the reporting page
-            window.location.href = "https://dosxdos.app.iidos.com/linea_historial_montador.html";
+            window.location.href = "http://localhost:8080/linea_historial_montador.html";
         };
     };
 
@@ -1402,7 +1402,7 @@
     function actualizarLinea(json) {
         return new Promise((resolve, reject) => {
             console.log(json);
-            fetch("https://dosxdos.app.iidos.com/apirest/lineas.php",
+            fetch("http://localhost:8080/apirest/lineas.php",
                 {
                     method: "PUT",
                     headers: {
@@ -1428,7 +1428,7 @@
 
     function subirFotos(json) {
         return new Promise((resolve, reject) => {
-            fetch("https://dosxdos.app.iidos.com/apirest/fotos.php",
+            fetch("http://localhost:8080/apirest/fotos.php",
                 {
                     method: "POST",
                     headers: {
@@ -1459,7 +1459,7 @@
 
     function subirFirmas(json) {
         return new Promise((resolve, reject) => {
-            fetch("https://dosxdos.app.iidos.com/apirest/firmas.php",
+            fetch("http://localhost:8080/apirest/firmas.php",
                 {
                     method: "POST",
                     headers: {
@@ -1490,7 +1490,7 @@
 
     function subirNota(json) {
         return new Promise((resolve, reject) => {
-            fetch("https://dosxdos.app.iidos.com/apirest/notas.php",
+            fetch("http://localhost:8080/apirest/notas.php",
                 {
                     method: "POST",
                     headers: {
@@ -1739,7 +1739,7 @@
         }
         let login = localStorage.getItem('login');
         if (!login || login === null) {
-            window.location.href = "https://dosxdos.app.iidos.com/index.html";
+            window.location.href = "http://localhost:8080/index.html";
         }
     })
 
@@ -1753,6 +1753,6 @@
         appOffline();
     }
 </script>
-<script src="https://dosxdos.app.iidos.com/js/loadFirebase.js"></script>
+<script src="http://localhost:8080/js/loadFirebase.js"></script>
 
 </html>

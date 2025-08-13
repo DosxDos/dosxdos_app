@@ -10,7 +10,7 @@ function fetchNotificaciones() {
   return new Promise(async (resolve, reject) => {
     try {
       const url =
-        "https://dosxdos.app.iidos.com/apirest/rutas_notificaciones.php/notificaciones/" +
+        "http://localhost:8080/apirest/rutas_notificaciones.php/notificaciones/" +
         usuario.id;
       const res = await fetch(url);
 
@@ -151,7 +151,7 @@ async function notificar() {
 
 function renderizarSinNotificaciones() {
   //Mobiles
-  $bellMobile.src = "https://dosxdos.app.iidos.com/img/bell2.png";
+  $bellMobile.src = "http://localhost:8080/img/bell2.png";
   if ($bellMobile.classList.contains("w-14")) {
     $bellMobile.classList.replace("w-14", "w-8");
   } else {
@@ -161,7 +161,7 @@ function renderizarSinNotificaciones() {
     $mobileNotificationCount.classList.add("hidden");
   }
   //Desktops
-  $bellDesktop.src = "https://dosxdos.app.iidos.com/img/bell2.png";
+  $bellDesktop.src = "http://localhost:8080/img/bell2.png";
   if ($bellDesktop.classList.contains("w-12")) {
     $bellDesktop.classList.replace("w-12", "w-7"); ç
   } else {
@@ -180,7 +180,7 @@ function renderizarConNotificaciones(numeroDeNotificacionesActuales) {
   $desktopNotificationCount.textContent = "";
 
   //Mobiles
-  $bellMobile.src = "https://dosxdos.app.iidos.com/img/bell.gif";
+  $bellMobile.src = "http://localhost:8080/img/bell.gif";
   if ($bellMobile.classList.contains("w-8")) {
     $bellMobile.classList.replace("w-8", "w-14");
   } else {
@@ -195,7 +195,7 @@ function renderizarConNotificaciones(numeroDeNotificacionesActuales) {
     $desktopNotificationCount.textContent = numeroDeNotificacionesActuales;
   }
   //Desktops
-  $bellDesktop.src = "https://dosxdos.app.iidos.com/img/bell.gif";
+  $bellDesktop.src = "http://localhost:8080/img/bell.gif";
   if ($bellDesktop.classList.contains("w-7")) {
     $bellDesktop.classList.replace("w-7", "w-12");
   } else {
@@ -215,7 +215,7 @@ function eliminarTokenNotificaciones() {
     tokenEliminar = localStorage.getItem("tokenNotificaciones");
     if (tokenEliminar != null) {
       urlTokenEliminar =
-        "https://dosxdos.app.iidos.com/apirest/rutas_notificaciones.php/notificaciones/token/" +
+        "http://localhost:8080/apirest/rutas_notificaciones.php/notificaciones/token/" +
         tokenEliminar;
       fetch(urlTokenEliminar, {
         method: "DELETE",
@@ -266,7 +266,7 @@ document.addEventListener('DOMContentLoaded', function () {
       // Also force the bell images to be consistent
       if (bellMobile && bellDesktop && bellMobile.src.includes("bell.gif")) {
         console.log("Syncing desktop bell image with mobile");
-        bellDesktop.src = "https://dosxdos.app.iidos.com/img/bell.gif";
+        bellDesktop.src = "http://localhost:8080/img/bell.gif";
         bellDesktop.classList.remove("w-7");
         bellDesktop.classList.add("w-12");
       }

@@ -64,3 +64,15 @@ COPY --from=vendor --chown=www-data:www-data /app/vendor ./vendor
 #  -e DB_USERNAME=mi_user `
 #  -e DB_PASSWORD=mi_pass `
 #  dosxdos_app-php
+# --restart unless-stopped -d dosxdos_app-php
+
+# PS C:\xampp\htdocs\dosxdos_app> docker run --name dosxdos_app `           
+#>>   -p 8080:80 `
+#>>   -e DB_HOST=localhost `
+#>>   -e DB_PORT=3306 `
+#>>   -e DB_DATABASE=dosxdos `
+#>>   -e DB_USERNAME=dosxdos `
+#>>   -e DB_PASSWORD=Abfe04** `          
+#>>   --restart unless-stopped -d dosxdos_app-php
+
+# https://dosxdos.app.iidos.com

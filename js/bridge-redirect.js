@@ -2,7 +2,7 @@ class UserBridge {
     constructor() {
         this.dbName = 'dosxdos';
         this.storeName = 'usuario';
-        this.backendUrl = 'https://dosxdos.app.iidos.com/apirest/generate_bridge_token.php';
+        this.backendUrl = 'http://localhost:8080/apirest/generate_bridge_token.php';
         this.nextjsUrl = 'https://nextjs.dosxdos.app';
     }
 

@@ -51,7 +51,7 @@ if ((isset($_REQUEST["crearUsuario"]))) {
     <div class="w-full max-w-6xl px-4">
         <!-- Page Header -->
         <div class="rounded-xl shadow-lg overflow-hidden relative mb-6">
-            <div class="absolute inset-0" style="background-image: url('https://dosxdos.app.iidos.com/img/texture-red.svg'); background-size: contain;"></div>
+            <div class="absolute inset-0" style="background-image: url('http://localhost:8080/img/texture-red.svg'); background-size: contain;"></div>
             <div class="relative p-10 flex gap-4 items-center text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-8 h-8">
                     <circle cx="9" cy="7" r="4" fill="none" stroke="white" stroke-width="2" />
@@ -65,7 +65,7 @@ if ((isset($_REQUEST["crearUsuario"]))) {
 
         <!-- Improved Volver Button -->
         <div class="mb-6">
-            <a href="https://dosxdos.app.iidos.com/dosxdos.php?modulo=usuarios"
+            <a href="http://localhost:8080/dosxdos.php?modulo=usuarios"
                 class="inline-flex items-center gap-2 text-red-600 hover:text-red-700 transition-colors duration-200">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
@@ -82,7 +82,7 @@ if ((isset($_REQUEST["crearUsuario"]))) {
                 </div>
                 <div class="mt-4 sm:mt-0">
                     <div class="relative h-24 w-24 mx-auto sm:mx-0 bg-gray-100 rounded-full overflow-hidden border-4 border-white shadow-md">
-                        <img src="https://dosxdos.app.iidos.com/img/usuario.png" id="imagenPerfil" class="w-full h-full object-cover" alt="Foto de perfil">
+                        <img src="http://localhost:8080/img/usuario.png" id="imagenPerfil" class="w-full h-full object-cover" alt="Foto de perfil">
                     </div>
                 </div>
             </div>
@@ -216,7 +216,7 @@ if ((isset($_REQUEST["crearUsuario"]))) {
                 <div class="flex flex-col sm:flex-row gap-4 mt-8 
                 col-span-1 md:col-span-2 lg:col-span-3 
                 xl:col-span-3">
-                    <a href="https://dosxdos.app.iidos.com/dosxdos.php?modulo=usuarios"
+                    <a href="http://localhost:8080/dosxdos.php?modulo=usuarios"
                         id="cancelar"
                         class="w-full sm:w-1/2">
                         <button type="button"
@@ -256,7 +256,7 @@ if ((isset($_REQUEST["crearUsuario"]))) {
         </div>
     </div>
 </section>
-<script src="https://dosxdos.app.iidos.com/js/navigation.js"></script>
+<script src="http://localhost:8080/js/navigation.js"></script>
 <script>
     titulo1 = <?php echo ("'" . $nombre . '_' . 'CREAR USUARIO' . "'") ?>;
     titulo2 = 'CREAR USUARIO';

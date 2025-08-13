@@ -206,18 +206,18 @@ if ($idUsuario == $id && $usuarioEditado) {
                     const mensajeActualizado = mensaje;
                     localStorage.setItem('mensaje', mensajeActualizado);
                     if (nuevoUsuario.clase == 'montador') {
-                        window.location.href = "https://dosxdos.app.iidos.com/rutas_montador.html";
+                        window.location.href = "http://localhost:8080/rutas_montador.html";
                     } else {
-                        window.location.href = "https://dosxdos.app.iidos.com/ot.html";
+                        window.location.href = "http://localhost:8080/ot.html";
                     }
                 }
             } catch (error) {
                 const mensajeActualizado = 'El usuario ha sido editado exitosamente, pero no ha sido actualizado en la base de datos local, es necesario que cierres la sesión y vuelvas a realizar login para efectuar los cambios: ' + error.message;
                 localStorage.setItem('mensaje', mensajeActualizado);
                 if (nuevoUsuario.clase == 'montador') {
-                    window.location.href = "https://dosxdos.app.iidos.com/rutas_montador.html";
+                    window.location.href = "http://localhost:8080/rutas_montador.html";
                 } else {
-                    window.location.href = "https://dosxdos.app.iidos.com/ot.html";
+                    window.location.href = "http://localhost:8080/ot.html";
                 }
             }
         }
@@ -235,7 +235,7 @@ if ($idUsuario == $id && $usuarioEditado) {
         <section class="mb-8">
             <div class="rounded-xl shadow-lg overflow-hidden relative">
                 <div class="absolute inset-0"
-                    style="background-image: url('https://dosxdos.app.iidos.com/img/texture-red.svg'); background-size: contain;">
+                    style="background-image: url('http://localhost:8080/img/texture-red.svg'); background-size: contain;">
                 </div>
                 <div class="relative p-6 sm:p-8 text-white z-10">
                     <h1 id="titulo" class="text-2xl sm:text-3xl font-bold mb-2">Editar Usuario</h1>
@@ -249,21 +249,21 @@ if ($idUsuario == $id && $usuarioEditado) {
             <div class="flex flex-col md:flex-row gap-3">
                 <!-- Back Button -->
                 <?php if ($clase == 'admon') { ?>
-                    <a href="https://dosxdos.app.iidos.com/dosxdos.php?modulo=usuarios" class="flex items-center gap-2 text-red-600 mb-3 md:mb-0">
+                    <a href="http://localhost:8080/dosxdos.php?modulo=usuarios" class="flex items-center gap-2 text-red-600 mb-3 md:mb-0">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
                         </svg>
                         <span class="font-medium">Volver</span>
                     </a>
                 <?php } else if ($clase == 'montador') { ?>
-                    <a href="https://dosxdos.app.iidos.com/rutas_montador.html" class="flex items-center gap-2 text-red-600 mb-3 md:mb-0">
+                    <a href="http://localhost:8080/rutas_montador.html" class="flex items-center gap-2 text-red-600 mb-3 md:mb-0">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
                         </svg>
                         <span class="font-medium">Volver</span>
                     </a>
                 <?php } else { ?>
-                    <a href="https://dosxdos.app.iidos.com/ot.html" class="flex items-center gap-2 text-red-600 mb-3 md:mb-0">
+                    <a href="http://localhost:8080/ot.html" class="flex items-center gap-2 text-red-600 mb-3 md:mb-0">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
                         </svg>
@@ -282,9 +282,9 @@ if ($idUsuario == $id && $usuarioEditado) {
                     <div class="flex justify-center mb-8 -mt-12">
                         <div class="w-48 h-48 rounded-full overflow-hidden border-2 border-red-600 bg-gradient-to-r from-red-500 to-red-600 flex items-center justify-center shadow-2xl transform hover:scale-105 transition-all duration-300">
                             <img src="<?php if ($imagenE) {
-                                            echo ('https://dosxdos.app.iidos.com/' . $imagenE);
+                                            echo ('http://localhost:8080/' . $imagenE);
                                         } else {
-                                            echo 'https://dosxdos.app.iidos.com/img/usuario.png';
+                                            echo 'http://localhost:8080/img/usuario.png';
                                         } ?>"
                                 id="imagenPerfil" alt="Perfil" class="w-full h-full object-cover" />
                         </div>
@@ -424,7 +424,7 @@ if ($idUsuario == $id && $usuarioEditado) {
                     <!-- Submit and Cancel Buttons -->
                     <div class="flex flex-col-reverse md:flex-row gap-3 pt-4 border-t border-gray-200">
                         <?php if ($clase == 'admon') { ?>
-                            <a href="https://dosxdos.app.iidos.com/dosxdos.php?modulo=usuarios" id="cancelar" class="w-full">
+                            <a href="http://localhost:8080/dosxdos.php?modulo=usuarios" id="cancelar" class="w-full">
                                 <button type="button" class="w-full flex items-center justify-center gap-2 bg-gray-300 hover:bg-gray-400 text-gray-800 py-3 px-6 rounded-lg shadow-md transition-all text-base font-medium">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -433,7 +433,7 @@ if ($idUsuario == $id && $usuarioEditado) {
                                 </button>
                             </a>
                         <?php } else if ($clase == 'montador') { ?>
-                            <a href="https://dosxdos.app.iidos.com/rutas_montador.html" id="cancelar" class="w-full">
+                            <a href="http://localhost:8080/rutas_montador.html" id="cancelar" class="w-full">
                                 <button type="button" class="w-full flex items-center justify-center gap-2 bg-gray-300 hover:bg-gray-400 text-gray-800 py-3 px-6 rounded-lg shadow-md transition-all text-base font-medium">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -442,7 +442,7 @@ if ($idUsuario == $id && $usuarioEditado) {
                                 </button>
                             </a>
                         <?php } else { ?>
-                            <a href="https://dosxdos.app.iidos.com/ot.html" id="cancelar" class="w-full">
+                            <a href="http://localhost:8080/ot.html" id="cancelar" class="w-full">
                                 <button type="button" class="w-full flex items-center justify-center gap-2 bg-gray-300 hover:bg-gray-400 text-gray-800 py-3 px-6 rounded-lg shadow-md transition-all text-base font-medium">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -453,7 +453,7 @@ if ($idUsuario == $id && $usuarioEditado) {
                         <?php } ?>
 
                         <?php if ($clase == 'admon') { ?>
-                            <a href="https://dosxdos.app.iidos.com/editar_usuario.php?eliminar=1&id=<?php echo $id ?>" class="eliminar w-full">
+                            <a href="http://localhost:8080/editar_usuario.php?eliminar=1&id=<?php echo $id ?>" class="eliminar w-full">
                                 <button type="button" id="eliminarUsuario" class="w-full flex items-center justify-center gap-2 bg-gray-800 hover:bg-gray-900 text-white py-3 px-6 rounded-lg shadow-md transition-all text-base font-medium">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -495,7 +495,7 @@ if ($idUsuario == $id && $usuarioEditado) {
                 </div>
             </div>
         </div>
-        <script src="https://dosxdos.app.iidos.com/js/navigation.js"></script>
+        <script src="http://localhost:8080/js/navigation.js"></script>
         <script>
             actualizarUsuario = false;
             /* CAMBIO DE IMAGEN */
@@ -556,5 +556,5 @@ if ($idUsuario == $id && $usuarioEditado) {
                 });
             });
         </script>
-        <script src="https://dosxdos.app.iidos.com/js/notificaciones.js"></script>
-        <script src="https://dosxdos.app.iidos.com/js/loadFirebase.js"></script>
+        <script src="http://localhost:8080/js/notificaciones.js"></script>
+        <script src="http://localhost:8080/js/loadFirebase.js"></script>

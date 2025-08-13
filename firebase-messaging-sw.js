@@ -23,9 +23,9 @@ if (navigator.onLine) {
         const notificationTitle = payload.data.title || 'Notificación';
         const notificationOptions = {
             body: payload.data.body || '',
-            icon: payload.data.icon || 'https://dosxdos.app.iidos.com/img/dosxdoslogoNuevoRojo.png',
+            icon: payload.data.icon || 'http://localhost:8080/img/dosxdoslogoNuevoRojo.png',
             data: {
-                url: payload.data.click_action || 'https://dosxdos.app.iidos.com/notificaciones.html'
+                url: payload.data.click_action || 'http://localhost:8080/notificaciones.html'
             }
         };
         self.registration.showNotification(notificationTitle, notificationOptions);
@@ -37,7 +37,7 @@ if (navigator.onLine) {
 
         event.notification.close();
 
-        let url = event.notification.data?.url || 'https://dosxdos.app.iidos.com/notificaciones.html';
+        let url = event.notification.data?.url || 'http://localhost:8080/notificaciones.html';
 
         event.waitUntil(
             clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {

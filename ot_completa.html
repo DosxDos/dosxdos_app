@@ -6,14 +6,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>OT Completa</title>
-    <link rel="icon" type="image/png" href="https://dosxdos.app.iidos.com/img/logo-red.png" />
-    <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/tailwindmain.css" />
-    <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/index.css" />
-    <link rel="stylesheet" href="https://dosxdos.app.iidos.com/css/cdn_data_tables.css">
-    <script src="https://dosxdos.app.iidos.com/js/jquery.js"></script>
-    <script src="https://dosxdos.app.iidos.com/js/data_tables.js"></script>
-    <script src="https://dosxdos.app.iidos.com/js/cdn_data_tables.js"></script>
-    <script src="https://dosxdos.app.iidos.com/js/fixed_header.js"></script>
+    <link rel="icon" type="image/png" href="http://localhost:8080/img/logo-red.png" />
+    <link rel="stylesheet" href="http://localhost:8080/css/tailwindmain.css" />
+    <link rel="stylesheet" href="http://localhost:8080/css/index.css" />
+    <link rel="stylesheet" href="http://localhost:8080/css/cdn_data_tables.css">
+    <script src="http://localhost:8080/js/jquery.js"></script>
+    <script src="http://localhost:8080/js/data_tables.js"></script>
+    <script src="http://localhost:8080/js/cdn_data_tables.js"></script>
+    <script src="http://localhost:8080/js/fixed_header.js"></script>
     <style>
         .lazy-load {
             opacity: 0.5;
@@ -183,7 +183,7 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            background-image: url('https://dosxdos.app.iidos.com/img/texture-white.svg');
+            background-image: url('http://localhost:8080/img/texture-white.svg');
             background-size: cover;
             background-position: center;
             border: 1px solid #e5e7eb;
@@ -628,9 +628,9 @@
         <div class="flex items-center justify-between w-full px-6 py-4">
             <!-- Logo -->
             <div class="flex items-center">
-                <img src="https://dosxdos.app.iidos.com/img/logo300.png" class="h-16 hidden xl:block"
+                <img src="http://localhost:8080/img/logo300.png" class="h-16 hidden xl:block"
                     alt="Logo completo" />
-                <img src="https://dosxdos.app.iidos.com/img/Isotipo-38.png" class="h-16 xl:hidden" alt="Isotipo" />
+                <img src="http://localhost:8080/img/Isotipo-38.png" class="h-16 xl:hidden" alt="Isotipo" />
             </div>
 
             <!-- Desktop Navigation -->
@@ -638,7 +638,7 @@
                 <!-- Navigation items will be dynamically created by createDesktopNavigation() -->
 
                 <!-- Desktop Menu Notifications Bell -->
-                <a href="https://dosxdos.app.iidos.com/notificaciones.html" class="relative z-10"
+                <a href="http://localhost:8080/notificaciones.html" class="relative z-10"
                     id="desktopBellContainer">
                     <img id="bellDesktop" src="" class="text-gray-900 object-contain" />
                     <span id="desktopNotificationCount"
@@ -652,7 +652,7 @@
                         aria-expanded="false">
                         <div
                             class="w-10 h-10 rounded-full overflow-hidden border-2 border-white shadow-sm bg-gray-100 flex items-center justify-center">
-                            <img id="imagenUsuarioDesktop" src="https://dosxdos.app.iidos.com/img/usuario.png"
+                            <img id="imagenUsuarioDesktop" src="http://localhost:8080/img/usuario.png"
                                 class="w-full h-full object-cover" alt="Profile"
                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
                             <svg class="w-5 h-5 text-gray-400 hidden" viewBox="0 0 24 24" fill="none"
@@ -700,9 +700,9 @@
             <!-- Mobile Navigation -->
             <div class="xl:hidden flex items-center space-x-2 mx-2">
                 <!-- Mobile Bell -->
-                <a href="https://dosxdos.app.iidos.com/notificaciones.html" class="relative z-10"
+                <a href="http://localhost:8080/notificaciones.html" class="relative z-10"
                     id="mobileBellContainer">
-                    <img id="bellMobile" src="https://dosxdos.app.iidos.com/img/bell2.png"
+                    <img id="bellMobile" src="http://localhost:8080/img/bell2.png"
                         class="w-8 text-gray-900 object-contain mt-2" />
                     <span id="mobileNotificationCount"
                         class="absolute top-2 right-0 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[20px] text-center border hidden"></span>
@@ -726,7 +726,7 @@
         <div id="opcionesMenu"
             class="xl:hidden fixed inset-0 bg-gradient-to-r from-red-500 to-red-600 bg-opacity-95 transform translate-x-full transition-all duration-500 ease-in-out z-40 overflow-hidden backdrop-blur-sm flex flex-col">
             <div class="absolute inset-0 z-0"
-                style="background-image: url('https://dosxdos.app.iidos.com/img/texture-red.svg'); background-size: contain; opacity: 0.7;">
+                style="background-image: url('http://localhost:8080/img/texture-red.svg'); background-size: contain; opacity: 0.7;">
             </div>
             <!-- User Profile Section -->
             <div class="px-8 py-4 mt-16 relative z-10">
@@ -734,7 +734,7 @@
                     <!-- Profile image -->
                     <div class="absolute left-0 w-28 h-28 rounded-full overflow-hidden border-4 border-white bg-gradient-to-br from-red-50 to-white flex items-center justify-center shadow-xl"
                         style="transform: translateX(-15%);">
-                        <img id="imagenUsuarioMobile" src="https://dosxdos.app.iidos.com/img/usuario.png"
+                        <img id="imagenUsuarioMobile" src="http://localhost:8080/img/usuario.png"
                             class="w-full h-full object-cover" alt="Profile"
                             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
                         <svg class="w-12 h-12 text-gray-400 hidden" viewBox="0 0 24 24" fill="none"
@@ -809,7 +809,7 @@
         <section class="mb-8">
             <div class="bg-white rounded-xl shadow-lg overflow-hidden relative">
                 <div class="absolute inset-0 bg-gradient-to-r from-red-600 to-red-700"
-                    style="background-image: url('https://dosxdos.app.iidos.com/img/texture-red.svg'); background-size: contain; ">
+                    style="background-image: url('http://localhost:8080/img/texture-red.svg'); background-size: contain; ">
                 </div>
                 <div class="relative p-6 sm:p-8 text-white z-10">
                     <h1 id="titulo" class="text-2xl sm:text-3xl font-bold mb-2">OT Completa</h1>
@@ -860,7 +860,7 @@
 
                 <!-- OT Approval Checkbox -->
                 <div id="cajaCheckOt" class="hidden mb-6 rounded-lg shadow-lg p-4"
-                    style="background-image: url('https://dosxdos.app.iidos.com/img/texture-white.svg'); background-size: 30%;">
+                    style="background-image: url('http://localhost:8080/img/texture-white.svg'); background-size: 30%;">
                     <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
                         <div class="flex items-center space-x-3 hover:scale-110 -ml-6 md:ml-0">
                             <input type="checkbox" id="checkOt"
@@ -1028,7 +1028,7 @@
         <div class="bg-white rounded-xl shadow-xl max-w-md w-full mx-4">
             <!-- Modal Header -->
             <div class="text-white p-4 rounded-t-xl flex justify-between items-center"
-                style="background-image: url('https://dosxdos.app.iidos.com/img/texture-red.svg'); background-size: contain;">
+                style="background-image: url('http://localhost:8080/img/texture-red.svg'); background-size: contain;">
                 <h2 class="text-xl font-bold" id="confirmationTitle">Confirmar acción</h2>
                 <button class="text-white hover:text-gray-100" id="closeConfirmationModal">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
@@ -1061,9 +1061,9 @@
     </div>
 </body>
 
-<script src="https://dosxdos.app.iidos.com/js/index_db.js"></script>
-<script src="https://dosxdos.app.iidos.com/js/navigation.js"></script>
-<script src="https://dosxdos.app.iidos.com/js/bridge-redirect.js"></script> 
+<script src="http://localhost:8080/js/index_db.js"></script>
+<script src="http://localhost:8080/js/navigation.js"></script>
+<script src="http://localhost:8080/js/bridge-redirect.js"></script> 
 <script>
     /*REENVÍO DE FORMULARIOS */
     if (window.history.replaceState) {
@@ -1648,7 +1648,7 @@
 
     function fetchLinea($rutaBuscar, $lineaBuscar) {
         return new Promise((resolve, reject) => {
-            url = 'https://dosxdos.app.iidos.com/apirest/lineas.php?ruta=' + $rutaBuscar + '&linea=' + $lineaBuscar;
+            url = 'http://localhost:8080/apirest/lineas.php?ruta=' + $rutaBuscar + '&linea=' + $lineaBuscar;
             fetch(url)
                 .then((res) => (res.ok ? res.json() : reject(new Error(`Error en el servidor de la api intermedia al intentar consultar los datos de la línea`))))
                 .then((res) => {
@@ -1754,7 +1754,7 @@
     function eliminarFoto(jsonDelete) {
         return new Promise((resolve, reject) => {
             //console.log(jsonDelete);
-            fetch("https://dosxdos.app.iidos.com/apirest/fotos.php",
+            fetch("http://localhost:8080/apirest/fotos.php",
                 {
                     method: "DELETE",
                     headers: {
@@ -1784,7 +1784,7 @@
     function eliminarFirma(jsonDelete) {
         return new Promise((resolve, reject) => {
             //console.log(jsonDelete);
-            fetch("https://dosxdos.app.iidos.com/apirest/firmas.php",
+            fetch("http://localhost:8080/apirest/firmas.php",
                 {
                     method: "DELETE",
                     headers: {
@@ -1813,7 +1813,7 @@
     function eliminarCarpeta(jsonDelete) {
         return new Promise((resolve, reject) => {
             //console.log(jsonDelete);
-            fetch("https://dosxdos.app.iidos.com/apirest/carpetas.php",
+            fetch("http://localhost:8080/apirest/carpetas.php",
                 {
                     method: "DELETE",
                     headers: {
@@ -1844,13 +1844,13 @@
             //console.log(jsonVisible);
             url = '';
             if (tipo == 'foto') {
-                url = 'https://dosxdos.app.iidos.com/apirest/fotos.php'
+                url = 'http://localhost:8080/apirest/fotos.php'
             } else if (tipo == 'firma') {
-                url = 'https://dosxdos.app.iidos.com/apirest/firmas.php'
+                url = 'http://localhost:8080/apirest/firmas.php'
             } else if (tipo == 'ot') {
-                url = 'https://dosxdos.app.iidos.com/apirest/ot_app.php'
+                url = 'http://localhost:8080/apirest/ot_app.php'
             } else {
-                url = 'https://dosxdos.app.iidos.com/apirest/carpetas.php'
+                url = 'http://localhost:8080/apirest/carpetas.php'
             }
             fetch(url,
                 {
@@ -2125,7 +2125,7 @@
 
     function traerFotos() {
         return new Promise((resolve, reject) => {
-            url = 'https://dosxdos.app.iidos.com/apirest/fotos.php?otCompleta=1&' + 'ot=' + ot;
+            url = 'http://localhost:8080/apirest/fotos.php?otCompleta=1&' + 'ot=' + ot;
             fetch(url)
                 .then((res) => (res.ok ? res.json() : reject(new Error(`Error en el servidor de la api intermedia al intentar consultar las fotos de la línea`))))
                 .then(async (res) => {
@@ -2325,7 +2325,7 @@
                                                 tipo: 'foto'
                                             };
 
-                                            fetch("https://dosxdos.app.iidos.com/apirest/fotos.php", {
+                                            fetch("http://localhost:8080/apirest/fotos.php", {
                                                 method: "DELETE",
                                                 headers: {
                                                     "Content-type": "application/json; charset=utf-8"
@@ -2511,7 +2511,7 @@
 
     function traerFirmas() {
         return new Promise((resolve, reject) => {
-            url = 'https://dosxdos.app.iidos.com/apirest/firmas.php?otCompleta=1&' + 'ot=' + ot;
+            url = 'http://localhost:8080/apirest/firmas.php?otCompleta=1&' + 'ot=' + ot;
             fetch(url)
                 .then((res) => (res.ok ? res.json() : reject(new Error(`Error consultando firmas`))))
                 .then((res) => {
@@ -2873,7 +2873,7 @@
 
     function traerCarpetas() {
         return new Promise((resolve, reject) => {
-            url = 'https://dosxdos.app.iidos.com/apirest/carpetas.php?otCompleta=1&' + 'ot=' + ot;
+            url = 'http://localhost:8080/apirest/carpetas.php?otCompleta=1&' + 'ot=' + ot;
             fetch(url)
                 .then((res) => (res.ok ? res.json() : reject(new Error(`Error en el servidor de la api intermedia al intentar consultar las carpetas de la línea`))))
                 .then((res) => {
@@ -3236,7 +3236,7 @@
 
     function subirCarpeta(json) {
         return new Promise((resolve, reject) => {
-            fetch("https://dosxdos.app.iidos.com/apirest/carpetas.php",
+            fetch("http://localhost:8080/apirest/carpetas.php",
                 {
                     method: "POST",
                     headers: {
@@ -3333,7 +3333,7 @@
 
     function fetchOts(otAr) {
         return new Promise((resolve, reject) => {
-            url = 'https://dosxdos.app.iidos.com/apirest/ot_app.php?ot=' + otAr;
+            url = 'http://localhost:8080/apirest/ot_app.php?ot=' + otAr;
             fetch(url)
                 .then((res) => {
                     if (res.ok) {
@@ -3369,7 +3369,7 @@
 
     function fetchLineasOt(otL) {
         return new Promise((resolve, reject) => {
-            url = 'https://dosxdos.app.iidos.com/apirest/lineas_app.php?ot=' + otL;
+            url = 'http://localhost:8080/apirest/lineas_app.php?ot=' + otL;
             fetch(url)
                 .then((res) => {
                     if (res.ok) {
@@ -3434,10 +3434,10 @@
                 const iEstadoVisible = document.createElement('img');
                 iEstadoVisible.className = 'visibilidad';
                 if (linea.visible != 0) {
-                    iEstadoVisible.src = 'https://dosxdos.app.iidos.com/img/visible.png';
+                    iEstadoVisible.src = 'http://localhost:8080/img/visible.png';
                     iEstadoVisible.className = 'h-6 flex-shrink-0 w-auto pl-2'
                 } else {
-                    iEstadoVisible.src = 'https://dosxdos.app.iidos.com/img/no_visible.png';
+                    iEstadoVisible.src = 'http://localhost:8080/img/no_visible.png';
                     iEstadoVisible.className = 'h-8 flex-shrink-0 w-auto pl-1'
                 }
                 estadoVisible.appendChild(iEstadoVisible);
@@ -3605,14 +3605,14 @@
         try {
             const login = await vLogin();
             if (!login) {
-                window.location.href = "https://dosxdos.app.iidos.com/index.html";
+                window.location.href = "http://localhost:8080/index.html";
             } else {
                 const Arrayusuario = await leerDatos('dosxdos', 'usuario');
                 usuario = Arrayusuario[0];
 
                 // Handle user roles
                 if (usuario.clase === 'montador') {
-                    window.location.href = "https://dosxdos.app.iidos.com/rutas_montador.html";
+                    window.location.href = "http://localhost:8080/rutas_montador.html";
                 }
 
                 initializeApplication()
@@ -3928,7 +3928,7 @@
                                 lineaId = fila.getAttribute('data-lineaId');
                                 localStorage.setItem('lineaId', lineaId);
                                 localStorage.setItem('otArchivos', ot);
-                                window.location.href = "https://dosxdos.app.iidos.com/fotos_y_firmas.html";
+                                window.location.href = "http://localhost:8080/fotos_y_firmas.html";
                             }
                         });
 
@@ -3945,7 +3945,7 @@
 
                         // Setup volver button
                         document.getElementById('volverBoton').addEventListener('click', () => {
-                            window.location.href = "https://dosxdos.app.iidos.com/ot2.html";
+                            window.location.href = "http://localhost:8080/ot2.html";
                         });
 
 
@@ -3978,7 +3978,7 @@
         try {
             const login = await vLogin();
             if (!login) {
-                window.location.href = "https://dosxdos.app.iidos.com/index.html";
+                window.location.href = "http://localhost:8080/index.html";
             } else {
                 const Arrayusuario = await leerDatos('dosxdos', 'usuario');
                 usuario = Arrayusuario[0];
@@ -3987,7 +3987,7 @@
 
                 // Handle montador redirection
                 if (usuario.clase === 'montador') {
-                    window.location.href = "https://dosxdos.app.iidos.com/rutas_montador.html";
+                    window.location.href = "http://localhost:8080/rutas_montador.html";
                     return;
                 }
 
@@ -3995,7 +3995,7 @@
                 const editarUsuario = document.getElementById('editarUsuario');
                 editarUsuario.addEventListener('click', e => {
                     if (navigator.onLine) {
-                        window.location.href = "https://dosxdos.app.iidos.com/dosxdos.php?modulo=editarUsuario&id=" + usuario.id;
+                        window.location.href = "http://localhost:8080/dosxdos.php?modulo=editarUsuario&id=" + usuario.id;
                     } else {
                         mensaje = 'No es posible acceder a las opciones de edición de usuario sin conexión a internet';
                         alerta(mensaje);
@@ -4005,7 +4005,7 @@
 
                 // Setup volverBoton
                 document.getElementById('volverBoton').addEventListener('click', () => {
-                    window.location.href = "https://dosxdos.app.iidos.com/ot2.html";
+                    window.location.href = "http://localhost:8080/ot2.html";
                 });
 
                 await notificar();
@@ -4044,7 +4044,7 @@
         }
         let login = localStorage.getItem('login');
         if (!login || login === null) {
-            window.location.href = "https://dosxdos.app.iidos.com/index.html";
+            window.location.href = "http://localhost:8080/index.html";
             loaderOff();
         }
     })
@@ -4186,7 +4186,7 @@
             window.updateModalNavigation = updateGalleryClickEvents;
         });
 </script>
-<script src="https://dosxdos.app.iidos.com/js/notificaciones.js"></script>
-<script src="https://dosxdos.app.iidos.com/js/loadFirebase.js"></script>
+<script src="http://localhost:8080/js/notificaciones.js"></script>
+<script src="http://localhost:8080/js/loadFirebase.js"></script>
 
 </html>

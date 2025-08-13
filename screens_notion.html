@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="https://dosxdos.app.iidos.com/img/logo-red.png" />
+    <link rel="icon" type="image/png" href="http://localhost:8080/img/logo-red.png" />
     <title>Frontend - Carrusel</title>
     <style>
         /* General Reset */
@@ -135,12 +135,12 @@
         for (let i = 1; i <= totalImages; i++) {
             const div = document.createElement('div');
             div.className = 'carousel-item';
-            div.style.backgroundImage = `url('https://dosxdos.app.iidos.com/dosxdos_notion_img/${i}.png')`;
+            div.style.backgroundImage = `url('http://localhost:8080/dosxdos_notion_img/${i}.png')`;
 
             if (i === 1) div.classList.add('active'); // Activa la primera imagen
 
             carouselInner.appendChild(div);
-            console.log('Imagen añadida:', `https://dosxdos.app.iidos.com/dosxdos_notion_img/${i}.png`);
+            console.log('Imagen añadida:', `http://localhost:8080/dosxdos_notion_img/${i}.png`);
         }
     }
 

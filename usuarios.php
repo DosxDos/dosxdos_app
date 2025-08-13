@@ -8,12 +8,12 @@ if (!isset($_COOKIE['login'])) {
     <section class="container mx-auto  w-full">
         <!-- Page Header -->
         <div class="rounded-xl shadow-lg overflow-hidden relative mb-6">
-            <div class="absolute inset-0" style="background-image: url('https://dosxdos.app.iidos.com/img/texture-red.svg'); background-size: contain;"></div>
+            <div class="absolute inset-0" style="background-image: url('http://localhost:8080/img/texture-red.svg'); background-size: contain;"></div>
             <div class="relative p-10 flex justify-between items-start md:items-center text-white">
                 <h1 class="text-2xl font-bold mb-2 md:mb-0">Gestión de Usuarios</h1>
 
                 <!-- Create User Button -->
-                <a href="https://dosxdos.app.iidos.com/dosxdos.php?modulo=crearUsuario"
+                <a href="http://localhost:8080/dosxdos.php?modulo=crearUsuario"
                     class="flex items-center gap-2 px-4 py-2 bg-white hover:bg-gray-100 text-red-600 rounded-lg transition-colors shadow-sm">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                         <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z" />
@@ -113,7 +113,7 @@ if (!isset($_COOKIE['login'])) {
         <div class="bg-white rounded-xl shadow-xl max-w-2xl w-full mx-4 max-h-[85vh] flex flex-col overflow-hidden">
             <!-- Modal Header -->
             <div class="text-white p-4 rounded-t-xl flex justify-between items-center sticky top-0 z-10"
-                style="background-image: url('https://dosxdos.app.iidos.com/img/texture-red.svg'); background-size: contain;">
+                style="background-image: url('http://localhost:8080/img/texture-red.svg'); background-size: contain;">
                 <h2 class="text-xl font-bold pr-4" id="userModalTitle">Detalles del Usuario</h2>
                 <button class="text-white hover:text-gray-100" id="closeUserModal">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
@@ -131,7 +131,7 @@ if (!isset($_COOKIE['login'])) {
                     <!-- User Image -->
                     <div class="flex justify-center">
                         <div class="w-24 h-24 rounded-full overflow-hidden border-2 border-gray-200 shadow-md">
-                            <img id="userModalImage" src="https://dosxdos.app.iidos.com/img/usuario.png"
+                            <img id="userModalImage" src="http://localhost:8080/img/usuario.png"
                                 class="w-full h-full object-cover" alt="User Profile"
                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
                             <svg class="w-full h-full text-gray-400 hidden" viewBox="0 0 24 24" fill="none"
@@ -195,7 +195,7 @@ if (!isset($_COOKIE['login'])) {
         </div>
     </div>
 </div>
-<script src="https://dosxdos.app.iidos.com/js/navigation.js"></script>
+<script src="http://localhost:8080/js/navigation.js"></script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -454,7 +454,7 @@ if (!isset($_COOKIE['login'])) {
         function populateUserModal(data, userData, rowElement) {
             // If we have parsed userData, use it directly
             if (userData && typeof userData === 'object') {
-                document.getElementById('userModalImage').src = userData.imagen || 'https://dosxdos.app.iidos.com/img/usuario.png';
+                document.getElementById('userModalImage').src = userData.imagen || 'http://localhost:8080/img/usuario.png';
                 document.getElementById('userModalUsername').textContent = userData.usuario || '-';
                 document.getElementById('userModalName').textContent = userData.nombre || '-';
                 document.getElementById('userModalLastName').textContent = userData.apellido || '-';
@@ -470,7 +470,7 @@ if (!isset($_COOKIE['login'])) {
 
             // Fallback to extracting from table data
             // Extract image URL
-            let imgSrc = 'https://dosxdos.app.iidos.com/img/usuario.png';
+            let imgSrc = 'http://localhost:8080/img/usuario.png';
 
             // Try to extract from HTML string if data[0] is a string
             if (typeof data[0] === 'string') {
@@ -528,7 +528,7 @@ if (!isset($_COOKIE['login'])) {
         // Edit user event
         editUserModal.addEventListener('click', () => {
             if (currentUserId) {
-                window.location.href = `https://dosxdos.app.iidos.com/dosxdos.php?modulo=editarUsuario&id=${currentUserId}`;
+                window.location.href = `http://localhost:8080/dosxdos.php?modulo=editarUsuario&id=${currentUserId}`;
             } else {
                 console.error('No user ID available for edit action');
             }
@@ -549,5 +549,5 @@ if (!isset($_COOKIE['login'])) {
         });
     });
 </script>
-<script src="https://dosxdos.app.iidos.com/js/notificaciones.js"></script>
-<script src="https://dosxdos.app.iidos.com/js/loadFirebase.js"></script>
+<script src="http://localhost:8080/js/notificaciones.js"></script>
+<script src="http://localhost:8080/js/loadFirebase.js"></script>
