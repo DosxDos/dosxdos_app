@@ -26,9 +26,9 @@ FROM php:8.2-apache
 # Paquetes del sistema + extensiones PHP. Instala las extensiones mínimas necesarias para PHP y Apache, además de habilitar módulos de Apache.
 RUN apt-get update && apt-get install -y --no-install-recommends \
       libzip-dev unzip \
-    && docker-php-ext-install zip pdo pdo_mysql \
-    && a2enmod rewrite headers \
-    && rm -rf /var/lib/apt/lists/*
+  && docker-php-ext-install zip pdo pdo_mysql mysqli fileinfo \
+  && a2enmod rewrite headers \
+  && rm -rf /var/lib/apt/lists/*
 
 # Docroot configurable si la app tuviera carpeta public, se lo añadiríamos al DOCROOT al final "/public"
 ARG DOCROOT=/var/www/html
@@ -56,15 +56,17 @@ COPY --from=vendor --chown=www-data:www-data /app/vendor ./vendor
 # Apache queda en primer plano por defecto, no hace falta CMD ni ENTRYPOINT ya que la imagen base ya lo tiene configurado para iniciar Apache en primer plano.
 
 #  Se construye usando: docker build -t dosxdos_app-php --build-arg DOCROOT=/var/www/html .
+# Creamos contenedor y arrancamos en el puerto (que queramos, en este caso tengo uno escrito ya) 8080: docker run -d --name dosxdos_app --restart unless-stopped -p 8080:80 dosxdos_app-php
 
-# Como unirlo a la databse: 
-#    docker run --rm -p 8080:80 `
-# -e DB_HOST=host.docker.internal `
+# Como unirlo a la database: 
+#    docker run -d --name dosxdos_app --restart unless-stopped -p 8080:80 `
+#  -e DB_CONNECTION=mysql `
+#  -e DB_HOST=host.docker.internal `
+#  -e DB_PORT=3306 `
 #  -e DB_DATABASE=mi_bd `
 #  -e DB_USERNAME=mi_user `
-#  -e DB_PASSWORD=mi_pass `
+#  -e DB_PASSWORD='mi_pass' `
 #  dosxdos_app-php
-# --restart unless-stopped -d dosxdos_app-php
 
 # docker run --name dosxdos_app-php `           
 #   -p 8080:80 `
@@ -76,3 +78,7 @@ COPY --from=vendor --chown=www-data:www-data /app/vendor ./vendor
 #   --restart unless-stopped -d dosxdos_app-php
 
 # https://dosxdos.app.iidos.com
+
+# Conectamos el contenedor a la base de datos, en este caso MySQL, que debe estar corriendo en el host o en otro contenedor.
+# docker run -d --name dosxdos_app --restart unless-stopped -p 8080:80 -e DB_CONNECTION=mysql -e DB_HOST=localhost -e DB_PORT=3306 -e DB_DATABASE=dosxdos -e DB_USERNAME=dosxdos -e DB_PASSWORD=Abfe04** dosxdos_app-php       
+      

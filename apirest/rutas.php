@@ -123,3 +123,6 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
     http_response_code(405);
     echo $response;
 }
+
+$ensayo=$_rutas->rutasActivas();
+print_r($ensayo);
