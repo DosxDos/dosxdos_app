@@ -7,9 +7,9 @@ $_respuestas = new Respuestas;
 $_ot = new Ot;
 
 if ($_SERVER['REQUEST_METHOD'] == "GET") {
-    if (isset($_GET["ot"])) {
-        $ot = $_GET['ot'];
-        $_ot->leerOt($ot);
+    if (isset($_GET["codOt"]) && !isset($_GET["nombreOt"])) {
+        $codOt = $_GET['codOt'];
+        $_ot->lineas($codOt);
         if ($_ot->error) {
             $cod = $_ot->error[2];
             http_response_code($cod);
@@ -21,22 +21,9 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
             $response = json_encode($_ot->respuesta);
             echo $response;
         }
-    } else if (isset($_GET["otLineas"])) {
-        $ot = $_GET['otLineas'];
-        $_ot->leerLineasOt($ot);
-        if ($_ot->error) {
-            $cod = $_ot->error[2];
-            http_response_code($cod);
-            $response = json_encode($_ot->error);
-            echo $response;
-        } else {
-            $cod = $_ot->respuesta[2];
-            http_response_code($cod);
-            $response = json_encode($_ot->respuesta);
-            echo $response;
-        }
-    } else {
-        $_ot->leerOts();
+    } else if (isset($_GET["codOt"]) && isset($_GET["nombreOt"])) {
+        $codOt = $_GET['codOt'];
+        $_ot->nombreOt($codOt);
         if ($_ot->error) {
             $cod = $_ot->error[2];
             http_response_code($cod);
